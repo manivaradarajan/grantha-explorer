@@ -52,7 +52,7 @@ export default function TextContent({
               }`}
             >
               <div className="flex items-start gap-4">
-                <span className="font-semibold text-gray-400 min-w-[2rem]">
+                <span className="mt-0.5 font-semibold text-gray-400 min-w-[2rem]">
                   {passage.ref}
                 </span>
                 <div className="flex-1">

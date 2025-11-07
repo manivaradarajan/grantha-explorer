@@ -54,7 +54,7 @@ export default function NavigationSidebar({
       </div>
 
       {/* Verse list */}
-      <div className="flex-1 overflow-y-auto px-6">
+      <div className="flex-1 overflow-y-auto pl-6 pr-4">
         {passages.map((passage) => {
           const isSelected = passage.ref === selectedRef;
           const fragment = getPassageFragment(passage);

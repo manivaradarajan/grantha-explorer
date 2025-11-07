@@ -3,6 +3,8 @@
 import { Grantha } from "@/lib/data";
 import { useState } from "react";
 
+import DOMPurify from "isomorphic-dompurify";
+
 interface CommentaryPanelProps {
   grantha: Grantha;
   selectedRef: string;
@@ -25,7 +27,7 @@ export default function CommentaryPanel({
       // Don't allow deselecting if it's the only one selected
       if (selectedCommentaries.length > 1) {
         setSelectedCommentaries(
-          selectedCommentaries.filter((i) => i !== index),
+          selectedCommentaries.filter((i) => i !== index)
         );
       }
     } else {
@@ -36,7 +38,7 @@ export default function CommentaryPanel({
   // Render a single commentary for the selected verse
   const renderCommentary = (commentary: any, index: number) => {
     const passage = commentary.passages?.find(
-      (p: any) => p.ref === selectedRef,
+      (p: any) => p.ref === selectedRef
     );
 
     if (!passage) {
@@ -49,6 +51,17 @@ export default function CommentaryPanel({
 
     const prefatoryMaterial = passage.prefatory_material || [];
     const mainContent = passage.content?.sanskrit?.devanagari || "";
+    const sanitizedHtml = DOMPurify.sanitize(
+      mainContent
+        .replace(
+          /^#### (.+)$/gm,
+          '<em class="text-base font-normal italic text-gray-500">$1</em>'
+        )
+        .replace(
+          /\*\*(.*?)\*\*/g,
+          '<strong class="font-bold text-gray-900">$1</strong>'
+        )
+    );
 
     return (
       <div key={index} className="mb-8">
@@ -86,10 +99,7 @@ export default function CommentaryPanel({
         <div
           className="text-base leading-relaxed whitespace-pre-line"
           dangerouslySetInnerHTML={{
-            __html: mainContent.replace(
-              /\*\*(.*?)\*\*/g,
-              '<strong class="font-bold text-gray-900">$1</strong>',
-            ),
+            __html: sanitizedHtml,
           }}
         />
       </div>

@@ -170,7 +170,7 @@ export function getStructureLevelLabel(
   grantha: Grantha,
   script: "devanagari" | "roman" = "devanagari"
 ): string {
-  if (grantha.structure_levels.length === 0) {
+  if (!grantha.structure_levels || grantha.structure_levels.length === 0) {
     return "";
   }
 
