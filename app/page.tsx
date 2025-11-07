@@ -11,11 +11,15 @@ import {
   Grantha,
   GranthaMetadata,
 } from "@/lib/data";
+import { useVerseHash } from "@/hooks/useVerseHash";
+import { getFirstVerseRef } from "@/lib/hashUtils";
 
 export default function Home() {
   const [granthas, setGranthas] = useState<GranthaMetadata[]>([]);
+  const [granthaDataMap, setGranthaDataMap] = useState<Map<string, Grantha>>(
+    new Map()
+  );
   const [currentGrantha, setCurrentGrantha] = useState<Grantha | null>(null);
-  const [selectedRef, setSelectedRef] = useState<string>("1");
   const [loading, setLoading] = useState(true);
 
   // Load available granthas on mount
@@ -24,16 +28,13 @@ export default function Home() {
       const available = await getAvailableGranthas();
       setGranthas(available);
 
-      // Load first grantha by default (isavasya)
+      // Load first grantha by default
       if (available.length > 0) {
         const firstGrantha = await loadGrantha(available[0].id);
+        const dataMap = new Map<string, Grantha>();
+        dataMap.set(available[0].id, firstGrantha);
+        setGranthaDataMap(dataMap);
         setCurrentGrantha(firstGrantha);
-        // Set first passage as selected
-        if (firstGrantha.passages.length > 0) {
-          setSelectedRef(firstGrantha.passages[0].ref);
-        } else if (firstGrantha.prefatory_material.length > 0) {
-          setSelectedRef(firstGrantha.prefatory_material[0].ref);
-        }
       }
       setLoading(false);
     }
@@ -41,23 +42,60 @@ export default function Home() {
     loadGranthas();
   }, []);
 
-  // Handle grantha change
-  const handleGranthaChange = async (granthaId: string) => {
-    setLoading(true);
-    const grantha = await loadGrantha(granthaId);
-    setCurrentGrantha(grantha);
-    // Reset to first passage
-    if (grantha.passages.length > 0) {
-      setSelectedRef(grantha.passages[0].ref);
-    } else if (grantha.prefatory_material.length > 0) {
-      setSelectedRef(grantha.prefatory_material[0].ref);
+  // Use hash-based routing
+  const { granthaId, verseRef, commentaries, updateHash } = useVerseHash(
+    granthas.map((g) => g.id),
+    granthas[0]?.id || "isavasya-upanishad",
+    granthaDataMap
+  );
+
+  // Load grantha when granthaId changes (from hash)
+  useEffect(() => {
+    async function loadCurrentGrantha() {
+      // Check if already loaded
+      if (currentGrantha?.grantha_id === granthaId) {
+        return;
+      }
+
+      // Check if in cache
+      const cached = granthaDataMap.get(granthaId);
+      if (cached) {
+        setCurrentGrantha(cached);
+        return;
+      }
+
+      // Load from server
+      setLoading(true);
+      try {
+        const grantha = await loadGrantha(granthaId);
+        setGranthaDataMap((prev) => new Map(prev).set(granthaId, grantha));
+        setCurrentGrantha(grantha);
+      } catch (error) {
+        console.error("Failed to load grantha:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
+
+    if (granthaId && granthas.length > 0) {
+      loadCurrentGrantha();
+    }
+  }, [granthaId, granthas, currentGrantha, granthaDataMap]);
+
+  // Handle grantha change
+  const handleGranthaChange = async (newGranthaId: string) => {
+    const grantha =
+      granthaDataMap.get(newGranthaId) || (await loadGrantha(newGranthaId));
+    if (!granthaDataMap.has(newGranthaId)) {
+      setGranthaDataMap((prev) => new Map(prev).set(newGranthaId, grantha));
+    }
+    const firstRef = getFirstVerseRef(grantha);
+    updateHash(newGranthaId, firstRef, commentaries);
   };
 
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
-    setSelectedRef(ref);
+    updateHash(granthaId, ref, commentaries);
   };
 
   if (loading || !currentGrantha) {
@@ -78,7 +116,7 @@ export default function Home() {
             <NavigationSidebar
               grantha={currentGrantha}
               granthas={granthas}
-              selectedRef={selectedRef}
+              selectedRef={verseRef}
               onGranthaChange={handleGranthaChange}
               onVerseSelect={handleVerseSelect}
             />
@@ -91,7 +129,7 @@ export default function Home() {
           <Panel defaultSize={50} minSize={30}>
             <TextContent
               grantha={currentGrantha}
-              selectedRef={selectedRef}
+              selectedRef={verseRef}
               onVerseSelect={handleVerseSelect}
               title={currentGrantha.canonical_title}
             />
@@ -102,10 +140,7 @@ export default function Home() {
 
           {/* Right Commentary Panel */}
           <Panel defaultSize={30} minSize={20} maxSize={40}>
-            <CommentaryPanel
-              grantha={currentGrantha}
-              selectedRef={selectedRef}
-            />
+            <CommentaryPanel grantha={currentGrantha} selectedRef={verseRef} />
           </Panel>
         </PanelGroup>
       </div>

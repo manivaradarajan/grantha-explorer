@@ -39,11 +39,17 @@ export default function PassageLink({
   const label = getLabel();
   const fragment = getPassageFragment(passage);
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onVerseSelect(passage.ref);
+  };
+
   return (
-    <button
-      ref={verseRef}
-      onClick={() => onVerseSelect(passage.ref)}
-      className={`w-full text-left py-1.5 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate ${
+    <a
+      ref={verseRef as any}
+      href={`#${grantha.grantha_id}:${passage.ref}`}
+      onClick={handleClick}
+      className={`block w-full text-left py-1.5 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate ${
         isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
       }`}
     >
@@ -53,6 +59,6 @@ export default function PassageLink({
       <span className={isSelected ? "text-gray-500" : "text-gray-500"}>
         {fragment}
       </span>
-    </button>
+    </a>
   );
 }

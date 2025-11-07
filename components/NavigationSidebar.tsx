@@ -32,6 +32,16 @@ export default function NavigationSidebar({
     return group ? [group.level] : [];
   });
 
+  // Auto-open accordion when grantha or selectedRef changes
+  useEffect(() => {
+    const group = hierarchy.main.find((g) =>
+      g.passages.some((p) => p.ref === selectedRef)
+    );
+    if (group && !openAccordions.includes(group.level)) {
+      setOpenAccordions((prev) => [...prev, group.level]);
+    }
+  }, [grantha.grantha_id, selectedRef, hierarchy.main, openAccordions]);
+
   // Auto-scroll to selected verse when selection changes
   useEffect(() => {
     const element = verseRefs.current[selectedRef];
