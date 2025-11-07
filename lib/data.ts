@@ -209,7 +209,7 @@ export function getAllPassagesForNavigation(
 
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
   const structure = grantha.structure_levels;
-  const isHierarchical = structure?.[0]?.children?.length > 0;
+  const isHierarchical = !!(structure?.[0]?.children && structure[0].children.length > 0);
 
   const hierarchy: PassageHierarchy = {
     prefatory: grantha.prefatory_material,

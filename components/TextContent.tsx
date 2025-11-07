@@ -53,7 +53,7 @@ export default function TextContent({
             >
               <div className="flex items-start gap-4">
                 {/* Show ref number for main passages, empty space for prefatory/concluding */}
-                <span className="mt-0.5 font-semibold text-gray-400 min-w-[2rem]">
+                <span className="mt-0.5 font-semibold text-gray-400 min-w-8">
                   {passage.passage_type === "main" ? passage.ref : ""}
                 </span>
                 <div className="flex-1">
