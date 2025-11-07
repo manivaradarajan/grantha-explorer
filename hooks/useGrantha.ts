@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { loadGrantha, Grantha, GranthaMetadata } from "@/lib/data";
+import { loadGrantha, Grantha, GranthaMetadata, getAvailableGranthas } from "@/lib/data";
 
 /**
  * Hook to load and cache grantha data using React Query
@@ -31,8 +31,6 @@ export function useGrantha(granthaId: string) {
  * Hook to load list of available granthas
  */
 export function useAvailableGranthas() {
-  const { getAvailableGranthas } = require("@/lib/data");
-
   return useQuery<GranthaMetadata[]>({
     queryKey: ["granthas"],
     queryFn: getAvailableGranthas,
