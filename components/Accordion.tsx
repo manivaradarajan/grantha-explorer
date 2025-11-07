@@ -22,11 +22,11 @@ export default function Accordion({
         className="w-full text-left py-2 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center"
       >
         <span
-          className={`transform transition-transform mr-2 ${isOpen ? "rotate-90" : ""}`}
+          className={`transform transition-transform mr-2 text-gray-600 ${isOpen ? "rotate-90" : ""}`}
         >
           ▶
         </span>
-        <span className="font-semibold">{title}</span>
+        <span className="font-semibold text-gray-600">{title}</span>
       </button>
       {isOpen && <div>{children}</div>}
     </div>
