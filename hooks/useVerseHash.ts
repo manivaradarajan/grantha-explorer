@@ -47,11 +47,11 @@ export function useVerseHash(
     const hash = window.location.hash;
     const parsed = parseHash(hash);
 
-    // If valid hash exists and grantha is available, use it
-    if (parsed && availableGranthas.includes(parsed.granthaId)) {
+    // If valid hash exists, trust it (grantha list may not be loaded yet)
+    if (parsed && parsed.granthaId && parsed.verseRef) {
       const grantha = granthaDataMap.get(parsed.granthaId);
 
-      // Validate verse ref exists in grantha
+      // Validate verse ref exists in grantha (if loaded)
       if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
         // Save commentaries to localStorage (content params)
         if (parsed.commentaries && parsed.commentaries.length > 0) {
@@ -72,7 +72,29 @@ export function useVerseHash(
         };
       }
 
-      // Invalid verse ref - use first verse of that grantha
+      // If grantha not loaded yet, trust the parsed hash
+      // The app will load the grantha data and validate later
+      if (!grantha) {
+        // Save commentaries to localStorage if present
+        if (parsed.commentaries && parsed.commentaries.length > 0) {
+          try {
+            localStorage.setItem(
+              "selectedCommentaries",
+              JSON.stringify(parsed.commentaries)
+            );
+          } catch (e) {
+            console.error("Failed to save commentaries to localStorage:", e);
+          }
+        }
+
+        return {
+          granthaId: parsed.granthaId,
+          verseRef: parsed.verseRef,
+          commentaries: parsed.commentaries || [],
+        };
+      }
+
+      // Invalid verse ref - use first verse of that grantha (only if loaded)
       if (grantha) {
         const firstRef = getFirstVerseRef(grantha);
         // Update URL with valid verse
@@ -133,7 +155,7 @@ export function useVerseHash(
       if (parsed && availableGranthas.includes(parsed.granthaId)) {
         const grantha = granthaDataMap.get(parsed.granthaId);
 
-        // Validate verse ref
+        // Validate verse ref if grantha is loaded
         if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
           // Save commentaries to localStorage if present
           if (parsed.commentaries && parsed.commentaries.length > 0) {
@@ -155,7 +177,30 @@ export function useVerseHash(
           return;
         }
 
-        // Invalid verse - use first verse
+        // If grantha not loaded yet, trust the parsed data and update state
+        // The app will load the grantha data separately
+        if (!grantha) {
+          // Save commentaries to localStorage if present
+          if (parsed.commentaries && parsed.commentaries.length > 0) {
+            try {
+              localStorage.setItem(
+                "selectedCommentaries",
+                JSON.stringify(parsed.commentaries)
+              );
+            } catch (e) {
+              console.error("Failed to save commentaries:", e);
+            }
+          }
+
+          setState({
+            granthaId: parsed.granthaId,
+            verseRef: parsed.verseRef,
+            commentaries: parsed.commentaries || [],
+          });
+          return;
+        }
+
+        // Invalid verse - use first verse (only if grantha is loaded)
         if (grantha) {
           const firstRef = getFirstVerseRef(grantha);
           window.history.replaceState(

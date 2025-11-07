@@ -20,7 +20,10 @@ export interface Passage {
 export interface PrefatoryMaterial {
   ref: string;
   passage_type: "prefatory";
-  label: string;
+  label: {
+    devanagari: string;
+    roman?: string;
+  };
   content: Content;
 }
 

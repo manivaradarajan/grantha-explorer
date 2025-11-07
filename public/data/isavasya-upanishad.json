@@ -37,9 +37,11 @@
   ],
   "prefatory_material": [
     {
-      "ref": "0",
+      "ref": "shaanti-mantrah",
       "passage_type": "prefatory",
-      "label": "शान्तिमन्त्रः",
+      "label": {
+        "devanagari": "शान्तिमन्त्रः"
+      },
       "content": {
         "sanskrit": {
           "devanagari": "ॐ पूर्णमदः पूर्णमिदं पूर्णात्पूर्णमुदच्यते ।\nपूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ॥\nॐ शान्तिः शान्तिः शान्तिः ॥"

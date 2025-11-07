@@ -96,11 +96,20 @@ export default function Home() {
 
   // Handle grantha change
   const handleGranthaChange = async (newGranthaId: string) => {
-    const grantha =
-      granthaDataMap.get(newGranthaId) || (await loadGrantha(newGranthaId));
-    if (!granthaDataMap.has(newGranthaId)) {
-      setGranthaDataMap((prev) => new Map(prev).set(newGranthaId, grantha));
+    // Load grantha if not in cache
+    let grantha = granthaDataMap.get(newGranthaId);
+    if (!grantha) {
+      grantha = await loadGrantha(newGranthaId);
+      // Update map and set as current immediately
+      const newMap = new Map(granthaDataMap);
+      newMap.set(newGranthaId, grantha);
+      setGranthaDataMap(newMap);
+      setCurrentGrantha(grantha);
+    } else {
+      // Already cached, just set as current
+      setCurrentGrantha(grantha);
     }
+
     const firstRef = getFirstVerseRef(grantha);
     updateHash(newGranthaId, firstRef, commentaries);
   };
