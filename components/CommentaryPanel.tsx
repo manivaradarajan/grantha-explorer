@@ -98,10 +98,7 @@ export default function CommentaryPanel({
 
   if (commentaries.length === 0) {
     return (
-      <div className="h-screen flex flex-col">
-        <div className="p-4 border-b border-gray-300">
-          <h2 className="text-lg font-semibold text-center font-serif">भाष्यम्</h2>
-        </div>
+      <div className="h-full flex flex-col">
         <div className="flex-1 overflow-y-auto p-6">
           <p className="text-gray-500 italic">No commentaries available.</p>
         </div>
@@ -109,19 +106,11 @@ export default function CommentaryPanel({
     );
   }
 
-  // Single commentary - show title in header
+  // Single commentary
   if (!hasMultipleCommentaries) {
     const commentary = commentaries[0];
     return (
-      <div className="h-screen flex flex-col">
-        <div className="p-4 border-b border-gray-300 text-center">
-          <h2 className="text-lg font-semibold font-serif">
-            {commentary.commentary_title}
-          </h2>
-          <div className="text-sm text-gray-600 mt-1">
-            {commentary.commentator.devanagari}
-          </div>
-        </div>
+      <div className="h-full flex flex-col">
         <div className="flex-1 overflow-y-auto p-6">
           {renderCommentary(commentary, 0)}
         </div>
@@ -131,12 +120,9 @@ export default function CommentaryPanel({
 
   // Multiple commentaries - show selector
   return (
-    <div className="h-screen flex flex-col">
-      <div className="border-b border-gray-300">
-        <div className="p-4 text-center">
-          <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
-        </div>
-        <div className="p-4 border-t border-gray-200">
+    <div className="h-full flex flex-col">
+      <div className="border-b border-gray-200">
+        <div className="p-4">
           {commentaries.map((commentary, index) => (
             <label
               key={index}

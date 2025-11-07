@@ -26,14 +26,7 @@ export default function TextContent({
   }, [selectedRef]);
 
   return (
-    <div className="h-screen flex flex-col border-r-2 border-gray-300">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-300">
-        <h1 className="text-xl font-semibold text-center font-serif">
-          {grantha.canonical_title}
-        </h1>
-      </div>
-
+    <div className="h-full flex flex-col">
       {/* Verses */}
       <div className="flex-1 overflow-y-auto p-6">
         {passages.map((passage) => {
@@ -47,8 +40,8 @@ export default function TextContent({
                 verseRefs.current[passage.ref] = el;
               }}
               onClick={() => onVerseSelect(passage.ref)}
-              className={`mb-6 p-4 transition-colors duration-150 cursor-pointer hover:bg-gray-100 ${
-                isSelected ? "bg-gray-200" : "bg-white"
+              className={`px-4 py-3 mb-4 transition-all duration-150 cursor-pointer hover:bg-gray-100 hover:rounded-lg ${
+                isSelected ? "bg-gray-200 rounded-lg" : "bg-white"
               }`}
             >
               <div className="flex items-start gap-4">

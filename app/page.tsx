@@ -69,39 +69,64 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen bg-white">
-      <PanelGroup direction="horizontal">
-        {/* Left Navigation Panel */}
-        <Panel defaultSize={20} minSize={15} maxSize={35}>
-          <NavigationSidebar
-            grantha={currentGrantha}
-            granthas={granthas}
-            selectedRef={selectedRef}
-            onGranthaChange={handleGranthaChange}
-            onVerseSelect={handleVerseSelect}
-          />
-        </Panel>
+    <main className="h-screen bg-white flex flex-col">
+      {/* Header row with all three column headers */}
+      <div className="flex border-b border-gray-300">
+        <div className="w-[20%] min-w-[15%] max-w-[35%] p-4 bg-[#f8f9fa]">
+          <h2 className="text-lg font-semibold font-serif">अनुक्रमणिका</h2>
+        </div>
+        <div className="flex-1 p-4 border-r-2 border-gray-300 text-center">
+          <h1 className="text-xl font-semibold font-serif">
+            {currentGrantha.canonical_title}
+          </h1>
+        </div>
+        <div className="w-[30%] min-w-[20%] max-w-[40%] p-4 text-center">
+          <h2 className="text-lg font-semibold font-serif">
+            {currentGrantha.commentaries?.[0]?.commentary_title || "भाष्यम्"}
+          </h2>
+          {currentGrantha.commentaries?.[0] && (
+            <div className="text-sm text-gray-600 mt-1">
+              {currentGrantha.commentaries[0].commentator.devanagari}
+            </div>
+          )}
+        </div>
+      </div>
 
-        {/* Resize Handle */}
-        <PanelResizeHandle className="w-0.5 bg-gray-300 hover:bg-blue-500 transition-colors" />
+      {/* Main content with resizable panels */}
+      <div className="flex-1 overflow-hidden">
+        <PanelGroup direction="horizontal">
+          {/* Left Navigation Panel */}
+          <Panel defaultSize={20} minSize={15} maxSize={35}>
+            <NavigationSidebar
+              grantha={currentGrantha}
+              granthas={granthas}
+              selectedRef={selectedRef}
+              onGranthaChange={handleGranthaChange}
+              onVerseSelect={handleVerseSelect}
+            />
+          </Panel>
 
-        {/* Center Content Panel */}
-        <Panel defaultSize={50} minSize={30}>
-          <TextContent
-            grantha={currentGrantha}
-            selectedRef={selectedRef}
-            onVerseSelect={handleVerseSelect}
-          />
-        </Panel>
+          {/* Resize Handle - invisible but functional */}
+          <PanelResizeHandle className="w-0.5" />
 
-        {/* Resize Handle */}
-        <PanelResizeHandle className="w-0.5 bg-gray-300 hover:bg-blue-500 transition-colors" />
+          {/* Center Content Panel */}
+          <Panel defaultSize={50} minSize={30}>
+            <TextContent
+              grantha={currentGrantha}
+              selectedRef={selectedRef}
+              onVerseSelect={handleVerseSelect}
+            />
+          </Panel>
 
-        {/* Right Commentary Panel */}
-        <Panel defaultSize={30} minSize={20} maxSize={40}>
-          <CommentaryPanel grantha={currentGrantha} selectedRef={selectedRef} />
-        </Panel>
-      </PanelGroup>
+          {/* Resize Handle */}
+          <PanelResizeHandle className="w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors" />
+
+          {/* Right Commentary Panel */}
+          <Panel defaultSize={30} minSize={20} maxSize={40}>
+            <CommentaryPanel grantha={currentGrantha} selectedRef={selectedRef} />
+          </Panel>
+        </PanelGroup>
+      </div>
     </main>
   );
 }

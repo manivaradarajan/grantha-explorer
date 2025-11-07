@@ -20,7 +20,7 @@ export default function GranthaSelector({
       <select
         value={selectedGranthaId}
         onChange={(e) => onSelect(e.target.value)}
-        className="w-full p-3 bg-white border-none outline-none cursor-pointer text-base"
+        className="w-full p-2 bg-white border-none outline-none cursor-pointer text-base"
       >
         {granthas.map((grantha) => (
           <option key={grantha.id} value={grantha.id}>
