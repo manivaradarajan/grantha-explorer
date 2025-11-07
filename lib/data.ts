@@ -53,6 +53,39 @@ export interface Alias {
   scope: string;
 }
 
+export interface Commentator {
+  devanagari: string;
+  latin?: string;
+}
+
+export interface CommentaryPrefatoryItem {
+  type: string;
+  label: string;
+  content: {
+    sanskrit: SanskritContent;
+    english: string;
+  };
+}
+
+export interface CommentaryPassage {
+  ref: string;
+  prefatory_material?: CommentaryPrefatoryItem[];
+  content: {
+    sanskrit: SanskritContent;
+    english: string;
+  };
+}
+
+export interface Commentary {
+  commentary_id: string;
+  commentary_title: string;
+  commentator: Commentator;
+  metadata?: {
+    source_file?: string;
+  };
+  passages: CommentaryPassage[];
+}
+
 export interface Grantha {
   grantha_id: string;
   canonical_title: string;
@@ -64,6 +97,7 @@ export interface Grantha {
   prefatory_material: PrefatoryMaterial[];
   passages: Passage[];
   concluding_material?: PrefatoryMaterial[];
+  commentaries?: Commentary[];
 }
 
 export interface GranthaMetadata {

@@ -246,7 +246,10 @@
     {
       "commentary_id": "vedanta_desika",
       "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
-      "commentator": "Vedanta Desika",
+      "commentator": {
+        "devanagari": "वेदान्तदेशिकः",
+        "latin": "Vedanta Desika"
+      },
       "metadata": {
         "source_file": "isavasya-vedantacharya.json"
       },

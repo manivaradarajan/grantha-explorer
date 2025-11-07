@@ -99,7 +99,7 @@ export default function Home() {
 
         {/* Right Commentary Panel */}
         <Panel defaultSize={30} minSize={20} maxSize={40}>
-          <CommentaryPanel />
+          <CommentaryPanel grantha={currentGrantha} selectedRef={selectedRef} />
         </Panel>
       </PanelGroup>
     </main>

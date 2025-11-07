@@ -41,7 +41,7 @@ export default function NavigationSidebar({
     <div className="h-screen flex flex-col border-r-2 border-gray-300">
       {/* Header */}
       <div className="p-4 border-b border-gray-300">
-        <h2 className="text-lg font-semibold mb-3">अनुक्रमणिका</h2>
+        <h2 className="text-lg font-semibold mb-3 font-serif">अनुक्रमणिका</h2>
         <GranthaSelector
           granthas={granthas}
           selectedGranthaId={grantha.grantha_id}

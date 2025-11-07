@@ -29,7 +29,7 @@ export default function TextContent({
     <div className="h-screen flex flex-col border-r-2 border-gray-300">
       {/* Header */}
       <div className="p-4 border-b border-gray-300">
-        <h1 className="text-xl font-semibold text-center">
+        <h1 className="text-xl font-semibold text-center font-serif">
           {grantha.canonical_title}
         </h1>
       </div>
