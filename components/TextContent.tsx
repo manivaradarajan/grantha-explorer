@@ -7,12 +7,14 @@ interface TextContentProps {
   grantha: Grantha;
   selectedRef: string;
   onVerseSelect: (ref: string) => void;
+  title: string;
 }
 
 export default function TextContent({
   grantha,
   selectedRef,
   onVerseSelect,
+  title,
 }: TextContentProps) {
   const passages = getAllPassagesForNavigation(grantha);
   const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -27,8 +29,13 @@ export default function TextContent({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="px-4 pt-6 pb-2 text-center bg-white">
+        <h1 className="text-3xl font-semibold font-serif">{title}</h1>
+      </div>
+
       {/* Verses */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto px-6 pb-6">
         {passages.map((passage) => {
           const isSelected = passage.ref === selectedRef;
           const sanskritText = passage.content.sanskrit.devanagari;

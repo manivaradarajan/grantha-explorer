@@ -25,7 +25,7 @@ export default function CommentaryPanel({
       // Don't allow deselecting if it's the only one selected
       if (selectedCommentaries.length > 1) {
         setSelectedCommentaries(
-          selectedCommentaries.filter((i) => i !== index)
+          selectedCommentaries.filter((i) => i !== index),
         );
       }
     } else {
@@ -36,7 +36,7 @@ export default function CommentaryPanel({
   // Render a single commentary for the selected verse
   const renderCommentary = (commentary: any, index: number) => {
     const passage = commentary.passages?.find(
-      (p: any) => p.ref === selectedRef
+      (p: any) => p.ref === selectedRef,
     );
 
     if (!passage) {
@@ -88,7 +88,7 @@ export default function CommentaryPanel({
           dangerouslySetInnerHTML={{
             __html: mainContent.replace(
               /\*\*(.*?)\*\*/g,
-              '<strong class="font-bold text-gray-900">$1</strong>'
+              '<strong class="font-bold text-gray-900">$1</strong>',
             ),
           }}
         />
@@ -99,7 +99,11 @@ export default function CommentaryPanel({
   if (commentaries.length === 0) {
     return (
       <div className="h-full flex flex-col">
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* Header */}
+        <div className="pt-6 px-4 text-center bg-white">
+          <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 pb-6">
           <p className="text-gray-500 italic">No commentaries available.</p>
         </div>
       </div>
@@ -111,7 +115,16 @@ export default function CommentaryPanel({
     const commentary = commentaries[0];
     return (
       <div className="h-full flex flex-col">
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* Header */}
+        <div className="pt-6 px-4 text-center bg-white">
+          <h2 className="text-lg font-semibold font-serif">
+            {commentary.commentary_title}
+          </h2>
+          <div className="text-sm pb-2 text-gray-600 mt-1">
+            {commentary.commentator.devanagari}
+          </div>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 pb-6">
           {renderCommentary(commentary, 0)}
         </div>
       </div>
@@ -121,6 +134,11 @@ export default function CommentaryPanel({
   // Multiple commentaries - show selector
   return (
     <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="p-4 text-center bg-white">
+        <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
+      </div>
+
       <div className="border-b border-gray-200">
         <div className="p-4">
           {commentaries.map((commentary, index) => (
@@ -134,13 +152,15 @@ export default function CommentaryPanel({
                 onChange={() => toggleCommentary(index)}
                 className="w-4 h-4"
               />
-              <span className="text-sm">{commentary.commentator.devanagari}</span>
+              <span className="text-sm">
+                {commentary.commentator.devanagari}
+              </span>
             </label>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto px-6 pb-6">
         {selectedCommentaries.map((index, idx) => (
           <div key={index}>
             {renderCommentary(commentaries[index], index)}

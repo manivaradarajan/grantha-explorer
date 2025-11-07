@@ -38,9 +38,14 @@ export default function NavigationSidebar({
   }, [selectedRef]);
 
   return (
-    <div className="h-full flex flex-col bg-[#f8f9fa]">
+    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
+      {/* Header */}
+      <div className="pt-8 pb-2 px-4 bg-[#f8f9fa]">
+        <h2 className="text-xl font-semibold font-serif px-5">अनुक्रमणिका</h2>
+      </div>
+
       {/* Grantha selector */}
-      <div className="px-6 pt-4 pb-3">
+      <div className="px-6 pb-3">
         <GranthaSelector
           granthas={granthas}
           selectedGranthaId={grantha.grantha_id}
@@ -66,13 +71,13 @@ export default function NavigationSidebar({
               }}
               onClick={() => onVerseSelect(passage.ref)}
               className={`w-full text-left py-2 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate ${
-                isSelected ? "bg-gray-300/80 rounded-lg font-bold" : ""
+                isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
               }`}
             >
-              <span className={isSelected ? "text-gray-700" : "text-blue-600"}>
+              <span className={isSelected ? "text-gray-500" : "text-blue-600"}>
                 {label} -{" "}
               </span>
-              <span className={isSelected ? "text-gray-700" : "text-gray-500"}>
+              <span className={isSelected ? "text-gray-500" : "text-gray-500"}>
                 {fragment}
               </span>
             </button>
