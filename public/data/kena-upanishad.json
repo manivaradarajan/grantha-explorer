@@ -31,7 +31,15 @@
       "key": "Khanda",
       "scriptNames": {
         "devanagari": "खण्डः"
-      }
+      },
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः"
+          }
+        }
+      ]
     }
   ],
   "variants_available": ["canonical"],

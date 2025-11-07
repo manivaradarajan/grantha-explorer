@@ -31,7 +31,8 @@
       "key": "Mantra",
       "scriptNames": {
         "devanagari": "मन्त्रः"
-      }
+      },
+      "children": []
     }
   ],
   "prefatory_material": [

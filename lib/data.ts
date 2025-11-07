@@ -30,6 +30,7 @@ export interface StructureLevel {
     devanagari: string;
     roman?: string;
   };
+  children?: StructureLevel[];
 }
 
 export interface ProcessingPipeline {
@@ -103,6 +104,17 @@ export interface Grantha {
 export interface GranthaMetadata {
   id: string;
   title: string;
+}
+
+export interface PassageGroup {
+  level: string;
+  passages: Passage[];
+}
+
+export interface PassageHierarchy {
+  prefatory: (Passage | PrefatoryMaterial)[];
+  main: PassageGroup[];
+  concluding: (Passage | PrefatoryMaterial)[];
 }
 
 // Data loading functions
@@ -190,4 +202,44 @@ export function getAllPassagesForNavigation(
     ...grantha.passages,
     ...(grantha.concluding_material || []),
   ];
+}
+
+export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
+  const structure = grantha.structure_levels;
+  const isHierarchical = structure?.[0]?.children?.length > 0;
+
+  const hierarchy: PassageHierarchy = {
+    prefatory: grantha.prefatory_material,
+    main: [],
+    concluding: grantha.concluding_material || [],
+  };
+
+  if (isHierarchical) {
+    const topLevel = structure[0];
+    const groups: { [key: string]: PassageGroup } = {};
+
+    for (const passage of grantha.passages) {
+      const refParts = passage.ref.split('.');
+      const topLevelRef = refParts[0];
+      const groupLabel = `${topLevel.scriptNames.devanagari} ${topLevelRef}`;
+
+      if (!groups[groupLabel]) {
+        groups[groupLabel] = {
+          level: groupLabel,
+          passages: [],
+        };
+      }
+      groups[groupLabel].passages.push(passage);
+    }
+    hierarchy.main = Object.values(groups);
+  } else {
+    hierarchy.main = [
+      {
+        level: "Passages",
+        passages: grantha.passages,
+      },
+    ];
+  }
+
+  return hierarchy;
 }
