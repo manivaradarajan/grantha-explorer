@@ -1,27 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import TextContent from "@/components/TextContent";
 import CommentaryPanel from "@/components/CommentaryPanel";
-import {
-  getAvailableGranthas,
-  loadGrantha,
-  Grantha,
-  GranthaMetadata,
-} from "@/lib/data";
 import { useVerseHash } from "@/hooks/useVerseHash";
-import { getFirstVerseRef } from "@/lib/hashUtils";
+import { useGrantha, useAvailableGranthas } from "@/hooks/useGrantha";
+import { getFirstVerseRef, validateAndNormalizeHash } from "@/lib/hashUtils";
 
 export default function Home() {
-  const [granthas, setGranthas] = useState<GranthaMetadata[]>([]);
-  const [granthaDataMap, setGranthaDataMap] = useState<Map<string, Grantha>>(
-    new Map()
-  );
-  const [currentGrantha, setCurrentGrantha] = useState<Grantha | null>(null);
-  const [loading, setLoading] = useState(true);
-
   // Load panel sizes from localStorage
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [20, 50, 30];
@@ -34,83 +22,45 @@ export default function Home() {
     }
   });
 
-  // Load available granthas on mount
-  useEffect(() => {
-    async function loadGranthas() {
-      const available = await getAvailableGranthas();
-      setGranthas(available);
+  // Load available granthas
+  const {
+    data: granthas = [],
+    isLoading: granthasLoading,
+    error: granthasError,
+  } = useAvailableGranthas();
 
-      // Load first grantha by default
-      if (available.length > 0) {
-        const firstGrantha = await loadGrantha(available[0].id);
-        const dataMap = new Map<string, Grantha>();
-        dataMap.set(available[0].id, firstGrantha);
-        setGranthaDataMap(dataMap);
-        setCurrentGrantha(firstGrantha);
-      }
-      setLoading(false);
-    }
-
-    loadGranthas();
-  }, []);
-
-  // Use hash-based routing
+  // Get current state from URL hash
   const { granthaId, verseRef, commentaries, updateHash } = useVerseHash(
-    granthas.map((g) => g.id),
     granthas[0]?.id || "isavasya-upanishad",
-    granthaDataMap
+    "1"
   );
 
-  // Load grantha when granthaId changes (from hash)
+  // Load current grantha data via React Query
+  const {
+    data: currentGrantha,
+    isLoading: granthaLoading,
+    error: granthaError,
+  } = useGrantha(granthaId);
+
+  // Validate and correct verse ref when grantha loads
   useEffect(() => {
-    async function loadCurrentGrantha() {
-      // Check if already loaded
-      if (currentGrantha?.grantha_id === granthaId) {
-        return;
-      }
+    if (!currentGrantha) return;
 
-      // Check if in cache
-      const cached = granthaDataMap.get(granthaId);
-      if (cached) {
-        setCurrentGrantha(cached);
-        return;
-      }
+    const normalized = validateAndNormalizeHash(
+      { granthaId, verseRef, commentaries },
+      currentGrantha
+    );
 
-      // Load from server
-      setLoading(true);
-      try {
-        const grantha = await loadGrantha(granthaId);
-        setGranthaDataMap((prev) => new Map(prev).set(granthaId, grantha));
-        setCurrentGrantha(grantha);
-      } catch (error) {
-        console.error("Failed to load grantha:", error);
-      } finally {
-        setLoading(false);
-      }
+    // If verse ref was invalid, update URL to corrected version
+    if (normalized.needsCorrection) {
+      updateHash(granthaId, normalized.verseRef, commentaries);
     }
+  }, [currentGrantha, granthaId, verseRef, commentaries, updateHash]);
 
-    if (granthaId && granthas.length > 0) {
-      loadCurrentGrantha();
-    }
-  }, [granthaId, granthas, currentGrantha, granthaDataMap]);
-
-  // Handle grantha change
+  // Handle grantha change (simplified - just update hash)
   const handleGranthaChange = async (newGranthaId: string) => {
-    // Load grantha if not in cache
-    let grantha = granthaDataMap.get(newGranthaId);
-    if (!grantha) {
-      grantha = await loadGrantha(newGranthaId);
-      // Update map and set as current immediately
-      const newMap = new Map(granthaDataMap);
-      newMap.set(newGranthaId, grantha);
-      setGranthaDataMap(newMap);
-      setCurrentGrantha(grantha);
-    } else {
-      // Already cached, just set as current
-      setCurrentGrantha(grantha);
-    }
-
-    const firstRef = getFirstVerseRef(grantha);
+    // Optimistically get first verse (will be validated when grantha loads)
+    const firstRef = "1";
     updateHash(newGranthaId, firstRef, commentaries);
   };
 
@@ -129,17 +79,58 @@ export default function Home() {
     }
   };
 
-  if (loading || !currentGrantha) {
+  // Error states
+  if (granthasError) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500">Loading...</p>
+        <div className="text-center">
+          <p className="text-red-500 mb-2">Failed to load granthas list</p>
+          <p className="text-gray-500 text-sm">
+            {granthasError instanceof Error
+              ? granthasError.message
+              : "Unknown error"}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (granthaError) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">
+            Failed to load grantha: {granthaId}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {granthaError instanceof Error
+              ? granthaError.message
+              : "Unknown error"}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Loading states
+  if (granthasLoading || !granthas.length) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">Loading granthas...</p>
+      </div>
+    );
+  }
+
+  if (granthaLoading || !currentGrantha) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">Loading {granthaId}...</p>
       </div>
     );
   }
 
   return (
     <main className="h-screen bg-white flex flex-col">
-      {/* Continuous horizontal border that spans all columns */}
       <div className="relative h-full">
         <PanelGroup
           direction="horizontal"

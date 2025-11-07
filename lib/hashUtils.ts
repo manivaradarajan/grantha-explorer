@@ -173,6 +173,37 @@ export function isValidVerseRef(grantha: Grantha, verseRef: string): boolean {
 }
 
 /**
+ * Validate and normalize a parsed hash against grantha data
+ * If verse ref is invalid, corrects it to the first verse
+ *
+ * @param parsed - Parsed URL state
+ * @param grantha - Grantha data (optional, if not loaded yet)
+ * @returns Normalized URL state with correction info
+ */
+export function validateAndNormalizeHash(
+  parsed: UrlState,
+  grantha?: Grantha | null
+): UrlState & { needsCorrection: boolean } {
+  // If grantha not loaded yet, trust the parsed values
+  if (!grantha) {
+    return { ...parsed, needsCorrection: false };
+  }
+
+  // Validate verse ref
+  if (isValidVerseRef(grantha, parsed.verseRef)) {
+    return { ...parsed, needsCorrection: false };
+  }
+
+  // Invalid verse ref - correct to first verse
+  const firstRef = getFirstVerseRef(grantha);
+  return {
+    ...parsed,
+    verseRef: firstRef,
+    needsCorrection: true,
+  };
+}
+
+/**
  * Get all commentary IDs available for a grantha
  */
 export function getCommentaryIds(grantha: Grantha): string[] {

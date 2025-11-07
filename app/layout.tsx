@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Devanagari, Noto_Serif_Devanagari } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const notoSans = Noto_Sans_Devanagari({
   subsets: ["devanagari", "latin"],
@@ -26,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="sa">
-      <body className={`${notoSans.variable} ${notoSerif.variable} font-sans`}>{children}</body>
+      <body className={`${notoSans.variable} ${notoSerif.variable} font-sans`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

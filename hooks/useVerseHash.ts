@@ -1,45 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  parseHash,
-  buildHash,
-  getFirstVerseRef,
-  isValidVerseRef,
-  UrlState,
-} from "@/lib/hashUtils";
-import { Grantha } from "@/lib/data";
+import { useEffect, useState, useRef } from "react";
+import { parseHash, buildHash, UrlState } from "@/lib/hashUtils";
 
 interface UseVerseHashReturn {
   granthaId: string;
   verseRef: string;
   commentaries: string[];
-  updateHash: (granthaId: string, verseRef: string, commentaries?: string[]) => void;
+  updateHash: (
+    granthaId: string,
+    verseRef: string,
+    commentaries?: string[]
+  ) => void;
 }
 
 /**
- * Custom hook for managing hash-based verse navigation
- * - Reads initial hash on mount
- * - Listens to hashchange events (for browser back/forward)
- * - Provides updateHash function for programmatic updates
- * - Auto-initializes with first verse if hash is missing/invalid
+ * Simplified custom hook for managing hash-based verse navigation
+ *
+ * Key improvements:
+ * - Single source of truth: URL hash
+ * - No "trust the hash" hacks
+ * - Event listener uses refs (no dependency issues)
+ * - Validation happens in components via React Query
+ * - Commentary persistence to localStorage
+ *
+ * @param defaultGranthaId - Fallback grantha ID if hash is empty/invalid
+ * @param defaultVerseRef - Fallback verse ref if hash is empty/invalid
+ * @returns Current hash state and update function
  */
 export function useVerseHash(
-  availableGranthas: string[],
   defaultGranthaId: string,
-  granthaDataMap: Map<string, Grantha>
+  defaultVerseRef: string = "1"
 ): UseVerseHashReturn {
-  // Initialize state from URL hash or defaults
-  const [state, setState] = useState<{
+  // Parse initial hash or use defaults
+  const getInitialState = (): {
     granthaId: string;
     verseRef: string;
     commentaries: string[];
-  }>(() => {
-    // Check if we're in browser environment
+  } => {
     if (typeof window === "undefined") {
       return {
         granthaId: defaultGranthaId,
-        verseRef: "1",
+        verseRef: defaultVerseRef,
         commentaries: [],
       };
     }
@@ -47,75 +49,27 @@ export function useVerseHash(
     const hash = window.location.hash;
     const parsed = parseHash(hash);
 
-    // If valid hash exists, trust it (grantha list may not be loaded yet)
     if (parsed && parsed.granthaId && parsed.verseRef) {
-      const grantha = granthaDataMap.get(parsed.granthaId);
-
-      // Validate verse ref exists in grantha (if loaded)
-      if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
-        // Save commentaries to localStorage (content params)
-        if (parsed.commentaries && parsed.commentaries.length > 0) {
-          try {
-            localStorage.setItem(
-              "selectedCommentaries",
-              JSON.stringify(parsed.commentaries)
-            );
-          } catch (e) {
-            console.error("Failed to save commentaries to localStorage:", e);
-          }
+      // Save commentaries to localStorage
+      if (parsed.commentaries && parsed.commentaries.length > 0) {
+        try {
+          localStorage.setItem(
+            "selectedCommentaries",
+            JSON.stringify(parsed.commentaries)
+          );
+        } catch (e) {
+          console.error("Failed to save commentaries to localStorage:", e);
         }
-
-        return {
-          granthaId: parsed.granthaId,
-          verseRef: parsed.verseRef,
-          commentaries: parsed.commentaries || [],
-        };
       }
 
-      // If grantha not loaded yet, trust the parsed hash
-      // The app will load the grantha data and validate later
-      if (!grantha) {
-        // Save commentaries to localStorage if present
-        if (parsed.commentaries && parsed.commentaries.length > 0) {
-          try {
-            localStorage.setItem(
-              "selectedCommentaries",
-              JSON.stringify(parsed.commentaries)
-            );
-          } catch (e) {
-            console.error("Failed to save commentaries to localStorage:", e);
-          }
-        }
-
-        return {
-          granthaId: parsed.granthaId,
-          verseRef: parsed.verseRef,
-          commentaries: parsed.commentaries || [],
-        };
-      }
-
-      // Invalid verse ref - use first verse of that grantha (only if loaded)
-      if (grantha) {
-        const firstRef = getFirstVerseRef(grantha);
-        // Update URL with valid verse
-        window.history.replaceState(
-          null,
-          "",
-          buildHash({ granthaId: parsed.granthaId, verseRef: firstRef })
-        );
-        return {
-          granthaId: parsed.granthaId,
-          verseRef: firstRef,
-          commentaries: parsed.commentaries || [],
-        };
-      }
+      return {
+        granthaId: parsed.granthaId,
+        verseRef: parsed.verseRef,
+        commentaries: parsed.commentaries || [],
+      };
     }
 
-    // No valid hash - use default grantha and first verse
-    const defaultGrantha = granthaDataMap.get(defaultGranthaId);
-    const firstRef = defaultGrantha ? getFirstVerseRef(defaultGrantha) : "1";
-
-    // Load commentaries from localStorage
+    // No valid hash - load commentaries from localStorage
     let savedCommentaries: string[] = [];
     try {
       const saved = localStorage.getItem("selectedCommentaries");
@@ -127,22 +81,28 @@ export function useVerseHash(
     }
 
     // Set initial hash
-    window.history.replaceState(
-      null,
-      "",
-      buildHash({
-        granthaId: defaultGranthaId,
-        verseRef: firstRef,
-        commentaries: savedCommentaries,
-      })
-    );
+    const initialHash = buildHash({
+      granthaId: defaultGranthaId,
+      verseRef: defaultVerseRef,
+      commentaries: savedCommentaries,
+    });
+    window.history.replaceState(null, "", initialHash);
 
     return {
       granthaId: defaultGranthaId,
-      verseRef: firstRef,
+      verseRef: defaultVerseRef,
       commentaries: savedCommentaries,
     };
-  });
+  };
+
+  const [state, setState] = useState(getInitialState);
+
+  // Use refs to avoid recreating event listener
+  const stateRef = useRef(state);
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   // Listen to hashchange events (browser back/forward)
   useEffect(() => {
@@ -152,85 +112,29 @@ export function useVerseHash(
       const hash = window.location.hash;
       const parsed = parseHash(hash);
 
-      if (parsed && availableGranthas.includes(parsed.granthaId)) {
-        const grantha = granthaDataMap.get(parsed.granthaId);
+      // Invalid hash - ignore (shouldn't happen normally)
+      if (!parsed || !parsed.granthaId || !parsed.verseRef) {
+        return;
+      }
 
-        // Validate verse ref if grantha is loaded
-        if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
-          // Save commentaries to localStorage if present
-          if (parsed.commentaries && parsed.commentaries.length > 0) {
-            try {
-              localStorage.setItem(
-                "selectedCommentaries",
-                JSON.stringify(parsed.commentaries)
-              );
-            } catch (e) {
-              console.error("Failed to save commentaries:", e);
-            }
-          }
-
-          setState({
-            granthaId: parsed.granthaId,
-            verseRef: parsed.verseRef,
-            commentaries: parsed.commentaries || [],
-          });
-          return;
-        }
-
-        // If grantha not loaded yet, trust the parsed data and update state
-        // The app will load the grantha data separately
-        if (!grantha) {
-          // Save commentaries to localStorage if present
-          if (parsed.commentaries && parsed.commentaries.length > 0) {
-            try {
-              localStorage.setItem(
-                "selectedCommentaries",
-                JSON.stringify(parsed.commentaries)
-              );
-            } catch (e) {
-              console.error("Failed to save commentaries:", e);
-            }
-          }
-
-          setState({
-            granthaId: parsed.granthaId,
-            verseRef: parsed.verseRef,
-            commentaries: parsed.commentaries || [],
-          });
-          return;
-        }
-
-        // Invalid verse - use first verse (only if grantha is loaded)
-        if (grantha) {
-          const firstRef = getFirstVerseRef(grantha);
-          window.history.replaceState(
-            null,
-            "",
-            buildHash({
-              granthaId: parsed.granthaId,
-              verseRef: firstRef,
-              commentaries: parsed.commentaries,
-            })
+      // Save commentaries to localStorage if present
+      if (parsed.commentaries && parsed.commentaries.length > 0) {
+        try {
+          localStorage.setItem(
+            "selectedCommentaries",
+            JSON.stringify(parsed.commentaries)
           );
-          setState({
-            granthaId: parsed.granthaId,
-            verseRef: firstRef,
-            commentaries: parsed.commentaries || [],
-          });
-          return;
+        } catch (e) {
+          console.error("Failed to save commentaries:", e);
         }
       }
 
-      // Invalid hash - revert to current state
-      window.history.replaceState(
-        null,
-        "",
-        buildHash({
-          granthaId: state.granthaId,
-          verseRef: state.verseRef,
-          commentaries: state.commentaries,
-        })
-      );
+      // Update state from hash
+      setState({
+        granthaId: parsed.granthaId,
+        verseRef: parsed.verseRef,
+        commentaries: parsed.commentaries || [],
+      });
     }
 
     window.addEventListener("hashchange", handleHashChange);
@@ -238,11 +142,16 @@ export function useVerseHash(
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
-  }, [availableGranthas, granthaDataMap, state.granthaId, state.verseRef, state.commentaries]);
+  }, []); // Empty deps - listener created once, uses refs
 
   // Function to update hash (called by components)
-  const updateHash = (granthaId: string, verseRef: string, commentaries?: string[]) => {
-    const newCommentaries = commentaries !== undefined ? commentaries : state.commentaries;
+  const updateHash = (
+    granthaId: string,
+    verseRef: string,
+    commentaries?: string[]
+  ) => {
+    const newCommentaries =
+      commentaries !== undefined ? commentaries : stateRef.current.commentaries;
 
     const newHash = buildHash({
       granthaId,
