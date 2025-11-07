@@ -22,6 +22,18 @@ export default function Home() {
   const [currentGrantha, setCurrentGrantha] = useState<Grantha | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Load panel sizes from localStorage
+  const [panelSizes, setPanelSizes] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [20, 50, 30];
+    try {
+      const saved = localStorage.getItem("panelSizes");
+      return saved ? JSON.parse(saved) : [20, 50, 30];
+    } catch (e) {
+      console.error("Failed to load panel sizes:", e);
+      return [20, 50, 30];
+    }
+  });
+
   // Load available granthas on mount
   useEffect(() => {
     async function loadGranthas() {
@@ -98,6 +110,16 @@ export default function Home() {
     updateHash(granthaId, ref, commentaries);
   };
 
+  // Handle panel size changes
+  const handlePanelLayout = (sizes: number[]) => {
+    setPanelSizes(sizes);
+    try {
+      localStorage.setItem("panelSizes", JSON.stringify(sizes));
+    } catch (e) {
+      console.error("Failed to save panel sizes:", e);
+    }
+  };
+
   if (loading || !currentGrantha) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -110,9 +132,13 @@ export default function Home() {
     <main className="h-screen bg-white flex flex-col">
       {/* Continuous horizontal border that spans all columns */}
       <div className="relative h-full">
-        <PanelGroup direction="horizontal" className="h-full">
+        <PanelGroup
+          direction="horizontal"
+          className="h-full"
+          onLayout={handlePanelLayout}
+        >
           {/* Left Navigation Panel */}
-          <Panel defaultSize={20} minSize={15} maxSize={35}>
+          <Panel defaultSize={panelSizes[0]} minSize={15} maxSize={35}>
             <NavigationSidebar
               grantha={currentGrantha}
               granthas={granthas}
@@ -126,7 +152,7 @@ export default function Home() {
           <PanelResizeHandle className="w-0.5" />
 
           {/* Center Content Panel */}
-          <Panel defaultSize={50} minSize={30}>
+          <Panel defaultSize={panelSizes[1]} minSize={30}>
             <TextContent
               grantha={currentGrantha}
               selectedRef={verseRef}
@@ -139,7 +165,7 @@ export default function Home() {
           <PanelResizeHandle className="w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors" />
 
           {/* Right Commentary Panel */}
-          <Panel defaultSize={30} minSize={20} maxSize={40}>
+          <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
             <CommentaryPanel grantha={currentGrantha} selectedRef={verseRef} />
           </Panel>
         </PanelGroup>

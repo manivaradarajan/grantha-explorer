@@ -24,9 +24,12 @@ export default function PassageLink({
   const verseRef = useRef<HTMLButtonElement | null>(null);
 
   const getLabel = () => {
-    if (passage.passage_type === "prefatory") {
+    // Use label directly for prefatory and concluding material
+    if (passage.passage_type === "prefatory" || passage.passage_type === "concluding") {
       return passage.label || "प्रस्तावना";
     }
+
+    // For main passages, construct label from structure levels
     const topLevelStructure = grantha.structure_levels[0];
     const level2Structure = topLevelStructure.children?.[0];
 
