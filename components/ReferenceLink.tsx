@@ -16,6 +16,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode | null>('Loading...');
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const [tooltipBelow, setTooltipBelow] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
 
   const isInLibrary = isReferenceInLibrary(reference.granthaId, availableGranthaIds);
@@ -23,7 +24,33 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const handleMouseEnter = async (e: React.MouseEvent) => {
     if (linkRef.current) {
       const rect = linkRef.current.getBoundingClientRect();
-      setTooltipPosition({ top: rect.top - 10, left: rect.left + rect.width / 2 });
+      const tooltipMaxWidth = 600; // matches max-width in CSS
+      const tooltipEstimatedHeight = 100; // estimated height for positioning
+      const padding = 10; // padding from viewport edges
+
+      let top = rect.top - 10;
+      let left = rect.left + rect.width / 2;
+
+      // Adjust horizontal position to keep tooltip in viewport
+      const leftBound = tooltipMaxWidth / 2 + padding;
+      const rightBound = window.innerWidth - tooltipMaxWidth / 2 - padding;
+
+      if (left < leftBound) {
+        left = leftBound;
+      } else if (left > rightBound) {
+        left = rightBound;
+      }
+
+      // Adjust vertical position if tooltip would go above viewport
+      if (top - tooltipEstimatedHeight < padding) {
+        // Position below the link instead
+        top = rect.bottom + 10;
+        setTooltipBelow(true);
+      } else {
+        setTooltipBelow(false);
+      }
+
+      setTooltipPosition({ top, left });
     }
     setShowTooltip(true);
     if (isInLibrary) {
@@ -44,6 +71,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const handleMouseLeave = () => {
     setShowTooltip(false);
     setTooltipContent('Loading...');
+    setTooltipBelow(false);
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -69,7 +97,14 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
         {reference.displayText}
       </a>
       {showTooltip && ReactDOM.createPortal(
-        <div className="reference-tooltip" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
+        <div
+          className="reference-tooltip"
+          style={{
+            top: tooltipPosition.top,
+            left: tooltipPosition.left,
+            transform: tooltipBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)'
+          }}
+        >
           {tooltipContent}
         </div>,
         document.body

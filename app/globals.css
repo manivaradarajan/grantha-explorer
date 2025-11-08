@@ -6,8 +6,8 @@
 }
 
 .reference-link {
-  color: blue;
-  text-decoration: underline;
+  color: #2563eb;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -26,7 +26,8 @@
   border-radius: 4px;
   z-index: 100;
   width: auto;
-  max-width: 300px;
+  min-width: 200px;
+  max-width: 600px;
   text-align: left;
   visibility: visible;
   opacity: 1;
