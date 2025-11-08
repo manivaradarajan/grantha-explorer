@@ -37,10 +37,16 @@ export default function NavigationSidebar({
     const group = hierarchy.main.find((g) =>
       g.passages.some((p) => p.ref === selectedRef)
     );
-    if (group && !openAccordions.includes(group.level)) {
-      setOpenAccordions((prev) => [...prev, group.level]);
+    if (group) {
+      setOpenAccordions((prev) => {
+        if (!prev.includes(group.level)) {
+          return [...prev, group.level];
+        }
+        return prev;
+      });
     }
-  }, [grantha.grantha_id, selectedRef, hierarchy.main, openAccordions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [grantha.grantha_id, selectedRef]);
 
   // Auto-scroll to selected verse when selection changes
   useEffect(() => {
