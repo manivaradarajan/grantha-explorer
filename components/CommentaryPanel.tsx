@@ -1,7 +1,8 @@
 "use client";
 
 import { Grantha, Commentary, CommentaryPassage, CommentaryPrefatoryItem } from "@/lib/data";
-import { useState } from "react";
+import { getUIStrings, type Language, type Script } from "@/lib/i18n";
+import { useState, useMemo } from "react";
 
 import DOMPurify from "isomorphic-dompurify";
 
@@ -16,6 +17,14 @@ export default function CommentaryPanel({
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
   const hasMultipleCommentaries = commentaries.length > 1;
+
+  // Get localized UI strings based on grantha language
+  const uiStrings = useMemo(() => {
+    const language = (grantha.language || "sanskrit") as Language;
+    // Default to devanagari for now - could be enhanced to detect script preference
+    const script: Script = "devanagari";
+    return getUIStrings(language, script);
+  }, [grantha.language]);
 
   // Track which commentaries are selected (by index)
   const [selectedCommentaries, setSelectedCommentaries] = useState<number[]>([
@@ -44,7 +53,7 @@ export default function CommentaryPanel({
     if (!passage) {
       return (
         <div key={index} className="text-gray-500 italic">
-          अत्र भाष्यं नास्ति
+          {uiStrings.noCommentaryForVerse}
         </div>
       );
     }
@@ -111,10 +120,10 @@ export default function CommentaryPanel({
       <div className="h-full flex flex-col">
         {/* Header */}
         <div className="pt-6 px-4 text-center bg-white">
-          <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
+          <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
         </div>
         <div className="flex-1 overflow-y-auto px-6 pb-6">
-          <p className="text-gray-500 italic">अत्र भाष्यं नास्ति</p>
+          <p className="text-gray-500 italic">{uiStrings.noCommentariesAvailable}</p>
         </div>
       </div>
     );
@@ -146,7 +155,7 @@ export default function CommentaryPanel({
     <div className="h-full flex flex-col">
       {/* Header */}
       <div className="p-4 text-center bg-white">
-        <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
+        <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
       </div>
 
       <div className="border-b border-gray-200">
