@@ -45,7 +45,7 @@ export default function Home() {
   // Track previous grantha to detect changes
   const previousGranthaId = useRef<string | null>(null);
 
-  // Handle grantha changes - jump to first main passage
+  // Handle grantha changes - jump to first main passage when appropriate
   useEffect(() => {
     if (!currentGrantha) return;
 
@@ -61,10 +61,11 @@ export default function Home() {
     // Update the ref for next comparison
     previousGranthaId.current = granthaId;
 
-    // Jump to first main passage if:
-    // 1. Grantha was switched, OR
-    // 2. First load with default verse ref (skip prefatory)
-    if (granthaChanged || isDefaultVerseRef) {
+    // Jump to first main passage only if:
+    // 1. First load with default verse ref (skip prefatory), OR
+    // 2. Grantha was switched AND the current verseRef doesn't exist in the new grantha
+    //    (this handles navigation from dropdown but preserves reference link targets)
+    if (isDefaultVerseRef || (granthaChanged && verseRef === "1")) {
       const firstMainRef = getFirstMainPassageRef(currentGrantha);
       // Only update if we're not already at the first main passage
       if (verseRef !== firstMainRef) {
