@@ -111,6 +111,9 @@ on:
       - 'ai-workflow/upanishad-explorer/claude-designed/**'
       - '.github/workflows/deploy-upanishad-explorer.yml'
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
