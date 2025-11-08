@@ -1,18 +1,11 @@
-import { NextResponse } from 'next/server';
-import { Alias } from '@/lib/data';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-/**
- * API Route: GET /api/granthas
- * Returns a list of available granthas by scanning the data directory.
- */
-export async function GET() {
+async function generateGranthasJson() {
   try {
     const dataDir = path.join(process.cwd(), 'public', 'data');
     const metaFilePath = path.join(dataDir, 'granthas-meta.json');
     const orderFilePath = path.join(dataDir, 'granthas-order.json');
-
     const libraryDir = path.join(dataDir, 'library');
 
     const [metaFileContents, orderFileContents, libraryFiles] = await Promise.all([
@@ -50,12 +43,24 @@ export async function GET() {
       return a.title.localeCompare(b.title);
     });
 
-    return NextResponse.json(granthas);
+    const output = {
+      _meta: {
+        generated: new Date().toISOString(),
+        generator: 'scripts/generate-granthas-json.ts',
+        warning: 'This file is auto-generated at build time. DO NOT EDIT manually. Edit source files in public/data/ instead.'
+      },
+      granthas
+    };
+
+    const generatedDir = path.join(dataDir, 'generated');
+    await fs.mkdir(generatedDir, { recursive: true });
+    const outputPath = path.join(generatedDir, 'granthas.json');
+    await fs.writeFile(outputPath, JSON.stringify(output, null, 2), 'utf-8');
+    console.log(`Successfully generated ${outputPath}`);
   } catch (error) {
-    console.error('Error dynamically reading granthas:', error);
-    return NextResponse.json(
-      { error: 'Failed to load granthas' },
-      { status: 500 }
-    );
+    console.error('Error generating granthas.json:', error);
+    process.exit(1);
   }
 }
+
+generateGranthasJson();

@@ -140,8 +140,8 @@ export interface PassageHierarchy {
 // Data loading functions
 
 /**
- * Get list of available granthas
- * Dynamically discovers granthas by reading /public/data/ directory via API
+ * Get list of available granthas metadata
+ * Loads from static JSON file generated at build time
  * Next.js caches fetch requests automatically
  */
 export const getGranthasMeta = async (): Promise<GranthaMeta> => {
@@ -167,13 +167,15 @@ export const createAbbreviationMap = (meta: GranthaMeta, script: 'devanagari'): 
 
 export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
   try {
-    const response = await fetch("/api/granthas");
+    const response = await fetch("/data/generated/granthas.json");
 
     if (!response.ok) {
       throw new Error("Failed to fetch granthas list");
     }
 
-    const granthas: GranthaMetadata[] = await response.json();
+    const data = await response.json();
+    // Handle both legacy array format and new object format with metadata
+    const granthas: GranthaMetadata[] = Array.isArray(data) ? data : data.granthas;
     return granthas;
   } catch (error) {
     console.error("Error loading granthas:", error);

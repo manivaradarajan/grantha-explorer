@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // basePath: '/upanishad-explorer', // TODO: Re-enable for production deployment
+  output: 'export',
+  // Use basePath for GitHub Pages deployment, empty for local testing
+  basePath: process.env.NEXT_PUBLIC_NO_BASE_PATH === 'true' ? '' : '/upanishad-explorer',
   reactStrictMode: true,
+  images: {
+    unoptimized: true,
+  },
 }
 
 module.exports = nextConfig

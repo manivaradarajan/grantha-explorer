@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "tsx scripts/generate-granthas-json.ts",
     "build": "next build",
+    "build:local": "npx tsx scripts/generate-granthas-json.ts && NEXT_PUBLIC_NO_BASE_PATH=true npx next build",
     "start": "next start",
+    "serve": "npx serve@latest out",
+    "test:deploy": "npm run build:local && npm run serve",
     "lint": "next lint",
     "validate:data": "tsx scripts/validate-data.ts"
   },
