@@ -18,12 +18,20 @@ export default function TextContent({
 }: TextContentProps) {
   const passages = getAllPassagesForNavigation(grantha);
   const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const clickedInternally = useRef(false);
 
-  // Auto-scroll to selected verse when selection changes
+  // Auto-scroll to selected verse when selection changes from navigation sidebar
   useEffect(() => {
+    // Don't scroll if the click came from within this component
+    if (clickedInternally.current) {
+      clickedInternally.current = false;
+      return;
+    }
+
+    // Scroll to top when clicked from navigation sidebar
     const element = verseRefs.current[selectedRef];
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [selectedRef]);
 
@@ -46,7 +54,10 @@ export default function TextContent({
               ref={(el) => {
                 verseRefs.current[passage.ref] = el;
               }}
-              onClick={() => onVerseSelect(passage.ref)}
+              onClick={() => {
+                clickedInternally.current = true;
+                onVerseSelect(passage.ref);
+              }}
               className={`px-4 py-3 mb-4 transition-all duration-150 cursor-pointer hover:bg-gray-100 hover:rounded-lg ${
                 isSelected ? "bg-gray-200 rounded-lg" : "bg-white"
               }`}
