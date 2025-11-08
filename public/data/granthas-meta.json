@@ -21,24 +21,26 @@
       ]
     }
   },
-  "aitareya": {
-    "title": {
-      "devanagari": "ऐतरेयोपनिषत्",
-      "iast": "Aitareya Upanishad"
-    },
-    "abbreviations": {
-      "devanagari": [
-        "aitareya-upanishad"
-      ]
-    }
-  },
   "aitareya-brahmana": {
     "title": {
       "devanagari": "ऐतरेयब्राह्मणम्",
       "iast": "Aitareya Brahmana"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "ऐ.बा."
+      ]
+    }
+  },
+  "aitareya-upanishad": {
+    "title": {
+      "devanagari": "ऐतरेयोपनिषत्",
+      "iast": "Aitareya Upanishad"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "aitareya"
+      ]
     }
   },
   "amarakosha": {
@@ -47,7 +49,9 @@
       "iast": "Amarakosha"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "अ.को."
+      ]
     }
   },
   "apastamba-shrauta-sutra": {
@@ -59,15 +63,14 @@
       "devanagari": []
     }
   },
-  "bhagavad-gita": {
+  "atharvashikha-upanishad": {
     "title": {
-      "devanagari": "श्रीमद्भगवद्गीता",
-      "iast": "Bhagavad Gita"
+      "devanagari": "अथर्वशिखोपनिषत्",
+      "iast": "Atharvashikha Upanishad"
     },
     "abbreviations": {
       "devanagari": [
-        "भ.गी.",
-        "gita"
+        "अथर्व.शि."
       ]
     }
   },
@@ -87,11 +90,23 @@
     },
     "abbreviations": {
       "devanagari": [
-        "ब्र.सू."
+        "ब्र.सू.",
+        "ब्र.स."
       ]
     }
   },
-  "brihadaranyaka": {
+  "brahma-upanishad": {
+    "title": {
+      "devanagari": "ब्रह्मोपनिषत्",
+      "iast": "Brahma Upanishad"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "ब्रह्मो."
+      ]
+    }
+  },
+  "brihadaranyaka-upanishad": {
     "title": {
       "devanagari": "बृहदारण्यकोपनिषत्",
       "iast": "Brihadaranyaka Upanishad"
@@ -99,20 +114,11 @@
     "abbreviations": {
       "devanagari": [
         "बृ.उ.",
-        "brihadaranyaka-upanishad"
+        "brihadaranyaka"
       ]
     }
   },
-  "brihadaranyaka-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
-    }
-  },
-  "chandogya": {
+  "chandogya-upanishad": {
     "title": {
       "devanagari": "छान्दोग्योपनिषत्",
       "iast": "Chandogya Upanishad"
@@ -120,17 +126,8 @@
     "abbreviations": {
       "devanagari": [
         "छां.उ.",
-        "chandogya-upanishad"
+        "chandogya"
       ]
-    }
-  },
-  "chandogya-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
     }
   },
   "daksha-smriti": {
@@ -150,7 +147,10 @@
       "iast": "Dhatu Patha"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "धा.पा.",
+        "पा.धा."
+      ]
     }
   },
   "garuda-purana": {
@@ -164,11 +164,14 @@
   },
   "gita": {
     "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
+      "devanagari": "श्रीमद्भगवद्गीता",
+      "iast": "Bhagavad Gita"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "भ.गी.",
+        "bhagavad-gita"
+      ]
     }
   },
   "harivamsha": {
@@ -211,7 +214,7 @@
       "devanagari": []
     }
   },
-  "katha": {
+  "katha-upanishad": {
     "title": {
       "devanagari": "कठोपनिषत्",
       "iast": "Katha Upanishad"
@@ -219,17 +222,8 @@
     "abbreviations": {
       "devanagari": [
         "क.उ.",
-        "katha-upanishad"
+        "katha"
       ]
-    }
-  },
-  "katha-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
     }
   },
   "kaushitaki": {
@@ -238,7 +232,10 @@
       "iast": "Kaushitaki Brahmana Upanishad"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "कौ.उ.",
+        "को.उ."
+      ]
     }
   },
   "kena-upanishad": {
@@ -247,7 +244,31 @@
       "iast": "Kenopanishad"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "के.उ."
+      ]
+    }
+  },
+  "kurma-samhita": {
+    "title": {
+      "devanagari": "कूर्मसंहिता",
+      "iast": "Kurma Samhita"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "कु.सं."
+      ]
+    }
+  },
+  "linganushasana-sutra": {
+    "title": {
+      "devanagari": "लिङ्गानुशासनसूत्रम्",
+      "iast": "Linganushasana Sutra"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "लिङ्गानु.सू."
+      ]
     }
   },
   "mahabharata-anushasana-parva": {
@@ -268,11 +289,26 @@
     },
     "abbreviations": {
       "devanagari": [
-        "म.भा.शां."
+        "म.भा.शां.",
+        "महा.भा.शां.",
+        "महा.भा.",
+        "म.भा."
       ]
     }
   },
-  "mahanarayana": {
+  "mahabhashya-vartika": {
+    "title": {
+      "devanagari": "महाभाष्यवार्तिकम्",
+      "iast": "Mahabhashya Vartika"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "महा.भा.व.",
+        "वा."
+      ]
+    }
+  },
+  "mahanarayana-upanishad": {
     "title": {
       "devanagari": "महानारायणोपनिषत्",
       "iast": "Mahanarayana Upanishad"
@@ -280,27 +316,10 @@
     "abbreviations": {
       "devanagari": [
         "म.ना.उ.",
-        "mahanarayana_upanishad",
-        "mahanarayana-upanishad"
+        "महा.ना.",
+        "mahanarayana",
+        "mahanarayana_upanishad"
       ]
-    }
-  },
-  "mahanarayana-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
-    }
-  },
-  "mahanarayana_upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
     }
   },
   "mahopanishad": {
@@ -309,7 +328,9 @@
       "iast": "Mahopanishad"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "महो."
+      ]
     }
   },
   "mandukya-rangaramanuja-upanishad": {
@@ -332,7 +353,7 @@
       ]
     }
   },
-  "mundaka": {
+  "mundaka-upanishad": {
     "title": {
       "devanagari": "मुण्डकोपनिषत्",
       "iast": "Mundaka Upanishad"
@@ -340,17 +361,9 @@
     "abbreviations": {
       "devanagari": [
         "मु.उ.",
-        "mundaka-upanishad"
+        "मुं.उ.",
+        "mundaka"
       ]
-    }
-  },
-  "mundaka-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
     }
   },
   "narada-parivrajaka-upanishad": {
@@ -361,6 +374,17 @@
     "abbreviations": {
       "devanagari": [
         "ना.प.उ."
+      ]
+    }
+  },
+  "nrisimha-tapaniya-upanishad": {
+    "title": {
+      "devanagari": "नृसिंहतापनीयोपनिषत्",
+      "iast": "Nrisimha Tapaniya Upanishad"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "नृ.ता.उ."
       ]
     }
   },
@@ -404,7 +428,7 @@
       ]
     }
   },
-  "prashna": {
+  "prasna-upanishad": {
     "title": {
       "devanagari": "प्रश्नोपनिषत्",
       "iast": "Prasna Upanishad"
@@ -412,38 +436,44 @@
     "abbreviations": {
       "devanagari": [
         "प्र.उ.",
-        "prasna-upanishad"
+        "prashna"
       ]
     }
   },
-  "prasna-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
-    }
-  },
-  "pu-mi-su": {
+  "purva-mimamsa": {
     "title": {
       "devanagari": "पूर्वमीमांसासूत्रम्",
       "iast": "Purva Mimamsa Sutra"
     },
     "abbreviations": {
       "devanagari": [
-        "purva-mimamsa",
-        "प.मी."
+        "प.मी.",
+        "पू.मी.",
+        "पू.मी.सू.",
+        "pu-mi-su"
       ]
     }
   },
-  "purva-mimamsa": {
+  "raghuvamsha": {
     "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
+      "devanagari": "रघुवंशम्",
+      "iast": "Raghuvamsha"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "रघु."
+      ]
+    }
+  },
+  "ramayana-balakanda": {
+    "title": {
+      "devanagari": "रामायणम्-बालकाण्डम्",
+      "iast": "Ramayana Balakanda"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "रा.बा."
+      ]
     }
   },
   "ramayana-kiskindha-kanda": {
@@ -457,6 +487,17 @@
       ]
     }
   },
+  "ramayana-uttara-kanda": {
+    "title": {
+      "devanagari": "रामायणम्-उत्तरकाण्डम्",
+      "iast": "Ramayana Uttara Kanda"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "रामो.ता."
+      ]
+    }
+  },
   "rigveda": {
     "title": {
       "devanagari": "ऋग्वेदः",
@@ -464,7 +505,19 @@
     },
     "abbreviations": {
       "devanagari": [
-        "ऋ.वे."
+        "ऋ.वे.",
+        "ऋग्वेद."
+      ]
+    }
+  },
+  "sabara-bhashya": {
+    "title": {
+      "devanagari": "शबरभाष्यम्",
+      "iast": "Shabara Bhashya"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "शा.दी."
       ]
     }
   },
@@ -488,6 +541,17 @@
       ]
     }
   },
+  "shrauta-prayoga": {
+    "title": {
+      "devanagari": "श्रौतप्रयोगः",
+      "iast": "Shrauta Prayoga"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "श्रु.प्र."
+      ]
+    }
+  },
   "shri-gunaratna-kosha": {
     "title": {
       "devanagari": "श्रीगुणरत्नकोशः",
@@ -495,18 +559,6 @@
     },
     "abbreviations": {
       "devanagari": []
-    }
-  },
-  "shvetashvatara": {
-    "title": {
-      "devanagari": "श्वेताश्वतरोपनिषत्",
-      "iast": "Svetasvatara Upanishad"
-    },
-    "abbreviations": {
-      "devanagari": [
-        "श्वे.उ.",
-        "svetasvatara-upanishad"
-      ]
     }
   },
   "sri-bhashya": {
@@ -520,7 +572,7 @@
       ]
     }
   },
-  "subala": {
+  "subala-upanishad": {
     "title": {
       "devanagari": "सुबालोपनिषत्",
       "iast": "Subala Upanishad"
@@ -528,38 +580,20 @@
     "abbreviations": {
       "devanagari": [
         "सु.उ.",
-        "subala-upanishad"
+        "सुबा.उ.",
+        "subala"
       ]
-    }
-  },
-  "subala-upanishad": {
-    "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
     }
   },
   "svetasvatara-upanishad": {
     "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
-    },
-    "abbreviations": {
-      "devanagari": []
-    }
-  },
-  "taittiriya": {
-    "title": {
-      "devanagari": "तैत्तिरीयोपनिषत्",
-      "iast": "Taittiriya Upanishad"
+      "devanagari": "श्वेताश्वतरोपनिषत्",
+      "iast": "Svetasvatara Upanishad"
     },
     "abbreviations": {
       "devanagari": [
-        "तै.उ.",
-        "taittiriya_upanishad",
-        "taittiriya-upanishad"
+        "श्वे.उ.",
+        "shvetashvatara"
       ]
     }
   },
@@ -570,7 +604,10 @@
     },
     "abbreviations": {
       "devanagari": [
-        "तै.आ."
+        "तै.आ.",
+        "तै.आर.",
+        "तै.ना.",
+        "तै.आन."
       ]
     }
   },
@@ -580,7 +617,9 @@
       "iast": "Taittiriya Brahmana"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "तै.ब्रा."
+      ]
     }
   },
   "taittiriya-samhita": {
@@ -589,25 +628,33 @@
       "iast": "Taittiriya Samhita"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "तै.सं."
+      ]
     }
   },
   "taittiriya-upanishad": {
     "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
+      "devanagari": "तैत्तिरीयोपनिषत्",
+      "iast": "Taittiriya Upanishad"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "तै.उ.",
+        "taittiriya",
+        "taittiriya_upanishad"
+      ]
     }
   },
-  "taittiriya_upanishad": {
+  "tantra-vartika": {
     "title": {
-      "devanagari": "Placeholder Title",
-      "iast": "Placeholder Title"
+      "devanagari": "तन्त्रवार्तिकम्",
+      "iast": "Tantra Vartika"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "तन्त्रवा."
+      ]
     }
   },
   "varaha-purana": {
@@ -654,6 +701,17 @@
       ]
     }
   },
+  "vishnu-smriti": {
+    "title": {
+      "devanagari": "विष्णुस्मृतिः",
+      "iast": "Vishnu Smriti"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "वि.स."
+      ]
+    }
+  },
   "vyasa-smriti": {
     "title": {
       "devanagari": "व्यासस्मृतिः",
@@ -670,6 +728,17 @@
     },
     "abbreviations": {
       "devanagari": []
+    }
+  },
+  "yajurveda-aranyaka": {
+    "title": {
+      "devanagari": "यजुर्वेदारण्यकम्",
+      "iast": "Yajurveda Aranyaka"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "यजु.आ"
+      ]
     }
   }
 }
