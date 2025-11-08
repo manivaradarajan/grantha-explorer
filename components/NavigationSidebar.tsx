@@ -7,6 +7,7 @@ import GranthaSelector from "./GranthaSelector";
 import { useEffect, useRef, useState } from "react";
 import Accordion from "./Accordion";
 import PassageLink from "./PassageLink";
+import { getUIStrings } from "@/lib/i18n";
 
 interface NavigationSidebarProps {
   grantha: Grantha;
@@ -31,6 +32,7 @@ export default function NavigationSidebar({
     );
     return group ? [group.level] : [];
   });
+  const uiStrings = getUIStrings();
 
   // Auto-open accordion when grantha or selectedRef changes
   useEffect(() => {
@@ -66,7 +68,7 @@ export default function NavigationSidebar({
     <div className="h-full flex flex-col pb-8 bg-[#f8f9fa] px-6">
       {/* Header */}
       <div className="pt-8 pb-2 px-4 bg-[#f8f9fa]">
-        <h2 className="text-xl font-semibold font-serif">अनुक्रमणिका</h2>
+        <h2 className="text-xl font-semibold font-serif">{uiStrings.index}</h2>
       </div>
 
       {/* Grantha selector */}

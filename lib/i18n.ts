@@ -9,6 +9,7 @@ interface UIStrings {
   noCommentaryForVerse: string;
   noCommentariesAvailable: string;
   commentary: string;
+  index: string;
 }
 
 const translations: Record<Language, Record<Script, UIStrings>> = {
@@ -17,16 +18,19 @@ const translations: Record<Language, Record<Script, UIStrings>> = {
       noCommentaryForVerse: "अत्र भाष्यं नास्ति",
       noCommentariesAvailable: "अत्र भाष्यं नास्ति",
       commentary: "भाष्यम्",
+      index: "अनुक्रमणिका",
     },
     roman: {
       noCommentaryForVerse: "atra bhāṣyaṃ nāsti",
       noCommentariesAvailable: "atra bhāṣyaṃ nāsti",
       commentary: "bhāṣyam",
+      index: "anukramaṇikā",
     },
     kannada: {
       noCommentaryForVerse: "ಇಲ್ಲಿ ವ್ಯಾಖ್ಯಾನ ಇಲ್ಲ",
       noCommentariesAvailable: "ಇಲ್ಲಿ ವ್ಯಾಖ್ಯಾನ ಇಲ್ಲ",
       commentary: "ವ್ಯಾಖ್ಯಾನ",
+      index: "ಅನುಕ್ರಮಣಿಕೆ",
     },
   },
   tamil: {
@@ -35,16 +39,19 @@ const translations: Record<Language, Record<Script, UIStrings>> = {
       noCommentaryForVerse: "இங்கு உரை இல்லை",
       noCommentariesAvailable: "இங்கு உரை இல்லை",
       commentary: "உரை",
+      index: "அட்டவணை",
     },
     roman: {
       noCommentaryForVerse: "iṅku urai illai",
       noCommentariesAvailable: "iṅku urai illai",
       commentary: "urai",
+      index: "aṭṭavaṇai",
     },
     kannada: {
       noCommentaryForVerse: "இங்கு உரை இல்லை",
       noCommentariesAvailable: "இங்கு உரை இல்லை",
       commentary: "உரை",
+      index: "ಅಟ್ಟವಣೆ",
     },
   },
   english: {
@@ -52,16 +59,19 @@ const translations: Record<Language, Record<Script, UIStrings>> = {
       noCommentaryForVerse: "No commentary available for this verse",
       noCommentariesAvailable: "No commentaries available",
       commentary: "Commentary",
+      index: "Index",
     },
     roman: {
       noCommentaryForVerse: "No commentary available for this verse",
       noCommentariesAvailable: "No commentaries available",
       commentary: "Commentary",
+      index: "Index",
     },
     kannada: {
       noCommentaryForVerse: "No commentary available for this verse",
       noCommentariesAvailable: "No commentaries available",
       commentary: "Commentary",
+      index: "Index",
     },
   },
 };
