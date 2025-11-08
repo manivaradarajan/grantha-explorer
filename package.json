@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "validate:data": "tsx scripts/validate-data.ts",
-    "prebuild": "tsx scripts/generate-metadata.ts"
+    "validate:data": "tsx scripts/validate-data.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",

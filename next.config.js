@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: '/upanishad-explorer',
+  // basePath: '/upanishad-explorer', // TODO: Re-enable for production deployment
   reactStrictMode: true,
 }
 
