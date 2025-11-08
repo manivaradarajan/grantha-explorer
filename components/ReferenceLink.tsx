@@ -12,16 +12,30 @@ interface ReferenceLinkProps {
   granthaIdToTitle: { [key: string]: string };
 }
 
+// Global flag to prevent scrolling when clicking reference links
+let preventNextScroll = false;
+export const shouldPreventScroll = () => {
+  const should = preventNextScroll;
+  preventNextScroll = false;
+  return should;
+};
+
 const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode | null>('Loading...');
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const [tooltipBelow, setTooltipBelow] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
+  const isTouchDevice = useRef(false);
 
   const isInLibrary = isReferenceInLibrary(reference.granthaId, availableGranthaIds);
 
-  const handleMouseEnter = async (e: React.MouseEvent) => {
+  // Detect if device supports touch
+  useEffect(() => {
+    isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  }, []);
+
+  const calculateTooltipPosition = () => {
     if (linkRef.current) {
       const rect = linkRef.current.getBoundingClientRect();
       const tooltipMaxWidth = 600; // matches max-width in CSS
@@ -52,7 +66,9 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
 
       setTooltipPosition({ top, left });
     }
-    setShowTooltip(true);
+  };
+
+  const loadTooltipContent = async () => {
     if (isInLibrary) {
       const passageText = await getPassagePreview(reference.granthaId, reference.path, availableGranthaIds);
       const title = granthaIdToTitle[reference.granthaId] || reference.granthaId;
@@ -68,18 +84,66 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     }
   };
 
+  const handleMouseEnter = async (e: React.MouseEvent) => {
+    // Don't show tooltip on mouse events for touch devices
+    if (isTouchDevice.current) return;
+
+    calculateTooltipPosition();
+    setShowTooltip(true);
+    await loadTooltipContent();
+  };
+
   const handleMouseLeave = () => {
+    // Don't hide tooltip on mouse leave for touch devices
+    if (isTouchDevice.current) return;
+
     setShowTooltip(false);
     setTooltipContent('Loading...');
     setTooltipBelow(false);
   };
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (isInLibrary) {
+    e.stopPropagation();
+
+    if (isTouchDevice.current && !isInLibrary) {
+      // For external references on touch devices, toggle tooltip
+      if (showTooltip) {
+        setShowTooltip(false);
+        setTooltipContent('Loading...');
+        setTooltipBelow(false);
+      } else {
+        calculateTooltipPosition();
+        setShowTooltip(true);
+        await loadTooltipContent();
+      }
+    } else if (isInLibrary) {
+      // For internal references, navigate without scrolling
+      preventNextScroll = true;
       updateHash(reference.granthaId, reference.path);
     }
   };
+
+  // Close tooltip when clicking outside on touch devices
+  useEffect(() => {
+    if (!isTouchDevice.current || !showTooltip) return;
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
+        setShowTooltip(false);
+        setTooltipContent('Loading...');
+        setTooltipBelow(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showTooltip]);
 
   const linkClassName = `reference-link ${!isInLibrary ? 'external-reference' : ''}`;
 

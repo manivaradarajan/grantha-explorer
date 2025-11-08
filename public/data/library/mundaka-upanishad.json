@@ -865,11 +865,10 @@
   "concluding_material": [],
   "commentaries": [
     {
-      "commentary_id": "vedanta-desika",
-      "commentary_title": "वेदान्तदेशिकीयभाष्यम्",
+      "commentary_id": "rangaramanuja",
+      "commentary_title": "प्रकाशिका",
       "commentator": {
-        "devanagari": "वेदान्तदेशिकः",
-        "latin": "Vedanta Desika"
+        "devanagari": "रङ्गरामानुजमुनिः"
       },
       "metadata": {
         "source_file": "../../simple/data/mundaka.json"
