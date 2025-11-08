@@ -69,15 +69,39 @@ export default function CommentaryPanel({
 
     references.forEach((ref, i) => {
       const startIndex = text.indexOf(ref.fullMatch, lastIndex);
-      if (startIndex > lastIndex) {
+
+      // Check if reference is wrapped in parentheses
+      const hasOpenParen = startIndex > 0 && text[startIndex - 1] === '(';
+      const refEndIndex = startIndex + ref.fullMatch.length;
+      const hasCloseParen = refEndIndex < text.length && text[refEndIndex] === ')';
+      const isParenthesized = hasOpenParen && hasCloseParen;
+
+      if (isParenthesized) {
+        // Include text before the opening paren
+        if (startIndex > lastIndex + 1) {
+          parts.push(
+            <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex - 1) }} />
+          );
+        }
+        // Wrap the entire parenthesized reference in a nowrap span
         parts.push(
-          <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex) }} />
+          <span key={`paren-ref-${i}`} style={{ whiteSpace: 'nowrap' }}>
+            (<ReferenceLink reference={ref} currentGranthaId={grantha.grantha_id} updateHash={updateHash} availableGranthaIds={availableGranthaIds} granthaIdToTitle={granthasMeta ? Object.fromEntries(Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])) : {}} />)
+          </span>
         );
+        lastIndex = refEndIndex + 1; // Skip past the closing paren
+      } else {
+        // Normal reference without parentheses
+        if (startIndex > lastIndex) {
+          parts.push(
+            <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex) }} />
+          );
+        }
+        parts.push(
+          <ReferenceLink key={`ref-${i}`} reference={ref} currentGranthaId={grantha.grantha_id} updateHash={updateHash} availableGranthaIds={availableGranthaIds} granthaIdToTitle={granthasMeta ? Object.fromEntries(Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])) : {}} />
+        );
+        lastIndex = startIndex + ref.fullMatch.length;
       }
-      parts.push(
-        <ReferenceLink key={`ref-${i}`} reference={ref} currentGranthaId={grantha.grantha_id} updateHash={updateHash} availableGranthaIds={availableGranthaIds} granthaIdToTitle={granthasMeta ? Object.fromEntries(Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])) : {}} />
-      );
-      lastIndex = startIndex + ref.fullMatch.length;
     });
 
     if (lastIndex < text.length) {
