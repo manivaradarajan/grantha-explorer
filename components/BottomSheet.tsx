@@ -90,26 +90,26 @@ export default function BottomSheet({
     }
   };
 
-  if (!isOpen) return null;
+
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end"
+      className={`fixed inset-0 z-50 flex items-end transition-opacity duration-200 ${
+        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      }`}
       onClick={handleBackdropClick}
     >
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-black transition-opacity ${
-          prefersReducedMotion ? "" : "duration-700 ease-out"
-        } ${isOpen ? "opacity-50" : "opacity-0"}`}
+        className={`absolute inset-0 bg-black ${isOpen ? "opacity-50" : "opacity-0"}`}
       />
 
       {/* Bottom Sheet */}
       <div
         ref={sheetRef}
-        className={`relative w-full bg-white rounded-t-2xl shadow-2xl h-[80vh] flex flex-col transform transition-all ${
-          prefersReducedMotion ? "" : "duration-700 ease-out"
-        } ${isDragging ? "" : isOpen ? "translate-y-0" : "translate-y-full"}`}
+        className={`relative w-full bg-white rounded-t-2xl shadow-2xl h-[80vh] flex flex-col transform transition-transform duration-200 ease-out ${
+          isDragging ? "" : isOpen ? "translate-y-0" : "translate-y-full"
+        }`}
         style={
           isDragging
             ? {

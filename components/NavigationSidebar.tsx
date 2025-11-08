@@ -63,14 +63,14 @@ export default function NavigationSidebar({
   };
 
   return (
-    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
+    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa] px-6">
       {/* Header */}
       <div className="pt-8 pb-2 px-4 bg-[#f8f9fa]">
-        <h2 className="text-xl font-semibold font-serif px-5">अनुक्रमणिका</h2>
+        <h2 className="text-xl font-semibold font-serif">अनुक्रमणिका</h2>
       </div>
 
       {/* Grantha selector */}
-      <div className="px-6 pb-3">
+      <div className="pb-3">
         <GranthaSelector
           granthas={granthas}
           selectedGranthaId={grantha.grantha_id}
@@ -79,7 +79,7 @@ export default function NavigationSidebar({
       </div>
 
       {/* Verse list */}
-      <div className="flex-1 overflow-y-auto pl-6 pr-4">
+      <div className="flex-1 overflow-y-auto">
         {hierarchy.prefatory.map((passage) => (
           <PassageLink
             key={passage.ref}

@@ -53,14 +53,14 @@ export default function PassageLink({
       ref={verseRef}
       href={`#${grantha.grantha_id}:${passage.ref}`}
       onClick={handleClick}
-      className={`block w-full text-left py-3 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[44px] flex items-center ${
+      className={`block w-full text-left py-3 px-1 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[44px] flex items-center ${
         isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
       }`}
     >
-      <span className={isSelected ? "text-gray-500" : "text-blue-600"}>
+      <span className={`flex-shrink-0 ${isSelected ? "text-gray-500" : "text-blue-600"}`}>
         {label} -{" "}
       </span>
-      <span className={isSelected ? "text-gray-500" : "text-gray-500"}>
+      <span className={`flex-1 truncate ${isSelected ? "text-gray-500" : "text-gray-500"}`}>
         {fragment}
       </span>
     </a>

@@ -47,11 +47,13 @@ export default function MobileDrawer({
     }
   };
 
-  if (!isOpen) return null;
+
 
   return (
     <div
-      className="fixed inset-0 z-50 flex"
+      className={`fixed inset-0 z-50 flex transition-opacity duration-200 ${
+        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      }`}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -59,16 +61,16 @@ export default function MobileDrawer({
     >
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-black transition-opacity ${
-          prefersReducedMotion ? "" : "duration-300"
-        } ${isOpen ? "opacity-50" : "opacity-0"}`}
+        className={`absolute inset-0 bg-black ${
+          isOpen ? "opacity-50" : "opacity-0"
+        }`}
       />
 
       {/* Drawer */}
       <div
-        className={`relative w-80 max-w-[85vw] bg-white shadow-2xl flex flex-col transform transition-transform ${
-          prefersReducedMotion ? "" : "duration-300"
-        } ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`relative w-80 max-w-[85vw] bg-white shadow-2xl flex flex-col transform transition-transform duration-200 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Close button */}
         <div className="absolute top-4 right-4 z-10">
