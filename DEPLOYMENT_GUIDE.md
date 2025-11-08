@@ -98,19 +98,26 @@ git push origin main
 
 #### 3. Verify GitHub Actions Workflow
 
-The deployment workflow is already configured in `.github/workflows/deploy.yml`. Verify it exists and contains:
+The deployment workflow is configured at the **repository root** in `.github/workflows/deploy-upanishad-explorer.yml` (since this is a monorepo). Verify it exists and contains:
 
 ```yaml
-name: Deploy to GitHub Pages
+name: Deploy Upanishad Explorer to GitHub Pages
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'ai-workflow/upanishad-explorer/claude-designed/**'
+      - '.github/workflows/deploy-upanishad-explorer.yml'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-workflow/upanishad-explorer/claude-designed
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -130,12 +137,14 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          publish_dir: ./ai-workflow/upanishad-explorer/claude-designed/out
 ```
+
+**Note:** The workflow uses `working-directory` to run commands in the app subdirectory and `paths` to only trigger when files in this directory change.
 
 #### 4. Trigger Deployment
 
-The deployment happens automatically when you push to the `main` branch. To manually trigger:
+The deployment happens automatically when you push changes to files in `ai-workflow/upanishad-explorer/claude-designed/` to the `main` branch. To manually trigger:
 
 ```bash
 # Make a small change (e.g., update README)
