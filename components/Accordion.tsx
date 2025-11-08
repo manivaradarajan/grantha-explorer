@@ -17,7 +17,7 @@ export default function Accordion({
     <div>
       <button
         onClick={onToggle}
-        className="w-full text-left py-2 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center"
+        className="w-full text-left py-3 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center min-h-[44px]"
       >
         <span
           className={`transform transition-transform mr-2 text-gray-600 ${isOpen ? "rotate-90" : ""}`}

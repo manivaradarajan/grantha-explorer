@@ -141,12 +141,25 @@ export interface PassageHierarchy {
 
 /**
  * Helper to construct asset paths with basePath support
- * In production, basePath is /aistudio, locally it's empty
+ * Detects whether to use absolute or relative paths based on environment
  */
 const getAssetPath = (path: string): string => {
-  // Remove leading slash if present
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  // Use relative path which works with basePath
+  // Ensure path starts with /
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  // In browser, check if we're on localhost (dev mode) or if pathname starts with basePath
+  if (typeof window !== 'undefined') {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // Dev mode: use absolute paths with basePath
+    if (isLocalhost || window.location.pathname.startsWith('/aistudio')) {
+      const basePath = process.env.NEXT_PUBLIC_NO_BASE_PATH === 'true' ? '' : '/aistudio';
+      return `${basePath}${normalizedPath}`;
+    }
+  }
+
+  // Production (static export): use relative paths
+  const cleanPath = normalizedPath.startsWith('/') ? normalizedPath.slice(1) : normalizedPath;
   return `./${cleanPath}`;
 };
 

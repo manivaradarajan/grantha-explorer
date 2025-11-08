@@ -53,7 +53,7 @@ export default function PassageLink({
       ref={verseRef}
       href={`#${grantha.grantha_id}:${passage.ref}`}
       onClick={handleClick}
-      className={`block w-full text-left py-1.5 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate ${
+      className={`block w-full text-left py-3 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[44px] flex items-center ${
         isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
       }`}
     >

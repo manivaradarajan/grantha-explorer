@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/* Ensure text wrapping for long Sanskrit words */
+.verse-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
 .reference-container {
   position: relative;
   display: inline-block;

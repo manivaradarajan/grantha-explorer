@@ -16,6 +16,7 @@ interface CommentaryPanelProps {
   availableGranthaIds: string[];
   granthaIdToDevanagariTitle: { [key: string]: string };
   granthaIdToLatinTitle: { [key: string]: string };
+  hideHeader?: boolean;
 }
 
 export default function CommentaryPanel({
@@ -25,6 +26,7 @@ export default function CommentaryPanel({
   availableGranthaIds,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
+  hideHeader = false,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
   const hasMultipleCommentaries = commentaries.length > 1;
@@ -164,9 +166,11 @@ export default function CommentaryPanel({
   if (commentaries.length === 0) {
     return (
       <div className="h-full flex flex-col">
-        <div className="pt-6 px-4 text-center bg-white">
-          <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
-        </div>
+        {!hideHeader && (
+          <div className="pt-6 px-4 text-center bg-white">
+            <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto px-6 pb-6">
           <p className="text-gray-500 italic">{uiStrings.noCommentariesAvailable}</p>
         </div>
@@ -178,10 +182,12 @@ export default function CommentaryPanel({
     const commentary = commentaries[0];
     return (
       <div className="h-full flex flex-col">
-        <div className="pt-6 px-4 text-center bg-white">
-          <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
-          <div className="text-sm pb-2 text-gray-600 mt-1">{commentary.commentator.devanagari}</div>
-        </div>
+        {!hideHeader && (
+          <div className="pt-6 px-4 text-center bg-white">
+            <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
+            <div className="text-sm pb-2 text-gray-600 mt-1">{commentary.commentator.devanagari}</div>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto px-6 pb-6">
           {renderCommentary(commentary, 0)}
         </div>
@@ -191,9 +197,11 @@ export default function CommentaryPanel({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 text-center bg-white">
-        <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
-      </div>
+      {!hideHeader && (
+        <div className="p-4 text-center bg-white">
+          <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
+        </div>
+      )}
 
       <div className="border-b border-gray-200">
         <div className="p-4">

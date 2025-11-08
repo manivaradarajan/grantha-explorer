@@ -8,6 +8,7 @@ interface TextContentProps {
   selectedRef: string;
   onVerseSelect: (ref: string) => void;
   title: string;
+  hideTitle?: boolean;
 }
 
 export default function TextContent({
@@ -15,6 +16,7 @@ export default function TextContent({
   selectedRef,
   onVerseSelect,
   title,
+  hideTitle = false,
 }: TextContentProps) {
   const passages = getAllPassagesForNavigation(grantha);
   const verseRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -38,12 +40,14 @@ export default function TextContent({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="px-4 pt-6 pb-2 text-center bg-white">
-        <h1 className="text-3xl font-semibold font-serif">{title}</h1>
-      </div>
+      {!hideTitle && (
+        <div className="px-4 pt-6 pb-2 text-center bg-white">
+          <h1 className="text-3xl font-semibold font-serif">{title}</h1>
+        </div>
+      )}
 
       {/* Verses */}
-      <div className="flex-1 overflow-y-auto px-6 pb-6">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 pb-6">
         {passages.map((passage) => {
           const isSelected = passage.ref === selectedRef;
           const sanskritText = passage.content.sanskrit.devanagari;
@@ -62,13 +66,13 @@ export default function TextContent({
                 isSelected ? "bg-gray-200 rounded-lg" : "bg-white"
               }`}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-4 min-w-0">
                 {/* Show ref number for main passages, empty space for prefatory/concluding */}
-                <span className="mt-0.5 font-semibold text-gray-400 min-w-8">
+                <span className="mt-0.5 font-semibold text-gray-400 min-w-8 flex-shrink-0">
                   {passage.passage_type === "main" ? passage.ref : ""}
                 </span>
-                <div className="flex-1">
-                  <p className="text-lg leading-relaxed whitespace-pre-line">
+                <div className="flex-1 min-w-0">
+                  <p className="text-lg leading-relaxed whitespace-pre-line verse-text">
                     {sanskritText}
                   </p>
                 </div>

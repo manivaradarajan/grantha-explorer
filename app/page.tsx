@@ -5,11 +5,18 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import TextContent from "@/components/TextContent";
 import CommentaryPanel from "@/components/CommentaryPanel";
+import MobileLayout from "@/components/MobileLayout";
+import TabletLayout from "@/components/TabletLayout";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useGrantha, useAvailableGranthas } from "@/hooks/useGrantha";
 import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function Home() {
+  // Media queries for responsive design
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+
   // Load panel sizes from localStorage
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [20, 50, 30];
@@ -173,6 +180,41 @@ export default function Home() {
     );
   }
 
+  // Render mobile layout for screens <768px
+  if (isMobile) {
+    return (
+      <MobileLayout
+        grantha={currentGrantha}
+        granthas={granthas}
+        selectedRef={verseRef}
+        commentaries={commentaries}
+        onGranthaChange={handleGranthaChange}
+        onVerseSelect={handleVerseSelect}
+        updateHash={updateHash}
+        granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+        granthaIdToLatinTitle={granthaIdToLatinTitle}
+      />
+    );
+  }
+
+  // Render tablet layout for screens 768px-1024px
+  if (isTablet) {
+    return (
+      <TabletLayout
+        grantha={currentGrantha}
+        granthas={granthas}
+        selectedRef={verseRef}
+        commentaries={commentaries}
+        onGranthaChange={handleGranthaChange}
+        onVerseSelect={handleVerseSelect}
+        updateHash={updateHash}
+        granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+        granthaIdToLatinTitle={granthaIdToLatinTitle}
+      />
+    );
+  }
+
+  // Render desktop layout for screens >1024px (default 3-column layout)
   return (
     <main className="h-screen bg-white flex flex-col">
       <div className="relative h-full">
