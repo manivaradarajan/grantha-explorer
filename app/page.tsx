@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import TextContent from "@/components/TextContent";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useGrantha, useAvailableGranthas } from "@/hooks/useGrantha";
-import { getFirstVerseRef, validateAndNormalizeHash } from "@/lib/hashUtils";
+import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
 
 export default function Home() {
   // Load panel sizes from localStorage
@@ -42,10 +42,27 @@ export default function Home() {
     error: granthaError,
   } = useGrantha(granthaId);
 
+  // Track previous grantha to detect changes
+  const previousGranthaId = useRef<string | null>(null);
+
   // Validate and correct verse ref when grantha loads
   useEffect(() => {
     if (!currentGrantha) return;
 
+    // Check if grantha changed (first time or switched)
+    const granthaChanged = previousGranthaId.current !== null && previousGranthaId.current !== granthaId;
+
+    // Update the ref for next comparison
+    previousGranthaId.current = granthaId;
+
+    // If grantha changed, jump to first main passage (skip prefatory)
+    if (granthaChanged) {
+      const firstMainRef = getFirstMainPassageRef(currentGrantha);
+      updateHash(granthaId, firstMainRef, commentaries);
+      return;
+    }
+
+    // Otherwise, validate current verse ref
     const normalized = validateAndNormalizeHash(
       { granthaId, verseRef, commentaries },
       currentGrantha

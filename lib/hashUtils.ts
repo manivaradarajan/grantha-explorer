@@ -148,6 +148,26 @@ export function getFirstVerseRef(grantha: Grantha): string {
 }
 
 /**
+ * Get the first main passage ref, skipping prefatory material
+ * @param grantha - Grantha data object
+ * @returns First main passage ref
+ */
+export function getFirstMainPassageRef(grantha: Grantha): string {
+  // Return first main passage, skipping prefatory material
+  if (grantha.passages?.length > 0) {
+    return grantha.passages[0].ref;
+  }
+
+  // Fallback to prefatory if no main passages
+  if (grantha.prefatory_material?.length > 0) {
+    return grantha.prefatory_material[0].ref;
+  }
+
+  // Final fallback
+  return "1";
+}
+
+/**
  * Validate if a verse ref exists in grantha data
  * @param grantha - Grantha data object
  * @param verseRef - Verse reference to validate
