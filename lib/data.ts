@@ -140,12 +140,23 @@ export interface PassageHierarchy {
 // Data loading functions
 
 /**
+ * Helper to construct asset paths with basePath support
+ * In production, basePath is /aistudio, locally it's empty
+ */
+const getAssetPath = (path: string): string => {
+  // Remove leading slash if present
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  // Use relative path which works with basePath
+  return `./${cleanPath}`;
+};
+
+/**
  * Get list of available granthas metadata
  * Loads from static JSON file generated at build time
  * Next.js caches fetch requests automatically
  */
 export const getGranthasMeta = async (): Promise<GranthaMeta> => {
-  const response = await fetch('/data/granthas-meta.json');
+  const response = await fetch(getAssetPath('/data/granthas-meta.json'));
   if (!response.ok) {
     throw new Error('Failed to fetch grantha metadata');
   }
@@ -167,7 +178,7 @@ export const createAbbreviationMap = (meta: GranthaMeta, script: 'devanagari'): 
 
 export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
   try {
-    const response = await fetch("/data/generated/granthas.json");
+    const response = await fetch(getAssetPath("/data/generated/granthas.json"));
 
     if (!response.ok) {
       throw new Error("Failed to fetch granthas list");
@@ -187,7 +198,7 @@ export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
  * Load full grantha data from JSON file
  */
 export async function loadGrantha(granthaId: string): Promise<Grantha> {
-  const response = await fetch(`/data/library/${granthaId}.json`);
+  const response = await fetch(getAssetPath(`/data/library/${granthaId}.json`));
 
   if (!response.ok) {
     throw new Error(`Failed to load grantha: ${granthaId}`);
