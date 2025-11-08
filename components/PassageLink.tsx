@@ -21,7 +21,7 @@ export default function PassageLink({
   isSelected,
   onVerseSelect,
 }: PassageLinkProps) {
-  const verseRef = useRef<HTMLButtonElement | null>(null);
+  const verseRef = useRef<HTMLAnchorElement | null>(null);
 
   const getLabel = () => {
     // Use label directly for prefatory and concluding material
@@ -50,7 +50,7 @@ export default function PassageLink({
 
   return (
     <a
-      ref={verseRef as any}
+      ref={verseRef}
       href={`#${grantha.grantha_id}:${passage.ref}`}
       onClick={handleClick}
       className={`block w-full text-left py-1.5 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate ${

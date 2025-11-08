@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface AccordionProps {
   title: string;
   children: React.ReactNode;

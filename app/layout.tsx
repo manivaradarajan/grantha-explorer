@@ -16,8 +16,8 @@ const notoSerif = Noto_Serif_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Hello Next.js",
-  description: "A simple Next.js hello world",
+  title: "Grantha Vibhrama - Upanishad Explorer",
+  description: "Explore classical Upanishad texts with Sanskrit commentary in an interactive reader",
 };
 
 export default function RootLayout({

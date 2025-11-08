@@ -1,6 +1,6 @@
 "use client";
 
-import { Grantha } from "@/lib/data";
+import { Grantha, Commentary, CommentaryPassage, CommentaryPrefatoryItem } from "@/lib/data";
 import { useState } from "react";
 
 import DOMPurify from "isomorphic-dompurify";
@@ -36,9 +36,9 @@ export default function CommentaryPanel({
   };
 
   // Render a single commentary for the selected verse
-  const renderCommentary = (commentary: any, index: number) => {
+  const renderCommentary = (commentary: Commentary, index: number) => {
     const passage = commentary.passages?.find(
-      (p: any) => p.ref === selectedRef
+      (p: CommentaryPassage) => p.ref === selectedRef
     );
 
     if (!passage) {
@@ -80,7 +80,7 @@ export default function CommentaryPanel({
         {/* Prefatory material */}
         {prefatoryMaterial.length > 0 && (
           <div className="mb-6 pb-4 border-b border-gray-200">
-            {prefatoryMaterial.map((item: any, idx: number) => (
+            {prefatoryMaterial.map((item: CommentaryPrefatoryItem, idx: number) => (
               <div key={idx} className="mb-4">
                 {item.label && (
                   <div className="text-sm text-gray-600 italic mb-3">

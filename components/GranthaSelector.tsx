@@ -13,8 +13,6 @@ export default function GranthaSelector({
   selectedGranthaId,
   onSelect,
 }: GranthaSelectorProps) {
-  const selectedGrantha = granthas.find((g) => g.id === selectedGranthaId);
-
   return (
     <div className="border border-gray-300 bg-white">
       <select
