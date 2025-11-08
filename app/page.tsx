@@ -114,6 +114,14 @@ export default function Home() {
     }
   };
 
+  const granthaIdToDevanagariTitle = Object.fromEntries(
+    granthas.map(g => [g.id, g.title_deva])
+  );
+
+  const granthaIdToLatinTitle = Object.fromEntries(
+    granthas.map(g => [g.id, g.title_iast])
+  );
+
   // Error states
   if (granthasError) {
     return (
@@ -201,7 +209,14 @@ export default function Home() {
 
           {/* Right Commentary Panel */}
           <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
-            <CommentaryPanel grantha={currentGrantha} selectedRef={verseRef} />
+            <CommentaryPanel
+              grantha={currentGrantha}
+              selectedRef={verseRef}
+              updateHash={updateHash}
+              availableGranthaIds={granthas.map(g => g.id)}
+              granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+              granthaIdToLatinTitle={granthaIdToLatinTitle}
+            />
           </Panel>
         </PanelGroup>
       </div>

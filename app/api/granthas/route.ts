@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Alias } from '@/lib/data';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -9,29 +10,29 @@ import path from 'path';
 export async function GET() {
   try {
     const dataDir = path.join(process.cwd(), 'public', 'data');
-    const libraryDir = path.join(dataDir, 'library');
+    const metaFilePath = path.join(dataDir, 'granthas-meta.json');
     const orderFilePath = path.join(dataDir, 'granthas-order.json');
 
-    const [files, orderFileContents] = await Promise.all([
-      fs.readdir(libraryDir),
+    const libraryDir = path.join(dataDir, 'library');
+
+    const [metaFileContents, orderFileContents, libraryFiles] = await Promise.all([
+      fs.readFile(metaFilePath, 'utf-8'),
       fs.readFile(orderFilePath, 'utf-8'),
+      fs.readdir(libraryDir),
     ]);
 
+    const metaData = JSON.parse(metaFileContents);
     const orderedIds = JSON.parse(orderFileContents);
+    const availableGranthaIds = new Set(libraryFiles.map(file => file.replace('.json', '')));
 
-    let granthas = await Promise.all(
-      files
-        .filter((file) => file.endsWith('.json'))
-        .map(async (file) => {
-          const filePath = path.join(libraryDir, file);
-          const fileContents = await fs.readFile(filePath, 'utf-8');
-          const data = JSON.parse(fileContents);
-          return {
-            id: data.grantha_id,
-            title: data.canonical_title,
-          };
-        })
-    );
+    let granthas = Object.entries(metaData)
+      .filter(([id]) => availableGranthaIds.has(id))
+      .map(([id, meta]: [string, any]) => ({
+        id,
+        title: meta.title.iast,
+        title_deva: meta.title.devanagari,
+        title_iast: meta.title.iast,
+      }));
 
     granthas.sort((a, b) => {
       const indexA = orderedIds.indexOf(a.id);

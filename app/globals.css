@@ -1,1 +1,37 @@
 @import 'tailwindcss';
+
+.reference-container {
+  position: relative;
+  display: inline-block;
+}
+
+.reference-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.reference-link.external-reference {
+  color: grey;
+  cursor: default;
+  text-decoration: none;
+}
+
+.reference-tooltip {
+  position: fixed;
+  transform: translate(-50%, -100%);
+  background-color: white;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 100;
+  width: auto;
+  max-width: 300px;
+  text-align: left;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s;
+  border: 1px solid #ccc;
+  white-space: normal;
+  font-size: 1rem;
+}

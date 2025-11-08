@@ -22,7 +22,7 @@ export default function GranthaSelector({
       >
         {granthas.map((grantha) => (
           <option key={grantha.id} value={grantha.id}>
-            {grantha.title}
+            {grantha.title_deva}
           </option>
         ))}
       </select>

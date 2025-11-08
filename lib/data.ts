@@ -90,12 +90,15 @@ export interface Commentary {
   passages: CommentaryPassage[];
 }
 
-export interface Grantha {
+import { type Script } from "./i18n";
+
+export interface Grantha extends GranthaMetadata {
   grantha_id: string;
   canonical_title: string;
   aliases: Alias[];
   text_type: string;
-  language: string;
+  language?: string;
+  script?: Script;
   metadata: Metadata;
   structure_levels: StructureLevel[];
   prefatory_material: PrefatoryMaterial[];
@@ -107,11 +110,25 @@ export interface Grantha {
 export interface GranthaMetadata {
   id: string;
   title: string;
+  title_deva: string;
+  title_iast: string;
 }
 
 export interface PassageGroup {
   level: string;
   passages: Passage[];
+}
+
+export interface GranthaMeta {
+  [granthaId: string]: {
+    title: {
+      devanagari: string;
+      iast: string;
+    };
+    abbreviations: {
+      devanagari: string[];
+    };
+  };
 }
 
 export interface PassageHierarchy {
@@ -127,7 +144,28 @@ export interface PassageHierarchy {
  * Dynamically discovers granthas by reading /public/data/ directory via API
  * Next.js caches fetch requests automatically
  */
-export async function getAvailableGranthas(): Promise<GranthaMetadata[]> {
+export const getGranthasMeta = async (): Promise<GranthaMeta> => {
+  const response = await fetch('/data/granthas-meta.json');
+  if (!response.ok) {
+    throw new Error('Failed to fetch grantha metadata');
+  }
+  return response.json();
+};
+
+export const createAbbreviationMap = (meta: GranthaMeta, script: 'devanagari'): { [key: string]: string } => {
+  const map: { [key: string]: string } = {};
+  for (const granthaId in meta) {
+    const grantha = meta[granthaId];
+    if (grantha.abbreviations && grantha.abbreviations[script]) {
+      for (const abbr of grantha.abbreviations[script]) {
+        map[abbr] = granthaId;
+      }
+    }
+  }
+  return map;
+};
+
+export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
   try {
     const response = await fetch("/api/granthas");
 
@@ -205,6 +243,13 @@ export function getAllPassagesForNavigation(
     ...grantha.passages,
     ...(grantha.concluding_material || []),
   ];
+}
+
+export function getPassageByRef(
+  grantha: Grantha,
+  ref: string
+): Passage | PrefatoryMaterial | undefined {
+  return getAllPassagesForNavigation(grantha).find((p) => p.ref === ref);
 }
 
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
