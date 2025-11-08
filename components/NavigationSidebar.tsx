@@ -65,14 +65,14 @@ export default function NavigationSidebar({
   };
 
   return (
-    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa] px-6">
+    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
       {/* Header */}
-      <div className="pt-8 pb-2 px-4 bg-[#f8f9fa]">
+      <div className="pt-8 pb-2 px-6 bg-[#f8f9fa]">
         <h2 className="text-xl font-semibold font-serif">{uiStrings.index}</h2>
       </div>
 
       {/* Grantha selector */}
-      <div className="pb-3">
+      <div className="pb-3 px-6">
         <GranthaSelector
           granthas={granthas}
           selectedGranthaId={grantha.grantha_id}
@@ -81,7 +81,7 @@ export default function NavigationSidebar({
       </div>
 
       {/* Verse list */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto px-6">
         {hierarchy.prefatory.map((passage) => (
           <PassageLink
             key={passage.ref}
