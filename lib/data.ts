@@ -165,7 +165,7 @@ export function getPassageFragment(
   passage: Passage | PrefatoryMaterial,
   maxLength: number = 80
 ): string {
-  const text = passage.content.sanskrit.devanagari;
+  const text = passage.content.sanskrit.devanagari || '';
 
   // Remove newlines and extra spaces
   const cleanText = text.replace(/\n/g, " ").replace(/\s+/g, " ").trim();

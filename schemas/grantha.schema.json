@@ -165,7 +165,7 @@
               "type": "object",
               "properties": {
                 "devanagari": {
-                  "type": ["string", "null"]
+                  "type": "string"
                 },
                 "roman": {
                   "type": ["string", "null"]
@@ -182,7 +182,13 @@
           }
         }
       },
-      "required": ["ref", "passage_type", "content"]
+      "required": ["ref", "passage_type", "content"],
+      "if": {
+        "properties": { "passage_type": { "enum": ["prefatory", "concluding"] } }
+      },
+      "then": {
+        "required": ["label"]
+      }
     },
     "commentary": {
       "type": "object",
@@ -203,7 +209,7 @@
               "type": "string"
             }
           },
-          "required": ["devanagari", "latin"]
+          "required": ["devanagari"]
         },
         "metadata": {
           "type": "object",

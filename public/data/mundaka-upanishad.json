@@ -1,0 +1,120 @@
+{
+  "grantha_id": "mundaka-upanishad",
+  "canonical_title": "मुण्डकोपनिषत्",
+  "aliases": [],
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "metadata": {
+    "source_file": "../../simple/data/mundaka.json",
+    "processing_pipeline": {
+      "llm_model": "n/a",
+      "llm_prompt_version": "n/a",
+      "llm_date": "2025-01-01",
+      "processor": "conversion_script.py"
+    },
+    "quality_notes": "Converted from simple format.",
+    "last_updated": "2025-11-07T23:36:29.158063Z"
+  },
+  "structure_levels": [
+    {
+      "key": "Mundaka",
+      "scriptNames": {
+        "devanagari": "मुण्डकः"
+      },
+      "children": [
+        {
+          "key": "Khanda",
+          "scriptNames": {
+            "devanagari": "खण्डः"
+          },
+          "children": [
+            {
+              "key": "Mantra",
+              "scriptNames": {
+                "devanagari": "मन्त्रः"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variants_available": [],
+  "prefatory_material": [],
+  "passages": [
+    {
+      "ref": "1.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    },
+    {
+      "ref": "1.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    },
+    {
+      "ref": "2.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    },
+    {
+      "ref": "2.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    },
+    {
+      "ref": "3.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    },
+    {
+      "ref": "3.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "",
+          "roman": null,
+          "kannada": null
+        },
+        "english_translation": null
+      }
+    }
+  ],
+  "concluding_material": [],
+  "commentaries": []
+}
