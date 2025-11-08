@@ -26,7 +26,7 @@ The application uses a two-step build process:
 
 2. **Build**: Next.js generates static HTML/CSS/JS files
    - Configured with `output: 'export'` for static site generation
-   - Uses `basePath: '/upanishad-explorer'` for GitHub Pages subdirectory
+   - Uses `basePath: '/aistudio'` for GitHub Pages subdirectory
    - Outputs to the `out/` directory
 
 ## Local Testing
@@ -61,7 +61,7 @@ npm run serve
 ### Why Two Different Builds?
 
 - **Local testing** (`npm run build:local`): Builds without basePath, serves at `http://localhost:3000/`
-- **Production** (`npm run build`): Builds with basePath `/upanishad-explorer`, serves at `https://<username>.github.io/upanishad-explorer/`
+- **Production** (`npm run build`): Builds with basePath `/aistudio`, serves at `https://manivaradarajan.github.io/aistudio/`
 
 This ensures local testing works correctly at the root URL while production deploys to the correct subdirectory.
 
@@ -168,14 +168,13 @@ git push origin main
 Once deployment completes, your site will be available at:
 
 ```
-https://<your-username>.github.io/upanishad-explorer/
+https://<your-username>.github.io/<repository-name>/
 ```
 
-Replace `<your-username>` with your actual GitHub username.
+Replace `<your-username>` and `<repository-name>` with your actual GitHub username and repository name.
 
-For example:
-- If your username is `john-doe`
-- Your site will be at: `https://john-doe.github.io/upanishad-explorer/`
+For this repository:
+- Your site is at: `https://manivaradarajan.github.io/aistudio/`
 
 > **Note**: It may take a few minutes for the site to be available after the first deployment.
 
@@ -205,7 +204,7 @@ npm run build
 
 ### 404 Errors When Testing Locally
 
-**Problem**: Assets are loading with `/upanishad-explorer/` prefix but server is at root.
+**Problem**: Assets are loading with `/aistudio/` prefix but server is at root.
 
 **Solution**: Use the local build script:
 ```bash
@@ -220,7 +219,7 @@ This builds without the basePath for local testing.
 
 1. **Branch not configured**: Ensure GitHub Pages is set to deploy from `gh-pages` branch
 2. **First deployment**: Wait 5-10 minutes for GitHub to propagate the site
-3. **Wrong URL**: Make sure you're accessing `https://<username>.github.io/upanishad-explorer/` (with the trailing slash)
+3. **Wrong URL**: Make sure you're accessing `https://manivaradarajan.github.io/aistudio/` (with the trailing slash)
 
 **To check**:
 ```bash
@@ -267,7 +266,7 @@ The app is configured in `next.config.js`:
 ```javascript
 const nextConfig = {
   output: 'export',                    // Enable static export
-  basePath: '/upanishad-explorer',     // GitHub Pages subdirectory
+  basePath: '/aistudio',               // GitHub Pages subdirectory (repository name)
   reactStrictMode: true,
   images: {
     unoptimized: true,                 // Required for static export
