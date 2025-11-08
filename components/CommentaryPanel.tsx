@@ -44,7 +44,7 @@ export default function CommentaryPanel({
     if (!passage) {
       return (
         <div key={index} className="text-gray-500 italic">
-          No commentary available for this verse.
+          अत्र भाष्यं नास्ति
         </div>
       );
     }
@@ -114,7 +114,7 @@ export default function CommentaryPanel({
           <h2 className="text-lg font-semibold font-serif">भाष्यम्</h2>
         </div>
         <div className="flex-1 overflow-y-auto px-6 pb-6">
-          <p className="text-gray-500 italic">No commentaries available.</p>
+          <p className="text-gray-500 italic">अत्र भाष्यं नास्ति</p>
         </div>
       </div>
     );
