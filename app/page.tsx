@@ -45,24 +45,42 @@ export default function Home() {
   // Track previous grantha to detect changes
   const previousGranthaId = useRef<string | null>(null);
 
-  // Validate and correct verse ref when grantha loads
+  // Handle grantha changes - jump to first main passage
   useEffect(() => {
     if (!currentGrantha) return;
 
-    // Check if grantha changed (first time or switched)
+    // Ensure currentGrantha data matches the current granthaId
+    if (currentGrantha.grantha_id !== granthaId) return;
+
+    // Check if grantha changed (not first load)
     const granthaChanged = previousGranthaId.current !== null && previousGranthaId.current !== granthaId;
+
+    // Check if this is a default verse ref (initial load with no specific verse)
+    const isDefaultVerseRef = verseRef === "1";
 
     // Update the ref for next comparison
     previousGranthaId.current = granthaId;
 
-    // If grantha changed, jump to first main passage (skip prefatory)
-    if (granthaChanged) {
+    // Jump to first main passage if:
+    // 1. Grantha was switched, OR
+    // 2. First load with default verse ref (skip prefatory)
+    if (granthaChanged || isDefaultVerseRef) {
       const firstMainRef = getFirstMainPassageRef(currentGrantha);
-      updateHash(granthaId, firstMainRef, commentaries);
-      return;
+      // Only update if we're not already at the first main passage
+      if (verseRef !== firstMainRef) {
+        updateHash(granthaId, firstMainRef, commentaries);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [granthaId, currentGrantha]);
 
-    // Otherwise, validate current verse ref
+  // Validate verse ref when it changes
+  useEffect(() => {
+    if (!currentGrantha) return;
+
+    // Skip validation for default verse ref "1" - grantha change effect handles this
+    if (verseRef === "1") return;
+
     const normalized = validateAndNormalizeHash(
       { granthaId, verseRef, commentaries },
       currentGrantha
@@ -72,13 +90,13 @@ export default function Home() {
     if (normalized.needsCorrection) {
       updateHash(granthaId, normalized.verseRef, commentaries);
     }
-  }, [currentGrantha, granthaId, verseRef, commentaries, updateHash]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentGrantha, verseRef]);
 
-  // Handle grantha change (simplified - just update hash)
-  const handleGranthaChange = async (newGranthaId: string) => {
-    // Optimistically get first verse (will be validated when grantha loads)
-    const firstRef = "1";
-    updateHash(newGranthaId, firstRef, commentaries);
+  // Handle grantha change
+  const handleGranthaChange = (newGranthaId: string) => {
+    // Set verse ref to "1" which triggers grantha change effect to skip to first main passage
+    updateHash(newGranthaId, "1", commentaries);
   };
 
   // Handle verse selection
