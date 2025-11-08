@@ -147,7 +147,7 @@ export async function getAvailableGranthas(): Promise<GranthaMetadata[]> {
  * Load full grantha data from JSON file
  */
 export async function loadGrantha(granthaId: string): Promise<Grantha> {
-  const response = await fetch(`/data/${granthaId}.json`);
+  const response = await fetch(`/data/library/${granthaId}.json`);
 
   if (!response.ok) {
     throw new Error(`Failed to load grantha: ${granthaId}`);
