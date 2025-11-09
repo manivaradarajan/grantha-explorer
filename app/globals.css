@@ -30,13 +30,10 @@
   transform: translate(-50%, -100%);
   background-color: white;
   color: black;
-  padding: 4px 8px;
+  padding: 2px 4px;
   border-radius: 4px;
-  z-index: 100;
-  width: auto;
-  min-width: 200px;
-  max-width: 600px;
-  text-align: left;
+  z-index: 9999;
+  text-align: center !important;
   visibility: visible;
   opacity: 1;
   transition: opacity 0.2s;
