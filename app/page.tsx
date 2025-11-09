@@ -11,11 +11,18 @@ import { useVerseHash } from "@/hooks/useVerseHash";
 import { useGrantha, useAvailableGranthas } from "@/hooks/useGrantha";
 import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import InvalidVerseModal from "@/components/InvalidVerseModal"; // Import the new modal component
 
 export default function Home() {
   // Media queries for responsive design
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+
+  // State for invalid verse modal
+  const [showInvalidVerseModal, setShowInvalidVerseModal] = useState(false);
+  const [invalidVerseTitle, setInvalidVerseTitle] = useState(""); // New state for modal title
+  const [invalidVerseMessageLines, setInvalidVerseMessageLines] = useState<string[]>([]); // New state for multi-line message
+  const [previousUrl, setPreviousUrl] = useState<string | null>(null); // To store the URL before an invalid navigation attempt
 
   // Load panel sizes from localStorage
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
@@ -44,7 +51,7 @@ export default function Home() {
     commentaryOpen,
     updateHash,
     updateCommentaryOpen,
-  } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
+  } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1"); // Removed currentGrantha and granthas
 
   // Load current grantha data via React Query
   const {
@@ -100,21 +107,58 @@ export default function Home() {
       currentGrantha
     );
 
-    // If verse ref was invalid, update URL to corrected version
+    // If verse ref was invalid, show modal and revert URL
     if (normalized.needsCorrection) {
-      updateHash(granthaId, normalized.verseRef, commentaries);
+      const granthaTitle = granthaIdToDevanagariTitle[granthaId] || granthaIdToLatinTitle[granthaId] || granthaId;
+      setInvalidVerseTitle("उक्तनिर्देशः नोपलभ्यते"); // "Passage not found"
+      setInvalidVerseMessageLines([
+        `${granthaTitle} ${verseRef}`,
+      ]);
+      setShowInvalidVerseModal(true);
+
+      // Log source and destination URLs
+      console.log("Invalid Verse Navigation Attempt:");
+      console.log("  Source URL:", window.location.href);
+      // The destination URL would have been the invalid one, but we are preventing navigation.
+      // For logging purposes, we can construct what it *would* have been.
+      const attemptedHash = `#${granthaId}:${verseRef}`;
+      console.log("  Attempted Destination Hash:", attemptedHash);
+
+      // Revert the URL to the previous valid state if available
+      if (previousUrl) {
+        window.history.replaceState(null, "", previousUrl);
+      } else {
+        // If no previous URL, revert to a default valid state (e.g., first verse of current grantha)
+        const firstMainRef = getFirstMainPassageRef(currentGrantha);
+        updateHash(granthaId, firstMainRef, commentaries, commentaryOpen, true);
+      }
+    } else {
+      // If the verse is valid, update previousUrl for future invalid navigations
+      setPreviousUrl(window.location.href);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGrantha, verseRef]);
 
   // Handle grantha change
   const handleGranthaChange = (newGranthaId: string) => {
+    // Log source and destination URLs
+    console.log("Grantha Change Attempt:");
+    console.log("  Source URL:", window.location.href);
+    const newHash = `#${newGranthaId}:1`; // Assuming default to first verse
+    console.log("  Attempted Destination Hash:", newHash);
+
     // Set verse ref to "1" which triggers grantha change effect to skip to first main passage
     updateHash(newGranthaId, "1", commentaries);
   };
 
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
+    // Log source and destination URLs
+    console.log("Verse Selection Attempt:");
+    console.log("  Source URL:", window.location.href);
+    const newHash = `#${granthaId}:${ref}`;
+    console.log("  Attempted Destination Hash:", newHash);
+
     if (isMobile) {
       updateHash(granthaId, ref, commentaries, true);
     } else {
@@ -139,6 +183,13 @@ export default function Home() {
   const granthaIdToLatinTitle = Object.fromEntries(
     granthas.map((g) => [g.id, g.title_iast])
   );
+
+  // Close modal handler
+  const handleCloseInvalidVerseModal = () => {
+    setShowInvalidVerseModal(false);
+    setInvalidVerseTitle("");
+    setInvalidVerseMessageLines([]);
+  };
 
   // Error states
   if (granthasError) {
@@ -193,36 +244,52 @@ export default function Home() {
   // Render mobile layout for screens <768px
   if (isMobile) {
     return (
-      <MobileLayout
-        grantha={currentGrantha}
-        granthas={granthas}
-        selectedRef={verseRef}
-        commentaries={commentaries}
-        commentaryOpen={commentaryOpen}
-        onGranthaChange={handleGranthaChange}
-        onVerseSelect={handleVerseSelect}
-        updateHash={updateHash}
-        updateCommentaryOpen={updateCommentaryOpen}
-        granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-        granthaIdToLatinTitle={granthaIdToLatinTitle}
-      />
+      <>
+        <MobileLayout
+          grantha={currentGrantha}
+          granthas={granthas}
+          selectedRef={verseRef}
+          commentaries={commentaries}
+          commentaryOpen={commentaryOpen}
+          onGranthaChange={handleGranthaChange}
+          onVerseSelect={handleVerseSelect}
+          updateHash={updateHash}
+          updateCommentaryOpen={updateCommentaryOpen}
+          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+          granthaIdToLatinTitle={granthaIdToLatinTitle}
+        />
+        <InvalidVerseModal
+          isOpen={showInvalidVerseModal}
+          onClose={handleCloseInvalidVerseModal}
+          title={invalidVerseTitle}
+          messageLines={invalidVerseMessageLines}
+        />
+      </>
     );
   }
 
   // Render tablet layout for screens 768px-1024px
   if (isTablet) {
     return (
-      <TabletLayout
-        grantha={currentGrantha}
-        granthas={granthas}
-        selectedRef={verseRef}
-        commentaries={commentaries}
-        onGranthaChange={handleGranthaChange}
-        onVerseSelect={handleVerseSelect}
-        updateHash={updateHash}
-        granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-        granthaIdToLatinTitle={granthaIdToLatinTitle}
-      />
+      <>
+        <TabletLayout
+          grantha={currentGrantha}
+          granthas={granthas}
+          selectedRef={verseRef}
+          commentaries={commentaries}
+          onGranthaChange={handleGranthaChange}
+          onVerseSelect={handleVerseSelect}
+          updateHash={updateHash}
+          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+          granthaIdToLatinTitle={granthaIdToLatinTitle}
+        />
+        <InvalidVerseModal
+          isOpen={showInvalidVerseModal}
+          onClose={handleCloseInvalidVerseModal}
+          title={invalidVerseTitle}
+          messageLines={invalidVerseMessageLines}
+        />
+      </>
     );
   }
 
@@ -275,6 +342,13 @@ export default function Home() {
           </Panel>
         </PanelGroup>
       </div>
+        <InvalidVerseModal
+          isOpen={showInvalidVerseModal}
+          onClose={handleCloseInvalidVerseModal}
+          title={invalidVerseTitle}
+          messageLines={invalidVerseMessageLines}
+        />
     </main>
   );
 }
+

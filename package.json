@@ -15,10 +15,11 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
+    "antd": "^5.28.0",
     "isomorphic-dompurify": "^2.31.0",
     "next": "^16.0.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-resizable-panels": "^3.0.6"
   },
   "devDependencies": {

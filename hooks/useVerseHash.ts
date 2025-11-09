@@ -1,7 +1,6 @@
-"use client";
-
 import { useEffect, useState, useRef, useCallback } from "react";
 import { parseHash, buildHash, UrlState } from "@/lib/hashUtils";
+import { Grantha, GranthaMeta } from "@/lib/data"; // Assuming Grantha and GranthaMeta are exported from lib/data
 
 interface UseVerseHashReturn {
   granthaId: string;
@@ -12,8 +11,9 @@ interface UseVerseHashReturn {
     granthaId: string,
     verseRef: string,
     commentaries?: string[],
-    commentaryOpen?: boolean
-  ) => void;
+    commentaryOpen?: boolean,
+    replaceHistory?: boolean
+  ) => void; // Reverted to void
   updateCommentaryOpen: (isOpen: boolean) => void;
 }
 
@@ -142,29 +142,36 @@ export function useVerseHash(
   }, []); // Empty deps - listener created once
 
   // Function to update hash (called by components)
-  const updateHash = (
+  const updateHash = useCallback((
     granthaId: string,
     verseRef: string,
     commentaries?: string[],
-    commentaryOpen?: boolean
+    commentaryOpen?: boolean,
+    replaceHistory: boolean = false
   ) => {
     const newCommentaries =
       commentaries !== undefined ? commentaries : state.commentaries;
 
-    const newHash = buildHash({
+    const potentialUrlState = {
       ...state,
       granthaId,
       verseRef,
       commentaries: newCommentaries,
       commentaryOpen: commentaryOpen ?? state.commentaryOpen,
-    });
+    };
+
+    const newHash = buildHash(potentialUrlState);
 
     // Only update if different from current hash
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
-      window.location.hash = newHash;
+      if (replaceHistory) {
+        window.history.replaceState(null, "", newHash);
+      } else {
+        window.location.hash = newHash;
+      }
       // State will be updated via hashchange event
     }
-  };
+  }, [state]); // Removed currentGrantha and granthas from dependencies
 
   const updateCommentaryOpen = (isOpen: boolean) => {
     const newHash = buildHash({
