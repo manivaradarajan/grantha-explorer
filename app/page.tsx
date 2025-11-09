@@ -37,10 +37,14 @@ export default function Home() {
   } = useAvailableGranthas();
 
   // Get current state from URL hash
-  const { granthaId, verseRef, commentaries, updateHash } = useVerseHash(
-    granthas[0]?.id || "isavasya-upanishad",
-    "1"
-  );
+  const {
+    granthaId,
+    verseRef,
+    commentaries,
+    commentaryOpen,
+    updateHash,
+    updateCommentaryOpen,
+  } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
 
   // Load current grantha data via React Query
   const {
@@ -60,7 +64,9 @@ export default function Home() {
     if (currentGrantha.grantha_id !== granthaId) return;
 
     // Check if grantha changed (not first load)
-    const granthaChanged = previousGranthaId.current !== null && previousGranthaId.current !== granthaId;
+    const granthaChanged =
+      previousGranthaId.current !== null &&
+      previousGranthaId.current !== granthaId;
 
     // Check if this is a default verse ref (initial load with no specific verse)
     const isDefaultVerseRef = verseRef === "1";
@@ -90,7 +96,7 @@ export default function Home() {
     if (verseRef === "1") return;
 
     const normalized = validateAndNormalizeHash(
-      { granthaId, verseRef, commentaries },
+      { granthaId, verseRef, commentaries, commentaryOpen },
       currentGrantha
     );
 
@@ -109,7 +115,11 @@ export default function Home() {
 
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
-    updateHash(granthaId, ref, commentaries);
+    if (isMobile) {
+      updateHash(granthaId, ref, commentaries, true);
+    } else {
+      updateHash(granthaId, ref, commentaries);
+    }
   };
 
   // Handle panel size changes
@@ -123,11 +133,11 @@ export default function Home() {
   };
 
   const granthaIdToDevanagariTitle = Object.fromEntries(
-    granthas.map(g => [g.id, g.title_deva])
+    granthas.map((g) => [g.id, g.title_deva])
   );
 
   const granthaIdToLatinTitle = Object.fromEntries(
-    granthas.map(g => [g.id, g.title_iast])
+    granthas.map((g) => [g.id, g.title_iast])
   );
 
   // Error states
@@ -188,9 +198,11 @@ export default function Home() {
         granthas={granthas}
         selectedRef={verseRef}
         commentaries={commentaries}
+        commentaryOpen={commentaryOpen}
         onGranthaChange={handleGranthaChange}
         onVerseSelect={handleVerseSelect}
         updateHash={updateHash}
+        updateCommentaryOpen={updateCommentaryOpen}
         granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
         granthaIdToLatinTitle={granthaIdToLatinTitle}
       />

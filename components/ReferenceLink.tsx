@@ -7,7 +7,7 @@ import { Reference, isReferenceInLibrary, getPassagePreview } from '../lib/refer
 interface ReferenceLinkProps {
   reference: Reference;
   currentGranthaId: string;
-  updateHash: (granthaId: string, verseRef: string) => void;
+  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
   availableGranthaIds: string[];
   granthaIdToTitle: { [key: string]: string };
 }
@@ -120,7 +120,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     } else if (isInLibrary) {
       // For internal references, navigate without scrolling
       preventNextScroll = true;
-      updateHash(reference.granthaId, reference.path);
+      updateHash(reference.granthaId, reference.path, []);
     }
   };
 

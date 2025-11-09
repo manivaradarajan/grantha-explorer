@@ -26,7 +26,7 @@ This document describes the technical implementation of shareable per-verse URLs
 - `#kena-upanishad:1.1` - Kena Upanishad, verse 1.1, default commentaries
 - `#kena-upanishad:1.1?c=rangaramanuja` - Kena 1.1 with Rangaramanuja commentary
 - `#kena-upanishad:1.1?c=rangaramanuja,vedanta_desika` - Kena 1.1 with multiple commentaries
-- `#isha-upanishad:0.0?c=vedanta_desika&s=roman&dark=1` - Isha prefatory material with Roman script and dark mode
+- `#isha-upanishad:0.0?c=vedanta_desika&s=roman&dark=1&co=1` - Isha prefatory material with Roman script, dark mode, and commentary panel open
 
 **Format Rationale:**
 - Hash fragment (`#`) for no-reload navigation
@@ -219,6 +219,7 @@ These define how content is displayed:
 |-----------|---------|------|--------|---------|
 | (hash path) | Location | Content | `#[granthaId]:[verseRef]` | `#kena-upanishad:1.1` |
 | `c` | Commentaries | Content | Comma-separated commentary IDs | `c=rangaramanuja,vedanta_desika` |
+| `co` | Commentary Open | Content | `0`, `1` | `co=1` |
 | `s` | Script | Preference | `deva`, `roman` | `s=roman` |
 | `l` | Language | Preference | `both`, `san`, `eng` | `l=san` |
 | `dark` | Dark mode | Preference | `0`, `1` | `dark=1` |
@@ -291,6 +292,7 @@ interface UrlState {
   granthaId: string;
   verseRef: string;
   commentaries?: string[];
+  commentaryOpen?: boolean;
   script?: 'deva' | 'roman';
   language?: 'both' | 'san' | 'eng';
   darkMode?: boolean;
@@ -326,6 +328,12 @@ export function parseHash(hash: string): UrlState | null {
     const c = params.get('c');
     if (c) {
       result.commentaries = c.split(',').filter(Boolean);
+    }
+
+    // Commentary open state
+    const co = params.get('co');
+    if (co) {
+      result.commentaryOpen = co === '1';
     }
 
     // Script
@@ -366,7 +374,7 @@ export function parseHash(hash: string): UrlState | null {
  * @returns Hash string
  */
 export function buildHash(state: UrlState, includePreferences: boolean = false): string {
-  const { granthaId, verseRef, commentaries, script, language, darkMode, fontSize } = state;
+  const { granthaId, verseRef, commentaries, commentaryOpen, script, language, darkMode, fontSize } = state;
 
   // Build base hash
   let hash = `#${granthaId}:${verseRef}`;
@@ -377,6 +385,11 @@ export function buildHash(state: UrlState, includePreferences: boolean = false):
   // Always include commentaries if present
   if (commentaries?.length) {
     params.set('c', commentaries.join(','));
+  }
+
+  // Always include commentary open state if true
+  if (commentaryOpen) {
+    params.set('co', '1');
   }
 
   // Only include display preferences if explicitly requested (Share My View)

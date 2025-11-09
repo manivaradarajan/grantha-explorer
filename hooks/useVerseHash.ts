@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { parseHash, buildHash, UrlState } from "@/lib/hashUtils";
 
 interface UseVerseHashReturn {
   granthaId: string;
   verseRef: string;
   commentaries: string[];
+  commentaryOpen: boolean;
   updateHash: (
     granthaId: string,
     verseRef: string,
-    commentaries?: string[]
+    commentaries?: string[],
+    commentaryOpen?: boolean
   ) => void;
+  updateCommentaryOpen: (isOpen: boolean) => void;
 }
 
 /**
@@ -33,16 +36,13 @@ export function useVerseHash(
   defaultVerseRef: string = "1"
 ): UseVerseHashReturn {
   // Parse initial hash or use defaults
-  const getInitialState = (): {
-    granthaId: string;
-    verseRef: string;
-    commentaries: string[];
-  } => {
+  const getInitialState = (): UrlState => {
     if (typeof window === "undefined") {
       return {
         granthaId: defaultGranthaId,
         verseRef: defaultVerseRef,
         commentaries: [],
+        commentaryOpen: false,
       };
     }
 
@@ -66,6 +66,7 @@ export function useVerseHash(
         granthaId: parsed.granthaId,
         verseRef: parsed.verseRef,
         commentaries: parsed.commentaries || [],
+        commentaryOpen: parsed.commentaryOpen || false,
       };
     }
 
@@ -85,6 +86,7 @@ export function useVerseHash(
       granthaId: defaultGranthaId,
       verseRef: defaultVerseRef,
       commentaries: savedCommentaries,
+      commentaryOpen: false,
     });
     window.history.replaceState(null, "", initialHash);
 
@@ -92,17 +94,11 @@ export function useVerseHash(
       granthaId: defaultGranthaId,
       verseRef: defaultVerseRef,
       commentaries: savedCommentaries,
+      commentaryOpen: false,
     };
   };
 
   const [state, setState] = useState(getInitialState);
-
-  // Use refs to avoid recreating event listener
-  const stateRef = useRef(state);
-
-  useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
 
   // Listen to hashchange events (browser back/forward)
   useEffect(() => {
@@ -134,6 +130,7 @@ export function useVerseHash(
         granthaId: parsed.granthaId,
         verseRef: parsed.verseRef,
         commentaries: parsed.commentaries || [],
+        commentaryOpen: parsed.commentaryOpen || false,
       });
     }
 
@@ -142,21 +139,24 @@ export function useVerseHash(
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
-  }, []); // Empty deps - listener created once, uses refs
+  }, []); // Empty deps - listener created once
 
   // Function to update hash (called by components)
   const updateHash = (
     granthaId: string,
     verseRef: string,
-    commentaries?: string[]
+    commentaries?: string[],
+    commentaryOpen?: boolean
   ) => {
     const newCommentaries =
-      commentaries !== undefined ? commentaries : stateRef.current.commentaries;
+      commentaries !== undefined ? commentaries : state.commentaries;
 
     const newHash = buildHash({
+      ...state,
       granthaId,
       verseRef,
       commentaries: newCommentaries,
+      commentaryOpen: commentaryOpen ?? state.commentaryOpen,
     });
 
     // Only update if different from current hash
@@ -166,10 +166,23 @@ export function useVerseHash(
     }
   };
 
+  const updateCommentaryOpen = (isOpen: boolean) => {
+    const newHash = buildHash({
+      ...state,
+      commentaryOpen: isOpen,
+    });
+
+    if (typeof window !== "undefined" && window.location.hash !== newHash) {
+      window.location.hash = newHash;
+    }
+  };
+
   return {
     granthaId: state.granthaId,
     verseRef: state.verseRef,
     commentaries: state.commentaries,
+    commentaryOpen: state.commentaryOpen || false,
     updateHash,
+    updateCommentaryOpen,
   };
 }

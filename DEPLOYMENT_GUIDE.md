@@ -31,7 +31,23 @@ The application uses a two-step build process:
 
 ## Local Testing
 
-### Quick Test
+### Development Server
+
+To run the application in a local development environment with hot-reloading:
+
+```bash
+npm run dev
+```
+
+The application will be available at: **http://localhost:3000/aistudio**
+
+**Why the `/aistudio` path?**
+
+The `next.config.js` file specifies `basePath: '/aistudio'` to ensure all links and assets work correctly when deployed to GitHub Pages (which serves the project from a subdirectory). The development server respects this `basePath`, which is why the site is accessible under the `/aistudio` path.
+
+Accessing the root URL `http://localhost:3000/` will result in a **404 Not Found** error, as no pages are served from the root.
+
+### Quick Test (Production Build)
 
 To test the production build locally:
 

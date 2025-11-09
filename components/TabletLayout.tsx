@@ -110,7 +110,7 @@ export default function TabletLayout({
             <CommentaryPanel
               grantha={grantha}
               selectedRef={selectedRef}
-              updateHash={(granthaId, verseRef) =>
+              updateHash={(granthaId, verseRef, commentaries) =>
                 updateHash(granthaId, verseRef, commentaries)
               }
               availableGranthaIds={granthas.map((g) => g.id)}

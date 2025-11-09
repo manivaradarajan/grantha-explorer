@@ -13,9 +13,15 @@ interface MobileLayoutProps {
   granthas: GranthaMetadata[];
   selectedRef: string;
   commentaries: string[];
+  commentaryOpen: boolean;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
-  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
+  updateHash: (
+    granthaId: string,
+    verseRef: string,
+    commentaries: string[]
+  ) => void;
+  updateCommentaryOpen: (isOpen: boolean) => void;
   granthaIdToDevanagariTitle: { [key: string]: string };
   granthaIdToLatinTitle: { [key: string]: string };
 }
@@ -25,21 +31,25 @@ export default function MobileLayout({
   granthas,
   selectedRef,
   commentaries,
+  commentaryOpen,
   onGranthaChange,
   onVerseSelect,
   updateHash,
+  updateCommentaryOpen,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
 }: MobileLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isCommentaryOpen, setIsCommentaryOpen] = useState(false);
 
   // Get all passages for navigation
-  const allPassages = useMemo(() => getAllPassagesForNavigation(grantha), [grantha]);
+  const allPassages = useMemo(
+    () => getAllPassagesForNavigation(grantha),
+    [grantha]
+  );
 
   // Find current passage index
   const currentPassageIndex = useMemo(() => {
-    return allPassages.findIndex(p => p.ref === selectedRef);
+    return allPassages.findIndex((p) => p.ref === selectedRef);
   }, [allPassages, selectedRef]);
 
   const hasPrevious = currentPassageIndex > 0;
@@ -47,7 +57,6 @@ export default function MobileLayout({
 
   const handleVerseSelect = (ref: string) => {
     onVerseSelect(ref);
-    setIsCommentaryOpen(true);
   };
 
   const handlePrevious = () => {
@@ -129,8 +138,8 @@ export default function MobileLayout({
 
       {/* Commentary Bottom Sheet */}
       <BottomSheet
-        isOpen={isCommentaryOpen}
-        onClose={() => setIsCommentaryOpen(false)}
+        isOpen={commentaryOpen}
+        onClose={() => updateCommentaryOpen(false)}
         title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
         subtitle={grantha.commentaries?.[0]?.commentator.devanagari}
         verseRef={selectedRef}
@@ -142,7 +151,7 @@ export default function MobileLayout({
         <CommentaryPanel
           grantha={grantha}
           selectedRef={selectedRef}
-          updateHash={(granthaId, verseRef) =>
+          updateHash={(granthaId, verseRef, commentaries) =>
             updateHash(granthaId, verseRef, commentaries)
           }
           availableGranthaIds={granthas.map((g) => g.id)}

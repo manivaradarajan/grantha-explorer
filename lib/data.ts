@@ -264,9 +264,10 @@ export function getStructureLevelLabel(
 export function getAllPassagesForNavigation(
   grantha: Grantha
 ): Array<Passage | PrefatoryMaterial> {
+  if (!grantha) return [];
   return [
-    ...grantha.prefatory_material,
-    ...grantha.passages,
+    ...(grantha.prefatory_material || []),
+    ...(grantha.passages || []),
     ...(grantha.concluding_material || []),
   ];
 }

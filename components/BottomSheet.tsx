@@ -84,24 +84,22 @@ export default function BottomSheet({
     setCurrentY(0);
   };
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+  const handleBackdropClick = () => {
+    onClose();
   };
-
-
 
   return (
     <div
       className={`fixed inset-0 z-50 flex items-end transition-opacity duration-200 ${
-        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        isOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       }`}
-      onClick={handleBackdropClick}
     >
       {/* Backdrop */}
       <div
         className={`absolute inset-0 bg-black ${isOpen ? "opacity-50" : "opacity-0"}`}
+        onClick={handleBackdropClick}
       />
 
       {/* Bottom Sheet */}
@@ -122,30 +120,12 @@ export default function BottomSheet({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Drag Handle and Close Button */}
-        <div className="relative flex justify-center py-3 cursor-grab active:cursor-grabbing">
-          <div className="w-12 h-1 bg-gray-300 rounded-full" />
-          {/* Close Button - positioned absolutely in top right */}
-          <button
+        {/* Drag Handle */}
+        <div className="relative flex justify-center py-6 cursor-grab active:cursor-grabbing">
+          <div
+            className="w-12 h-1 bg-gray-300 rounded-full"
             onClick={onClose}
-            className="absolute right-4 top-2 p-2 hover:bg-gray-100 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-            aria-label="Close commentary"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          />
         </div>
 
         {/* Header with Symmetric Navigation */}
@@ -180,17 +160,15 @@ export default function BottomSheet({
           {/* Title and Reference */}
           <div className="flex-1 text-center px-2">
             <div className="flex items-center justify-center gap-2 leading-tight">
-              <h2 className="text-lg font-semibold font-serif">
-                {title}
-              </h2>
+              <h2 className="text-xl font-semibold font-serif">{title}</h2>
               {verseRef && (
-                <span className="text-sm font-medium text-gray-700 -mt-0.5">
+                <span className="text-lg font-medium text-gray-700 -mt-0.5">
                   {verseRef}
                 </span>
               )}
             </div>
             {subtitle && (
-              <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+              <p className="text-base text-gray-600 mt-1">{subtitle}</p>
             )}
           </div>
 
@@ -225,7 +203,7 @@ export default function BottomSheet({
         {/* Content */}
         <div
           ref={contentRef}
-          className="flex-1 overflow-y-auto overscroll-contain px-6 pb-6"
+          className="flex-1 overflow-y-auto overscroll-contain pt-4 px-4 pb-6"
         >
           {children}
         </div>

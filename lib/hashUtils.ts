@@ -7,6 +7,7 @@ export interface UrlState {
   granthaId: string;
   verseRef: string;
   commentaries?: string[];
+  commentaryOpen?: boolean;
   script?: "deva" | "roman";
   language?: "both" | "san" | "eng";
   darkMode?: boolean;
@@ -42,6 +43,12 @@ export function parseHash(hash: string): UrlState | null {
     const c = params.get("c");
     if (c) {
       result.commentaries = c.split(",").filter(Boolean);
+    }
+
+    // Commentary open state
+    const co = params.get("co");
+    if (co) {
+      result.commentaryOpen = co === '1';
     }
 
     // Script
@@ -85,7 +92,7 @@ export function buildHash(
   state: UrlState,
   includePreferences: boolean = false
 ): string {
-  const { granthaId, verseRef, commentaries, script, language, darkMode, fontSize } =
+  const { granthaId, verseRef, commentaries, commentaryOpen, script, language, darkMode, fontSize } =
     state;
 
   // Build base hash
@@ -97,6 +104,11 @@ export function buildHash(
   // Always include commentaries if present
   if (commentaries?.length) {
     params.set("c", commentaries.join(","));
+  }
+
+  // Always include commentary open state if true
+  if (commentaryOpen) {
+    params.set("co", "1");
   }
 
   // Only include display preferences if explicitly requested (Share My View)

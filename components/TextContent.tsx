@@ -56,7 +56,7 @@ export default function TextContent({
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 pb-6">
         {passages.map((passage) => {
           const isSelected = passage.ref === selectedRef;
-          const sanskritText = passage.content.sanskrit.devanagari;
+          const sanskritText = passage.content.sanskrit?.devanagari || "";
 
           return (
             <div

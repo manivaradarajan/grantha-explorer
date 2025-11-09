@@ -12,7 +12,7 @@ import ReferenceLink from './ReferenceLink';
 interface CommentaryPanelProps {
   grantha: Grantha;
   selectedRef: string;
-  updateHash: (granthaId: string, verseRef: string) => void;
+  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
   availableGranthaIds: string[];
   granthaIdToDevanagariTitle: { [key: string]: string };
   granthaIdToLatinTitle: { [key: string]: string };
@@ -156,7 +156,7 @@ export default function CommentaryPanel({
           </div>
         )}
 
-        <div className="text-base leading-relaxed whitespace-pre-line">
+        <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
           {renderCommentaryWithReferences(sanitizedHtml, script)}
         </div>
       </div>
