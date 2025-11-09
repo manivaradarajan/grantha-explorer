@@ -24,6 +24,10 @@ export default function Home() {
   const [invalidVerseMessageLines, setInvalidVerseMessageLines] = useState<string[]>([]); // New state for multi-line message
   const [previousUrl, setPreviousUrl] = useState<string | null>(null); // To store the URL before an invalid navigation attempt
 
+  // State for resize handle dragging
+  const [isDraggingLeftHandle, setIsDraggingLeftHandle] = useState(false);
+  const [isDraggingRightHandle, setIsDraggingRightHandle] = useState(false);
+
   // Load panel sizes from localStorage
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [20, 50, 30];
@@ -314,7 +318,10 @@ export default function Home() {
           </Panel>
 
           {/* Resize Handle - invisible but functional */}
-          <PanelResizeHandle className="w-0.5" />
+          <PanelResizeHandle
+            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? 'bg-blue-500' : ''}`}
+            onDragging={setIsDraggingLeftHandle}
+          />
 
           {/* Center Content Panel */}
           <Panel defaultSize={panelSizes[1]} minSize={30}>
@@ -327,7 +334,10 @@ export default function Home() {
           </Panel>
 
           {/* Resize Handle */}
-          <PanelResizeHandle className="w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors" />
+          <PanelResizeHandle
+            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingRightHandle ? 'bg-blue-500' : ''}`}
+            onDragging={setIsDraggingRightHandle}
+          />
 
           {/* Right Commentary Panel */}
           <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>

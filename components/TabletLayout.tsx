@@ -32,6 +32,7 @@ export default function TabletLayout({
   granthaIdToLatinTitle,
 }: TabletLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [60, 40];
     try {
@@ -103,7 +104,10 @@ export default function TabletLayout({
           </Panel>
 
           {/* Resize Handle */}
-          <PanelResizeHandle className="w-1 bg-gray-200 hover:bg-blue-500 transition-colors" />
+          <PanelResizeHandle
+            className={`w-1 bg-gray-200 ${isDragging ? 'bg-blue-500' : 'hover:bg-blue-500'} transition-colors`}
+            onDragging={setIsDragging}
+          />
 
           {/* Right Commentary Panel */}
           <Panel defaultSize={panelSizes[1]} minSize={30} maxSize={60}>
