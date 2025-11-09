@@ -68,7 +68,7 @@ export default function NavigationSidebar({
     <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
       {/* Header */}
       <div className="pt-8 pb-2 px-6 bg-[#f8f9fa]">
-        <h2 className="text-xl font-semibold font-serif">{uiStrings.index}</h2>
+        <h2 className="text-xl font-semibold font-serif text-center">{uiStrings.index}</h2>
       </div>
 
       {/* Grantha selector */}
