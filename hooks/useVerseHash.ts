@@ -187,7 +187,7 @@ export function useVerseHash(
   return {
     granthaId: state.granthaId,
     verseRef: state.verseRef,
-    commentaries: state.commentaries,
+    commentaries: state.commentaries || [],
     commentaryOpen: state.commentaryOpen || false,
     updateHash,
     updateCommentaryOpen,

@@ -85,7 +85,9 @@ export default function NavigationSidebar({
         {hierarchy.prefatory.map((passage) => (
           <PassageLink
             key={passage.ref}
-            ref={(el) => (verseRefs.current[passage.ref] = el)}
+            ref={(el) => {
+              verseRefs.current[passage.ref] = el;
+            }}
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
@@ -97,8 +99,9 @@ export default function NavigationSidebar({
           ? // Flat list for single-level structures
             hierarchy.main[0].passages.map((passage) => (
               <PassageLink
-                key={passage.ref}
-                ref={(el) => (verseRefs.current[passage.ref] = el)}
+              ref={(el) => {
+                verseRefs.current[passage.ref] = el;
+              }}
                 passage={passage}
                 grantha={grantha}
                 isSelected={passage.ref === selectedRef}
@@ -116,7 +119,9 @@ export default function NavigationSidebar({
                 {group.passages.map((passage) => (
                   <PassageLink
                     key={passage.ref}
-                    ref={(el) => (verseRefs.current[passage.ref] = el)}
+                  ref={(el) => {
+                    verseRefs.current[passage.ref] = el;
+                  }}
                     passage={passage}
                     grantha={grantha}
                     isSelected={passage.ref === selectedRef}
@@ -129,7 +134,9 @@ export default function NavigationSidebar({
         {hierarchy.concluding.map((passage) => (
           <PassageLink
             key={passage.ref}
-            ref={(el) => (verseRefs.current[passage.ref] = el)}
+            ref={(el) => {
+              verseRefs.current[passage.ref] = el;
+            }}
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
