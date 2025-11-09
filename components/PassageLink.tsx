@@ -19,7 +19,10 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
   ({ passage, grantha, isSelected, onVerseSelect }, ref) => {
     const getLabel = () => {
       // Use label directly for prefatory and concluding material
-      if (passage.passage_type === "prefatory" || passage.passage_type === "concluding") {
+      if (
+        passage.passage_type === "prefatory" ||
+        passage.passage_type === "concluding"
+      ) {
         const prefatoryPassage = passage as PrefatoryMaterial;
         return prefatoryPassage.label.devanagari || "प्रस्तावना";
       }
@@ -47,19 +50,24 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
         ref={ref}
         href={`#${grantha.grantha_id}:${passage.ref}`}
         onClick={handleClick}
-        className={`block w-full text-left py-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[44px] flex items-center ${
+        className={`block w-full text-left py-1 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[44px] flex items-center ${
           isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
         }`}
       >
-        <span className={`flex-shrink-0 px-2 ${isSelected ? "text-gray-500" : "text-blue-600"}`}>
+        <span
+          className={`flex-shrink-0 px-1 pl-5 ${isSelected ? "text-gray-500" : "text-blue-600"}`}
+        >
           {label}
         </span>
-        <span className={`flex-1 truncate pr-2 ${isSelected ? "text-gray-500" : "text-gray-500"}`}>
-          {" - "}{fragment}
+        <span
+          className={`flex-1 truncate pr-2 ${isSelected ? "text-gray-500" : "text-gray-500"}`}
+        >
+          {" - "}
+          {fragment}
         </span>
       </a>
     );
-  }
+  },
 );
 
 PassageLink.displayName = "PassageLink";
