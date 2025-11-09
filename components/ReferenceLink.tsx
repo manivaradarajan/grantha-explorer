@@ -33,7 +33,6 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   // Detect if device supports touch
   useEffect(() => {
     isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    console.log('isTouchDevice detected:', isTouchDevice.current);
   }, []);
 
   const calculateTooltipPosition = () => {
@@ -69,7 +68,6 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
 
       setTooltipBelow(false); // Always try to position above the link
       setTooltipPosition({ top, left });
-      console.log('Tooltip position calculated:', { top, left });
     }
   };
 
@@ -87,14 +85,12 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       const title = granthaIdToTitle[reference.granthaId] || reference.granthaId;
       setTooltipContent(`${title} ${reference.path}`);
     }
-    console.log('Tooltip content loaded:', tooltipContent);
   };
 
   const handleMouseEnter = async (e: React.MouseEvent) => {
     // Don't show tooltip on mouse events for touch devices
     if (isTouchDevice.current) return;
 
-    console.log('handleMouseEnter: Desktop device, showing tooltip');
     calculateTooltipPosition();
     setShowTooltip(true);
     await loadTooltipContent();
@@ -104,7 +100,6 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     // Don't hide tooltip on mouse leave for touch devices
     if (isTouchDevice.current) return;
 
-    console.log('handleMouseLeave: Desktop device, hiding tooltip');
     setShowTooltip(false);
     setTooltipContent('Loading...');
     setTooltipBelow(false);
@@ -114,29 +109,22 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     e.preventDefault();
     e.stopPropagation();
 
-    console.log('handleClick: isTouchDevice.current:', isTouchDevice.current, 'isInLibrary:', isInLibrary);
-
     if (isTouchDevice.current && !isInLibrary) {
       // For external references on touch devices, toggle tooltip
-      console.log('handleClick: Touch device, external reference. Toggling tooltip.');
       if (showTooltip) {
         setShowTooltip(false);
         setTooltipContent('Loading...');
         setTooltipBelow(false);
-        console.log('handleClick: Hiding tooltip.');
       } else {
         calculateTooltipPosition();
         setShowTooltip(true);
         await loadTooltipContent();
-        console.log('handleClick: Showing tooltip.');
       }
     } else if (isInLibrary) {
       // For internal references, navigate without scrolling
-      console.log('handleClick: Internal reference, navigating.');
       preventNextScroll = true;
       updateHash(reference.granthaId, reference.path, []);
     } else {
-      console.log('handleClick: Desktop device, external reference. No action on click (hover handles it).');
     }
   };
 
@@ -144,13 +132,11 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   useEffect(() => {
     if (!isTouchDevice.current || !showTooltip) return;
 
-    console.log('handleClickOutside useEffect: Active for touch device and showTooltip is true.');
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
         setShowTooltip(false);
         setTooltipContent('Loading...');
         setTooltipBelow(false);
-        console.log('handleClickOutside: Hiding tooltip due to outside click.');
       }
     };
 
