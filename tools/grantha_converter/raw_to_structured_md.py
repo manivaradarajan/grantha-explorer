@@ -186,12 +186,16 @@ class RawParser:
             elif is_mula_start:  # THEN CHECK THIS
                 paragraph_type = "mula"
             else:
-                # If it's not any of the above, and contains Devanagari characters,
-                # assume it's a continuation of a commentary block.
-                # This is a heuristic and might need refinement.
-                if re.search(
-                    r"[\u0900-\u097F]", paragraph
-                ):  # Check for Devanagari characters
+                # Heuristic for continuations: If we're already in a multi-line
+                # commentary block, and this new block doesn't start a
+                # different recognized type, assume it's a continuation.
+                # This handles multi-paragraph commentaries that may or may not
+                # contain Devanagari in every paragraph.
+                if current_multiline_type == "commentary":
+                    paragraph_type = "commentary"
+                # Fallback heuristic for a commentary that's missing the
+                # 'प्र.–' prefix but contains Devanagari.
+                elif re.search(r"[\u0900-\u097F]", paragraph):
                     paragraph_type = "commentary"
 
             if current_multiline_type is not None:
