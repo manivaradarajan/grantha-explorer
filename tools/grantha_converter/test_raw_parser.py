@@ -8,11 +8,13 @@ from .raw_to_structured_md import (
     verify_sanskrit_integrity,
 )
 
+
 def _get_passage_number_from_text(text: str) -> Optional[int]:
     match = re.search(r"।।\s*(\d+)\s*।।", text)
     if match:
         return int(match.group(1))
     return None
+
 
 def _is_decorative_text(text: str) -> bool:
     # Patterns for decorative text, now also considering optional ** around them
@@ -20,7 +22,7 @@ def _is_decorative_text(text: str) -> bool:
         r"^\s*\*{0,2}।।\s*श्रीः\s*।।\*{0,2}\s*$",  # ।। श्रीः ।। with optional **
         r"^\s*\*{0,2}\[उपक्रमशान्तिपाठः\]\*{0,2}\s*$",  # [उपक्रमशान्tiपाठः] with optional **
         r"^\s*\*{0,2}हरिः\s*ओम्\*{0,2}\s*$",  # हरिः ओम् with optional **
-        r"^\s*\*{0,2}पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते ।पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ।।।। ओं शान्तिः शान्तिः शान्तिः ।।\*{0,2}\s*$", # Shanti Patha with optional **
+        r"^\s*\*{0,2}पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते ।पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ।।।। ओं शान्तिः शान्तिः शान्तिः ।।\*{0,2}\s*$",  # Shanti Patha with optional **
         r"^\s*(\*{4,})\s*$",  # Lines with 4 or more asterisks (already handled)
     ]
     for pattern in decorative_patterns:
@@ -28,9 +30,11 @@ def _is_decorative_text(text: str) -> bool:
             return True
     return False
 
+
 def _to_devanagari_numeral(n: int) -> str:
     names = {3: "तृतीय", 4: "चतुर्थ", 5: "पञ्चम", 6: "षष्ठ", 7: "सप्तम", 8: "अष्टम"}
     return names.get(n, str(n))
+
 
 # =============================================================================
 # LEVEL 1: ATOMIC UNIT TESTS
@@ -110,10 +114,19 @@ RAW_MULA_NO_COMMENTARY = """
 # TEST IMPLEMENTATIONS
 # =============================================================================
 
+# In test_raw_parser.py
+
 
 def test_lex_blocks_multi_paragraph_mula():
     parser = RawParser(grantha_id="test", part_num=1)
-    blocks = parser._lex_blocks(RAW_MULTI_PARA_MULA, debug=True)
+
+    # Call the method to populate the parser's internal state.
+    # Do not assign its return value, which is None.
+    parser._lex_blocks(RAW_MULTI_PARA_MULA, debug=True)
+
+    # Now, access the results from the instance attribute.
+    blocks = parser.semantic_blocks
+
     assert len(blocks) == 1
     assert blocks[0]["type"] == "mula"
     # Check that the content is correctly joined
@@ -158,17 +171,17 @@ def test_structure_parsing():
     assert len(parser.passages) == 1
     assert parser.passages[0]["ref"] == "1.1.1"
 
+
 def test_prefatory_parsing():
     parser = RawParser(grantha_id="test", part_num=1)
     parser.parse(RAW_PREFATORY_THEN_BRAHMANA)
     assert len(parser.prefatory_passages) > 0, "Should identify prefatory content"
-    assert (
-        "पूर्णमदः" in parser.prefatory_passages[0]["content"]
-    )
+    assert "पूर्णमदः" in parser.prefatory_passages[0]["content"]
     assert (
         len(parser.passages) == 1
     ), "Should still parse the main passage after prefatory"
     assert parser.passages[0]["ref"] == "1.1.1"
+
 
 def test_ignore_decorative_text():
     parser = RawParser(grantha_id="test", part_num=1)
@@ -178,6 +191,7 @@ def test_ignore_decorative_text():
     assert len(parser.passages) == 0
     assert len(parser.commentaries) == 0
     assert len(parser.prefatory_passages) == 0
+
 
 def test_hash_integrity_on_snippets():
     raw_content = RAW_MULA_THEN_COMMENTARY
@@ -234,8 +248,8 @@ def test_full_parser_counts(full_file_parser):
         ("some text ।। 123 ।। more text", 123),
         ("no number here", None),
         ("।।  5  ।।", 5),
-        ("।।1।।", 1), # No spaces
-        ("।। 1.1 ।।", None), # Not a simple integer
+        ("।।1।।", 1),  # No spaces
+        ("।। 1.1 ।।", None),  # Not a simple integer
         ("", None),
     ],
 )
@@ -258,7 +272,7 @@ def test_get_passage_number_from_text(text, expected):
         ("।। 1 ।।", False),
         ("प्र.– commentary", False),
         ("", False),
-        ("  ।। श्रीः ।।  ", True), # With leading/trailing spaces
+        ("  ।। श्रीः ।।  ", True),  # With leading/trailing spaces
     ],
 )
 def test_is_decorative_text(text, expected):
@@ -274,12 +288,13 @@ def test_is_decorative_text(text, expected):
         (6, "षष्ठ"),
         (7, "सप्तम"),
         (8, "अष्टम"),
-        (1, "1"), # Unmapped number
-        (99, "99"), # Unmapped number
+        (1, "1"),  # Unmapped number
+        (99, "99"),  # Unmapped number
     ],
 )
 def test_to_devanagagari_numeral(number, expected):
     assert _to_devanagari_numeral(number) == expected
+
 
 def test_empty_input():
     parser = RawParser(grantha_id="test", part_num=1)
@@ -289,6 +304,7 @@ def test_empty_input():
     assert len(parser.prefatory_passages) == 0
     assert len(parser.structure_nodes) == 0
     assert parser.chapter_name == ""
+
 
 def test_only_decorative_text_input():
     parser = RawParser(grantha_id="test", part_num=1)
