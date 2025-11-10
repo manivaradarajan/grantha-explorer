@@ -119,12 +119,12 @@ RAW_MULA_NO_COMMENTARY = """
 
 def test_lex_blocks_multi_paragraph_mula():
     parser = RawParser(grantha_id="test", part_num=1)
+    parser.debug = True
 
     # Call the method to populate the parser's internal state.
     # Do not assign its return value, which is None.
     parser._lex_blocks(RAW_MULTI_PARA_MULA, debug=True)
 
-    # Now, access the results from the instance attribute.
     blocks = parser.semantic_blocks
 
     assert len(blocks) == 1
@@ -379,7 +379,7 @@ def test_lex_block_classification_edge_cases(raw_text, expected_type, test_id):
     with various tricky formatting issues.
     """
     parser = RawParser(grantha_id="test-edge", part_num=1)
-    parser._lex_blocks(raw_text)  # Call the lexer
+    parser._lex_blocks(raw_text, debug=True)  # Call the lexer
 
     blocks = parser.semantic_blocks
 
@@ -402,11 +402,12 @@ This is the second देवनागरी paragraph, which should be treated a
 of the commentary above.
 """
     parser = RawParser(grantha_id="test-multi", part_num=1)
-    parser._lex_blocks(raw_text)  # Call the lexer
-
+    parser.debug = True
+    parser._lex_blocks(raw_text)  # This was missing
     blocks = parser.semantic_blocks
-
-    assert len(blocks) == 1, "Should merge into a single multi-paragraph block."
+    assert (
+        len(blocks) == 1
+    ), "Should merge into a single block"  # Added for clarity
     assert (
         blocks[0]["type"] == "commentary"
     ), "The merged block should be of type 'commentary'."

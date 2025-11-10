@@ -145,34 +145,29 @@ class RawParser:
         return text
 
     def _lex_blocks(self, raw_md_content: str, debug=False) -> None:
-        """Stage 1: Lexing. Identify all semantic blocks and their types."""
         if debug:
             print("\n--- STAGE 1: LEXING (Block Identification) ---")
+            print(f"DEBUG: raw_md_content received by _lex_blocks: '{raw_md_content}'")
 
         raw_paragraphs = [
             p.strip() for p in re.split(r"\n{2,}", raw_md_content) if p.strip()
         ]
+        if debug:
+            print(f"DEBUG: raw_paragraphs: {raw_paragraphs}")
 
-        self.semantic_blocks = []  # Initialize here
-        current_multiline_content = []
-        current_multiline_type = None
-
+        # Step 1: Classify each paragraph
+        classified_paragraphs = []
         for paragraph in raw_paragraphs:
-            # CORRECTED: More robust commentary check by cleaning the string first
-            # and using a flexible regex for dash types (-, –, —).
             cleaned_for_check = re.sub(r"\*", "", paragraph)
             is_commentary_start = bool(re.match(r"^\s*प्र\.\s*[-–—]", cleaned_for_check))
             is_mula_start = paragraph.startswith("**")
-
-            has_passage_number = _get_passage_number_from_text(paragraph) is not None
             is_brahmana = "ब्राह्मणम्" in paragraph and len(paragraph) < 100
             is_chapter = "ऽध्यायः" in paragraph and len(paragraph) < 100
             is_decorative = _is_decorative_text(paragraph)
             is_shanti = "पूर्णमदः" in paragraph and "पूर्णमेवावशिष्यते" in paragraph
 
-            paragraph_type = "unknown"  # Default to unknown
+            paragraph_type = "unknown"
 
-            # CORRECTED: Reordered the if/elif chain to check for commentary first.
             if is_decorative:
                 paragraph_type = "decorative"
             elif is_chapter:
@@ -181,112 +176,41 @@ class RawParser:
                 paragraph_type = "brahmana"
             elif is_shanti:
                 paragraph_type = "shanti"
-            elif is_commentary_start:  # CHECK THIS FIRST
+            elif is_commentary_start:
                 paragraph_type = "commentary"
-            elif is_mula_start:  # THEN CHECK THIS
+            elif is_mula_start:
                 paragraph_type = "mula"
             else:
-                # Heuristic for continuations: If we're already in a multi-line
-                # commentary block, and this new block doesn't start a
-                # different recognized type, assume it's a continuation.
-                # This handles multi-paragraph commentaries that may or may not
-                # contain Devanagari in every paragraph.
-                if current_multiline_type == "commentary":
-                    paragraph_type = "commentary"
-                # Fallback heuristic for a commentary that's missing the
-                # 'प्र.–' prefix but contains Devanagari.
-                elif re.search(r"[\u0900-\u097F]", paragraph):
-                    paragraph_type = "commentary"
+                if re.search(r"[\u0900-\u097F]", paragraph):
+                    paragraph_type = "commentary"  # Unmarked commentary
 
-            if current_multiline_type is not None:
-                # If the current paragraph is of the same type, continue accumulating
-                if paragraph_type == current_multiline_type:
-                    current_multiline_content.append(paragraph)
-                    if debug:
-                        print(
-                            f"  [LEXED] Type: {current_multiline_type} (multi-continue), Content: '{paragraph[:40]}...'"
-                        )
+            classified_paragraphs.append({"type": paragraph_type, "content": paragraph})
 
-                    # If this paragraph has a passage number, it marks the end of this multiline block
-                    if has_passage_number:
-                        self.semantic_blocks.append(
-                            {
-                                "type": current_multiline_type,
-                                "content": "\n\n".join(current_multiline_content),
-                            }
-                        )
-                        if debug:
-                            print(
-                                f"  [LEXED] Type: {current_multiline_type} (multi-end with num), Content: '{current_multiline_content[0][:40]}...'"
-                            )
-                        current_multiline_content = []
-                        current_multiline_type = None
-                else:
-                    # Type changed, so finalize the previous multiline block
-                    self.semantic_blocks.append(
-                        {
-                            "type": current_multiline_type,
-                            "content": "\n\n".join(current_multiline_content),
-                        }
-                    )
-                    if debug:
-                        print(
-                            f"  [LEXED] Type: {current_multiline_type} (multi-end, type change), Content: '{current_multiline_content[0][:40]}...'"
-                        )
-                    current_multiline_content = []
-                    current_multiline_type = None
+        # Step 2: Merge blocks
+        if not classified_paragraphs:
+            return
 
-                    # Now, start a new block (either multiline or single)
-                    if (
-                        paragraph_type in ["mula", "commentary"]
-                        and not has_passage_number
-                    ):
-                        current_multiline_content.append(paragraph)
-                        current_multiline_type = paragraph_type
-                        if debug:
-                            print(
-                                f"  [LEXED] Type: {current_multiline_type} (multi-start new), Content: '{paragraph[:40]}...'"
-                            )
-                    else:
-                        self.semantic_blocks.append(
-                            {"type": paragraph_type, "content": paragraph}
-                        )
-                        if debug:
-                            print(
-                                f"  [LEXED] Type: {paragraph_type}, Content: '{paragraph[:40]}...'"
-                            )
+        self.semantic_blocks = []
+        current_block = classified_paragraphs[0]
+
+        for i in range(1, len(classified_paragraphs)):
+            next_block = classified_paragraphs[i]
+            
+            # Merge logic
+            merge = False
+            if current_block["type"] == "mula" and next_block["type"] == "mula":
+                if _get_passage_number_from_text(current_block["content"]) is None:
+                    merge = True
+            elif current_block["type"] == "commentary" and next_block["type"] in ["commentary", "unknown"]:
+                merge = True
+
+            if merge:
+                current_block["content"] += "\n\n" + next_block["content"]
             else:
-                # No active multiline block
-                if paragraph_type in ["mula", "commentary"] and not has_passage_number:
-                    # Start a new multiline block
-                    current_multiline_content.append(paragraph)
-                    current_multiline_type = paragraph_type
-                    if debug:
-                        print(
-                            f"  [LEXED] Type: {current_multiline_type} (multi-start), Content: '{paragraph[:40]}...'"
-                        )
-                else:
-                    # Add as a single semantic block
-                    self.semantic_blocks.append(
-                        {"type": paragraph_type, "content": paragraph}
-                    )
-                    if debug:
-                        print(
-                            f"  [LEXED] Type: {paragraph_type}, Content: '{paragraph[:40]}...'"
-                        )
-
-        # Finalize any remaining multiline block after the loop
-        if current_multiline_type is not None:
-            self.semantic_blocks.append(
-                {
-                    "type": current_multiline_type,
-                    "content": "\n\n".join(current_multiline_content),
-                }
-            )
-            if debug:
-                print(
-                    f"  [LEXED] Type: {current_multiline_type} (multi-end, final), Content: '{current_multiline_content[0][:40]}...'"
-                )
+                self.semantic_blocks.append(current_block)
+                current_block = next_block
+        
+        self.semantic_blocks.append(current_block)
 
     def parse(self, raw_md_content: str):
         self.raw_content = raw_md_content
