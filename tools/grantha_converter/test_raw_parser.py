@@ -314,3 +314,101 @@ def test_only_decorative_text_input():
     assert len(parser.prefatory_passages) == 0
     assert len(parser.structure_nodes) == 0
     assert parser.chapter_name == ""
+
+
+# In test_raw_parser.py
+
+# =============================================================================
+# NEW TESTS FOR LEXER ROBUSTNESS
+# =============================================================================
+
+# In test_raw_parser.py
+
+# Replace the two failing test functions with these corrected versions.
+
+
+@pytest.mark.parametrize(
+    "raw_text, expected_type, test_id",
+    [
+        # --- The most critical test case: Mula vs. Commentary ---
+        (
+            "**प्र.– This is a commentary that starts with bold, the main failure case.**",
+            "commentary",
+            "mula-commentary-conflict",
+        ),
+        # --- Variations of the commentary prefix ---
+        (
+            "प्र.– Simple commentary, no bold.",
+            "commentary",
+            "simple-commentary-no-bold",
+        ),
+        (
+            "  **प्र.– Commentary with leading space and bold.**",
+            "commentary",
+            "commentary-leading-space",
+        ),
+        (
+            "**प्र. – Commentary with space after dot.**",
+            "commentary",
+            "commentary-space-after-dot",
+        ),
+        (
+            "**प्र.- Commentary with regular hyphen.**",
+            "commentary",
+            "commentary-regular-hyphen",
+        ),
+        (
+            # This replicates the messy formatting from your source file
+            "**प्र****. –** Messy bolding commentary.",
+            "commentary",
+            "commentary-messy-bolding",
+        ),
+        # --- Ensure Mula is still correctly identified ---
+        ("**This is just a regular Mula block.**", "mula", "simple-mula-no-conflict"),
+        # --- CORRECTED TEST: Test for unmarked commentary continuation ---
+        (
+            "सम देवनागरी पाठः",  # The text MUST contain Devanagari
+            "commentary",  # The heuristic should classify this as commentary
+            "unmarked-devanagari-is-commentary",
+        ),
+    ],
+)
+def test_lex_block_classification_edge_cases(raw_text, expected_type, test_id):
+    """
+    Tests the lexer's ability to correctly classify single blocks
+    with various tricky formatting issues.
+    """
+    parser = RawParser(grantha_id="test-edge", part_num=1)
+    parser._lex_blocks(raw_text)  # Call the lexer
+
+    blocks = parser.semantic_blocks
+
+    assert len(blocks) == 1, f"Test '{test_id}' should produce exactly one block."
+    assert (
+        blocks[0]["type"] == expected_type
+    ), f"Test '{test_id}' failed classification."
+
+
+def test_lex_multi_paragraph_commentary_continuation():
+    """
+    Tests that a commentary block followed by an unmarked Devanagari block
+    are correctly merged into a single commentary block.
+    """
+    # --- CORRECTED TEST: The second paragraph now contains Devanagari ---
+    raw_text = """
+**प्र.– This is the first paragraph of a commentary.**
+
+This is the second देवनागरी paragraph, which should be treated as a continuation
+of the commentary above.
+"""
+    parser = RawParser(grantha_id="test-multi", part_num=1)
+    parser._lex_blocks(raw_text)  # Call the lexer
+
+    blocks = parser.semantic_blocks
+
+    assert len(blocks) == 1, "Should merge into a single multi-paragraph block."
+    assert (
+        blocks[0]["type"] == "commentary"
+    ), "The merged block should be of type 'commentary'."
+    assert "first paragraph" in blocks[0]["content"]
+    assert "second paragraph" in blocks[0]["content"]
