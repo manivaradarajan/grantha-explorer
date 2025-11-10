@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../schemas/grantha-envelope.schema.json",
+  "grantha_id": "brihadaranyaka-upanishad",
+  "canonical_title": "Bṛhadāraṇyaka Upaniṣad",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "metadata": {
+    "source_url": null,
+    "source_commit": null,
+    "source_file": "bRhadAraNyakopaniSat-*.md",
+    "processing_pipeline": {
+      "llm_model": "N/A - Manual Conversion",
+      "llm_prompt_version": "N/A",
+      "llm_date": "2024-05-24",
+      "processor": "AI Technical Consultant"
+    },
+    "quality_notes": "Converted from raw Markdown via structured intermediate format. Contains Raṅgarāmānuja Muni's commentary.",
+    "last_updated": "2024-05-24T12:00:00Z"
+  },
+  "structure_levels": [
+    {
+      "key": "Adhyāya",
+      "scriptNames": { "devanagari": "अध्यायः" },
+      "children": [
+        {
+          "key": "Brāhmaṇa",
+          "scriptNames": { "devanagari": "ब्राह्मणम्" },
+          "children": [
+            {
+              "key": "Mantra",
+              "scriptNames": { "devanagari": "मन्त्रः" },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parts": [
+    "part3.json",
+    "part4.json",
+    "part5.json",
+    "part6.json",
+    "part7.json",
+    "part8.json"
+  ]
+}

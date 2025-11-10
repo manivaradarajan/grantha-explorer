@@ -1,0 +1,15 @@
+{
+  "grantha_id": "brihadaranyaka-upanishad",
+  "canonical_title": "बृहदारण्यकोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "structure_levels": [
+    {
+      "key": "3",
+      "scriptNames": {
+        "devanagari": "तृतीयोऽध्यायः"
+      },
+      "children": []
+    }
+  ]
+}

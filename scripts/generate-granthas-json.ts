@@ -8,15 +8,40 @@ async function generateGranthasJson() {
     const orderFilePath = path.join(dataDir, 'granthas-order.json');
     const libraryDir = path.join(dataDir, 'library');
 
-    const [metaFileContents, orderFileContents, libraryFiles] = await Promise.all([
+    const [metaFileContents, orderFileContents] = await Promise.all([
       fs.readFile(metaFilePath, 'utf-8'),
       fs.readFile(orderFilePath, 'utf-8'),
-      fs.readdir(libraryDir),
     ]);
 
     const metaData = JSON.parse(metaFileContents);
     const orderedIds = JSON.parse(orderFileContents);
-    const availableGranthaIds = new Set(libraryFiles.map(file => file.replace('.json', '')));
+
+    // ======================== CHANGE STARTS HERE ========================
+    
+    // Scan the library directory for both files and directories.
+    const libraryDirEntries = await fs.readdir(libraryDir, { withFileTypes: true });
+    const availableGranthaIds = new Set<string>();
+
+    for (const entry of libraryDirEntries) {
+      if (entry.isFile() && entry.name.endsWith('.json')) {
+        // This is a single-file grantha. Add its name without extension.
+        availableGranthaIds.add(entry.name.replace('.json', ''));
+      } else if (entry.isDirectory()) {
+        // This is potentially a multi-part grantha. The directory name is the ID.
+        // We verify its validity by checking for a metadata.json file inside.
+        const metadataPath = path.join(libraryDir, entry.name, 'metadata.json');
+        try {
+          await fs.access(metadataPath); // Check for existence without reading the file.
+          availableGranthaIds.add(entry.name);
+        } catch {
+          console.warn(
+            `[Indexer Warning] Directory '${entry.name}' found in library but it lacks a metadata.json file. Skipping.`
+          );
+        }
+      }
+    }
+    
+    // ========================= CHANGE ENDS HERE =========================
 
     let granthas = Object.entries(metaData)
       .filter(([id]) => availableGranthaIds.has(id))
