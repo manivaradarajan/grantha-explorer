@@ -338,7 +338,7 @@ npm run format  # if Prettier configured
 1. Initialize Next.js project:
 
    ```bash
-   npx create-next-app@latest grantha-vibhrama --typescript --tailwind
+   npx create-next-app@latest grantha-explorer --typescript --tailwind
    ```
 
 2. Project structure:

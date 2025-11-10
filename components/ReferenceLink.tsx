@@ -12,13 +12,7 @@ interface ReferenceLinkProps {
   granthaIdToTitle: { [key: string]: string };
 }
 
-// Global flag to prevent scrolling when clicking reference links
-let preventNextScroll = false;
-export const shouldPreventScroll = () => {
-  const should = preventNextScroll;
-  preventNextScroll = false;
-  return should;
-};
+
 
 const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -121,8 +115,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
         await loadTooltipContent();
       }
     } else if (isInLibrary) {
-      // For internal references, navigate without scrolling
-      preventNextScroll = true;
+      // For internal references, navigate
       updateHash(reference.granthaId, reference.path, []);
     } else {
     }

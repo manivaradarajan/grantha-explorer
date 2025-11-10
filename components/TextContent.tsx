@@ -1,8 +1,7 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import { Grantha, getAllPassagesForNavigation } from "@/lib/data";
-import { useEffect, useRef } from "react";
-import { shouldPreventScroll } from "./ReferenceLink";
 
 interface TextContentProps {
   grantha: Grantha;
@@ -31,10 +30,7 @@ export default function TextContent({
       return;
     }
 
-    // Don't scroll if the click came from a reference link
-    if (shouldPreventScroll()) {
-      return;
-    }
+
 
     // Scroll to verse when selected (from navigation sidebar or grantha change)
     const element = verseRefs.current[selectedRef];
