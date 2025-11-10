@@ -6,12 +6,11 @@
     "dev": "next dev",
     "prebuild": "tsx scripts/generate-granthas-json.ts",
     "build": "next build",
-    "build:local": "npx tsx scripts/generate-granthas-json.ts && NEXT_PUBLIC_NO_BASE_PATH=true npx next build",
-    "start": "next start",
-    "serve": "npx serve@latest out",
-    "test:deploy": "npm run build:local && npm run serve",
     "lint": "next lint",
-    "validate:data": "tsx scripts/validate-data.ts"
+    "validate:data": "tsx scripts/validate-data.ts",
+    "build:local": "npx tsx scripts/generate-granthas-json.ts && NEXT_PUBLIC_NO_BASE_PATH=true npx next build",
+    "serve": "npx serve@latest out",
+    "test:deploy": "npm run build:local && npm run serve"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",

@@ -1,0 +1,59 @@
+# Name of the workflow
+name: Deploy Grantha Explorer to GitHub Pages
+
+# Run this workflow on pushes to the main branch
+on:
+  push:
+    branches: ["main"]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Grant GITHUB_TOKEN the permissions it needs to deploy to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout your repository's code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js. Caching is enabled for faster installs in subsequent runs.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # 3. Install dependencies using 'npm ci' for faster, more reliable installs
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Build the Next.js application (this will also run your 'prebuild' script)
+      - name: Build Project
+        run: npm run build
+
+      # 5. Create a .nojekyll file. This is crucial to prevent GitHub Pages
+      # from ignoring files that start with an underscore (like Next.js's '_next' folder)
+      - name: Add .nojekyll file
+        run: touch out/.nojekyll
+
+      # 6. Configure GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # 7. Upload the build output as an artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # This should be the directory where 'next build' exports your static files
+          path: "./out"
+
+      # 8. Deploy the artifact to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

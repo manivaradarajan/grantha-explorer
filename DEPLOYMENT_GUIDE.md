@@ -26,8 +26,7 @@ The application uses a two-step build process:
 
 2. **Build**: Next.js generates static HTML/CSS/JS files
    - Configured with `output: 'export'` for static site generation
-   - Uses `basePath: '/aistudio'` for GitHub Pages subdirectory
-   - Outputs to the `out/` directory
+     - Outputs to the `out/` directory
 
 ## Local Testing
 
@@ -39,13 +38,7 @@ To run the application in a local development environment with hot-reloading:
 npm run dev
 ```
 
-The application will be available at: **http://localhost:3000/aistudio**
-
-**Why the `/aistudio` path?**
-
-The `next.config.js` file specifies `basePath: '/aistudio'` to ensure all links and assets work correctly when deployed to GitHub Pages (which serves the project from a subdirectory). The development server respects this `basePath`, which is why the site is accessible under the `/aistudio` path.
-
-Accessing the root URL `http://localhost:3000/` will result in a **404 Not Found** error, as no pages are served from the root.
+The application will be available at: **http://localhost:3000/**
 
 ### Quick Test (Production Build)
 
@@ -56,7 +49,8 @@ npm run test:deploy
 ```
 
 This command will:
-1. Build the app without the `/upanishad-explorer` basePath (for local testing)
+
+1. Build the app
 2. Automatically start a local server
 3. Display the URL (typically http://localhost:3000)
 
@@ -77,7 +71,7 @@ npm run serve
 ### Why Two Different Builds?
 
 - **Local testing** (`npm run build:local`): Builds without basePath, serves at `http://localhost:3000/`
-- **Production** (`npm run build`): Builds with basePath `/aistudio`, serves at `https://manivaradarajan.github.io/aistudio/`
+- **Production** (`npm run build`): Builds with basePath `/aistudio`, serves at `https://manivaradarajan.github.io/grantha-explorer/`
 
 This ensures local testing works correctly at the root URL while production deploys to the correct subdirectory.
 
@@ -124,8 +118,8 @@ on:
     branches:
       - main
     paths:
-      - 'ai-workflow/upanishad-explorer/claude-designed/**'
-      - '.github/workflows/deploy-upanishad-explorer.yml'
+      - "ai-workflow/upanishad-explorer/claude-designed/**"
+      - ".github/workflows/deploy-upanishad-explorer.yml"
 
 permissions:
   contents: write
@@ -144,7 +138,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install
@@ -190,7 +184,8 @@ https://<your-username>.github.io/<repository-name>/
 Replace `<your-username>` and `<repository-name>` with your actual GitHub username and repository name.
 
 For this repository:
-- Your site is at: `https://manivaradarajan.github.io/aistudio/`
+
+- Your site is at: `https://manivaradarajan.github.io/grantha-explorer/`
 
 > **Note**: It may take a few minutes for the site to be available after the first deployment.
 
@@ -213,16 +208,12 @@ The GitHub Action will automatically rebuild and redeploy your site.
 **Problem**: TypeScript can't find a deleted API route.
 
 **Solution**: Clear the Next.js cache and rebuild:
+
 ```bash
 rm -rf .next out
 npm run build
 ```
 
-### 404 Errors When Testing Locally
-
-**Problem**: Assets are loading with `/aistudio/` prefix but server is at root.
-
-**Solution**: Use the local build script:
 ```bash
 npm run test:deploy
 ```
@@ -238,6 +229,7 @@ This builds without the basePath for local testing.
 3. **Wrong URL**: Make sure you're accessing `https://manivaradarajan.github.io/aistudio/` (with the trailing slash)
 
 **To check**:
+
 ```bash
 # Verify the gh-pages branch exists
 git fetch origin
@@ -249,6 +241,7 @@ git branch -r | grep gh-pages
 **Problem**: The `granthas.json` file wasn't generated or isn't accessible.
 
 **Solution**: Verify the build process:
+
 ```bash
 # Check if prebuild script runs
 npm run build
@@ -262,6 +255,7 @@ ls -la out/data/generated/granthas.json
 **Problem**: You edited `public/data/generated/granthas.json` directly.
 
 **Solution**:
+
 - **Don't edit** `public/data/generated/granthas.json` - it's auto-generated!
 - The entire `generated/` directory is gitignored and rebuilt every time
 - Instead, edit the source files:
@@ -281,13 +275,13 @@ The app is configured in `next.config.js`:
 
 ```javascript
 const nextConfig = {
-  output: 'export',                    // Enable static export
-  basePath: '/aistudio',               // GitHub Pages subdirectory (repository name)
+  output: "export", // Enable static export
+  basePath: "/aistudio", // GitHub Pages subdirectory (repository name)
   reactStrictMode: true,
   images: {
-    unoptimized: true,                 // Required for static export
+    unoptimized: true, // Required for static export
   },
-}
+};
 ```
 
 For local testing, the basePath is conditionally disabled using the `NEXT_PUBLIC_NO_BASE_PATH` environment variable.
@@ -305,14 +299,14 @@ The following files and directories are auto-generated and should **not** be edi
 
 ### Build Scripts Reference
 
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build with basePath (for GitHub Pages) |
-| `npm run build:local` | Local build without basePath (for testing) |
-| `npm run serve` | Serve the `out/` directory |
-| `npm run test:deploy` | Build locally + serve (one command) |
-| `npm run validate:data` | Validate data files against schema |
+| Command                 | Purpose                                           |
+| ----------------------- | ------------------------------------------------- |
+| `npm run dev`           | Start development server                          |
+| `npm run build`         | Production build with basePath (for GitHub Pages) |
+| `npm run build:local`   | Local build without basePath (for testing)        |
+| `npm run serve`         | Serve the `out/` directory                        |
+| `npm run test:deploy`   | Build locally + serve (one command)               |
+| `npm run validate:data` | Validate data files against schema                |
 
 ### Directory Structure
 
