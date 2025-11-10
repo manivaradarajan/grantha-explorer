@@ -140,27 +140,16 @@ export interface PassageHierarchy {
 // Data loading functions
 
 /**
- * Helper to construct asset paths with basePath support
- * Detects whether to use absolute or relative paths based on environment
+ * Helper to construct asset paths.
+ * It reads the basePath from an environment variable set in next.config.js.
  */
 const getAssetPath = (path: string): string => {
-  // Ensure path starts with /
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  
+  // Read the pre-configured base path. Default to empty string if not set.
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-  // In browser, check if we're on localhost (dev mode) or if pathname starts with basePath
-  if (typeof window !== 'undefined') {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-    // Dev mode: use absolute paths with basePath
-    if (isLocalhost || window.location.pathname.startsWith('/aistudio')) {
-      const basePath = process.env.NEXT_PUBLIC_NO_BASE_PATH === 'true' ? '' : '/aistudio';
-      return `${basePath}${normalizedPath}`;
-    }
-  }
-
-  // Production (static export): use relative paths
-  const cleanPath = normalizedPath.startsWith('/') ? normalizedPath.slice(1) : normalizedPath;
-  return `./${cleanPath}`;
+  return `${basePath}${normalizedPath}`;
 };
 
 /**
