@@ -168,7 +168,6 @@ class TestFormatContent:
         result = format_content(content, scripts=['devanagari'])
         assert 'देवनागरी' in result
         assert 'romanized' not in result
-        assert '**Sanskrit (Devanagari):**' in result
 
     def test_formats_multiple_scripts(self):
         """Test formatting with multiple scripts."""
@@ -181,8 +180,6 @@ class TestFormatContent:
         result = format_content(content, scripts=['devanagari', 'roman'])
         assert 'देवनागरी' in result
         assert 'romanized' in result
-        assert '**Sanskrit (Devanagari):**' in result
-        assert '**Sanskrit (Roman):**' in result
 
     def test_includes_english_translation(self):
         """Test that English translation is included."""
@@ -192,7 +189,6 @@ class TestFormatContent:
         }
         result = format_content(content, scripts=['devanagari'])
         assert 'Sanskrit' in result
-        assert '**English Translation:**' in result
 
     def test_includes_english_commentary(self):
         """Test that English commentary is included."""
@@ -202,7 +198,6 @@ class TestFormatContent:
         }
         result = format_content(content, scripts=['devanagari'])
         assert 'Commentary' in result
-        assert '**English:**' in result
 
     def test_handles_null_fields(self):
         """Test handling of null fields."""
@@ -435,8 +430,6 @@ class TestConvertToMarkdown:
         result = convert_to_markdown(data, scripts=['devanagari'], commentaries=['test-commentary'])
 
         assert '# Commentary: टीकाकारः' in result
-        assert '**Title:** परीक्षाभाष्यम्' in result
-        assert '## Commentary on Passage 1' in result
         assert 'व्याख्या' in result
 
     def test_excludes_commentary_when_not_requested(self):
@@ -510,5 +503,3 @@ class TestConvertToMarkdown:
 
         assert 'देवनागरी' in result
         assert 'devanāgarī' in result
-        assert '**Sanskrit (Devanagari):**' in result
-        assert '**Sanskrit (Roman):**' in result

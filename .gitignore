@@ -36,3 +36,5 @@ next-env.d.ts
 
 # generated files
 public/data/generated/
+
+__pycache__/

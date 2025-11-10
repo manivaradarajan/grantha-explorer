@@ -410,7 +410,7 @@ def main():
     part_num_map = {
         "trtiya": 3,
         "catur": 4,
-        "paJcama": 5,
+        "pajcama": 5,
         "sastho": 6,
         "saptama": 7,
         "astama": 8,
