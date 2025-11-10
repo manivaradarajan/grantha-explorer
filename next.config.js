@@ -1,12 +1,20 @@
 /** @type {import('next').NextConfig} */
+
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig = {
-  output: 'export',
-  // Use basePath for GitHub Pages deployment, empty for local testing
-  basePath: process.env.NEXT_PUBLIC_NO_BASE_PATH === 'true' ? '' : '/aistudio',
+  // Tell Next.js to generate a static site
+  output: "export",
   reactStrictMode: true,
+
+  // Your repository name
+  basePath: isProd ? "/grantha-explorer" : "",
+  assetPrefix: isProd ? "/grantha-explorer/" : "",
+
+  // Disable server-based image optimization
   images: {
     unoptimized: true,
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
