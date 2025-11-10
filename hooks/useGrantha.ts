@@ -16,7 +16,7 @@ import { loadGrantha, Grantha, GranthaMetadata, getAvailableGranthas } from "@/l
  * @returns Query result with grantha data, loading state, and error
  */
 export function useGrantha(granthaId: string) {
-  return useQuery({
+  return useQuery<Grantha>({
     queryKey: ["grantha", granthaId],
     queryFn: () => loadGrantha(granthaId),
     // Granthas never change, cache forever

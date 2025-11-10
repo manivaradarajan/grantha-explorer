@@ -1,4 +1,4 @@
-import { Grantha } from "./data";
+import { Grantha, Passage, PrefatoryMaterial, Commentary } from "./data";
 
 /**
  * URL state interface
@@ -182,22 +182,21 @@ export function getFirstMainPassageRef(grantha: Grantha): string {
 /**
  * Validate if a verse ref exists in grantha data
  * @param grantha - Grantha data object
- * @param verseRef - Verse reference to validate
  * @returns true if verse exists, false otherwise
  */
 export function isValidVerseRef(grantha: Grantha, verseRef: string): boolean {
   // Check prefatory material
-  if (grantha.prefatory_material?.some((p) => p.ref === verseRef)) {
+  if (grantha.prefatory_material?.some((p: Passage | PrefatoryMaterial) => p.ref === verseRef)) {
     return true;
   }
 
   // Check main passages
-  if (grantha.passages?.some((p) => p.ref === verseRef)) {
+  if (grantha.passages?.some((p: Passage | PrefatoryMaterial) => p.ref === verseRef)) {
     return true;
   }
 
   // Check concluding material
-  if (grantha.concluding_material?.some((p) => p.ref === verseRef)) {
+  if (grantha.concluding_material?.some((p: Passage | PrefatoryMaterial) => p.ref === verseRef)) {
     return true;
   }
 
@@ -239,12 +238,12 @@ export function validateAndNormalizeHash(
  * Get all commentary IDs available for a grantha
  */
 export function getCommentaryIds(grantha: Grantha): string[] {
-  return grantha.commentaries?.map((c) => c.commentary_id) || [];
+  return grantha.commentaries?.map((c: Commentary) => c.commentary_id) || [];
 }
 
 /**
  * Validate if commentary ID exists in grantha
  */
 export function isValidCommentaryId(grantha: Grantha, commentaryId: string): boolean {
-  return grantha.commentaries?.some((c) => c.commentary_id === commentaryId) || false;
+  return grantha.commentaries?.some((c: Commentary) => c.commentary_id === commentaryId) || false;
 }

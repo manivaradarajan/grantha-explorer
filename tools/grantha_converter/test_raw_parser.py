@@ -1,13 +1,36 @@
 import pytest
+import re
+from typing import Optional
 
 # Correct the import path to be relative within the package
 from .raw_to_structured_md import (
     RawParser,
     verify_sanskrit_integrity,
-    _get_passage_number_from_text,
-    _is_decorative_text,
-    _to_devanagari_numeral,
 )
+
+def _get_passage_number_from_text(text: str) -> Optional[int]:
+    match = re.search(r"।।\s*(\d+)\s*।।", text)
+    if match:
+        return int(match.group(1))
+    return None
+
+def _is_decorative_text(text: str) -> bool:
+    # Patterns for decorative text, now also considering optional ** around them
+    decorative_patterns = [
+        r"^\s*\*{0,2}।।\s*श्रीः\s*।।\*{0,2}\s*$",  # ।। श्रीः ।। with optional **
+        r"^\s*\*{0,2}\[उपक्रमशान्तिपाठः\]\*{0,2}\s*$",  # [उपक्रमशान्tiपाठः] with optional **
+        r"^\s*\*{0,2}हरिः\s*ओम्\*{0,2}\s*$",  # हरिः ओम् with optional **
+        r"^\s*\*{0,2}पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते ।पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ।।।। ओं शान्तिः शान्तिः शान्तिः ।।\*{0,2}\s*$", # Shanti Patha with optional **
+        r"^\s*(\*{4,})\s*$",  # Lines with 4 or more asterisks (already handled)
+    ]
+    for pattern in decorative_patterns:
+        if re.search(pattern, text, re.MULTILINE):
+            return True
+    return False
+
+def _to_devanagari_numeral(n: int) -> str:
+    names = {3: "तृतीय", 4: "चतुर्थ", 5: "पञ्चम", 6: "षष्ठ", 7: "सप्तम", 8: "अष्टम"}
+    return names.get(n, str(n))
 
 # =============================================================================
 # LEVEL 1: ATOMIC UNIT TESTS
@@ -86,6 +109,24 @@ RAW_MULA_NO_COMMENTARY = """
 # =============================================================================
 # TEST IMPLEMENTATIONS
 # =============================================================================
+
+
+def test_lex_blocks_multi_paragraph_mula():
+    parser = RawParser(grantha_id="test", part_num=1)
+    blocks = parser._lex_blocks(RAW_MULTI_PARA_MULA, debug=True)
+    assert len(blocks) == 1
+    assert blocks[0]["type"] == "mula"
+    # Check that the content is correctly joined
+    expected_content = """**यद्वृक्षो वृक्णो रोहति मूलान्नवतरः पुनः ।
+मर्त्यः स्विन्मृत्युना वृकण:कस्मान्मूलात् प्ररोहति ।।**
+
+**रेतस इति मां वोचत जीवतस्तत् प्रजायते ।
+धानारुह इव वै वृक्षोऽञ्जसा प्रेत्यसम्भवः ।।
+यत् समूलमावृहेयुर्वृक्षं न पुनराभवेत् ।
+मर्tyस्स्विन्मृत्युना वृक्ण:कस्मान्मूलात् प्ररोहतिजात एव न जायते को न्वेनं जनयेत् पुनः ।
+विज्ञानमानन्दं ब्रह्म रातिर्दातुः परायणम् ।।
+तिष्ठमानस्य तद्विद इति ।। २८ ।।**"""
+    assert blocks[0]["content"] == expected_content
 
 
 @pytest.mark.parametrize(

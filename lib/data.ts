@@ -103,8 +103,8 @@ export interface Grantha extends GranthaMetadata {
   structure_levels: StructureLevel[];
   prefatory_material: PrefatoryMaterial[];
   passages: Passage[];
-  concluding_material?: PrefatoryMaterial[];
-  commentaries?: Commentary[];
+  concluding_material: PrefatoryMaterial[]; // Changed to non-optional array
+  commentaries: Commentary[]; // Changed to non-optional array
 }
 
 export interface GranthaMetadata {
@@ -136,6 +136,35 @@ export interface PassageHierarchy {
   main: PassageGroup[];
   concluding: (Passage | PrefatoryMaterial)[];
 }
+
+// New interface for the content of an individual part file (e.g., part3.json)
+export interface GranthaPartContent {
+  prefatory_material?: PrefatoryMaterial[];
+  passages: Passage[];
+  concluding_material?: PrefatoryMaterial[];
+  commentaries?: Commentary[];
+}
+
+// New interface for the metadata of a multi-part grantha (from metadata.json)
+export interface GranthaMetadataOnly {
+  grantha_id: string;
+  canonical_title: string;
+  aliases?: Alias[];
+  text_type: string;
+  language?: string;
+  script?: Script;
+  metadata: Metadata;
+  structure_levels: StructureLevel[];
+  parts: string[]; // Array of part file names, e.g., ["part1.json", "part2.json"]
+}
+
+// The type returned by loadGrantha.
+// For single-file granthas, it's the full Grantha object.
+// For multi-part granthas, it's the metadata + the content of the first part.
+// export type LoadedGrantha = Grantha | (GranthaMetadataOnly & { initialPartContent: GranthaPartContent });
+
+// In-memory cache for grantha data
+const granthaCache = new Map<string, Grantha>();
 
 // Data loading functions
 
@@ -197,17 +226,91 @@ export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
 }
 
 /**
- * Load full grantha data from JSON file
+ * Load full grantha data from JSON file or initial part of a multi-part grantha.
  */
 export async function loadGrantha(granthaId: string): Promise<Grantha> {
-  const response = await fetch(getAssetPath(`/data/library/${granthaId}.json`));
-
-  if (!response.ok) {
-    throw new Error(`Failed to load grantha: ${granthaId}`);
+  // 1. Check cache first
+  if (granthaCache.has(granthaId)) {
+    return granthaCache.get(granthaId)!;
   }
 
-  const data: Grantha = await response.json();
-  return data;
+  try {
+    // 1. Try to fetch metadata.json for multi-part granthas
+    const metadataResponse = await fetch(getAssetPath(`/data/library/${granthaId}/metadata.json`));
+
+    if (metadataResponse.ok) {
+      // It's a multi-part grantha
+      const multiPartMetadata: GranthaMetadataOnly = await metadataResponse.json();
+
+      if (!multiPartMetadata.parts || multiPartMetadata.parts.length === 0) {
+        throw new Error(`Multi-part grantha ${granthaId} has no parts defined in metadata.json`);
+      }
+
+      // Fetch all part files in parallel
+      const partPromises = multiPartMetadata.parts.map(partFileName =>
+        fetch(getAssetPath(`/data/library/${granthaId}/${partFileName}`))
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
+            }
+            return res.json();
+          })
+      );
+
+      const allPartContents: GranthaPartContent[] = await Promise.all(partPromises);
+
+      // Merge all parts into a single Grantha object
+      const mergedGrantha: Grantha = {
+        ...multiPartMetadata,
+        id: multiPartMetadata.grantha_id, // Derived from grantha_id
+        title: multiPartMetadata.canonical_title, // Derived from canonical_title
+        title_deva: multiPartMetadata.canonical_title, // Placeholder, needs actual Devanagari title
+        title_iast: multiPartMetadata.canonical_title, // Placeholder, needs actual IAST title
+        aliases: multiPartMetadata.aliases || [], // Ensure aliases is always an array
+        prefatory_material: [],
+        passages: [],
+        concluding_material: [],
+        commentaries: [],
+      };
+
+      for (const partContent of allPartContents) {
+        if (partContent.prefatory_material) {
+          mergedGrantha.prefatory_material.push(...partContent.prefatory_material);
+        }
+        if (partContent.passages) {
+          mergedGrantha.passages.push(...partContent.passages);
+        }
+        if (partContent.concluding_material) {
+          mergedGrantha.concluding_material.push(...partContent.concluding_material);
+        }
+        if (partContent.commentaries) {
+          mergedGrantha.commentaries.push(...partContent.commentaries);
+        }
+      }
+
+      // Cache and return the fully assembled grantha
+      granthaCache.set(granthaId, mergedGrantha);
+      return mergedGrantha;
+
+    } else if (metadataResponse.status === 404) {
+      // 2. If metadata.json not found, assume it's a single-file grantha
+      const singleFileResponse = await fetch(getAssetPath(`/data/library/${granthaId}.json`));
+
+      if (!singleFileResponse.ok) {
+        throw new Error(`Failed to load single-file grantha: ${granthaId}`);
+      }
+
+      const data: Grantha = await singleFileResponse.json();
+      granthaCache.set(granthaId, data);
+      return data;
+    } else {
+      // Handle other potential errors for metadata.json fetch
+      throw new Error(`Failed to fetch metadata for grantha ${granthaId}: ${metadataResponse.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error in loadGrantha for ${granthaId}:`, error);
+    throw error;
+  }
 }
 
 /**
@@ -254,6 +357,7 @@ export function getAllPassagesForNavigation(
   grantha: Grantha
 ): Array<Passage | PrefatoryMaterial> {
   if (!grantha) return [];
+
   return [
     ...(grantha.prefatory_material || []),
     ...(grantha.passages || []),

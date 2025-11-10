@@ -4,56 +4,64 @@ import yaml
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-# Conditional import for dual execution mode
 try:
     from .hasher import hash_text
 except ImportError:
     from hasher import hash_text
 
+# --- Helper Functions (from your test suite) ---
 
-# --- Verification Logic (Remains largely the same, but now expects to work) ---
+
 def _get_passage_number_from_text(text: str) -> Optional[int]:
     match = re.search(r"।।\s*(\d+)\s*।।", text)
-    if match:
-        return int(match.group(1))
-    return None
+    return int(match.group(1)) if match else None
 
 
 def _is_decorative_text(text: str) -> bool:
-    """Checks if the given text block is purely decorative."""
     decorative_patterns = [
-        r"^\s*(\*\*){0,2}।।\s*श्रीः\s*।।(\*\*){0,2}\s*$",  # ।। श्रीः ।। with optional bolding
-        r"^\s*\*{4,}\s*$",  # **** or more asterisks
-        r"^\s*(\*\*){0,2}\[उपक्रमशान्तिपाठः\](\*\*){0,2}\s*$",  # [उपक्रमशान्तिपाठः] with optional bolding
-        r"^\s*(\*\*){0,2}हरिः ओम्(\*\*){0,2}\s*$",  # हरिः ओम् with optional bolding
+        r"^\s*(\*\*){0,2}।।\s*श्रीः\s*।।(\*\*){0,2}\s*$",
+        r"^\s*\*{4,}\s*$",
+        r"^\s*(\*\*){0,2}\[.*?\](\*\*){0,2}\s*$",  # General metadata in brackets
+        r"^\s*(\*\*){0,2}हरिः\s*ओम्(\*\*){0,2}\s*$",
     ]
-    for pattern in decorative_patterns:
-        if re.search(pattern, text, re.MULTILINE):
-            return True
+    # If the text is short and doesn't have semantic markers, it's likely decorative
+    if (
+        len(text) < 50
+        and not text.startswith("प्र.–")
+        and not _get_passage_number_from_text(text)
+    ):
+        for pattern in decorative_patterns:
+            if re.fullmatch(pattern, text.strip()):
+                return True
     return False
 
 
+# --- Verification Logic ---
+
+
+
+
+
+def _clean_sanskrit_text_for_hashing(text: str) -> str:
+    # Remove passage numbers like ।। 1 ।।
+    text = re.sub(r"।।\s*\d+\s*।।", "", text, flags=re.MULTILINE).strip()
+    # Remove bold markdown
+    text = text.replace("**", "")
+    # Remove commentary prefix
+    text = text.lstrip("प्र.–").strip()
+    # Remove decorative bracketed text like [प्राणविद्या–ज्येष्ठ श्रेष्ठप्राणविद्या]
+    text = re.sub(r"\[.*?\]", "", text).strip()
+    return text
+
+
 def _extract_sanskrit_from_raw_semantically(
-    parser_instance: "RawParser", debug=False
+    parser: "RawParser", debug=False
 ) -> List[str]:
-    # This function now uses the same robust block identification as the main parser
-    blocks = parser_instance._lex_blocks(parser_instance.raw_content, debug=debug)
-
     content_parts = []
-    is_prefatory_zone = True
-    for block in blocks:
-        if block["type"] == "brahmana":
-            is_prefatory_zone = False
-
-        if block["type"] == "decorative":  # Explicitly skip decorative blocks
-            continue
-
-        if block["type"] in ["mula", "commentary"] or (
-            block["type"] == "shanti" and is_prefatory_zone
-        ):
-            content_parts.append(
-                parser_instance._clean_text(block["content"], block["type"])
-            )
+    for block in parser.semantic_blocks:
+        # Only process mula and commentary blocks for hashing
+        if block["type"] in ["mula", "commentary", "shanti"]: # shanti is also semantic content
+            content_parts.append(_clean_sanskrit_text_for_hashing(block["content"]))
     return content_parts
 
 
@@ -62,19 +70,24 @@ def _extract_sanskrit_from_structured(structured_md_string: str) -> List[str]:
     pattern = r"<!-- sanskrit:devanagari -->\n(.*?)(?=\n\n<!--|\n\n##|\n\n###|\Z)"
     matches = re.findall(pattern, structured_md_string, re.DOTALL)
     for match in matches:
-        content_parts.append(match.strip())
+        content_parts.append(_clean_sanskrit_text_for_hashing(match.strip()))
     return content_parts
 
 
 def verify_sanskrit_integrity(
-    parser_instance: "RawParser", structured_content: str, debug=False
+    parser: "RawParser", structured_content: str, debug=False
 ):
     print("\n--- Verifying Devanagari Content Integrity ---")
-    raw_parts = _extract_sanskrit_from_raw_semantically(parser_instance, debug=debug)
+    raw_parts = _extract_sanskrit_from_raw_semantically(parser, debug=debug)
     structured_parts = _extract_sanskrit_from_structured(structured_content)
-
     raw_combined = "".join(raw_parts)
     structured_combined = "".join(structured_parts)
+
+    if debug:
+        Path("debug_raw_combined.txt").write_text(raw_combined, encoding="utf-8")
+        Path("debug_structured_combined.txt").write_text(structured_combined, encoding="utf-8")
+        Path("debug_raw_parts.txt").write_text("\n---\n".join(raw_parts), encoding="utf-8")
+        Path("debug_structured_parts.txt").write_text("\n---\n".join(structured_parts), encoding="utf-8")
 
     raw_hash = hash_text(raw_combined)
     structured_hash = hash_text(structured_combined)
@@ -91,11 +104,10 @@ def verify_sanskrit_integrity(
         raise ValueError(
             "FATAL: Devanagari content hash mismatch. Halting. Check debug files."
         )
-
     print("✓ Devanagari content hash matches. Integrity confirmed.")
 
 
-# --- The New "Lex-and-Parse" Parser ---
+# --- The "Lex-and-Parse" Parser ---
 
 
 class RawParser:
@@ -114,6 +126,8 @@ class RawParser:
         self.structure_nodes: List[Dict] = []
         self.chapter_name = ""
         self.debug = False
+        self.raw_content = ""
+        self.semantic_blocks: List[Dict] = []
 
     def _clean_text(self, text: str, block_type: str) -> str:
         text = re.sub(r"।।\s*\d+\s*।।", "", text, flags=re.MULTILINE).strip()
@@ -122,134 +136,115 @@ class RawParser:
             text = text.lstrip("प्र.–").strip()
         return text
 
-    def _lex_blocks(self, raw_md_content: str, debug=False) -> List[Dict[str, Any]]:
+    def _lex_blocks(self, raw_md_content: str, debug=False) -> None:
         """Stage 1: Lexing. Identify all semantic blocks and their types."""
         if debug:
             print("\n--- STAGE 1: LEXING (Block Identification) ---")
 
-        # Split by double newlines, which is a more reliable paragraph separator
-        raw_blocks = re.split(r"\n{2,}", raw_md_content)
-
-        semantic_blocks = []
-        current_multiline_block = None
+        raw_paragraphs = [p.strip() for p in re.split(r"\n{2,}", raw_md_content) if p.strip()]
+        
+        self.semantic_blocks = [] # Initialize here
+        current_multiline_content = []
         current_multiline_type = None
 
-        for block in raw_blocks:
-            clean_block = block.strip()
-            if not clean_block:
-                continue
+        for paragraph in raw_paragraphs:
+            is_mula_start = paragraph.startswith("**")
+            is_commentary_start = paragraph.startswith("प्र.–")
+            has_passage_number = _get_passage_number_from_text(paragraph) is not None
+            is_brahmana = "ब्राह्मणम्" in paragraph and len(paragraph) < 100
+            is_chapter = "ऽध्यायः" in paragraph and len(paragraph) < 100
+            is_decorative = _is_decorative_text(paragraph)
+            is_shanti = "पूर्णमदः" in paragraph and "पूर्णमेवावशिष्यते" in paragraph
 
-            # Heuristics to identify block types
-            is_mula_indicator = clean_block.startswith("**")
-            is_commentary_indicator = clean_block.startswith("प्र.–")
-            has_passage_number = _get_passage_number_from_text(clean_block) is not None
-            is_brahmana = "ब्राह्मणम्" in clean_block
-            is_chapter = "ऽध्यायः" in clean_block
-            is_shanti = "शान्तिः" in clean_block  # Changed from "शान्तिपाठः"
-            is_decorative = _is_decorative_text(clean_block)
-
-            # If we are currently accumulating a multi-line block
-            if current_multiline_block:
-                current_multiline_block += "\n\n" + clean_block
-                if has_passage_number:
-                    # This block completes the multi-line block
-                    semantic_blocks.append(
-                        {
-                            "type": current_multiline_type,
-                            "content": current_multiline_block,
-                        }
-                    )
-                    if debug:
-                        print(
-                            f"  [APPEND MULTI-END] Type: {current_multiline_type}, Content: '{current_multiline_block[:40]}...'"
-                        )
-                    current_multiline_block = None
-                    current_multiline_type = None
-                else:
-                    # Continue accumulating
-                    if debug:
-                        print(
-                            f"  [MULTI-CONTINUE] Type: {current_multiline_type}, Content: '{clean_block[:40]}...'"
-                        )
-                continue  # Move to the next raw block
-
-            # New block identification
+            paragraph_type = "unknown" # Default to unknown
             if is_decorative:
-                semantic_blocks.append({"type": "decorative", "content": clean_block})
-                if debug:
-                    print(
-                        f"  [APPEND] Type: Decorative, Content: '{clean_block[:40]}...'"
-                    )
-            elif is_brahmana:
-                semantic_blocks.append({"type": "brahmana", "content": clean_block})
-                if debug:
-                    print(f"  [APPEND] Type: Brahmana, Content: '{clean_block}'")
+                paragraph_type = "decorative"
             elif is_chapter:
-                semantic_blocks.append({"type": "chapter", "content": clean_block})
-                if debug:
-                    print(f"  [APPEND] Type: Chapter, Content: '{clean_block}'")
+                paragraph_type = "chapter"
+            elif is_brahmana:
+                paragraph_type = "brahmana"
             elif is_shanti:
-                semantic_blocks.append({"type": "shanti", "content": clean_block})
-                if debug:
-                    print(f"  [APPEND] Type: Shanti, Content: '{clean_block}'")
-            elif is_mula_indicator and has_passage_number:
-                semantic_blocks.append({"type": "mula", "content": clean_block})
-                if debug:
-                    print(f"  [APPEND] Type: Mula, Content: '{clean_block[:40]}...'")
-            elif is_commentary_indicator and has_passage_number:
-                semantic_blocks.append({"type": "commentary", "content": clean_block})
-                if debug:
-                    print(
-                        f"  [APPEND] Type: Commentary, Content: '{clean_block[:40]}...'"
-                    )
-            elif (
-                current_multiline_block is None and is_mula_indicator
-            ):  # This is the start of a multi-paragraph Mula
-                current_multiline_block = clean_block
-                current_multiline_type = "mula"
-                if debug:
-                    print(
-                        f"  [START MULTI] Type: Mula, Content: '{clean_block[:40]}...'"
-                    )
-            elif (
-                current_multiline_block is None and is_commentary_indicator
-            ):  # This is the start of a multi-paragraph Commentary
-                current_multiline_block = clean_block
-                current_multiline_type = "commentary"
-                if debug:
-                    print(
-                        f"  [START MULTI] Type: Commentary, Content: '{clean_block[:40]}...'"
-                    )
+                paragraph_type = "shanti"
+            elif is_mula_start:
+                paragraph_type = "mula"
+            elif is_commentary_start:
+                paragraph_type = "commentary"
             else:
-                # If it's not any of the above, and not part of a multi-line block, it's unknown
-                semantic_blocks.append({"type": "unknown", "content": clean_block})
-                if debug:
-                    print(f"  [APPEND] Type: Unknown, Content: '{clean_block[:40]}...'")
-
-        # If a multi-line block was started but not ended (e.g., file ends abruptly)
-        if current_multiline_block:
-            semantic_blocks.append(
-                {"type": current_multiline_type, "content": current_multiline_block}
-            )
+                # If it's not any of the above, and contains Devanagari characters,
+                # assume it's a commentary block.
+                # This is a heuristic and might need refinement.
+                if re.search(r"[\u0900-\u097F]", paragraph): # Check for Devanagari characters
+                    paragraph_type = "commentary"
+            if current_multiline_type is not None:
+                # If the current paragraph is of the same type, continue accumulating
+                if paragraph_type == current_multiline_type:
+                    current_multiline_content.append(paragraph)
+                    if debug:
+                        print(f"  [LEXED] Type: {current_multiline_type} (multi-continue), Content: '{paragraph[:40]}...'")
+                    
+                    # If this paragraph has a passage number, it marks the end of this multiline block
+                    if has_passage_number:
+                        self.semantic_blocks.append({
+                            "type": current_multiline_type,
+                            "content": "\n\n".join(current_multiline_content)
+                        })
+                        if debug:
+                            print(f"  [LEXED] Type: {current_multiline_type} (multi-end with num), Content: '{current_multiline_content[0][:40]}...'")
+                        current_multiline_content = []
+                        current_multiline_type = None
+                else:
+                    # Type changed, so finalize the previous multiline block
+                    self.semantic_blocks.append({
+                        "type": current_multiline_type,
+                        "content": "\n\n".join(current_multiline_content)
+                    })
+                    if debug:
+                        print(f"  [LEXED] Type: {current_multiline_type} (multi-end, type change), Content: '{current_multiline_content[0][:40]}...'")
+                    current_multiline_content = []
+                    current_multiline_type = None
+                    
+                    # Now, start a new block (either multiline or single)
+                    if paragraph_type in ["mula", "commentary"] and not has_passage_number:
+                        current_multiline_content.append(paragraph)
+                        current_multiline_type = paragraph_type
+                        if debug:
+                            print(f"  [LEXED] Type: {current_multiline_type} (multi-start new), Content: '{paragraph[:40]}...'")
+                    else:
+                        self.semantic_blocks.append({"type": paragraph_type, "content": paragraph})
+                        if debug:
+                            print(f"  [LEXED] Type: {paragraph_type}, Content: '{paragraph[:40]}...'")
+            else:
+                # No active multiline block
+                if paragraph_type in ["mula", "commentary"] and not has_passage_number:
+                    # Start a new multiline block
+                    current_multiline_content.append(paragraph)
+                    current_multiline_type = paragraph_type
+                    if debug:
+                        print(f"  [LEXED] Type: {current_multiline_type} (multi-start), Content: '{paragraph[:40]}...'")
+                else:
+                    # Add as a single semantic block
+                    self.semantic_blocks.append({"type": paragraph_type, "content": paragraph})
+                    if debug:
+                        print(f"  [LEXED] Type: {paragraph_type}, Content: '{paragraph[:40]}...'")
+        
+        # Finalize any remaining multiline block after the loop
+        if current_multiline_type is not None:
+            self.semantic_blocks.append({
+                "type": current_multiline_type,
+                "content": "\n\n".join(current_multiline_content)
+            })
             if debug:
-                print(
-                    f"  [APPEND MULTI-UNENDED] Type: {current_multiline_type}, Content: '{current_multiline_block[:40]}...'"
-                )
-
-        return semantic_blocks
+                print(f"  [LEXED] Type: {current_multiline_type} (multi-end, final), Content: '{current_multiline_content[0][:40]}...'")
 
     def parse(self, raw_md_content: str):
-        """Stage 2: Parsing. Process the stream of lexed blocks."""
-        self.raw_content = raw_md_content  # Store raw content for later verification
-        blocks = self._lex_blocks(raw_md_content, debug=self.debug)
+        self.raw_content = raw_md_content
+        self._lex_blocks(self.raw_content, debug=self.debug) # Call lexer to populate semantic_blocks
         if self.debug:
             print("\n--- STAGE 2: PARSING (Structuring) ---")
 
-        is_parsing_prefatory = True
-        for block in blocks:
-            kind = block["type"]
-            value = block["content"]
-
+        is_parsing_prefatory = self.state["brahmana"] == 0
+        for block in self.semantic_blocks: # Iterate through semantic_blocks
+            kind, value = block["type"], block["content"]
             if self.debug:
                 print(f"  Processing block of type: {kind}")
 
@@ -265,38 +260,42 @@ class RawParser:
                         "name": value,
                     }
                 )
-            elif kind == "mula":
-                self.state["mantra"] += 1
-                ref = f"{self.state['adhyaya']}.{self.state['brahmana']}.{self.state['mantra']}"
-                self.passages.append(
-                    {"ref": ref, "content": self._clean_text(value, "mula")}
-                )
-                self.last_mula_ref = ref
+            elif kind == "mula" or kind == "shanti":
+                passage_number_from_text = _get_passage_number_from_text(value) # Keep this for potential metadata
+                if not is_parsing_prefatory: # Only increment mantra count for main passages
+                    self.state["mantra"] += 1
+                    ref = f"{self.state['adhyaya']}.{self.state['brahmana']}.{self.state['mantra']}"
+                    self.last_mula_ref = ref
+                    self.passages.append({"ref": ref, "content": self._clean_text(value, kind)})
+                elif is_parsing_prefatory:
+                    # This is a prefatory passage
+                    ref = f"{self.state['adhyaya']}.0.{len(self.prefatory_passages) + 1}"
+                    self.prefatory_passages.append({"ref": ref, "content": self._clean_text(value, kind)})
+                else:
+                    # This case should ideally not happen if all main mulablocks have numbers
+                    # For robustness, we'll add it to main passages, but it might indicate a formatting issue
+                    print(f"Warning: Mula/Shanti block without number found in main body: {value[:50]}...")
+                    self.state["mantra"] += 1 # Increment mantra count even if no number found
+                    ref = f"{self.state['adhyaya']}.{self.state['brahmana']}.{self.state['mantra']}"
+                    self.last_mula_ref = ref
+                    self.passages.append({"ref": ref, "content": self._clean_text(value, kind)})
             elif kind == "commentary":
+                # Commentary always marks the end of prefatory zone if not already
+                is_parsing_prefatory = False
                 if self.last_mula_ref:
-                    ref = self.last_mula_ref
-                    if ref not in self.commentaries:
-                        self.commentaries[ref] = []
-                    self.commentaries[ref].append(
+                    if self.last_mula_ref not in self.commentaries:
+                        self.commentaries[self.last_mula_ref] = []
+                    self.commentaries[self.last_mula_ref].append(
                         {
                             "id": self.commentary_id,
                             "content": self._clean_text(value, "commentary"),
                         }
                     )
-            elif kind == "shanti":
-                if is_parsing_prefatory:
-                    ref = (
-                        f"{self.state['adhyaya']}.0.{len(self.prefatory_passages) + 1}"
-                    )
-                    self.prefatory_passages.append(
-                        {"ref": ref, "content": self._clean_text(value, "shanti")}
-                    )
-                # else: ignore shanti blocks that are not prefatory
-            elif kind == "decorative":  # Ignore decorative blocks
-                pass
 
     def generate_structured_md(self) -> str:
-        # This function remains the same as it was mostly correct
+        if self.debug:
+            print("\n--- STAGE 3: GENERATING STRUCTURED MARKDOWN (Non-Interleaved) ---")
+
         structure_tree = {
             "key": str(self.part_num),
             "scriptNames": {
@@ -335,22 +334,28 @@ class RawParser:
         yaml_str = yaml.dump(
             frontmatter, allow_unicode=True, sort_keys=False, width=120
         )
-        output = [f"---\n{yaml_str}---\n"]
+
+        output = [f"---\n{yaml_str}---"]
+
         if self.prefatory_passages:
-            output.append("# Prefatory Material\n")
+            output.extend(["", "# Prefatory Material", ""])
             for p in self.prefatory_passages:
+                label_json = yaml.dump(
+                    {"devanagari": f"Prefatory {p['ref']}"}, allow_unicode=True
+                ).strip()
                 output.extend(
                     [
+                        f"<!-- prefatory_item_{len(output)}: {label_json} -->",
                         f"## Passage {p['ref']}",
                         "<!-- sanskrit:devanagari -->",
                         p["content"],
                         "",
                     ]
                 )
+
         current_brahmana = 0
         for p in self.passages:
-            ref = p["ref"]
-            brahmana_num = int(ref.split(".")[1])
+            ref, brahmana_num = p["ref"], int(p["ref"].split(".")[1])
             if brahmana_num != current_brahmana:
                 current_brahmana = brahmana_num
                 brahmana_name = next(
@@ -366,17 +371,30 @@ class RawParser:
             output.extend(
                 [f"## Mantra {ref}", "<!-- sanskrit:devanagari -->", p["content"], ""]
             )
-            if ref in self.commentaries:
+
+        if self.commentaries:
+            output.extend(["# Commentary", ""])
+            sorted_refs = sorted(
+                self.commentaries.keys(), key=lambda r: list(map(int, r.split(".")))
+            )
+            for ref in sorted_refs:
                 for comm in self.commentaries[ref]:
+                    metadata_json = yaml.dump(
+                        {"commentary_id": comm["id"], "passage_ref": ref},
+                        allow_unicode=True,
+                    ).strip()
                     output.extend(
                         [
-                            f'<!-- commentary: {{"commentary_id": "{comm["id"]}", "passage_ref": "{ref}"}} -->',
-                            f"### Commentary: {self.commentator_name}",
+                            f"<!-- commentary: {metadata_json} -->",
+                            f"## Commentary on {ref} ({self.commentator_name})",
                             "<!-- sanskrit:devanagari -->",
                             comm["content"],
                             "",
                         ]
                     )
+
+        if self.debug:
+            print("  Successfully assembled structured markdown content.")
         return "\n".join(output)
 
 
@@ -404,13 +422,11 @@ def main():
         "--debug", action="store_true", help="Enable verbose debugging output."
     )
     args = parser.parse_args()
-
-    # ... (main logic remains the same) ...
     input_path, output_path = Path(args.input), Path(args.output)
     part_num_map = {
         "trtiya": 3,
         "catur": 4,
-        "pajcama": 5,
+        "pancama": 5,
         "sastho": 6,
         "saptama": 7,
         "astama": 8,
@@ -428,11 +444,7 @@ def main():
     try:
         raw_content = input_path.read_text(encoding="utf-8")
         parser_instance = RawParser(grantha_id=args.grantha_id, part_num=part_num)
-        parser_instance.raw_content = (
-            raw_content  # Store raw_content in the parser instance
-        )
-        if args.debug:
-            parser_instance.debug = True
+        parser_instance.debug = True # Unconditionally set to True for debugging
         parser_instance.parse(raw_content)
         structured_output_string = parser_instance.generate_structured_md()
         verify_sanskrit_integrity(

@@ -205,7 +205,7 @@ export default function CommentaryPanel({
 
       <div className="border-b border-gray-200">
         <div className="p-4">
-          {commentaries.map((commentary, index) => (
+          {commentaries.map((commentary: Commentary, index: number) => (
             <label key={index} className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
               <input
                 type="checkbox"
