@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(printf:*)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(git reset:*)",
+      "Bash(git add:*)",
+      "Bash(mkdir:*)",
+      "Bash(curl:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx next lint:*)",
+      "Bash(npx tsc:*)",
+      "Bash(tsx scripts/validate-data.ts:*)",
+      "Bash(npx tsx:*)",
+      "Bash(python3:*)",
+      "Bash(sed:*)",
+      "Bash(node -e:*)",
+      "Bash(node /tmp/add_ref_markup.js:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run test:deploy:*)",
+      "Bash(NEXT_PUBLIC_NO_BASE_PATH=true tsx:*)",
+      "Bash(NEXT_PUBLIC_NO_BASE_PATH=true next build:*)",
+      "Bash(NEXT_PUBLIC_NO_BASE_PATH=true npx next build:*)",
+      "Bash(npx serve@latest:*)",
+      "Bash(lsof:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(pip3 install:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(python -m tools.grantha_converter.cli:*)"
+    ],
+    "deny": [
+      "Read(./node-modules/**)",
+      "Read(./out/**)"
+      "Read(./.next/**)"
+    ],
+    "ask": []
+  }
+}
