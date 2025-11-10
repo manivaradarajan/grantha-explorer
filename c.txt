@@ -1,9 +1,0 @@
-feat: Rename project from grantha-vibhrama to grantha-explorer
-
-Updated all occurrences of the project name from "grantha-vibhrama" to "grantha-explorer"
-across the codebase. This includes:
-- package.json and package-lock.json
-- TECH-STACK.md
-- DEPLOYMENT_GUIDE.md (title and basePath configuration)
-
-This change aligns the project name consistently throughout the repository.

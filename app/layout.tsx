@@ -16,8 +16,9 @@ const notoSerif = Noto_Serif_Devanagari({
 });
 
 export const metadata: Metadata = {
-  title: "Grantha Vibhrama - Upanishad Explorer",
-  description: "Explore classical Upanishad texts with Sanskrit commentary in an interactive reader",
+  title: "Grantha Explorer",
+  description:
+    "Explore classical Upanishad texts with Sanskrit commentary in an interactive reader",
 };
 
 export const viewport = {
