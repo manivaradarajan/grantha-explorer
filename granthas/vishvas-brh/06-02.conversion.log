@@ -1,0 +1,16 @@
+Verification log for ../granthas/vishvas-brh/06-02.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[31m- Deleted  : ०६०२
+[2m  ... बृहदारण्यकोपनिषत्षष् ... रूपेणाभिनिष्पद्यतेछा
+[32m+ Inserted : ं
+[2m  ... उ८१२२इतिश्रवणात्परब् ... क्ष्येअथसम्पत्स्येछा
+[32m+ Inserted : ं
+[2m  ... उ६१४२इतिदेहवियोगानन् ... स्यअहेतुसाध्यतयास्वत
+[31m- Original : स्
+[32m+ Generated: ः
+[2m  ... सिद्धेःसतएवहिहेतुरन् ... नुपपन्नमितिहिस्थितम्
+
+Debug files '../granthas/vishvas-brh/06-02.original_normalized.txt' and '../granthas/vishvas-brh/06-02.generated_normalized.txt' created.

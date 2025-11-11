@@ -1,0 +1,10 @@
+Verification log for ../granthas/vishvas-brh/03-01.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[2m  ... ०३०१श्रीःबृहदारण्यको ... नमनेनयक्ष्यइत्यवमन्य
+[31m- Deleted  : त
+[2m  ... इत्यर्थःतंसंवत्सरस्य ... तिनीरसत्वादितिभावः१९
+
+Debug files '../granthas/vishvas-brh/03-01.original_normalized.txt' and '../granthas/vishvas-brh/03-01.generated_normalized.txt' created.

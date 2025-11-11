@@ -1,0 +1,13 @@
+Verification log for ../granthas/vishvas-brh/05-02.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[2m  ... ०५०२बृहदारण्यकोपनिषत ... िप्रघट्टार्थः७योऽप्स
+[31m- Deleted  : ु
+[2m  ... तिष्ठन्नद्भयोऽन्तरोय ... आत्माऽन्तर्याम्यमृतः
+[31m- Original : ५
+[32m+ Generated: ९
+[2m  ... योऽन्तरिक्षेतिष्ठन्त ... ष्टमब्राह्मणप्रकशिका
+
+Debug files '../granthas/vishvas-brh/05-02.original_normalized.txt' and '../granthas/vishvas-brh/05-02.generated_normalized.txt' created.

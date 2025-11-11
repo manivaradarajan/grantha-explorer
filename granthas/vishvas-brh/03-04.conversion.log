@@ -1,0 +1,13 @@
+Verification log for ../granthas/vishvas-brh/03-04.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[2m  ... ०३०४बृहदारण्यकोपनिषत ... यःआविशन्तिइत्यर्थः१७
+[31m- Deleted  : सम्प्रत्तिकर्मणःफलम्
+[2m  ... पृथिव्यैचैनमग्नेश्चद ... सर्वाणिनामानिबिभर्ति
+[31m- Original : २
+[32m+ Generated: १
+[2m  ... प्रत्रयंवाइदंनामरूपं ... शिकाइतितृतीयोऽध्यायः
+
+Debug files '../granthas/vishvas-brh/03-04.original_normalized.txt' and '../granthas/vishvas-brh/03-04.generated_normalized.txt' created.

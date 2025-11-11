@@ -1,0 +1,12 @@
+Verification log for ../granthas/vishvas-brh/07-01.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[2m  ... ०७०१बृहदारण्यकोपनिषत ... राह्मणम्सत्याख्यब्रह
+[32m+ Inserted : ्
+[2m  ... ्मणःउपासनम्तद्यत्सत् ... ्यायस्वाराज्यायमोक्ष
+[31m- Deleted  : ाये
+[2m  ... तियावत्अस्मान्नयप्रा ... ाप्तश्चसप्तमोऽध्यायः
+
+Debug files '../granthas/vishvas-brh/07-01.original_normalized.txt' and '../granthas/vishvas-brh/07-01.generated_normalized.txt' created.

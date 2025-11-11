@@ -1,0 +1,12 @@
+Verification log for ../granthas/vishvas-brh/06-03.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[2m  ... ०६०३बृहदारण्यकोपनिषत ... ्वाजसनेयकेतुआकाशेशया
+[31m- Deleted  : ने
+[2m  ... एवपरमात्मलिङ्गसद्भाव ... ्छित्तिःधर्मोयस्यसोऽ
+[32m+ Inserted : अ
+[2m  ... नुच्छित्तिधर्माएवंबह ... माप्तश्चषष्ठःअध्यायः
+
+Debug files '../granthas/vishvas-brh/06-03.original_normalized.txt' and '../granthas/vishvas-brh/06-03.generated_normalized.txt' created.

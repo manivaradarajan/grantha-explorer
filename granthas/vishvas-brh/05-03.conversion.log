@@ -1,0 +1,11 @@
+Verification log for ../granthas/vishvas-brh/05-03.md
+FAILURE: Devanagari content was altered during conversion.
+
+[1m--- Detailed Devanagari Diff Report ---[22m
+Comparing normalized text to find changes in core script content.
+[31m- Deleted  : ०५०३
+[2m  ... बृहदारण्यकोपनिषत्पञ् ... घटक्षणद्वययोगपद्यप्र
+[31m- Deleted  : स
+[2m  ... ङ्गइत्यर्थःप्रतिसंख् ... ाप्तश्चपञ्चमोऽध्यायः
+
+Debug files '../granthas/vishvas-brh/05-03.original_normalized.txt' and '../granthas/vishvas-brh/05-03.generated_normalized.txt' created.
