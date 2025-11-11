@@ -102,7 +102,7 @@ export default function NavigationSidebar({
       );
     } else if (group.passages) {
       return (
-        <div key={group.level} style={{ paddingLeft: `${level * 1}rem` }}>
+        <div key={group.level} style={{ paddingLeft: `${level * 0.2}rem` }}>
           {group.passages.map((passage: any, index: number) => (
             <PassageLink
               key={`${passage.ref}-${index}`}

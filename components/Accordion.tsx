@@ -20,7 +20,7 @@ export default function Accordion({
       <button
         onClick={onToggle}
         className="w-full text-left py-3 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center min-h-[44px]"
-        style={{ paddingLeft: `${1 + level * 1}rem` }}
+        style={{ paddingLeft: `${1 + level * 0.5}rem` }}
       >
         <span
           className={`transform transition-transform mr-2 text-gray-600 ${isOpen ? "rotate-90" : ""}`}
