@@ -33,7 +33,9 @@ export default function TextContent({
 
 
     // Scroll to verse when selected (from navigation sidebar or grantha change)
-    const element = verseRefs.current[selectedRef];
+    const currentPassage = passages.find(p => p.ref === selectedRef);
+    const key = currentPassage?.part_num ? `${currentPassage.part_num}-${selectedRef}` : selectedRef;
+    const element = verseRefs.current[key];
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -50,15 +52,16 @@ export default function TextContent({
 
       {/* Verses */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 pb-6">
-        {passages.map((passage) => {
+        {passages.map((passage, index) => {
           const isSelected = passage.ref === selectedRef;
           const sanskritText = passage.content.sanskrit?.devanagari || "";
+          const uniqueKey = passage.part_num ? `${passage.part_num}-${passage.ref}` : passage.ref;
 
           return (
             <div
-              key={passage.ref}
+              key={`${uniqueKey}-${index}`}
               ref={(el) => {
-                verseRefs.current[passage.ref] = el;
+                verseRefs.current[uniqueKey] = el;
               }}
               onClick={() => {
                 clickedInternally.current = true;

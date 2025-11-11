@@ -14,34 +14,61 @@ interface NavigationSidebarProps {
 }
 
 export default function NavigationSidebar({
+
   grantha,
+
   granthas,
+
   selectedRef,
+
   onGranthaChange,
+
   onVerseSelect,
+
 }: NavigationSidebarProps) {
+
   const hierarchy = getPassageHierarchy(grantha);
+
   const verseRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+
   const [openAccordions, setOpenAccordions] = useState<string[]>(() => {
-    const group = hierarchy.main.find((g) =>
-      g.passages.some((p) => p.ref === selectedRef),
-    );
-    return group ? [group.level] : [];
+    for (const group of hierarchy.main) {
+      if (group.children) {
+        for (const child of group.children) {
+          if (child.passages?.some((p) => p.ref === selectedRef)) {
+            return [group.level, child.level];
+          }
+        }
+      } else if (group.passages?.some((p) => p.ref === selectedRef)) {
+        return [group.level];
+      }
+    }
+    return [];
   });
+
   const uiStrings = getUIStrings();
 
   // Auto-open accordion when grantha or selectedRef changes
   useEffect(() => {
-    const group = hierarchy.main.find((g) =>
-      g.passages.some((p) => p.ref === selectedRef),
-    );
-    if (group) {
-      setOpenAccordions((prev) => {
-        if (!prev.includes(group.level)) {
-          return [...prev, group.level];
+    const findPath = (groups: any[], ref: string, currentPath: string[] = []): string[] | null => {
+      for (const group of groups) {
+        const newPath = [...currentPath, group.level];
+        if (group.passages?.some((p: any) => p.ref === ref)) {
+          return newPath;
         }
-        return prev;
-      });
+        if (group.children) {
+          const path = findPath(group.children, ref, newPath);
+          if (path) {
+            return path;
+          }
+        }
+      }
+      return null;
+    };
+
+    const path = findPath(hierarchy.main, selectedRef);
+    if (path) {
+      setOpenAccordions((prev) => [...new Set([...prev, ...path])]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grantha.grantha_id, selectedRef]);
@@ -58,6 +85,40 @@ export default function NavigationSidebar({
     setOpenAccordions((prev) =>
       prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level],
     );
+  };
+
+  const renderPassageGroup = (group: any, level: number) => {
+    if (group.children) {
+      return (
+        <Accordion
+          key={group.level}
+          title={group.level}
+          isOpen={openAccordions.includes(group.level)}
+          onToggle={() => toggleAccordion(group.level)}
+          level={level}
+        >
+          {group.children.map((child: any) => renderPassageGroup(child, level + 1))}
+        </Accordion>
+      );
+    } else if (group.passages) {
+      return (
+        <div key={group.level} style={{ paddingLeft: `${level * 1}rem` }}>
+          {group.passages.map((passage: any, index: number) => (
+            <PassageLink
+              key={`${passage.ref}-${index}`}
+              ref={(el) => {
+                verseRefs.current[passage.ref] = el;
+              }}
+              passage={passage}
+              grantha={grantha}
+              isSelected={passage.ref === selectedRef}
+              onVerseSelect={onVerseSelect}
+            />
+          ))}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -80,9 +141,9 @@ export default function NavigationSidebar({
 
       {/* Verse list */}
       <div className="flex-1 overflow-y-auto px-6">
-        {hierarchy.prefatory.map((passage) => (
+        {hierarchy.prefatory.map((passage, index) => (
           <PassageLink
-            key={passage.ref}
+            key={`${passage.ref}-${index}`}
             ref={(el) => {
               verseRefs.current[passage.ref] = el;
             }}
@@ -93,132 +154,11 @@ export default function NavigationSidebar({
           />
         ))}
 
-        {hierarchy.main.length === 1
-          ? // Flat list for single-level structures
-            hierarchy.main[0].passages.map((passage) => (
-              <PassageLink
-                key={passage.ref}
-                ref={(el) => {
-                  verseRefs.current[passage.ref] = el;
-                }}
-                passage={passage}
-                grantha={grantha}
-                isSelected={passage.ref === selectedRef}
-                onVerseSelect={onVerseSelect}
-              />
-            ))
-          : // Accordion for hierarchical structures
-            hierarchy.main.map((group) => (
-              <Accordion
-                key={group.level}
-                title={group.level}
-                isOpen={openAccordions.includes(group.level)}
-                onToggle={() => toggleAccordion(group.level)}
-              >
-                {group.passages.map((passage) => (
-                  <PassageLink
-                    key={passage.ref}
-                    ref={(el) => {
-                      verseRefs.current[passage.ref] = el;
-                    }}
-                    passage={passage}
-                    grantha={grantha}
-                    isSelected={passage.ref === selectedRef}
-                    onVerseSelect={onVerseSelect}
-                  />
-                ))}
-              </Accordion>
-            ))}
+        {hierarchy.main.map((group) => renderPassageGroup(group, 0))}
 
-        {hierarchy.concluding.map((passage) => (
+        {hierarchy.concluding.map((passage, index) => (
           <PassageLink
-            key={passage.ref}
-            ref={(el) => {
-              verseRefs.current[passage.ref] = el;
-            }}
-            passage={passage}
-            grantha={grantha}
-            isSelected={passage.ref === selectedRef}
-            onVerseSelect={onVerseSelect}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
-      {/* Header */}
-      <div className="pt-8 pb-2 px-6 bg-[#f8f9fa]">
-        <h2 className="text-xl font-semibold font-serif text-center">
-          {uiStrings.index}
-        </h2>
-      </div>
-
-      {/* Grantha selector */}
-      <div className="pb-3 px-6">
-        <GranthaSelector
-          granthas={granthas}
-          selectedGranthaId={grantha.grantha_id}
-          onSelect={onGranthaChange}
-        />
-      </div>
-
-      {/* Verse list */}
-      <div className="flex-1 overflow-y-auto px-6">
-        {hierarchy.prefatory.map((passage) => (
-          <PassageLink
-            key={passage.ref}
-            ref={(el) => {
-              verseRefs.current[passage.ref] = el;
-            }}
-            passage={passage}
-            grantha={grantha}
-            isSelected={passage.ref === selectedRef}
-            onVerseSelect={onVerseSelect}
-          />
-        ))}
-
-        {hierarchy.main.length === 1
-          ? // Flat list for single-level structures
-            hierarchy.main[0].passages.map((passage) => (
-              <PassageLink
-                key={passage.ref} // <-- ADD THIS LINE
-                ref={(el) => {
-                  verseRefs.current[passage.ref] = el;
-                }}
-                passage={passage}
-                grantha={grantha}
-                isSelected={passage.ref === selectedRef}
-                onVerseSelect={onVerseSelect}
-              />
-            ))
-          : // Accordion for hierarchical structures
-            hierarchy.main.map((group) => (
-              <Accordion
-                key={group.level}
-                title={group.level}
-                isOpen={openAccordions.includes(group.level)}
-                onToggle={() => toggleAccordion(group.level)}
-              >
-                {group.passages.map((passage) => (
-                  <PassageLink
-                    key={passage.ref}
-                    ref={(el) => {
-                      verseRefs.current[passage.ref] = el;
-                    }}
-                    passage={passage}
-                    grantha={grantha}
-                    isSelected={passage.ref === selectedRef}
-                    onVerseSelect={onVerseSelect}
-                  />
-                ))}
-              </Accordion>
-            ))}
-
-        {hierarchy.concluding.map((passage) => (
-          <PassageLink
-            key={passage.ref}
+            key={`${passage.ref}-${index}`}
             ref={(el) => {
               verseRefs.current[passage.ref] = el;
             }}

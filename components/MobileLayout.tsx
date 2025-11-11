@@ -141,7 +141,7 @@ export default function MobileLayout({
         isOpen={commentaryOpen}
         onClose={() => updateCommentaryOpen(false)}
         title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
-        subtitle={grantha.commentaries?.[0]?.commentator.devanagari}
+        subtitle={grantha.commentaries?.[0]?.commentator?.devanagari}
         verseRef={selectedRef}
         onPrevious={handlePrevious}
         onNext={handleNext}

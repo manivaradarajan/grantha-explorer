@@ -17,8 +17,13 @@ interface PassageLinkProps {
 
 const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
   ({ passage, grantha, isSelected, onVerseSelect }, ref) => {
+    if (!passage.ref) {
+      // This can happen with bad data. Render nothing to avoid a crash.
+      // A better solution might be to log this error.
+      return null;
+    }
+
     const getLabel = () => {
-      // Use label directly for prefatory and concluding material
       if (
         passage.passage_type === "prefatory" ||
         passage.passage_type === "concluding"
@@ -27,14 +32,15 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
         return prefatoryPassage.label.devanagari || "प्रस्तावना";
       }
 
-      // For main passages, construct label from structure levels
-      const topLevelStructure = grantha.structure_levels[0];
-      const level2Structure = topLevelStructure.children?.[0];
-
-      if (level2Structure) {
-        return `${level2Structure.scriptNames.devanagari} ${passage.ref.split(".")[1] || passage.ref}`;
+      let deepestStructure = grantha.structure_levels[0];
+      while (deepestStructure.children && deepestStructure.children.length > 0) {
+        deepestStructure = deepestStructure.children[0];
       }
-      return `${topLevelStructure.scriptNames.devanagari} ${passage.ref}`;
+
+      const refParts = passage.ref.split(".");
+      const lastRefPart = refParts[refParts.length - 1];
+
+      return `${deepestStructure.scriptNames.devanagari} ${lastRefPart}`;
     };
 
     const label = getLabel();

@@ -15,6 +15,7 @@ export interface Passage {
   passage_type: "main" | "prefatory" | "concluding";
   label?: string;
   content: Content;
+  part_num?: number;
 }
 
 export interface PrefatoryMaterial {
@@ -25,6 +26,7 @@ export interface PrefatoryMaterial {
     roman?: string;
   };
   content: Content;
+  part_num?: number;
 }
 
 export interface StructureLevel {
@@ -116,7 +118,8 @@ export interface GranthaMetadata {
 
 export interface PassageGroup {
   level: string;
-  passages: Passage[];
+  passages?: Passage[];
+  children?: PassageGroup[];
 }
 
 export interface GranthaMeta {
@@ -155,6 +158,7 @@ export interface GranthaMetadataOnly {
   script?: Script;
   metadata: Metadata;
   structure_levels: StructureLevel[];
+  commentaries?: Commentary[];
   parts: string[]; // Array of part file names, e.g., ["part1.json", "part2.json"]
 }
 
@@ -264,29 +268,41 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         ...multiPartMetadata,
         id: multiPartMetadata.grantha_id, // Derived from grantha_id
         title: multiPartMetadata.canonical_title, // Derived from canonical_title
-        title_deva: multiPartMetadata.canonical_title, // Placeholder, needs actual Devanagari title
+        title_deva: multiPartMetadata.canonical_title, // Placeholder, needs actual Devanari title
         title_iast: multiPartMetadata.canonical_title, // Placeholder, needs actual IAST title
         aliases: multiPartMetadata.aliases || [], // Ensure aliases is always an array
         prefatory_material: [],
         passages: [],
         concluding_material: [],
-        commentaries: [],
+        commentaries: multiPartMetadata.commentaries
+          ? JSON.parse(JSON.stringify(multiPartMetadata.commentaries)).map((c: Commentary) => ({ ...c, passages: [] }))
+          : [],
       };
 
-      for (const partContent of allPartContents) {
+      allPartContents.forEach((partContent, index) => {
+        const part_num = index + 1;
         if (partContent.prefatory_material) {
-          mergedGrantha.prefatory_material.push(...partContent.prefatory_material);
+          mergedGrantha.prefatory_material.push(...partContent.prefatory_material.map(p => ({...p, part_num})));
         }
         if (partContent.passages) {
-          mergedGrantha.passages.push(...partContent.passages);
+          mergedGrantha.passages.push(...partContent.passages.map(p => ({...p, part_num})));
         }
         if (partContent.concluding_material) {
-          mergedGrantha.concluding_material.push(...partContent.concluding_material);
+          mergedGrantha.concluding_material.push(...partContent.concluding_material.map(p => ({...p, part_num})));
         }
         if (partContent.commentaries) {
-          mergedGrantha.commentaries.push(...partContent.commentaries);
+          partContent.commentaries.forEach(commentaryPart => {
+            const existingCommentary = mergedGrantha.commentaries.find(
+              c => c.commentary_id === commentaryPart.commentary_id
+            );
+            if (existingCommentary) {
+              existingCommentary.passages.push(...commentaryPart.passages);
+            } else {
+              mergedGrantha.commentaries.push(commentaryPart);
+            }
+          });
         }
-      }
+      });
 
       // Cache and return the fully assembled grantha
       granthaCache.set(granthaId, mergedGrantha);
@@ -345,8 +361,10 @@ export function getStructureLevelLabel(
     return "";
   }
 
-  // Use the first structure level (most common case)
-  const level = grantha.structure_levels[0];
+  let level = grantha.structure_levels[0];
+  while (level.children && level.children.length > 0) {
+    level = level.children[0];
+  }
   return level.scriptNames[script] || level.scriptNames.devanagari;
 }
 
@@ -374,7 +392,7 @@ export function getPassageByRef(
 
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
   const structure = grantha.structure_levels;
-  const isHierarchical = !!(structure?.[0]?.children && structure[0].children.length > 0);
+  const isHierarchical = structure && structure.length > 0;
 
   const hierarchy: PassageHierarchy = {
     prefatory: grantha.prefatory_material,
@@ -382,28 +400,52 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
     concluding: grantha.concluding_material || [],
   };
 
-  if (isHierarchical) {
-    const topLevel = structure[0];
-    const groups: { [key: string]: PassageGroup } = {};
+  function buildNestedGroups(passages: Passage[], structureLevel: StructureLevel, refLevel: number): PassageGroup[] {
+    const groups: { [key: string]: Passage[] } = {};
 
-    for (const passage of grantha.passages) {
+    // Group passages by the current level's ref part
+    for (const passage of passages) {
       const refParts = passage.ref.split('.');
-      const topLevelRef = refParts[0];
-      const groupLabel = `${topLevel.scriptNames.devanagari} ${topLevelRef}`;
-
-      if (!groups[groupLabel]) {
-        groups[groupLabel] = {
-          level: groupLabel,
-          passages: [],
-        };
+      if (refParts.length > refLevel) {
+        const refPart = refParts[refLevel];
+        const groupKey = `${structureLevel.scriptNames.devanagari} ${refPart}`;
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+        groups[groupKey].push(passage);
       }
-      groups[groupLabel].passages.push(passage);
     }
-    hierarchy.main = Object.values(groups);
+
+    // Get the keys and sort them numerically
+    const sortedGroupKeys = Object.keys(groups).sort((a, b) => {
+      const numA = parseInt(a.split(' ').pop() || '0');
+      const numB = parseInt(b.split(' ').pop() || '0');
+      return numA - numB;
+    });
+
+    // Create PassageGroup for each group
+    return sortedGroupKeys.map(groupKey => {
+      const groupPassages = groups[groupKey];
+      const passageGroup: PassageGroup = {
+        level: groupKey,
+      };
+
+      if (structureLevel.children && structureLevel.children.length > 0) {
+        // If there are more levels, recurse
+        passageGroup.children = buildNestedGroups(groupPassages, structureLevel.children[0], refLevel + 1);
+      } else {
+        // This is the last level of grouping, so add passages
+        passageGroup.passages = groupPassages;
+      }
+      return passageGroup;
+    });
+  }
+
+  if (isHierarchical) {
+    hierarchy.main = buildNestedGroups(grantha.passages, structure[0], 0);
   } else {
     hierarchy.main = [
-      {
-        level: "Passages",
+      {        level: "Passages",
         passages: grantha.passages,
       },
     ];

@@ -139,7 +139,7 @@ export default function CommentaryPanel({
         {hasMultipleCommentaries && (
           <div className="mb-4">
             <h3 className="text-base font-semibold font-serif">{commentary.commentary_title}</h3>
-            <div className="text-sm text-gray-600">{commentary.commentator.devanagari}</div>
+            <div className="text-sm text-gray-600">{commentary.commentator?.devanagari}</div>
           </div>
         )}
 
@@ -185,7 +185,7 @@ export default function CommentaryPanel({
         {!hideHeader && (
           <div className="pt-6 px-4 text-center bg-white">
             <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
-            <div className="text-sm pb-2 text-gray-600 mt-1">{commentary.commentator.devanagari}</div>
+            <div className="text-sm pb-2 text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
           </div>
         )}
         <div className="flex-1 overflow-y-auto px-6 pb-6">
@@ -213,7 +213,7 @@ export default function CommentaryPanel({
                 onChange={() => toggleCommentary(index)}
                 className="w-4 h-4"
               />
-              <span className="text-sm">{commentary.commentator.devanagari}</span>
+              <span className="text-sm">{commentary.commentator?.devanagari}</span>
             </label>
           ))}
         </div>
