@@ -15,7 +15,7 @@ export interface Passage {
   passage_type: "main" | "prefatory" | "concluding";
   label?: string;
   content: Content;
-  part_num?: number;
+  part_id?: string; // Changed from part_num
 }
 
 export interface PrefatoryMaterial {
@@ -26,7 +26,7 @@ export interface PrefatoryMaterial {
     roman?: string;
   };
   content: Content;
-  part_num?: number;
+  part_id?: string; // Changed from part_num
 }
 
 export interface StructureLevel {
@@ -107,6 +107,7 @@ export interface Grantha extends GranthaMetadata {
   passages: Passage[];
   concluding_material: PrefatoryMaterial[]; // Changed to non-optional array
   commentaries: Commentary[]; // Changed to non-optional array
+  parts?: { file: string; id: string }[];
 }
 
 export interface GranthaMetadata {
@@ -118,6 +119,7 @@ export interface GranthaMetadata {
 
 export interface PassageGroup {
   level: string;
+  partId?: string; // Add partId to PassageGroup
   passages?: Passage[];
   children?: PassageGroup[];
 }
@@ -159,12 +161,11 @@ export interface GranthaMetadataOnly {
   metadata: Metadata;
   structure_levels: StructureLevel[];
   commentaries?: Commentary[];
-  parts: string[]; // Array of part file names, e.g., ["part1.json", "part2.json"]
+  parts: { file: string; id: string }[]; // Array of part file names, e.g., ["part1.json", "part2.json"]
 }
-
-// The type returned by loadGrantha.
-// For single-file granthas, it's the full Grantha object.
-// For multi-part granthas, it's the metadata + the content of the first part.
+    
+    // The type returned by loadGrantha.
+    // For single-file granthas, it's the full Grantha object.// For multi-part granthas, it's the metadata + the content of the first part.
 // export type LoadedGrantha = Grantha | (GranthaMetadataOnly & { initialPartContent: GranthaPartContent });
 
 // In-memory cache for grantha data
@@ -243,70 +244,65 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
     const metadataResponse = await fetch(getAssetPath(`/data/library/${granthaId}/metadata.json`));
 
     if (metadataResponse.ok) {
-      // It's a multi-part grantha
-      const multiPartMetadata: GranthaMetadataOnly = await metadataResponse.json();
+      // It's a multi-part grantha. The raw metadata has `id` as `number[]`.
+      // We convert it to `string` to match our app's internal types.
+      const rawMetadata = await metadataResponse.json();
+      const multiPartMetadata: GranthaMetadataOnly = {
+        ...rawMetadata,
+        parts: rawMetadata.parts.map((p: { file: string; id: number[] }) => ({
+          file: p.file,
+          id: p.id && p.id.length > 0 ? String(p.id[0]) : p.file.replace('.json', ''),
+        })),
+      };
 
       if (!multiPartMetadata.parts || multiPartMetadata.parts.length === 0) {
         throw new Error(`Multi-part grantha ${granthaId} has no parts defined in metadata.json`);
       }
 
-      // Fetch all part files in parallel
-      const partPromises = multiPartMetadata.parts.map(partFileName =>
-        fetch(getAssetPath(`/data/library/${granthaId}/${partFileName}`))
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
-            }
-            return res.json();
-          })
-      );
+      // Fetch ONLY the first part
+      const firstPartInfo = multiPartMetadata.parts[0];
+      const firstPartFileName = firstPartInfo.file;
+      const firstPartResponse = await fetch(getAssetPath(`/data/library/${granthaId}/${firstPartFileName}`));
+      if (!firstPartResponse.ok) {
+        throw new Error(`Failed to load initial part file ${firstPartFileName} for grantha ${granthaId}`);
+      }
+      const firstPartContent: GranthaPartContent = await firstPartResponse.json();
 
-      const allPartContents: GranthaPartContent[] = await Promise.all(partPromises);
-
-      // Merge all parts into a single Grantha object
-      const mergedGrantha: Grantha = {
+      // Create a partial Grantha object with metadata and the first part's content
+      const partialGrantha: Grantha = {
         ...multiPartMetadata,
-        id: multiPartMetadata.grantha_id, // Derived from grantha_id
-        title: multiPartMetadata.canonical_title, // Derived from canonical_title
-        title_deva: multiPartMetadata.canonical_title, // Placeholder, needs actual Devanari title
-        title_iast: multiPartMetadata.canonical_title, // Placeholder, needs actual IAST title
-        aliases: multiPartMetadata.aliases || [], // Ensure aliases is always an array
-        prefatory_material: [],
-        passages: [],
-        concluding_material: [],
+        id: multiPartMetadata.grantha_id,
+        title: multiPartMetadata.canonical_title,
+        title_deva: multiPartMetadata.canonical_title, // Placeholder
+        title_iast: multiPartMetadata.canonical_title, // Placeholder
+        aliases: multiPartMetadata.aliases || [],
+        parts: multiPartMetadata.parts, // Store the list of all parts
+        prefatory_material: (firstPartContent.prefatory_material || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
+        passages: (firstPartContent.passages || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
+        concluding_material: (firstPartContent.concluding_material || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
         commentaries: multiPartMetadata.commentaries
           ? JSON.parse(JSON.stringify(multiPartMetadata.commentaries)).map((c: Commentary) => ({ ...c, passages: [] }))
           : [],
       };
 
-      allPartContents.forEach((partContent, index) => {
-        const part_num = index + 1;
-        if (partContent.prefatory_material) {
-          mergedGrantha.prefatory_material.push(...partContent.prefatory_material.map(p => ({...p, part_num})));
-        }
-        if (partContent.passages) {
-          mergedGrantha.passages.push(...partContent.passages.map(p => ({...p, part_num})));
-        }
-        if (partContent.concluding_material) {
-          mergedGrantha.concluding_material.push(...partContent.concluding_material.map(p => ({...p, part_num})));
-        }
-        if (partContent.commentaries) {
-          partContent.commentaries.forEach(commentaryPart => {
-            const existingCommentary = mergedGrantha.commentaries.find(
-              c => c.commentary_id === commentaryPart.commentary_id
-            );
-            if (existingCommentary) {
-              existingCommentary.passages.push(...commentaryPart.passages);
-            } else {
-              mergedGrantha.commentaries.push(commentaryPart);
-            }
-          });
-        }
-      });
+      // Merge commentaries from the first part
+      if (firstPartContent.commentaries) {
+        firstPartContent.commentaries.forEach(commentaryPart => {
+          const existingCommentary = partialGrantha.commentaries.find(
+            c => c.commentary_id === commentaryPart.commentary_id
+          );
+          if (existingCommentary) {
+            existingCommentary.passages.push(...commentaryPart.passages);
+          } else {
+            // This case should ideally not happen if metadata is correct
+            partialGrantha.commentaries.push(commentaryPart);
+          }
+        });
+      }
 
-      // Cache and return the fully assembled grantha
-      granthaCache.set(granthaId, mergedGrantha);
-      return mergedGrantha;
+      // Cache and return the partially assembled grantha
+      granthaCache.set(granthaId, partialGrantha);
+      return partialGrantha;
 
     } else if (metadataResponse.status === 404) {
       // 2. If metadata.json not found, assume it's a single-file grantha
@@ -430,6 +426,11 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
         level: groupKey,
       };
 
+      // If it's a top-level group and passages have part_id, assign it
+      if (refLevel === 0 && groupPassages.length > 0 && groupPassages[0].part_id) {
+        passageGroup.partId = groupPassages[0].part_id;
+      }
+
       if (structureLevel.children && structureLevel.children.length > 0) {
         // If there are more levels, recurse
         passageGroup.children = buildNestedGroups(groupPassages, structureLevel.children[0], refLevel + 1);
@@ -443,6 +444,40 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
 
   if (isHierarchical) {
     hierarchy.main = buildNestedGroups(grantha.passages, structure[0], 0);
+
+    // Add placeholders for unloaded parts
+    if (grantha.parts) {
+      const existingPartIds = new Set(hierarchy.main.map(group => group.partId).filter(Boolean));
+
+      grantha.parts.forEach((part) => {
+        if (!existingPartIds.has(part.id)) {
+          // Derive a display level from the part.id (e.g., "part1" -> "1")
+          const partNumMatch = part.id.match(/\d+/);
+          const displayNum = partNumMatch ? partNumMatch[0] : '';
+          const groupKey = `${structure[0].scriptNames.devanagari} ${displayNum}`;
+          hierarchy.main.push({
+            level: groupKey,
+            partId: part.id,
+            children: [], // Placeholder
+          });
+          existingPartIds.add(part.id);
+        }
+      });
+
+      // Sort the main hierarchy by partId (numerically) or by level if partId is missing
+      hierarchy.main.sort((a, b) => {
+        const getSortKey = (group: PassageGroup) => {
+          if (group.partId) {
+            const match = group.partId.match(/\d+/);
+            return match ? parseInt(match[0]) : 0;
+          } else {
+            const match = group.level.match(/\s(\d+)$/);
+            return match ? parseInt(match[1]) : 0;
+          }
+        };
+        return getSortKey(a) - getSortKey(b);
+      });
+    }
   } else {
     hierarchy.main = [
       {        level: "Passages",
@@ -451,5 +486,24 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
     ];
   }
 
-  return hierarchy;
-}
+    return hierarchy;
+
+  }
+
+  
+
+  export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
+
+    const response = await fetch(getAssetPath(`/data/library/${granthaId}/${partFileName}`));
+
+    if (!response.ok) {
+
+      throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
+
+    }
+
+    return response.json();
+
+  }
+
+  

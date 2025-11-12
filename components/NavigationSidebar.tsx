@@ -1,4 +1,4 @@
-import { Grantha, GranthaMetadata, getPassageHierarchy } from "@/lib/data";
+import { Grantha, GranthaMetadata, Passage, PassageGroup, PrefatoryMaterial, getPassageHierarchy } from "@/lib/data";
 import GranthaSelector from "./GranthaSelector";
 import { useEffect, useRef, useState } from "react";
 import Accordion from "./Accordion";
@@ -11,24 +11,18 @@ interface NavigationSidebarProps {
   selectedRef: string;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
+  loadPart: (partId: string) => Promise<void>;
 }
 
 export default function NavigationSidebar({
-
   grantha,
-
   granthas,
-
   selectedRef,
-
   onGranthaChange,
-
   onVerseSelect,
-
+  loadPart,
 }: NavigationSidebarProps) {
-
   const hierarchy = getPassageHierarchy(grantha);
-
   const verseRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
 
   const [openAccordions, setOpenAccordions] = useState<string[]>(() => {
@@ -48,12 +42,12 @@ export default function NavigationSidebar({
 
   const uiStrings = getUIStrings();
 
-  // Auto-open accordion when grantha or selectedRef changes
+  // Auto-open accordion and scroll to selected verse when selection changes
   useEffect(() => {
-    const findPath = (groups: any[], ref: string, currentPath: string[] = []): string[] | null => {
+    const findPath = (groups: PassageGroup[], ref: string, currentPath: string[] = []): string[] | null => {
       for (const group of groups) {
         const newPath = [...currentPath, group.level];
-        if (group.passages?.some((p: any) => p.ref === ref)) {
+        if (group.passages?.some((p: Passage) => p.ref === ref)) {
           return newPath;
         }
         if (group.children) {
@@ -70,24 +64,48 @@ export default function NavigationSidebar({
     if (path) {
       setOpenAccordions((prev) => [...new Set([...prev, ...path])]);
     }
+
+    // Delay scroll to allow accordions to open
+    setTimeout(() => {
+      const element = verseRefs.current[selectedRef];
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grantha.grantha_id, selectedRef]);
 
-  // Auto-scroll to selected verse when selection changes
-  useEffect(() => {
-    const element = verseRefs.current[selectedRef];
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [selectedRef]);
+  const toggleAccordion = async (level: string) => {
+    // If we are opening the accordion, check if we need to load data
+    if (!openAccordions.includes(level)) {
+      const findGroup = (groups: PassageGroup[], targetLevel: string): PassageGroup | null => {
+        for (const group of groups) {
+          if (group.level === targetLevel) return group;
+          if (group.children) {
+            const found = findGroup(group.children, targetLevel);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
 
-  const toggleAccordion = (level: string) => {
+      const group = findGroup(hierarchy.main, level);
+
+      // Check if it's a placeholder that needs loading.
+      // A placeholder has an empty `children` array and no `passages`.
+      if (group && !group.passages && group.children && group.children.length === 0 && group.partId) {
+        // Use the partId directly from the group to load the part
+        await loadPart(group.partId);
+      }
+    }
+
+    // Now, toggle the accordion state
     setOpenAccordions((prev) =>
       prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level],
     );
   };
 
-  const renderPassageGroup = (group: any, level: number) => {
+  const renderPassageGroup = (group: PassageGroup, level: number) => {
     if (group.children) {
       return (
         <Accordion
@@ -97,13 +115,13 @@ export default function NavigationSidebar({
           onToggle={() => toggleAccordion(group.level)}
           level={level}
         >
-          {group.children.map((child: any) => renderPassageGroup(child, level + 1))}
+          {group.children.map((child) => renderPassageGroup(child, level + 1))}
         </Accordion>
       );
     } else if (group.passages) {
       return (
         <div key={group.level} style={{ paddingLeft: `${level * 0.2}rem` }}>
-          {group.passages.map((passage: any, index: number) => (
+          {group.passages.map((passage: Passage, index: number) => (
             <PassageLink
               key={`${passage.ref}-${index}`}
               ref={(el) => {
@@ -112,7 +130,12 @@ export default function NavigationSidebar({
               passage={passage}
               grantha={grantha}
               isSelected={passage.ref === selectedRef}
-              onVerseSelect={onVerseSelect}
+              onVerseSelect={async (ref) => {
+                if (passage.part_id) {
+                  await loadPart(passage.part_id);
+                }
+                onVerseSelect(ref);
+              }}
             />
           ))}
         </div>
@@ -150,7 +173,13 @@ export default function NavigationSidebar({
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
-            onVerseSelect={onVerseSelect}
+            onVerseSelect={async (ref) => {
+              const p = passage as Passage | PrefatoryMaterial;
+              if (p.part_id) {
+                await loadPart(p.part_id);
+              }
+              onVerseSelect(ref);
+            }}
           />
         ))}
 
@@ -165,7 +194,13 @@ export default function NavigationSidebar({
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
-            onVerseSelect={onVerseSelect}
+            onVerseSelect={async (ref) => {
+              const p = passage as Passage | PrefatoryMaterial;
+              if (p.part_id) {
+                await loadPart(p.part_id);
+              }
+              onVerseSelect(ref);
+            }}
           />
         ))}
       </div>

@@ -3,6 +3,7 @@ import json
 import os
 import glob
 from datetime import datetime, timezone
+from validate_grantha_integrity import validate_grantha_directory
 
 def create_envelope_file(parts_dir, output_filepath):
     """
@@ -22,7 +23,16 @@ def create_envelope_file(parts_dir, output_filepath):
         print(f"No 'part*.json' files found in {parts_dir}")
         return
 
-    part_filenames = [os.path.basename(f) for f in part_files]
+    part_details = []
+    for part_file in part_files:
+        with open(part_file, 'r', encoding='utf-8') as f:
+            part_data = json.load(f)
+            adhyayas = sorted(list(set([int(p['ref'].split('.')[0]) for p in part_data.get('passages', [])])))
+            part_details.append({
+                "file": os.path.basename(part_file),
+                "adhyayas": adhyayas
+            })
+
     grantha_id = "brihadaranyaka-upanishad" # Hardcoded for this task
 
     envelope_data = {
@@ -55,7 +65,7 @@ def create_envelope_file(parts_dir, output_filepath):
             }
         ],
         "variants_available": [],
-        "parts": part_filenames
+        "parts": part_details
     }
 
     # Ensure the output directory exists
@@ -65,7 +75,17 @@ def create_envelope_file(parts_dir, output_filepath):
         json.dump(envelope_data, f, ensure_ascii=False, indent=2)
 
     print(f"Successfully created envelope file at: {output_filepath}")
-    print(f"It contains references to {len(part_filenames)} part files.")
+    print(f"It contains references to {len(part_details)} part files.")
+
+    # Automatically run validation after creating the file
+    errors = []
+    validate_grantha_directory(parts_dir, errors)
+    if errors:
+        print("\n--- Validation Failed on newly created file! Errors found: ---")
+        for error in errors:
+            print(f"- {error}")
+    else:
+        print("\n--- Validation Successful on newly created file! ---")
 
 def main():
     parser = argparse.ArgumentParser(

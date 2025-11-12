@@ -18,6 +18,8 @@ interface TabletLayoutProps {
   updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
   granthaIdToDevanagariTitle: { [key: string]: string };
   granthaIdToLatinTitle: { [key: string]: string };
+  loadPart: (partId: string) => Promise<void>;
+  isLoadingPart: boolean;
 }
 
 export default function TabletLayout({
@@ -30,6 +32,8 @@ export default function TabletLayout({
   updateHash,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
+  loadPart,
+  isLoadingPart,
 }: TabletLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -100,6 +104,8 @@ export default function TabletLayout({
               onVerseSelect={onVerseSelect}
               title={grantha.canonical_title}
               hideTitle={true}
+              loadPart={loadPart}
+              isLoadingPart={isLoadingPart}
             />
           </Panel>
 
@@ -139,6 +145,7 @@ export default function TabletLayout({
             onVerseSelect(ref);
             setIsNavOpen(false);
           }}
+          loadPart={loadPart}
         />
       </MobileDrawer>
     </div>

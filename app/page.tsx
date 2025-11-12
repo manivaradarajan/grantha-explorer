@@ -8,7 +8,8 @@ import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
 import { useVerseHash } from "@/hooks/useVerseHash";
-import { useGrantha, useAvailableGranthas } from "@/hooks/useGrantha";
+import { useAvailableGranthas } from "@/hooks/useGrantha";
+import { useGranthaLoader } from "@/hooks/useGranthaLoader";
 import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal"; // Import the new modal component
@@ -57,12 +58,14 @@ export default function Home() {
     updateCommentaryOpen,
   } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1"); // Removed currentGrantha and granthas
 
-  // Load current grantha data via React Query
+  // Load current grantha data via the new loader hook
   const {
-    data: currentGrantha,
-    isLoading: granthaLoading,
+    grantha: currentGrantha,
+    isLoading: isGranthaLoading,
     error: granthaError,
-  } = useGrantha(granthaId);
+    loadPart,
+    isLoadingPart,
+  } = useGranthaLoader(granthaId);
 
   // Track previous grantha to detect changes
   const previousGranthaId = useRef<string | null>(null);
@@ -237,7 +240,7 @@ export default function Home() {
     );
   }
 
-  if (granthaLoading || !currentGrantha) {
+  if (isGranthaLoading || !currentGrantha) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-gray-500">Loading {granthaId}...</p>
@@ -261,6 +264,8 @@ export default function Home() {
           updateCommentaryOpen={updateCommentaryOpen}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -286,6 +291,8 @@ export default function Home() {
           updateHash={updateHash}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -314,6 +321,7 @@ export default function Home() {
               selectedRef={verseRef}
               onGranthaChange={handleGranthaChange}
               onVerseSelect={handleVerseSelect}
+              loadPart={loadPart}
             />
           </Panel>
 
@@ -330,6 +338,8 @@ export default function Home() {
               selectedRef={verseRef}
               onVerseSelect={handleVerseSelect}
               title={currentGrantha.canonical_title}
+              loadPart={loadPart}
+              isLoadingPart={isLoadingPart}
             />
           </Panel>
 

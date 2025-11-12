@@ -24,6 +24,8 @@ interface MobileLayoutProps {
   updateCommentaryOpen: (isOpen: boolean) => void;
   granthaIdToDevanagariTitle: { [key: string]: string };
   granthaIdToLatinTitle: { [key: string]: string };
+  loadPart: (partId: string) => Promise<void>;
+  isLoadingPart: boolean;
 }
 
 export default function MobileLayout({
@@ -38,6 +40,8 @@ export default function MobileLayout({
   updateCommentaryOpen,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
+  loadPart,
+  isLoadingPart,
 }: MobileLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
@@ -116,6 +120,8 @@ export default function MobileLayout({
           onVerseSelect={handleVerseSelect}
           title={grantha.canonical_title}
           hideTitle={true}
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
         />
       </div>
 
@@ -133,6 +139,7 @@ export default function MobileLayout({
             onVerseSelect(ref);
             setIsNavOpen(false);
           }}
+          loadPart={loadPart}
         />
       </MobileDrawer>
 
