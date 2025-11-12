@@ -1,8 +1,17 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Grantha, GranthaPartContent, loadGrantha, loadGranthaPart } from "@/lib/data";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function useGranthaLoader(granthaId: string) {
+interface UseGranthaLoaderReturn {
+  grantha: Grantha | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+  loadPart: (partId: string) => Promise<void>;
+  isLoadingPart: boolean;
+}
+
+export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
   const queryClient = useQueryClient();
   const [isLoadingPart, setIsLoadingPart] = useState(false);
 
@@ -36,7 +45,7 @@ export function useGranthaLoader(granthaId: string) {
     setIsLoadingPart(true);
     try {
       const partFileName = partInfo.file;
-      const partContent = await loadGranthaPart(grantha.grantha_id, partFileName);
+      const partContent = await loadGranthaPart(grantha.id, partFileName);
 
       // Update the query data in the cache
       queryClient.setQueryData<Grantha>(["grantha", granthaId], (oldData) => {
@@ -44,19 +53,34 @@ export function useGranthaLoader(granthaId: string) {
 
         // Create a new grantha object to ensure reactivity
         const newData = { ...oldData };
+        const existingRefs = new Set(oldData.passages.map(p => p.ref));
 
-        // Merge passages
+        // Merge passages, filtering out duplicates
         if (partContent.passages) {
-          newData.passages = [...newData.passages, ...partContent.passages.map(p => ({ ...p, part_id: partId }))];
+          const newPassages = partContent.passages
+            .filter(p => !existingRefs.has(p.ref))
+            .map(p => ({ ...p, part_id: partId }));
+          newData.passages = [...newData.passages, ...newPassages];
         }
-        // Merge prefatory material
+        
+        // Merge prefatory material, filtering out duplicates
+        const existingPrefatoryRefs = new Set(oldData.prefatory_material.map(p => p.ref));
         if (partContent.prefatory_material) {
-          newData.prefatory_material = [...newData.prefatory_material, ...partContent.prefatory_material.map(p => ({ ...p, part_id: partId }))];
+          const newPrefatory = partContent.prefatory_material
+            .filter(p => !existingPrefatoryRefs.has(p.ref))
+            .map(p => ({ ...p, part_id: partId }));
+          newData.prefatory_material = [...newData.prefatory_material, ...newPrefatory];
         }
-        // Merge concluding material
+
+        // Merge concluding material, filtering out duplicates
+        const existingConcludingRefs = new Set(oldData.concluding_material.map(p => p.ref));
         if (partContent.concluding_material) {
-          newData.concluding_material = [...newData.concluding_material, ...partContent.concluding_material.map(p => ({ ...p, part_id: partId }))];
+          const newConcluding = partContent.concluding_material
+            .filter(p => !existingConcludingRefs.has(p.ref))
+            .map(p => ({ ...p, part_id: partId }));
+          newData.concluding_material = [...newData.concluding_material, ...newConcluding];
         }
+
         // Merge commentaries
         if (partContent.commentaries) {
           partContent.commentaries.forEach(commentaryPart => {
@@ -64,7 +88,9 @@ export function useGranthaLoader(granthaId: string) {
               c => c.commentary_id === commentaryPart.commentary_id
             );
             if (existingCommentary) {
-              existingCommentary.passages.push(...commentaryPart.passages);
+              const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
+              const newCommentaryPassages = commentaryPart.passages.filter(p => !existingCommentaryRefs.has(p.ref));
+              existingCommentary.passages.push(...newCommentaryPassages);
             }
           });
         }

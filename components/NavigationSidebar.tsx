@@ -73,7 +73,7 @@ export default function NavigationSidebar({
       }
     }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grantha.grantha_id, selectedRef]);
+  }, [grantha, selectedRef]);
 
   const toggleAccordion = async (level: string) => {
     // If we are opening the accordion, check if we need to load data

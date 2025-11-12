@@ -104,10 +104,26 @@ export default function Home() {
 
   // Validate verse ref when it changes
   useEffect(() => {
-    if (!currentGrantha) return;
+    if (!currentGrantha) {
+      return;
+    }
 
     // Skip validation for default verse ref "1" - grantha change effect handles this
-    if (verseRef === "1") return;
+    if (verseRef === "1") {
+      return;
+    }
+
+    // For multi-part granthas, check if the required part is loaded before validating
+    if (currentGrantha.parts) {
+      const refParts = verseRef.split('.');
+      if (refParts.length > 0) {
+        const topLevelRef = refParts[0];
+        const isPartLoaded = currentGrantha.passages.some(p => p.part_id === topLevelRef);
+        if (!isPartLoaded) {
+          return;
+        }
+      }
+    }
 
     const normalized = validateAndNormalizeHash(
       { granthaId, verseRef, commentaries, commentaryOpen },
@@ -122,14 +138,6 @@ export default function Home() {
         `${granthaTitle} ${verseRef}`,
       ]);
       setShowInvalidVerseModal(true);
-
-      // Log source and destination URLs
-      console.log("Invalid Verse Navigation Attempt:");
-      console.log("  Source URL:", window.location.href);
-      // The destination URL would have been the invalid one, but we are preventing navigation.
-      // For logging purposes, we can construct what it *would* have been.
-      const attemptedHash = `#${granthaId}:${verseRef}`;
-      console.log("  Attempted Destination Hash:", attemptedHash);
 
       // Revert the URL to the previous valid state if available
       if (previousUrl) {

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useCallback } from "react";
+import { Spin } from "antd";
 import { Grantha, getAllPassagesForNavigation } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -40,6 +41,14 @@ export default function TextContent({
   const observer = useRef<IntersectionObserver | null>(null);
   const isMobile = useMediaQuery("(max-width: 767px)");
 
+  // Check if the selected verse's part is loaded for multi-part granthas
+  const isMultiPart = grantha.parts && grantha.parts.length > 0;
+  let isSelectedPartLoaded = true;
+  if (isMultiPart && selectedRef !== "1") {
+    const requiredPartId = selectedRef.split('.')[0];
+    isSelectedPartLoaded = passages.some(p => p.part_id === requiredPartId);
+  }
+
   const loaderRef = useCallback((node: HTMLDivElement) => {
     if (isLoadingPart) return;
     if (observer.current) observer.current.disconnect();
@@ -69,13 +78,11 @@ export default function TextContent({
 
   // Auto-scroll to selected verse when selection changes from navigation sidebar
   useEffect(() => {
-    // Don't scroll if the click came from within this component
     if (clickedInternally.current) {
       clickedInternally.current = false;
       return;
     }
 
-    // Scroll to verse when selected (from navigation sidebar or grantha change)
     const currentPassage = passages.find(p => p.ref === selectedRef);
     const key = currentPassage?.part_id ? `${currentPassage.part_id}-${selectedRef}` : selectedRef;
     const element = verseRefs.current[key];
@@ -85,6 +92,15 @@ export default function TextContent({
   }, [selectedRef, passages]);
 
   const hasHierarchicalStructure = grantha.structure_levels && grantha.structure_levels.length > 0;
+
+  // If the required part isn't loaded yet, show a full-panel spinner
+  if (!isSelectedPartLoaded) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col">
@@ -144,8 +160,8 @@ export default function TextContent({
         <div ref={loaderRef} />
 
         {isLoadingPart && (
-          <div className="text-center text-gray-500 py-4">
-            Loading...
+          <div className="text-center py-4 flex justify-center">
+            <Spin />
           </div>
         )}
       </div>
