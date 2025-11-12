@@ -259,16 +259,38 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         throw new Error(`Multi-part grantha ${granthaId} has no parts defined in metadata.json`);
       }
 
-      // Fetch ONLY the first part
-      const firstPartInfo = multiPartMetadata.parts[0];
-      const firstPartFileName = firstPartInfo.file;
-      const firstPartResponse = await fetch(getAssetPath(`/data/library/${granthaId}/${firstPartFileName}`));
-      if (!firstPartResponse.ok) {
-        throw new Error(`Failed to load initial part file ${firstPartFileName} for grantha ${granthaId}`);
-      }
-      const firstPartContent: GranthaPartContent = await firstPartResponse.json();
+      // Fetch all parts that share the same ID as the first part.
+      const firstPartId = multiPartMetadata.parts[0]?.id;
+      const partsToLoad = multiPartMetadata.parts.filter(p => p.id === firstPartId);
 
-      // Create a partial Grantha object with metadata and the first part's content
+      const loadedPartsContent: GranthaPartContent[] = await Promise.all(
+        partsToLoad.map(async (partInfo) => {
+          const response = await fetch(getAssetPath(`/data/library/${granthaId}/${partInfo.file}`));
+          if (!response.ok) {
+            throw new Error(`Failed to load part file ${partInfo.file} for grantha ${granthaId}`);
+          }
+          const content: GranthaPartContent = await response.json();
+          return {
+            ...content,
+            prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.id })),
+            passages: (content.passages || []).map(p => ({ ...p, part_id: partInfo.id })),
+            concluding_material: (content.concluding_material || []).map(p => ({ ...p, part_id: partInfo.id })),
+          };
+        })
+      );
+
+      // Combine the content from all loaded parts
+      const combinedContent: GranthaPartContent = loadedPartsContent.reduce((acc, partContent) => {
+        return {
+          prefatory_material: [...(acc.prefatory_material || []), ...(partContent.prefatory_material || [])],
+          passages: [...(acc.passages || []), ...(partContent.passages || [])],
+          concluding_material: [...(acc.concluding_material || []), ...(partContent.concluding_material || [])],
+          commentaries: [...(acc.commentaries || []), ...(partContent.commentaries || [])],
+        };
+      }, { passages: [] });
+
+
+      // Create a partial Grantha object with metadata and the combined content
       const partialGrantha: Grantha = {
         ...multiPartMetadata,
         id: multiPartMetadata.grantha_id,
@@ -277,25 +299,26 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         title_iast: multiPartMetadata.canonical_title, // Placeholder
         aliases: multiPartMetadata.aliases || [],
         parts: multiPartMetadata.parts, // Store the list of all parts
-        prefatory_material: (firstPartContent.prefatory_material || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
-        passages: (firstPartContent.passages || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
-        concluding_material: (firstPartContent.concluding_material || []).map(p => ({ ...p, part_id: firstPartInfo.id })),
+        prefatory_material: combinedContent.prefatory_material || [],
+        passages: combinedContent.passages || [],
+        concluding_material: combinedContent.concluding_material || [],
         commentaries: multiPartMetadata.commentaries
           ? JSON.parse(JSON.stringify(multiPartMetadata.commentaries)).map((c: Commentary) => ({ ...c, passages: [] }))
           : [],
       };
 
-      // Merge commentaries from the first part
-      if (firstPartContent.commentaries) {
-        firstPartContent.commentaries.forEach(commentaryPart => {
-          const existingCommentary = partialGrantha.commentaries.find(
-            c => c.commentary_id === commentaryPart.commentary_id
-          );
-          if (existingCommentary) {
-            existingCommentary.passages.push(...commentaryPart.passages);
-          } else {
-            // This case should ideally not happen if metadata is correct
-            partialGrantha.commentaries.push(commentaryPart);
+      // Merge commentaries from the loaded parts
+      if (combinedContent.commentaries) {
+        combinedContent.commentaries.forEach(commentaryPart => {
+          if (commentaryPart) {
+            const existingCommentary = partialGrantha.commentaries.find(
+              c => c.commentary_id === commentaryPart.commentary_id
+            );
+            if (existingCommentary) {
+              existingCommentary.passages.push(...commentaryPart.passages);
+            } else {
+              partialGrantha.commentaries.push(commentaryPart);
+            }
           }
         });
       }
