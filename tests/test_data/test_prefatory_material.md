@@ -4,7 +4,10 @@ part_num: 1
 canonical_title: "Test Grantha"
 text_type: upanishad
 language: sanskrit
-structure_levels: []
+structure_levels:
+  - key: Mantra
+    scriptNames:
+      devanagari: मन्त्रः
 commentaries_metadata:
   test-commentator:
     commentary_title: "Test Commentary"
@@ -12,32 +15,29 @@ commentaries_metadata:
       devanagari: "Test"
 ---
 
-### PREFATORY: 0.1 (devanagari: "Test Prefatory")
+# PREFATORY: 0.1 (devanagari: "Test Prefatory")
 
 <!-- sanskrit:devanagari -->
 Prefatory text.
-<!-- /sanskrit:devanagari -->
 
-### COMMENTARY: 0.1
+<!-- commentary: {"commentary_id": "test-commentator"} -->
+# COMMENTARY: 0.1
 
 <!-- sanskrit:devanagari -->
 Commentary on prefatory.
-<!-- /sanskrit:devanagari -->
 
 # Mantra 1.1
 
 <!-- sanskrit:devanagari -->
 Mantra text.
-<!-- /sanskrit:devanagari -->
 
-### COMMENTARY: 1.1
+<!-- commentary: {"commentary_id": "test-commentator"} -->
+# COMMENTARY: 1.1
 
 <!-- sanskrit:devanagari -->
 Commentary on mantra 1.1.
-<!-- /sanskrit:devanagari -->
 
-### CONCLUDING: 1.2 (devanagari: "Test Concluding")
+# CONCLUDING: 1.2 (devanagari: "Test Concluding")
 
 <!-- sanskrit:devanagari -->
 Concluding text.
-<!-- /sanskrit:devanagari -->

@@ -55,10 +55,12 @@ commentaries_metadata:
 
 ### Optional Fields
 
-| Field        | Type   | Description                                    |
-| ------------ | ------ | ---------------------------------------------- |
-| `part_title` | String | A human-readable title for this specific part. |
-| `aliases`    | Array  | An array of alternate names for the grantha.   |
+| Field                | Type    | Description                                                                |
+| -------------------- | ------- | -------------------------------------------------------------------------- |
+| `part_title`         | String  | A human-readable title for this specific part.                             |
+| `aliases`            | Array   | An array of alternate names for the grantha.                               |
+| `variants_available` | Array   | An array of available text variants.                                       |
+| `metadata`           | Object  | Contains metadata related to file processing and quality control.          |
 
 ## 3. Content Blocks
 
@@ -84,24 +86,24 @@ Used for the primary verses of the text.
 
 Used for invocations, introductions, or other material that precedes a main section (e.g., a Shanti Patha).
 
-**Format:** `### PREFATORY: <ref> (devanagari: "<label>")`
+**Format:** `# Prefatory: <ref> (devanagari: "<label>")`
 
 **Example:**
 
 ```markdown
-### PREFATORY: 3.1.0 (devanagari: "शान्तिपाठः")
+# Prefatory: 3.1.0 (devanagari: "शान्तिपाठः")
 ```
 
 #### **Concluding Material**
 
 Used for benedictions or other material that follows a main section.
 
-**Format:** `### CONCLUDING: <ref> (devanagari: "<label>")`
+**Format:** `# Concluding: <ref> (devanagari: "<label>")`
 
 **Example:**
 
 ```markdown
-### CONCLUDING: 3.1.8 (devanagari: "समापनम्")
+# Concluding: 3.1.8 (devanagari: "समापनम्")
 ```
 
 ### 3.2. Sanskrit Content
@@ -120,11 +122,36 @@ Sanskrit text for any passage type **must** be enclosed in a script block.
 
 ### 3.3. Commentaries
 
-Commentaries are linked to a specific passage (`Mantra`, `PREFATORY`, or `CONCLUDING`) via its `<ref>`.
+Commentaries are linked to a specific passage (`Mantra`, `Prefatory`, or `Concluding`) via a mandatory metadata comment.
 
-**Format:** `### COMMENTARY: <ref>`
+**Format:**
+1.  A required HTML comment containing the `commentary_id`.
+2.  A standard Level 1 heading with the `<ref>`.
 
-A commentary heading must be followed by a Sanskrit content block. The metadata for the commentary is defined in the frontmatter and is not repeated here.
+```markdown
+<!-- commentary: {"commentary_id": "ranga-ramanujamuni-prakashika"} -->
+# Commentary: 3.1.1
+```
+
+The `<ref>` in the heading provides the `passage_ref`. It can be a single reference (e.g., `3.1.1`) or a range (e.g., `3.1.1-5`) if the commentary applies to multiple passages. The `commentary_id` in the metadata comment must correspond to an entry in the `commentaries_metadata` section of the YAML frontmatter.
+
+*Note: For backwards compatibility, the parser will tolerate older files that contain additional keys like `passage_ref` within the metadata comment, but these keys are now considered redundant.*
+
+A commentary block must be followed by a Sanskrit content block.
+
+### 3.4. Content Hiding
+
+To control the visibility or processing of certain parts of the text, such as editorial notes or headings not intended for final output, you can enclose the content within `<!-- hide -->` and `<!-- /hide -->` tags.
+
+**Format:**
+
+```markdown
+<!-- hide -->
+
+...Content to be hidden goes here...
+
+<!-- /hide -->
+```
 
 ---
 
@@ -153,7 +180,7 @@ commentaries_metadata:
       devanagari: "रङ्गरामानुजमुनिः"
 ---
 
-### PREFATORY: 3.1.0 (devanagari: "शान्तिपाठः")
+# Prefatory: 3.1.0 (devanagari: "शान्तिपाठः")
 
 <!-- sanskrit:devanagari -->
 
@@ -161,7 +188,8 @@ commentaries_metadata:
 
 <!-- /sanskrit:devanagari -->
 
-### COMMENTARY: 3.1.0
+<!-- commentary: {"commentary_id": "ranga-ramanujamuni-prakashika"} -->
+# Commentary: 3.1.0
 
 <!-- sanskrit:devanagari -->
 
@@ -177,7 +205,8 @@ Commentary on the Shanti Patha.
 
 <!-- /sanskrit:devanagari -->
 
-### COMMENTARY: 3.1.1
+<!-- commentary: {"commentary_id": "ranga-ramanujamuni-prakashika"} -->
+# Commentary: 3.1.1
 
 <!-- sanskrit:devanagari -->
 
@@ -185,7 +214,7 @@ Commentary on Mantra 3.1.1.
 
 <!-- /sanskrit:devanagari -->
 
-### CONCLUDING: 3.1.2 (devanagari: "फलश्रुतिः")
+# Concluding: 3.1.2 (devanagari: "फलश्रुतिः")
 
 <!-- sanskrit:devanagari -->
 
@@ -193,7 +222,8 @@ Concluding text.
 
 <!-- /sanskrit:devanagari -->
 
-### COMMENTARY: 3.1.2
+<!-- commentary: {"commentary_id": "ranga-ramanujamuni-prakashika"} -->
+# Commentary: 3.1.2
 
 <!-- sanskrit:devanagari -->
 

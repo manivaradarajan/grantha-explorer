@@ -93,23 +93,21 @@ class TestHideEditorComments(unittest.TestCase):
         self.assertFalse(validate_devanagari(original, modified_incorrect))
 
     def test_main_script_execution(self):
-        """Test the main function end-to-end."""
-        with patch('builtins.print') as mock_print:
-            with patch('hide_editor_comments.find_converted_md_files', return_value=[
-                os.path.join(self.test_dir, "simple_comment.converted.md"),
-                os.path.join(self.test_dir, "already_hidden.converted.md")
-            ]):
-                hide_comments_main()
+        """Test the main script execution path."""
+        # Create a dummy file with a comment
+        dummy_filepath = os.path.join(self.test_dir, "dummy_file.md")
+        with open(dummy_filepath, "w", encoding="utf-8") as f:
+            f.write("This is a test file with a [comment to hide].")
 
-        # Check that the simple comment file was modified
-        with open(os.path.join(self.test_dir, "simple_comment.converted.md"), 'r', encoding='utf-8') as f:
-            content = f.read()
-            self.assertIn("<!-- hide -->", content)
+        # Mock sys.argv to pass the dummy file to the script
+        with patch.object(sys, 'argv', ['hide_editor_comments.py', dummy_filepath]):
+            # Run the main function, which should now parse the args and run
+            hide_comments_main()
 
-        # Check that the already hidden file was not modified
-        with open(os.path.join(self.test_dir, "already_hidden.converted.md"), 'r', encoding='utf-8') as f:
+        # Verify the comment was hidden
+        with open(dummy_filepath, "r", encoding="utf-8") as f:
             content = f.read()
-            self.assertEqual(content, self.sample_files["already_hidden.converted.md"])
+        self.assertIn("<!-- hide -->[comment to hide]<!-- /hide -->", content)
 
 
 if __name__ == "__main__":

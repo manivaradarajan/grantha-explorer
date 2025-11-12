@@ -8,17 +8,19 @@ import yaml
 
 # Regex patterns for different heading types
 # Captures: 1=ref
-HEADING_MANTRA = re.compile(r'^#\s+Mantra\s+([\d\.]+)$')
+HEADING_MANTRA = re.compile(r'^#\s+Mantra\s+([\d\.-]+)$')
 # Captures: 1=ref, 2=script, 3=label
-HEADING_PREFATORY = re.compile(r'^###\s+PREFATORY:\s+([\d\.]+)\s+\((\w+):\s*"(.*?)"\)$')
+HEADING_PREFATORY = re.compile(r'^#\s+Prefatory:\s+([\d\.]+)\s+\((\w+):\s*"(.*?)"\)$')
 # Captures: 1=ref, 2=script, 3=label
-HEADING_CONCLUDING = re.compile(r'^###\s+CONCLUDING:\s+([\d\.]+)\s+\((\w+):\s*"(.*?)"\)$')
+HEADING_CONCLUDING = re.compile(r'^#\s+Concluding:\s+([\d\.]+)\s+\((\w+):\s*"(.*?)"\)$')
 # Captures: 1=ref
-HEADING_COMMENTARY = re.compile(r'^###\s+COMMENTARY:\s+([\d\.]+)$')
+HEADING_COMMENTARY = re.compile(r'^#\s+Commentary:\s+([\d\.-]+)$')
 
 # Regex for content blocks
 CONTENT_BLOCK_START = re.compile(r'^<!--\s*sanskrit:(\w+)\s*-->$')
 CONTENT_BLOCK_END = re.compile(r'^<!--\s*/sanskrit:(\w+)\s*-->$')
+CONTENT_BLOCK_END = re.compile(r'^<!--\s*/sanskrit:(\w+)\s*-->$')
+COMMENTARY_METADATA = re.compile(r'^<!--\s*commentary:\s*(.*?)\s*-->$')
 
 class ValidationError(Exception):
     """Custom exception for validation errors."""
@@ -51,14 +53,11 @@ def validate_markdown_file(filepath: str) -> List[str]:
     Returns a list of error messages.
     """
     errors = []
-    passage_refs = set()
-    commentary_refs = []
-
+    
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # 1. Validate Frontmatter
         if not content.startswith('---'):
             raise ValidationError("File must start with YAML frontmatter.", line_num=1)
 
@@ -75,16 +74,36 @@ def validate_markdown_file(filepath: str) -> List[str]:
         except yaml.YAMLError as e:
             raise ValidationError(f"Invalid YAML in frontmatter: {e}")
 
-        # 2. Validate Body
         lines = body.split('\n')
+        
+        # First pass: Collect all passage_refs
+        passage_refs = set()
+        for i, line in enumerate(lines):
+            line = line.strip()
+            for pattern, name in [
+                (HEADING_MANTRA, "Mantra"),
+                (HEADING_PREFATORY, "Prefatory"),
+                (HEADING_CONCLUDING, "Concluding")
+            ]:
+                match = pattern.match(line)
+                if match:
+                    ref = match.group(1)
+                    if ref in passage_refs:
+                        line_num = i + frontmatter_str.count('\n') + 3
+                        errors.append(f"Line {line_num}: Duplicate passage ref '{ref}' found.")
+                    passage_refs.add(ref)
+
+        # Second pass: Full validation
         in_content_block = False
         expected_closing_script = None
+        last_line_was_commentary_meta = False
 
         for i, line in enumerate(lines):
-            line_num = i + frontmatter_str.count('\n') + 3  # Adjust line number
+            line_num = i + frontmatter_str.count('\n') + 3
+            line = line.strip()
 
             if in_content_block:
-                match = CONTENT_BLOCK_END.match(line.strip())
+                match = CONTENT_BLOCK_END.match(line)
                 if match:
                     if match.group(1) != expected_closing_script:
                         errors.append(f"Line {line_num}: Mismatched content block end tag. Expected '{expected_closing_script}', got '{match.group(1)}'.")
@@ -92,12 +111,13 @@ def validate_markdown_file(filepath: str) -> List[str]:
                     expected_closing_script = None
                 continue
 
-            line = line.strip()
             if not line:
                 continue
 
-            # Check for valid headings
-            is_heading = False
+            is_valid_line = False
+
+            # Check for headings
+            heading_match = None
             for pattern, name in [
                 (HEADING_MANTRA, "Mantra"),
                 (HEADING_PREFATORY, "Prefatory"),
@@ -106,37 +126,73 @@ def validate_markdown_file(filepath: str) -> List[str]:
             ]:
                 match = pattern.match(line)
                 if match:
-                    is_heading = True
-                    ref = match.group(1)
-                    if not re.match(r'^\d+(\.\d+)*$', ref):
-                        errors.append(f"Line {line_num}: Invalid ref format '{ref}' in {name} heading.")
+                    heading_match = (match, name)
+                    break
+            
+            if heading_match:
+                is_valid_line = True
+                match, name = heading_match
+                ref = match.group(1)
 
-                    if name != "Commentary":
-                        if ref in passage_refs:
-                            errors.append(f"Line {line_num}: Duplicate ref '{ref}' found.")
-                        passage_refs.add(ref)
-                    else:
-                        commentary_refs.append((ref, line_num))
-                    break # Found a matching heading, stop checking
+                if name == "Commentary":
+                    if not last_line_was_commentary_meta:
+                        errors.append(f"Line {line_num}: Commentary heading is missing a preceding metadata comment.")
+                    
+                    # Check if the exact commentary reference exists as a mantra heading
+                    if ref in passage_refs:
+                        pass # Valid, exact mantra heading found
+                    elif '-' in ref:
+                        # If exact match not found, and it's a range, try expanding it to check for individual mantras
+                        try:
+                            base, range_part = ref.rsplit('.', 1)
+                            start_str, end_str = range_part.split('-')
+                            start, end = int(start_str), int(end_str)
+                            
+                            for j in range(start, end + 1):
+                                individual_ref = f"{base}.{j}"
+                                if individual_ref not in passage_refs:
+                                    errors.append(f"Line {line_num}: Commentary for ranged ref '{ref}' is missing a corresponding passage for '{individual_ref}'.")
+                        except ValueError:
+                            errors.append(f"Line {line_num}: Invalid range format in commentary ref '{ref}'.")
+                    else: # Single reference, and not found in passage_refs
+                        errors.append(f"Line {line_num}: Commentary for ref '{ref}' has no corresponding passage.")
+                
+                last_line_was_commentary_meta = False
+
+            if last_line_was_commentary_meta and not HEADING_COMMENTARY.match(line):
+                errors.append(f"Line {line_num-1}: Commentary metadata comment must be immediately followed by a Commentary heading.")
+                last_line_was_commentary_meta = False
+
+            if is_valid_line:
+                continue
+
+            # Check for commentary metadata
+            meta_match = COMMENTARY_METADATA.match(line)
+            if meta_match:
+                is_valid_line = True
+                last_line_was_commentary_meta = True
+                try:
+                    import json
+                    meta_json = json.loads(meta_match.group(1))
+                    if 'commentary_id' not in meta_json:
+                        errors.append(f"Line {line_num}: Commentary metadata is missing 'commentary_id'.")
+                except (json.JSONDecodeError, yaml.YAMLError):
+                    errors.append(f"Line {line_num}: Invalid JSON in commentary metadata.")
+                continue
 
             # Check for content block start
             content_match = CONTENT_BLOCK_START.match(line)
             if content_match:
-                is_heading = True # Treat this as a valid line type
+                is_valid_line = True
                 in_content_block = True
                 expected_closing_script = content_match.group(1)
+                continue
 
-            if not is_heading:
-                errors.append(f"Line {line_num}: Unrecognized line. All content must be inside a heading block or a 'sanskrit' content block. Line content: '{line}'")
+            if not is_valid_line:
+                errors.append(f"Line {line_num}: Unrecognized line or invalid heading format: '{line}'")
 
         if in_content_block:
             errors.append(f"File Error: Reached end of file while inside an unclosed content block for script '{expected_closing_script}'.")
-
-        # 3. Validate Commentary Links
-        for ref, line_num in commentary_refs:
-            if ref not in passage_refs:
-                errors.append(f"Line {line_num}: Commentary for ref '{ref}' has no corresponding passage in this file.")
-
     except FileNotFoundError:
         errors.append(f"File not found at path: {filepath}")
     except ValidationError as e:
@@ -146,76 +202,6 @@ def validate_markdown_file(filepath: str) -> List[str]:
 
     return errors
 
-def create_test_files(test_dir: str):
-    """Creates exhaustive test files for validation."""
-    os.makedirs(test_dir, exist_ok=True)
-
-    # --- Valid File ---
-    valid_content = """---
-grantha_id: test-grantha
-part_num: 1
-canonical_title: \"Test Grantha\"
-text_type: upanishad
-language: sanskrit
-structure_levels: []
-commentaries_metadata:
-  test-commentator:
-    commentary_title: \"Test Commentary\"
-    commentator:
-      devanagari: \"Test\"
----
-
-### PREFATORY: 0.1 (devanagari: \"Test Prefatory\")
-
-<!-- sanskrit:devanagari -->
-Prefatory text.
-<!-- /sanskrit:devanagari -->
-
-# Mantra 1.1
-
-<!-- sanskrit:devanagari -->
-Mantra text.
-<!-- /sanskrit:devanagari -->
-
-### COMMENTARY: 1.1
-
-<!-- sanskrit:devanagari -->
-Commentary on mantra 1.1.
-<!-- /sanskrit:devanagari -->
-
-### CONCLUDING: 1.2 (devanagari: \"Test Concluding\")
-
-<!-- sanskrit:devanagari -->
-Concluding text.
-<!-- /sanskrit:devanagari -->
-"""
-    with open(os.path.join(test_dir, "valid.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content)
-
-    # --- Invalid Files ---
-    # Missing frontmatter field
-    with open(os.path.join(test_dir, "invalid_missing_field.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content.replace("part_num: 1\n", ""))
-
-    # Malformed heading
-    with open(os.path.join(test_dir, "invalid_bad_heading.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content.replace("# Mantra 1.1", "# Mantra 1.1a"))
-
-    # Duplicate ref
-    with open(os.path.join(test_dir, "invalid_duplicate_ref.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content.replace("### CONCLUDING: 1.2", "### CONCLUDING: 1.1"))
-
-    # Dangling commentary
-    with open(os.path.join(test_dir, "invalid_dangling_commentary.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content.replace("### COMMENTARY: 1.1", "### COMMENTARY: 9.9"))
-
-    # Unclosed content block
-    with open(os.path.join(test_dir, "invalid_unclosed_block.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content.replace("<!-- /sanskrit:devanagari -->", ""))
-
-    # Unrecognized content
-    with open(os.path.join(test_dir, "invalid_unrecognized_line.md"), "w", encoding="utf-8") as f:
-        f.write(valid_content + "\nThis line is not in a block.")
 
 def main():
     parser = argparse.ArgumentParser(

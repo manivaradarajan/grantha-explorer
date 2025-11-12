@@ -14,6 +14,18 @@ import yaml
 from .hasher import hash_grantha, extract_content_text
 
 
+def get_lowest_level_key(structure_levels: List[Dict[str, Any]]) -> str:
+    """Recursively get the lowest 'key' value from structure_levels."""
+    if not structure_levels:
+        return 'Mantra'  # Default if none
+
+    last_level = structure_levels[-1]
+    if 'children' in last_level and last_level['children']:
+        return get_lowest_level_key(last_level['children'])
+    else:
+        return last_level['key']
+
+
 def build_hierarchy_tree(structure_levels: List[Dict[str, Any]],
                          passages: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Build a hierarchical tree structure from flat passage list.
@@ -142,6 +154,7 @@ def write_tree_to_markdown(tree: Dict[str, Any],
 
     # Get level name for headers
     level_name = get_header_level_name(structure_levels, depth)
+    lowest_level_key = get_lowest_level_key(structure_levels)
 
     # Sort keys numerically
     sorted_keys = sorted(tree.keys(), key=lambda x: int(x) if x.isdigit() else x)
@@ -151,7 +164,7 @@ def write_tree_to_markdown(tree: Dict[str, Any],
         current_ref = f"{ref_prefix}{key}" if ref_prefix else key
 
         # Write header for this level
-        header_level = depth + 1
+        header_level = 1 if level_name == lowest_level_key else depth + 1
         header_prefix = '#' * header_level
         header_text = f"{level_name} {current_ref}"
         lines.append(f"{header_prefix} {header_text}\n")
@@ -169,8 +182,7 @@ def write_tree_to_markdown(tree: Dict[str, Any],
                 for comm_data in commentary_map[passage_ref]:
                     # Add metadata comment for reconstruction
                     comm_metadata = {
-                        'commentary_id': comm_data['commentary_id'],
-                        'passage_ref': passage_ref
+                        'commentary_id': comm_data['commentary_id']
                     }
                     lines.append(f"<!-- commentary: {json.dumps(comm_metadata, ensure_ascii=False)} -->")
 
@@ -289,7 +301,7 @@ def convert_to_markdown(data: Dict[str, Any],
             label_info = item.get('label', {})
             label_text = label_info.get('devanagari', '')
             if ref and label_text:
-                header = f'### PREFATORY: {ref} (devanagari: "{label_text}")'
+                header = f'# Prefatory: {ref} (devanagari: "{label_text}")'
                 content_lines.append(header)
                 content_md = format_content(item['content'], scripts)
                 if content_md:
@@ -349,7 +361,7 @@ def convert_to_markdown(data: Dict[str, Any],
             label_info = item.get('label', {})
             label_text = label_info.get('devanagari', '')
             if ref and label_text:
-                header = f'### CONCLUDING: {ref} (devanagari: "{label_text}")'
+                header = f'# Concluding: {ref} (devanagari: "{label_text}")'
                 content_lines.append(header)
                 content_md = format_content(item['content'], scripts)
                 if content_md:

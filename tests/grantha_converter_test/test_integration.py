@@ -36,6 +36,7 @@ class TestLibraryRoundtrip:
             # Convert MD → JSON
             with open(md_path, 'r', encoding='utf-8') as f:
                 md_content = f.read()
+            print(f"Generated Markdown for {json_file.stem}:\n{md_content}")
             json_data = convert_to_json(md_content)
             with open(roundtrip_path, 'w', encoding='utf-8') as f:
                 json.dump(json_data, f, ensure_ascii=False, indent=2)
