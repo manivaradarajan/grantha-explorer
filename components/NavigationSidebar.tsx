@@ -114,6 +114,7 @@ export default function NavigationSidebar({
           isOpen={openAccordions.includes(group.level)}
           onToggle={() => toggleAccordion(group.level)}
           level={level}
+          isSecondLevel={level === 1}
         >
           {group.children.map((child) => renderPassageGroup(child, level + 1))}
         </Accordion>

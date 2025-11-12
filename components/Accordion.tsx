@@ -6,6 +6,7 @@ interface AccordionProps {
   isOpen: boolean;
   onToggle: () => void;
   level?: number;
+  isSecondLevel?: boolean;
 }
 
 export default function Accordion({
@@ -14,6 +15,7 @@ export default function Accordion({
   isOpen,
   onToggle,
   level = 0,
+  isSecondLevel = false,
 }: AccordionProps) {
   return (
     <div>
@@ -23,11 +25,12 @@ export default function Accordion({
         style={{ paddingLeft: `${1 + level * 0.5}rem` }}
       >
         <span
-          className={`transform transition-transform mr-2 text-gray-600 ${isOpen ? "rotate-90" : ""}`}
+          className={`transform transition-transform mr-2 text-gray-500 ${isOpen ? "rotate-90" : ""}`}
+          style={{ fontSize: isSecondLevel ? '0.9em' : 'inherit' }}
         >
           ▶
         </span>
-        <span className="font-semibold text-gray-600">{title}</span>
+        <span className={"font-semibold text-gray-600}"}>{title}</span>
       </button>
       {isOpen && <div>{children}</div>}
     </div>
