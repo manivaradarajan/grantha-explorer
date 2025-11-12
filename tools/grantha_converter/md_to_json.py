@@ -81,7 +81,7 @@ def convert_to_json(markdown: str) -> Dict[str, Any]:
     lowest_level_key = get_lowest_level_key(structure_levels)
     
     heading_structure_pattern = r'^#\s+(' + '|'.join(re.escape(key) for key in structure_keys) + r')\s+([\d\.]+)$'
-    HEADING_STRUCTURE = re.compile(heading_structure_pattern, re.MULTILINE)
+    HEADING_STRUCTURE = re.compile(heading_structure_pattern, re.MULTILINE | re.IGNORECASE)
 
     data = {
         'grantha_id': frontmatter.get('grantha_id'),
@@ -104,20 +104,54 @@ def convert_to_json(markdown: str) -> Dict[str, Any]:
         key=lambda m: m.start()
     )
 
+    pending_commentary_meta = None
+
     for i, match in enumerate(all_headings):
         start_pos = match.end()
         end_pos = all_headings[i+1].start() if i + 1 < len(all_headings) else len(content)
         
         heading_line = match.group(0).strip()
-        body_content = content[start_pos:end_pos].strip()
+        raw_body_content = content[start_pos:end_pos].strip()
 
-        # Determine which type of heading this is based on the matched pattern
-        # Re-match to know which group is which
+        # Re-match to identify heading type
         match_prefatory = HEADING_PREFATORY.match(heading_line)
         match_concluding = HEADING_CONCLUDING.match(heading_line)
         match_commentary = HEADING_COMMENTARY.match(heading_line)
         match_structure = HEADING_STRUCTURE.match(heading_line)
 
+        if match_commentary:
+            if pending_commentary_meta:
+                ref = match_commentary.group(1)
+                commentary_id = pending_commentary_meta.get('commentary_id')
+
+                if commentary_id and commentary_id in data['commentaries']:
+                    commentary_passage = {
+                        'ref': ref,
+                        'content': parse_sanskrit_content(raw_body_content)
+                    }
+                    data['commentaries'][commentary_id]['passages'].append(commentary_passage)
+                
+                pending_commentary_meta = None # Consume it
+            continue
+
+        # This is a content-bearing heading, not a commentary heading.
+        body_content = raw_body_content
+        
+        # Reset any stale metadata from a previous loop
+        pending_commentary_meta = None
+
+        # Check for attached commentary metadata for the *next* heading
+        meta_match = COMMENTARY_METADATA.search(body_content)
+        if meta_match and body_content.endswith(meta_match.group(0)):
+            try:
+                import json
+                pending_commentary_meta = json.loads(meta_match.group(1))
+                # Clean the metadata from the current body
+                body_content = body_content[:meta_match.start()].strip()
+            except (json.JSONDecodeError, yaml.YAMLError):
+                pending_commentary_meta = None
+
+        # Now process the passage with the cleaned body content
         if match_prefatory:
             ref = match_prefatory.group(1)
             script = match_prefatory.group(2)
@@ -128,7 +162,8 @@ def convert_to_json(markdown: str) -> Dict[str, Any]:
                 'label': {script: label},
                 'content': parse_sanskrit_content(body_content)
             }
-            data['prefatory_material'].append(passage)
+            if passage['content']:
+                data['prefatory_material'].append(passage)
 
         elif match_concluding:
             ref = match_concluding.group(1)
@@ -140,31 +175,13 @@ def convert_to_json(markdown: str) -> Dict[str, Any]:
                 'label': {script: label},
                 'content': parse_sanskrit_content(body_content)
             }
-            data['concluding_material'].append(passage)
+            if passage['content']:
+                data['concluding_material'].append(passage)
 
-        elif match_commentary:
-            ref = match_commentary.group(1)
-            meta_match = COMMENTARY_METADATA.search(body_content)
-            if meta_match:
-                try:
-                    import json
-                    meta_json = json.loads(meta_match.group(1))
-                    commentary_id = meta_json.get('commentary_id')
-
-                    if commentary_id in data['commentaries']:
-                        body_content = body_content.replace(meta_match.group(0), '').strip()
-                        commentary_passage = {
-                            'ref': ref,
-                            'content': parse_sanskrit_content(body_content)
-                        }
-                        data['commentaries'][commentary_id]['passages'].append(commentary_passage)
-                except (json.JSONDecodeError, yaml.YAMLError):
-                    pass
-        
         elif match_structure:
             key = match_structure.group(1)
             ref = match_structure.group(2)
-            if key == lowest_level_key:
+            if key.lower() == lowest_level_key.lower():
                 passage = {
                     'ref': ref,
                     'passage_type': 'main',
