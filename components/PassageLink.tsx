@@ -6,6 +6,7 @@ import {
   PrefatoryMaterial,
   getPassageFragment,
 } from "@/lib/data";
+import { stripMarkdown } from "@/lib/stringUtils";
 import { forwardRef } from "react";
 
 interface PassageLinkProps {
@@ -43,8 +44,8 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
       return `${deepestStructure.scriptNames.devanagari} ${lastRefPart}`;
     };
 
-    const label = getLabel();
-    const fragment = getPassageFragment(passage);
+    const label = stripMarkdown(getLabel());
+    const fragment = stripMarkdown(getPassageFragment(passage));
 
     const handleClick = (e: React.MouseEvent) => {
       e.preventDefault();

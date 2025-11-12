@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 import { Spin } from "antd";
 import { Grantha, getAllPassagesForNavigation } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { stripMarkdown } from "@/lib/stringUtils";
 
 const getSectionRef = (ref: string): string => {
   if (!ref) {
@@ -121,7 +122,7 @@ export default function TextContent({
             getSectionRef(passage.ref) !== getSectionRef(prevPassage.ref);
 
           const isSelected = passage.ref === selectedRef;
-          const sanskritText = passage.content.sanskrit?.devanagari || "";
+          const sanskritText = stripMarkdown(passage.content.sanskrit?.devanagari);
           const uniqueKey = passage.part_id ? `${passage.part_id}-${passage.ref}` : passage.ref;
 
           return (

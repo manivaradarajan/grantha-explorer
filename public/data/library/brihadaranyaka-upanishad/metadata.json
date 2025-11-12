@@ -39,88 +39,60 @@
   "variants_available": [],
   "parts": [
     {
-      "file": "part1.json",
-      "id": [
-        3
-      ]
+      "file": "part-1.json",
+      "id": [3]
     },
     {
-      "file": "part2.json",
-      "id": [
-        3
-      ]
+      "file": "part-2.json",
+      "id": [3]
     },
     {
-      "file": "part3.json",
-      "id": [
-        3
-      ]
+      "file": "part-3.json",
+      "id": [3]
     },
     {
-      "file": "part4.json",
-      "id": [
-        3
-      ]
+      "file": "part-4.json",
+      "id": [3]
     },
     {
-      "file": "part5.json",
-      "id": [
-        4
-      ]
+      "file": "part-5.json",
+      "id": [4]
     },
     {
-      "file": "part6.json",
-      "id": [
-        5
-      ]
+      "file": "part-6.json",
+      "id": [5]
     },
     {
-      "file": "part7.json",
-      "id": [
-        5
-      ]
+      "file": "part-7.json",
+      "id": [5]
     },
     {
-      "file": "part8.json",
-      "id": [
-        5
-      ]
+      "file": "part-8.json",
+      "id": [5]
     },
     {
-      "file": "part9.json",
-      "id": [
-        6
-      ]
+      "file": "part-9.json",
+      "id": [6]
     },
     {
-      "file": "part10.json",
-      "id": [
-        6
-      ]
+      "file": "part-10.json",
+      "id": [6]
     },
     {
-      "file": "part11.json",
-      "id": [
-        6
-      ]
+      "file": "part-11.json",
+      "id": [6]
     },
     {
-      "file": "part12.json",
-      "id": [
-        7
-      ]
+      "file": "part-12.json",
+      "id": [7]
     },
     {
-      "file": "part13.json",
-      "id": [
-        8
-      ]
+      "file": "part-13.json",
+      "id": [8]
     },
     {
-      "file": "part14.json",
-      "id": [
-        8
-      ]
+      "file": "part-14.json",
+      "id": [8]
     }
   ]
 }
