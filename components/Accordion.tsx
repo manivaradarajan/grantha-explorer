@@ -19,7 +19,7 @@ export default function Accordion({
     <div>
       <button
         onClick={onToggle}
-        className="w-full text-left py-0 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center min-h-[35px]"
+        className="w-full text-left py-0 px-3 transition-all duration-150 hover:bg-black/5 hover:rounded-lg flex items-center min-h-[40px]"
         style={{ paddingLeft: `${1 + level * 0.5}rem` }}
       >
         <span

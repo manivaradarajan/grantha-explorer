@@ -56,7 +56,7 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
         ref={ref}
         href={`#${grantha.grantha_id}:${passage.ref}`}
         onClick={handleClick}
-        className={`block w-full text-left py-0 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[35px] flex items-center ${
+        className={`block w-full text-left py-0 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[40px] flex items-center ${
           isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
         }`}
       >
