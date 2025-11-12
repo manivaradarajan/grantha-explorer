@@ -100,7 +100,6 @@ export default function TextContent({
         {passages.map((passage, index) => {
           const prevPassage = index > 0 ? passages[index - 1] : null;
           const showSeparator =
-            !isMobile &&
             hasHierarchicalStructure &&
             prevPassage &&
             getSectionRef(passage.ref) !== getSectionRef(prevPassage.ref);
