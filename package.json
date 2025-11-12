@@ -9,7 +9,7 @@
     "lint": "next lint",
     "validate:data": "tsx scripts/validate-data.ts",
     "validate:integrity": "python3 scripts/validate_grantha_integrity.py public/data/library/brihadaranyaka-upanishad",
-    "build:local": "npx tsx scripts/generate-granthas-json.ts && NEXT_PUBLIC_NO_BASE_PATH=true npx next build",
+    "build:local": "npx tsx scripts/generate-granthas-json.ts && NODE_ENV=production NEXT_PUBLIC_NO_BASE_PATH=true next build",
     "serve": "npx serve@latest out",
     "test:deploy": "npm run build:local && npm run serve"
   },
