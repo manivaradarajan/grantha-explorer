@@ -37,7 +37,7 @@ sys.path.insert(0, project_root)
 
 from tools.grantha_converter.md_to_json import convert_to_json
 
-def convert_md_to_part_json(md_filepath, part_num):
+def convert_md_to_part_json(md_filepath):
     """
     Converts a single Markdown file into a structured dictionary that represents a "grantha part".
 
@@ -47,25 +47,27 @@ def convert_md_to_part_json(md_filepath, part_num):
 
     Args:
         md_filepath (str): The path to the input Markdown file.
-        part_num (int): The sequential number for this part of the grantha.
 
     Returns:
         dict: A dictionary representing the grantha part, ready for JSON serialization.
     """
-    print(f"Converting {md_filepath} to part {part_num}...")
+    print(f"Converting {md_filepath}...")
     with open(md_filepath, 'r', encoding='utf-8') as f:
         markdown = f.read()
 
     # Sanitize the markdown by removing any content wrapped in <!-- hide --> tags.
-    # This ensures that editor meta-comments do not end up in the final JSON data.
     sanitized_markdown = re.sub(r'<!--\s*hide\s*-->.*?<!--\s*/hide\s*-->', '', markdown, flags=re.DOTALL)
 
     # The `convert_to_json` function handles the heavy lifting of parsing the Markdown
     # and its frontmatter into a structured Python dictionary.
     full_grantha_data = convert_to_json(sanitized_markdown)
 
+    # The part_num is now read directly from the frontmatter.
+    part_num = full_grantha_data.get("part_num")
+    if not part_num:
+        raise ValueError(f"Mandatory 'part_num' not found in frontmatter of {md_filepath}")
+
     # The full data is then filtered and restructured to fit the "part" schema.
-    # This ensures that only the necessary fields are included in the final part file.
     part_data = {
         "grantha_id": full_grantha_data.get("grantha_id"),
         "part_num": part_num,
@@ -74,53 +76,36 @@ def convert_md_to_part_json(md_filepath, part_num):
         "concluding_material": full_grantha_data.get("concluding_material", []),
         "commentaries": full_grantha_data.get("commentaries", [])
     }
-    print(f"  - Conversion successful.")
+    print(f"  - Conversion successful for part {part_num}.")
     return part_data
 
 def main():
     """
-    Main function to orchestrate the conversion of a directory of Markdown files.
+    Main function to orchestrate the conversion of a single Markdown file.
 
-    It parses command-line arguments for input and output directories, finds all
-    `*.converted.md` files, and processes them in a sorted order to generate
-    sequentially numbered `part*.json` files.
+    It parses command-line arguments for a single input and output file and converts it.
     """
     parser = argparse.ArgumentParser(
-        description="Convert a directory of markdown files into a series of grantha part JSON files."
+        description="Convert a single markdown file into a grantha part JSON file."
     )
-    parser.add_argument("input_dir", help="Directory containing the markdown files.")
-    parser.add_argument("output_dir", help="Directory to save the output JSON files.")
+    parser.add_argument("input_file", help="Path to the input markdown file.")
+    parser.add_argument("output_file", help="Path to save the output JSON file.")
     args = parser.parse_args()
 
-    if not os.path.isdir(args.input_dir):
-        print(f"Error: Input directory not found at {args.input_dir}", file=sys.stderr)
+    if not os.path.isfile(args.input_file):
+        print(f"Error: Input file not found at {args.input_file}", file=sys.stderr)
         return
 
-    # Ensure the output directory exists before writing files.
-    os.makedirs(args.output_dir, exist_ok=True)
+    # Ensure the output directory exists.
+    output_dir = os.path.dirname(args.output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
-    # Use glob to find all relevant markdown files and sort them alphabetically.
-    # Sorting is critical to ensure that `part1.json`, `part2.json`, etc., are created
-    # in the correct, predictable order.
-    md_filepaths = sorted(glob.glob(os.path.join(args.input_dir, '*converted.md')))
+    part_json = convert_md_to_part_json(args.input_file)
 
-    if not md_filepaths:
-        print(f"Warning: No '*converted.md' files found in {args.input_dir}")
-        return
-
-    print(f"Found {len(md_filepaths)} markdown files to convert.")
-
-    for i, md_filepath in enumerate(md_filepaths):
-        part_num = i + 1
-        part_json = convert_md_to_part_json(md_filepath, part_num)
-
-        output_filename = f"part{part_num}.json"
-        output_filepath = os.path.join(args.output_dir, output_filename)
-
-        with open(output_filepath, 'w', encoding='utf-8') as f:
-            # `ensure_ascii=False` is important for correctly serializing Devanagari and other non-ASCII characters.
-            json.dump(part_json, f, ensure_ascii=False, indent=2)
-        print(f"  - Saved to {output_filepath}")
+    with open(args.output_file, 'w', encoding='utf-8') as f:
+        json.dump(part_json, f, ensure_ascii=False, indent=2)
+    print(f"  - Saved to {args.output_file}")
 
     print("\nConversion process complete.")
 

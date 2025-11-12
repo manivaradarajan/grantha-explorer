@@ -57,7 +57,7 @@ def get_header_level_name(structure_levels: List[Dict[str, Any]], depth: int) ->
         Name of the level (e.g., "Mundaka", "Khanda", "Mantra")
     """
     if not structure_levels:
-        return "Section"
+        return "Mantra"
 
     # Start at the root level
     current = structure_levels[0]
@@ -155,7 +155,7 @@ def write_tree_to_markdown(tree: Dict[str, Any],
         header_prefix = '#' * header_level
         header_text = f"{level_name} {current_ref}"
         lines.append(f"{header_prefix} {header_text}\n")
-
+        
         # Write passages at this level
         for passage in node.get('_passages', []):
             content_md = format_content(passage['content'], scripts)
@@ -284,23 +284,17 @@ def convert_to_markdown(data: Dict[str, Any],
 
     # Add prefatory material
     if 'prefatory_material' in data and data['prefatory_material']:
-        content_lines.append("# Prefatory Material\n")
-        for i, item in enumerate(data['prefatory_material']):
-            # Preserve complete metadata in HTML comment
-            metadata_comment = f"<!-- prefatory_item_{i}: {json.dumps(item.get('label', {}), ensure_ascii=False)} -->"
-            content_lines.append(metadata_comment)
-
-            label = item.get('label', {})
-            if isinstance(label, dict):
-                label_text = label.get('devanagari', label.get('latin', 'Prefatory'))
-            else:
-                label_text = label
-
-            content_lines.append(f"## {label_text}\n")
-            content_md = format_content(item['content'], scripts)
-            if content_md:
-                content_lines.append(content_md)
-                content_lines.append("")
+        for item in data['prefatory_material']:
+            ref = item.get('ref')
+            label_info = item.get('label', {})
+            label_text = label_info.get('devanagari', '')
+            if ref and label_text:
+                header = f'### PREFATORY: {ref} (devanagari: "{label_text}")'
+                content_lines.append(header)
+                content_md = format_content(item['content'], scripts)
+                if content_md:
+                    content_lines.append(content_md)
+                    content_lines.append("")
 
     # Build commentary map for interleaving (ref -> list of commentary data)
     commentary_map: Dict[str, List[Dict[str, Any]]] = {}
@@ -350,23 +344,17 @@ def convert_to_markdown(data: Dict[str, Any],
 
     # Add concluding material
     if 'concluding_material' in data and data['concluding_material']:
-        content_lines.append("# Concluding Material\n")
-        for i, item in enumerate(data['concluding_material']):
-            # Preserve complete metadata in HTML comment
-            metadata_comment = f"<!-- concluding_item_{i}: {json.dumps(item.get('label', {}), ensure_ascii=False)} -->"
-            content_lines.append(metadata_comment)
-
-            label = item.get('label', {})
-            if isinstance(label, dict):
-                label_text = label.get('devanagari', label.get('latin', 'Concluding'))
-            else:
-                label_text = label
-
-            content_lines.append(f"## {label_text}\n")
-            content_md = format_content(item['content'], scripts)
-            if content_md:
-                content_lines.append(content_md)
-                content_lines.append("")
+        for item in data['concluding_material']:
+            ref = item.get('ref')
+            label_info = item.get('label', {})
+            label_text = label_info.get('devanagari', '')
+            if ref and label_text:
+                header = f'### CONCLUDING: {ref} (devanagari: "{label_text}")'
+                content_lines.append(header)
+                content_md = format_content(item['content'], scripts)
+                if content_md:
+                    content_lines.append(content_md)
+                    content_lines.append("")
 
     # Commentaries are now interleaved with passages above
     # No separate commentary section needed

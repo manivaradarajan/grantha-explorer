@@ -5,7 +5,7 @@ import json
 import tempfile
 from pathlib import Path
 from tools.grantha_converter.json_to_md import json_file_to_markdown_file
-from tools.grantha_converter.md_to_json import markdown_file_to_json_file
+from tools.grantha_converter.md_to_json import convert_to_json
 
 
 # Get all library JSON files
@@ -34,10 +34,11 @@ class TestLibraryRoundtrip:
             assert md_path.exists()
 
             # Convert MD → JSON
-            markdown_file_to_json_file(
-                str(md_path),
-                str(roundtrip_path)
-            )
+            with open(md_path, 'r', encoding='utf-8') as f:
+                md_content = f.read()
+            json_data = convert_to_json(md_content)
+            with open(roundtrip_path, 'w', encoding='utf-8') as f:
+                json.dump(json_data, f, ensure_ascii=False, indent=2)
 
             assert roundtrip_path.exists()
 

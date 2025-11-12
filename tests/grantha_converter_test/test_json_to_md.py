@@ -328,28 +328,34 @@ class TestWriteTreeToMarkdown:
         assert '#### Verse 1.1.1.1' in result
 
 
+import copy
+
+@pytest.fixture
+def base_data():
+    """Fixture for a base grantha data structure."""
+    return {
+        'grantha_id': 'test-grantha',
+        'canonical_title': 'परीक्षा',
+        'text_type': 'upanishad',
+        'language': 'sanskrit',
+        'structure_levels': [{'key': 'Mantra'}],
+        'passages': [
+            {
+                'ref': '1',
+                'content': {
+                    'sanskrit': {'devanagari': 'पाठः १'},
+                    'english_translation': 'Passage 1'
+                }
+            }
+        ]
+    }
+
 class TestConvertToMarkdown:
     """Tests for convert_to_markdown function."""
 
-    def test_basic_conversion(self):
+    def test_basic_conversion(self, base_data):
         """Test basic conversion with simple grantha."""
-        data = {
-            'grantha_id': 'test-grantha',
-            'canonical_title': 'परीक्षा',
-            'text_type': 'upanishad',
-            'language': 'sanskrit',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {
-                    'ref': '1',
-                    'content': {
-                        'sanskrit': {'devanagari': 'पाठः १'},
-                        'english_translation': 'Passage 1'
-                    }
-                }
-            ]
-        }
-        result = convert_to_markdown(data, scripts=['devanagari'])
+        result = convert_to_markdown(base_data, scripts=['devanagari'])
 
         # Check frontmatter
         assert '---' in result
@@ -361,114 +367,76 @@ class TestConvertToMarkdown:
         assert 'पाठः १' in result
         assert 'Passage 1' in result
 
-    def test_includes_prefatory_material(self):
+    def test_includes_prefatory_material(self, base_data):
         """Test that prefatory material is included."""
-        data = {
-            'grantha_id': 'test',
-            'structure_levels': [{'key': 'Mantra'}],
-            'prefatory_material': [
-                {
-                    'label': {'devanagari': 'शान्तिपाठः'},
-                    'content': {'sanskrit': {'devanagari': 'ॐ शान्तिः'}}
-                }
-            ],
-            'passages': [
-                {'ref': '1', 'content': {'sanskrit': {'devanagari': 'पाठः'}}}
-            ]
-        }
-        result = convert_to_markdown(data, scripts=['devanagari'])
+        data = copy.deepcopy(base_data)
+        data['prefatory_material'] = [{
+            'ref': '0.1',
+            'label': {'devanagari': 'Intro'},
+            'content': {'sanskrit': {'devanagari': 'prefatory text'}}
+        }]
+        result = convert_to_markdown(data)
+        assert '### PREFATORY: 0.1 (devanagari: "Intro")' in result
+        assert 'prefatory text' in result
 
-        assert '# Prefatory Material' in result
-        assert '## शान्तिपाठः' in result
-        assert 'ॐ शान्तिः' in result
-
-    def test_includes_concluding_material(self):
+    def test_includes_concluding_material(self, base_data):
         """Test that concluding material is included."""
-        data = {
-            'grantha_id': 'test',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {'ref': '1', 'content': {'sanskrit': {'devanagari': 'पाठः'}}}
-            ],
-            'concluding_material': [
-                {
-                    'label': {'devanagari': 'समाप्तिः'},
-                    'content': {'sanskrit': {'devanagari': 'इति समाप्तम्'}}
-                }
-            ]
-        }
-        result = convert_to_markdown(data, scripts=['devanagari'])
+        data = copy.deepcopy(base_data)
+        data['concluding_material'] = [{
+            'ref': '99.1',
+            'label': {'devanagari': 'Outro'},
+            'content': {'sanskrit': {'devanagari': 'concluding text'}}
+        }]
+        result = convert_to_markdown(data)
+        assert '### CONCLUDING: 99.1 (devanagari: "Outro")' in result
+        assert 'concluding text' in result
 
-        assert '# Concluding Material' in result
-        assert '## समाप्तिः' in result
-        assert 'इति समाप्तम्' in result
-
-    def test_includes_commentary(self):
+    def test_includes_commentary(self, base_data):
         """Test that commentary is included when requested."""
-        data = {
-            'grantha_id': 'test',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {'ref': '1', 'content': {'sanskrit': {'devanagari': 'पाठः'}}}
-            ],
-            'commentaries': [
-                {
-                    'commentary_id': 'test-commentary',
-                    'commentary_title': 'परीक्षाभाष्यम्',
-                    'commentator': {'devanagari': 'टीकाकारः'},
-                    'passages': [
-                        {
-                            'ref': '1',
-                            'content': {
-                                'sanskrit': {'devanagari': 'व्याख्या'}
-                            }
+        data = copy.deepcopy(base_data)
+        data['commentaries'] = [
+            {
+                'commentary_id': 'test-commentary',
+                'commentary_title': 'परीक्षाभाष्यम्',
+                'commentator': {'devanagari': 'टीकाकारः'},
+                'passages': [
+                    {
+                        'ref': '1',
+                        'content': {
+                            'sanskrit': {'devanagari': 'व्याख्या'}
                         }
-                    ]
-                }
-            ]
-        }
+                    }
+                ]
+            }
+        ]
         result = convert_to_markdown(data, scripts=['devanagari'], commentaries=['test-commentary'])
 
         assert '# Commentary: टीकाकारः' in result
         assert 'व्याख्या' in result
 
-    def test_excludes_commentary_when_not_requested(self):
+    def test_excludes_commentary_when_not_requested(self, base_data):
         """Test that commentary is excluded when not requested."""
-        data = {
-            'grantha_id': 'test',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {'ref': '1', 'content': {'sanskrit': {'devanagari': 'पाठः'}}}
-            ],
-            'commentaries': [
-                {
-                    'commentary_id': 'test-commentary',
-                    'commentator': {'devanagari': 'टीकाकारः'},
-                    'passages': [
-                        {
-                            'ref': '1',
-                            'content': {'sanskrit': {'devanagari': 'व्याख्या'}}
-                        }
-                    ]
-                }
-            ]
-        }
+        data = copy.deepcopy(base_data)
+        data['commentaries'] = [
+            {
+                'commentary_id': 'test-commentary',
+                'commentator': {'devanagari': 'टीकाकारः'},
+                'passages': [
+                    {
+                        'ref': '1',
+                        'content': {'sanskrit': {'devanagari': 'व्याख्या'}}
+                    }
+                ]
+            }
+        ]
         result = convert_to_markdown(data, scripts=['devanagari'], commentaries=None)
 
         assert 'Commentary' not in result
         assert 'व्याख्या' not in result
 
-    def test_yaml_frontmatter_parseable(self):
+    def test_yaml_frontmatter_parseable(self, base_data):
         """Test that YAML frontmatter is valid and parseable."""
-        data = {
-            'grantha_id': 'test',
-            'canonical_title': 'परीक्षा',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {'ref': '1', 'content': {'sanskrit': {'devanagari': 'पाठः'}}}
-            ]
-        }
-        result = convert_to_markdown(data, scripts=['devanagari'])
+        result = convert_to_markdown(base_data, scripts=['devanagari'])
 
         # Extract frontmatter
         parts = result.split('---\n')
@@ -477,29 +445,16 @@ class TestConvertToMarkdown:
 
         # Parse YAML
         frontmatter = yaml.safe_load(frontmatter_yaml)
-        assert frontmatter['grantha_id'] == 'test'
+        assert frontmatter['grantha_id'] == 'test-grantha'
         assert frontmatter['canonical_title'] == 'परीक्षा'
         assert 'validation_hash' in frontmatter
         assert frontmatter['validation_hash'].startswith('sha256:')
 
-    def test_multiple_scripts(self):
+    def test_multiple_scripts(self, base_data):
         """Test conversion with multiple scripts."""
-        data = {
-            'grantha_id': 'test',
-            'structure_levels': [{'key': 'Mantra'}],
-            'passages': [
-                {
-                    'ref': '1',
-                    'content': {
-                        'sanskrit': {
-                            'devanagari': 'देवनागरी',
-                            'roman': 'devanāgarī'
-                        }
-                    }
-                }
-            ]
-        }
+        data = copy.deepcopy(base_data)
+        data['passages'][0]['content']['sanskrit']['roman'] = 'devanāgarī'
         result = convert_to_markdown(data, scripts=['devanagari', 'roman'])
 
-        assert 'देवनागरी' in result
+        assert 'पाठः १' in result
         assert 'devanāgarī' in result
