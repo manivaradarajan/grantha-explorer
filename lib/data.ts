@@ -120,7 +120,7 @@ export interface GranthaMetadata {
 
 export interface PassageGroup {
   level: string;
-  partId?: string; // Add partId to PassageGroup
+  partIds?: string[];
   passages?: Passage[];
   children?: PassageGroup[];
 }
@@ -492,9 +492,9 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
         level: groupKey,
       };
 
-      // If it's a top-level group and passages have part_id, assign it
+      // If it's a top-level group and passages have part_id, record it
       if (refLevel === 0 && groupPassages.length > 0 && groupPassages[0].part_id) {
-        passageGroup.partId = groupPassages[0].part_id;
+        passageGroup.partIds = [groupPassages[0].part_id];
       }
 
       if (structureLevel.children && structureLevel.children.length > 0) {
@@ -513,35 +513,41 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
 
     // Add placeholders for unloaded parts
     if (grantha.parts) {
-      const existingPartIds = new Set(hierarchy.main.map(group => group.partId).filter(Boolean));
+      const groupsByKey = new Map<string, PassageGroup>(
+        hierarchy.main.map(g => [g.level, g])
+      );
+      const trackedPartIds = new Set<string>(
+        hierarchy.main.flatMap(g => g.partIds ?? [])
+      );
 
-      grantha.parts.forEach((part) => {
-        if (!existingPartIds.has(part.id)) {
-          // Derive a display level from the part.id (e.g., "part1" -> "1")
-          const partNumMatch = part.id.match(/\d+/);
-          const displayNum = partNumMatch ? partNumMatch[0] : '';
-          const groupKey = `${structure[0].scriptNames.devanagari} ${displayNum}`;
-          hierarchy.main.push({
+      for (const part of grantha.parts) {
+        if (trackedPartIds.has(part.id)) continue;
+
+        const partNumMatch = part.id.match(/\d+/);
+        const displayNum = partNumMatch ? partNumMatch[0] : '';
+        const groupKey = `${structure[0].scriptNames.devanagari} ${displayNum}`;
+
+        const existing = groupsByKey.get(groupKey);
+        if (existing) {
+          existing.partIds = [...(existing.partIds ?? []), part.id];
+        } else {
+          const placeholder: PassageGroup = {
             level: groupKey,
-            partId: part.id,
-            children: [], // Placeholder
-          });
-          existingPartIds.add(part.id);
+            partIds: [part.id],
+            children: [],
+          };
+          hierarchy.main.push(placeholder);
+          groupsByKey.set(groupKey, placeholder);
         }
-      });
+        trackedPartIds.add(part.id);
+      }
 
-      // Sort the main hierarchy by partId (numerically) or by level if partId is missing
       hierarchy.main.sort((a, b) => {
-        const getSortKey = (group: PassageGroup) => {
-          if (group.partId) {
-            const match = group.partId.match(/\d+/);
-            return match ? parseInt(match[0]) : 0;
-          } else {
-            const match = group.level.match(/\s(\d+)$/);
-            return match ? parseInt(match[1]) : 0;
-          }
+        const getNum = (level: string) => {
+          const match = level.match(/\s(\d+)$/);
+          return match ? parseInt(match[1]) : 0;
         };
-        return getSortKey(a) - getSortKey(b);
+        return getNum(a.level) - getNum(b.level);
       });
     }
   } else {

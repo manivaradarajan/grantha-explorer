@@ -93,9 +93,8 @@ export default function NavigationSidebar({
 
       // Check if it's a placeholder that needs loading.
       // A placeholder has an empty `children` array and no `passages`.
-      if (group && !group.passages && group.children && group.children.length === 0 && group.partId) {
-        // Use the partId directly from the group to load the part
-        await loadPart(group.partId);
+      if (group && !group.passages && group.children && group.children.length === 0 && group.partIds?.length) {
+        await loadPart(group.partIds[0]);
       }
     }
 
