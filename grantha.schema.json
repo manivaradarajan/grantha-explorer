@@ -1,13 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Grantha Data Schema (Complete Single File)",
-  "description": "Defines a complete grantha contained within a single file. Also serves as the source of truth for common definitions. Versioned using semantic versioning.",
+  "title": "Grantha Data Schema (Single-File Edition)",
+  "description": "Defines a complete grantha edition contained within a single file. Also the source of truth for shared definitions (passage, commentary, commentary_passage, metadata). Versioned using semantic versioning.",
   "type": "object",
   "properties": {
     "schema_version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "description": "Version of this schema in semver format (MAJOR.MINOR.PATCH). Major version changes indicate breaking schema changes."
+    },
+    "edition_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier for this edition. For single-edition granthas, use the grantha_id by convention."
     },
     "grantha_id": {
       "type": "string",
@@ -25,16 +30,18 @@
         "required": ["alias", "scope"]
       }
     },
-    "text_type": { "type": "string", "enum": ["upanishad", "commentary"] },
+    "text_type": {
+      "type": "string",
+      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "other"]
+    },
     "language": { "type": "string", "enum": ["sanskrit", "english"] },
-    "metadata": { "$ref": "#/definitions/metadata" },
+    "metadata": {
+      "$ref": "#/definitions/metadata",
+      "description": "Provenance metadata. Optional; populate when processing pipeline is known."
+    },
     "structure_levels": {
       "type": "array",
-      "items": { "$ref": "#/definitions/structure_level" }
-    },
-    "variants_available": {
-      "type": "array",
-      "items": { "type": "string" }
+      "items": { "$ref": "grantha-envelope.schema.json#/definitions/structure_level" }
     },
     "prefatory_material": {
       "type": "array",
@@ -48,23 +55,14 @@
       "type": "array",
       "items": { "$ref": "#/definitions/passage" }
     },
-    "commentaries": {
-      "oneOf": [
-        {
-          "type": "object",
-          "description": "Map of commentary_id to commentary object (preferred format)",
-          "additionalProperties": { "$ref": "#/definitions/commentary" }
-        },
-        {
-          "type": "array",
-          "description": "Array of commentary objects (legacy format)",
-          "items": { "$ref": "#/definitions/commentary" }
-        }
-      ]
+    "commentary": {
+      "$ref": "#/definitions/commentary",
+      "description": "Exactly one commentary per edition. Absent if this is a mūla-only edition."
     }
   },
   "required": [
     "schema_version",
+    "edition_id",
     "grantha_id",
     "canonical_title",
     "text_type",
@@ -105,31 +103,7 @@
         "last_updated"
       ]
     },
-    "structure_level": {
-      "type": "object",
-      "properties": {
-        "key": { "type": "string" },
-        "scriptNames": {
-          "type": "object",
-          "properties": { "devanagari": { "type": "string" } },
-          "required": ["devanagari"]
-        },
-        "children": {
-          "oneOf": [
-            {
-              "type": "array",
-              "description": "Array of child structure levels (preferred format)",
-              "items": { "$ref": "#/definitions/structure_level" }
-            },
-            {
-              "description": "Single child structure level (legacy format - will be converted to array)",
-              "$ref": "#/definitions/structure_level"
-            }
-          ]
-        }
-      },
-      "required": ["key", "scriptNames"]
-    },
+
     "passage": {
       "type": "object",
       "properties": {
@@ -141,6 +115,10 @@
         "label": {
           "type": "object",
           "properties": { "devanagari": { "type": "string" } }
+        },
+        "alignsWith": {
+          "type": ["string", "null"],
+          "description": "Reserved for future cross-edition concordance. Set to null."
         },
         "content": {
           "type": "object",
@@ -166,6 +144,7 @@
       },
       "then": { "required": ["label"] }
     },
+
     "commentary": {
       "type": "object",
       "properties": {
@@ -175,7 +154,7 @@
           "type": "object",
           "properties": {
             "devanagari": { "type": "string" },
-            "latin": { "type": "string" }
+            "roman": { "type": "string" }
           },
           "required": ["devanagari"]
         },
@@ -195,6 +174,7 @@
         "passages"
       ]
     },
+
     "commentary_passage": {
       "type": "object",
       "properties": {

@@ -328,9 +328,9 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
       const partialGrantha: Grantha = {
         ...multiPartMetadata,
         id: multiPartMetadata.grantha_id,
-        title: multiPartMetadata.canonical_title,
-        title_deva: multiPartMetadata.canonical_title, // Placeholder
-        title_iast: multiPartMetadata.canonical_title, // Placeholder
+        title: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
+        title_deva: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
+        title_iast: multiPartMetadata.canonical_title ?? granthaMetadata.title_iast,
         aliases: multiPartMetadata.aliases || [],
         parts: multiPartMetadata.parts, // Store the list of all parts
         prefatory_material: combinedContent.prefatory_material || [],

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Grantha Envelope Schema",
-  "description": "Schema for the envelope/metadata file of a multi-part grantha. This file contains all top-level metadata but no content. Versioned using semantic versioning.",
+  "description": "Top-level envelope for a grantha. Carries identity, classification, and an ordered list of edition stubs. One file per grantha.",
   "type": "object",
   "properties": {
     "schema_version": {
@@ -14,6 +14,14 @@
       "pattern": "^[a-z0-9-]+$"
     },
     "canonical_title": { "type": "string" },
+    "text_type": {
+      "type": "string",
+      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "other"]
+    },
+    "language": {
+      "type": "string",
+      "enum": ["sanskrit", "english"]
+    },
     "aliases": {
       "type": "array",
       "items": {
@@ -22,28 +30,14 @@
           "alias": { "type": "string" },
           "scope": { "type": "string", "enum": ["full_text", "abbreviation"] }
         },
-        "required": ["alias", "scope"]
+        "required": ["alias", "scope"],
+        "additionalProperties": false
       }
     },
-    "text_type": { "type": "string", "enum": ["upanishad", "commentary"] },
-    "language": { "type": "string", "enum": ["sanskrit", "english"] },
-    "metadata": { "$ref": "grantha.schema.json#/definitions/metadata" },
-    "structure_levels": {
-      "type": "array",
-      "items": { "$ref": "grantha.schema.json#/definitions/structure_level" }
-    },
-    "variants_available": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "parts": {
-      "description": "An ordered list of filenames for the content parts of this grantha.",
+    "editions": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "type": "string",
-        "pattern": "^part[0-9]+\\.json$"
-      }
+      "items": { "$ref": "#/definitions/edition_stub" }
     }
   },
   "required": [
@@ -52,8 +46,103 @@
     "canonical_title",
     "text_type",
     "language",
-    "structure_levels",
-    "parts"
+    "editions"
   ],
-  "unevaluatedProperties": false
+  "additionalProperties": false,
+
+  "definitions": {
+    "edition_stub": {
+      "type": "object",
+      "description": "Lightweight descriptor for one edition. Carried in the grantha envelope's editions array. A .json suffix in path means single file; no suffix means directory.",
+      "properties": {
+        "edition_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path to the edition file or directory. A .json suffix = single file; no suffix = directory containing an envelope + part files."
+        },
+        "commentator": {
+          "type": "object",
+          "description": "Primary commentator for this edition.",
+          "properties": {
+            "devanagari": { "type": "string" },
+            "roman": { "type": "string" }
+          },
+          "required": ["devanagari"],
+          "additionalProperties": false
+        },
+        "commentary_title": { "type": "string" },
+        "isDefault": {
+          "type": "boolean",
+          "description": "Mark exactly one edition stub as default in a multi-edition grantha. Moot for single-edition granthas."
+        }
+      },
+      "required": ["edition_id", "path", "commentator", "commentary_title"],
+      "additionalProperties": false
+    },
+
+    "edition_sub_envelope": {
+      "type": "object",
+      "description": "Shape of the envelope.json that lives inside an edition directory for multi-part editions. Validated by the Python validator using this definition.",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "edition_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "grantha_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "structure_levels": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/structure_level" }
+        },
+        "parts": {
+          "description": "Ordered list of content part filenames for this edition.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^part[0-9]+\\.json$"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "edition_id",
+        "grantha_id",
+        "structure_levels",
+        "parts"
+      ],
+      "additionalProperties": false
+    },
+
+    "structure_level": {
+      "type": "object",
+      "description": "One level in the hierarchical structure of a grantha (e.g. Adhyaya, Brahmana, Mantra). Canonical definition lives here; grantha.schema.json references this.",
+      "properties": {
+        "key": { "type": "string" },
+        "scriptNames": {
+          "type": "object",
+          "properties": {
+            "devanagari": { "type": "string" },
+            "roman": { "type": "string" }
+          },
+          "required": ["devanagari"]
+        },
+        "children": {
+          "type": "array",
+          "description": "Ordered list of child structure levels.",
+          "items": { "$ref": "#/definitions/structure_level" }
+        }
+      },
+      "required": ["key", "scriptNames"]
+    }
+  }
 }

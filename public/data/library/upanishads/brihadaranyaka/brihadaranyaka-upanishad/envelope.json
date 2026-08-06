@@ -1,8 +1,7 @@
 {
+  "schema_version": "1.0.0",
+  "edition_id": "brihadaranyaka-upanishad",
   "grantha_id": "brihadaranyaka-upanishad",
-  "canonical_title": "बृहदारण्यकोपनिषत्",
-  "text_type": "upanishad",
-  "language": "sanskrit",
   "structure_levels": [
     {
       "key": "Adhyaya",
@@ -10,20 +9,24 @@
         "devanagari": "अध्यायः",
         "roman": "adhyāya"
       },
-      "children": {
-        "key": "Brahmana",
-        "scriptNames": {
-          "devanagari": "ब्राह्मणम्",
-          "roman": "brāhmaṇam"
-        },
-        "children": {
-          "key": "Mantra",
+      "children": [
+        {
+          "key": "Brahmana",
           "scriptNames": {
-            "devanagari": "मन्त्रः",
-            "roman": "mantra"
-          }
+            "devanagari": "ब्राह्मणम्",
+            "roman": "brāhmaṇam"
+          },
+          "children": [
+            {
+              "key": "Mantra",
+              "scriptNames": {
+                "devanagari": "मन्त्रः",
+                "roman": "mantra"
+              }
+            }
+          ]
         }
-      }
+      ]
     }
   ],
   "parts": [
@@ -41,6 +44,5 @@
     "part12.json",
     "part13.json",
     "part14.json"
-  ],
-  "schema_version": "0.1.0"
+  ]
 }

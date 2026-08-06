@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Grantha Part Schema",
-  "description": "Schema for a single content part of a multi-part grantha. Contains content arrays and identifiers. Versioned using semantic versioning.",
+  "description": "Schema for a single content part of a multi-part edition. Contains content arrays and identifiers. Versioned using semantic versioning.",
   "type": "object",
   "properties": {
     "schema_version": {
@@ -9,13 +9,18 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "description": "Version of this schema in semver format (MAJOR.MINOR.PATCH). Major version changes indicate breaking schema changes."
     },
-    "grantha_id": {
-      "description": "The ID of the parent grantha this part belongs to.",
+    "edition_id": {
       "type": "string",
-      "pattern": "^[a-z0-9-]+$"
+      "pattern": "^[a-z0-9-]+$",
+      "description": "The ID of the edition this part belongs to."
+    },
+    "grantha_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "The ID of the parent grantha. Optional; derivable from the edition_id in most cases."
     },
     "part_num": {
-      "description": "The sequential number of this part within the grantha.",
+      "description": "The sequential number of this part within the edition.",
       "type": "integer",
       "minimum": 1
     },
@@ -31,21 +36,11 @@
       "type": "array",
       "items": { "$ref": "grantha.schema.json#/definitions/passage" }
     },
-    "commentaries": {
-      "oneOf": [
-        {
-          "type": "object",
-          "description": "Map of commentary_id to commentary object (preferred format)",
-          "additionalProperties": { "$ref": "grantha.schema.json#/definitions/commentary" }
-        },
-        {
-          "type": "array",
-          "description": "Array of commentary objects (legacy format)",
-          "items": { "$ref": "grantha.schema.json#/definitions/commentary" }
-        }
-      ]
+    "commentary": {
+      "$ref": "grantha.schema.json#/definitions/commentary",
+      "description": "Exactly one commentary per edition part. Absent if this is a mūla-only edition."
     }
   },
-  "required": ["schema_version", "grantha_id", "part_num"],
-  "unevaluatedProperties": false
+  "required": ["schema_version", "edition_id", "part_num"],
+  "additionalProperties": false
 }
