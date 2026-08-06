@@ -344,6 +344,15 @@
       ]
     }
   },
+  "mandukya-karika": {
+    "title": {
+      "devanagari": "गौडपादकारिका",
+      "iast": "Gaudapada Karika"
+    },
+    "abbreviations": {
+      "devanagari": []
+    }
+  },
   "manu-smriti": {
     "title": {
       "devanagari": "मनुस्मृतिः",

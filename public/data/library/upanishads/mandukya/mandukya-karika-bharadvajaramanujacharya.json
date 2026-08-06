@@ -1,7 +1,8 @@
 {
-  "grantha_id": "mandukya-upanishad",
+  "grantha_id": "mandukya-karika",
+  "edition_id": "mandukya-karika",
   "part_num": 1,
-  "canonical_title": "माण्डूक्योपनिषत्",
+  "canonical_title": "गौडपादकारिका",
   "text_type": "upanishad",
   "language": "sanskrit",
   "structure_levels": [

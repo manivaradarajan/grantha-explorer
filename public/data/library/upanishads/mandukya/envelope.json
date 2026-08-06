@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "grantha_id": "mandukya-upanishad",
+  "canonical_title": "माण्डूक्योपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "mandukya-upanishad-rangaramanuja",
+      "path": "upanishads/mandukya/mandukya-upanishad-rangaramanuja.json",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः"
+      },
+      "commentary_title": "प्रकाशिका",
+      "isDefault": true
+    },
+    {
+      "edition_id": "mandukya-upanishad-kuranarayana",
+      "path": "upanishads/mandukya/mandukya-upanishad-kuranarayana.json",
+      "commentator": {
+        "devanagari": "कूरनारायणमुनिः"
+      },
+      "commentary_title": "भाष्यम्"
+    }
+  ]
+}

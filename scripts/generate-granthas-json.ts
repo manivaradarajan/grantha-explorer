@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
+type EditionStub = { edition_id: string; path: string; isDefault?: boolean };
+
 async function generateGranthasJson() {
   try {
     const dataDir = path.join(process.cwd(), 'public', 'data');
@@ -19,6 +21,8 @@ async function generateGranthasJson() {
     // ======================== CHANGE STARTS HERE ========================
 
     // Recursively scan the library directory for both single-file and multi-part granthas.
+    // Hybrid mode: reads grantha-level envelopes (editions[]) where present, falls back
+    // to edition sub-envelopes (grantha_id + parts[]) or flat .json files elsewhere.
     const granthaPathMap = new Map<string, string>(); // Maps grantha_id to relative path
 
     async function scanDirectory(dir: string, relativePath: string = ''): Promise<void> {
@@ -26,25 +30,77 @@ async function generateGranthasJson() {
 
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
-        const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+        const entryRelativePath = relativePath ? path.join(relativePath, entry.name) : entry.name;
 
         if (entry.isDirectory()) {
-          // Check if this directory contains an envelope.json (multi-part grantha)
           const envelopePath = path.join(fullPath, 'envelope.json');
+          let envelopeData: Record<string, unknown> | null = null;
+
           try {
-            await fs.access(envelopePath);
-            // Read the envelope to get the grantha_id
             const content = await fs.readFile(envelopePath, 'utf-8');
-            const data = JSON.parse(content);
-            if (data.grantha_id) {
-              granthaPathMap.set(data.grantha_id, entryRelativePath);
+            envelopeData = JSON.parse(content);
+          } catch (err) {
+            if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
+            // No envelope.json — recurse into subdirectories
+            await scanDirectory(fullPath, entryRelativePath);
+            continue;
+          }
+
+          if (Array.isArray((envelopeData as any).editions)) {
+            // Grantha-level envelope: resolve the default edition path
+            const editions = (envelopeData as any).editions as EditionStub[];
+            const defaultEdition = editions.find((e) => e.isDefault === true);
+            if (!defaultEdition) {
+              console.warn(
+                `[Indexer Warning] Grantha-level envelope at ${envelopePath} has no isDefault edition. Skipping.`
+              );
+              continue;
             }
-          } catch {
-            // No envelope.json, recurse into subdirectories
+            const granthaId = (envelopeData as any).grantha_id as string | undefined;
+            if (!granthaId) {
+              console.warn(
+                `[Indexer Warning] Grantha-level envelope at ${envelopePath} missing grantha_id. Skipping.`
+              );
+              continue;
+            }
+            // path in edition stub is relative to library/
+            granthaPathMap.set(granthaId, defaultEdition.path);
+
+            // Also scan sibling .json files in the same directory for other grantha_ids
+            // (e.g. a karika file that shares a directory with a multi-edition upanishad)
+            const siblingEntries = await fs.readdir(fullPath, { withFileTypes: true });
+            for (const sibling of siblingEntries) {
+              if (
+                sibling.isFile() &&
+                sibling.name.endsWith('.json') &&
+                sibling.name !== 'envelope.json'
+              ) {
+                try {
+                  const siblingContent = await fs.readFile(
+                    path.join(fullPath, sibling.name),
+                    'utf-8'
+                  );
+                  const siblingData = JSON.parse(siblingContent);
+                  if (siblingData.grantha_id && siblingData.grantha_id !== granthaId) {
+                    const siblingRelPath = path.join(entryRelativePath, sibling.name);
+                    granthaPathMap.set(siblingData.grantha_id, siblingRelPath);
+                  }
+                } catch {
+                  console.warn(
+                    `[Indexer Warning] Failed to read grantha_id from sibling ${sibling.name}. Skipping.`
+                  );
+                }
+              }
+            }
+          } else if ((envelopeData as any).grantha_id) {
+            // Edition sub-envelope (grantha_id + parts[]) — register directory path as before
+            granthaPathMap.set((envelopeData as any).grantha_id as string, entryRelativePath);
+          } else {
+            // Unknown envelope shape — recurse
             await scanDirectory(fullPath, entryRelativePath);
           }
         } else if (entry.isFile() && entry.name.endsWith('.json') && entry.name !== 'envelope.json') {
-          // This is a single-file grantha. Extract grantha_id from the file.
+          // Flat single-file grantha. Extract grantha_id from the file.
           try {
             const content = await fs.readFile(fullPath, 'utf-8');
             const data = JSON.parse(content);

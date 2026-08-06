@@ -1,5 +1,6 @@
 {
   "grantha_id": "mandukya-upanishad",
+  "edition_id": "mandukya-upanishad-kuranarayana",
   "part_num": 1,
   "canonical_title": "माण्डूक्योपनिषत्",
   "text_type": "upanishad",
@@ -11,13 +12,15 @@
         "devanagari": "खण्डः",
         "roman": "khaṇḍa"
       },
-      "children": {
-        "key": "Mantra",
-        "scriptNames": {
-          "devanagari": "मन्त्रः",
-          "roman": "mantra"
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
         }
-      }
+      ]
     }
   ],
   "passages": [

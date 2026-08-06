@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "grantha_id": "isavasya-upanishad",
+  "canonical_title": "ईशावास्योपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "isavasya-upanishad-vedantadesika",
+      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika.json",
+      "commentator": {
+        "devanagari": "श्रीमद्वेदान्ताचार्यः",
+        "roman": "śrīmadvēdāntācāryaḥ"
+      },
+      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
+      "isDefault": true
+    },
+    {
+      "edition_id": "isavasya-upanishad-srivatsanarayana",
+      "path": "upanishads/isavasya/isavasya-upanishad-srivatsanarayana.json",
+      "commentator": {
+        "devanagari": "श्रीवत्सनारायणमुनीन्द्रः",
+        "roman": "śrīvatsanārāyaṇamunīndraḥ"
+      },
+      "commentary_title": "प्रकाशिका"
+    }
+  ]
+}
