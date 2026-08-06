@@ -38,3 +38,6 @@ next-env.d.ts
 public/data/generated/
 
 __pycache__/
+
+# local Claude Code settings (personal permission approvals, not shared)
+.claude/settings.local.json
