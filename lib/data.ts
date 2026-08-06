@@ -118,8 +118,20 @@ export interface GranthaMetadata {
   title_iast: string;
 }
 
+/**
+ * A node in the passage hierarchy rendered by NavigationSidebar.
+ *
+ * Exactly one of the following states applies at any given time:
+ *   - `passages` set              — leaf node; passages are loaded and ready to display.
+ *   - `children` non-empty        — interior node with loaded sub-groups.
+ *   - `partIds` + empty `children` — placeholder; the backing part file(s) have not been
+ *                                    fetched yet. Multiple part files can share the same
+ *                                    display group (e.g. a chapter split across part files).
+ */
 export interface PassageGroup {
   level: string;
+  /** IDs of part files backing this placeholder group. Populated when the group has
+   *  not yet been loaded; may reference more than one part when a chapter spans files. */
   partIds?: string[];
   passages?: Passage[];
   children?: PassageGroup[];
@@ -480,8 +492,8 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
 
     // Get the keys and sort them numerically
     const sortedGroupKeys = Object.keys(groups).sort((a, b) => {
-      const numA = parseInt(a.split(' ').pop() || '0');
-      const numB = parseInt(b.split(' ').pop() || '0');
+      const numA = parseInt(a.split(' ').pop() || '0', 10);
+      const numB = parseInt(b.split(' ').pop() || '0', 10);
       return numA - numB;
     });
 
@@ -524,11 +536,13 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
         if (trackedPartIds.has(part.id)) continue;
 
         const partNumMatch = part.id.match(/\d+/);
-        const displayNum = partNumMatch ? partNumMatch[0] : '';
-        const groupKey = `${structure[0].scriptNames.devanagari} ${displayNum}`;
+        const levelLabel = structure[0].scriptNames.devanagari;
+        const partNumber = partNumMatch ? partNumMatch[0] : ''; // part.id is expected to contain a digit
+        const groupKey = `${levelLabel} ${partNumber}`;
 
         const existing = groupsByKey.get(groupKey);
         if (existing) {
+          // Multiple parts can share the same display group (e.g. a chapter split across files).
           existing.partIds = [...(existing.partIds ?? []), part.id];
         } else {
           const placeholder: PassageGroup = {
@@ -542,27 +556,24 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
         trackedPartIds.add(part.id);
       }
 
-      hierarchy.main.sort((a, b) => {
-        const getNum = (level: string) => {
-          const match = level.match(/\s(\d+)$/);
-          return match ? parseInt(match[1]) : 0;
-        };
-        return getNum(a.level) - getNum(b.level);
-      });
+      const extractTrailingNumber = (level: string): number => {
+        const match = level.match(/\s(\d+)$/);
+        return match ? parseInt(match[1], 10) : 0;
+      };
+      hierarchy.main.sort((a, b) => extractTrailingNumber(a.level) - extractTrailingNumber(b.level));
     }
   } else {
     hierarchy.main = [
-      {        level: "Passages",
+      {
+        level: "Passages",
         passages: grantha.passages,
       },
     ];
   }
 
-    return hierarchy;
+  return hierarchy;
+}
 
-  }
-
-  
 
   export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
 

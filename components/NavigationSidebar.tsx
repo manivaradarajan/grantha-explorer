@@ -91,10 +91,10 @@ export default function NavigationSidebar({
 
       const group = findGroup(hierarchy.main, level);
 
-      // Check if it's a placeholder that needs loading.
-      // A placeholder has an empty `children` array and no `passages`.
+      // Children are empty until the part is fetched; loading is triggered on first open.
       if (group && !group.passages && group.children && group.children.length === 0 && group.partIds?.length) {
-        await loadPart(group.partIds[0]);
+        const partId = group.partIds[0];
+        if (partId) await loadPart(partId);
       }
     }
 
