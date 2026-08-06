@@ -9,21 +9,25 @@
       "scriptNames": {
         "devanagari": "अध्यायः",
         "roman": "adhyāya"
-      }
-    },
-    {
-      "key": "Valli",
-      "scriptNames": {
-        "devanagari": "वल्ली",
-        "roman": "vallī"
-      }
-    },
-    {
-      "key": "Mantra",
-      "scriptNames": {
-        "devanagari": "मन्त्रः",
-        "roman": "mantra"
-      }
+      },
+      "children": [
+        {
+          "key": "Valli",
+          "scriptNames": {
+            "devanagari": "वल्ली",
+            "roman": "vallī"
+          },
+          "children": [
+            {
+              "key": "Mantra",
+              "scriptNames": {
+                "devanagari": "मन्त्रः",
+                "roman": "mantra"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "parts": [

@@ -10,14 +10,16 @@
       "scriptNames": {
         "devanagari": "खण्डः",
         "roman": "khaṇḍa"
-      }
-    },
-    {
-      "key": "Mantra",
-      "scriptNames": {
-        "devanagari": "मन्त्रः",
-        "roman": "mantra"
-      }
+      },
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      ]
     }
   ],
   "passages": [
