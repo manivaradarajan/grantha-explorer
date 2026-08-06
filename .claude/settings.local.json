@@ -34,7 +34,12 @@
       "Bash(pip3 install:*)",
       "Bash(python -m pytest:*)",
       "Bash(python -m tools.grantha_converter.cli:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(git -C /Users/mani/github/grantha-explorer diff)",
+      "Bash(git -C /Users/mani/github/grantha-explorer add .claude/settings.local.json)",
+      "Bash(git -C:*)"
     ],
     "deny": [
       "Read(./node-modules/**)",
