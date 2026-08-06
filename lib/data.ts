@@ -107,7 +107,7 @@ export interface Grantha extends GranthaMetadata {
   passages: Passage[];
   concluding_material: PrefatoryMaterial[]; // Changed to non-optional array
   commentaries: Commentary[]; // Changed to non-optional array
-  parts?: { file: string; id: string }[];
+  parts?: { file: string; id: string; first_ref: string }[];
 }
 
 export interface GranthaMetadata {
@@ -160,7 +160,10 @@ export interface GranthaPartContent {
   prefatory_material?: PrefatoryMaterial[];
   passages: Passage[];
   concluding_material?: PrefatoryMaterial[];
-  commentaries?: Commentary[];
+  /** New schema format: single Commentary object per part (grantha-part.schema.json). */
+  commentary?: Commentary;
+  /** Legacy format: keyed object or array. Superseded by commentary. */
+  commentaries?: Commentary[] | Record<string, Commentary>;
 }
 
 // New interface for the metadata of a multi-part grantha (from metadata.json)
@@ -174,7 +177,7 @@ export interface GranthaMetadataOnly {
   metadata: Metadata;
   structure_levels: StructureLevel[];
   commentaries?: Commentary[];
-  parts: { file: string; id: string }[]; // Array of part file names, e.g., ["part1.json", "part2.json"]
+  parts: { file: string; id: string; first_ref: string }[];
 }
     
     // The type returned by loadGrantha.
@@ -275,18 +278,16 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         // It's a multi-part grantha. Read the envelope.
         const rawEnvelope = await envelopeResponse.json();
 
-        // The envelope now has a simple parts array of filenames
+        // The envelope's parts[] entries are {file, first_ref} objects.
+        // part.id is the top-level structural section number from first_ref
+        // (e.g. first_ref "3.1.1" → id "3"), not the sequential file number.
         const multiPartMetadata: GranthaMetadataOnly = {
           ...rawEnvelope,
-          parts: rawEnvelope.parts.map((partFile: string) => {
-            // Extract part number from filename (e.g., "part1.json" -> "1")
-            const partNumMatch = partFile.match(/part(\d+)\.json/);
-            const partId = partNumMatch ? partNumMatch[1] : partFile.replace('.json', '');
-            return {
-              file: partFile,
-              id: partId,
-            };
-          }),
+          parts: rawEnvelope.parts.map((partEntry: { file: string; first_ref: string }) => ({
+            file: partEntry.file,
+            id: partEntry.first_ref.split('.')[0],
+            first_ref: partEntry.first_ref,
+          })),
         };
 
         if (!multiPartMetadata.parts || multiPartMetadata.parts.length === 0) {
@@ -305,13 +306,16 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
             }
             const content: GranthaPartContent = await response.json();
 
-            // Convert commentaries from object to array if needed
+            // Resolve commentary into a flat array regardless of source format.
+            // New schema (grantha-part.schema.json): commentary is a single object.
+            // Legacy format: commentaries is a keyed dict or array.
             let commentariesArray: Commentary[] = [];
-            if (content.commentaries) {
+            if (content.commentary) {
+              commentariesArray = [content.commentary];
+            } else if (content.commentaries) {
               if (Array.isArray(content.commentaries)) {
                 commentariesArray = content.commentaries;
               } else {
-                // Convert object format to array
                 commentariesArray = Object.values(content.commentaries);
               }
             }
@@ -331,7 +335,7 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
           prefatory_material: [...(acc.prefatory_material || []), ...(partContent.prefatory_material || [])],
           passages: [...(acc.passages || []), ...(partContent.passages || [])],
           concluding_material: [...(acc.concluding_material || []), ...(partContent.concluding_material || [])],
-          commentaries: [...(acc.commentaries || []), ...(partContent.commentaries || [])],
+          commentaries: [...((acc.commentaries as Commentary[]) || []), ...((partContent.commentaries as Commentary[]) || [])],
         };
       }, { passages: [] });
 
@@ -340,6 +344,7 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
       const partialGrantha: Grantha = {
         ...multiPartMetadata,
         id: multiPartMetadata.grantha_id,
+        path: granthaMetadata.path,
         title: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
         title_deva: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
         title_iast: multiPartMetadata.canonical_title ?? granthaMetadata.title_iast,
@@ -355,7 +360,7 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
 
       // Merge commentaries from the loaded parts
       if (combinedContent.commentaries) {
-        combinedContent.commentaries.forEach(commentaryPart => {
+        (combinedContent.commentaries as Commentary[]).forEach(commentaryPart => {
           if (commentaryPart) {
             const existingCommentary = partialGrantha.commentaries.find(
               c => c.commentary_id === commentaryPart.commentary_id
@@ -504,10 +509,7 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
         level: groupKey,
       };
 
-      // If it's a top-level group and passages have part_id, record it
-      if (refLevel === 0 && groupPassages.length > 0 && groupPassages[0].part_id) {
-        passageGroup.partIds = [groupPassages[0].part_id];
-      }
+
 
       if (structureLevel.children && structureLevel.children.length > 0) {
         // If there are more levels, recurse
@@ -523,37 +525,50 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
   if (isHierarchical) {
     hierarchy.main = buildNestedGroups(grantha.passages, structure[0], 0);
 
-    // Add placeholders for unloaded parts
+    // Add placeholders for unloaded parts; tag loaded groups with their file first_refs.
     if (grantha.parts) {
+      const levelLabel = structure[0].scriptNames.devanagari;
+
+      // Determine which part files are loaded by checking for their first passage.
+      const loadedPassageRefs = new Set(grantha.passages.map(p => p.ref));
+      const loadedFirstRefs = new Set(
+        grantha.parts
+          .filter(p => loadedPassageRefs.has(p.first_ref))
+          .map(p => p.first_ref)
+      );
+
       const groupsByKey = new Map<string, PassageGroup>(
         hierarchy.main.map(g => [g.level, g])
       );
-      const trackedPartIds = new Set<string>(
-        hierarchy.main.flatMap(g => g.partIds ?? [])
-      );
 
+      // Tag existing loaded groups with first_refs from grantha.parts (not by parsing level labels).
       for (const part of grantha.parts) {
-        if (trackedPartIds.has(part.id)) continue;
+        if (!loadedFirstRefs.has(part.first_ref)) continue;
+        const groupKey = `${levelLabel} ${part.id}`;
+        const group = groupsByKey.get(groupKey);
+        if (group) {
+          group.partIds = [...(group.partIds ?? []), part.first_ref];
+        }
+      }
 
-        const partNumMatch = part.id.match(/\d+/);
-        const levelLabel = structure[0].scriptNames.devanagari;
-        const partNumber = partNumMatch ? partNumMatch[0] : ''; // part.id is expected to contain a digit
-        const groupKey = `${levelLabel} ${partNumber}`;
+      // Create placeholder entries for unloaded part files.
+      for (const part of grantha.parts) {
+        if (loadedFirstRefs.has(part.first_ref)) continue;
+        const groupKey = `${levelLabel} ${part.id}`;
 
         const existing = groupsByKey.get(groupKey);
         if (existing) {
-          // Multiple parts can share the same display group (e.g. a chapter split across files).
-          existing.partIds = [...(existing.partIds ?? []), part.id];
+          // Section already has a loaded group — append unloaded first_ref to its partIds.
+          existing.partIds = [...(existing.partIds ?? []), part.first_ref];
         } else {
           const placeholder: PassageGroup = {
             level: groupKey,
-            partIds: [part.id],
+            partIds: [part.first_ref],
             children: [],
           };
           hierarchy.main.push(placeholder);
           groupsByKey.set(groupKey, placeholder);
         }
-        trackedPartIds.add(part.id);
       }
 
       const extractTrailingNumber = (level: string): number => {
@@ -575,18 +590,17 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
 }
 
 
-  export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
-
-    const response = await fetch(getAssetPath(`/data/library/${granthaId}/${partFileName}`));
-
-    if (!response.ok) {
-
-      throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
-
-    }
-
-    return response.json();
-
+export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
+  const granthasList = await getAvailableGranthas();
+  const granthaMetadata = granthasList.find(g => g.id === granthaId);
+  if (!granthaMetadata) {
+    throw new Error(`Grantha ${granthaId} not found in index`);
   }
+  const response = await fetch(getAssetPath(`/data/library/${granthaMetadata.path}/${partFileName}`));
+  if (!response.ok) {
+    throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
+  }
+  return response.json();
+}
 
   

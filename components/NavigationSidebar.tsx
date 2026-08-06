@@ -1,6 +1,6 @@
 import { Grantha, GranthaMetadata, Passage, PassageGroup, PrefatoryMaterial, getPassageHierarchy } from "@/lib/data";
 import GranthaSelector from "./GranthaSelector";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Accordion from "./Accordion";
 import PassageLink from "./PassageLink";
 import { getUIStrings } from "@/lib/i18n";
@@ -11,7 +11,7 @@ interface NavigationSidebarProps {
   selectedRef: string;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
-  loadPart: (partId: string) => Promise<void>;
+  loadPart: (firstRef: string) => Promise<void>;
 }
 
 export default function NavigationSidebar({
@@ -22,7 +22,7 @@ export default function NavigationSidebar({
   onVerseSelect,
   loadPart,
 }: NavigationSidebarProps) {
-  const hierarchy = getPassageHierarchy(grantha);
+  const hierarchy = useMemo(() => getPassageHierarchy(grantha), [grantha]);
   const verseRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
 
   const [openAccordions, setOpenAccordions] = useState<string[]>(() => {
@@ -91,10 +91,16 @@ export default function NavigationSidebar({
 
       const group = findGroup(hierarchy.main, level);
 
-      // Children are empty until the part is fetched; loading is triggered on first open.
-      if (group && !group.passages && group.children && group.children.length === 0 && group.partIds?.length) {
-        const partId = group.partIds[0];
-        if (partId) await loadPart(partId);
+      // Load any part files not yet fetched for this group.
+      // Condition: group has no passages of its own (it's a structural group, not a leaf) and has
+      // backing part file first_refs listed — fetch any that haven't been loaded yet.
+      if (group && !group.passages && group.partIds?.length) {
+        const loadedRefs = new Set(grantha.passages.map(p => p.ref));
+        for (const firstRef of group.partIds) {
+          if (!loadedRefs.has(firstRef)) {
+            await loadPart(firstRef);
+          }
+        }
       }
     }
 
@@ -130,10 +136,7 @@ export default function NavigationSidebar({
               passage={passage}
               grantha={grantha}
               isSelected={passage.ref === selectedRef}
-              onVerseSelect={async (ref) => {
-                if (passage.part_id) {
-                  await loadPart(passage.part_id);
-                }
+              onVerseSelect={(ref) => {
                 onVerseSelect(ref);
               }}
             />
@@ -173,13 +176,7 @@ export default function NavigationSidebar({
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
-            onVerseSelect={async (ref) => {
-              const p = passage as Passage | PrefatoryMaterial;
-              if (p.part_id) {
-                await loadPart(p.part_id);
-              }
-              onVerseSelect(ref);
-            }}
+            onVerseSelect={(ref) => { onVerseSelect(ref); }}
           />
         ))}
 
@@ -194,13 +191,7 @@ export default function NavigationSidebar({
             passage={passage}
             grantha={grantha}
             isSelected={passage.ref === selectedRef}
-            onVerseSelect={async (ref) => {
-              const p = passage as Passage | PrefatoryMaterial;
-              if (p.part_id) {
-                await loadPart(p.part_id);
-              }
-              onVerseSelect(ref);
-            }}
+            onVerseSelect={(ref) => { onVerseSelect(ref); }}
           />
         ))}
       </div>

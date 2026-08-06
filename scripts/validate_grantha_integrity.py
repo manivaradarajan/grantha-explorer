@@ -48,8 +48,11 @@ def validate_grantha_directory(grantha_dir: str, error_log: List[str]):
         envelope = json.load(f)
 
     # 2. File Manifest Check
-    # Note: envelope.parts is now just an array of filenames, not objects with 'file' key
-    parts_from_envelope = envelope.get('parts', [])
+    # envelope.parts[] items are {file, first_ref} objects; extract the filename from each.
+    raw_parts = envelope.get('parts', [])
+    parts_from_envelope = [
+        p['file'] if isinstance(p, dict) else p for p in raw_parts
+    ]
     part_files_on_disk = sorted([os.path.basename(p) for p in glob.glob(os.path.join(grantha_dir, 'part*.json'))])
 
     if set(parts_from_envelope) != set(part_files_on_disk):

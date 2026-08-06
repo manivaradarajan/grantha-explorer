@@ -154,32 +154,29 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGrantha, verseRef]);
 
-  // Effect to load the correct part of a multi-part grantha based on the verseRef
+  // Effect to load the correct part(s) of a multi-part grantha based on the verseRef.
   useEffect(() => {
     if (!currentGrantha || !currentGrantha.parts || verseRef === "1") {
       return;
     }
-  
-    // 1. Determine the required part from the verseRef
+
     const refParts = verseRef.split('.');
     if (refParts.length === 0) return;
-  
+
     const topLevelRef = refParts[0];
-    const requiredPart = currentGrantha.parts.find(p => p.id === topLevelRef);
-  
-    if (!requiredPart) {
-      // This case should be handled by the verse validation effect,
-      // but we'll log it just in case.
-      console.warn(`Could not find part for topLevelRef: ${topLevelRef}`);
+
+    // A structural section can span multiple part files. Load all unloaded files for the section.
+    const sectionParts = currentGrantha.parts.filter(p => p.id === topLevelRef);
+    if (sectionParts.length === 0) {
+      console.warn(`Could not find any parts for topLevelRef: ${topLevelRef}`);
       return;
     }
-  
-    // 2. Check if the part is already loaded
-    const isPartLoaded = currentGrantha.passages.some(p => p.part_id === requiredPart.id);
-  
-    // 3. If not loaded, call loadPart
-    if (!isPartLoaded) {
-      loadPart(requiredPart.id);
+
+    const loadedPassageRefs = new Set(currentGrantha.passages.map(p => p.ref));
+    for (const part of sectionParts) {
+      if (!loadedPassageRefs.has(part.first_ref)) {
+        loadPart(part.first_ref);
+      }
     }
   }, [currentGrantha, verseRef, loadPart]);
 

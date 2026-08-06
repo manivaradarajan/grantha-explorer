@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Grantha, GranthaPartContent, loadGrantha, loadGranthaPart } from "@/lib/data";
+import { Commentary, Grantha, GranthaPartContent, loadGrantha, loadGranthaPart } from "@/lib/data";
 import { useState, useEffect } from "react";
 
 interface UseGranthaLoaderReturn {
@@ -7,7 +7,7 @@ interface UseGranthaLoaderReturn {
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
-  loadPart: (partId: string) => Promise<void>;
+  loadPart: (firstRef: string) => Promise<void>;
   isLoadingPart: boolean;
 }
 
@@ -24,20 +24,20 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
     gcTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 
-  const loadPart = async (partId: string) => {
+  const loadPart = async (firstRef: string) => {
     if (!grantha || !grantha.parts) {
       return;
     }
 
-    // Find the part info from the metadata
-    const partInfo = grantha.parts.find(p => p.id === partId);
+    // Find the part info from the metadata using the unique first_ref key.
+    const partInfo = grantha.parts.find(p => p.first_ref === firstRef);
     if (!partInfo) {
-      console.warn(`Part with id ${partId} not found in grantha ${granthaId}`);
+      console.warn(`Part with first_ref ${firstRef} not found in grantha ${granthaId}`);
       return;
     }
 
-    // Check if the part is already loaded to avoid redundant fetches.
-    const isPartLoaded = grantha.passages.some(p => p.part_id === partId);
+    // A part file is loaded iff its first passage is present in the cache.
+    const isPartLoaded = grantha.passages.some(p => p.ref === firstRef);
     if (isPartLoaded) {
       return;
     }
@@ -59,16 +59,16 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
         if (partContent.passages) {
           const newPassages = partContent.passages
             .filter(p => !existingRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partId }));
+            .map(p => ({ ...p, part_id: partInfo.id }));
           newData.passages = [...newData.passages, ...newPassages];
         }
-        
+
         // Merge prefatory material, filtering out duplicates
         const existingPrefatoryRefs = new Set(oldData.prefatory_material.map(p => p.ref));
         if (partContent.prefatory_material) {
           const newPrefatory = partContent.prefatory_material
             .filter(p => !existingPrefatoryRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partId }));
+            .map(p => ({ ...p, part_id: partInfo.id }));
           newData.prefatory_material = [...newData.prefatory_material, ...newPrefatory];
         }
 
@@ -77,28 +77,34 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
         if (partContent.concluding_material) {
           const newConcluding = partContent.concluding_material
             .filter(p => !existingConcludingRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partId }));
+            .map(p => ({ ...p, part_id: partInfo.id }));
           newData.concluding_material = [...newData.concluding_material, ...newConcluding];
         }
 
-        // Merge commentaries
-        if (partContent.commentaries) {
-          partContent.commentaries.forEach(commentaryPart => {
-            const existingCommentary = newData.commentaries.find(
-              c => c.commentary_id === commentaryPart.commentary_id
-            );
-            if (existingCommentary) {
-              const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
-              const newCommentaryPassages = commentaryPart.passages.filter(p => !existingCommentaryRefs.has(p.ref));
-              existingCommentary.passages.push(...newCommentaryPassages);
-            }
-          });
+        // Merge commentaries — handle all three formats:
+        //   new schema:  commentary  (single Commentary object)
+        //   legacy array: commentaries (Commentary[])
+        //   legacy dict:  commentaries (Record<id, Commentary>)
+        const incomingCommentaries: Commentary[] = partContent.commentary
+          ? [partContent.commentary]
+          : Array.isArray(partContent.commentaries)
+            ? partContent.commentaries
+            : Object.values(partContent.commentaries ?? {});
+        for (const commentaryPart of incomingCommentaries) {
+          const existingCommentary = newData.commentaries.find(
+            c => c.commentary_id === commentaryPart.commentary_id
+          );
+          if (existingCommentary) {
+            const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
+            const newCommentaryPassages = commentaryPart.passages.filter(p => !existingCommentaryRefs.has(p.ref));
+            existingCommentary.passages.push(...newCommentaryPassages);
+          }
         }
         
         return newData;
       });
     } catch (error) {
-      console.error(`Failed to load part ${partId} for ${granthaId}:`, error);
+      console.error(`Failed to load part ${firstRef} for ${granthaId}:`, error);
       // Optionally, handle the error state in the UI
     } finally {
       setIsLoadingPart(false);
