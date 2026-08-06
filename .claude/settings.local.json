@@ -33,11 +33,12 @@
       "Bash(git rev-parse:*)",
       "Bash(pip3 install:*)",
       "Bash(python -m pytest:*)",
-      "Bash(python -m tools.grantha_converter.cli:*)"
+      "Bash(python -m tools.grantha_converter.cli:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [
       "Read(./node-modules/**)",
-      "Read(./out/**)"
+      "Read(./out/**)",
       "Read(./.next/**)"
     ],
     "ask": []

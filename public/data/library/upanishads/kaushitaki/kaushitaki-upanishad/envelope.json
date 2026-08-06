@@ -1,0 +1,29 @@
+{
+  "grantha_id": "kaushitaki-upanishad",
+  "canonical_title": "कौषीतकिब्राह्मणोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "structure_levels": [
+    {
+      "key": "Adhyaya",
+      "scriptNames": {
+        "devanagari": "अध्यायः",
+        "roman": "adhyāya"
+      },
+      "children": {
+        "key": "Mantra",
+        "scriptNames": {
+          "devanagari": "मन्त्रः",
+          "roman": "mantra"
+        }
+      }
+    }
+  ],
+  "parts": [
+    "part1.json",
+    "part2.json",
+    "part3.json",
+    "part4.json"
+  ],
+  "schema_version": "0.1.0"
+}

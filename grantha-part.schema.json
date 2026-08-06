@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Grantha Part Schema",
+  "description": "Schema for a single content part of a multi-part grantha. Contains content arrays and identifiers. Versioned using semantic versioning.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of this schema in semver format (MAJOR.MINOR.PATCH). Major version changes indicate breaking schema changes."
+    },
+    "grantha_id": {
+      "description": "The ID of the parent grantha this part belongs to.",
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "part_num": {
+      "description": "The sequential number of this part within the grantha.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "prefatory_material": {
+      "type": "array",
+      "items": { "$ref": "grantha.schema.json#/definitions/passage" }
+    },
+    "passages": {
+      "type": "array",
+      "items": { "$ref": "grantha.schema.json#/definitions/passage" }
+    },
+    "concluding_material": {
+      "type": "array",
+      "items": { "$ref": "grantha.schema.json#/definitions/passage" }
+    },
+    "commentaries": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "Map of commentary_id to commentary object (preferred format)",
+          "additionalProperties": { "$ref": "grantha.schema.json#/definitions/commentary" }
+        },
+        {
+          "type": "array",
+          "description": "Array of commentary objects (legacy format)",
+          "items": { "$ref": "grantha.schema.json#/definitions/commentary" }
+        }
+      ]
+    }
+  },
+  "required": ["schema_version", "grantha_id", "part_num"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,35 @@
+{
+  "grantha_id": "taittiriya-upanishad",
+  "canonical_title": "तैत्तिरीयोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "structure_levels": [
+    {
+      "key": "Valli",
+      "scriptNames": {
+        "devanagari": "वल्ली",
+        "roman": "vallī"
+      },
+      "children": {
+        "key": "Anuvaka",
+        "scriptNames": {
+          "devanagari": "अनुवाकः",
+          "roman": "anuvāka"
+        },
+        "children": {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      }
+    }
+  ],
+  "parts": [
+    "part1.json",
+    "part2.json",
+    "part3.json"
+  ],
+  "schema_version": "0.1.0"
+}

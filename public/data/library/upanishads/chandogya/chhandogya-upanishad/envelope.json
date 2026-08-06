@@ -1,0 +1,40 @@
+{
+  "grantha_id": "chhandogya-upanishad",
+  "canonical_title": "छान्दोग्योपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "structure_levels": [
+    {
+      "key": "Prapathaka",
+      "scriptNames": {
+        "devanagari": "प्रपाठकः",
+        "roman": "prapāṭhaka"
+      },
+      "children": {
+        "key": "Khanda",
+        "scriptNames": {
+          "devanagari": "खण्डः",
+          "roman": "khaṇḍa"
+        },
+        "children": {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      }
+    }
+  ],
+  "parts": [
+    "part1.json",
+    "part2.json",
+    "part3.json",
+    "part4.json",
+    "part5.json",
+    "part6.json",
+    "part7.json",
+    "part8.json"
+  ],
+  "schema_version": "0.1.0"
+}

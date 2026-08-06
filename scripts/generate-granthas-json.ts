@@ -17,36 +17,56 @@ async function generateGranthasJson() {
     const orderedIds = JSON.parse(orderFileContents);
 
     // ======================== CHANGE STARTS HERE ========================
-    
-    // Scan the library directory for both files and directories.
-    const libraryDirEntries = await fs.readdir(libraryDir, { withFileTypes: true });
-    const availableGranthaIds = new Set<string>();
 
-    for (const entry of libraryDirEntries) {
-      if (entry.isFile() && entry.name.endsWith('.json')) {
-        // This is a single-file grantha. Add its name without extension.
-        availableGranthaIds.add(entry.name.replace('.json', ''));
-      } else if (entry.isDirectory()) {
-        // This is potentially a multi-part grantha. The directory name is the ID.
-        // We verify its validity by checking for a metadata.json file inside.
-        const metadataPath = path.join(libraryDir, entry.name, 'metadata.json');
-        try {
-          await fs.access(metadataPath); // Check for existence without reading the file.
-          availableGranthaIds.add(entry.name);
-        } catch {
-          console.warn(
-            `[Indexer Warning] Directory '${entry.name}' found in library but it lacks a metadata.json file. Skipping.`
-          );
+    // Recursively scan the library directory for both single-file and multi-part granthas.
+    const granthaPathMap = new Map<string, string>(); // Maps grantha_id to relative path
+
+    async function scanDirectory(dir: string, relativePath: string = ''): Promise<void> {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        const entryRelativePath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+
+        if (entry.isDirectory()) {
+          // Check if this directory contains an envelope.json (multi-part grantha)
+          const envelopePath = path.join(fullPath, 'envelope.json');
+          try {
+            await fs.access(envelopePath);
+            // Read the envelope to get the grantha_id
+            const content = await fs.readFile(envelopePath, 'utf-8');
+            const data = JSON.parse(content);
+            if (data.grantha_id) {
+              granthaPathMap.set(data.grantha_id, entryRelativePath);
+            }
+          } catch {
+            // No envelope.json, recurse into subdirectories
+            await scanDirectory(fullPath, entryRelativePath);
+          }
+        } else if (entry.isFile() && entry.name.endsWith('.json') && entry.name !== 'envelope.json') {
+          // This is a single-file grantha. Extract grantha_id from the file.
+          try {
+            const content = await fs.readFile(fullPath, 'utf-8');
+            const data = JSON.parse(content);
+            if (data.grantha_id) {
+              granthaPathMap.set(data.grantha_id, entryRelativePath);
+            }
+          } catch (error) {
+            console.warn(`[Indexer Warning] Failed to read grantha_id from ${fullPath}. Skipping.`);
+          }
         }
       }
     }
-    
+
+    await scanDirectory(libraryDir);
+
     // ========================= CHANGE ENDS HERE =========================
 
     let granthas = Object.entries(metaData)
-      .filter(([id]) => availableGranthaIds.has(id))
+      .filter(([id]) => granthaPathMap.has(id))
       .map(([id, meta]: [string, any]) => ({
         id,
+        path: granthaPathMap.get(id)!, // Add the relative path to the grantha
         title: meta.title.iast,
         title_deva: meta.title.devanagari,
         title_iast: meta.title.iast,

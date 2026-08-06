@@ -118,7 +118,7 @@
       ]
     }
   },
-  "chandogya-upanishad": {
+  "chhandogya-upanishad": {
     "title": {
       "devanagari": "छान्दोग्योपनिषत्",
       "iast": "Chandogya Upanishad"
@@ -226,7 +226,7 @@
       ]
     }
   },
-  "kaushitaki": {
+  "kaushitaki-upanishad": {
     "title": {
       "devanagari": "कौषीतकिब्राह्मणोपनिषत्",
       "iast": "Kaushitaki Brahmana Upanishad"
@@ -333,13 +333,15 @@
       ]
     }
   },
-  "mandukya-rangaramanuja-upanishad": {
+  "mandukya-upanishad": {
     "title": {
       "devanagari": "माण्डूक्योपनिषत्",
-      "iast": "Mandukya Rangaramanuja Upanishad"
+      "iast": "Mandukya Upanishad"
     },
     "abbreviations": {
-      "devanagari": []
+      "devanagari": [
+        "मां.उ."
+      ]
     }
   },
   "manu-smriti": {
@@ -428,10 +430,10 @@
       ]
     }
   },
-  "prasna-upanishad": {
+  "prashna-upanishad": {
     "title": {
       "devanagari": "प्रश्नोपनिषत्",
-      "iast": "Prasna Upanishad"
+      "iast": "Prashna Upanishad"
     },
     "abbreviations": {
       "devanagari": [

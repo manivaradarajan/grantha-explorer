@@ -112,6 +112,7 @@ export interface Grantha extends GranthaMetadata {
 
 export interface GranthaMetadata {
   id: string;
+  path: string; // Relative path from /data/library/ to the grantha file or directory
   title: string;
   title_deva: string;
   title_iast: string;
@@ -232,6 +233,7 @@ export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
 
 /**
  * Load full grantha data from JSON file or initial part of a multi-part grantha.
+ * TODO: Remove duplicate structure_levels from part files (should only be in envelope.json)
  */
 export async function loadGrantha(granthaId: string): Promise<Grantha> {
   // 1. Check cache first
@@ -240,44 +242,76 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
   }
 
   try {
-    // 1. Try to fetch metadata.json for multi-part granthas
-    const metadataResponse = await fetch(getAssetPath(`/data/library/${granthaId}/metadata.json`));
+    // Get the path from the generated index
+    const granthasList = await getAvailableGranthas();
+    const granthaMetadata = granthasList.find(g => g.id === granthaId);
 
-    if (metadataResponse.ok) {
-      // It's a multi-part grantha. The raw metadata has `id` as `number[]`.
-      // We convert it to `string` to match our app's internal types.
-      const rawMetadata = await metadataResponse.json();
-      const multiPartMetadata: GranthaMetadataOnly = {
-        ...rawMetadata,
-        parts: rawMetadata.parts.map((p: { file: string; id: number[] }) => ({
-          file: p.file,
-          id: p.id && p.id.length > 0 ? String(p.id[0]) : p.file.replace('.json', ''),
-        })),
-      };
+    if (!granthaMetadata) {
+      throw new Error(`Grantha ${granthaId} not found in index`);
+    }
 
-      if (!multiPartMetadata.parts || multiPartMetadata.parts.length === 0) {
-        throw new Error(`Multi-part grantha ${granthaId} has no parts defined in metadata.json`);
-      }
+    const granthaPath = granthaMetadata.path;
 
-      // Fetch all parts that share the same ID as the first part.
-      const firstPartId = multiPartMetadata.parts[0]?.id;
-      const partsToLoad = multiPartMetadata.parts.filter(p => p.id === firstPartId);
+    // Determine if it's a directory (multi-part) or file (single-part)
+    const isMultiPart = !granthaPath.endsWith('.json');
 
-      const loadedPartsContent: GranthaPartContent[] = await Promise.all(
-        partsToLoad.map(async (partInfo) => {
-          const response = await fetch(getAssetPath(`/data/library/${granthaId}/${partInfo.file}`));
-          if (!response.ok) {
-            throw new Error(`Failed to load part file ${partInfo.file} for grantha ${granthaId}`);
-          }
-          const content: GranthaPartContent = await response.json();
-          return {
-            ...content,
-            prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.id })),
-            passages: (content.passages || []).map(p => ({ ...p, part_id: partInfo.id })),
-            concluding_material: (content.concluding_material || []).map(p => ({ ...p, part_id: partInfo.id })),
-          };
-        })
-      );
+    if (isMultiPart) {
+      // Try to fetch envelope.json for multi-part granthas
+      const envelopeResponse = await fetch(getAssetPath(`/data/library/${granthaPath}/envelope.json`));
+
+      if (envelopeResponse.ok) {
+        // It's a multi-part grantha. Read the envelope.
+        const rawEnvelope = await envelopeResponse.json();
+
+        // The envelope now has a simple parts array of filenames
+        const multiPartMetadata: GranthaMetadataOnly = {
+          ...rawEnvelope,
+          parts: rawEnvelope.parts.map((partFile: string) => {
+            // Extract part number from filename (e.g., "part1.json" -> "1")
+            const partNumMatch = partFile.match(/part(\d+)\.json/);
+            const partId = partNumMatch ? partNumMatch[1] : partFile.replace('.json', '');
+            return {
+              file: partFile,
+              id: partId,
+            };
+          }),
+        };
+
+        if (!multiPartMetadata.parts || multiPartMetadata.parts.length === 0) {
+          throw new Error(`Multi-part grantha ${granthaId} has no parts defined in envelope.json`);
+        }
+
+        // Fetch all parts that share the same ID as the first part.
+        const firstPartId = multiPartMetadata.parts[0]?.id;
+        const partsToLoad = multiPartMetadata.parts.filter(p => p.id === firstPartId);
+
+        const loadedPartsContent: GranthaPartContent[] = await Promise.all(
+          partsToLoad.map(async (partInfo) => {
+            const response = await fetch(getAssetPath(`/data/library/${granthaPath}/${partInfo.file}`));
+            if (!response.ok) {
+              throw new Error(`Failed to load part file ${partInfo.file} for grantha ${granthaId}`);
+            }
+            const content: GranthaPartContent = await response.json();
+
+            // Convert commentaries from object to array if needed
+            let commentariesArray: Commentary[] = [];
+            if (content.commentaries) {
+              if (Array.isArray(content.commentaries)) {
+                commentariesArray = content.commentaries;
+              } else {
+                // Convert object format to array
+                commentariesArray = Object.values(content.commentaries);
+              }
+            }
+
+            return {
+              prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.id })),
+              passages: (content.passages || []).map(p => ({ ...p, part_id: partInfo.id })),
+              concluding_material: (content.concluding_material || []).map(p => ({ ...p, part_id: partInfo.id })),
+              commentaries: commentariesArray,
+            };
+          })
+        );
 
       // Combine the content from all loaded parts
       const combinedContent: GranthaPartContent = loadedPartsContent.reduce((acc, partContent) => {
@@ -323,24 +357,33 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         });
       }
 
-      // Cache and return the partially assembled grantha
-      granthaCache.set(granthaId, partialGrantha);
-      return partialGrantha;
+        // Cache and return the partially assembled grantha
+        granthaCache.set(granthaId, partialGrantha);
+        return partialGrantha;
 
-    } else if (metadataResponse.status === 404) {
-      // 2. If metadata.json not found, assume it's a single-file grantha
-      const singleFileResponse = await fetch(getAssetPath(`/data/library/${granthaId}.json`));
+      } else if (envelopeResponse.status === 404) {
+        throw new Error(`Multi-part grantha ${granthaId} directory found but envelope.json is missing`);
+      } else {
+        // Handle other potential errors for envelope.json fetch
+        throw new Error(`Failed to fetch envelope.json for grantha ${granthaId}: ${envelopeResponse.statusText}`);
+      }
+    } else {
+      // It's a single-file grantha
+      const singleFileResponse = await fetch(getAssetPath(`/data/library/${granthaPath}`));
 
       if (!singleFileResponse.ok) {
         throw new Error(`Failed to load single-file grantha: ${granthaId}`);
       }
 
-      const data: Grantha = await singleFileResponse.json();
+      const data: any = await singleFileResponse.json();
+
+      // Convert commentaries from object to array if needed
+      if (data.commentaries && !Array.isArray(data.commentaries)) {
+        data.commentaries = Object.values(data.commentaries);
+      }
+
       granthaCache.set(granthaId, data);
       return data;
-    } else {
-      // Handle other potential errors for metadata.json fetch
-      throw new Error(`Failed to fetch metadata for grantha ${granthaId}: ${metadataResponse.statusText}`);
     }
   } catch (error) {
     console.error(`Error in loadGrantha for ${granthaId}:`, error);
