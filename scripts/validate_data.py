@@ -3,7 +3,7 @@ import os
 from jsonschema import validate
 
 def main():
-    schema_path = os.path.join(os.path.dirname(__file__), '..', 'schemas', 'grantha.schema.json')
+    schema_path = os.path.join(os.path.dirname(__file__), '..', 'grantha.schema.json')
     with open(schema_path, 'r') as f:
         schema = json.load(f)
 

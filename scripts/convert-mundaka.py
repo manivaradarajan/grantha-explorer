@@ -17,7 +17,7 @@ SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 SOURCE_FILE = PROJECT_ROOT.parent / "simple" / "data" / "mundaka.json"
 OUTPUT_FILE = PROJECT_ROOT / "public" / "data" / "library" / "mundaka-upanishad.json"
-SCHEMA_FILE = PROJECT_ROOT / "schemas" / "grantha.schema.json"
+SCHEMA_FILE = PROJECT_ROOT / "grantha.schema.json"
 
 
 def load_json(file_path: Path) -> Dict[str, Any]:

@@ -6,7 +6,7 @@ const path = require('path');
 const ajv = new Ajv();
 addFormats(ajv);
 
-const schemaPath = path.resolve(__dirname, '../schemas/grantha.schema.json');
+const schemaPath = path.resolve(__dirname, '../grantha.schema.json');
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
 const validate = ajv.compile(schema);
 

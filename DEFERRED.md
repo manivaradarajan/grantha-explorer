@@ -109,10 +109,10 @@ schema rewrite and uses `children` as a plain object (not wrapped in `[]`):
 
 The runtime code in `buildNestedGroups` and `PassageLink.getLabel()` already
 handles both shapes (`Array.isArray(children) ? children[0] : children`), so
-there is no rendering bug. But these files likely fail schema validation
-against the current `grantha-envelope.schema.json`.
+there is no rendering bug. But these files **fail schema validation** against the
+current `grantha-envelope.schema.json` (confirmed: 48 files, error
+`wrong type at structure_levels[0].children` once the validators were pointed
+at the correct root schemas — stale-validator issue resolved).
 
-This is unconfirmed because `scripts/validate_data.py` still reads the stale
-schema copy in `schemas/` (also flagged — see item 6 notes). The audit and
-migration (wrapping bare `children: {...}` in `children: [...]`) should be
-done as a single pass once the stale-validator issue is resolved.
+The migration (wrapping bare `children: {...}` in `children: [...]`) is the
+next planned data fix pass.
