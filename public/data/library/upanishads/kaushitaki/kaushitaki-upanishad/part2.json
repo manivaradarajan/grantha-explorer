@@ -1,25 +1,8 @@
 {
+  "schema_version": "1.0.0",
   "grantha_id": "kaushitaki-upanishad",
+  "edition_id": "kaushitaki-upanishad",
   "part_num": 2,
-  "canonical_title": "कौषीतकिब्राह्मणोपनिषत्",
-  "text_type": "upanishad",
-  "language": "sanskrit",
-  "structure_levels": [
-    {
-      "key": "Adhyaya",
-      "scriptNames": {
-        "devanagari": "अध्यायः",
-        "roman": "adhyāya"
-      },
-      "children": {
-        "key": "Mantra",
-        "scriptNames": {
-          "devanagari": "मन्त्रः",
-          "roman": "mantra"
-        }
-      }
-    }
-  ],
   "passages": [
     {
       "ref": "2.1",
@@ -156,9 +139,5 @@
         }
       }
     }
-  ],
-  "prefatory_material": [],
-  "concluding_material": [],
-  "commentaries": {},
-  "schema_version": "0.1.0"
+  ]
 }
