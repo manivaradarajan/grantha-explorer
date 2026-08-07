@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import TextContent from "@/components/TextContent";
@@ -186,13 +186,6 @@ export default function Home() {
     updateHash(newGranthaId, "1", commentaries);
   };
 
-  // Handle scroll-spy focus updates — uses replaceState so scrolling doesn't
-  // pollute back-button history. Passes undefined for commentaries/commentaryOpen
-  // so updateHash preserves the current values from state.
-  const handleScrollFocus = useCallback((ref: string) => {
-    updateHash(granthaId, ref, undefined, undefined, true);
-  }, [updateHash, granthaId]);
-
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
     if (isMobile) {
@@ -295,7 +288,6 @@ export default function Home() {
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
           isLoadingPart={isLoadingPart}
-          onScrollFocus={handleScrollFocus}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -325,7 +317,6 @@ export default function Home() {
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
           isLoadingPart={isLoadingPart}
-          onScrollFocus={handleScrollFocus}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -373,7 +364,6 @@ export default function Home() {
               title={currentGrantha.canonical_title}
               loadPart={loadPart}
               isLoadingPart={isLoadingPart}
-              onScrollFocus={handleScrollFocus}
             />
           </Panel>
 

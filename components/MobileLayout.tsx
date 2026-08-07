@@ -26,7 +26,6 @@ interface MobileLayoutProps {
   granthaIdToLatinTitle: { [key: string]: string };
   loadPart: (partId: string) => Promise<void>;
   isLoadingPart: boolean;
-  onScrollFocus: (ref: string) => void;
 }
 
 export default function MobileLayout({
@@ -43,7 +42,6 @@ export default function MobileLayout({
   granthaIdToLatinTitle,
   loadPart,
   isLoadingPart,
-  onScrollFocus,
 }: MobileLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
@@ -124,7 +122,6 @@ export default function MobileLayout({
           hideTitle={true}
           loadPart={loadPart}
           isLoadingPart={isLoadingPart}
-          onScrollFocus={onScrollFocus}
         />
       </div>
 

@@ -10,7 +10,7 @@ import {
   type GranthaMeta,
 } from "@/lib/data";
 import { getUIStrings, type Language, type Script } from "@/lib/i18n";
-import { useCallback, useMemo, useEffect, useState, useRef } from "react";
+import { useCallback, useMemo, useEffect, useState } from "react";
 
 import DOMPurify from "isomorphic-dompurify";
 import { parseReferences } from '@/lib/references';
@@ -48,18 +48,6 @@ export default function CommentaryPanel({
     const language = (grantha.language || "sanskrit") as Language;
     return getUIStrings(language, script);
   }, [grantha.language, script]);
-
-  // Debounce commentary re-render by 400 ms to avoid jarring updates during fast scroll.
-  // The URL hash (selectedRef) updates at 150 ms; the commentary pane waits longer
-  // so fling-scrolling doesn't produce rapid re-renders.
-  const [displayRef, setDisplayRef] = useState(selectedRef);
-  const displayRefTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => {
-    displayRefTimer.current = setTimeout(() => setDisplayRef(selectedRef), 400);
-    return () => {
-      if (displayRefTimer.current !== null) clearTimeout(displayRefTimer.current);
-    };
-  }, [selectedRef]);
 
   const [abbreviationMap, setAbbreviationMap] = useState<Record<string, string>>({});
   const [granthasMeta, setGranthasMeta] = useState<GranthaMeta | null>(null);
@@ -178,7 +166,7 @@ export default function CommentaryPanel({
   );
 
   const renderCommentary = (commentary: Commentary, index: number) => {
-    const passage = commentary.passages?.find((p: CommentaryPassage) => p.ref === displayRef);
+    const passage = commentary.passages?.find((p: CommentaryPassage) => p.ref === selectedRef);
 
     if (!passage) {
       return (

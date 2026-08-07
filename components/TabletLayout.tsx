@@ -22,7 +22,6 @@ interface TabletLayoutProps {
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
   isLoadingPart: boolean;
-  onScrollFocus: (ref: string) => void;
 }
 
 export default function TabletLayout({
@@ -39,7 +38,6 @@ export default function TabletLayout({
   granthaIdToLatinTitle,
   loadPart,
   isLoadingPart,
-  onScrollFocus,
 }: TabletLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -140,7 +138,6 @@ export default function TabletLayout({
                 hideTitle={true}
                 loadPart={loadPart}
                 isLoadingPart={isLoadingPart}
-                onScrollFocus={onScrollFocus}
               />
             </Panel>
 
@@ -172,7 +169,6 @@ export default function TabletLayout({
             hideTitle={true}
             loadPart={loadPart}
             isLoadingPart={isLoadingPart}
-            onScrollFocus={onScrollFocus}
           />
         )}
       </div>

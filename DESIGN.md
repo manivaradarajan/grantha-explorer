@@ -137,16 +137,17 @@ always.
   at least one must remain active (the last active cannot be unchecked).
   This resolves Open Design Choice #5 — variant C (checkbox style), with
   full Devanagari name rather than a siglum abbreviation.
-- **Browsing vs. focused-verse state.** The reading screen distinguishes
-  two scroll states: *browsing* (reader is scrolling, current verse has not
-  yet settled) and *focused* (the verse stably in the upper reading zone for
-  ≥150 ms). Scroll-driven focus changes use `replaceState` — scanning verses
-  must not pollute back-button history; one tap back after a reading session
-  should return to where the session started, not to every intermediate verse.
-  Explicit navigation (verse tap, Prev/Next, cross-reference click) uses
-  `pushState` and is always recoverable via back button. Commentary pane
-  content updates after a longer settle period (~400 ms) than the URL update
-  (~150 ms) to avoid jarring re-renders during fast scroll.
+- **Focus changes only via explicit action.** The URL hash, commentary
+  content, and breadcrumb update only when the reader makes a deliberate
+  choice: tapping a verse, pressing Prev/Next, or following a cross-reference
+  link. Scrolling the verse list is pure browsing with zero side effects —
+  it must never change the URL hash or the displayed commentary.
+  Scroll-driven focus tracking (IntersectionObserver updating hash and
+  commentary as the reader scrolls) was implemented, tested, and reverted.
+  It was found disruptive to sustained reading: live-updating a full
+  commentary pane mid-scroll violates the "preserve place" and "zero
+  cognitive load" principles this screen is built on. Do not reintroduce
+  scroll-driven focus tracking without re-evaluating this decision.
 - **Flagging (v1 scope):**
   - Unified entry point for both content errors and product feedback — one
     button, not two separate mechanisms.
