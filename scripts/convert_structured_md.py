@@ -123,6 +123,15 @@ _SANSKRIT_OPEN_RE = re.compile(r"<!--\s*sanskrit:devanagari\s*-->")
 # instead closed with a stray <!-- /hide --> tag).
 _ANY_HTML_CLOSE_RE = re.compile(r"<!--\s*/[^>]+?-->")
 
+# Matches any Markdown level-1 heading that is NOT a passage heading and NOT a
+# commentary heading within a passage segment.  Used to detect trailing section
+# breaks (e.g. "# Appendix:") that should terminate the final passage segment
+# rather than being swept into its content.
+_SECTION_BREAK_RE = re.compile(
+    r"^# (?!Mantra\b|Prefatory\b|Concluding\b|Commentary:)\S",
+    re.MULTILINE,
+)
+
 
 # ---------------------------------------------------------------------------
 # Parsing helpers
@@ -278,7 +287,14 @@ def parse_body(text: str) -> BodyData:
         label = match.group(3) or ""
 
         seg_start = match.end()
-        seg_end = headings[i + 1].start() if i + 1 < len(headings) else len(text)
+        if i + 1 < len(headings):
+            seg_end = headings[i + 1].start()
+        else:
+            # For the final passage, stop at any non-passage/non-commentary
+            # level-1 heading (e.g. "# Appendix:") to avoid sweeping trailing
+            # editorial sections into the last passage's content.
+            section_break = _SECTION_BREAK_RE.search(text, match.end())
+            seg_end = section_break.start() if section_break else len(text)
         segment = text[seg_start:seg_end]
 
         mula_text = _extract_mula_text(segment)
@@ -502,12 +518,10 @@ def build_envelope_json(
         Dict conforming to the v1.0.0 envelope schema.
     """
     grantha_id: str = frontmatter["grantha_id"]
-    canonical_title: str = frontmatter.get("canonical_title", "")
     return {
         "schema_version": SCHEMA_VERSION,
         "edition_id": grantha_id,
         "grantha_id": grantha_id,
-        "canonical_title": canonical_title,
         "structure_levels": structure_levels,
         "parts": parts_info,
     }
