@@ -20,10 +20,22 @@
     }
   ],
   "parts": [
-    "part1.json",
-    "part2.json",
-    "part3.json",
-    "part4.json"
+    {
+      "file": "part1.json",
+      "first_ref": "1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "3.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "4.1"
+    }
   ],
   "schema_version": "0.1.0"
 }

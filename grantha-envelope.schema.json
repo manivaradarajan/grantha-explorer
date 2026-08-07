@@ -104,12 +104,24 @@
           "items": { "$ref": "#/definitions/structure_level" }
         },
         "parts": {
-          "description": "Ordered list of content part filenames for this edition.",
+          "description": "Ordered list of content parts for this edition. Each entry names the file and records the ref of the first main passage in that file, so the runtime knows which structural group (e.g. Adhyaya) the part belongs to without loading the content file.",
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "string",
-            "pattern": "^part[0-9]+\\.json$"
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string",
+                "pattern": "^part[0-9]+\\.json$",
+                "description": "Filename of the part content file."
+              },
+              "first_ref": {
+                "type": "string",
+                "description": "Ref of the first main passage in this part file (e.g. '3.1.1'). The top-level segment (split on '.') identifies the structural group this part belongs to."
+              }
+            },
+            "required": ["file", "first_ref"],
+            "additionalProperties": false
           }
         }
       },
