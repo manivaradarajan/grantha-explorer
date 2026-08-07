@@ -472,210 +472,79 @@ export function isValidVerseRef(grantha: Grantha, verseRef: string): boolean {
 
 **Location:** `hooks/useVerseHash.ts`
 
+> **Note:** The pseudocode below reflects the actual implementation as of the
+> current codebase. Earlier versions of this document described a different
+> signature (`availableGranthas`, `defaultGranthaId`, `granthaData: Map`) that
+> was superseded during implementation.
+
 ```typescript
-import { useEffect, useState } from 'react';
-import { parseHash, buildHash, getFirstVerseRef, isValidVerseRef } from '@/lib/hashUtils';
-import { Grantha } from '@/types';
-
-interface VerseHashState {
-  granthaId: string;
-  verseRef: string;
-}
-
 interface UseVerseHashReturn {
   granthaId: string;
   verseRef: string;
-  updateHash: (granthaId: string, verseRef: string) => void;
+  commentaries: string[];        // active commentary IDs from ?c= param
+  commentaryOpen: boolean;       // whether commentary panel is open (?co=1)
+  updateHash: (
+    granthaId: string,
+    verseRef: string,
+    commentaries?: string[],
+    commentaryOpen?: boolean,
+    replaceHistory?: boolean
+  ) => void;
+  updateCommentaryOpen: (isOpen: boolean) => void;
 }
 
 /**
- * Custom hook for managing hash-based verse navigation
- * - Reads initial hash on mount
- * - Listens to hashchange events (for browser back/forward)
- * - Provides updateHash function for programmatic updates
- * - Auto-initializes with first verse if hash is missing/invalid
+ * Hook for managing hash-based verse navigation.
+ *
+ * - Single source of truth: the URL hash.
+ * - Initializes from the hash on mount; falls back to defaults if absent/invalid.
+ * - Listens to hashchange events (browser back/forward).
+ * - Commentary IDs (from ?c=) are saved to localStorage as the new default
+ *   whenever they appear in the URL.
+ * - Verse-level validation and correction happen in page.tsx via
+ *   validateAndNormalizeHash(), not inside this hook.
+ *
+ * @param defaultGranthaId - Fallback grantha ID when hash is empty or invalid.
+ * @param defaultVerseRef  - Fallback verse ref (default "1").
  */
 export function useVerseHash(
-  availableGranthas: string[],
   defaultGranthaId: string,
-  granthaData: Map<string, Grantha>
-): UseVerseHashReturn {
-  // Initialize state from URL hash or defaults
-  const [state, setState] = useState<VerseHashState>(() => {
-    const hash = window.location.hash;
-    const parsed = parseHash(hash);
-
-    // If valid hash exists and grantha is available, use it
-    if (parsed && availableGranthas.includes(parsed.granthaId)) {
-      const grantha = granthaData.get(parsed.granthaId);
-
-      // Validate verse ref exists in grantha
-      if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
-        return parsed;
-      }
-
-      // Invalid verse ref - use first verse of that grantha
-      if (grantha) {
-        const firstRef = getFirstVerseRef(grantha);
-        // Update URL with valid verse
-        window.history.replaceState(null, '', buildHash(parsed.granthaId, firstRef));
-        return { granthaId: parsed.granthaId, verseRef: firstRef };
-      }
-    }
-
-    // No valid hash - use default grantha and first verse
-    const defaultGrantha = granthaData.get(defaultGranthaId);
-    const firstRef = defaultGrantha ? getFirstVerseRef(defaultGrantha) : '1.1';
-
-    // Set initial hash
-    window.history.replaceState(null, '', buildHash(defaultGranthaId, firstRef));
-
-    return { granthaId: defaultGranthaId, verseRef: firstRef };
-  });
-
-  // Listen to hashchange events (browser back/forward)
-  useEffect(() => {
-    function handleHashChange() {
-      const hash = window.location.hash;
-      const parsed = parseHash(hash);
-
-      if (parsed && availableGranthas.includes(parsed.granthaId)) {
-        const grantha = granthaData.get(parsed.granthaId);
-
-        // Validate verse ref
-        if (grantha && isValidVerseRef(grantha, parsed.verseRef)) {
-          setState(parsed);
-          return;
-        }
-
-        // Invalid verse - use first verse
-        if (grantha) {
-          const firstRef = getFirstVerseRef(grantha);
-          window.history.replaceState(null, '', buildHash(parsed.granthaId, firstRef));
-          setState({ granthaId: parsed.granthaId, verseRef: firstRef });
-          return;
-        }
-      }
-
-      // Invalid hash - revert to current state
-      window.history.replaceState(null, '', buildHash(state.granthaId, state.verseRef));
-    }
-
-    window.addEventListener('hashchange', handleHashChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, [availableGranthas, granthaData, state.granthaId, state.verseRef]);
-
-  // Function to update hash (called by components)
-  const updateHash = (granthaId: string, verseRef: string) => {
-    const newHash = buildHash(granthaId, verseRef);
-
-    // Only update if different from current hash
-    if (window.location.hash !== newHash) {
-      window.location.hash = newHash;
-      // State will be updated via hashchange event
-    }
-  };
-
-  return {
-    granthaId: state.granthaId,
-    verseRef: state.verseRef,
-    updateHash
-  };
-}
+  defaultVerseRef: string = "1"
+): UseVerseHashReturn { /* ... */ }
 ```
 
 ---
 
 ### 3. Main Page Integration
 
-**Location:** `app/page.tsx`
-
-**Changes Required:**
+**Location:** `app/page.tsx` *(implemented)*
 
 ```typescript
-// BEFORE (current implementation)
-const [currentGrantha, setCurrentGrantha] = useState('kena-upanishad');
-const [selectedRef, setSelectedRef] = useState('1.1');
-
-// AFTER (hash-based implementation)
-const { granthaId, verseRef, updateHash } = useVerseHash(
-  availableGranthas,
-  'kena-upanishad', // default grantha
-  granthaDataMap    // Map<string, Grantha>
-);
-
-// Use granthaId and verseRef instead of state variables
-// No need for setCurrentGrantha or setSelectedRef
+// Actual usage in page.tsx
+const {
+  granthaId,
+  verseRef,
+  commentaries,
+  commentaryOpen,
+  updateHash,
+  updateCommentaryOpen,
+} = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
 ```
 
-**Handler Updates:**
-
-```typescript
-// Grantha selection handler
-const handleGranthaChange = (newGranthaId: string) => {
-  const grantha = granthaDataMap.get(newGranthaId);
-  const firstRef = grantha ? getFirstVerseRef(grantha) : '1.1';
-  updateHash(newGranthaId, firstRef);
-};
-
-// Verse selection handler
-const handleVerseSelect = (ref: string) => {
-  updateHash(granthaId, ref);
-};
-```
+Grantha data is loaded separately via `useGranthaLoader(granthaId)` (TanStack Query),
+not passed into the hook. Verse-ref validation runs in a `useEffect` that calls
+`validateAndNormalizeHash()` and shows `InvalidVerseModal` on failure.
 
 ---
 
-### 4. Component Updates
+### 4. Component Updates *(implemented)*
 
-#### PassageLink Component
+**PassageLink** (`components/PassageLink.tsx`): calls `onVerseSelect(ref)` which
+propagates up to `handleVerseSelect` → `updateHash` in `page.tsx`.
 
-**Location:** `components/PassageLink.tsx`
-
-**Changes:**
-
-```typescript
-interface PassageLinkProps {
-  passage: Passage;
-  isSelected: boolean;
-  onSelect: (ref: string) => void; // This now calls updateHash
-}
-
-export default function PassageLink({ passage, isSelected, onSelect }: PassageLinkProps) {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    onSelect(passage.ref); // Triggers updateHash in parent
-  };
-
-  return (
-    <a
-      href={`#${passage.ref}`} // Optional: for accessibility/right-click
-      onClick={handleClick}
-      className={/* ... */}
-    >
-      {/* ... content ... */}
-    </a>
-  );
-}
-```
-
-#### GranthaSelector Component
-
-**Location:** `components/GranthaSelector.tsx` or equivalent
-
-**Changes:**
-
-```typescript
-// When user selects new grantha
-const handleChange = (newGranthaId: string) => {
-  const grantha = granthaDataMap.get(newGranthaId);
-  const firstRef = getFirstVerseRef(grantha);
-  onGranthaChange(newGranthaId); // Calls handleGranthaChange which calls updateHash
-};
-```
+**GranthaSelector** (`components/GranthaSelector.tsx`): calls `onSelect(granthaId)` →
+`handleGranthaChange` → `updateHash(newGranthaId, "1")`, which triggers the grantha-
+change `useEffect` to jump to the first main passage.
 
 ---
 
@@ -849,28 +718,18 @@ describe('buildHash', () => {
 
 ---
 
-## Migration Path
+## Migration Status *(as of 2026-08-06)*
 
-**From Current Implementation:**
+All items below are complete:
 
-1. ✅ Create `lib/hashUtils.ts` with utility functions
-2. ✅ Create `hooks/useVerseHash.ts` custom hook
-3. Update `app/page.tsx`:
-   - Replace state with `useVerseHash` hook
-   - Update handlers to use `updateHash`
-4. Update `components/PassageLink.tsx`:
-   - Add href for accessibility
-   - Call `onSelect` which triggers `updateHash`
-5. Update `components/GranthaSelector.tsx`:
-   - Call handler which triggers `updateHash` with first verse
-6. Test thoroughly (see testing checklist above)
-7. Remove old localStorage-based verse tracking (keep preferences)
-
-**Rollback Plan:**
-
-- Hash utilities are pure functions (no side effects)
-- Hook is isolated (doesn't modify global state)
-- Easy to revert by removing hook and restoring old state management
+1. ✅ `lib/hashUtils.ts` — utility functions (`parseHash`, `buildHash`,
+   `getFirstVerseRef`, `getFirstMainPassageRef`, `isValidVerseRef`,
+   `validateAndNormalizeHash`)
+2. ✅ `hooks/useVerseHash.ts` — custom hook (simplified signature, see §2 above)
+3. ✅ `app/page.tsx` — uses `useVerseHash`; grantha data via `useGranthaLoader`
+4. ✅ `components/PassageLink.tsx` — calls `onVerseSelect` → `updateHash`
+5. ✅ `components/GranthaSelector.tsx` — calls `onSelect` → `updateHash`
+6. ✅ `components/InvalidVerseModal.tsx` — shown on invalid verse ref, URL reverted
 
 ---
 

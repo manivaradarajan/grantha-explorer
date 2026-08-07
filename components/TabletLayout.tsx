@@ -13,13 +13,16 @@ interface TabletLayoutProps {
   granthas: GranthaMetadata[];
   selectedRef: string;
   commentaries: string[];
+  commentaryOpen: boolean;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
   updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
-  granthaIdToDevanagariTitle: { [key: string]: string };
-  granthaIdToLatinTitle: { [key: string]: string };
+  updateCommentaryOpen: (isOpen: boolean) => void;
+  granthaIdToDevanagariTitle: Record<string, string>;
+  granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
   isLoadingPart: boolean;
+  onScrollFocus: (ref: string) => void;
 }
 
 export default function TabletLayout({
@@ -27,13 +30,16 @@ export default function TabletLayout({
   granthas,
   selectedRef,
   commentaries,
+  commentaryOpen,
   onGranthaChange,
   onVerseSelect,
   updateHash,
+  updateCommentaryOpen,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
   loadPart,
   isLoadingPart,
+  onScrollFocus,
 }: TabletLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -59,7 +65,7 @@ export default function TabletLayout({
 
   return (
     <div className="h-screen flex flex-col bg-white">
-      {/* Tablet Header with Hamburger Menu */}
+      {/* Tablet Header with Hamburger Menu and Commentary Toggle */}
       <div className="flex items-center gap-4 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
         {/* Hamburger Menu Button */}
         <button
@@ -84,51 +90,91 @@ export default function TabletLayout({
         </button>
 
         {/* Title */}
-        <h1 className="text-xl font-semibold font-serif">
+        <h1 className="text-xl font-semibold font-serif flex-1">
           {grantha.canonical_title}
         </h1>
+
+        {/* Commentary Toggle Button */}
+        <button
+          onClick={() => updateCommentaryOpen(!commentaryOpen)}
+          className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-medium ${
+            commentaryOpen
+              ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              : "bg-white text-gray-500 hover:bg-gray-100 border border-gray-300"
+          }`}
+          aria-label={commentaryOpen ? "Hide commentary" : "Show commentary"}
+          aria-pressed={commentaryOpen}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+            />
+          </svg>
+        </button>
       </div>
 
-      {/* 2-Column Layout: Primary Text + Commentary */}
+      {/* Content: text alone, or text + commentary side-by-side */}
       <div className="flex-1 overflow-hidden">
-        <PanelGroup
-          direction="horizontal"
-          className="h-full"
-          onLayout={handlePanelLayout}
-        >
-          {/* Center Content Panel */}
-          <Panel defaultSize={panelSizes[0]} minSize={40}>
-            <TextContent
-              grantha={grantha}
-              selectedRef={selectedRef}
-              onVerseSelect={onVerseSelect}
-              title={grantha.canonical_title}
-              hideTitle={true}
-              loadPart={loadPart}
-              isLoadingPart={isLoadingPart}
-            />
-          </Panel>
+        {commentaryOpen ? (
+          <PanelGroup
+            direction="horizontal"
+            className="h-full"
+            onLayout={handlePanelLayout}
+          >
+            {/* Center Content Panel */}
+            <Panel defaultSize={panelSizes[0]} minSize={40}>
+              <TextContent
+                grantha={grantha}
+                selectedRef={selectedRef}
+                onVerseSelect={onVerseSelect}
+                title={grantha.canonical_title}
+                hideTitle={true}
+                loadPart={loadPart}
+                isLoadingPart={isLoadingPart}
+                onScrollFocus={onScrollFocus}
+              />
+            </Panel>
 
-          {/* Resize Handle */}
-          <PanelResizeHandle
-            className={`w-1 bg-gray-200 ${isDragging ? 'bg-blue-500' : 'hover:bg-blue-500'} transition-colors`}
-            onDragging={setIsDragging}
+            {/* Resize Handle */}
+            <PanelResizeHandle
+              className={`w-1 bg-gray-200 ${isDragging ? 'bg-blue-500' : 'hover:bg-blue-500'} transition-colors`}
+              onDragging={setIsDragging}
+            />
+
+            {/* Right Commentary Panel */}
+            <Panel defaultSize={panelSizes[1]} minSize={30} maxSize={60}>
+              <CommentaryPanel
+                grantha={grantha}
+                selectedRef={selectedRef}
+                selectedCommentaryIds={commentaries}
+                updateHash={updateHash}
+                availableGranthaIds={granthas.map((g) => g.id)}
+                granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+                granthaIdToLatinTitle={granthaIdToLatinTitle}
+              />
+            </Panel>
+          </PanelGroup>
+        ) : (
+          <TextContent
+            grantha={grantha}
+            selectedRef={selectedRef}
+            onVerseSelect={onVerseSelect}
+            title={grantha.canonical_title}
+            hideTitle={true}
+            loadPart={loadPart}
+            isLoadingPart={isLoadingPart}
+            onScrollFocus={onScrollFocus}
           />
-
-          {/* Right Commentary Panel */}
-          <Panel defaultSize={panelSizes[1]} minSize={30} maxSize={60}>
-            <CommentaryPanel
-              grantha={grantha}
-              selectedRef={selectedRef}
-              updateHash={(granthaId, verseRef, commentaries) =>
-                updateHash(granthaId, verseRef, commentaries)
-              }
-              availableGranthaIds={granthas.map((g) => g.id)}
-              granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-              granthaIdToLatinTitle={granthaIdToLatinTitle}
-            />
-          </Panel>
-        </PanelGroup>
+        )}
       </div>
 
       {/* Navigation Drawer */}

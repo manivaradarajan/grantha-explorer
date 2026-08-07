@@ -1,27 +1,38 @@
 "use client";
 
-import { Grantha, Commentary, CommentaryPassage, CommentaryPrefatoryItem } from "@/lib/data";
+import {
+  Grantha,
+  Commentary,
+  CommentaryPassage,
+  CommentaryPrefatoryItem,
+  getGranthasMeta,
+  createAbbreviationMap,
+  type GranthaMeta,
+} from "@/lib/data";
 import { getUIStrings, type Language, type Script } from "@/lib/i18n";
-import { useState, useMemo, useEffect } from "react";
+import { useCallback, useMemo, useEffect, useState, useRef } from "react";
 
 import DOMPurify from "isomorphic-dompurify";
-import { getGranthasMeta, createAbbreviationMap, GranthaMeta } from "@/lib/data";
 import { parseReferences } from '@/lib/references';
 import ReferenceLink from './ReferenceLink';
 
 interface CommentaryPanelProps {
   grantha: Grantha;
   selectedRef: string;
+  /** Commentary IDs currently active in the URL hash (?c=). If empty or absent,
+   *  defaults to the first commentary in the grantha. */
+  selectedCommentaryIds?: string[];
   updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
   availableGranthaIds: string[];
-  granthaIdToDevanagariTitle: { [key: string]: string };
-  granthaIdToLatinTitle: { [key: string]: string };
+  granthaIdToDevanagariTitle: Record<string, string>;
+  granthaIdToLatinTitle: Record<string, string>;
   hideHeader?: boolean;
 }
 
 export default function CommentaryPanel({
   grantha,
   selectedRef,
+  selectedCommentaryIds,
   updateHash,
   availableGranthaIds,
   granthaIdToDevanagariTitle,
@@ -38,89 +49,140 @@ export default function CommentaryPanel({
     return getUIStrings(language, script);
   }, [grantha.language, script]);
 
-  const [selectedCommentaries, setSelectedCommentaries] = useState<number[]>([0]);
-  const [abbreviationMap, setAbbreviationMap] = useState<{ [key: string]: string }>({});
+  // Debounce commentary re-render by 400 ms to avoid jarring updates during fast scroll.
+  // The URL hash (selectedRef) updates at 150 ms; the commentary pane waits longer
+  // so fling-scrolling doesn't produce rapid re-renders.
+  const [displayRef, setDisplayRef] = useState(selectedRef);
+  const displayRefTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    displayRefTimer.current = setTimeout(() => setDisplayRef(selectedRef), 400);
+    return () => {
+      if (displayRefTimer.current !== null) clearTimeout(displayRefTimer.current);
+    };
+  }, [selectedRef]);
+
+  const [abbreviationMap, setAbbreviationMap] = useState<Record<string, string>>({});
   const [granthasMeta, setGranthasMeta] = useState<GranthaMeta | null>(null);
 
   useEffect(() => {
     getGranthasMeta().then(meta => {
       setGranthasMeta(meta);
-      const abbrMap = createAbbreviationMap(meta, 'devanagari');
-      setAbbreviationMap(abbrMap);
+      setAbbreviationMap(createAbbreviationMap(meta, 'devanagari'));
     });
   }, []);
 
-  const toggleCommentary = (index: number) => {
-    if (selectedCommentaries.includes(index)) {
-      if (selectedCommentaries.length > 1) {
-        setSelectedCommentaries(selectedCommentaries.filter((i) => i !== index));
+  /** Map of grantha ID → Devanagari title, for use in cross-reference links. */
+  const granthaIdToTitle = useMemo<Record<string, string>>(
+    () =>
+      granthasMeta
+        ? Object.fromEntries(
+            Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])
+          )
+        : {},
+    [granthasMeta]
+  );
+
+  /**
+   * Derive the effective active commentary IDs from the URL prop.
+   * Falls back to the first commentary when the prop is absent or contains
+   * no IDs that exist in this grantha.
+   */
+  const effectiveSelectedIds = useMemo(() => {
+    if (selectedCommentaryIds && selectedCommentaryIds.length > 0) {
+      const valid = selectedCommentaryIds.filter(id =>
+        commentaries.some(c => c.commentary_id === id)
+      );
+      if (valid.length > 0) return valid;
+    }
+    return commentaries.length > 0 ? [commentaries[0].commentary_id] : [];
+  }, [selectedCommentaryIds, commentaries]);
+
+  /**
+   * Toggle a commentary ID in the active set and write the new set to the URL.
+   * The last active commentary cannot be removed.
+   */
+  const toggleCommentary = (id: string) => {
+    if (effectiveSelectedIds.includes(id)) {
+      if (effectiveSelectedIds.length > 1) {
+        updateHash(grantha.grantha_id, selectedRef, effectiveSelectedIds.filter(i => i !== id));
       }
     } else {
-      setSelectedCommentaries([...selectedCommentaries, index]);
+      updateHash(grantha.grantha_id, selectedRef, [...effectiveSelectedIds, id]);
     }
   };
 
-  const renderCommentaryWithReferences = (text: string, script: Script) => {
-    const references = parseReferences(text, abbreviationMap);
-    if (references.length === 0) {
-      return <div dangerouslySetInnerHTML={{ __html: text }} />;
-    }
-
-    const parts: React.ReactNode[] = [];
-    let lastIndex = 0;
-
-    references.forEach((ref, i) => {
-      const startIndex = text.indexOf(ref.fullMatch, lastIndex);
-
-      // Check if reference is wrapped in parentheses
-      const hasOpenParen = startIndex > 0 && text[startIndex - 1] === '(';
-      const refEndIndex = startIndex + ref.fullMatch.length;
-      const hasCloseParen = refEndIndex < text.length && text[refEndIndex] === ')';
-      const isParenthesized = hasOpenParen && hasCloseParen;
-
-      if (isParenthesized) {
-        // Include text before the opening paren
-        if (startIndex > lastIndex + 1) {
-          parts.push(
-            <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex - 1) }} />
-          );
-        }
-        // Wrap the entire parenthesized reference in a nowrap span
-        parts.push(
-          <span key={`paren-ref-${i}`} style={{ whiteSpace: 'nowrap' }}>
-            (<ReferenceLink reference={ref} currentGranthaId={grantha.grantha_id} updateHash={updateHash} availableGranthaIds={availableGranthaIds} granthaIdToTitle={granthasMeta ? Object.fromEntries(Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])) : {}} />)
-          </span>
-        );
-        lastIndex = refEndIndex + 1; // Skip past the closing paren
-      } else {
-        // Normal reference without parentheses
-        if (startIndex > lastIndex) {
-          parts.push(
-            <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex) }} />
-          );
-        }
-        parts.push(
-          <ReferenceLink key={`ref-${i}`} reference={ref} currentGranthaId={grantha.grantha_id} updateHash={updateHash} availableGranthaIds={availableGranthaIds} granthaIdToTitle={granthasMeta ? Object.fromEntries(Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])) : {}} />
-        );
-        lastIndex = startIndex + ref.fullMatch.length;
+  const renderCommentaryWithReferences = useCallback(
+    (text: string): React.ReactNode => {
+      const references = parseReferences(text, abbreviationMap);
+      if (references.length === 0) {
+        return <div dangerouslySetInnerHTML={{ __html: text }} />;
       }
-    });
 
-    if (lastIndex < text.length) {
-      parts.push(
-        <span key="text-last" dangerouslySetInnerHTML={{ __html: text.substring(lastIndex) }} />
-      );
-    }
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
 
-    return <>{parts}</>;
-  };
+      references.forEach((ref, i) => {
+        const startIndex = text.indexOf(ref.fullMatch, lastIndex);
+        const hasOpenParen = startIndex > 0 && text[startIndex - 1] === '(';
+        const refEndIndex = startIndex + ref.fullMatch.length;
+        const hasCloseParen = refEndIndex < text.length && text[refEndIndex] === ')';
+        const isParenthesized = hasOpenParen && hasCloseParen;
+
+        if (isParenthesized) {
+          if (startIndex > lastIndex + 1) {
+            parts.push(
+              <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex - 1) }} />
+            );
+          }
+          parts.push(
+            <span key={`paren-ref-${i}`} style={{ whiteSpace: 'nowrap' }}>
+              (<ReferenceLink
+                reference={ref}
+                currentGranthaId={grantha.grantha_id}
+                updateHash={updateHash}
+                availableGranthaIds={availableGranthaIds}
+                granthaIdToTitle={granthaIdToTitle}
+              />)
+            </span>
+          );
+          lastIndex = refEndIndex + 1;
+        } else {
+          if (startIndex > lastIndex) {
+            parts.push(
+              <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex) }} />
+            );
+          }
+          parts.push(
+            <ReferenceLink
+              key={`ref-${i}`}
+              reference={ref}
+              currentGranthaId={grantha.grantha_id}
+              updateHash={updateHash}
+              availableGranthaIds={availableGranthaIds}
+              granthaIdToTitle={granthaIdToTitle}
+            />
+          );
+          lastIndex = startIndex + ref.fullMatch.length;
+        }
+      });
+
+      if (lastIndex < text.length) {
+        parts.push(
+          <span key="text-last" dangerouslySetInnerHTML={{ __html: text.substring(lastIndex) }} />
+        );
+      }
+
+      return <>{parts}</>;
+    },
+    [abbreviationMap, granthaIdToTitle, grantha.grantha_id, updateHash, availableGranthaIds]
+  );
 
   const renderCommentary = (commentary: Commentary, index: number) => {
-    const passage = commentary.passages?.find((p: CommentaryPassage) => p.ref === selectedRef);
+    const passage = commentary.passages?.find((p: CommentaryPassage) => p.ref === displayRef);
 
     if (!passage) {
       return (
-        <div key={index} className="text-gray-500 italic">
+        <div className="text-gray-500 italic">
           {uiStrings.noCommentaryForVerse}
         </div>
       );
@@ -135,7 +197,7 @@ export default function CommentaryPanel({
     );
 
     return (
-      <div key={index} className="mb-8">
+      <div className="mb-8">
         {hasMultipleCommentaries && (
           <div className="mb-4">
             <h3 className="text-base font-semibold font-serif">{commentary.commentary_title}</h3>
@@ -157,7 +219,7 @@ export default function CommentaryPanel({
         )}
 
         <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-          {renderCommentaryWithReferences(sanitizedHtml, script)}
+          {renderCommentaryWithReferences(sanitizedHtml)}
         </div>
       </div>
     );
@@ -205,12 +267,12 @@ export default function CommentaryPanel({
 
       <div className="border-b border-gray-200">
         <div className="p-4">
-          {commentaries.map((commentary: Commentary, index: number) => (
-            <label key={index} className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+          {commentaries.map((commentary: Commentary) => (
+            <label key={commentary.commentary_id} className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
               <input
                 type="checkbox"
-                checked={selectedCommentaries.includes(index)}
-                onChange={() => toggleCommentary(index)}
+                checked={effectiveSelectedIds.includes(commentary.commentary_id)}
+                onChange={() => toggleCommentary(commentary.commentary_id)}
                 className="w-4 h-4"
               />
               <span className="text-sm">{commentary.commentator?.devanagari}</span>
@@ -220,12 +282,16 @@ export default function CommentaryPanel({
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 pb-6">
-        {selectedCommentaries.map((index, idx) => (
-          <div key={index}>
-            {renderCommentary(commentaries[index], index)}
-            {idx < selectedCommentaries.length - 1 && <hr className="my-8 border-gray-300" />}
-          </div>
-        ))}
+        {effectiveSelectedIds.map((id, idx) => {
+          const commentary = commentaries.find(c => c.commentary_id === id);
+          if (!commentary) return null;
+          return (
+            <div key={id}>
+              {renderCommentary(commentary, idx)}
+              {idx < effectiveSelectedIds.length - 1 && <hr className="my-8 border-gray-300" />}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

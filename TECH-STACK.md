@@ -61,44 +61,32 @@
 
 ---
 
-### State Management: **React Context + localStorage**
+### State Management: **TanStack Query + URL hash + localStorage**
 
-**Decision:** React Context API for UI state, localStorage for persistence
+**Decision:** Three-layer state model
 
-**Rationale:**
+| Layer | What it holds | Library |
+|-------|--------------|---------|
+| URL hash | Grantha, verse ref, active commentary IDs, commentary open/closed | `lib/hashUtils.ts` + `hooks/useVerseHash.ts` |
+| Server/async state | Grantha JSON data, lazily-loaded parts | **TanStack Query** (`@tanstack/react-query`) |
+| localStorage | Commentary IDs fallback, panel sizes, last-visited grantha | Direct `localStorage` reads/writes |
 
-- No backend in Phase 0, so no Redux/TanStack Query needed
-- localStorage handles session persistence (last verse, preferences)
-- Simple and sufficient for Phase 0
-- Easy to migrate to backend/database in Phase 1
+**TanStack Query** (`useQuery`, `useQueryClient`) is the data-fetching layer for
+grantha JSON files. It provides transparent caching (5-minute stale time,
+24-hour gc), and `queryClient.setQueryData` is used to merge lazily-loaded part
+files into the cached grantha without a full refetch. React Context is **not**
+used; TanStack Query's query cache acts as shared server-state.
 
-**What to Store in localStorage:**
+**URL hash** (not localStorage) is the primary source of truth for what the
+reader is viewing. `useVerseHash` reads/writes the hash and syncs to React state
+via `hashchange` events. Commentary IDs from the URL are additionally mirrored to
+localStorage so that the last-used selection survives a fresh open with no hash.
 
-- Last visited grantha and verse
-- Script preference (Devanagari only in Phase 0)
-- Language toggle state (both/sanskrit-only in Phase 0)
-- Selected commentaries (which are checked)
-- Font size preference
-- Dark mode preference
-- Column widths (desktop)
+**What localStorage holds:**
 
-**Implementation:**
-
-```typescript
-// hooks/usePreferences.ts
-const usePreferences = () => {
-  const [preferences, setPreferences] = useState(() => {
-    const saved = localStorage.getItem("preferences");
-    return saved ? JSON.parse(saved) : defaultPreferences;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("preferences", JSON.stringify(preferences));
-  }, [preferences]);
-
-  return [preferences, setPreferences];
-};
-```
+- `selectedCommentaries` — commentary ID array (fallback when no `?c=` in URL)
+- `panelSizes` / `tabletPanelSizes` — resizable panel widths
+- `lastVisitedVerse` — for "continue where you left off" on the landing page (future)
 
 ---
 
@@ -324,7 +312,7 @@ npm run format  # if Prettier configured
 | Framework           | Next.js                       | Phase 1 extensibility, API routes, deployment ease |
 | Language            | TypeScript                    | Type safety, IDE support                           |
 | Styling             | Tailwind CSS                  | Rapid dev, consistency, responsive                 |
-| State               | React Context + localStorage  | Simple, sufficient for Phase 0                     |
+| State               | TanStack Query + URL hash + localStorage | Query cache for data, hash for nav state |
 | Data (Phase 0)      | JSON in `/public/data/`       | Version-controlled, auditable, static              |
 | Database (Phase 1+) | Supabase PostgreSQL           | Scalable, auth built-in, easy migration            |
 | Deployment          | Vercel                        | Native Next.js, automatic deploys, CDN             |

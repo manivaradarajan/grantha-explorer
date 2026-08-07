@@ -166,10 +166,11 @@ export function useVerseHash(
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
       if (replaceHistory) {
         window.history.replaceState(null, "", newHash);
+        setState(potentialUrlState);
       } else {
         window.location.hash = newHash;
+        // State updated via hashchange listener
       }
-      // State will be updated via hashchange event
     }
   }, [state]); // Removed currentGrantha and granthas from dependencies
 

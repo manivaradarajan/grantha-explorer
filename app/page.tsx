@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import TextContent from "@/components/TextContent";
@@ -12,7 +12,7 @@ import { useAvailableGranthas } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
 import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import InvalidVerseModal from "@/components/InvalidVerseModal"; // Import the new modal component
+import InvalidVerseModal from "@/components/InvalidVerseModal";
 
 export default function Home() {
   // Media queries for responsive design
@@ -56,7 +56,7 @@ export default function Home() {
     commentaryOpen,
     updateHash,
     updateCommentaryOpen,
-  } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1"); // Removed currentGrantha and granthas
+  } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
 
   // Load current grantha data via the new loader hook
   const {
@@ -180,26 +180,21 @@ export default function Home() {
     }
   }, [currentGrantha, verseRef, loadPart]);
 
-  // Handle grantha change
+  // Handle grantha change — verse ref "1" triggers the grantha-change effect to
+  // skip to the first main passage of the new grantha.
   const handleGranthaChange = (newGranthaId: string) => {
-    // Log source and destination URLs
-    console.log("Grantha Change Attempt:");
-    console.log("  Source URL:", window.location.href);
-    const newHash = `#${newGranthaId}:1`; // Assuming default to first verse
-    console.log("  Attempted Destination Hash:", newHash);
-
-    // Set verse ref to "1" which triggers grantha change effect to skip to first main passage
     updateHash(newGranthaId, "1", commentaries);
   };
 
+  // Handle scroll-spy focus updates — uses replaceState so scrolling doesn't
+  // pollute back-button history. Passes undefined for commentaries/commentaryOpen
+  // so updateHash preserves the current values from state.
+  const handleScrollFocus = useCallback((ref: string) => {
+    updateHash(granthaId, ref, undefined, undefined, true);
+  }, [updateHash, granthaId]);
+
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
-    // Log source and destination URLs
-    console.log("Verse Selection Attempt:");
-    console.log("  Source URL:", window.location.href);
-    const newHash = `#${granthaId}:${ref}`;
-    console.log("  Attempted Destination Hash:", newHash);
-
     if (isMobile) {
       updateHash(granthaId, ref, commentaries, true);
     } else {
@@ -300,6 +295,7 @@ export default function Home() {
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
           isLoadingPart={isLoadingPart}
+          onScrollFocus={handleScrollFocus}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -320,13 +316,16 @@ export default function Home() {
           granthas={granthas}
           selectedRef={verseRef}
           commentaries={commentaries}
+          commentaryOpen={commentaryOpen}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleVerseSelect}
           updateHash={updateHash}
+          updateCommentaryOpen={updateCommentaryOpen}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
           isLoadingPart={isLoadingPart}
+          onScrollFocus={handleScrollFocus}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
@@ -374,6 +373,7 @@ export default function Home() {
               title={currentGrantha.canonical_title}
               loadPart={loadPart}
               isLoadingPart={isLoadingPart}
+              onScrollFocus={handleScrollFocus}
             />
           </Panel>
 
@@ -388,6 +388,7 @@ export default function Home() {
             <CommentaryPanel
               grantha={currentGrantha}
               selectedRef={verseRef}
+              selectedCommentaryIds={commentaries}
               updateHash={updateHash}
               availableGranthaIds={granthas.map(g => g.id)}
               granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
@@ -396,12 +397,12 @@ export default function Home() {
           </Panel>
         </PanelGroup>
       </div>
-        <InvalidVerseModal
-          isOpen={showInvalidVerseModal}
-          onClose={handleCloseInvalidVerseModal}
-          title={invalidVerseTitle}
-          messageLines={invalidVerseMessageLines}
-        />
+      <InvalidVerseModal
+        isOpen={showInvalidVerseModal}
+        onClose={handleCloseInvalidVerseModal}
+        title={invalidVerseTitle}
+        messageLines={invalidVerseMessageLines}
+      />
     </main>
   );
 }
