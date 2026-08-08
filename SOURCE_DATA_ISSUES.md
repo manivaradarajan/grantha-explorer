@@ -9,9 +9,17 @@ All paths below are relative to the `grantha-data` repository root.
 
 ---
 
+> **All 7 issues resolved.**
+> Fixed in grantha-data commit `4569fe1`
+> ("Fix all 7 source data issues identified in grantha-explorer/SOURCE_DATA_ISSUES.md").
+> After regenerating JSON from the corrected sources, all commentary streams
+> should unify correctly across all affected granthas.
+
+---
+
 ## 1. Chandogya Upanishad — duplicate `part_num` in files 06 and 07
 
-**Priority: Actionable.** Simple two-line fix, low risk.
+**Status: Resolved** (commit `4569fe1`). `part_num` corrected to 6 and 7.
 
 ### Affected files
 
@@ -51,7 +59,7 @@ and the fallback WARNING no longer appears.
 
 ## 2. Brihadaranyaka Upanishad — `<!-- /hide -->` used as Sanskrit block close tag in 8 passages
 
-**Priority: Low.** Purely cosmetic; no functional impact on converter output.
+**Status: Resolved** (commit `4569fe1`). All 8 passages corrected to `<!-- /sanskrit:devanagari -->`.
 
 ### Affected files and passages
 
@@ -107,8 +115,7 @@ tag needs to change.
 
 ## 3. Taittiriya Upanishad — `commentary_id` spelling inconsistency (part 2)
 
-**Priority: High.** Causes commentary for refs 2.1.1–2.1.9 (all in part 2) to
-be silently dropped at runtime when the part is lazy-loaded.
+**Status: Resolved** (commit `4569fe1`). `srirangaramanuja-muni-prakashika` → `rangaramanuja-muni-prakashika` in frontmatter and all 11 body markers.
 
 ### Affected files
 
@@ -168,8 +175,7 @@ After this fix, regenerate `part2.json` and re-copy to live.
 
 ## 4. Katha Upanishad — `commentary_id` spelling inconsistency (parts 3 and 5)
 
-**Priority: High.** Same runtime failure as issue 3: commentary for all refs
-in parts 3 and 5 is dropped when those parts are lazy-loaded.
+**Status: Resolved** (commit `4569fe1`). `srirangaramanuja-muni-prakashika` → `rangaramanuja-muni-prakashika` in frontmatter and body markers (14 in part 3, 12 in part 5).
 
 ### Affected files
 
@@ -218,8 +224,7 @@ Regenerate and re-copy `part3.json` and `part5.json` for katha after the fix.
 
 ## 5. Mundaka Upanishad — `commentary_id` spelling inconsistency (part 1)
 
-**Priority: High.** Same runtime failure: commentary for refs 1.1.1–1.1.10
-(part 1) is dropped when that part is lazy-loaded.
+**Status: Resolved** (commit `4569fe1`). `rangaramanuja-prakashika` → `rangaramanuja-muni-prakashika` in frontmatter and all 11 body markers.
 
 ### Affected files
 
@@ -273,9 +278,7 @@ cache id changes, all parts must be regenerated together).
 
 ## 6. Chandogya Upanishad — `commentary_id` spelling error in part 1
 
-**Priority: High.** The part 1 outlier seeds the runtime cache with the wrong
-id, causing commentary for refs in ALL other parts (2–8, ~670 passages) to be
-dropped when those parts are lazy-loaded.
+**Status: Resolved** (commit `4569fe1`). `srirangaramanujamuni-prakashika` → `rangaramanuja-muni-prakashika` in frontmatter and all 100 body markers.
 
 ### Affected files
 
@@ -336,10 +339,9 @@ changes for the whole grantha.
 
 ---
 
-## 7. Chandogya Upanishad — part 7 uses `rangaramanuja-muni-bhashyam` (probable labeling error)
+## 7. Chandogya Upanishad — part 7 uses `rangaramanuja-muni-bhashyam` (confirmed labeling error)
 
-**Priority: High — probable labeling error, scholar confirmation recommended
-before treating as final.** See classification note below.
+**Status: Resolved** (commit `4569fe1`). Three fields corrected: `commentary_id`, `commentary_title` (भाष्यम् → प्रकाशिका), `authored_colophon` (विरचितम् → विरचिता); 30 body markers updated.
 
 ### Affected files
 
@@ -359,10 +361,18 @@ commentary_title: भाष्यम्
 All other chandogya parts use `commentary_id: rangaramanuja-muni-prakashika`
 (or the part 1 variant — see issue 6) and `commentary_title: प्रकाशिका`.
 
-### Classification: probable labeling error (Claude's textual analysis)
+### Classification: confirmed labeling error
 
-**This classification is based on Claude's analysis of the source text, not
-independent scholarly verification.** The evidence for "labeling error" is:
+**This classification is confirmed by two independent lines of evidence:**
+
+**1. User's direct domain knowledge (definitive):** In this school's naming
+convention, every upanishad's Rangarāmānuja commentary is uniformly named
+`rangaramanuja-muni-prakashika`. There is no distinct work called
+`rangaramanuja-muni-bhashyam` in this tradition. The naming convention alone
+rules out the alternative interpretation, independently of any textual analysis.
+
+**2. Claude's textual analysis (corroborating):** The evidence for "labeling
+error" from the source text is:
 
 1. **Identical prose style and expository method across all 8 parts.** The
    `**प्र.**` citation abbreviation (consistently used throughout the corpus
@@ -391,15 +401,11 @@ independent scholarly verification.** The evidence for "labeling error" is:
    parts 6 and 7, as would be expected if transitioning to a genuinely
    different sub-work.
 
-**Caveat:** A Sanskrit scholar's confirmation is still worthwhile before
-treating this classification as final. The Aitareya case in this project is a
-precedent for things that initially looked like simple labeling errors turning
-out to be real distinct content (Sāyaṇa bhāṣya vs Rangarāmānuja commentary).
-This case is different in kind — there the evidence was absence of the
-Rangarāmānuja voice in a block; here there is positive evidence of a mechanism
-that would produce the mislabeling — but the caveat belongs in writing: do not
-edit the grantha-data source on the basis of this analysis alone without a
-scholar's sign-off.
+**Note:** The Aitareya case in this project is a precedent for things that initially
+looked like labeling errors turning out to be real distinct content. This case was
+confirmed by direct domain knowledge (the school's naming convention uniformly uses
+`rangaramanuja-muni-prakashika`; no distinct bhāṣyam work exists in this tradition),
+corroborated by textual analysis. Fix has been applied.
 
 ### What the converter does
 
