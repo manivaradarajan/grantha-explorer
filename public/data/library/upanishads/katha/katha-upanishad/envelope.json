@@ -1,8 +1,7 @@
 {
+  "schema_version": "1.0.0",
+  "edition_id": "katha-upanishad",
   "grantha_id": "katha-upanishad",
-  "canonical_title": "कठोपनिषत्",
-  "text_type": "upanishad",
-  "language": "sanskrit",
   "structure_levels": [
     {
       "key": "Adhyaya",
@@ -55,6 +54,5 @@
       "file": "part6.json",
       "first_ref": "2.6.1"
     }
-  ],
-  "schema_version": "0.1.0"
+  ]
 }

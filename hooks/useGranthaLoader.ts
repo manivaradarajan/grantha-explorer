@@ -98,6 +98,12 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
             const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
             const newCommentaryPassages = commentaryPart.passages.filter(p => !existingCommentaryRefs.has(p.ref));
             existingCommentary.passages.push(...newCommentaryPassages);
+          } else {
+            // commentary_id not yet in cache (e.g. source file uses a different
+            // spelling of the id than the part that was loaded initially).
+            // Without this branch, all passages for the incoming commentary are
+            // silently dropped and no commentary renders for refs in this part.
+            newData.commentaries = [...newData.commentaries, commentaryPart];
           }
         }
         
