@@ -12,6 +12,16 @@ DEFERRED.md in the grantha-explorer root when processing aitareya.
 
 from __future__ import annotations
 
+__all__ = [
+    "parse_frontmatter",
+    "parse_body",
+    "build_part_json",
+    "build_envelope_json",
+    "normalize_structure_levels",
+    "convert_grantha",
+    "append_sayana_deferred",
+]
+
 import argparse
 import functools
 import json
@@ -30,20 +40,11 @@ import yaml
 
 SCHEMA_VERSION = "1.0.0"
 
-__all__ = [
-    "parse_frontmatter",
-    "parse_body",
-    "build_part_json",
-    "build_envelope_json",
-    "normalize_structure_levels",
-    "convert_grantha",
-    "append_sayana_deferred",
-]
-
 # For aitareya: index-0 commentary is Rangaramanuja, index-1 is Sayana.
 AITAREYA_GRANTHA_ID = "aitareya-upanishad"
 SAYANA_COMMENTARY_ID = "sayana-bhashya"
 AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
+SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
 
 # ---------------------------------------------------------------------------
@@ -386,6 +387,21 @@ def parse_body(text: str) -> BodyData:
     headings = list(_PASSAGE_HEADING_RE.finditer(text))
     data = BodyData()
 
+    # Extract commentary blocks that appear before the first passage heading
+    # (preamble commentary).  These blocks carry an explicit ``# Commentary:
+    # X.Y.Z`` subheading and must be preserved; the normal heading loop never
+    # reaches content before headings[0].  Only blocks with an explicit ref
+    # subheading are collected — headingless preamble commentary cannot be
+    # reliably attributed.
+    if headings:
+        preamble = text[: headings[0].start()]
+        for cid, sub_passages in _extract_commentary_blocks(preamble).items():
+            for heading_ref, content in sub_passages:
+                if heading_ref is not None:
+                    data.commentary_blocks.setdefault(cid, []).append(
+                        CommentaryPassage(ref=heading_ref, text=content)
+                    )
+
     for i, match in enumerate(headings):
         kind = match.group(1)   # Mantra | Prefatory | Concluding
         ref = match.group(2)
@@ -644,8 +660,6 @@ def build_envelope_json(
 # Aitareya special handling
 # ---------------------------------------------------------------------------
 
-_SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
-
 
 def append_sayana_deferred(
     sayana_text: str,
@@ -654,22 +668,26 @@ def append_sayana_deferred(
 ) -> None:
     """Append a Sayana-deferral note to DEFERRED.md, idempotently.
 
-    Checks whether the entry already exists (by heading text) before
-    appending, so repeated converter runs do not create duplicate entries.
+    Checks whether the entry already exists by scanning for
+    SAYANA_DEFERRED_HEADING before appending, so repeated converter runs
+    do not create duplicate entries.
 
     Args:
         sayana_text: The full Sayana commentary text for the passage.
         passage_ref: The passage ref (e.g. "0.0").
         grantha_explorer_root: Root of the grantha-explorer repo.
+
+    Returns:
+        None. Side effect: appends to DEFERRED.md when the heading is absent.
     """
     deferred_path = grantha_explorer_root / "DEFERRED.md"
-    existing = deferred_path.read_text(encoding="utf-8")
-    if _SAYANA_DEFERRED_HEADING in existing:
+    existing = deferred_path.read_text(encoding="utf-8") if deferred_path.exists() else ""
+    if SAYANA_DEFERRED_HEADING in existing:
         print(f"  → Sayana text for {passage_ref} already in DEFERRED.md — skipped")
         return
     note = (
         "\n\n---\n\n"
-        f"{_SAYANA_DEFERRED_HEADING}\n\n"
+        f"{SAYANA_DEFERRED_HEADING}\n\n"
         f"**Passage ref:** {passage_ref}\n\n"
         "**Source editorial note:** "
         "रङ्गरामानुजमुनिभिः अव्याख्यातत्वात् सायण भाष्यमेव दत्तम्\n\n"
