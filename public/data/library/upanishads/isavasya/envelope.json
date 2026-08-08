@@ -8,7 +8,7 @@
   "editions": [
     {
       "edition_id": "isavasya-upanishad-vedantadesika",
-      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika.json",
+      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika",
       "commentator": {
         "devanagari": "श्रीमद्वेदान्ताचार्यः",
         "roman": "śrīmadvēdāntācāryaḥ"
@@ -18,7 +18,7 @@
     },
     {
       "edition_id": "isavasya-upanishad-srivatsanarayana",
-      "path": "upanishads/isavasya/isavasya-upanishad-srivatsanarayana.json",
+      "path": "upanishads/isavasya/isavasya-upanishad-srivatsanarayana",
       "commentator": {
         "devanagari": "श्रीवत्सनारायणमुनीन्द्रः",
         "roman": "śrīvatsanārāyaṇamunīndraḥ"
