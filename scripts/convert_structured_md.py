@@ -108,9 +108,11 @@ _COMMENTARY_CLOSE_RE = re.compile(
     r"<!--\s*/commentary\s*-->",
 )
 
-# Commentary heading that appears inside a <!-- commentary --> block.
-_COMMENTARY_HEADING_RE = re.compile(
-    r"^#\s+Commentary:\s+\S+\s*$",
+# Sub-heading inside a <!-- commentary --> block: "# Commentary: N.X.Y".
+# Group 1 captures the stated ref, which is used as the passage ref in output
+# (the source author's explicit attribution, overriding positional inference).
+_COMMENTARY_SUBHEADING_RE = re.compile(
+    r"^#\s+Commentary:\s+(\S+)\s*$",
     re.MULTILINE,
 )
 
@@ -122,6 +124,18 @@ _SANSKRIT_OPEN_RE = re.compile(r"<!--\s*sanskrit:devanagari\s*-->")
 # (source data quality issue observed in brihadaranyaka where some blocks are
 # instead closed with a stray <!-- /hide --> tag).
 _ANY_HTML_CLOSE_RE = re.compile(r"<!--\s*/[^>]+?-->")
+
+# Matches a hide-open tag in any format (``<!-- hide type:... -->`` or the
+# shorter ``<!-- hide:... -->``), but NOT close tags (``<!-- /hide -->``).
+# Used as an inner boundary in ``_extract_mula_text`` to cap mula content
+# before inline verse-number hide blocks embedded in Sanskrit text (pattern
+# observed in katha from passage 1.1.18 onwards).
+_HIDE_OPEN_RE = re.compile(r"<!--\s*hide[^>]*-->")
+
+# Matches any remaining HTML comment in cleaned commentary text.  Used to
+# strip stray orphaned tags (e.g. ``<!-- /hide -->``) that appear as source
+# data errors inside commentary blocks.
+_RESIDUAL_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 
 # Matches any Markdown level-1 heading that is NOT a passage heading and NOT a
 # commentary heading within a passage segment.  Used to detect trailing section
@@ -181,6 +195,13 @@ def _extract_mula_text(segment: str) -> str:
             None,
         )
         content_end = matching_close.start() if matching_close else next_open_pos
+        # Cap at any embedded hide-open tag (e.g. ``<!-- hide:verse-number -->``)
+        # which appears inline inside the Sanskrit content in some source files
+        # (katha from 1.1.18 onwards).  The tag and the verse number that
+        # follows it should not be included in the extracted mula text.
+        inner_hide = _HIDE_OPEN_RE.search(segment, content_start, content_end)
+        if inner_hide:
+            content_end = inner_hide.start()
         text = segment[content_start:content_end].strip()
         if text:
             results.append(text)
@@ -188,24 +209,109 @@ def _extract_mula_text(segment: str) -> str:
     return "\n\n".join(results)
 
 
-def _extract_commentary_blocks(segment: str) -> dict[str, str]:
-    """Extract commentary blocks from a segment, grouped by commentary_id.
+def _split_commentary_subheadings(
+    content: str,
+) -> list[tuple[str | None, str]]:
+    """Split raw commentary block content at ``# Commentary: N.X.Y`` sub-headings.
+
+    The sub-heading's stated ref is the source author's explicit attribution
+    for that passage's commentary.  When no sub-heading is present the whole
+    block is returned as a single ``(None, text)`` pair; the caller falls back
+    to the containing mantra ref.
+
+    Any text appearing before the first sub-heading is prepended to the first
+    sub-passage's text (rare in practice; usually there is no such preamble).
+
+    Args:
+        content: Raw content of one ``<!-- commentary: ... -->`` block,
+            from the tag's end to the close marker's start.
+
+    Returns:
+        List of ``(heading_ref_or_None, stripped_text)`` pairs, one per
+        sub-heading.  Empty text after stripping is included (callers filter).
+    """
+    headings = list(_COMMENTARY_SUBHEADING_RE.finditer(content))
+    if not headings:
+        return [(None, content.strip())]
+
+    result: list[tuple[str | None, str]] = []
+    preamble = content[: headings[0].start()].strip()
+
+    for j, heading_match in enumerate(headings):
+        heading_ref: str = heading_match.group(1)
+        text_start = heading_match.end()
+        text_end = headings[j + 1].start() if j + 1 < len(headings) else len(content)
+        text = content[text_start:text_end]
+        if j == 0 and preamble:
+            text = preamble + "\n\n" + text
+        result.append((heading_ref, text.strip()))
+
+    return result
+
+
+def _merge_duplicate_ref_passages(
+    passages: list[CommentaryPassage],
+) -> list[CommentaryPassage]:
+    """Merge commentary passages that share the same ref.
+
+    When the source contains multiple ``<!-- commentary -->`` blocks for the
+    same passage ref (e.g. two separate blocks both labeled
+    ``# Commentary: 1.2.1``), their texts are joined with a double newline.
+    This reproduces the single-entry behaviour of the earlier converter and
+    prevents duplicate-ref entries in the output JSON.
+
+    The order of first occurrence is preserved.  Because ``CommentaryPassage``
+    is frozen, merging creates a replacement object at the same list index
+    rather than mutating the existing one in place.
+
+    Args:
+        passages: List of CommentaryPassage objects, possibly with duplicate
+            refs.
+
+    Returns:
+        List with duplicate-ref passages merged into single entries.
+    """
+    seen: dict[str, int] = {}  # ref -> index in merged; list positions are stable
+    merged: list[CommentaryPassage] = []
+    for cp in passages:
+        if cp.ref in seen:
+            idx = seen[cp.ref]
+            existing = merged[idx]
+            merged[idx] = CommentaryPassage(
+                ref=cp.ref,
+                text=existing.text + "\n\n" + cp.text,
+            )
+        else:
+            seen[cp.ref] = len(merged)
+            merged.append(cp)
+    return merged
+
+
+def _extract_commentary_blocks(
+    segment: str,
+) -> dict[str, list[tuple[str | None, str]]]:
+    """Extract commentary blocks from a segment, split by sub-heading refs.
 
     Handles two source variants:
     - Explicit close: ``<!-- commentary: ... -->...<!-- /commentary -->``
-    - Implicit close: content runs to the next opening tag or end of segment
-      (used in sources that omit the ``<!-- /commentary -->`` tag).
+    - Implicit close: content runs to the next opening tag or end of segment.
 
-    Multiple blocks for the same commentary_id within one passage are
-    joined with double newlines.
+    Each ``<!-- commentary: ... -->`` block may contain multiple
+    ``# Commentary: N.X.Y`` sub-headings.  The stated ref in each sub-heading
+    is the source author's explicit attribution and is used as the passage ref
+    in the output (overriding positional/containing-mantra inference).  When
+    no sub-heading is present, ``None`` is returned as the ref and the caller
+    falls back to the containing mantra ref.
 
     Args:
         segment: Text between two passage headings (or end of body).
 
     Returns:
-        Mapping from commentary_id to cleaned commentary text.
+        Mapping from commentary_id to a list of ``(heading_ref_or_None,
+        cleaned_text)`` pairs, one per sub-heading (or one per block when no
+        sub-heading is present).
     """
-    grouped: dict[str, list[str]] = {}
+    grouped: dict[str, list[tuple[str | None, str]]] = {}
     opens = list(_COMMENTARY_OPEN_RE.finditer(segment))
     closes = list(_COMMENTARY_CLOSE_RE.finditer(segment))
 
@@ -219,22 +325,21 @@ def _extract_commentary_blocks(segment: str) -> dict[str, str]:
             continue
 
         content_start = open_match.end()
-        # Content ends at the start of the next opening tag (implicit close),
-        # or at the explicit close tag if one exists before the next open.
         next_open_pos = opens[i + 1].start() if i + 1 < len(opens) else len(segment)
         matching_close = next(
             (c for c in closes if content_start <= c.start() < next_open_pos),
             None,
         )
         content_end = matching_close.start() if matching_close else next_open_pos
-
         content = segment[content_start:content_end]
-        # Remove the "# Commentary: X.Y.Z" heading that appears inside the block
-        cleaned = _COMMENTARY_HEADING_RE.sub("", content).strip()
-        if cleaned:
-            grouped.setdefault(cid, []).append(cleaned)
 
-    return {cid: "\n\n".join(chunks) for cid, chunks in grouped.items()}
+        for heading_ref, text in _split_commentary_subheadings(content):
+            # Strip any stray orphaned HTML comment tags (source data errors).
+            cleaned = _RESIDUAL_HTML_COMMENT_RE.sub("", text).strip()
+            if cleaned:
+                grouped.setdefault(cid, []).append((heading_ref, cleaned))
+
+    return grouped
 
 
 # ---------------------------------------------------------------------------
@@ -309,10 +414,16 @@ def parse_body(text: str) -> BodyData:
         else:
             data.passages.append(passage)
 
-        for cid, content in commentary_by_cid.items():
-            data.commentary_blocks.setdefault(cid, []).append(
-                CommentaryPassage(ref=ref, text=content)
-            )
+        # Use each sub-heading's stated ref as the commentary passage ref.
+        # Fall back to the containing mantra ref only when no sub-heading
+        # is present (heading_ref is None) — the fallback handles the small
+        # number of blocks in the corpus that carry no explicit heading.
+        for cid, sub_passages in commentary_by_cid.items():
+            for heading_ref, content in sub_passages:
+                passage_ref = heading_ref if heading_ref is not None else ref
+                data.commentary_blocks.setdefault(cid, []).append(
+                    CommentaryPassage(ref=passage_ref, text=content)
+                )
 
     return data
 
@@ -481,7 +592,9 @@ def build_part_json(
             (c for c in commentaries_meta if c["commentary_id"] == target_commentary_id),
             None,
         )
-        cid_blocks = body.commentary_blocks.get(target_commentary_id, [])
+        raw_blocks = body.commentary_blocks.get(target_commentary_id, [])
+        # Merge any duplicate-ref blocks arising from split commentary tags in source.
+        cid_blocks = _merge_duplicate_ref_passages(raw_blocks)
         if meta and cid_blocks:
             commentary_passages = [
                 {

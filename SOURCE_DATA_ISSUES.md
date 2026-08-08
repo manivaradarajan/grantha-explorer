@@ -102,3 +102,330 @@ tag with `<!-- /sanskrit:devanagari -->`. Note: these passages also contain
 legitimate `<!-- /hide -->` tags inside their commentary blocks (closing
 `<!-- hide type:... -->` annotation markers); only the Sanskrit-block close
 tag needs to change.
+
+---
+
+## 3. Taittiriya Upanishad — `commentary_id` spelling inconsistency (part 2)
+
+**Priority: High.** Causes commentary for refs 2.1.1–2.1.9 (all in part 2) to
+be silently dropped at runtime when the part is lazy-loaded.
+
+### Affected files
+
+```
+structured_md/upanishads/taittiriya/taittiriya-upanishad-rangaramanuja-02-01-01.md
+```
+
+### What is wrong
+
+The three taittiriya source files use two different spellings of the same
+commentary's identifier:
+
+| File | `commentary_id` in frontmatter |
+|------|-------------------------------|
+| `taittiriya-upanishad-rangaramanuja-01-01-01.md` | `rangaramanuja-muni-prakashika` |
+| `taittiriya-upanishad-rangaramanuja-02-01-01.md` | `srirangaramanuja-muni-prakashika` ← outlier |
+| `taittiriya-upanishad-rangaramanuja-03-01-01.md` | `rangaramanuja-muni-prakashika` |
+
+Part 2 has a spurious `sri` prefix. The canonical spelling used by 2 of 3
+parts, and consistent with the majority of other texts in the corpus, is
+`rangaramanuja-muni-prakashika`.
+
+### What the converter does
+
+Preserves each file's `commentary_id` as-is in the output JSON (by design;
+the plan explicitly prohibits normalisation in the converter). Part 2's
+generated `part2.json` therefore carries `commentary_id:
+"srirangaramanuja-muni-prakashika"` while parts 1 and 3 carry
+`"rangaramanuja-muni-prakashika"`.
+
+At runtime, when the user navigates to a ref in part 2, `useGranthaLoader`
+lazy-loads `part2.json` and attempts to merge its commentary into the cached
+grantha. The cache already contains a commentary object from the initial
+part 1 load with id `"rangaramanuja-muni-prakashika"`. The id lookup fails,
+and the 10 commentary passages for refs 2.1.1–2.1.9 are dropped (fixed
+on the app side in `hooks/useGranthaLoader.ts` by adding an `else` branch;
+that fix surfaces the passages but under the mismatched id, so the UI still
+shows two separate commentary streams as the user scrolls past the part
+boundary).
+
+### Correct fix
+
+In `taittiriya-upanishad-rangaramanuja-02-01-01.md`, change the
+`commentary_id` field in `commentaries_metadata`:
+
+```yaml
+# Before
+- commentary_id: srirangaramanuja-muni-prakashika
+
+# After
+- commentary_id: rangaramanuja-muni-prakashika
+```
+
+After this fix, regenerate `part2.json` and re-copy to live.
+
+---
+
+## 4. Katha Upanishad — `commentary_id` spelling inconsistency (parts 3 and 5)
+
+**Priority: High.** Same runtime failure as issue 3: commentary for all refs
+in parts 3 and 5 is dropped when those parts are lazy-loaded.
+
+### Affected files
+
+```
+structured_md/upanishads/katha/katha-upanishad-rangaramanuja-03-01.md
+structured_md/upanishads/katha/katha-upanishad-rangaramanuja-05-01.md
+```
+
+### What is wrong
+
+Katha has 6 source files; 4 use the canonical spelling and 2 use a spurious
+`sri` prefix:
+
+| File | `commentary_id` in frontmatter |
+|------|-------------------------------|
+| `katha-upanishad-rangaramanuja-01-01.md` | `rangaramanuja-muni-prakashika` |
+| `katha-upanishad-rangaramanuja-02-01.md` | `rangaramanuja-muni-prakashika` |
+| `katha-upanishad-rangaramanuja-03-01.md` | `srirangaramanuja-muni-prakashika` ← outlier |
+| `katha-upanishad-rangaramanuja-04-01.md` | `rangaramanuja-muni-prakashika` |
+| `katha-upanishad-rangaramanuja-05-01.md` | `srirangaramanuja-muni-prakashika` ← outlier |
+| `katha-upanishad-rangaramanuja-06-01.md` | `rangaramanuja-muni-prakashika` |
+
+Refs affected at runtime: 1.3.1–1.3.17 (part 3) and 2.5.1–2.5.12 (part 5).
+
+### What the converter does
+
+Same as issue 3: preserves the ids as-is. The `else` branch fix to
+`useGranthaLoader` surfaces the passages but under the mismatched id.
+
+### Correct fix
+
+In both outlier files, change the `commentary_id` field in
+`commentaries_metadata`:
+
+```yaml
+# Before
+- commentary_id: srirangaramanuja-muni-prakashika
+
+# After
+- commentary_id: rangaramanuja-muni-prakashika
+```
+
+Regenerate and re-copy `part3.json` and `part5.json` for katha after the fix.
+
+---
+
+## 5. Mundaka Upanishad — `commentary_id` spelling inconsistency (part 1)
+
+**Priority: High.** Same runtime failure: commentary for refs 1.1.1–1.1.10
+(part 1) is dropped when that part is lazy-loaded.
+
+### Affected files
+
+```
+structured_md/upanishads/mundaka/mundaka-upanishad-rangaramanuja-01-01-01.md
+```
+
+### What is wrong
+
+Mundaka has 6 source files; 5 use `rangaramanuja-muni-prakashika` and part 1
+drops the word `muni`:
+
+| File | `commentary_id` in frontmatter |
+|------|-------------------------------|
+| `mundaka-upanishad-rangaramanuja-01-01-01.md` | `rangaramanuja-prakashika` ← outlier (missing `-muni`) |
+| `mundaka-upanishad-rangaramanuja-01-02-01.md` | `rangaramanuja-muni-prakashika` |
+| `mundaka-upanishad-rangaramanuja-02-01-01.md` | `rangaramanuja-muni-prakashika` |
+| `mundaka-upanishad-rangaramanuja-02-02-01.md` | `rangaramanuja-muni-prakashika` |
+| `mundaka-upanishad-rangaramanuja-03-01-01.md` | `rangaramanuja-muni-prakashika` |
+| `mundaka-upanishad-rangaramanuja-03-02-01.md` | `rangaramanuja-muni-prakashika` |
+
+Note: the initial load of a multi-part grantha loads only the first part.
+For mundaka the first part loaded is part 1 (id `"1"`, first_ref `1.1.1`),
+which has the outlier id `"rangaramanuja-prakashika"`. This means the cache
+is initialised with the wrong id, and parts 2–6 (using
+`"rangaramanuja-muni-prakashika"`) fail to merge into it. Commentary is
+broken for ALL mundaka refs — not just part 1.
+
+### What the converter does
+
+Preserves ids as-is. The `else` branch fix surfaces parts 2–6's passages
+under `"rangaramanuja-muni-prakashika"`, but part 1's passages remain under
+the outlier `"rangaramanuja-prakashika"`, producing two commentary streams.
+
+### Correct fix
+
+In `mundaka-upanishad-rangaramanuja-01-01-01.md`, change the `commentary_id`:
+
+```yaml
+# Before
+- commentary_id: rangaramanuja-prakashika
+
+# After
+- commentary_id: rangaramanuja-muni-prakashika
+```
+
+Regenerate and re-copy all mundaka parts after the fix (since the initial
+cache id changes, all parts must be regenerated together).
+
+---
+
+## 6. Chandogya Upanishad — `commentary_id` spelling error in part 1
+
+**Priority: High.** The part 1 outlier seeds the runtime cache with the wrong
+id, causing commentary for refs in ALL other parts (2–8, ~670 passages) to be
+dropped when those parts are lazy-loaded.
+
+### Affected files
+
+```
+structured_md/upanishads/chandogya/chhandogya-upanishad-rangaramanuja-01-01-01.md
+```
+
+### What is wrong
+
+Chandogya has 8 source files. Six use `rangaramanuja-muni-prakashika`; part 7
+is a separate issue (see issue 7 below); part 1 has a distinct spelling error:
+
+| File | `commentary_id` | `commentary_title` |
+|------|----------------|-------------------|
+| `chhandogya-upanishad-rangaramanuja-01-01-01.md` | `srirangaramanujamuni-prakashika` ← outlier | `प्रकाशिका` |
+| `chhandogya-upanishad-rangaramanuja-02-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+| `chhandogya-upanishad-rangaramanuja-03-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+| `chhandogya-upanishad-rangaramanuja-04-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+| `chhandogya-upanishad-rangaramanuja-05-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+| `chhandogya-upanishad-rangaramanuja-06-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+| `chhandogya-upanishad-rangaramanuja-08-01-01.md` | `rangaramanuja-muni-prakashika` | — |
+
+The part 1 `commentary_id` has two simultaneous errors relative to the
+canonical spelling: a spurious `sri` prefix prepended, and the dash between
+`muni` and `prakashika` removed. The `commentary_title` field in the same
+file is correctly `प्रकाशिका`, confirming this is the same Prakashika work as
+the other parts — the id is just misspelled.
+
+Because the initial multi-part load fetches only the first part, the cache is
+seeded with `"srirangaramanujamuni-prakashika"`. Parts 2–6 and 8 (all using
+`"rangaramanuja-muni-prakashika"`) cannot merge into it. The `else` branch
+fix in `useGranthaLoader.ts` surfaces those passages as a separate stream
+rather than dropping them silently, but the split-stream UX persists until
+the source is corrected.
+
+### What the converter does
+
+Preserves the misspelled id as-is in `part1.json`. The `else` branch fix in
+`useGranthaLoader.ts` then surfaces two commentary streams in the UI:
+`srirangaramanujamuni-prakashika` (part 1 passages) and
+`rangaramanuja-muni-prakashika` (parts 2–6, 8 passages).
+
+### Correct fix
+
+In `chhandogya-upanishad-rangaramanuja-01-01-01.md`, change the
+`commentary_id` field in `commentaries_metadata`:
+
+```yaml
+# Before
+- commentary_id: srirangaramanujamuni-prakashika
+
+# After
+- commentary_id: rangaramanuja-muni-prakashika
+```
+
+Regenerate all chandogya parts after this fix, since the seeded cache id
+changes for the whole grantha.
+
+---
+
+## 7. Chandogya Upanishad — part 7 uses `rangaramanuja-muni-bhashyam` (probable labeling error)
+
+**Priority: High — probable labeling error, scholar confirmation recommended
+before treating as final.** See classification note below.
+
+### Affected files
+
+```
+structured_md/upanishads/chandogya/chhandogya-upanishad-rangaramanuja-07-01-01.md
+```
+
+### What is wrong
+
+Part 7 (Prapāṭhaka 7, Bhūma Vidyā section) carries:
+
+```yaml
+commentary_id: rangaramanuja-muni-bhashyam
+commentary_title: भाष्यम्
+```
+
+All other chandogya parts use `commentary_id: rangaramanuja-muni-prakashika`
+(or the part 1 variant — see issue 6) and `commentary_title: प्रकाशिका`.
+
+### Classification: probable labeling error (Claude's textual analysis)
+
+**This classification is based on Claude's analysis of the source text, not
+independent scholarly verification.** The evidence for "labeling error" is:
+
+1. **Identical prose style and expository method across all 8 parts.** The
+   `**प्र.**` citation abbreviation (consistently used throughout the corpus
+   as shorthand for *Prakāśikā*) appears in part 7 at the same rate and in the
+   same structural positions as in the other parts. Word-by-word Sanskrit
+   glossing, section introductions (विद्या name + प्रस्तूयते), and sentence
+   framing are indistinguishable from parts 2–6 and 8.
+
+2. **Identical authorial attribution.** Part 7's frontmatter carries
+   `authored_colophon: श्रीरङ्गरामानुजमुनिभिः विरचितम्` — the same phrase
+   as all other parts.
+
+3. **A positive mechanism for the mislabeling.** Every khanda in all 8 parts
+   of the chandogya source ends with a traditional Sanskrit section-close
+   colophon of the form `॥ इति प्रथमखण्डभाष्यम् ॥`. This uses "bhāṣyam" in
+   its generic sense ("the commentary/explanation on this section") — a
+   completely standard Sanskrit convention, not a genre designation. The term
+   appears uniformly across all 8 parts (16–25 occurrences per part). The
+   most probable explanation is that whoever authored part 7's frontmatter
+   copied this colophon phrasing as the `commentary_title`, rather than using
+   the work's actual title `प्रकाशिका`. This is a specific, verifiable
+   mechanism — not merely an absence of counter-evidence.
+
+4. **No content discontinuity at the part 7 boundary.** There is no
+   perceptible shift in register, vocabulary, or commentary method between
+   parts 6 and 7, as would be expected if transitioning to a genuinely
+   different sub-work.
+
+**Caveat:** A Sanskrit scholar's confirmation is still worthwhile before
+treating this classification as final. The Aitareya case in this project is a
+precedent for things that initially looked like simple labeling errors turning
+out to be real distinct content (Sāyaṇa bhāṣya vs Rangarāmānuja commentary).
+This case is different in kind — there the evidence was absence of the
+Rangarāmānuja voice in a block; here there is positive evidence of a mechanism
+that would produce the mislabeling — but the caveat belongs in writing: do not
+edit the grantha-data source on the basis of this analysis alone without a
+scholar's sign-off.
+
+### What the converter does
+
+Preserves `rangaramanuja-muni-bhashyam` as-is in `part7.json` (no-normalise
+policy). With the `else` branch fix in `useGranthaLoader.ts`, part 7 commentary
+(30 blocks, refs 7.1.1–7.26.2) surfaces as a **third** commentary stream in
+the UI alongside `srirangaramanujamuni-prakashika` (part 1) and
+`rangaramanuja-muni-prakashika` (parts 2–6, 8). Once issue 6 is corrected
+(part 1 id normalised), the third stream reduces to two. This three-stream
+(or two-stream post-fix-6) UX is a **known tracked issue** — the same
+split-stream category as issues 3–6 — and is not a converter defect.
+
+### Recommended fix (pending scholar confirmation)
+
+In `chhandogya-upanishad-rangaramanuja-07-01-01.md`, change the
+`commentaries_metadata` fields:
+
+```yaml
+# Before
+- commentary_id: rangaramanuja-muni-bhashyam
+  commentary_title: भाष्यम्
+
+# After
+- commentary_id: rangaramanuja-muni-prakashika
+  commentary_title: प्रकाशिका
+```
+
+Regenerate `part7.json` and re-copy to live after the fix. Once issue 6 is
+also fixed, the grantha will have a single unified commentary stream.
