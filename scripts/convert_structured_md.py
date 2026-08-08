@@ -644,12 +644,18 @@ def build_envelope_json(
 # Aitareya special handling
 # ---------------------------------------------------------------------------
 
+_SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
+
+
 def append_sayana_deferred(
     sayana_text: str,
     passage_ref: str,
     grantha_explorer_root: Path,
 ) -> None:
-    """Append a Sayana-deferral note to DEFERRED.md.
+    """Append a Sayana-deferral note to DEFERRED.md, idempotently.
+
+    Checks whether the entry already exists (by heading text) before
+    appending, so repeated converter runs do not create duplicate entries.
 
     Args:
         sayana_text: The full Sayana commentary text for the passage.
@@ -657,9 +663,13 @@ def append_sayana_deferred(
         grantha_explorer_root: Root of the grantha-explorer repo.
     """
     deferred_path = grantha_explorer_root / "DEFERRED.md"
+    existing = deferred_path.read_text(encoding="utf-8")
+    if _SAYANA_DEFERRED_HEADING in existing:
+        print(f"  → Sayana text for {passage_ref} already in DEFERRED.md — skipped")
+        return
     note = (
         "\n\n---\n\n"
-        "## Aitareya Upanishad — Sayana Bhashya (deferred)\n\n"
+        f"{_SAYANA_DEFERRED_HEADING}\n\n"
         f"**Passage ref:** {passage_ref}\n\n"
         "**Source editorial note:** "
         "रङ्गरामानुजमुनिभिः अव्याख्यातत्वात् सायण भाष्यमेव दत्तम्\n\n"
