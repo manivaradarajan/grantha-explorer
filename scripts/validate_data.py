@@ -65,7 +65,11 @@ def _classify(data: dict, path: pathlib.Path | None = None) -> str | None:
                 try:
                     env = json.loads(sibling.read_text())
                     parts = env.get('parts')
-                    if isinstance(parts, list) and path.name in parts:
+                    part_files = [
+                        p.get('file', '') if isinstance(p, dict) else p
+                        for p in parts
+                    ] if isinstance(parts, list) else []
+                    if path.name in part_files:
                         return 'grantha-part'
                 except json.JSONDecodeError:
                     pass

@@ -60,8 +60,11 @@ function classifyFile(data: Record<string, unknown>, filePath: string): FileKind
     const siblingPath = path.join(path.dirname(filePath), 'envelope.json');
     if (fs.existsSync(siblingPath)) {
       const env = JSON.parse(fs.readFileSync(siblingPath, 'utf-8')) as Record<string, unknown>;
-      const parts = env.parts as string[] | undefined;
-      if (Array.isArray(parts) && parts.includes(path.basename(filePath))) {
+      const parts = env.parts as Array<string | { file?: string }> | undefined;
+      const partFiles = Array.isArray(parts)
+        ? parts.map(p => (typeof p === 'object' && p !== null ? (p.file ?? '') : p))
+        : [];
+      if (partFiles.includes(path.basename(filePath))) {
         return 'grantha-part';
       }
     }
