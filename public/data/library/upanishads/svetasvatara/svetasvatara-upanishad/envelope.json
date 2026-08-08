@@ -1,8 +1,7 @@
 {
+  "schema_version": "1.0.0",
+  "edition_id": "svetasvatara-upanishad",
   "grantha_id": "svetasvatara-upanishad",
-  "canonical_title": "श्वेताश्वतरोपनिषत्",
-  "text_type": "upanishad",
-  "language": "sanskrit",
   "structure_levels": [
     {
       "key": "Adhyaya",
@@ -10,13 +9,15 @@
         "devanagari": "अध्यायः",
         "roman": "adhyāya"
       },
-      "children": {
-        "key": "Mantra",
-        "scriptNames": {
-          "devanagari": "मन्त्रः",
-          "roman": "mantra"
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
         }
-      }
+      ]
     }
   ],
   "parts": [
@@ -44,6 +45,5 @@
       "file": "part6.json",
       "first_ref": "6.1"
     }
-  ],
-  "schema_version": "0.1.0"
+  ]
 }
