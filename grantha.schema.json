@@ -4,6 +4,11 @@
   "description": "Defines a complete grantha edition contained within a single file. Also the source of truth for shared definitions (passage, commentary, commentary_passage, metadata). Versioned using semantic versioning.",
   "type": "object",
   "properties": {
+    "kind": {
+      "type": "string",
+      "const": "grantha",
+      "description": "Explicit file-type discriminator. Must be 'grantha' for flat single-file editions."
+    },
     "schema_version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -61,6 +66,7 @@
     }
   },
   "required": [
+    "kind",
     "schema_version",
     "edition_id",
     "grantha_id",

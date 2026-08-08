@@ -42,38 +42,28 @@ type FileKind =
   | 'grantha'
   | null;
 
+const VALID_KINDS = new Set<string>([
+  'grantha-envelope',
+  'edition-sub-envelope',
+  'grantha-part',
+  'grantha',
+]);
+
 /**
- * Classify a data file by its shape to select the right schema.
+ * Return the file's explicit kind marker, or null to skip the file.
+ * Classification is a direct lookup on data.kind — no field-presence inference.
  *
- * A file with `part_num` is only a true content part if a sibling
- * `envelope.json` exists in the same directory.  Without that sibling it is
- * a standalone edition and belongs under grantha.schema.json.
+ * @param data - Parsed JSON content of the file.
+ * @param _filePath - Unused; retained for call-site compatibility with the
+ *   duck-typing era classifier.
+ * @returns The kind string if recognised, or null to skip the file.
  */
-function classifyFile(data: Record<string, unknown>, filePath: string): FileKind {
-  if ('editions' in data) return 'grantha-envelope';
-  if ('parts' in data && !('passages' in data)) return 'edition-sub-envelope';
-  if ('passages' in data && 'part_num' in data) {
-    // Only a true content part when the sibling envelope is an *edition
-    // sub-envelope* (has parts[]) AND this file appears in that list.
-    // A grantha-level envelope (has editions[]) must NOT trigger this
-    // branch — those files are standalone editions validated as 'grantha'.
-    const siblingPath = path.join(path.dirname(filePath), 'envelope.json');
-    if (fs.existsSync(siblingPath)) {
-      const env = JSON.parse(fs.readFileSync(siblingPath, 'utf-8')) as Record<string, unknown>;
-      const parts = env.parts as Array<string | { file?: string }> | undefined;
-      const partFiles = Array.isArray(parts)
-        ? parts.map(p => (typeof p === 'object' && p !== null ? (p.file ?? '') : p))
-        : [];
-      if (partFiles.includes(path.basename(filePath))) {
-        return 'grantha-part';
-      }
-    }
-    // No qualifying edition sub-envelope → falls through to 'grantha'.
-  }
-  if ('passages' in data || 'grantha_id' in data) return 'grantha';
-  return null;
+function classifyFile(data: Record<string, unknown>, _filePath: string): FileKind {
+  const kind = data.kind as string | undefined;
+  return (kind !== undefined && VALID_KINDS.has(kind)) ? kind as FileKind : null;
 }
 
+/** Return the AJV compiled validator for the given kind discriminant. */
 function validatorForKind(kind: Exclude<FileKind, null>) {
   switch (kind) {
     case 'grantha-envelope':    return validateEnvelope;

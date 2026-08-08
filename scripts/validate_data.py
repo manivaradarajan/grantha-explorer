@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import pathlib
 import warnings
+from typing import Any
 from jsonschema import Draft7Validator, RefResolver
 
 warnings.filterwarnings('ignore', category=DeprecationWarning)
@@ -35,48 +36,26 @@ def _make_resolver(schema_key: str, schema_paths: dict, schemas: dict, store: di
     )
 
 
-def _classify(data: dict, path: pathlib.Path | None = None) -> str | None:
-    """Classify a data file by its shape to select the right schema.
+_VALID_KINDS: frozenset[str] = frozenset({
+    'grantha-envelope',
+    'edition-sub-envelope',
+    'grantha-part',
+    'grantha',
+})
 
-    A file with ``part_num`` is only a true content part if a sibling
-    ``envelope.json`` exists in the same directory.  Without that sibling it
-    is a standalone edition and belongs under ``grantha.schema.json``.
+
+def _classify(data: dict[str, Any], path: pathlib.Path | None = None) -> str | None:
+    """Return the file's explicit kind marker, or None to skip the file.
 
     Args:
         data: Parsed JSON content of the file.
-        path: Filesystem path to the file, used for sibling-envelope detection.
+        path: Unused; retained for call-site compatibility.
 
     Returns:
-        One of 'grantha-envelope', 'edition-sub-envelope', 'grantha-part',
-        'grantha', or None if the file should be skipped.
+        The ``kind`` value if it is a recognised library file type, else None.
     """
-    if 'editions' in data:
-        return 'grantha-envelope'
-    if 'parts' in data and 'passages' not in data:
-        return 'edition-sub-envelope'
-    if 'passages' in data and 'part_num' in data:
-        # Only a true content part when the sibling envelope is an *edition
-        # sub-envelope* (has parts[]) AND this file appears in that list.
-        # A grantha-level envelope (has editions[]) must NOT trigger this
-        # branch — those files are standalone editions validated as 'grantha'.
-        if path is not None:
-            sibling = path.parent / 'envelope.json'
-            if sibling.exists():
-                try:
-                    env = json.loads(sibling.read_text())
-                    parts = env.get('parts')
-                    part_files = [
-                        p.get('file', '') if isinstance(p, dict) else p
-                        for p in parts
-                    ] if isinstance(parts, list) else []
-                    if path.name in part_files:
-                        return 'grantha-part'
-                except json.JSONDecodeError:
-                    pass
-        # No qualifying edition sub-envelope → falls through to 'grantha' below.
-    if 'passages' in data or 'grantha_id' in data:
-        return 'grantha'
-    return None
+    kind = data.get('kind')
+    return kind if kind in _VALID_KINDS else None
 
 
 def _validate_file(

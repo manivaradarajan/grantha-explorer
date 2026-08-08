@@ -21,8 +21,9 @@ async function generateGranthasJson() {
     // ======================== CHANGE STARTS HERE ========================
 
     // Recursively scan the library directory for both single-file and multi-part granthas.
-    // Hybrid mode: reads grantha-level envelopes (editions[]) where present, falls back
-    // to edition sub-envelopes (grantha_id + parts[]) or flat .json files elsewhere.
+    // Reads the explicit 'kind' field from each envelope.json — never infers type from field presence.
+    // Consumers must read paths from this generated file; never template grantha_id or edition_id
+    // into a filesystem path.
     const granthaPathMap = new Map<string, string>(); // Maps grantha_id to relative path
 
     async function scanDirectory(dir: string, relativePath: string = ''): Promise<void> {
@@ -46,9 +47,17 @@ async function generateGranthasJson() {
             continue;
           }
 
-          if (Array.isArray((envelopeData as any).editions)) {
+          const kind = envelopeData['kind'] as string | undefined;
+
+          if (kind === 'grantha-envelope') {
             // Grantha-level envelope: resolve the default edition path
-            const editions = (envelopeData as any).editions as EditionStub[];
+            const editions = envelopeData['editions'] as EditionStub[] | undefined;
+            if (!editions) {
+              console.warn(
+                `[Indexer Warning] Grantha-level envelope at ${envelopePath} missing editions array. Skipping.`
+              );
+              continue;
+            }
             const defaultEdition = editions.find((e) => e.isDefault === true);
             if (!defaultEdition) {
               console.warn(
@@ -56,7 +65,7 @@ async function generateGranthasJson() {
               );
               continue;
             }
-            const granthaId = (envelopeData as any).grantha_id as string | undefined;
+            const granthaId = envelopeData['grantha_id'] as string | undefined;
             if (!granthaId) {
               console.warn(
                 `[Indexer Warning] Grantha-level envelope at ${envelopePath} missing grantha_id. Skipping.`
@@ -92,11 +101,21 @@ async function generateGranthasJson() {
                 }
               }
             }
-          } else if ((envelopeData as any).grantha_id) {
-            // Edition sub-envelope (grantha_id + parts[]) — register directory path as before
-            granthaPathMap.set((envelopeData as any).grantha_id as string, entryRelativePath);
+          } else if (kind === 'edition-sub-envelope') {
+            // Edition sub-envelope — register directory path
+            const granthaId = envelopeData['grantha_id'] as string | undefined;
+            if (granthaId) {
+              granthaPathMap.set(granthaId, entryRelativePath);
+            } else {
+              console.warn(
+                `[Indexer Warning] ${envelopePath}: edition-sub-envelope missing grantha_id. Skipping.`
+              );
+            }
           } else {
-            // Unknown envelope shape — recurse
+            // Missing or unknown kind — warn and recurse
+            console.warn(
+              `[Indexer Warning] ${envelopePath}: missing or unknown 'kind' field ('${kind}'). Recursing.`
+            );
             await scanDirectory(fullPath, entryRelativePath);
           }
         } else if (entry.isFile() && entry.name.endsWith('.json') && entry.name !== 'envelope.json') {
@@ -108,7 +127,7 @@ async function generateGranthasJson() {
               granthaPathMap.set(data.grantha_id, entryRelativePath);
             }
           } catch (error) {
-            console.warn(`[Indexer Warning] Failed to read grantha_id from ${fullPath}. Skipping.`);
+            console.warn(`[Indexer Warning] Failed to read grantha_id from ${fullPath}: ${error}. Skipping.`);
           }
         }
       }

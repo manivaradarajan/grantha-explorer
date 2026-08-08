@@ -1,0 +1,17 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.0.0",
+  "edition_id": "test-upanishad",
+  "part_num": 1,
+  "passages": [
+    {
+      "ref": "1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "ॐ"
+        }
+      }
+    }
+  ]
+}

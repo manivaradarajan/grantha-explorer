@@ -4,6 +4,11 @@
   "description": "Schema for a single content part of a multi-part edition. Contains content arrays and identifiers. Versioned using semantic versioning.",
   "type": "object",
   "properties": {
+    "kind": {
+      "type": "string",
+      "const": "grantha-part",
+      "description": "Explicit file-type discriminator. Must be 'grantha-part' for edition part files."
+    },
     "schema_version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -41,6 +46,6 @@
       "description": "Exactly one commentary per edition part. Absent if this is a mūla-only edition."
     }
   },
-  "required": ["schema_version", "edition_id", "part_num"],
+  "required": ["kind", "schema_version", "edition_id", "part_num"],
   "additionalProperties": false
 }

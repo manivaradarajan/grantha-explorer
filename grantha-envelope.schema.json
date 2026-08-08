@@ -4,6 +4,11 @@
   "description": "Top-level envelope for a grantha. Carries identity, classification, and an ordered list of edition stubs. One file per grantha.",
   "type": "object",
   "properties": {
+    "kind": {
+      "type": "string",
+      "const": "grantha-envelope",
+      "description": "Explicit file-type discriminator. Must be 'grantha-envelope' for top-level grantha envelopes."
+    },
     "schema_version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
@@ -41,6 +46,7 @@
     }
   },
   "required": [
+    "kind",
     "schema_version",
     "grantha_id",
     "canonical_title",
@@ -87,6 +93,11 @@
       "type": "object",
       "description": "Shape of the envelope.json that lives inside an edition directory for multi-part editions. Validated by the Python validator using this definition.",
       "properties": {
+        "kind": {
+          "type": "string",
+          "const": "edition-sub-envelope",
+          "description": "Explicit file-type discriminator. Must be 'edition-sub-envelope' for edition-directory envelopes."
+        },
         "schema_version": {
           "type": "string",
           "pattern": "^\\d+\\.\\d+\\.\\d+$"
@@ -126,6 +137,7 @@
         }
       },
       "required": [
+        "kind",
         "schema_version",
         "edition_id",
         "grantha_id",

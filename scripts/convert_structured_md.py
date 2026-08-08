@@ -589,6 +589,7 @@ def build_part_json(
     ]
 
     result: dict[str, Any] = {
+        "kind": "grantha-part",
         "schema_version": SCHEMA_VERSION,
         "grantha_id": grantha_id,
         "edition_id": edition_id,
@@ -648,6 +649,7 @@ def build_envelope_json(
     """
     grantha_id: str = frontmatter["grantha_id"]
     return {
+        "kind": "edition-sub-envelope",
         "schema_version": SCHEMA_VERSION,
         "edition_id": grantha_id,
         "grantha_id": grantha_id,
