@@ -42,12 +42,15 @@ export default function TextContent({
   const observer = useRef<IntersectionObserver | null>(null);
   const isMobile = useMediaQuery("(max-width: 767px)");
 
-  // Check if the selected verse's part is loaded for multi-part granthas
+  // Check if the selected verse's part is loaded for multi-part granthas.
+  // Checks direct passage membership rather than re-deriving a section number
+  // from the selected ref, so prefatory (e.g. "0.0") and concluding material
+  // load correctly regardless of how their refs are numbered relative to the
+  // containing part file's first_ref.
   const isMultiPart = grantha.parts && grantha.parts.length > 0;
   let isSelectedPartLoaded = true;
   if (isMultiPart && selectedRef !== "1") {
-    const requiredPartId = selectedRef.split('.')[0];
-    isSelectedPartLoaded = passages.some(p => p.part_id === requiredPartId);
+    isSelectedPartLoaded = passages.some(p => p.ref === selectedRef);
   }
 
   // Prev/Next computation

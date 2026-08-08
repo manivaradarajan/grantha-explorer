@@ -321,9 +321,9 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
             }
 
             return {
-              prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.id })),
-              passages: (content.passages || []).map(p => ({ ...p, part_id: partInfo.id })),
-              concluding_material: (content.concluding_material || []).map(p => ({ ...p, part_id: partInfo.id })),
+              prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.first_ref })),
+              passages: (content.passages || []).map(p => ({ ...p, part_id: partInfo.first_ref })),
+              concluding_material: (content.concluding_material || []).map(p => ({ ...p, part_id: partInfo.first_ref })),
               commentaries: commentariesArray,
             };
           })

@@ -11,6 +11,7 @@ import { useVerseHash } from "@/hooks/useVerseHash";
 import { useAvailableGranthas } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
 import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
+import { getAllPassagesForNavigation } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
 
@@ -113,15 +114,13 @@ export default function Home() {
       return;
     }
 
-    // For multi-part granthas, check if the required part is loaded before validating
+    // For multi-part granthas, defer validation until the passage's containing
+    // part is loaded. Checks all three passage arrays (prefatory, main,
+    // concluding) so refs like "0.0" (prefatory) are found correctly.
     if (currentGrantha.parts) {
-      const refParts = verseRef.split('.');
-      if (refParts.length > 0) {
-        const topLevelRef = refParts[0];
-        const isPartLoaded = currentGrantha.passages.some(p => p.part_id === topLevelRef);
-        if (!isPartLoaded) {
-          return;
-        }
+      const allPassages = getAllPassagesForNavigation(currentGrantha);
+      if (!allPassages.some(p => p.ref === verseRef)) {
+        return;
       }
     }
 

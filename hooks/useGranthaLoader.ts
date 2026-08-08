@@ -59,7 +59,7 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
         if (partContent.passages) {
           const newPassages = partContent.passages
             .filter(p => !existingRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partInfo.id }));
+            .map(p => ({ ...p, part_id: partInfo.first_ref }));
           newData.passages = [...newData.passages, ...newPassages];
         }
 
@@ -68,7 +68,7 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
         if (partContent.prefatory_material) {
           const newPrefatory = partContent.prefatory_material
             .filter(p => !existingPrefatoryRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partInfo.id }));
+            .map(p => ({ ...p, part_id: partInfo.first_ref }));
           newData.prefatory_material = [...newData.prefatory_material, ...newPrefatory];
         }
 
@@ -77,7 +77,7 @@ export function useGranthaLoader(granthaId: string): UseGranthaLoaderReturn {
         if (partContent.concluding_material) {
           const newConcluding = partContent.concluding_material
             .filter(p => !existingConcludingRefs.has(p.ref))
-            .map(p => ({ ...p, part_id: partInfo.id }));
+            .map(p => ({ ...p, part_id: partInfo.first_ref }));
           newData.concluding_material = [...newData.concluding_material, ...newConcluding];
         }
 
