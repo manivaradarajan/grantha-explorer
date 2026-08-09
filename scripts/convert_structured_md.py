@@ -46,6 +46,24 @@ SAYANA_COMMENTARY_ID = "sayana-bhashya"
 AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
 SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
+# Non-content files co-located with source .md files that must never be treated
+# as grantha sources (e.g. per-text editorial-issue notes).
+_NON_SOURCE_MD_FILES = frozenset({"SOURCE_ISSUES.md", "BUILD"})
+
+
+def _list_source_markdown_files(source_dir: Path) -> list[Path]:
+    """Return sorted source markdown files, excluding non-content files.
+
+    Args:
+        source_dir: Directory containing source markdown files.
+
+    Returns:
+        Sorted list of markdown file paths, excluding _NON_SOURCE_MD_FILES.
+    """
+    return sorted(
+        p for p in source_dir.glob("*.md") if p.name not in _NON_SOURCE_MD_FILES
+    )
+
 
 # ---------------------------------------------------------------------------
 # Data classes
@@ -822,9 +840,10 @@ def _collect_source_files(source_dir: Path) -> list[Path]:
         List of .md file paths in correct logical part sequence.
 
     Raises:
-        FileNotFoundError: If no .md files (other than BUILD) exist.
+        FileNotFoundError: If no source .md files (other than non-content
+            files) exist.
     """
-    candidates = [p for p in source_dir.glob("*.md") if p.name != "BUILD"]
+    candidates = _list_source_markdown_files(source_dir)
     if not candidates:
         raise FileNotFoundError(f"No .md files found in {source_dir}")
 
