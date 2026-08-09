@@ -8,6 +8,8 @@ interface GranthaSelectorProps {
   granthas: GranthaMetadata[];
   selectedGranthaId: string;
   onSelect: (granthaId: string) => void;
+  /** Overrides the default trigger button className for alternate rendering contexts. */
+  triggerClassName?: string;
 }
 
 const LISTBOX_ID = "grantha-picker-listbox";
@@ -21,6 +23,7 @@ export default function GranthaSelector({
   granthas,
   selectedGranthaId,
   onSelect,
+  triggerClassName,
 }: GranthaSelectorProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -71,8 +74,12 @@ export default function GranthaSelector({
 
   const currentFocusIndex = () => {
     const current = document.activeElement;
-    const index = granthas.findIndex((_, i) => optionRefs.current[i] === current);
-    return index >= 0 ? index : granthas.findIndex((g) => g.id === selectedGranthaId);
+    const index = granthas.findIndex(
+      (_, i) => optionRefs.current[i] === current,
+    );
+    return index >= 0
+      ? index
+      : granthas.findIndex((g) => g.id === selectedGranthaId);
   };
 
   const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
@@ -119,15 +126,25 @@ export default function GranthaSelector({
         aria-controls={open ? LISTBOX_ID : undefined}
         onClick={() => setOpen((o) => !o)}
         onKeyDown={handleTriggerKeyDown}
-        className="w-full flex items-center justify-between gap-2 font-bold text-base border-b border-gray-300 pt-1 pb-2 text-left bg-transparent cursor-pointer"
+        className={
+          triggerClassName ??
+          "w-full flex items-center justify-between gap-2 font-bold text-base border-b border-gray-300 pt-1 pb-2 text-left bg-transparent cursor-pointer"
+        }
       >
-        <span className="truncate min-w-0">{selectedTitle}</span>
-        <span
+        <span className="truncate min-w-0 pt-1">{selectedTitle}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4 flex-shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
           aria-hidden="true"
-          className="text-gray-500 font-normal flex-shrink-0"
         >
-          ⌄
-        </span>
+          <path
+            fillRule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clipRule="evenodd"
+          />
+        </svg>
       </button>
 
       {open && triggerRect
@@ -142,7 +159,10 @@ export default function GranthaSelector({
               style={{
                 top: Math.min(triggerRect.bottom + 4, window.innerHeight - 304),
                 left: triggerRect.left,
-                width: Math.max(140, Math.min(240, window.innerWidth - triggerRect.left - 8)),
+                width: Math.max(
+                  140,
+                  Math.min(240, window.innerWidth - triggerRect.left - 8),
+                ),
                 minWidth: 0,
               }}
             >

@@ -7,6 +7,8 @@ import TextContent from "./TextContent";
 import CommentaryPanel from "./CommentaryPanel";
 import MobileDrawer from "./MobileDrawer";
 import BottomSheet from "./BottomSheet";
+import AppWordmark from "./AppWordmark";
+import GranthaSelector from "./GranthaSelector";
 
 interface MobileLayoutProps {
   grantha: Grantha;
@@ -22,8 +24,8 @@ interface MobileLayoutProps {
     commentaries: string[]
   ) => void;
   updateCommentaryOpen: (isOpen: boolean) => void;
-  granthaIdToDevanagariTitle: { [key: string]: string };
-  granthaIdToLatinTitle: { [key: string]: string };
+  granthaIdToDevanagariTitle: Record<string, string>;
+  granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
   isLoadingPart: boolean;
 }
@@ -59,10 +61,6 @@ export default function MobileLayout({
   const hasPrevious = currentPassageIndex > 0;
   const hasNext = currentPassageIndex < allPassages.length - 1;
 
-  const handleVerseSelect = (ref: string) => {
-    onVerseSelect(ref);
-  };
-
   const handlePrevious = () => {
     if (hasPrevious) {
       const prevRef = allPassages[currentPassageIndex - 1].ref;
@@ -78,9 +76,9 @@ export default function MobileLayout({
   };
 
   return (
-    <div className="h-screen flex flex-col bg-white">
-      {/* Mobile Header */}
-      <div className="flex items-center gap-4 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+    <main className="h-screen flex flex-col bg-white">
+      <header className="flex items-center gap-4 px-4 py-3 bg-white">
+        <h1 className="sr-only">Grantha Explorer</h1>
         {/* Hamburger Menu Button */}
         <button
           onClick={() => setIsNavOpen(true)}
@@ -103,26 +101,38 @@ export default function MobileLayout({
           </svg>
         </button>
 
-        {/* Title */}
-        <h1 className="text-3xl font-semibold font-serif flex-1 text-center">
-          {grantha.canonical_title}
-        </h1>
+        {/* Wordmark */}
+        <div className="flex-1 flex items-center justify-center">
+          <AppWordmark aria-hidden="true" />
+        </div>
 
         {/* Spacer to balance hamburger button */}
-        <div className="min-w-[44px]"></div>
-      </div>
+        <div className="min-w-[44px]" aria-hidden="true"></div>
+      </header>
 
       {/* Main Content - Full Width Text */}
       <div className="flex-1 overflow-hidden">
-        <TextContent
-          grantha={grantha}
-          selectedRef={selectedRef}
-          onVerseSelect={handleVerseSelect}
-          title={grantha.canonical_title}
-          hideTitle={true}
-          loadPart={loadPart}
-          isLoadingPart={isLoadingPart}
-        />
+        <div className="h-full flex flex-col">
+          <div className="shrink-0 border-b border-gray-100 bg-white flex items-center justify-center px-6 min-h-[5.5rem]">
+            <GranthaSelector
+              granthas={granthas}
+              selectedGranthaId={grantha.grantha_id}
+              onSelect={onGranthaChange}
+              triggerClassName="inline-flex items-center gap-2 font-serif text-2xl font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
+            />
+          </div>
+          <div className="flex-1 min-h-0">
+            <TextContent
+              grantha={grantha}
+              selectedRef={selectedRef}
+              onVerseSelect={onVerseSelect}
+              title={grantha.canonical_title}
+              hideTitle
+              loadPart={loadPart}
+              isLoadingPart={isLoadingPart}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Navigation Drawer */}
@@ -140,6 +150,7 @@ export default function MobileLayout({
             setIsNavOpen(false);
           }}
           loadPart={loadPart}
+          showGranthaSelector
         />
       </MobileDrawer>
 
@@ -166,6 +177,6 @@ export default function MobileLayout({
           hideHeader={true}
         />
       </BottomSheet>
-    </div>
+    </main>
   );
 }

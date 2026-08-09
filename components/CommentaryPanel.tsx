@@ -29,6 +29,9 @@ interface CommentaryPanelProps {
   hideHeader?: boolean;
 }
 
+const PANEL_HEADER_CLASS =
+  "shrink-0 border-b border-gray-100 bg-white flex flex-col items-center justify-start pt-7 px-4 min-h-[5.5rem]";
+
 export default function CommentaryPanel({
   grantha,
   selectedRef,
@@ -217,7 +220,7 @@ export default function CommentaryPanel({
     return (
       <div className="h-full flex flex-col">
         {!hideHeader && (
-          <div className="pt-6 px-4 text-center bg-white">
+          <div className={PANEL_HEADER_CLASS}>
             <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
           </div>
         )}
@@ -233,9 +236,9 @@ export default function CommentaryPanel({
     return (
       <div className="h-full flex flex-col">
         {!hideHeader && (
-          <div className="pt-6 px-4 text-center bg-white">
+          <div className={PANEL_HEADER_CLASS}>
             <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
-            <div className="text-sm pb-2 text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
+            <div className="text-sm text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
           </div>
         )}
         <div className="flex-1 overflow-y-auto px-6 pb-6">
@@ -248,7 +251,7 @@ export default function CommentaryPanel({
   return (
     <div className="h-full flex flex-col">
       {!hideHeader && (
-        <div className="p-4 text-center bg-white">
+        <div className={PANEL_HEADER_CLASS}>
           <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
         </div>
       )}

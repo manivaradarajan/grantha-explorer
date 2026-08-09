@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
+import GranthaSelector from "@/components/GranthaSelector";
 import TextContent from "@/components/TextContent";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
@@ -10,7 +11,10 @@ import TabletLayout from "@/components/TabletLayout";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useAvailableGranthas } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
-import { getFirstMainPassageRef, validateAndNormalizeHash } from "@/lib/hashUtils";
+import {
+  getFirstMainPassageRef,
+  validateAndNormalizeHash,
+} from "@/lib/hashUtils";
 import { getAllPassagesForNavigation } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
@@ -20,11 +24,11 @@ export default function Home() {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
 
-  // State for invalid verse modal
   const [showInvalidVerseModal, setShowInvalidVerseModal] = useState(false);
-  const [invalidVerseTitle, setInvalidVerseTitle] = useState(""); // New state for modal title
-  const [invalidVerseMessageLines, setInvalidVerseMessageLines] = useState<string[]>([]); // New state for multi-line message
-  const [previousUrl, setPreviousUrl] = useState<string | null>(null); // To store the URL before an invalid navigation attempt
+  const [invalidVerseTitle, setInvalidVerseTitle] = useState("");
+  const [invalidVerseMessageLines, setInvalidVerseMessageLines] =
+    useState<string>("");
+  const [previousUrl, setPreviousUrl] = useState<string | null>(null);
 
   // State for resize handle dragging
   const [isDraggingLeftHandle, setIsDraggingLeftHandle] = useState(false);
@@ -119,23 +123,24 @@ export default function Home() {
     // concluding) so refs like "0.0" (prefatory) are found correctly.
     if (currentGrantha.parts) {
       const allPassages = getAllPassagesForNavigation(currentGrantha);
-      if (!allPassages.some(p => p.ref === verseRef)) {
+      if (!allPassages.some((p) => p.ref === verseRef)) {
         return;
       }
     }
 
     const normalized = validateAndNormalizeHash(
       { granthaId, verseRef, commentaries, commentaryOpen },
-      currentGrantha
+      currentGrantha,
     );
 
     // If verse ref was invalid, show modal and revert URL
     if (normalized.needsCorrection) {
-      const granthaTitle = granthaIdToDevanagariTitle[granthaId] || granthaIdToLatinTitle[granthaId] || granthaId;
+      const granthaTitle =
+        granthaIdToDevanagariTitle[granthaId] ||
+        granthaIdToLatinTitle[granthaId] ||
+        granthaId;
       setInvalidVerseTitle("उक्तनिर्देशः नोपलभ्यते"); // "Passage not found"
-      setInvalidVerseMessageLines([
-        `${granthaTitle} ${verseRef}`,
-      ]);
+      setInvalidVerseMessageLines(`${granthaTitle} ${verseRef}`);
       setShowInvalidVerseModal(true);
 
       // Revert the URL to the previous valid state if available
@@ -159,19 +164,23 @@ export default function Home() {
       return;
     }
 
-    const refParts = verseRef.split('.');
+    const refParts = verseRef.split(".");
     if (refParts.length === 0) return;
 
     const topLevelRef = refParts[0];
 
     // A structural section can span multiple part files. Load all unloaded files for the section.
-    const sectionParts = currentGrantha.parts.filter(p => p.id === topLevelRef);
+    const sectionParts = currentGrantha.parts.filter(
+      (p) => p.id === topLevelRef,
+    );
     if (sectionParts.length === 0) {
       console.warn(`Could not find any parts for topLevelRef: ${topLevelRef}`);
       return;
     }
 
-    const loadedPassageRefs = new Set(currentGrantha.passages.map(p => p.ref));
+    const loadedPassageRefs = new Set(
+      currentGrantha.passages.map((p) => p.ref),
+    );
     for (const part of sectionParts) {
       if (!loadedPassageRefs.has(part.first_ref)) {
         loadPart(part.first_ref);
@@ -204,19 +213,21 @@ export default function Home() {
     }
   };
 
-  const granthaIdToDevanagariTitle = Object.fromEntries(
-    granthas.map((g) => [g.id, g.title_deva])
+  const granthaIdToDevanagariTitle = useMemo(
+    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_deva])),
+    [granthas],
   );
 
-  const granthaIdToLatinTitle = Object.fromEntries(
-    granthas.map((g) => [g.id, g.title_iast])
+  const granthaIdToLatinTitle = useMemo(
+    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_iast])),
+    [granthas],
   );
 
   // Close modal handler
   const handleCloseInvalidVerseModal = () => {
     setShowInvalidVerseModal(false);
     setInvalidVerseTitle("");
-    setInvalidVerseMessageLines([]);
+    setInvalidVerseMessageLines("");
   };
 
   // Error states
@@ -329,63 +340,73 @@ export default function Home() {
 
   // Render desktop layout for screens >1024px (default 3-column layout)
   return (
-    <main className="h-screen bg-white flex flex-col">
-      <div className="relative h-full">
-        <PanelGroup
-          direction="horizontal"
-          className="h-full"
-          onLayout={handlePanelLayout}
-        >
-          {/* Left Navigation Panel */}
-          <Panel defaultSize={panelSizes[0]} minSize={15} maxSize={35}>
-            <NavigationSidebar
-              grantha={currentGrantha}
-              granthas={granthas}
-              selectedRef={verseRef}
-              onGranthaChange={handleGranthaChange}
-              onVerseSelect={handleVerseSelect}
-              loadPart={loadPart}
-            />
-          </Panel>
-
-          {/* Resize Handle - invisible but functional */}
-          <PanelResizeHandle
-            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? 'bg-blue-500' : ''}`}
-            onDragging={setIsDraggingLeftHandle}
+    <main className="h-screen bg-white">
+      <PanelGroup
+        direction="horizontal"
+        className="h-full"
+        onLayout={handlePanelLayout}
+      >
+        {/* Left Navigation Panel */}
+        <Panel defaultSize={panelSizes[0]} minSize={15} maxSize={35}>
+          <NavigationSidebar
+            grantha={currentGrantha}
+            selectedRef={verseRef}
+            onVerseSelect={handleVerseSelect}
+            loadPart={loadPart}
+            showWordmark
           />
+        </Panel>
 
-          {/* Center Content Panel */}
-          <Panel defaultSize={panelSizes[1]} minSize={30}>
-            <TextContent
-              grantha={currentGrantha}
-              selectedRef={verseRef}
-              onVerseSelect={handleVerseSelect}
-              title={currentGrantha.canonical_title}
-              loadPart={loadPart}
-              isLoadingPart={isLoadingPart}
-            />
-          </Panel>
+        {/* Resize Handle - invisible but functional */}
+        <PanelResizeHandle
+          className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? "bg-blue-500" : ""}`}
+          onDragging={setIsDraggingLeftHandle}
+        />
 
-          {/* Resize Handle */}
-          <PanelResizeHandle
-            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingRightHandle ? 'bg-blue-500' : ''}`}
-            onDragging={setIsDraggingRightHandle}
+        {/* Center Content Panel */}
+        <Panel defaultSize={panelSizes[1]} minSize={30}>
+          <div className="h-full flex flex-col">
+            <div className="shrink-0 border-b border-gray-100 bg-white flex flex-col items-center justify-start pt-5 px-6 min-h-[5.5rem]">
+              <GranthaSelector
+                granthas={granthas}
+                selectedGranthaId={granthaId}
+                onSelect={handleGranthaChange}
+                triggerClassName="inline-flex items-center gap-2 font-serif text-[1.625rem] font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
+              />
+            </div>
+            <div className="flex-1 min-h-0">
+              <TextContent
+                grantha={currentGrantha}
+                selectedRef={verseRef}
+                onVerseSelect={handleVerseSelect}
+                title={currentGrantha.canonical_title}
+                hideTitle
+                loadPart={loadPart}
+                isLoadingPart={isLoadingPart}
+              />
+            </div>
+          </div>
+        </Panel>
+
+        {/* Resize Handle */}
+        <PanelResizeHandle
+          className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingRightHandle ? "bg-blue-500" : ""}`}
+          onDragging={setIsDraggingRightHandle}
+        />
+
+        {/* Right Commentary Panel */}
+        <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
+          <CommentaryPanel
+            grantha={currentGrantha}
+            selectedRef={verseRef}
+            selectedCommentaryIds={commentaries}
+            updateHash={updateHash}
+            availableGranthaIds={granthas.map((g) => g.id)}
+            granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+            granthaIdToLatinTitle={granthaIdToLatinTitle}
           />
-
-          {/* Right Commentary Panel */}
-          <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
-            <CommentaryPanel
-              grantha={currentGrantha}
-              selectedRef={verseRef}
-              selectedCommentaryIds={commentaries}
-              updateHash={updateHash}
-              availableGranthaIds={granthas.map(g => g.id)}
-              granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-              granthaIdToLatinTitle={granthaIdToLatinTitle}
-            />
-          </Panel>
-        </PanelGroup>
-      </div>
+        </Panel>
+      </PanelGroup>
       <InvalidVerseModal
         isOpen={showInvalidVerseModal}
         onClose={handleCloseInvalidVerseModal}
@@ -395,4 +416,3 @@ export default function Home() {
     </main>
   );
 }
-

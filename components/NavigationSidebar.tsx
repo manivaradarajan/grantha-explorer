@@ -11,19 +11,27 @@ import GranthaSelector from "./GranthaSelector";
 import { useEffect, useMemo, useRef, useState } from "react";
 import SidebarList from "./SidebarList";
 import { getUIStrings } from "@/lib/i18n";
+import AppWordmark from "./AppWordmark";
 
 interface NavigationSidebarProps {
   grantha: Grantha;
-  granthas: GranthaMetadata[];
+  granthas?: GranthaMetadata[];
   selectedRef: string;
-  onGranthaChange: (granthaId: string) => void;
+  onGranthaChange?: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
   loadPart: (firstRef: string) => Promise<void>;
+  showWordmark?: boolean;
+  /** When true, renders the GranthaSelector above the verse list (mobile drawer). */
+  showGranthaSelector?: boolean;
 }
 
 /** section-top delta relative to the scroll container (offsetTop is document-relative). */
 function elementScrollTop(scroller: HTMLElement, el: HTMLElement): number {
-  return el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+  return (
+    el.getBoundingClientRect().top -
+    scroller.getBoundingClientRect().top +
+    scroller.scrollTop
+  );
 }
 
 export default function NavigationSidebar({
@@ -33,6 +41,8 @@ export default function NavigationSidebar({
   onGranthaChange,
   onVerseSelect,
   loadPart,
+  showWordmark = false,
+  showGranthaSelector = false,
 }: NavigationSidebarProps) {
   const model = useMemo(() => getSidebarFlatModel(grantha), [grantha]);
   const uiStrings = getUIStrings();
@@ -157,7 +167,8 @@ export default function NavigationSidebar({
     }
     setJumpError(false);
     onVerseSelect(targetRef);
-    pendingSectionRef.current = model.depth >= 2 ? dropLastRefComponent(targetRef) : null;
+    pendingSectionRef.current =
+      model.depth >= 2 ? dropLastRefComponent(targetRef) : null;
     if (!loadedRefs.has(targetRef)) {
       const section = model.sections.find(
         (s) =>
@@ -166,7 +177,9 @@ export default function NavigationSidebar({
       );
       if (section) ensureSectionLoaded(section);
       else {
-        const part = (grantha.parts ?? []).find((p) => p.first_ref === targetRef);
+        const part = (grantha.parts ?? []).find(
+          (p) => p.first_ref === targetRef,
+        );
         if (part) void loadPart(part.first_ref);
       }
     }
@@ -174,21 +187,28 @@ export default function NavigationSidebar({
 
   return (
     <div className="h-full flex flex-col pb-8 bg-[#f8f9fa]">
+      {showWordmark && (
+        <div className="shrink-0 min-h-[5.5rem] flex items-center px-6 border-b border-gray-100">
+          <AppWordmark />
+        </div>
+      )}
       {/* Header */}
-      <div className="pt-8 pb-2 px-6 bg-[#f8f9fa]">
+      <div className="pt-4 pb-2 px-6 bg-[#f8f9fa]">
         <h2 className="text-xl font-semibold font-serif text-center">
           {uiStrings.index}
         </h2>
       </div>
 
-      {/* Grantha selector */}
-      <div className="pb-3 px-6">
-        <GranthaSelector
-          granthas={granthas}
-          selectedGranthaId={grantha.grantha_id}
-          onSelect={onGranthaChange}
-        />
-      </div>
+      {/* Grantha selector — shown only in mobile drawer */}
+      {showGranthaSelector && granthas && onGranthaChange && (
+        <div className="pb-3 px-6">
+          <GranthaSelector
+            granthas={granthas}
+            selectedGranthaId={grantha.grantha_id}
+            onSelect={onGranthaChange}
+          />
+        </div>
+      )}
 
       {/* Quick jump — shows the current ref, doubles as a jump field */}
       <div className="px-6 pb-2">

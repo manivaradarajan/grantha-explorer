@@ -6,7 +6,7 @@ import {
   PrefatoryMaterial,
   getPassageFragment,
 } from "@/lib/data";
-import { stripMarkdown } from "@/lib/stringUtils";
+import { stripMarkdown, toDevanagariNumerals } from "@/lib/stringUtils";
 import { forwardRef } from "react";
 
 interface PassageLinkProps {
@@ -24,7 +24,7 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
       return null;
     }
 
-    const getLabel = () => {
+    const getLabel = (): string => {
       if (
         passage.passage_type === "prefatory" ||
         passage.passage_type === "concluding"
@@ -39,9 +39,9 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
       }
 
       const refParts = passage.ref.split(".");
-      const lastRefPart = refParts[refParts.length - 1];
+      const lastRefPart = refParts[refParts.length - 1] ?? "";
 
-      return `${deepestStructure.scriptNames.devanagari} ${lastRefPart}`;
+      return `${deepestStructure.scriptNames.devanagari} ${toDevanagariNumerals(lastRefPart)}`;
     };
 
     const label = stripMarkdown(getLabel());

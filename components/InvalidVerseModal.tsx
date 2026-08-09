@@ -4,8 +4,8 @@ import React from "react";
 interface InvalidVerseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string; // Custom title for the modal
-  messageLines: string[]; // Array of strings for multi-line message
+  title: string;
+  messageLines: string;
 }
 
 const InvalidVerseModal: React.FC<InvalidVerseModalProps> = ({
@@ -31,11 +31,7 @@ const InvalidVerseModal: React.FC<InvalidVerseModalProps> = ({
       centered
       getContainer={false} // Render modal in its current DOM position
     >
-      {messageLines.map((line, index) => (
-        <p key={index} className="text-center">
-          {line}
-        </p>
-      ))}
+      <p className="text-center">{messageLines}</p>
     </Modal>
   );
 };

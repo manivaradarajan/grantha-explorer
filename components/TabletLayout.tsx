@@ -7,6 +7,8 @@ import NavigationSidebar from "./NavigationSidebar";
 import TextContent from "./TextContent";
 import CommentaryPanel from "./CommentaryPanel";
 import MobileDrawer from "./MobileDrawer";
+import AppWordmark from "./AppWordmark";
+import GranthaSelector from "./GranthaSelector";
 
 interface TabletLayoutProps {
   grantha: Grantha;
@@ -61,10 +63,34 @@ export default function TabletLayout({
     }
   };
 
+  const textPanel = (
+    <div className="h-full flex flex-col">
+      <div className="shrink-0 border-b border-gray-100 bg-white flex flex-col items-center justify-start pt-7 px-6 min-h-[5.5rem]">
+        <GranthaSelector
+          granthas={granthas}
+          selectedGranthaId={grantha.grantha_id}
+          onSelect={onGranthaChange}
+          triggerClassName="inline-flex items-center gap-2 font-serif text-2xl font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
+        />
+      </div>
+      <div className="flex-1 min-h-0">
+        <TextContent
+          grantha={grantha}
+          selectedRef={selectedRef}
+          onVerseSelect={onVerseSelect}
+          title={grantha.canonical_title}
+          hideTitle
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
+        />
+      </div>
+    </div>
+  );
+
   return (
-    <div className="h-screen flex flex-col bg-white">
-      {/* Tablet Header with Hamburger Menu and Commentary Toggle */}
-      <div className="flex items-center gap-4 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+    <main className="h-screen flex flex-col bg-white">
+      <header className="flex items-center gap-4 px-4 py-3 bg-white">
+        <h1 className="sr-only">Grantha Explorer</h1>
         {/* Hamburger Menu Button */}
         <button
           onClick={() => setIsNavOpen(true)}
@@ -87,10 +113,10 @@ export default function TabletLayout({
           </svg>
         </button>
 
-        {/* Title */}
-        <h1 className="text-xl font-semibold font-serif flex-1">
-          {grantha.canonical_title}
-        </h1>
+        {/* Wordmark */}
+        <div className="flex-1 flex items-center">
+          <AppWordmark aria-hidden="true" />
+        </div>
 
         {/* Commentary Toggle Button */}
         <button
@@ -118,7 +144,7 @@ export default function TabletLayout({
             />
           </svg>
         </button>
-      </div>
+      </header>
 
       {/* Content: text alone, or text + commentary side-by-side */}
       <div className="flex-1 overflow-hidden">
@@ -130,15 +156,7 @@ export default function TabletLayout({
           >
             {/* Center Content Panel */}
             <Panel defaultSize={panelSizes[0]} minSize={40}>
-              <TextContent
-                grantha={grantha}
-                selectedRef={selectedRef}
-                onVerseSelect={onVerseSelect}
-                title={grantha.canonical_title}
-                hideTitle={true}
-                loadPart={loadPart}
-                isLoadingPart={isLoadingPart}
-              />
+              {textPanel}
             </Panel>
 
             {/* Resize Handle */}
@@ -161,15 +179,7 @@ export default function TabletLayout({
             </Panel>
           </PanelGroup>
         ) : (
-          <TextContent
-            grantha={grantha}
-            selectedRef={selectedRef}
-            onVerseSelect={onVerseSelect}
-            title={grantha.canonical_title}
-            hideTitle={true}
-            loadPart={loadPart}
-            isLoadingPart={isLoadingPart}
-          />
+          textPanel
         )}
       </div>
 
@@ -177,12 +187,7 @@ export default function TabletLayout({
       <MobileDrawer isOpen={isNavOpen} onClose={() => setIsNavOpen(false)}>
         <NavigationSidebar
           grantha={grantha}
-          granthas={granthas}
           selectedRef={selectedRef}
-          onGranthaChange={(newGranthaId) => {
-            onGranthaChange(newGranthaId);
-            setIsNavOpen(false);
-          }}
           onVerseSelect={(ref) => {
             onVerseSelect(ref);
             setIsNavOpen(false);
@@ -190,6 +195,6 @@ export default function TabletLayout({
           loadPart={loadPart}
         />
       </MobileDrawer>
-    </div>
+    </main>
   );
 }

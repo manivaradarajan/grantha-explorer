@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Devanagari, Noto_Serif_Devanagari } from "next/font/google";
+import { Noto_Sans_Devanagari, Noto_Serif_Devanagari, Anek_Devanagari } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -13,6 +13,12 @@ const notoSerif = Noto_Serif_Devanagari({
   subsets: ["devanagari", "latin"],
   weight: ["400", "600", "700"],
   variable: "--font-serif",
+});
+
+const anekDevanagari = Anek_Devanagari({
+  subsets: ["devanagari"],
+  weight: ["400", "500", "600"],
+  variable: "--font-wordmark",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="sa">
-      <body className={`${notoSans.variable} ${notoSerif.variable} font-sans`}>
+      <body className={`${notoSans.variable} ${notoSerif.variable} ${anekDevanagari.variable} font-sans`}>
         <Providers>{children}</Providers>
       </body>
     </html>
