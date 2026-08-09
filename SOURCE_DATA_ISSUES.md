@@ -435,3 +435,62 @@ In `chhandogya-upanishad-rangaramanuja-07-01-01.md`, change the
 
 Regenerate `part7.json` and re-copy to live after the fix. Once issue 6 is
 also fixed, the grantha will have a single unified commentary stream.
+
+---
+
+## 8. Isavasya Srivatsanarayana — prefatory śāntimantra has no Sanskrit block; śānti-pāṭha bhāṣya misattributed
+
+**Status: Open.** Identified while resolving the vedantadesika prefatory
+regression (see commit history); the vedantadesika edition was fixed by
+removing the misattributed śānti-pāṭha bhāṣya and keeping the mangalam as the
+`0.0` commentary. This edition has not yet been restructured.
+
+### Affected files
+
+```
+structured_md/upanishads/isavasya/isavasya-upanishad-srivatsanarayana-01.md
+```
+
+### What is wrong
+
+The prefatory passage (`# Prefatory: 0.0 (devanagari: "शान्तिमन्त्रः")`,
+lines 24–66) is missing two structural elements every other edition has:
+
+1. **No `<!-- sanskrit:devanagari -->` block.** The śāntimantra mūla
+   (`ओम् पूर्णमदः …`) is written as bold-markdown prose interleaved with the
+   commentary text instead of being enclosed in a Sanskrit content block
+   (violates GRANTHA_MARKDOWN.md §3.2). The converter therefore cannot extract
+   it as `prefatory_material` — the output `part1.json` has no prefatory entry
+   and no displayable mūla for the śānti-pāṭha.
+2. **No `# Commentary: 0.0` sub-heading.** The whole block — śānti-pāṭha
+   bhāṣya *and* the प्रकाशिका mangalam — is one unstructured blob, attributed
+   to ref `0.0` only through the converter's positional fallback. The same
+   misattributed śānti-pāṭha bhāṣya prose that was removed from the
+   vedantadesika edition (it is not Srivatsanarayana Muni's text) is present
+   here too, and the genuine mangalam verses are buried inside it.
+
+### What the converter does
+
+- Produces `prefatory_material: []` for this edition (no Sanskrit block to
+  extract), so the śāntimantra mūla never displays.
+- Emits a single `0.0` commentary passage combining the śānti-pāṭha bhāṣya and
+  the mangalam — recoverable, but misattributed content bundled into one blob.
+
+### Recommended fix (pending scholar confirmation)
+
+Restructure the prefatory block to match the vedantadesika edition:
+
+1. Wrap the śāntimantra mūla in a `<!-- sanskrit:devanagari -->` block so it
+   becomes `prefatory_material`.
+2. Add a `# Commentary: 0.0` sub-heading.
+3. Remove the misattributed śānti-pāṭha bhāṣya (it is not Srivatsanarayana
+   Muni's text), leaving the genuine प्रकाशिका mangalam as the `0.0`
+   commentary content.
+
+Then regenerate `part1.json` for this edition.
+
+### Note
+
+The inline `<!-- hide -->शान्तिमन्त्रः<!-- /hide -->` label inside the
+prefatory is harmless (redundant with the heading label) and is handled by the
+converter's hide-block stripping (`_extract_mula_text`).

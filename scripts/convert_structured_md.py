@@ -126,12 +126,25 @@ _SANSKRIT_OPEN_RE = re.compile(r"<!--\s*sanskrit:devanagari\s*-->")
 # instead closed with a stray <!-- /hide --> tag).
 _ANY_HTML_CLOSE_RE = re.compile(r"<!--\s*/[^>]+?-->")
 
+# The proper closing tag for a Sanskrit block.  Preferred over the generic
+# fallback above so that a stray <!-- /hide --> closing an inline hide label
+# is not mistaken for the block boundary (isavasya-vd prefatory).
+_SANSKRIT_CLOSE_RE = re.compile(r"<!--\s*/sanskrit:devanagari\s*-->")
+
+# A complete <!-- hide ... -->...</hide --> block in bare or typed form.  Used
+# to strip residual hide blocks (e.g. a leading inline label) from extracted
+# mula text after the real Sanskrit close has been located.
+_FULL_HIDE_BLOCK_RE = re.compile(
+    r"<!--\s*hide\b[^>]*-->.*?<!--\s*/hide\s*-->",
+    re.DOTALL,
+)
+
 # Matches a hide-open tag in any format (``<!-- hide type:... -->`` or the
 # shorter ``<!-- hide:... -->``), but NOT close tags (``<!-- /hide -->``).
 # Used as an inner boundary in ``_extract_mula_text`` to cap mula content
 # before inline verse-number hide blocks embedded in Sanskrit text (pattern
 # observed in katha from passage 1.1.18 onwards).
-_HIDE_OPEN_RE = re.compile(r"<!--\s*hide[^>]*-->")
+_HIDE_OPEN_RE = re.compile(r"<!--\s*hide\b[^>]*-->")
 
 # Matches any remaining HTML comment in cleaned commentary text.  Used to
 # strip stray orphaned tags (e.g. ``<!-- /hide -->``) that appear as source
@@ -168,12 +181,16 @@ def _extract_mula_text(segment: str) -> str:
     """Extract and concatenate all sanskrit:devanagari blocks in a segment.
 
     Handles two closing-tag variants:
-    - Correct: ``<!-- /sanskrit:devanagari -->``
-    - Malformed: any ``<!-- /... -->`` tag (e.g. stray ``<!-- /hide -->`` used
-      as a closing boundary in some brihadaranyaka source files).
+    - Correct: ``<!-- /sanskrit:devanagari -->`` (preferred).
+    - Malformed: any ``<!-- /... -->`` tag, used as a fallback when the proper
+      close is absent (e.g. brihadaranyaka source files).
 
-    Each Sanskrit block runs from its opening tag to the nearest closing
-    HTML-comment tag or the start of the next Sanskrit block.
+    When the proper close is present it is preferred over the generic
+    fallback, so a stray ``<!-- /hide -->`` closing an inline label block does
+    not truncate the mula (isavasya-vd prefatory).  If an inner
+    ``<!-- hide:... -->`` tag appears after real mula content, extraction stops
+    at that tag (katha 1.1.18+).  Residual hide blocks and orphaned HTML
+    comments are stripped from the final text.
 
     Args:
         segment: Text between two passage headings.
@@ -183,6 +200,19 @@ def _extract_mula_text(segment: str) -> str:
     """
     opens = list(_SANSKRIT_OPEN_RE.finditer(segment))
     closes = list(_ANY_HTML_CLOSE_RE.finditer(segment))
+    proper_closes = list(_SANSKRIT_CLOSE_RE.finditer(segment))
+
+    def _close_in_window(close: re.Match[str]) -> bool:
+        """Whether a closing tag lies within the current block's window.
+
+        Args:
+            close: A closing-tag match.
+
+        Returns:
+            True when the tag falls between the block's content start and the
+            start of the next Sanskrit block.
+        """
+        return content_start <= close.start() < next_open_pos
 
     results: list[str] = []
     for i, open_match in enumerate(opens):
@@ -190,20 +220,31 @@ def _extract_mula_text(segment: str) -> str:
         next_open_pos = (
             opens[i + 1].start() if i + 1 < len(opens) else len(segment)
         )
-        # Use the first closing HTML-comment tag before the next open block.
-        matching_close = next(
-            (c for c in closes if content_start <= c.start() < next_open_pos),
-            None,
+        # Prefer the real <!-- /sanskrit:devanagari --> close.  Only fall back
+        # to any closing HTML-comment tag when it is absent (malformed-close
+        # support, e.g. brihadaranyaka's stray <!-- /hide --> boundary).  The
+        # preferred match prevents an inline hide close from truncating the
+        # block (isavasya-vd prefatory, where a bare <!-- hide --> label block
+        # precedes the mula text).
+        matching_close = (
+            next((c for c in proper_closes if _close_in_window(c)), None)
+            or next((c for c in closes if _close_in_window(c)), None)
         )
         content_end = matching_close.start() if matching_close else next_open_pos
         # Cap at any embedded hide-open tag (e.g. ``<!-- hide:verse-number -->``)
         # which appears inline inside the Sanskrit content in some source files
         # (katha from 1.1.18 onwards).  The tag and the verse number that
-        # follows it should not be included in the extracted mula text.
+        # follows it should not be included in the extracted mula text.  The cap
+        # fires only when real mula text precedes the tag — a leading hide label
+        # block with nothing before it must not truncate the mula.
         inner_hide = _HIDE_OPEN_RE.search(segment, content_start, content_end)
-        if inner_hide:
+        if inner_hide and segment[content_start:inner_hide.start()].strip():
             content_end = inner_hide.start()
-        text = segment[content_start:content_end].strip()
+        text = segment[content_start:content_end]
+        # Drop any residual hide blocks (e.g. a leading inline label) and any
+        # orphaned HTML comment tags left in the mula.
+        text = _FULL_HIDE_BLOCK_RE.sub("", text)
+        text = _RESIDUAL_HTML_COMMENT_RE.sub("", text).strip()
         if text:
             results.append(text)
 
