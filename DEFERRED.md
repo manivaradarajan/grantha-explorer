@@ -153,6 +153,23 @@ index generator.
 
 ---
 
+## 12. Default landing skips prefatory material (opens at first main passage)
+
+On a fresh load the app treats `verseRef: "1"` as a sentinel and the
+grantha-change effect in `app/page.tsx` jumps to the first *main* passage via
+`getFirstMainPassageRef` (`lib/hashUtils.ts`), deliberately skipping prefatory
+material. So a grantha with a śānti-pāṭha (e.g. isavasya, ref `0.0`) opens at
+Mantra 1 and never at the prefatory passage on first load.
+
+Note `getFirstVerseRef` (`lib/hashUtils.ts`) *does* prefer prefatory material
+first, but it is only used to correct an invalid ref, not for the default
+landing. Decide whether a fresh open should land on the first real ref
+(prefatory included) — e.g. switch that effect to `getFirstVerseRef` — and
+whether behaviour should differ per edition (e.g. isavasya-vd). Flagged for
+consideration; not an active bug.
+
+---
+
 ## Aitareya Upanishad — Sayana Bhashya (deferred)
 
 **Passage ref:** 0.0

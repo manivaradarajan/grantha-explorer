@@ -108,6 +108,17 @@ export default function TextContent({
   // (Prev/Next, sidebar tap, deep link, cross-reference click).
   // Skips when the change was driven by an internal verse click — the user
   // already tapped the verse they want; scrolling there would be redundant.
+  //
+  // `passages` is a fresh array reference each render (getAllPassagesForNavigation
+  // spreads the grantha arrays), so this effect would re-fire on every re-render.
+  // That is intentional for one case — deep links to a not-yet-loaded part, where
+  // the verse element mounts only after the part loads and we need to retry — but
+  // it also re-fires on lazy part loads triggered while the user is mid-scroll,
+  // yanking the viewport back to the selected verse ("bounces to top"). Track the
+  // last target and whether its element was found so we only re-scroll when the
+  // target changes or a previously-missing element appears.
+  const lastAutoScroll = useRef<{ ref: string; found: boolean } | null>(null);
+
   useEffect(() => {
     if (clickedInternally.current) {
       clickedInternally.current = false;
@@ -117,8 +128,20 @@ export default function TextContent({
     const currentPassage = passages.find(p => p.ref === selectedRef);
     const key = currentPassage?.part_id ? `${currentPassage.part_id}-${selectedRef}` : selectedRef;
     const element = verseRefs.current[key];
+    const prev = lastAutoScroll.current;
+
+    // Already auto-scrolled to this ref and its element is mounted — skip so a
+    // later re-render (e.g. a lazy part load) does not re-yank the viewport.
+    if (prev && prev.ref === selectedRef && prev.found) {
+      return;
+    }
+
     if (element) {
+      lastAutoScroll.current = { ref: selectedRef, found: true };
       element.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Element not mounted yet (part still loading); remember so we retry.
+      lastAutoScroll.current = { ref: selectedRef, found: false };
     }
   }, [selectedRef, passages]);
 
