@@ -192,7 +192,7 @@ export default function NavigationSidebar({
 
       {/* Quick jump — shows the current ref, doubles as a jump field */}
       <div className="px-6 pb-2">
-        <form onSubmit={handleJumpSubmit} className="flex gap-2">
+        <form onSubmit={handleJumpSubmit} className="relative">
           <input
             value={quickJump}
             onChange={(e) => {
@@ -201,14 +201,15 @@ export default function NavigationSidebar({
             }}
             onFocus={(e) => e.target.select()}
             placeholder="ref e.g. 3.4.2"
-            className="flex-1 min-w-0 text-sm px-3 py-1.5 border border-gray-200 rounded-md bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full h-9 text-sm pl-3 pr-9 border border-gray-300 rounded bg-white text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-500"
             aria-label="Jump to reference"
           />
           <button
             type="submit"
-            className="text-sm px-3 py-1.5 border border-gray-200 rounded-md bg-white text-gray-600 hover:bg-gray-50"
+            aria-label="जायताम्"
+            className="absolute right-0 top-0 w-9 h-9 flex items-center justify-center text-gray-500 hover:text-blue-600 transition-colors"
           >
-            Go
+            →
           </button>
         </form>
         {jumpError && (

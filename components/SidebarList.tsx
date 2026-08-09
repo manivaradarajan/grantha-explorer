@@ -8,6 +8,7 @@ import {
   PrefatoryMaterial,
   SidebarSection,
 } from "@/lib/data";
+import { toDevanagariNumerals } from "@/lib/stringUtils";
 import PassageLink from "./PassageLink";
 
 interface SidebarListProps {
@@ -34,13 +35,17 @@ interface MenuState {
   anchor: { top: number; left: number };
 }
 
+const LISTBOX_ID = "sidebar-segments-listbox";
+
 /**
  * Flat, accordion-free verse list. Each section begins with a full-bleed
- * labeled heading (e.g. "अध्यायः 3 › ब्राह्मणम् 1", top-down). Every segment
- * of the heading is a tappable breadcrumb: tapping a segment opens a popup of
- * that level's sibling sections; picking one navigates. A scroll-sentinel
- * lazy-loads the next part file (same pattern as the reading panel's
- * loaderRef).
+ * sticky heading (e.g. "अध्यायः ३ › ब्राह्मणम् १", top-down) held in place by
+ * native CSS `position: sticky` — the browser handles the handoff between
+ * sibling headings, no scroll-tracking JS. Every segment of the heading is a
+ * tappable breadcrumb (a real `<button>` with listbox semantics): tapping a
+ * segment opens a scoped popup of that level's sibling sections; picking one
+ * navigates. A scroll-sentinel lazy-loads the next part file (same pattern
+ * as the reading panel's loaderRef).
  */
 const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
   function SidebarList(
@@ -62,10 +67,13 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
   const observer = useRef<IntersectionObserver | null>(null);
   const [menu, setMenu] = useState<MenuState | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const optionRefs = useRef<Record<number, HTMLButtonElement | null>>({});
 
   const closeMenu = useCallback(() => setMenu(null), []);
 
-  // Close the popup on outside click, Escape, or the list scrolling.
+  // Close the popup on outside click, Escape, or the list scrolling. Escape
+  // also returns focus to the segment button that opened the popup.
   useEffect(() => {
     if (!menu) return;
     const onDocMouseDown = (e: MouseEvent) => {
@@ -75,7 +83,10 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
       closeMenu();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu();
+      if (e.key === "Escape") {
+        closeMenu();
+        triggerRef.current?.focus();
+      }
     };
     const onScroll = () => closeMenu();
     document.addEventListener("mousedown", onDocMouseDown);
@@ -134,6 +145,7 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
       closeMenu();
       return;
     }
+    triggerRef.current = btn;
     const rect = btn.getBoundingClientRect();
     setMenu({
       level,
@@ -165,39 +177,113 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
         })()
       : [];
 
+  // Whether a popup option contains the currently selected verse. At the
+  // top level (adhyaya), an option represents a whole adhyaya but only holds
+  // the first brahmana's passages, so scan all sections under that adhyaya
+  // rather than only the option's own passages. At deeper levels the option
+  // already covers the full scope, so check its passages directly.
+  const optionContainsSelection = (option: SidebarSection, level: number): boolean => {
+    if (level === 0) {
+      return sections.some(
+        (s) =>
+          s.boundary.path[0] === option.boundary.path[0] &&
+          s.passages.some((p) => p.ref === selectedRef),
+      );
+    }
+    return option.passages.some((p) => p.ref === selectedRef);
+  };
+
+  // Focus the option containing the selected verse whenever the popup opens,
+  // so keyboard/screen-reader users land on the highlighted option. If no
+  // option contains the selection, fall back to the option matching the open
+  // heading so focus is never dropped.
+  useEffect(() => {
+    if (!menu || !openSection) return;
+    let idx = menuOptions.findIndex((o) => optionContainsSelection(o, menu.level));
+    if (idx < 0) {
+      idx = menuOptions.findIndex(
+        (o) => o.boundary.path[menu.level] === openSection.boundary.path[menu.level],
+      );
+    }
+    optionRefs.current[idx >= 0 ? idx : 0]?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menu]);
+
+  // Arrow-key navigation between popup options (Home/End jump to ends).
+  const handlePopupKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const current = document.activeElement;
+      const currentIdx = menuOptions.findIndex((_, i) => optionRefs.current[i] === current);
+      const start = currentIdx >= 0 ? currentIdx : 0;
+      const next = Math.min(
+        menuOptions.length - 1,
+        Math.max(0, start + (e.key === "ArrowDown" ? 1 : -1)),
+      );
+      optionRefs.current[next]?.focus();
+    } else if (e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      optionRefs.current[e.key === "Home" ? 0 : menuOptions.length - 1]?.focus();
+    }
+  };
+
+  // Clamp the popup so it stays within the sidebar panel and the viewport,
+  // with internal scroll for long option lists (Bṛhadāraṇyaka has 6+
+  // adhyāyas). At very narrow sidebar widths — or when the tapped segment sits
+  // near the panel's right edge — the available space can be far under the
+  // usual 200px minimum, so the width clamps to what actually fits.
+  const popupWidth = (() => {
+    const scrollerEl = typeof ref === "object" && ref ? ref.current : null;
+    if (!scrollerEl || !menu) return 240;
+    const rect = scrollerEl.getBoundingClientRect();
+    const available = rect.right - menu.anchor.left - 8;
+    return Math.min(240, Math.max(1, available));
+  })();
+
   const menuEl =
     menu != null && openSection ? (
       createPortal(
         <div
           ref={menuRef}
-          className="fixed z-50 min-w-[200px] max-h-[300px] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg py-1"
-          style={{ top: menu.anchor.top, left: menu.anchor.left }}
-          role="menu"
+          role="listbox"
+          id={LISTBOX_ID}
+          aria-label="Section navigation"
+          onKeyDown={handlePopupKeyDown}
+          className="fixed z-50 max-h-[300px] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg py-1"
+          style={{
+            top: Math.min(menu.anchor.top, window.innerHeight - 304),
+            left: menu.anchor.left,
+            width: popupWidth,
+          }}
         >
-          {menuOptions.map((option) => {
-            const label = option.boundary.path[menu.level] ?? option.boundary.path[0];
-            // The option is "current" when it represents the same unit at the
-            // tapped level as the open heading (e.g. the same adhyaya, or the
-            // same brahmana within that adhyaya).
-            const isCurrent =
-              option.boundary.path[menu.level] === openSection.boundary.path[menu.level];
-            const containsSelection = option.passages.some(
-              (p) => p.ref === selectedRef,
-            );
+          {menuOptions.map((option, index) => {
+            const rawLabel = option.boundary.path[menu.level] ?? option.boundary.path[0];
+            // The option the reader is actually showing in the main panel is
+            // the one that contains the selected verse — not the sticky
+            // heading's section. That one gets the bold highlight.
+            const isSelectedOption = optionContainsSelection(option, menu.level);
             return (
               <button
-                key={`${menu.level}-${label}`}
+                key={`${menu.level}-${rawLabel}`}
+                ref={(el) => {
+                  optionRefs.current[index] = el;
+                }}
                 type="button"
-                role="menuitem"
-                className={`block w-full text-left text-sm font-semibold px-3 py-1.5 hover:bg-gray-100 ${
-                  isCurrent || containsSelection ? "bg-gray-100 text-gray-900" : "text-gray-700"
+                role="option"
+                aria-selected={isSelectedOption}
+                tabIndex={-1}
+                className={`block w-full text-left text-sm px-3 py-1.5 cursor-pointer ${
+                  isSelectedOption
+                    ? "font-bold text-gray-900 bg-gray-100"
+                    : "font-normal text-gray-700 hover:bg-gray-100"
                 }`}
                 onClick={() => {
+                  triggerRef.current?.focus();
                   closeMenu();
                   onSectionSelect(option);
                 }}
               >
-                {label}
+                {toDevanagariNumerals(rawLabel)}
               </button>
             );
           })}
@@ -217,30 +303,52 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
             return (
               <div key={section.boundary.markerRef}>
                 {/* Section heading: full labeled path, top-down (e.g.
-                    अध्यायः 3 › ब्राह्मणम् 1). Each segment is a tappable
+                    अध्यायः ३ › ब्राह्मणम् १). Each segment is a tappable
                     breadcrumb that opens a popup of that level's sibling
-                    sections. Full-bleed uniform gray band. */}
+                    sections. Sticky within the scrolling list; native CSS
+                    handles the handoff between sections — no JS scroll
+                    tracking. Full-bleed uniform gray band. */}
                 <div
                   data-marker={section.boundary.markerRef}
-                  className="flex items-center gap-1 w-[calc(100%+3rem)] -ml-6 px-6 py-2.5 mt-4 mb-1.5 text-base font-semibold text-gray-700 border-t border-gray-200 bg-gray-100"
+                  className="flex items-center gap-1 sticky top-0 z-10 w-[calc(100%+3rem)] -ml-6 px-6 py-2.5 mt-4 mb-1.5 text-base font-bold text-black bg-gray-100"
                 >
                   {segments.map((segment, i) => {
                     // Display index equals the path level: index 0 is the
                     // topmost level, index 1 the next, etc. (the path is
                     // already broad → narrow).
                     const level = i;
+                    const isLast = i === segments.length - 1;
+                    const isOpen =
+                      menu != null &&
+                      menu.sectionRef === section.boundary.markerRef &&
+                      menu.level === level;
                     return (
-                      <span key={`${segment}-${i}`} className="flex items-center">
+                      <span
+                        key={`${segment}-${i}`}
+                        className={`flex items-center ${
+                          isLast ? "flex-shrink-0" : "min-w-0"
+                        }`}
+                      >
                         {i > 0 && (
-                          <span className="text-gray-400 select-none px-1">›</span>
+                          <span
+                            aria-hidden="true"
+                            className="text-gray-500 font-normal select-none px-1 flex-shrink-0"
+                          >
+                            ›
+                          </span>
                         )}
                         <button
                           type="button"
                           data-crumb-seg
+                          aria-haspopup="listbox"
+                          aria-expanded={isOpen}
+                          aria-controls={isOpen ? LISTBOX_ID : undefined}
                           onClick={(e) => openMenuFor(section, level, e.currentTarget)}
-                          className="px-1.5 py-0.5 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                          className={`font-bold text-black px-1.5 py-0.5 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-400 ${
+                            isLast ? "flex-shrink-0" : "min-w-0 truncate"
+                          }`}
                         >
-                          {segment}
+                          {toDevanagariNumerals(segment)}
                         </button>
                       </span>
                     );

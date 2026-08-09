@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { GranthaMetadata } from "@/lib/data";
 
 interface GranthaSelectorProps {
@@ -8,24 +10,169 @@ interface GranthaSelectorProps {
   onSelect: (granthaId: string) => void;
 }
 
+const LISTBOX_ID = "grantha-picker-listbox";
+
+/**
+ * Grantha picker rendered as a bold tappable line with a thin bottom rule,
+ * matching the sticky heading's segment styling rather than a bordered box.
+ * The picker popup is a portal-based listbox with full keyboard support.
+ */
 export default function GranthaSelector({
   granthas,
   selectedGranthaId,
   onSelect,
 }: GranthaSelectorProps) {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const listboxRef = useRef<HTMLDivElement | null>(null);
+  const optionRefs = useRef<Record<number, HTMLButtonElement | null>>({});
+
+  const selectedGrantha = granthas.find((g) => g.id === selectedGranthaId);
+  const selectedTitle = selectedGrantha?.title_deva ?? "";
+
+  const close = useCallback(() => setOpen(false), []);
+
+  // Close on outside click or Escape; Escape also returns focus to the trigger.
+  useEffect(() => {
+    if (!open) return;
+    const onDocMouseDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (listboxRef.current?.contains(target)) return;
+      if (triggerRef.current?.contains(target)) return;
+      close();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        close();
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener("mousedown", onDocMouseDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocMouseDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open, close]);
+
+  const selectOption = (granthaId: string) => {
+    triggerRef.current?.focus();
+    onSelect(granthaId);
+    close();
+  };
+
+  const moveFocus = (currentIndex: number, direction: 1 | -1) => {
+    const nextIndex = Math.min(
+      granthas.length - 1,
+      Math.max(0, currentIndex + direction),
+    );
+    optionRefs.current[nextIndex]?.focus();
+  };
+
+  const currentFocusIndex = () => {
+    const current = document.activeElement;
+    const index = granthas.findIndex((_, i) => optionRefs.current[i] === current);
+    return index >= 0 ? index : granthas.findIndex((g) => g.id === selectedGranthaId);
+  };
+
+  const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!open) {
+        setOpen(true);
+        return;
+      }
+      moveFocus(currentFocusIndex(), e.key === "ArrowDown" ? 1 : -1);
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setOpen((o) => !o);
+    }
+  };
+
+  const handleListboxKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      moveFocus(currentFocusIndex(), e.key === "ArrowDown" ? 1 : -1);
+    } else if (e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      optionRefs.current[e.key === "Home" ? 0 : granthas.length - 1]?.focus();
+    }
+  };
+
+  const triggerRect = open ? triggerRef.current?.getBoundingClientRect() : null;
+
+  // When the picker opens, land focus on the currently selected option so
+  // keyboard/screen-reader users always start on the highlighted entry.
+  useEffect(() => {
+    if (!open) return;
+    const idx = granthas.findIndex((g) => g.id === selectedGranthaId);
+    optionRefs.current[idx >= 0 ? idx : 0]?.focus();
+  }, [open, granthas, selectedGranthaId]);
+
   return (
-    <div className="border border-gray-300 bg-white">
-      <select
-        value={selectedGranthaId}
-        onChange={(e) => onSelect(e.target.value)}
-        className="w-full p-3 bg-white border-none outline-none cursor-pointer text-base min-h-[44px]"
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={open ? LISTBOX_ID : undefined}
+        onClick={() => setOpen((o) => !o)}
+        onKeyDown={handleTriggerKeyDown}
+        className="w-full flex items-center justify-between gap-2 font-bold text-base border-b border-gray-300 pt-1 pb-2 text-left bg-transparent cursor-pointer"
       >
-        {granthas.map((grantha) => (
-          <option key={grantha.id} value={grantha.id}>
-            {grantha.title_deva}
-          </option>
-        ))}
-      </select>
-    </div>
+        <span className="truncate min-w-0">{selectedTitle}</span>
+        <span
+          aria-hidden="true"
+          className="text-gray-500 font-normal flex-shrink-0"
+        >
+          ⌄
+        </span>
+      </button>
+
+      {open && triggerRect
+        ? createPortal(
+            <div
+              ref={listboxRef}
+              id={LISTBOX_ID}
+              role="listbox"
+              aria-label="Select grantha"
+              onKeyDown={handleListboxKeyDown}
+              className="fixed z-50 max-h-[300px] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg py-1"
+              style={{
+                top: Math.min(triggerRect.bottom + 4, window.innerHeight - 304),
+                left: triggerRect.left,
+                width: Math.max(140, Math.min(240, window.innerWidth - triggerRect.left - 8)),
+                minWidth: 0,
+              }}
+            >
+              {granthas.map((grantha, index) => {
+                const isSelected = grantha.id === selectedGranthaId;
+                return (
+                  <button
+                    key={grantha.id}
+                    ref={(el) => {
+                      optionRefs.current[index] = el;
+                    }}
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    tabIndex={-1}
+                    onClick={() => selectOption(grantha.id)}
+                    className={`block w-full text-left text-sm px-3 py-2 cursor-pointer ${
+                      isSelected
+                        ? "font-bold text-gray-900 bg-gray-100"
+                        : "font-normal text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    {grantha.title_deva}
+                  </button>
+                );
+              })}
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }

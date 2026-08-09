@@ -20,7 +20,7 @@
 }
 
 .reference-link.external-reference {
-  color: grey;
+  color: #6b7280;
   cursor: default;
   text-decoration: none;
 }
@@ -37,7 +37,7 @@
   visibility: visible;
   opacity: 1;
   transition: opacity 0.2s;
-  border: 1px solid #ccc;
+  border: 1px solid #d1d5db;
   white-space: normal;
   font-size: 1rem;
 }
