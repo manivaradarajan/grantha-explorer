@@ -589,6 +589,133 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
   return hierarchy;
 }
 
+// ---------------------------------------------------------------------------
+// Sidebar flat model (Section Picker redesign)
+// ---------------------------------------------------------------------------
+
+/** A structural section boundary rendered as a compact marker + sticky crumb. */
+export interface SidebarBoundary {
+  /** Structural path from root to this section, e.g. ["अध्यायः 3", "ब्राह्मणम् 4"]. */
+  path: string[];
+  /** Compact numeric ref, e.g. "3.4" (firstVerseRef minus its last component). */
+  markerRef: string;
+  /** First verse ref in this section, e.g. "3.4.1". */
+  firstVerseRef: string;
+  /** Part-file first_refs backing this section (for lazy loading). */
+  partIds: string[];
+}
+
+/** One loaded structural section: its boundary marker plus its main passages. */
+export interface SidebarSection {
+  boundary: SidebarBoundary;
+  passages: Passage[];
+}
+
+/** A flattened, accordion-free view of a grantha's hierarchy for the sidebar. */
+export interface SidebarFlatModel {
+  /** Recursive depth of structure_levels (1 = flat mantra list). */
+  depth: number;
+  prefatory: (Passage | PrefatoryMaterial)[];
+  /** Loaded sections in document order. Empty for depth 1. */
+  sections: SidebarSection[];
+  /** All passages flat — used only for depth 1 texts. */
+  flatPassages: Passage[];
+  concluding: (Passage | PrefatoryMaterial)[];
+}
+
+function getStructureDepth(structure: StructureLevel[]): number {
+  let depth = 1;
+  let level = structure[0];
+  while (level?.children && level.children.length > 0) {
+    level = level.children[0];
+    depth += 1;
+  }
+  return depth;
+}
+
+/** Drop the last dot-segment of a ref ("3.4.2" → "3.4"). Shared by the sidebar. */
+export function dropLastRefComponent(ref: string): string {
+  const parts = ref.split(".");
+  return parts.length > 1 ? parts.slice(0, -1).join(".") : ref;
+}
+
+function collectSections(
+  group: PassageGroup,
+  path: string[],
+  inheritedPartIds: string[],
+  out: SidebarSection[],
+): void {
+  const partIds =
+    group.partIds && group.partIds.length > 0 ? group.partIds : inheritedPartIds;
+  const children = group.children ?? [];
+
+  // A section boundary is a group whose children are all leaf passage-groups
+  // (e.g. kena: खण्डः 1 → [मन्त्रः 1..10]). Emit one section per such parent.
+  // Placeholder groups (unloaded parts) have children: [] with no passages —
+  // derive their refs from partIds instead of dereferencing passages[0].
+  if (
+    children.length > 0 &&
+    children.every((child) => (child.passages?.length ?? 0) > 0)
+  ) {
+    const passages = children.flatMap((child) => child.passages as Passage[]);
+    const first = passages[0];
+    const fallbackRef = partIds[0] ?? "";
+    out.push({
+      boundary: {
+        path,
+        markerRef: first ? dropLastRefComponent(first.ref) : dropLastRefComponent(fallbackRef),
+        firstVerseRef: first ? first.ref : fallbackRef,
+        partIds,
+      },
+      passages,
+    });
+    return;
+  }
+
+  // Placeholder section: an interior group with no children and no passages yet.
+  if (children.length === 0 && (group.passages?.length ?? 0) === 0 && partIds.length > 0) {
+    const ref = partIds[0];
+    out.push({
+      boundary: {
+        path,
+        markerRef: dropLastRefComponent(ref),
+        firstVerseRef: ref,
+        partIds,
+      },
+      passages: [],
+    });
+    return;
+  }
+
+  // Otherwise recurse into children.
+  for (const child of children) {
+    collectSections(child, [...path, child.level], partIds, out);
+  }
+}
+
+export function getSidebarFlatModel(grantha: Grantha): SidebarFlatModel {
+  const structure = grantha.structure_levels ?? [];
+  const depth = structure.length > 0 ? getStructureDepth(structure) : 0;
+  const hierarchy = getPassageHierarchy(grantha);
+  const sections: SidebarSection[] = [];
+  let flatPassages: Passage[] = [];
+
+  if (depth <= 1) {
+    flatPassages = hierarchy.main.flatMap((g) => g.passages ?? []);
+  } else if (depth >= 2) {
+    for (const topGroup of hierarchy.main) {
+      collectSections(topGroup, [topGroup.level], topGroup.partIds ?? [], sections);
+    }
+  }
+
+  return {
+    depth,
+    prefatory: hierarchy.prefatory,
+    sections,
+    flatPassages,
+    concluding: hierarchy.concluding,
+  };
+}
 
 export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
   const granthasList = await getAvailableGranthas();
