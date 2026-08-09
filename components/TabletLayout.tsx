@@ -15,11 +15,9 @@ interface TabletLayoutProps {
   granthas: GranthaMetadata[];
   selectedRef: string;
   commentaries: string[];
-  commentaryOpen: boolean;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
   updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
-  updateCommentaryOpen: (isOpen: boolean) => void;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
@@ -31,17 +29,20 @@ export default function TabletLayout({
   granthas,
   selectedRef,
   commentaries,
-  commentaryOpen,
   onGranthaChange,
   onVerseSelect,
   updateHash,
-  updateCommentaryOpen,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
   loadPart,
   isLoadingPart,
 }: TabletLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  // Commentary is visible by default at tablet widths; the header icon is an
+  // optional collapse. Deliberately not wired to the URL `commentaryOpen`
+  // param (which drives the mobile bottom sheet) so two columns are the
+  // default state whenever the width permits them.
+  const [commentaryCollapsed, setCommentaryCollapsed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [60, 40];
@@ -118,16 +119,16 @@ export default function TabletLayout({
           <AppWordmark aria-hidden="true" />
         </div>
 
-        {/* Commentary Toggle Button */}
+        {/* Commentary Toggle Button — optional collapse; visible by default */}
         <button
-          onClick={() => updateCommentaryOpen(!commentaryOpen)}
+          onClick={() => setCommentaryCollapsed((c) => !c)}
           className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-medium ${
-            commentaryOpen
-              ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              : "bg-white text-gray-500 hover:bg-gray-100 border border-gray-300"
+            commentaryCollapsed
+              ? "bg-white text-gray-500 hover:bg-gray-100 border border-gray-300"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
           }`}
-          aria-label={commentaryOpen ? "Hide commentary" : "Show commentary"}
-          aria-pressed={commentaryOpen}
+          aria-label={commentaryCollapsed ? "Show commentary" : "Hide commentary"}
+          aria-pressed={!commentaryCollapsed}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -146,9 +147,9 @@ export default function TabletLayout({
         </button>
       </header>
 
-      {/* Content: text alone, or text + commentary side-by-side */}
+      {/* Content: text alone, or text + commentary side-by-side (default) */}
       <div className="flex-1 overflow-hidden">
-        {commentaryOpen ? (
+        {!commentaryCollapsed ? (
           <PanelGroup
             direction="horizontal"
             className="h-full"

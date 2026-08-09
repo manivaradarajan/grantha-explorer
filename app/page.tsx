@@ -318,11 +318,9 @@ export default function Home() {
           granthas={granthas}
           selectedRef={verseRef}
           commentaries={commentaries}
-          commentaryOpen={commentaryOpen}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleVerseSelect}
           updateHash={updateHash}
-          updateCommentaryOpen={updateCommentaryOpen}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
