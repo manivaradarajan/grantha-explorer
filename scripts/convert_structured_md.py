@@ -48,9 +48,23 @@ SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
 # Non-content files co-located with source .md files that must never be treated
 # as grantha sources (e.g. per-text editorial-issue notes, the partial
-# Aitareya Sayana-edition file that is tracked but not yet built).
+# Aitareya Sayana-edition file that is tracked but not yet built, and the
+# Brihadaranyaka shanti-vyakhya file extracted from the Rangaramanuja source).
+#
+# TODO(option B): derive this list from each source directory's BUILD file
+# instead of a hardcoded filename set. The BUILD's `markdown_files` (and
+# `markdown_file`) declarations are the authoritative publication gate used by
+# import_editions.py; making the flat converter read them (with a fallback to
+# this set for directories without a BUILD) would give single-edition texts the
+# same BUILD-gated semantics as multi-edition ones and remove the need to
+# hardcode excluded filenames here.
 _NON_SOURCE_MD_FILES = frozenset(
-    {"SOURCE_ISSUES.md", "BUILD", "aitareya-upanishad-sayana-01-01.md"}
+    {
+        "SOURCE_ISSUES.md",
+        "BUILD",
+        "aitareya-upanishad-sayana-01-01.md",
+        "brihadaranyaka-upanishad-shanti-vyakhya-01-01.md",
+    }
 )
 
 
