@@ -2,7 +2,7 @@
   "kind": "grantha-part",
   "schema_version": "1.0.0",
   "grantha_id": "isavasya-upanishad",
-  "edition_id": "isavasya-upanishad",
+  "edition_id": "isavasya-upanishad-vedantadesika",
   "part_num": 1,
   "prefatory_material": [
     {
@@ -178,20 +178,6 @@
       "content": {
         "sanskrit": {
           "devanagari": "अग्ने नय सुपथा राये अस्मान्विश्वानि देव वयुनानि विद्वान् ।\nयुयोध्यस्मज्जुहुराणमेनो भूयिष्ठां ते नम उक्तिं विधेम ।।"
-        }
-      }
-    }
-  ],
-  "concluding_material": [
-    {
-      "ref": "19",
-      "passage_type": "concluding",
-      "label": {
-        "devanagari": "शान्तिपाठः"
-      },
-      "content": {
-        "sanskrit": {
-          "devanagari": "ॐ पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते ।\nपूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ॥\nॐ शान्तिः शान्तिः शान्तिः ॥"
         }
       }
     }

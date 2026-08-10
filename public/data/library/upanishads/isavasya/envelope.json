@@ -9,21 +9,21 @@
     {
       "edition_id": "isavasya-upanishad-vedantadesika",
       "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika",
+      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
       "commentator": {
         "devanagari": "श्रीमद्वेदान्ताचार्यः",
         "roman": "śrīmadvēdāntācāryaḥ"
       },
-      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
       "isDefault": true
     },
     {
       "edition_id": "isavasya-upanishad-srivatsanarayana",
       "path": "upanishads/isavasya/isavasya-upanishad-srivatsanarayana",
+      "commentary_title": "प्रकाशिका",
       "commentator": {
         "devanagari": "श्रीवत्सनारायणमुनीन्द्रः",
         "roman": "śrīvatsanārāyaṇamunīndraḥ"
-      },
-      "commentary_title": "प्रकाशिका"
+      }
     }
   ]
 }
