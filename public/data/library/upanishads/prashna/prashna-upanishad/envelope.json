@@ -24,7 +24,7 @@
   "parts": [
     {
       "file": "part1.json",
-      "first_ref": "1.0"
+      "first_ref": "1.1"
     },
     {
       "file": "part2.json",
