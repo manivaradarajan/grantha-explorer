@@ -155,10 +155,11 @@ export default function GranthaSelector({
               role="listbox"
               aria-label="Select grantha"
               onKeyDown={handleListboxKeyDown}
-              className="fixed z-50 max-h-[300px] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg py-1"
+              className="fixed z-50 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg py-1"
               style={{
-                top: Math.min(triggerRect.bottom + 4, window.innerHeight - 304),
+                top: Math.min(triggerRect.bottom + 4, 8),
                 left: triggerRect.left,
+                maxHeight: window.innerHeight - 16,
                 width: Math.max(
                   140,
                   Math.min(240, window.innerWidth - triggerRect.left - 8),
