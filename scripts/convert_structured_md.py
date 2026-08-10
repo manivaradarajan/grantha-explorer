@@ -33,6 +33,8 @@ from typing import Any
 
 import yaml
 
+import _build_parser
+
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -46,30 +48,27 @@ SAYANA_COMMENTARY_ID = "sayana-bhashya"
 AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
 SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
-# Non-content files co-located with source .md files that must never be treated
-# as grantha sources (e.g. per-text editorial-issue notes, the partial
-# Aitareya Sayana-edition file that is tracked but not yet built, and the
-# Brihadaranyaka shanti-vyakhya file extracted from the Rangaramanuja source).
-#
-# TODO(option B): derive this list from each source directory's BUILD file
-# instead of a hardcoded filename set. The BUILD's `markdown_files` (and
-# `markdown_file`) declarations are the authoritative publication gate used by
-# import_editions.py; making the flat converter read them (with a fallback to
-# this set for directories without a BUILD) would give single-edition texts the
-# same BUILD-gated semantics as multi-edition ones and remove the need to
-# hardcode excluded filenames here.
+# Non-content files co-located with source .md files that must never be
+# treated as grantha sources (editorial notes, build files).  This set is the
+# fallback publication gate only for directories WITHOUT a BUILD file; when a
+# BUILD exists, its md2json `markdown_file(s)` declarations are authoritative
+# (see _collect_source_files), so this set is not consulted.
 _NON_SOURCE_MD_FILES = frozenset(
     {
         "SOURCE_ISSUES.md",
         "BUILD",
-        "aitareya-upanishad-sayana-01-01.md",
-        "brihadaranyaka-upanishad-shanti-vyakhya-01-01.md",
     }
 )
 
 
 def _list_source_markdown_files(source_dir: Path) -> list[Path]:
     """Return sorted source markdown files, excluding non-content files.
+
+    This is pure discovery: every ``.md`` in the directory except the universal
+    non-content names (``SOURCE_ISSUES.md``, ``BUILD``).  It does NOT apply the
+    BUILD publication gate — callers that need BUILD-gating (the flat
+    converter's ``_collect_source_files``, and ``import_editions``'s
+    ``discover_editions``) apply it themselves so they can report skipped files.
 
     Args:
         source_dir: Directory containing source markdown files.
@@ -79,6 +78,24 @@ def _list_source_markdown_files(source_dir: Path) -> list[Path]:
     """
     return sorted(
         p for p in source_dir.glob("*.md") if p.name not in _NON_SOURCE_MD_FILES
+    )
+
+
+def _build_declared_files(source_dir: Path) -> set[str]:
+    """Return the BUILD-declared markdown set for ``source_dir``, or empty.
+
+    Args:
+        source_dir: Directory containing a BUILD file (may be absent).
+
+    Returns:
+        Set of markdown basenames declared in the directory's BUILD md2json
+        rules, or an empty set when there is no BUILD or it declares nothing.
+    """
+    build_path = source_dir / "BUILD"
+    if not build_path.exists():
+        return set()
+    return _build_parser.declared_markdown_files(
+        build_path.read_text(encoding="utf-8")
     )
 
 
@@ -845,6 +862,16 @@ def _read_part_num(path: Path) -> int:
 def _collect_source_files(source_dir: Path) -> list[Path]:
     """Return .md source files from `source_dir` in logical part order.
 
+    Publication gate:
+    - When the directory has a BUILD file, only the markdown files it declares
+      (via its md2json ``markdown_file(s)`` arguments) are publishable.  A
+      present-but-undeclared file (e.g. a partial Sāyaṇa edition, an
+      unattributed śānti-vyākhyā) is skipped with a warning and never emitted.
+      This gives single-edition (flat) texts the same BUILD-gated semantics
+      that import_editions.py applies to multi-edition texts.
+    - Without a BUILD (or with one declaring nothing), all files except the
+      universal non-content names are candidates.
+
     Ordering strategy:
     - If all ``part_num`` values in the frontmatter are unique, sort by
       ``part_num``. This correctly orders mixed-type files such as kaushitaki
@@ -868,6 +895,19 @@ def _collect_source_files(source_dir: Path) -> list[Path]:
     candidates = _list_source_markdown_files(source_dir)
     if not candidates:
         raise FileNotFoundError(f"No .md files found in {source_dir}")
+
+    declared = _build_declared_files(source_dir)
+    if declared:
+        present = {p.name for p in candidates}
+        for name in sorted(present - declared):
+            print(f"  SKIP (not declared in BUILD): {name}")
+        candidates = [p for p in candidates if p.name in declared]
+
+    if not candidates:
+        raise FileNotFoundError(
+            f"No publishable .md files found in {source_dir} (BUILD declares "
+            f"{len(declared)} file(s), none present on disk)"
+        )
 
     part_nums = [_read_part_num(p) for p in candidates]
     if len(set(part_nums)) == len(part_nums):

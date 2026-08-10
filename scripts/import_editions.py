@@ -35,6 +35,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+import _build_parser
+
 from convert_structured_md import (
     _first_main_ref,
     _list_source_markdown_files,
@@ -52,14 +54,6 @@ from convert_structured_md import (
 
 SCHEMA_VERSION = "1.0.0"
 
-_BUILD_RULE_RE = re.compile(
-    r"grantha_md2json_(single|multipart)\s*\((.*?)\)",
-    re.DOTALL,
-)
-_GRANTHA_ID_KW_RE = re.compile(r'grantha_id\s*=\s*"([^"]+)"')
-_SINGLE_FILE_KW_RE = re.compile(r'markdown_file\s*=\s*"([^"]+)"')
-_FILES_LIST_KW_RE = re.compile(r"markdown_files\s*=\s*\[(.*?)\]", re.DOTALL)
-_ANY_QUOTED_RE = re.compile(r'"([^"]+)"')
 _FILENAME_SUFFIX_RE = re.compile(r"(-\d+)+\.md$")
 
 _DEFAULT_MARKER_NAME = ".default"
@@ -79,24 +73,7 @@ def parse_build_rules(build_text: str) -> dict[str, list[str]]:
         Mapping from edition_id (the BUILD ``grantha_id``) to the ordered list
         of markdown source filenames belonging to that edition.
     """
-    mapping: dict[str, list[str]] = {}
-    for rule in _BUILD_RULE_RE.finditer(build_text):
-        body = rule.group(2)
-        grantha_match = _GRANTHA_ID_KW_RE.search(body)
-        if not grantha_match:
-            continue
-        edition_id = grantha_match.group(1)
-        files: list[str] = []
-        single_match = _SINGLE_FILE_KW_RE.search(body)
-        if single_match:
-            files = [single_match.group(1)]
-        else:
-            files_match = _FILES_LIST_KW_RE.search(body)
-            if files_match:
-                files = _ANY_QUOTED_RE.findall(files_match.group(1))
-        if files:
-            mapping.setdefault(edition_id, []).extend(files)
-    return mapping
+    return _build_parser.parse_build_rules(build_text)
 
 
 def edition_id_for_file(filename: str) -> str:
