@@ -43,9 +43,10 @@ via a shared link — assume no prior context.
   commentary keep a desktop-style side-by-side split with **resizable panels**
   (widths persisted to `tabletPanelSizes` in localStorage, separate key from the
   desktop `panelSizes`). Not a shrunk desktop, not a stretched mobile — a
-  deliberate hybrid. Commentary open/closed is toggled via a button in the
-  tablet header and driven by the same `commentaryOpen` URL state (`?co=`) as
-  mobile; when closed, the text panel expands to full width.
+  deliberate hybrid. The commentary column is **visible by default**; the icon
+  button in the tablet header optionally collapses it (local state, not the URL
+  `?co=` param, which only drives the mobile bottom sheet). When collapsed, the
+  text panel expands to full width.
 - **Mobile (<768px):** navigation as a full drawer; commentary panel toggles
   open/closed, single column.
 

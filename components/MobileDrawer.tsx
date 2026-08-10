@@ -13,11 +13,6 @@ export default function MobileDrawer({
   onClose,
   children,
 }: MobileDrawerProps) {
-  // Check if user prefers reduced motion
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   useEffect(() => {
     if (isOpen) {
       // Prevent body scroll when drawer is open
@@ -47,8 +42,6 @@ export default function MobileDrawer({
     }
   };
 
-
-
   return (
     <div
       className={`fixed inset-0 z-50 flex transition-opacity duration-200 ${
@@ -73,7 +66,7 @@ export default function MobileDrawer({
         }`}
       >
         {/* Close button */}
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-2 right-4 z-10">
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"

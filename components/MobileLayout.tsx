@@ -82,7 +82,7 @@ export default function MobileLayout({
         {/* Hamburger Menu Button */}
         <button
           onClick={() => setIsNavOpen(true)}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+          className="px-2 pt-3 pb-1 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label="Open navigation menu"
         >
           <svg
@@ -103,7 +103,7 @@ export default function MobileLayout({
 
         {/* Wordmark */}
         <div className="flex-1 flex items-center justify-center">
-          <AppWordmark aria-hidden="true" />
+          <AppWordmark aria-hidden="true" className="mt-5" />
         </div>
 
         {/* Spacer to balance hamburger button */}
