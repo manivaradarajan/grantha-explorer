@@ -47,8 +47,11 @@ AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
 SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
 # Non-content files co-located with source .md files that must never be treated
-# as grantha sources (e.g. per-text editorial-issue notes).
-_NON_SOURCE_MD_FILES = frozenset({"SOURCE_ISSUES.md", "BUILD"})
+# as grantha sources (e.g. per-text editorial-issue notes, the partial
+# Aitareya Sayana-edition file that is tracked but not yet built).
+_NON_SOURCE_MD_FILES = frozenset(
+    {"SOURCE_ISSUES.md", "BUILD", "aitareya-upanishad-sayana-01-01.md"}
+)
 
 
 def _list_source_markdown_files(source_dir: Path) -> list[Path]:
