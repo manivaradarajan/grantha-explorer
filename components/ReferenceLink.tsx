@@ -7,7 +7,9 @@ import { Reference, isReferenceInLibrary, getPassagePreview } from '../lib/refer
 interface ReferenceLinkProps {
   reference: Reference;
   currentGranthaId: string;
-  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
+  /** Active edition to preserve on same-grantha reference jumps. */
+  editionId?: string;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   granthaIdToTitle: Record<string, string>;
 }
@@ -17,7 +19,7 @@ const TOOLTIP_ESTIMATED_WIDTH = 200;
 const TOOLTIP_ESTIMATED_HEIGHT = 40;
 const TOOLTIP_VIEWPORT_PADDING = 10;
 
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
@@ -116,8 +118,14 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     e.stopPropagation();
 
     if (isInLibrary) {
-      // Internal reference: navigate (synchronous)
-      updateHash(reference.granthaId, reference.path, []);
+      // Internal reference: navigate (synchronous). Same-grantha refs preserve
+      // the active edition (the reader stays in the same commentary); cross-
+      // grantha refs must not carry it — the target has its own editions.
+      updateHash(
+        reference.granthaId,
+        reference.path,
+        reference.granthaId === currentGranthaId ? editionId : undefined,
+      );
     } else {
       // Not yet in corpus: toggle "not yet available" tooltip on any device
       if (showTooltip) {

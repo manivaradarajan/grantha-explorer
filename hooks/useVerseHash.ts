@@ -5,12 +5,12 @@ import { Grantha, GranthaMeta } from "@/lib/data"; // Assuming Grantha and Grant
 interface UseVerseHashReturn {
   granthaId: string;
   verseRef: string;
-  commentaries: string[];
+  editionId?: string;
   commentaryOpen: boolean;
   updateHash: (
     granthaId: string,
     verseRef: string,
-    commentaries?: string[],
+    editionId?: string,
     commentaryOpen?: boolean,
     replaceHistory?: boolean
   ) => void; // Reverted to void
@@ -25,7 +25,8 @@ interface UseVerseHashReturn {
  * - No "trust the hash" hacks
  * - Event listener uses refs (no dependency issues)
  * - Validation happens in components via React Query
- * - Commentary persistence to localStorage
+ * - Edition state (e.g. which commentary of a text is active) lives in the
+ *   hash as `?e=<edition_id>`; absent means the grantha's default edition.
  *
  * @param defaultGranthaId - Fallback grantha ID if hash is empty/invalid
  * @param defaultVerseRef - Fallback verse ref if hash is empty/invalid
@@ -41,7 +42,6 @@ export function useVerseHash(
       return {
         granthaId: defaultGranthaId,
         verseRef: defaultVerseRef,
-        commentaries: [],
         commentaryOpen: false,
       };
     }
@@ -50,42 +50,18 @@ export function useVerseHash(
     const parsed = parseHash(hash);
 
     if (parsed && parsed.granthaId && parsed.verseRef) {
-      // Save commentaries to localStorage
-      if (parsed.commentaries && parsed.commentaries.length > 0) {
-        try {
-          localStorage.setItem(
-            "selectedCommentaries",
-            JSON.stringify(parsed.commentaries)
-          );
-        } catch (e) {
-          console.error("Failed to save commentaries to localStorage:", e);
-        }
-      }
-
       return {
         granthaId: parsed.granthaId,
         verseRef: parsed.verseRef,
-        commentaries: parsed.commentaries || [],
+        editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
       };
     }
 
-    // No valid hash - load commentaries from localStorage
-    let savedCommentaries: string[] = [];
-    try {
-      const saved = localStorage.getItem("selectedCommentaries");
-      if (saved) {
-        savedCommentaries = JSON.parse(saved);
-      }
-    } catch (e) {
-      console.error("Failed to load commentaries from localStorage:", e);
-    }
-
-    // Set initial hash
+    // No valid hash - set a default hash
     const initialHash = buildHash({
       granthaId: defaultGranthaId,
       verseRef: defaultVerseRef,
-      commentaries: savedCommentaries,
       commentaryOpen: false,
     });
     window.history.replaceState(null, "", initialHash);
@@ -93,7 +69,6 @@ export function useVerseHash(
     return {
       granthaId: defaultGranthaId,
       verseRef: defaultVerseRef,
-      commentaries: savedCommentaries,
       commentaryOpen: false,
     };
   };
@@ -113,23 +88,11 @@ export function useVerseHash(
         return;
       }
 
-      // Save commentaries to localStorage if present
-      if (parsed.commentaries && parsed.commentaries.length > 0) {
-        try {
-          localStorage.setItem(
-            "selectedCommentaries",
-            JSON.stringify(parsed.commentaries)
-          );
-        } catch (e) {
-          console.error("Failed to save commentaries:", e);
-        }
-      }
-
       // Update state from hash
       setState({
         granthaId: parsed.granthaId,
         verseRef: parsed.verseRef,
-        commentaries: parsed.commentaries || [],
+        editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
       });
     }
@@ -145,18 +108,30 @@ export function useVerseHash(
   const updateHash = useCallback((
     granthaId: string,
     verseRef: string,
-    commentaries?: string[],
+    editionId?: string,
     commentaryOpen?: boolean,
     replaceHistory: boolean = false
   ) => {
-    const newCommentaries =
-      commentaries !== undefined ? commentaries : state.commentaries;
+    // Switching grantha always resets the edition: another grantha's edition
+    // id is meaningless (its editions are resolved independently). Same-grantha
+    // navigation keeps the current edition unless one is passed explicitly.
+    // The empty string "" is an explicit "clear the edition" sentinel (used
+    // when a stale ?e= must be dropped, e.g. on a single-edition grantha).
+    const granthaChanged = granthaId !== state.granthaId;
+    const newEditionId =
+      editionId === ""
+        ? undefined
+        : editionId !== undefined
+          ? editionId
+          : granthaChanged
+            ? undefined
+            : state.editionId;
 
-    const potentialUrlState = {
+    const potentialUrlState: UrlState = {
       ...state,
       granthaId,
       verseRef,
-      commentaries: newCommentaries,
+      editionId: newEditionId,
       commentaryOpen: commentaryOpen ?? state.commentaryOpen,
     };
 
@@ -172,7 +147,7 @@ export function useVerseHash(
         // State updated via hashchange listener
       }
     }
-  }, [state]); // Removed currentGrantha and granthas from dependencies
+  }, [state]);
 
   const updateCommentaryOpen = (isOpen: boolean) => {
     const newHash = buildHash({
@@ -188,7 +163,7 @@ export function useVerseHash(
   return {
     granthaId: state.granthaId,
     verseRef: state.verseRef,
-    commentaries: state.commentaries || [],
+    editionId: state.editionId,
     commentaryOpen: state.commentaryOpen || false,
     updateHash,
     updateCommentaryOpen,

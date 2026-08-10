@@ -631,7 +631,8 @@ def build_part_json(
     Args:
         frontmatter: Parsed YAML frontmatter dict.
         body: Parsed body data.
-        edition_id: The edition_id to embed (equals grantha_id for all texts).
+        edition_id: The edition_id to embed (equals grantha_id for
+            single-edition texts; multi-edition texts pass the real edition id).
         target_commentary_id: The commentary_id to include, or None to omit.
 
     Returns:
@@ -698,6 +699,7 @@ def build_envelope_json(
     parts_info: list[dict[str, str]],
     structure_levels: list[dict[str, Any]],
     frontmatter: dict[str, Any],
+    edition_id: str,
 ) -> dict[str, Any]:
     """Assemble the envelope JSON for the grantha.
 
@@ -705,6 +707,9 @@ def build_envelope_json(
         parts_info: List of {"file": "partN.json", "first_ref": "..."} dicts.
         structure_levels: Normalized structure_levels array.
         frontmatter: Frontmatter from the first source file (for metadata).
+        edition_id: The edition_id for this sub-envelope. For single-edition
+            granthas this equals the grantha_id; multi-edition texts pass the
+            real edition_id.
 
     Returns:
         Dict conforming to the v1.0.0 envelope schema.
@@ -713,7 +718,7 @@ def build_envelope_json(
     return {
         "kind": "edition-sub-envelope",
         "schema_version": SCHEMA_VERSION,
-        "edition_id": grantha_id,
+        "edition_id": edition_id,
         "grantha_id": grantha_id,
         "structure_levels": structure_levels,
         "parts": parts_info,
@@ -939,7 +944,10 @@ def convert_grantha(
         raise RuntimeError("structure_levels missing from first source file frontmatter")
 
     normalized_levels = normalize_structure_levels(structure_levels_raw)
-    envelope = build_envelope_json(parts_info, normalized_levels, first_frontmatter)
+    # Single-edition flow: edition_id == grantha_id by convention.
+    envelope = build_envelope_json(
+        parts_info, normalized_levels, first_frontmatter, edition_id=first_frontmatter["grantha_id"]
+    )
 
     envelope_path = out_dir / "envelope.json"
     envelope_path.write_text(

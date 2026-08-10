@@ -1,4 +1,4 @@
-import { Grantha, Passage, PrefatoryMaterial, Commentary } from "./data";
+import { Grantha, Passage, PrefatoryMaterial } from "./data";
 
 /**
  * URL state interface
@@ -6,7 +6,10 @@ import { Grantha, Passage, PrefatoryMaterial, Commentary } from "./data";
 export interface UrlState {
   granthaId: string;
   verseRef: string;
-  commentaries?: string[];
+  /** Active edition_id for multi-edition granthas. Absent = default edition.
+   *  Single-select today; extend to a comma-list when a side-by-side
+   *  comparison view is designed. */
+  editionId?: string;
   commentaryOpen?: boolean;
   script?: "deva" | "roman";
   language?: "both" | "san" | "eng";
@@ -16,7 +19,7 @@ export interface UrlState {
 
 /**
  * Parse URL hash into grantha ID, verse ref, and optional params
- * @param hash - Raw hash string (e.g., "#kena-upanishad:1.1?c=rangaramanuja&s=roman")
+ * @param hash - Raw hash string (e.g., "#kena-upanishad:1.1?e=kena-upanishad&s=roman")
  * @returns Parsed object or null if invalid
  */
 export function parseHash(hash: string): UrlState | null {
@@ -39,10 +42,11 @@ export function parseHash(hash: string): UrlState | null {
   if (queryPart) {
     const params = new URLSearchParams(queryPart);
 
-    // Commentary IDs (comma-separated)
-    const c = params.get("c");
-    if (c) {
-      result.commentaries = c.split(",").filter(Boolean);
+    // Active edition (single-select). See UrlState.editionId for the future
+    // comma-list extension path.
+    const e = params.get("e");
+    if (e) {
+      result.editionId = e;
     }
 
     // Commentary open state
@@ -92,7 +96,7 @@ export function buildHash(
   state: UrlState,
   includePreferences: boolean = false
 ): string {
-  const { granthaId, verseRef, commentaries, commentaryOpen, script, language, darkMode, fontSize } =
+  const { granthaId, verseRef, editionId, commentaryOpen, script, language, darkMode, fontSize } =
     state;
 
   // Build base hash
@@ -101,9 +105,9 @@ export function buildHash(
   // Build query params
   const params = new URLSearchParams();
 
-  // Always include commentaries if present
-  if (commentaries?.length) {
-    params.set("c", commentaries.join(","));
+  // Always include the active edition if present
+  if (editionId) {
+    params.set("e", editionId);
   }
 
   // Always include commentary open state if true
@@ -220,6 +224,27 @@ export function validateAndNormalizeHash(
     return { ...parsed, needsCorrection: false };
   }
 
+  // Edition validation: if the grantha exposes editions and the URL names one
+  // it doesn't have, correct to the default edition. If the grantha has no
+  // editions (single-edition text), a stray ?e= from another grantha is
+  // meaningless and is dropped.
+  if (grantha.editions?.length) {
+    const validEdition =
+      !parsed.editionId ||
+      grantha.editions.some(e => e.edition_id === parsed.editionId);
+    if (!validEdition) {
+      const defaultEdition =
+        grantha.editions.find(e => e.isDefault) ?? grantha.editions[0];
+      return {
+        ...parsed,
+        editionId: defaultEdition?.edition_id,
+        needsCorrection: true,
+      };
+    }
+  } else if (parsed.editionId) {
+    return { ...parsed, editionId: undefined, needsCorrection: true };
+  }
+
   // Validate verse ref
   if (isValidVerseRef(grantha, parsed.verseRef)) {
     return { ...parsed, needsCorrection: false };
@@ -234,16 +259,3 @@ export function validateAndNormalizeHash(
   };
 }
 
-/**
- * Get all commentary IDs available for a grantha
- */
-export function getCommentaryIds(grantha: Grantha): string[] {
-  return grantha.commentaries?.map((c: Commentary) => c.commentary_id) || [];
-}
-
-/**
- * Validate if commentary ID exists in grantha
- */
-export function isValidCommentaryId(grantha: Grantha, commentaryId: string): boolean {
-  return grantha.commentaries?.some((c: Commentary) => c.commentary_id === commentaryId) || false;
-}

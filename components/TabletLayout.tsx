@@ -14,10 +14,11 @@ interface TabletLayoutProps {
   grantha: Grantha;
   granthas: GranthaMetadata[];
   selectedRef: string;
-  commentaries: string[];
+  editionId?: string;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
-  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
+  onEditionChange: (editionId: string) => void;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
@@ -28,9 +29,10 @@ export default function TabletLayout({
   grantha,
   granthas,
   selectedRef,
-  commentaries,
+  editionId,
   onGranthaChange,
   onVerseSelect,
+  onEditionChange,
   updateHash,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
@@ -171,7 +173,8 @@ export default function TabletLayout({
               <CommentaryPanel
                 grantha={grantha}
                 selectedRef={selectedRef}
-                selectedCommentaryIds={commentaries}
+                selectedEditionId={editionId}
+                onEditionChange={onEditionChange}
                 updateHash={updateHash}
                 availableGranthaIds={granthas.map((g) => g.id)}
                 granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}

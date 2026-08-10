@@ -159,6 +159,46 @@ function collectJsonFiles(dir: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
+// Edition path-resolution check (grantha-level envelopes only)
+// ---------------------------------------------------------------------------
+
+interface EditionStubShape {
+  path?: unknown;
+  edition_id?: unknown;
+}
+
+/**
+ * Verify that every edition stub path in a grantha-level envelope resolves to
+ * an existing file or directory under the library root. Catches envelope/data
+ * drift (e.g. an editions[].path pointing at a directory that no longer exists
+ * after a text was re-imported).
+ *
+ * @param data - Parsed grantha-envelope content.
+ * @param libraryRoot - Absolute path to the library directory.
+ * @returns List of error messages (empty when all paths resolve).
+ */
+function checkEditionPathsResolve(
+  data: Record<string, unknown>,
+  libraryRoot: string,
+): string[] {
+  const editions = data.editions as EditionStubShape[] | undefined;
+  if (!Array.isArray(editions)) return [];
+  const errs: string[] = [];
+  for (const edition of editions) {
+    if (typeof edition.path !== 'string') continue;
+    const full = path.join(libraryRoot, edition.path);
+    if (!fs.existsSync(full)) {
+      const label =
+        typeof edition.edition_id === 'string'
+          ? edition.edition_id
+          : edition.path;
+      errs.push(`[editions] "${label}" path does not resolve: ${edition.path}`);
+    }
+  }
+  return errs;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -189,7 +229,13 @@ for (const filePath of allFiles) {
       ? checkStructureConsistency(data, rel)
       : [];
 
-  const allErrors = [...schemaErrors, ...structureErrors];
+  // Edition paths in grantha-level envelopes must resolve under the library.
+  const editionPathErrors =
+    kind === 'grantha-envelope'
+      ? checkEditionPathsResolve(data, dataDir)
+      : [];
+
+  const allErrors = [...schemaErrors, ...structureErrors, ...editionPathErrors];
 
   if (allErrors.length > 0) {
     failCount++;

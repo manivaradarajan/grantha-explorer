@@ -1,7 +1,13 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-type EditionStub = { edition_id: string; path: string; isDefault?: boolean };
+type EditionStub = {
+  edition_id: string;
+  path: string;
+  isDefault?: boolean;
+  commentator?: { devanagari: string; roman?: string };
+  commentary_title?: string;
+};
 
 async function readEnvelopeJson(
   dir: string
@@ -37,6 +43,7 @@ async function generateGranthasJson() {
     // Consumers must read paths from this generated file; never template grantha_id or edition_id
     // into a filesystem path.
     const granthaPathMap = new Map<string, string>(); // Maps grantha_id to relative path
+    const granthaEditionsMap = new Map<string, EditionStub[]>(); // grantha_id -> editions[] (grantha-envelope only)
 
     async function scanDirectory(dir: string, relativePath: string = ''): Promise<void> {
       const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -81,6 +88,7 @@ async function generateGranthasJson() {
             }
             // path in edition stub is relative to library/
             granthaPathMap.set(granthaId, defaultEdition.path);
+            granthaEditionsMap.set(granthaId, editions);
 
             // Also scan sibling .json files in the same directory for other grantha_ids
             // (e.g. a karika file that shares a directory with a multi-edition upanishad)
@@ -152,6 +160,9 @@ async function generateGranthasJson() {
         title: meta.title.iast,
         title_deva: meta.title.devanagari,
         title_iast: meta.title.iast,
+        ...(granthaEditionsMap.has(id)
+          ? { editions: granthaEditionsMap.get(id) }
+          : {}),
       }));
 
     granthas.sort((a, b) => {

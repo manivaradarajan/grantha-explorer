@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import NavigationSidebar from "@/components/NavigationSidebar";
 import GranthaSelector from "@/components/GranthaSelector";
@@ -28,7 +28,6 @@ export default function Home() {
   const [invalidVerseTitle, setInvalidVerseTitle] = useState("");
   const [invalidVerseMessageLines, setInvalidVerseMessageLines] =
     useState<string>("");
-  const [previousUrl, setPreviousUrl] = useState<string | null>(null);
 
   // State for resize handle dragging
   const [isDraggingLeftHandle, setIsDraggingLeftHandle] = useState(false);
@@ -57,7 +56,7 @@ export default function Home() {
   const {
     granthaId,
     verseRef,
-    commentaries,
+    editionId,
     commentaryOpen,
     updateHash,
     updateCommentaryOpen,
@@ -70,10 +69,7 @@ export default function Home() {
     error: granthaError,
     loadPart,
     isLoadingPart,
-  } = useGranthaLoader(granthaId);
-
-  // Track previous grantha to detect changes
-  const previousGranthaId = useRef<string | null>(null);
+  } = useGranthaLoader(granthaId, editionId);
 
   // Handle grantha changes - jump to first main passage when appropriate
   useEffect(() => {
@@ -82,28 +78,22 @@ export default function Home() {
     // Ensure currentGrantha data matches the current granthaId
     if (currentGrantha.grantha_id !== granthaId) return;
 
-    // Check if grantha changed (not first load)
-    const granthaChanged =
-      previousGranthaId.current !== null &&
-      previousGranthaId.current !== granthaId;
-
     // Check if this is a default verse ref (initial load with no specific verse)
     const isDefaultVerseRef = verseRef === "1";
 
-    // Update the ref for next comparison
-    previousGranthaId.current = granthaId;
-
-    // Jump to first main passage only if:
-    // 1. First load with default verse ref (skip prefatory), OR
-    // 2. Grantha was switched AND the current verseRef doesn't exist in the new grantha
-    //    (this handles navigation from dropdown but preserves reference link targets)
-    if (isDefaultVerseRef || (granthaChanged && verseRef === "1")) {
+    // Jump to first main passage when the current ref is the "1" sentinel —
+    // true on first load and on grantha switches via the selector (which
+    // navigate with ref "1"). Reference-link targets with a real ref are
+    // preserved by not jumping.
+    if (isDefaultVerseRef) {
       const firstMainRef = getFirstMainPassageRef(currentGrantha);
       // Only update if we're not already at the first main passage
       if (verseRef !== firstMainRef) {
-        updateHash(granthaId, firstMainRef, commentaries);
+        updateHash(granthaId, firstMainRef, editionId);
       }
     }
+    // editionId intentionally excluded: switching editions re-loads the grantha
+    // (so this effect re-runs) but must NOT jump away from the current verse.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [granthaId, currentGrantha]);
 
@@ -118,22 +108,34 @@ export default function Home() {
       return;
     }
 
-    // For multi-part granthas, defer validation until the passage's containing
-    // part is loaded. Checks all three passage arrays (prefatory, main,
-    // concluding) so refs like "0.0" (prefatory) are found correctly.
+    // For multi-part granthas, defer validation only when the ref's section has
+    // a part file that hasn't loaded yet (the passage may appear once it loads).
+    // A ref that is absent while its section is fully loaded is genuinely
+    // invalid for this edition — important after an edition switch, where a ref
+    // valid in one edition (e.g. prefatory "0.0") may not exist in another.
     if (currentGrantha.parts) {
       const allPassages = getAllPassagesForNavigation(currentGrantha);
       if (!allPassages.some((p) => p.ref === verseRef)) {
-        return;
+        const topLevelRef = verseRef.split(".")[0];
+        const hasUnloadedPartForSection = currentGrantha.parts.some(
+          (p) =>
+            p.id === topLevelRef &&
+            !allPassages.some((a) => a.ref === p.first_ref)
+        );
+        if (hasUnloadedPartForSection) {
+          return;
+        }
       }
     }
 
     const normalized = validateAndNormalizeHash(
-      { granthaId, verseRef, commentaries, commentaryOpen },
+      { granthaId, verseRef, editionId, commentaryOpen },
       currentGrantha,
     );
 
-    // If verse ref was invalid, show modal and revert URL
+    // If verse ref (or edition) was invalid, show modal and correct the URL,
+    // always rebuilding from current state — never from a stale snapshot that
+    // could carry the wrong edition.
     if (normalized.needsCorrection) {
       const granthaTitle =
         granthaIdToDevanagariTitle[granthaId] ||
@@ -143,17 +145,18 @@ export default function Home() {
       setInvalidVerseMessageLines(`${granthaTitle} ${verseRef}`);
       setShowInvalidVerseModal(true);
 
-      // Revert the URL to the previous valid state if available
-      if (previousUrl) {
-        window.history.replaceState(null, "", previousUrl);
-      } else {
-        // If no previous URL, revert to a default valid state (e.g., first verse of current grantha)
-        const firstMainRef = getFirstMainPassageRef(currentGrantha);
-        updateHash(granthaId, firstMainRef, commentaries, commentaryOpen, true);
-      }
-    } else {
-      // If the verse is valid, update previousUrl for future invalid navigations
-      setPreviousUrl(window.location.href);
+      // Revert to a valid state using the corrected ref/edition from the
+      // current grantha (first main passage for bad refs; default edition for
+      // an edition this grantha doesn't have). The "" sentinel drops a stale
+      // ?e= when the corrected edition is undefined.
+      const firstMainRef = getFirstMainPassageRef(currentGrantha);
+      updateHash(
+        granthaId,
+        normalized.verseRef ?? firstMainRef,
+        normalized.editionId ?? "",
+        commentaryOpen,
+        true,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGrantha, verseRef]);
@@ -189,18 +192,24 @@ export default function Home() {
   }, [currentGrantha, verseRef, loadPart]);
 
   // Handle grantha change — verse ref "1" triggers the grantha-change effect to
-  // skip to the first main passage of the new grantha.
+  // skip to the first main passage of the new grantha. Edition resets to the
+  // new grantha's default (updateHash drops it on grantha change).
   const handleGranthaChange = (newGranthaId: string) => {
-    updateHash(newGranthaId, "1", commentaries);
+    updateHash(newGranthaId, "1");
   };
 
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
     if (isMobile) {
-      updateHash(granthaId, ref, commentaries, true);
+      updateHash(granthaId, ref, editionId, true);
     } else {
-      updateHash(granthaId, ref, commentaries);
+      updateHash(granthaId, ref, editionId);
     }
+  };
+
+  // Handle commentary (edition) switch
+  const handleEditionChange = (newEditionId: string) => {
+    updateHash(granthaId, verseRef, newEditionId);
   };
 
   // Handle panel size changes
@@ -288,10 +297,11 @@ export default function Home() {
           grantha={currentGrantha}
           granthas={granthas}
           selectedRef={verseRef}
-          commentaries={commentaries}
+          editionId={editionId}
           commentaryOpen={commentaryOpen}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleVerseSelect}
+          onEditionChange={handleEditionChange}
           updateHash={updateHash}
           updateCommentaryOpen={updateCommentaryOpen}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
@@ -317,9 +327,10 @@ export default function Home() {
           grantha={currentGrantha}
           granthas={granthas}
           selectedRef={verseRef}
-          commentaries={commentaries}
+          editionId={editionId}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleVerseSelect}
+          onEditionChange={handleEditionChange}
           updateHash={updateHash}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
@@ -397,7 +408,8 @@ export default function Home() {
           <CommentaryPanel
             grantha={currentGrantha}
             selectedRef={verseRef}
-            selectedCommentaryIds={commentaries}
+            selectedEditionId={editionId}
+            onEditionChange={handleEditionChange}
             updateHash={updateHash}
             availableGranthaIds={granthas.map((g) => g.id)}
             granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}

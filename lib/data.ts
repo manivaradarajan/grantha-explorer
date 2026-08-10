@@ -94,6 +94,14 @@ export interface Commentary {
 
 import { type Script } from "./i18n";
 
+export interface EditionStub {
+  edition_id: string;
+  path: string; // Relative path from /data/library/ to the edition file or directory
+  commentator?: { devanagari: string; roman?: string };
+  commentary_title?: string;
+  isDefault?: boolean;
+}
+
 export interface Grantha extends GranthaMetadata {
   grantha_id: string;
   canonical_title: string;
@@ -108,6 +116,8 @@ export interface Grantha extends GranthaMetadata {
   concluding_material: PrefatoryMaterial[]; // Changed to non-optional array
   commentaries: Commentary[]; // Changed to non-optional array
   parts?: { file: string; id: string; first_ref: string }[];
+  /** The edition this grantha object was loaded as. Undefined for single-edition granthas. */
+  edition_id?: string;
 }
 
 export interface GranthaMetadata {
@@ -116,6 +126,8 @@ export interface GranthaMetadata {
   title: string;
   title_deva: string;
   title_iast: string;
+  /** Available editions for multi-edition granthas (grantha-envelope kind). Absent for single-edition. */
+  editions?: EditionStub[];
 }
 
 /**
@@ -179,13 +191,13 @@ export interface GranthaMetadataOnly {
   commentaries?: Commentary[];
   parts: { file: string; id: string; first_ref: string }[];
 }
-    
-    // The type returned by loadGrantha.
-    // For single-file granthas, it's the full Grantha object.// For multi-part granthas, it's the metadata + the content of the first part.
-// export type LoadedGrantha = Grantha | (GranthaMetadataOnly & { initialPartContent: GranthaPartContent });
 
-// In-memory cache for grantha data
+// In-memory cache for grantha data, keyed by granthaId::editionId so multiple
+// editions of the same grantha can coexist (e.g. for a future comparison view).
 const granthaCache = new Map<string, Grantha>();
+
+const granthaCacheKey = (granthaId: string, editionId?: string): string =>
+  editionId ? `${granthaId}::${editionId}` : granthaId;
 
 // Data loading functions
 
@@ -250,10 +262,12 @@ export const getAvailableGranthas = async (): Promise<GranthaMetadata[]> => {
  * Load full grantha data from JSON file or initial part of a multi-part grantha.
  * TODO: Remove duplicate structure_levels from part files (should only be in envelope.json)
  */
-export async function loadGrantha(granthaId: string): Promise<Grantha> {
-  // 1. Check cache first
-  if (granthaCache.has(granthaId)) {
-    return granthaCache.get(granthaId)!;
+export async function loadGrantha(granthaId: string, editionId?: string): Promise<Grantha> {
+  // 1. Check cache first (keyed per edition so switching editions never
+  //    serves stale mula/commentary data for the wrong edition).
+  const cacheKey = granthaCacheKey(granthaId, editionId);
+  if (granthaCache.has(cacheKey)) {
+    return granthaCache.get(cacheKey)!;
   }
 
   try {
@@ -265,7 +279,29 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
       throw new Error(`Grantha ${granthaId} not found in index`);
     }
 
-    const granthaPath = granthaMetadata.path;
+    // Resolve the selected edition. For multi-edition granthas the index
+    // entry carries editions[] (from the grantha-level envelope); the
+    // requested editionId falls back to isDefault, then to the first stub.
+    // For single-edition granthas edition_id == grantha_id by convention and
+    // the index path is used directly.
+    const granthaEditions = granthaMetadata.editions;
+    let resolvedEditionId: string;
+    let granthaPath: string;
+
+    if (granthaEditions && granthaEditions.length > 0) {
+      const selected =
+        granthaEditions.find(e => e.edition_id === editionId) ||
+        granthaEditions.find(e => e.isDefault) ||
+        granthaEditions[0];
+      if (!selected) {
+        throw new Error(`Grantha ${granthaId} has an empty editions array`);
+      }
+      resolvedEditionId = selected.edition_id;
+      granthaPath = selected.path;
+    } else {
+      resolvedEditionId = granthaId;
+      granthaPath = granthaMetadata.path;
+    }
 
     // Determine if it's a directory (multi-part) or file (single-part)
     const isMultiPart = !granthaPath.endsWith('.json');
@@ -344,12 +380,14 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
       const partialGrantha: Grantha = {
         ...multiPartMetadata,
         id: multiPartMetadata.grantha_id,
-        path: granthaMetadata.path,
+        path: granthaPath,
         title: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
         title_deva: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
         title_iast: multiPartMetadata.canonical_title ?? granthaMetadata.title_iast,
         aliases: multiPartMetadata.aliases || [],
         parts: multiPartMetadata.parts, // Store the list of all parts
+        edition_id: resolvedEditionId,
+        editions: granthaEditions,
         prefatory_material: combinedContent.prefatory_material || [],
         passages: combinedContent.passages || [],
         concluding_material: combinedContent.concluding_material || [],
@@ -375,7 +413,7 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
       }
 
         // Cache and return the partially assembled grantha
-        granthaCache.set(granthaId, partialGrantha);
+        granthaCache.set(cacheKey, partialGrantha);
         return partialGrantha;
 
       } else if (envelopeResponse.status === 404) {
@@ -399,7 +437,12 @@ export async function loadGrantha(granthaId: string): Promise<Grantha> {
         data.commentaries = Object.values(data.commentaries);
       }
 
-      granthaCache.set(granthaId, data);
+      // Stamp the resolved edition identity on the returned object so callers
+      // (switcher UI, lazy part loader) know which edition this represents.
+      data.edition_id = resolvedEditionId;
+      data.editions = granthaEditions;
+
+      granthaCache.set(cacheKey, data);
       return data;
     }
   } catch (error) {
@@ -467,6 +510,51 @@ export function getPassageByRef(
   ref: string
 ): Passage | PrefatoryMaterial | undefined {
   return getAllPassagesForNavigation(grantha).find((p) => p.ref === ref);
+}
+
+/**
+ * Find the commentary passage applicable to a given verse ref, resolving both
+ * exact refs ("8.3.4") and range refs ("8.3.8-12").
+ *
+ * Some source texts attach a single summary gloss to a whole run of mantras
+ * via a range ref (e.g. brihadaranyaka "8.4.7-11", "5.2.3-9"). The panel must
+ * render that gloss for every verse it covers, not only when the selected ref
+ * happens to equal the literal range string.
+ *
+ * Args:
+ *     passages: The commentary's passage list.
+ *     selectedRef: The currently selected verse ref (e.g. "8.3.8").
+ *
+ * Returns:
+ *     The matching commentary passage, or undefined when no passage covers the
+ *     selected ref.
+ */
+export function commentaryPassageForRef(
+  passages: CommentaryPassage[],
+  selectedRef: string,
+): CommentaryPassage | undefined {
+  const exact = passages.find((p) => p.ref === selectedRef);
+  if (exact) {
+    return exact;
+  }
+  // Range ref: "A.B.LOW-HIGH" within the same section prefix "A.B".
+  const match = selectedRef.match(/^(\d+)\.(\d+)\.(\d+)$/);
+  if (!match) {
+    return undefined;
+  }
+  const prefix = `${match[1]}.${match[2]}`;
+  const num = parseInt(match[3], 10);
+  return passages.find((p) => {
+    const range = p.ref.match(/^(\d+)\.(\d+)\.(\d+)-(\d+)$/);
+    if (!range) {
+      return false;
+    }
+    const [rp1, rp2, rpLo, rpHi] = range.slice(1).map((s) => parseInt(s, 10));
+    if (rp1 !== parseInt(match[1], 10) || rp2 !== parseInt(match[2], 10)) {
+      return false;
+    }
+    return num >= rpLo && num <= rpHi;
+  });
 }
 
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
@@ -717,15 +805,16 @@ export function getSidebarFlatModel(grantha: Grantha): SidebarFlatModel {
   };
 }
 
-export async function loadGranthaPart(granthaId: string, partFileName: string): Promise<GranthaPartContent> {
-  const granthasList = await getAvailableGranthas();
-  const granthaMetadata = granthasList.find(g => g.id === granthaId);
-  if (!granthaMetadata) {
-    throw new Error(`Grantha ${granthaId} not found in index`);
-  }
-  const response = await fetch(getAssetPath(`/data/library/${granthaMetadata.path}/${partFileName}`));
+/**
+ * Load a single part file of a multi-part edition by its resolved library
+ * path. The path (not a grantha_id) is passed in because the index entry only
+ * stores the default edition's path; lazy part loads must use the currently
+ * loaded edition's directory or they silently fetch the wrong edition.
+ */
+export async function loadGranthaPart(path: string, partFileName: string): Promise<GranthaPartContent> {
+  const response = await fetch(getAssetPath(`/data/library/${path}/${partFileName}`));
   if (!response.ok) {
-    throw new Error(`Failed to load part file ${partFileName} for grantha ${granthaId}`);
+    throw new Error(`Failed to load part file ${partFileName} at ${path}`);
   }
   return response.json();
 }

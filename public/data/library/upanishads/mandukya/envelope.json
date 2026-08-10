@@ -9,19 +9,21 @@
     {
       "edition_id": "mandukya-upanishad-rangaramanuja",
       "path": "upanishads/mandukya/mandukya-upanishad-rangaramanuja",
-      "commentator": {
-        "devanagari": "श्रीरङ्गरामानुजमुनिः"
-      },
       "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः",
+        "roman": ""
+      },
       "isDefault": true
     },
     {
       "edition_id": "mandukya-upanishad-kuranarayana",
       "path": "upanishads/mandukya/mandukya-upanishad-kuranarayana",
+      "commentary_title": "भाष्यम्",
       "commentator": {
-        "devanagari": "कूरनारायणमुनिः"
-      },
-      "commentary_title": "भाष्यम्"
+        "devanagari": "कूरनारायणमुनिः",
+        "roman": ""
+      }
     }
   ]
 }

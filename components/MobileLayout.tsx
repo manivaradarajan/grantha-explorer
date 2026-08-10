@@ -14,14 +14,15 @@ interface MobileLayoutProps {
   grantha: Grantha;
   granthas: GranthaMetadata[];
   selectedRef: string;
-  commentaries: string[];
+  editionId?: string;
   commentaryOpen: boolean;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
+  onEditionChange: (editionId: string) => void;
   updateHash: (
     granthaId: string,
     verseRef: string,
-    commentaries: string[]
+    editionId?: string
   ) => void;
   updateCommentaryOpen: (isOpen: boolean) => void;
   granthaIdToDevanagariTitle: Record<string, string>;
@@ -34,10 +35,11 @@ export default function MobileLayout({
   grantha,
   granthas,
   selectedRef,
-  commentaries,
+  editionId,
   commentaryOpen,
   onGranthaChange,
   onVerseSelect,
+  onEditionChange,
   updateHash,
   updateCommentaryOpen,
   granthaIdToDevanagariTitle,
@@ -160,6 +162,9 @@ export default function MobileLayout({
         onClose={() => updateCommentaryOpen(false)}
         title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
         subtitle={grantha.commentaries?.[0]?.commentator?.devanagari}
+        editions={grantha.editions}
+        selectedEditionId={editionId}
+        onEditionChange={onEditionChange}
         verseRef={selectedRef}
         onPrevious={handlePrevious}
         onNext={handleNext}
@@ -169,7 +174,8 @@ export default function MobileLayout({
         <CommentaryPanel
           grantha={grantha}
           selectedRef={selectedRef}
-          selectedCommentaryIds={commentaries}
+          selectedEditionId={editionId}
+          onEditionChange={onEditionChange}
           updateHash={updateHash}
           availableGranthaIds={granthas.map((g) => g.id)}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}

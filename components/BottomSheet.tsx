@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { EditionStub } from "@/lib/data";
+import CommentarySelector from "./CommentarySelector";
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -8,6 +10,10 @@ interface BottomSheetProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
+  /** Multi-edition switching (renders a caret in the title bar). */
+  editions?: EditionStub[];
+  selectedEditionId?: string;
+  onEditionChange?: (editionId: string) => void;
   verseRef?: string;
   onPrevious?: () => void;
   onNext?: () => void;
@@ -21,6 +27,9 @@ export default function BottomSheet({
   children,
   title,
   subtitle,
+  editions,
+  selectedEditionId,
+  onEditionChange,
   verseRef,
   onPrevious,
   onNext,
@@ -165,6 +174,13 @@ export default function BottomSheet({
                 <span className="text-lg font-medium text-gray-700 -mt-0.5">
                   {verseRef}
                 </span>
+              )}
+              {editions && editions.length > 1 && onEditionChange && (
+                <CommentarySelector
+                  editions={editions}
+                  selectedEditionId={selectedEditionId}
+                  onSelect={onEditionChange}
+                />
               )}
             </div>
             {subtitle && (

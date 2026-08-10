@@ -3,26 +3,28 @@
 import {
   Grantha,
   Commentary,
-  CommentaryPassage,
   CommentaryPrefatoryItem,
   getGranthasMeta,
   createAbbreviationMap,
   type GranthaMeta,
 } from "@/lib/data";
 import { getUIStrings, type Language, type Script } from "@/lib/i18n";
+import { commentaryPassageForRef } from "@/lib/data";
 import { useCallback, useMemo, useEffect, useState } from "react";
 
 import DOMPurify from "isomorphic-dompurify";
 import { parseReferences } from '@/lib/references';
 import ReferenceLink from './ReferenceLink';
+import CommentarySelector from './CommentarySelector';
 
 interface CommentaryPanelProps {
   grantha: Grantha;
   selectedRef: string;
-  /** Commentary IDs currently active in the URL hash (?c=). If empty or absent,
-   *  defaults to the first commentary in the grantha. */
-  selectedCommentaryIds?: string[];
-  updateHash: (granthaId: string, verseRef: string, commentaries: string[]) => void;
+  /** Active edition_id from the URL (?e=). Absent = default edition. */
+  selectedEditionId?: string;
+  /** Called when the reader switches the active commentary edition. */
+  onEditionChange: (editionId: string) => void;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
@@ -35,7 +37,8 @@ const PANEL_HEADER_CLASS =
 export default function CommentaryPanel({
   grantha,
   selectedRef,
-  selectedCommentaryIds,
+  selectedEditionId,
+  onEditionChange,
   updateHash,
   availableGranthaIds,
   granthaIdToDevanagariTitle,
@@ -43,7 +46,8 @@ export default function CommentaryPanel({
   hideHeader = false,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
-  const hasMultipleCommentaries = commentaries.length > 1;
+  const hasMultipleEditions =
+    (grantha.editions && grantha.editions.length > 1) || false;
 
   const script: Script = grantha.script || "devanagari";
 
@@ -73,34 +77,9 @@ export default function CommentaryPanel({
     [granthasMeta]
   );
 
-  /**
-   * Derive the effective active commentary IDs from the URL prop.
-   * Falls back to the first commentary when the prop is absent or contains
-   * no IDs that exist in this grantha.
-   */
-  const effectiveSelectedIds = useMemo(() => {
-    if (selectedCommentaryIds && selectedCommentaryIds.length > 0) {
-      const valid = selectedCommentaryIds.filter(id =>
-        commentaries.some(c => c.commentary_id === id)
-      );
-      if (valid.length > 0) return valid;
-    }
-    return commentaries.length > 0 ? [commentaries[0].commentary_id] : [];
-  }, [selectedCommentaryIds, commentaries]);
-
-  /**
-   * Toggle a commentary ID in the active set and write the new set to the URL.
-   * The last active commentary cannot be removed.
-   */
-  const toggleCommentary = (id: string) => {
-    if (effectiveSelectedIds.includes(id)) {
-      if (effectiveSelectedIds.length > 1) {
-        updateHash(grantha.grantha_id, selectedRef, effectiveSelectedIds.filter(i => i !== id));
-      }
-    } else {
-      updateHash(grantha.grantha_id, selectedRef, [...effectiveSelectedIds, id]);
-    }
-  };
+  // Same-grantha references preserve the active edition; cross-grantha refs
+  // must not carry it (the target grantha has its own editions).
+  const referenceEditionId = hasMultipleEditions ? grantha.edition_id : undefined;
 
   const renderCommentaryWithReferences = useCallback(
     (text: string): React.ReactNode => {
@@ -130,6 +109,7 @@ export default function CommentaryPanel({
               (<ReferenceLink
                 reference={ref}
                 currentGranthaId={grantha.grantha_id}
+                editionId={referenceEditionId}
                 updateHash={updateHash}
                 availableGranthaIds={availableGranthaIds}
                 granthaIdToTitle={granthaIdToTitle}
@@ -148,6 +128,7 @@ export default function CommentaryPanel({
               key={`ref-${i}`}
               reference={ref}
               currentGranthaId={grantha.grantha_id}
+              editionId={referenceEditionId}
               updateHash={updateHash}
               availableGranthaIds={availableGranthaIds}
               granthaIdToTitle={granthaIdToTitle}
@@ -165,11 +146,11 @@ export default function CommentaryPanel({
 
       return <>{parts}</>;
     },
-    [abbreviationMap, granthaIdToTitle, grantha.grantha_id, updateHash, availableGranthaIds]
+    [abbreviationMap, granthaIdToTitle, grantha.grantha_id, referenceEditionId, updateHash, availableGranthaIds]
   );
 
-  const renderCommentary = (commentary: Commentary, index: number) => {
-    const passage = commentary.passages?.find((p: CommentaryPassage) => p.ref === selectedRef);
+  const renderCommentary = (commentary: Commentary) => {
+    const passage = commentaryPassageForRef(commentary.passages || [], selectedRef);
 
     if (!passage) {
       return (
@@ -189,13 +170,6 @@ export default function CommentaryPanel({
 
     return (
       <div className="mb-8">
-        {hasMultipleCommentaries && (
-          <div className="mb-4">
-            <h3 className="text-base font-semibold font-serif">{commentary.commentary_title}</h3>
-            <div className="text-sm text-gray-600">{commentary.commentator?.devanagari}</div>
-          </div>
-        )}
-
         {prefatoryMaterial.length > 0 && (
           <div className="mb-6 pb-4 border-b border-gray-200">
             {prefatoryMaterial.map((item: CommentaryPrefatoryItem, idx: number) => (
@@ -231,58 +205,26 @@ export default function CommentaryPanel({
     );
   }
 
-  if (!hasMultipleCommentaries) {
-    const commentary = commentaries[0];
-    return (
-      <div className="h-full flex flex-col">
-        {!hideHeader && (
-          <div className={PANEL_HEADER_CLASS}>
-            <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
-            <div className="text-sm text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
-          </div>
-        )}
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
-          {renderCommentary(commentary, 0)}
-        </div>
-      </div>
-    );
-  }
-
+  const commentary = commentaries[0];
   return (
     <div className="h-full flex flex-col">
       {!hideHeader && (
         <div className={PANEL_HEADER_CLASS}>
-          <h2 className="text-lg font-semibold font-serif">{uiStrings.commentary}</h2>
+          <div className="flex items-center justify-center gap-2">
+            <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
+            {hasMultipleEditions && grantha.editions && (
+              <CommentarySelector
+                editions={grantha.editions}
+                selectedEditionId={selectedEditionId}
+                onSelect={onEditionChange}
+              />
+            )}
+          </div>
+          <div className="text-sm text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
         </div>
       )}
-
-      <div className="border-b border-gray-200">
-        <div className="p-4">
-          {commentaries.map((commentary: Commentary) => (
-            <label key={commentary.commentary_id} className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-              <input
-                type="checkbox"
-                checked={effectiveSelectedIds.includes(commentary.commentary_id)}
-                onChange={() => toggleCommentary(commentary.commentary_id)}
-                className="w-4 h-4"
-              />
-              <span className="text-sm">{commentary.commentator?.devanagari}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto px-6 pb-6">
-        {effectiveSelectedIds.map((id, idx) => {
-          const commentary = commentaries.find(c => c.commentary_id === id);
-          if (!commentary) return null;
-          return (
-            <div key={id}>
-              {renderCommentary(commentary, idx)}
-              {idx < effectiveSelectedIds.length - 1 && <hr className="my-8 border-gray-300" />}
-            </div>
-          );
-        })}
+        {renderCommentary(commentary)}
       </div>
     </div>
   );
