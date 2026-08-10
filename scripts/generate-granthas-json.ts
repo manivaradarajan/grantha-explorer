@@ -3,6 +3,18 @@ import path from 'path';
 
 type EditionStub = { edition_id: string; path: string; isDefault?: boolean };
 
+async function readEnvelopeJson(
+  dir: string
+): Promise<Record<string, unknown> | null> {
+  const envelopePath = path.join(dir, 'envelope.json');
+  try {
+    return JSON.parse(await fs.readFile(envelopePath, 'utf-8'));
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
+    return null;
+  }
+}
+
 async function generateGranthasJson() {
   try {
     const dataDir = path.join(process.cwd(), 'public', 'data');
@@ -35,13 +47,8 @@ async function generateGranthasJson() {
 
         if (entry.isDirectory()) {
           const envelopePath = path.join(fullPath, 'envelope.json');
-          let envelopeData: Record<string, unknown> | null = null;
-
-          try {
-            const content = await fs.readFile(envelopePath, 'utf-8');
-            envelopeData = JSON.parse(content);
-          } catch (err) {
-            if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
+          const envelopeData = await readEnvelopeJson(fullPath);
+          if (!envelopeData) {
             // No envelope.json — recurse into subdirectories
             await scanDirectory(fullPath, entryRelativePath);
             continue;
