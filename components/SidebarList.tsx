@@ -37,6 +37,44 @@ interface MenuState {
 
 const LISTBOX_ID = "sidebar-segments-listbox";
 
+/** Chevron-right breadcrumb separator, matching the dropdown caret family. */
+function ChevronRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-3 w-3 flex-shrink-0"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+/** Downward caret signaling a tappable dropdown, matching GranthaSelector. */
+function CaretDownIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-3 w-3 flex-shrink-0"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 /**
  * Flat, accordion-free verse list. Each section begins with a full-bleed
  * sticky heading (e.g. "अध्यायः ३ › ब्राह्मणम् १", top-down) held in place by
@@ -330,11 +368,8 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
                         }`}
                       >
                         {i > 0 && (
-                          <span
-                            aria-hidden="true"
-                            className="text-gray-500 font-normal select-none px-1 flex-shrink-0"
-                          >
-                            ›
+                          <span className="text-gray-500 select-none flex-shrink-0">
+                            <ChevronRightIcon />
                           </span>
                         )}
                         <button
@@ -350,6 +385,11 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
                         >
                           {toDevanagariNumerals(segment)}
                         </button>
+                        {isLast && (
+                          <span className="text-gray-500 select-none pl-0.5 flex-shrink-0">
+                            <CaretDownIcon />
+                          </span>
+                        )}
                       </span>
                     );
                   })}

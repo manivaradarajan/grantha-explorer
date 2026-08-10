@@ -57,16 +57,14 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
         ref={ref}
         href={`#${grantha.grantha_id}:${passage.ref}`}
         onClick={handleClick}
-        className="block w-full text-left py-0 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[40px] flex items-center"
+        className={`block w-full text-left py-0 transition-all duration-150 hover:bg-black/5 hover:rounded-lg truncate min-h-[40px] flex items-center ${
+          isSelected ? "bg-gray-300/60 rounded-lg font-bold" : ""
+        }`}
       >
-        <span className="flex-shrink-0 pr-1 pl-5">
-          {isSelected ? (
-            <span className="inline-block rounded-full bg-gray-100 text-black font-semibold -ml-2.5 px-2.5 py-0.5">
-              {label}
-            </span>
-          ) : (
-            <span className="text-blue-600">{label}</span>
-          )}
+        <span
+          className={`flex-shrink-0 px-1 pl-5 ${isSelected ? "text-black" : "text-blue-600"}`}
+        >
+          {label}
         </span>
         <span className="flex-1 truncate pr-2 text-gray-500">
           {" - "}
