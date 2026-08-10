@@ -3,6 +3,7 @@
 import {
   Grantha,
   GranthaMetadata,
+  SidebarFlatModel,
   SidebarSection,
   dropLastRefComponent,
   getSidebarFlatModel,
@@ -25,7 +26,16 @@ interface NavigationSidebarProps {
   showGranthaSelector?: boolean;
 }
 
-/** section-top delta relative to the scroll container (offsetTop is document-relative). */
+/**
+ * Compute the scrollTop offset that places `el` at the top of `scroller`.
+ *
+ * `offsetTop` is document-relative, so the scroller's own position and scroll
+ * must be factored in.
+ *
+ * @param scroller - The scroll container element.
+ * @param el - The target element inside the scroller.
+ * @returns The scrollTop value to align `el` with the top of `scroller`.
+ */
 function elementScrollTop(scroller: HTMLElement, el: HTMLElement): number {
   return (
     el.getBoundingClientRect().top -
@@ -34,6 +44,61 @@ function elementScrollTop(scroller: HTMLElement, el: HTMLElement): number {
   );
 }
 
+/** Result of resolving a quick-jump query. */
+interface ResolvedJump {
+  ref: string;
+  /** True when the ref is a section marker — no verse DOM element exists for it. */
+  isSection: boolean;
+}
+
+/**
+ * Resolve a quick-jump query to a target ref, or null when unresolvable.
+ *
+ * Matches loaded passages first (prefatory, main, concluding), then part-file
+ * first_refs, then known (possibly not-yet-loaded) section markers so jumps
+ * into unloaded parts resolve. Pure and side-effect free.
+ */
+function resolveJumpTarget(
+  q: string,
+  model: SidebarFlatModel,
+  partFirstRefs: string[],
+): ResolvedJump | null {
+  const loadedVerses = [
+    ...model.prefatory,
+    ...(model.depth <= 1
+      ? model.flatPassages
+      : model.sections.flatMap((s) => s.passages)),
+    ...model.concluding,
+  ];
+
+  const exactLoaded = loadedVerses.find((p) => p.ref === q);
+  if (exactLoaded) return { ref: exactLoaded.ref, isSection: false };
+
+  if (partFirstRefs.includes(q)) return { ref: q, isSection: false };
+
+  const prefixLoaded = loadedVerses.find((p) => p.ref.startsWith(q + "."));
+  if (prefixLoaded) return { ref: prefixLoaded.ref, isSection: false };
+
+  const prefixPartMatch = partFirstRefs.find((r) => r.startsWith(q + "."));
+  if (prefixPartMatch) return { ref: prefixPartMatch, isSection: false };
+
+  if (model.depth >= 2) {
+    const parentRef = dropLastRefComponent(q);
+    if (model.sections.some((s) => s.boundary.markerRef === parentRef)) {
+      return { ref: q, isSection: true };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Sidebar navigation panel for a grantha text.
+ *
+ * Renders a section-structured verse list, a quick-jump input, and an
+ * optional grantha selector. Coordinates lazy part loading, auto-scroll, and
+ * centering of quick-jump verses whose parts are not yet loaded.
+ */
 export default function NavigationSidebar({
   grantha,
   granthas,
@@ -47,10 +112,19 @@ export default function NavigationSidebar({
   const model = useMemo(() => getSidebarFlatModel(grantha), [grantha]);
   const uiStrings = getUIStrings();
 
+  // --- Pending-scroll state machine ---
+  // pendingVerseRef: set when a quick-jump targets a verse whose part is not
+  //   yet loaded; cleared when the verse mounts, the selection changes, or the
+  //   grantha changes. Only meaningful while it equals selectedRef.
+  // pendingSectionRef: markerRef of the section containing the jump target;
+  //   used as the fallback scroll target while a verse is still loading.
+  // lastAutoScroll: dedup record; {ref, found:true} matching selectedRef
+  //   suppresses redundant scrollIntoView calls.
   const listRef = useRef<HTMLDivElement | null>(null);
   const passageRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const lastAutoScroll = useRef<{ ref: string; found: boolean } | null>(null);
   const pendingSectionRef = useRef<string | null>(null);
+  const pendingVerseRef = useRef<string | null>(null);
   const prevGranthaId = useRef<string>(grantha.grantha_id);
 
   const [quickJump, setQuickJump] = useState(selectedRef);
@@ -63,10 +137,11 @@ export default function NavigationSidebar({
       prevGranthaId.current = grantha.grantha_id;
       lastAutoScroll.current = null;
       pendingSectionRef.current = null;
+      pendingVerseRef.current = null;
       setQuickJump(selectedRef);
       setJumpError(false);
     }
-  }, [grantha.grantha_id, grantha, selectedRef]);
+  }, [grantha.grantha_id, selectedRef]);
 
   // Keep the quick-jump display in sync with the selected ref. Deliberately no
   // onBlur revert — the submit handler reads `quickJump` directly.
@@ -79,15 +154,39 @@ export default function NavigationSidebar({
   // selection change (or when a not-yet-loaded part mounts), never on scroll.
   useEffect(() => {
     const scroller = listRef.current;
-    let markerRef = pendingSectionRef.current;
+
+    // A pending quick-jump verse is stale if the selection moved elsewhere
+    // while its part was still loading.
+    if (
+      pendingVerseRef.current &&
+      pendingVerseRef.current !== selectedRef
+    ) {
+      pendingVerseRef.current = null;
+    }
+    const pendingVerse = pendingVerseRef.current;
 
     // The pending marker is stale if the selection moved to a different
     // section while its part was still loading — clear it so we fall through
     // to the normal verse-scroll branch instead of redirecting to the old
     // section or suppressing the new selection's scroll.
+    let markerRef = pendingSectionRef.current;
     if (markerRef && dropLastRefComponent(selectedRef) !== markerRef) {
       pendingSectionRef.current = null;
       markerRef = null;
+    }
+
+    // A pending quick-jump should center the exact verse once its part loads.
+    // If the verse isn't in the DOM yet, fall through to the marker scroll for
+    // interim feedback (without recording the verse as already scrolled).
+    if (pendingVerse && pendingVerse === selectedRef) {
+      const verseEl = passageRefs.current[selectedRef];
+      if (verseEl) {
+        pendingVerseRef.current = null;
+        pendingSectionRef.current = null;
+        lastAutoScroll.current = { ref: selectedRef, found: true };
+        verseEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
     }
 
     if (markerRef) {
@@ -97,7 +196,12 @@ export default function NavigationSidebar({
       if (markerEl && scroller) {
         scroller.scrollTop = elementScrollTop(scroller, markerEl);
         pendingSectionRef.current = null;
-        lastAutoScroll.current = { ref: selectedRef, found: true };
+        lastAutoScroll.current = {
+          ref: selectedRef,
+          // A section-pick is complete at its heading; a pending quick-jump
+          // still needs the verse centered once it mounts.
+          found: pendingVerse == null,
+        };
       }
       return; // marker not loaded yet — retry on next grantha change
     }
@@ -115,7 +219,10 @@ export default function NavigationSidebar({
     }
   }, [grantha.passages, selectedRef]);
 
-  /** Load the part backing a section if it isn't loaded yet. */
+  /**
+   * Load the part files backing a section if it isn't loaded yet. No-op when
+   * the section already has passages.
+   */
   const ensureSectionLoaded = (section: SidebarSection) => {
     if (section.passages.length > 0) return;
     for (const firstRef of section.boundary.partIds) {
@@ -125,63 +232,76 @@ export default function NavigationSidebar({
     }
   };
 
+  /** Load every unloaded section from the top up to `sectionIdx` inclusive,
+   *  so the sidebar stays gap-free when jumping deep into the text. */
+  const ensureSectionsUpToLoaded = (sectionIdx: number) => {
+    for (let i = 0; i <= sectionIdx && i < model.sections.length; i++) {
+      ensureSectionLoaded(model.sections[i]);
+    }
+  };
+
+  /** Select a section from the breadcrumb popup, then load everything from
+   *  the top down to it so the list stays gap-free. */
   const handleSectionSelect = (section: SidebarSection) => {
     onVerseSelect(section.boundary.firstVerseRef);
     pendingSectionRef.current = section.boundary.markerRef;
-    ensureSectionLoaded(section);
+    const targetIdx = model.sections.findIndex(
+      (s) => s.boundary.markerRef === section.boundary.markerRef,
+    );
+    if (targetIdx >= 0) ensureSectionsUpToLoaded(targetIdx);
   };
 
+  /**
+   * Resolve the quick-jump query, select the target, and schedule loading of
+   * any unloaded parts. Sets pending scroll state so the auto-scroll effect
+   * centers a verse target when its part mounts (or lands on a section heading
+   * directly for a section-marker target).
+   */
   const handleJumpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const q = quickJump.trim();
     if (!q) return;
 
-    // Search loaded passages (prefatory, main, concluding) first, then match
-    // against known part first_refs so quick-jump works for not-yet-loaded
-    // sections.
-    const loadedVerses = [
-      ...model.prefatory,
-      ...(model.depth <= 1
-        ? model.flatPassages
-        : model.sections.flatMap((s) => s.passages)),
-      ...model.concluding,
-    ];
-    const loadedRefs = new Set(loadedVerses.map((p) => p.ref));
     const partFirstRefs = (grantha.parts ?? []).map((p) => p.first_ref);
+    const resolved = resolveJumpTarget(q, model, partFirstRefs);
 
-    let targetRef: string | null = null;
-    const exactLoaded = loadedVerses.find((p) => p.ref === q);
-    const exactPart = !exactLoaded && partFirstRefs.includes(q) ? q : null;
-    if (exactLoaded) targetRef = exactLoaded.ref;
-    else if (exactPart) targetRef = exactPart;
-    else {
-      const prefixLoaded = loadedVerses.find((p) => p.ref.startsWith(q + "."));
-      const prefixPartMatch = partFirstRefs.find((r) => r.startsWith(q + "."));
-      if (prefixLoaded) targetRef = prefixLoaded.ref;
-      else if (prefixPartMatch) targetRef = prefixPartMatch;
-    }
-
-    if (!targetRef) {
+    if (!resolved) {
       setJumpError(true);
       return;
     }
     setJumpError(false);
+    const targetRef = resolved.ref;
     onVerseSelect(targetRef);
-    pendingSectionRef.current =
-      model.depth >= 2 ? dropLastRefComponent(targetRef) : null;
-    if (!loadedRefs.has(targetRef)) {
-      const section = model.sections.find(
+
+    let targetSectionIdx: number;
+    if (resolved.isSection) {
+      // The target IS a section marker — land on its heading directly.
+      pendingSectionRef.current = targetRef;
+      targetSectionIdx = model.sections.findIndex(
+        (s) => s.boundary.markerRef === targetRef,
+      );
+    } else {
+      // Verse jump: scroll to the parent section marker as interim feedback,
+      // then center the exact verse once its part mounts.
+      const parentRef =
+        model.depth >= 2 ? dropLastRefComponent(targetRef) : null;
+      pendingSectionRef.current = parentRef;
+      pendingVerseRef.current = targetRef;
+      targetSectionIdx = model.sections.findIndex(
         (s) =>
           s.boundary.firstVerseRef === targetRef ||
-          s.passages.some((p) => p.ref === targetRef),
+          s.passages.some((p) => p.ref === targetRef) ||
+          (parentRef != null && s.boundary.markerRef === parentRef),
       );
-      if (section) ensureSectionLoaded(section);
-      else {
-        const part = (grantha.parts ?? []).find(
-          (p) => p.first_ref === targetRef,
-        );
-        if (part) void loadPart(part.first_ref);
-      }
+    }
+
+    if (targetSectionIdx >= 0) {
+      ensureSectionsUpToLoaded(targetSectionIdx);
+    } else {
+      const part = (grantha.parts ?? []).find(
+        (p) => p.first_ref === targetRef,
+      );
+      if (part) void loadPart(part.first_ref);
     }
   };
 
@@ -233,7 +353,7 @@ export default function NavigationSidebar({
           </button>
         </form>
         {jumpError && (
-          <p className="text-xs text-red-600 mt-1">No match for that ref.</p>
+          <p className="text-xs text-red-600 mt-1">निर्देशः नोपलभ्यते</p>
         )}
       </div>
 
