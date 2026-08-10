@@ -7,34 +7,32 @@ Update this file when an item is addressed or re-scoped.
 
 ## 1. editions[] in the generated index format
 
-`scripts/generate-granthas-json.ts` now operates in hybrid mode: it reads
-grantha-level `envelope.json` files where present (isavasya, mandukya) and
-falls back to `granthas-meta.json` for all other texts. The generated index
-(`public/data/generated/granthas.json`) still emits one flat entry per
-`grantha_id` — it does not expose `editions[]` to the runtime.
-
-Adding `editions[]` to the index format is deferred until `loadGrantha` in
-`lib/data.ts` has edition-selection logic to consume it.
+**RESOLVED** — `scripts/generate-granthas-json.ts` now emits an `editions[]`
+array on index entries for grantha-level envelope granthas (isavasya,
+mandukya), and `loadGrantha` in `lib/data.ts` consumes it to resolve the
+active edition. Single-edition granthas omit the field (edition_id ==
+grantha_id by convention).
 
 ---
 
 ## 2. mandukya-karika grantha-level envelope
 
-`mandukya-karika-bharadvajaramanujacharya.json` is a single-edition grantha
-that currently falls through to the flat-file scanner path (the scanner picks
-it up as a sibling `.json` inside the mandukya grantha-level envelope
-directory). No `envelope.json` with `editions[]` has been authored for it.
-
-Needed when a second edition of the Karika is added.
+**RESOLVED** — `mandukya-karika` now has a grantha-level
+`public/data/library/upanishads/mandukya-karika/envelope.json` with two
+editions (Bhāradvāja Rāmānujācārya's प्रतिपदार्थदीपिका, default, and
+Kūranārāyaṇa Muni's karika-bhāṣya), generated from the split
+structured_md kārikā files by `scripts/import_editions.py`. The legacy flat
+file `upanishads/mandukya/mandukya-karika-bharadvajaramanujacharya.json` was
+deleted.
 
 ---
 
 ## 3. Edition-resolution logic not implemented in loadGrantha
 
-The schema supports `isDefault` on edition stubs and the convention that
-`edition_id == grantha_id` for single-edition granthas, but `loadGrantha`
-in `lib/data.ts` has no edition-resolution logic. There is no user →
-`isDefault` → convention fallback chain yet.
+**RESOLVED** — `loadGrantha(granthaId, editionId)` in `lib/data.ts` now
+resolves the active edition from the index entry's `editions[]` using the
+user → `?e=` → `isDefault` → first-stub fallback chain, and caches per
+`granthaId::editionId`. Lazy part loading uses the resolved edition path.
 
 ---
 

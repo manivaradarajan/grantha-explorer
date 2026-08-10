@@ -1,0 +1,21 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.0.0",
+  "edition_id": "mandukya-karika-bharadvajaramanujacharya",
+  "grantha_id": "mandukya-karika",
+  "structure_levels": [
+    {
+      "key": "Mantra",
+      "scriptNames": {
+        "devanagari": "कारिका",
+        "roman": "kārikā"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1"
+    }
+  ]
+}

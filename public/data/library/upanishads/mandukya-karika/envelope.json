@@ -1,0 +1,29 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.0.0",
+  "grantha_id": "mandukya-karika",
+  "canonical_title": "गौडपादकारिका",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "mandukya-karika-bharadvajaramanujacharya",
+      "path": "upanishads/mandukya-karika/mandukya-karika-bharadvajaramanujacharya",
+      "commentary_title": "प्रतिपदार्थदीपिका",
+      "commentator": {
+        "devanagari": "भारद्वाजरामानुजाचार्यः",
+        "roman": ""
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "mandukya-karika-kuranarayana",
+      "path": "upanishads/mandukya-karika/mandukya-karika-kuranarayana",
+      "commentary_title": "भाष्यम्",
+      "commentator": {
+        "devanagari": "कूरनारायणमुनिः",
+        "roman": ""
+      }
+    }
+  ]
+}
