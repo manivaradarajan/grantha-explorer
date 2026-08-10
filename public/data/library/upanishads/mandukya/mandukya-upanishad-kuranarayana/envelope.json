@@ -1,0 +1,30 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.0.0",
+  "edition_id": "mandukya-upanishad",
+  "grantha_id": "mandukya-upanishad",
+  "structure_levels": [
+    {
+      "key": "Khanda",
+      "scriptNames": {
+        "devanagari": "खण्डः",
+        "roman": "khaṇḍa"
+      },
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1"
+    }
+  ]
+}
