@@ -143,10 +143,18 @@ _HIDE_RE = re.compile(
     re.DOTALL,
 )
 
-# Matches passage-level headings (Mantra, Prefatory, Concluding).
+# Known main-passage type names. The set drives the passage-heading regex so
+# that non-Upanishad texts are parsed identically to mantra-based texts.
+# "Para" was added for prakarana texts like the Vedartha Sangraha, whose
+# passages are prose paragraphs rather than mantras. When adding a new
+# passage type used by a future grantha, add its PascalCase name here.
+_PASSAGE_KINDS = frozenset({"Mantra", "Prefatory", "Concluding", "Para"})
+_PASSAGE_KINDS_ALT = "|".join(sorted(_PASSAGE_KINDS))
+
+# Matches passage-level headings (Mantra, Para, Prefatory, Concluding).
 # Group 1: kind, Group 2: ref, Group 3: optional devanagari label.
 _PASSAGE_HEADING_RE = re.compile(
-    r"^# (Mantra|Prefatory|Concluding)(?::?\s+)(\S+)"
+    rf"^# ({_PASSAGE_KINDS_ALT})(?::?\s+)(\S+)"
     r"(?:\s+\(devanagari:\s*\"([^\"]+)\"\))?",
     re.MULTILINE,
 )
@@ -208,7 +216,7 @@ _RESIDUAL_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 # breaks (e.g. "# Appendix:") that should terminate the final passage segment
 # rather than being swept into its content.
 _SECTION_BREAK_RE = re.compile(
-    r"^# (?!Mantra\b|Prefatory\b|Concluding\b|Commentary:)\S",
+    rf"^# (?!{'|'.join(sorted(_PASSAGE_KINDS))}\b|Commentary:)\S",
     re.MULTILINE,
 )
 
@@ -496,7 +504,7 @@ def parse_body(text: str) -> BodyData:
                     )
 
     for i, match in enumerate(headings):
-        kind = match.group(1)   # Mantra | Prefatory | Concluding
+        kind = match.group(1)   # any _PASSAGE_KINDS member (e.g. Mantra | Para | Prefatory | Concluding)
         ref = match.group(2)
         label = match.group(3) or ""
 

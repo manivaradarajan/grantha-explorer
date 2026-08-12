@@ -7,8 +7,11 @@ from typing import List, Dict, Tuple
 import yaml
 
 # Regex patterns for different heading types
-# Captures: 1=ref
-HEADING_MANTRA = re.compile(r'^#\s+Mantra\s+([\d\.-]+)$')
+# Main passage headings match any passage type word (Mantra, Para, etc.)
+# followed by a ref. Prefatory/Concluding/Commentary carry a colon after the
+# keyword, so they never match this generic pattern.
+# Captures: 1=word (passage type), 2=ref
+HEADING_MAIN_PASSAGE = re.compile(r'^#\s+(\w+)\s+([\d\.-]+)$')
 # Captures: 1=ref, 2=script, 3=label
 HEADING_PREFATORY = re.compile(r'^#\s+Prefatory:\s+([\d\.]+)\s+\((\w+):\s*"(.*?)"\)$')
 # Captures: 1=ref, 2=script, 3=label
@@ -18,7 +21,6 @@ HEADING_COMMENTARY = re.compile(r'^#\s+Commentary:\s+([\d\.-]+)$')
 
 # Regex for content blocks
 CONTENT_BLOCK_START = re.compile(r'^<!--\s*sanskrit:(\w+)\s*-->$')
-CONTENT_BLOCK_END = re.compile(r'^<!--\s*/sanskrit:(\w+)\s*-->$')
 CONTENT_BLOCK_END = re.compile(r'^<!--\s*/sanskrit:(\w+)\s*-->$')
 COMMENTARY_METADATA = re.compile(r'^<!--\s*commentary:\s*(.*?)\s*-->$')
 
@@ -36,7 +38,7 @@ def validate_frontmatter(frontmatter: Dict) -> List[str]:
     errors = []
     required_fields = [
         "grantha_id", "part_num", "canonical_title", "text_type",
-        "language", "structure_levels", "commentaries_metadata"
+        "language", "structure_levels"
     ]
     for field in required_fields:
         if field not in frontmatter:
@@ -44,6 +46,45 @@ def validate_frontmatter(frontmatter: Dict) -> List[str]:
 
     if "part_num" in frontmatter and not isinstance(frontmatter["part_num"], int):
         errors.append("'part_num' must be an integer.")
+
+    # text_type must be one of the known values. Keep in sync with the
+    # canonical enum in grantha.schema.json (a read-only mirror of
+    # grantha-data/formats/schemas/grantha.schema.json — see SCHEMAS.md).
+    valid_text_types = [
+        "upanishad",
+        "smriti",
+        "sutra",
+        "purana",
+        "stotra",
+        "prakarana",
+        "brahma-sutra-bhashya",
+        "gita-bhashya",
+        "other",
+    ]
+    if "text_type" in frontmatter and frontmatter["text_type"] not in valid_text_types:
+        errors.append(
+            f"Invalid text_type: '{frontmatter['text_type']}' "
+            f"(must be one of: {', '.join(valid_text_types)})"
+        )
+
+    # author and commentaries_metadata are mutually exclusive
+    has_author = "author" in frontmatter
+    has_commentaries = "commentaries_metadata" in frontmatter
+    if has_author and has_commentaries:
+        errors.append(
+            "'author' and 'commentaries_metadata' are mutually exclusive; "
+            "a file may carry the original composer (author) or commentary "
+            "edition metadata (commentaries_metadata), but not both."
+        )
+
+    if has_author:
+        author = frontmatter["author"]
+        if not isinstance(author, dict):
+            errors.append("'author' must be a mapping with a 'devanagari' key.")
+        elif "devanagari" not in author or not isinstance(author["devanagari"], str):
+            errors.append("'author.devanagari' is required and must be a string.")
+        elif not author["devanagari"].strip():
+            errors.append("'author.devanagari' must not be empty.")
 
     return errors
 
@@ -80,14 +121,14 @@ def validate_markdown_file(filepath: str) -> List[str]:
         passage_refs = set()
         for i, line in enumerate(lines):
             line = line.strip()
-            for pattern, name in [
-                (HEADING_MANTRA, "Mantra"),
-                (HEADING_PREFATORY, "Prefatory"),
-                (HEADING_CONCLUDING, "Concluding")
+            for pattern, name, ref_group in [
+                (HEADING_MAIN_PASSAGE, "MainPassage", 2),
+                (HEADING_PREFATORY, "Prefatory", 1),
+                (HEADING_CONCLUDING, "Concluding", 1)
             ]:
                 match = pattern.match(line)
                 if match:
-                    ref = match.group(1)
+                    ref = match.group(ref_group)
                     if ref in passage_refs:
                         line_num = i + frontmatter_str.count('\n') + 3
                         errors.append(f"Line {line_num}: Duplicate passage ref '{ref}' found.")
@@ -118,21 +159,21 @@ def validate_markdown_file(filepath: str) -> List[str]:
 
             # Check for headings
             heading_match = None
-            for pattern, name in [
-                (HEADING_MANTRA, "Mantra"),
-                (HEADING_PREFATORY, "Prefatory"),
-                (HEADING_CONCLUDING, "Concluding"),
-                (HEADING_COMMENTARY, "Commentary")
+            for pattern, name, ref_group in [
+                (HEADING_MAIN_PASSAGE, "MainPassage", 2),
+                (HEADING_PREFATORY, "Prefatory", 1),
+                (HEADING_CONCLUDING, "Concluding", 1),
+                (HEADING_COMMENTARY, "Commentary", 1)
             ]:
                 match = pattern.match(line)
                 if match:
-                    heading_match = (match, name)
+                    heading_match = (match, name, ref_group)
                     break
-            
+
             if heading_match:
                 is_valid_line = True
-                match, name = heading_match
-                ref = match.group(1)
+                match, name, ref_group = heading_match
+                ref = match.group(ref_group)
 
                 if name == "Commentary":
                     if not last_line_was_commentary_meta:
