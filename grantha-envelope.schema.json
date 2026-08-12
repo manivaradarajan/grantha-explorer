@@ -21,7 +21,7 @@
     "canonical_title": { "type": "string" },
     "text_type": {
       "type": "string",
-      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "other"]
+      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "other"]
     },
     "language": {
       "type": "string",

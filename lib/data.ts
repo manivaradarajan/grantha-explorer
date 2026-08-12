@@ -61,7 +61,7 @@ export interface Alias {
 
 export interface Commentator {
   devanagari: string;
-  latin?: string;
+  roman?: string;
 }
 
 export interface CommentaryPrefatoryItem {
@@ -128,6 +128,10 @@ export interface GranthaMetadata {
   title_iast: string;
   /** Available editions for multi-edition granthas (grantha-envelope kind). Absent for single-edition. */
   editions?: EditionStub[];
+  /** Category membership, stamped at index time from categories.json text_categories. */
+  categories: string[];
+  /** Devanagari display label for the grantha's text_type, resolved via categories.json text_type_labels. */
+  text_type_display?: string;
 }
 
 /**
@@ -385,6 +389,7 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         title_deva: multiPartMetadata.canonical_title ?? granthaMetadata.title_deva,
         title_iast: multiPartMetadata.canonical_title ?? granthaMetadata.title_iast,
         aliases: multiPartMetadata.aliases || [],
+        categories: granthaMetadata.categories ?? [],
         parts: multiPartMetadata.parts, // Store the list of all parts
         edition_id: resolvedEditionId,
         editions: granthaEditions,
@@ -432,15 +437,30 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
 
       const data: any = await singleFileResponse.json();
 
-      // Convert commentaries from object to array if needed
-      if (data.commentaries && !Array.isArray(data.commentaries)) {
+      // Normalize commentary into the runtime's flat array. The canonical
+      // single-file schema carries `commentary` (singular object); legacy files
+      // may carry `commentaries` (keyed dict or array).
+      if (data.commentary) {
+        data.commentaries = [data.commentary];
+        delete data.commentary;
+      } else if (data.commentaries && !Array.isArray(data.commentaries)) {
         data.commentaries = Object.values(data.commentaries);
+      } else if (!data.commentaries) {
+        data.commentaries = [];
       }
 
       // Stamp the resolved edition identity on the returned object so callers
       // (switcher UI, lazy part loader) know which edition this represents.
       data.edition_id = resolvedEditionId;
       data.editions = granthaEditions;
+      data.categories = granthaMetadata.categories ?? [];
+
+      // Map the canonical_title onto the display title fields, mirroring the
+      // multi-part path: prefer the index's Devanagari/Iast titles, fall back
+      // to the file's canonical_title.
+      data.title = data.canonical_title ?? granthaMetadata.title;
+      data.title_deva = granthaMetadata.title_deva ?? data.canonical_title;
+      data.title_iast = granthaMetadata.title_iast ?? data.canonical_title;
 
       granthaCache.set(cacheKey, data);
       return data;

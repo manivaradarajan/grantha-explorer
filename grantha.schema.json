@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Grantha Data Schema (Single-File Edition)",
-  "description": "Defines a complete grantha edition contained within a single file. Also the source of truth for shared definitions (passage, commentary, commentary_passage, metadata). Versioned using semantic versioning.",
+  "title": "Grantha Data Schema (Complete Single File)",
+  "description": "Defines a complete grantha contained within a single file. Also serves as the source of truth for common definitions. Versioned using semantic versioning.",
   "type": "object",
   "properties": {
     "kind": {
@@ -35,18 +35,31 @@
         "required": ["alias", "scope"]
       }
     },
-    "text_type": {
-      "type": "string",
-      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "other"]
-    },
+    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "other"] },
     "language": { "type": "string", "enum": ["sanskrit", "english"] },
-    "metadata": {
-      "$ref": "#/definitions/metadata",
-      "description": "Provenance metadata. Optional; populate when processing pipeline is known."
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional free-form classification tags. Complement the single-valued text_type with additional categories (e.g., ['prakarana', 'upanishads', 'vedas'])."
     },
+    "author": {
+      "type": "object",
+      "description": "Composer of the mula text.",
+      "properties": {
+        "devanagari": { "type": "string" },
+        "latin": { "type": "string" }
+      },
+      "required": ["devanagari"],
+      "additionalProperties": false
+    },
+    "metadata": { "$ref": "#/definitions/metadata" },
     "structure_levels": {
       "type": "array",
-      "items": { "$ref": "grantha-envelope.schema.json#/definitions/structure_level" }
+      "items": { "$ref": "#/definitions/structure_level" }
+    },
+    "variants_available": {
+      "type": "array",
+      "items": { "type": "string" }
     },
     "prefatory_material": {
       "type": "array",
@@ -109,7 +122,31 @@
         "last_updated"
       ]
     },
-
+    "structure_level": {
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "scriptNames": {
+          "type": "object",
+          "properties": { "devanagari": { "type": "string" }, "roman": { "type": "string" } },
+          "required": ["devanagari"]
+        },
+        "children": {
+          "oneOf": [
+            {
+              "type": "array",
+              "description": "Array of child structure levels (preferred format)",
+              "items": { "$ref": "#/definitions/structure_level" }
+            },
+            {
+              "description": "Single child structure level (legacy format - will be converted to array)",
+              "$ref": "#/definitions/structure_level"
+            }
+          ]
+        }
+      },
+      "required": ["key", "scriptNames"]
+    },
     "passage": {
       "type": "object",
       "properties": {
@@ -121,10 +158,6 @@
         "label": {
           "type": "object",
           "properties": { "devanagari": { "type": "string" } }
-        },
-        "alignsWith": {
-          "type": ["string", "null"],
-          "description": "Reserved for future cross-edition concordance. Set to null."
         },
         "content": {
           "type": "object",
@@ -150,7 +183,6 @@
       },
       "then": { "required": ["label"] }
     },
-
     "commentary": {
       "type": "object",
       "properties": {
@@ -180,7 +212,6 @@
         "passages"
       ]
     },
-
     "commentary_passage": {
       "type": "object",
       "properties": {

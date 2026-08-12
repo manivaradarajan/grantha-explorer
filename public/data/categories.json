@@ -1,0 +1,33 @@
+{
+  "categories": [
+    { "id": "upanishads", "deva": "उपनिषदः", "iast": "Upaniṣadaḥ", "order": 1 },
+    { "id": "ramanuja", "deva": "रामानुजश्रीसूक्तयः", "iast": "Rāmānujaśrīsūktayaḥ", "order": 2 }
+  ],
+  "text_type_labels": {
+    "upanishad": { "deva": "उपनिषत्" },
+    "brahma-sutra-bhashya": { "deva": "ब्रह्मसूत्रभाष्यम्" },
+    "gita-bhashya": { "deva": "गीताभाष्यम्" },
+    "prakarana": { "deva": "प्रकरणम्" },
+    "smriti": { "deva": "स्मृतिः" },
+    "sutra": { "deva": "सूत्रम्" },
+    "purana": { "deva": "पुराणम्" },
+    "stotra": { "deva": "स्तोत्रम्" },
+    "other": { "deva": "ग्रन्थः" }
+  },
+  "text_categories": {
+    "isavasya-upanishad": ["upanishads"],
+    "kena-upanishad": ["upanishads"],
+    "katha-upanishad": ["upanishads"],
+    "prashna-upanishad": ["upanishads"],
+    "mundaka-upanishad": ["upanishads"],
+    "mandukya-upanishad": ["upanishads"],
+    "mandukya-karika": ["upanishads"],
+    "taittiriya-upanishad": ["upanishads"],
+    "aitareya-upanishad": ["upanishads"],
+    "chhandogya-upanishad": ["upanishads"],
+    "brihadaranyaka-upanishad": ["upanishads"],
+    "kaushitaki-upanishad": ["upanishads"],
+    "svetasvatara-upanishad": ["upanishads"],
+    "vedarthasangraha": ["ramanuja"]
+  }
+}

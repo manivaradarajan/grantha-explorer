@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "tsx scripts/generate-granthas-json.ts && npm run validate:integrity",
+    "prebuild": "tsx scripts/generate-granthas-json.ts && npm run validate:data && npm run validate:integrity",
     "build": "next build",
     "lint": "next lint",
     "validate:data": "tsx scripts/validate-data.ts",

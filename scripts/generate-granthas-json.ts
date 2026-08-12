@@ -26,6 +26,7 @@ async function generateGranthasJson() {
     const dataDir = path.join(process.cwd(), 'public', 'data');
     const metaFilePath = path.join(dataDir, 'granthas-meta.json');
     const orderFilePath = path.join(dataDir, 'granthas-order.json');
+    const categoriesFilePath = path.join(dataDir, 'categories.json');
     const libraryDir = path.join(dataDir, 'library');
 
     const [metaFileContents, orderFileContents] = await Promise.all([
@@ -36,6 +37,22 @@ async function generateGranthasJson() {
     const metaData = JSON.parse(metaFileContents);
     const orderedIds = JSON.parse(orderFileContents);
 
+    // Optional categories config. Graceful degradation: when absent or malformed,
+    // every grantha gets categories: [] and text_type_display is omitted.
+    let categoriesConfig: {
+      categories?: { id: string; deva: string; iast: string; order: number }[];
+      text_type_labels?: Record<string, { deva: string }>;
+      text_categories?: Record<string, string[]>;
+    } = {};
+    try {
+      categoriesConfig = JSON.parse(await fs.readFile(categoriesFilePath, 'utf-8'));
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
+      console.warn('[Indexer Warning] categories.json missing — stamping empty categories.');
+    }
+    const textTypeLabels = categoriesConfig.text_type_labels ?? {};
+    const textCategories = categoriesConfig.text_categories ?? {};
+
     // ======================== CHANGE STARTS HERE ========================
 
     // Recursively scan the library directory for both single-file and multi-part granthas.
@@ -44,6 +61,7 @@ async function generateGranthasJson() {
     // into a filesystem path.
     const granthaPathMap = new Map<string, string>(); // Maps grantha_id to relative path
     const granthaEditionsMap = new Map<string, EditionStub[]>(); // grantha_id -> editions[] (grantha-envelope only)
+    const granthaTextTypeMap = new Map<string, string>(); // grantha_id -> text_type (from envelope or flat file)
 
     async function scanDirectory(dir: string, relativePath: string = ''): Promise<void> {
       const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -89,6 +107,9 @@ async function generateGranthasJson() {
             // path in edition stub is relative to library/
             granthaPathMap.set(granthaId, defaultEdition.path);
             granthaEditionsMap.set(granthaId, editions);
+            if (typeof envelopeData['text_type'] === 'string') {
+              granthaTextTypeMap.set(granthaId, envelopeData['text_type'] as string);
+            }
 
             // Also scan sibling .json files in the same directory for other grantha_ids
             // (e.g. a karika file that shares a directory with a multi-edition upanishad)
@@ -108,6 +129,9 @@ async function generateGranthasJson() {
                   if (siblingData.grantha_id && siblingData.grantha_id !== granthaId) {
                     const siblingRelPath = path.join(entryRelativePath, sibling.name);
                     granthaPathMap.set(siblingData.grantha_id, siblingRelPath);
+                    if (typeof siblingData.text_type === 'string') {
+                      granthaTextTypeMap.set(siblingData.grantha_id, siblingData.text_type);
+                    }
                   }
                 } catch {
                   console.warn(
@@ -121,6 +145,9 @@ async function generateGranthasJson() {
             const granthaId = envelopeData['grantha_id'] as string | undefined;
             if (granthaId) {
               granthaPathMap.set(granthaId, entryRelativePath);
+              if (typeof envelopeData['text_type'] === 'string') {
+                granthaTextTypeMap.set(granthaId, envelopeData['text_type'] as string);
+              }
             } else {
               console.warn(
                 `[Indexer Warning] ${envelopePath}: edition-sub-envelope missing grantha_id. Skipping.`
@@ -140,6 +167,9 @@ async function generateGranthasJson() {
             const data = JSON.parse(content);
             if (data.grantha_id) {
               granthaPathMap.set(data.grantha_id, entryRelativePath);
+              if (typeof data.text_type === 'string') {
+                granthaTextTypeMap.set(data.grantha_id, data.text_type);
+              }
             }
           } catch (error) {
             console.warn(`[Indexer Warning] Failed to read grantha_id from ${fullPath}: ${error}. Skipping.`);
@@ -154,16 +184,22 @@ async function generateGranthasJson() {
 
     let granthas = Object.entries(metaData)
       .filter(([id]) => granthaPathMap.has(id))
-      .map(([id, meta]: [string, any]) => ({
-        id,
-        path: granthaPathMap.get(id)!, // Add the relative path to the grantha
-        title: meta.title.iast,
-        title_deva: meta.title.devanagari,
-        title_iast: meta.title.iast,
-        ...(granthaEditionsMap.has(id)
-          ? { editions: granthaEditionsMap.get(id) }
-          : {}),
-      }));
+      .map(([id, meta]: [string, any]) => {
+        const textType = granthaTextTypeMap.get(id);
+        const textTypeDisplay = textType ? textTypeLabels[textType]?.deva : undefined;
+        return {
+          id,
+          path: granthaPathMap.get(id)!, // Add the relative path to the grantha
+          title: meta.title.iast,
+          title_deva: meta.title.devanagari,
+          title_iast: meta.title.iast,
+          categories: textCategories[id] ?? [],
+          ...(textTypeDisplay ? { text_type_display: textTypeDisplay } : {}),
+          ...(granthaEditionsMap.has(id)
+            ? { editions: granthaEditionsMap.get(id) }
+            : {}),
+        };
+      });
 
     granthas.sort((a, b) => {
       const indexA = orderedIds.indexOf(a.id);

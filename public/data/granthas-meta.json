@@ -690,6 +690,15 @@
       ]
     }
   },
+  "vedarthasangraha": {
+    "title": {
+      "devanagari": "वेदार्थसङ्ग्रहः",
+      "iast": "Vedartha Sangraha"
+    },
+    "abbreviations": {
+      "devanagari": []
+    }
+  },
   "vishnu-dharma-purana": {
     "title": {
       "devanagari": "विष्णुधर्मपुराणम्",
