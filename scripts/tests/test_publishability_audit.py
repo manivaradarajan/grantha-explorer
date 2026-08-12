@@ -59,6 +59,28 @@ _PRESERVED_NOT_PUBLISHED = frozenset(
     }
 )
 
+# Pattern-based preserved-not-published rule. Source files matching this are
+# imported-and-validated but deliberately withheld from the BUILD/publication
+# pipeline, preserved as seeds for a future edition. The Śaṅkara bhāṣya series
+# (44 files across 10 upanishads) is currently in this state: it shares each
+# upanishad's grantha_id and would require converting single-edition texts to
+# multi-edition granthas to publish — tracked in DEFERRED.md.
+_SANKARA_NAME_MARKER = "-sankara-"
+
+
+def _is_preserved_not_published(name: str) -> bool:
+    """Return True for files exempt from the BUILD-declared publication gate.
+
+    Args:
+        name: A source filename (e.g. "katha-upanishad-sankara-bhashya-01.md").
+
+    Returns:
+        True when the file is a known preserved-not-published file: either
+        explicitly listed in _PRESERVED_NOT_PUBLISHED or matching the Śaṅkara
+        bhāṣya pattern.
+    """
+    return name in _PRESERVED_NOT_PUBLISHED or _SANKARA_NAME_MARKER in name
+
 
 class TestCollectSourceFiles(unittest.TestCase):
     """BUILD-gated publication discovery in the flat converter path."""
@@ -187,7 +209,12 @@ class TestPublishabilityAudit(unittest.TestCase):
                     continue
                 declared = declared_markdown_files(build.read_text(encoding="utf-8"))
                 present = {p.name for p in src_dir.glob("*.md")}
-                stray = present - declared - {"SOURCE_ISSUES.md"} - _PRESERVED_NOT_PUBLISHED
+                preserved = {
+                    n for n in present if _is_preserved_not_published(n)
+                }
+                stray = (
+                    present - declared - {"SOURCE_ISSUES.md"} - preserved
+                )
                 self.assertEqual(
                     stray,
                     set(),
