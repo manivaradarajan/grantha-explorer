@@ -255,17 +255,7 @@ The validator is also integrated into the project's `pytest` suite. Any changes 
 
 ## 6. Tooling and Scripts
 
-The project includes several Python scripts to manage the conversion and validation of Grantha Markdown files.
-
-### `scripts/convert_granthas.py`
-
-This is the main script for converting a single `.converted.md` file into its corresponding `part_*.json` file. It reads the `part_num` from the frontmatter to determine the output filename.
-
-**Usage:**
-
-```bash
-python scripts/convert_granthas.py <path/to/your/file.converted.md> <output/directory/>
-```
+The project includes several Python scripts to manage the validation of Grantha Markdown files.
 
 ### `scripts/grantha_markdown_validator.py`
 
@@ -277,7 +267,20 @@ As described in the "Validation" section, this script validates a Markdown file 
 python scripts/grantha_markdown_validator.py <path/to/your/file.md>
 ```
 
-### Core Conversion Modules
+### Conversion Tooling
 
--   **`tools/grantha_converter/md_to_json.py`**: This module contains the core logic for parsing a Markdown file and converting it into the final JSON structure. It uses a robust, single-pass strategy based on the explicit headings defined in this specification.
--   **`tools/grantha_converter/json_to_md.py`**: This module handles the reverse process of converting a `part_*.json` file back into a Markdown file. This is primarily used for round-trip testing to ensure data integrity.
+Markdown → JSON conversion and JSON → Markdown round-tripping are owned by the
+**grantha-data** repository (the canonical producer), not by grantha-explorer:
+
+- **`grantha-data/tools/lib/grantha_converter/md_to_json.py`**: Core logic for
+  parsing a Markdown file and converting it into the canonical JSON structure,
+  using a single-pass strategy based on the explicit headings defined in this
+  specification. Emits the kind-discriminated v1.0.0 shape (`kind`,
+  `edition_id`, singular `commentary`).
+- **`grantha-data/tools/lib/grantha_converter/json_to_md.py`**: The reverse
+  process, converting JSON back into Markdown — used for round-trip testing to
+  ensure data integrity.
+
+grantha-explorer consumes the published data; it no longer carries a local copy
+of the converter. The grantha JSON schemas in this repository are read-only
+mirrors of `grantha-data/formats/schemas/` (see `SCHEMAS.md`).
