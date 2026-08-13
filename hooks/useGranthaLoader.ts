@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Commentary, Grantha, GranthaPartContent, loadGrantha, loadGranthaPart } from "@/lib/data";
-import { useState, useEffect, useCallback } from "react";
+import { Commentary, Grantha, loadGrantha, loadGranthaPart } from "@/lib/data";
+import { useState, useCallback } from "react";
 
 interface UseGranthaLoaderReturn {
   grantha: Grantha | undefined;

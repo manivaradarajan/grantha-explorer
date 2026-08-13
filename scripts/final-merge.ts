@@ -31,7 +31,7 @@ async function finalMerge() {
       }
     }
 
-    const sortedMeta: { [key: string]: any } = {};
+    const sortedMeta: Record<string, unknown> = {};
     Object.keys(meta).sort().forEach(key => {
       sortedMeta[key] = meta[key];
     });

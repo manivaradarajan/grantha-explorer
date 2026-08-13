@@ -34,7 +34,7 @@ async function cleanupGranthasMeta() {
 
   // 2. Read granthas-meta.json
   const granthasMetaContent = fs.readFileSync(granthasMetaPath, 'utf-8');
-  let granthasMetaData: Record<string, GranthaMeta> = JSON.parse(granthasMetaContent);
+  const granthasMetaData: Record<string, GranthaMeta> = JSON.parse(granthasMetaContent);
 
   // 3. Ensure all abbreviations are present
   const existingAbbreviations = new Set(Object.keys(granthasMetaData));

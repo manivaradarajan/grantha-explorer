@@ -16,13 +16,6 @@ async function scrollContainer(page, deltaY) {
   }, deltaY);
 }
 
-async function getScrollTop(page) {
-  return page.evaluate(() => {
-    const c = Array.from(document.querySelectorAll('.overflow-y-auto')).find(c => c.className.includes('pb-6'));
-    return c ? { scrollTop: c.scrollTop, scrollHeight: c.scrollHeight, clientHeight: c.clientHeight } : null;
-  });
-}
-
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });

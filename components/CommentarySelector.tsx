@@ -27,6 +27,7 @@ export default function CommentarySelector({
   triggerClassName,
 }: CommentarySelectorProps) {
   const [open, setOpen] = useState(false);
+  const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const listboxRef = useRef<HTMLDivElement | null>(null);
   const optionRefs = useRef<Record<number, HTMLButtonElement | null>>({});
@@ -38,6 +39,11 @@ export default function CommentarySelector({
     editions[0];
 
   const close = useCallback(() => setOpen(false), []);
+
+  const openPicker = useCallback(() => {
+    setTriggerRect(triggerRef.current?.getBoundingClientRect() ?? null);
+    setOpen(true);
+  }, []);
 
   // Close on outside click or Escape; Escape also returns focus to the trigger.
   useEffect(() => {
@@ -90,13 +96,17 @@ export default function CommentarySelector({
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
       if (!open) {
-        setOpen(true);
+        openPicker();
         return;
       }
       moveFocus(currentFocusIndex(), e.key === "ArrowDown" ? 1 : -1);
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      setOpen((o) => !o);
+      if (open) {
+        close();
+      } else {
+        openPicker();
+      }
     }
   };
 
@@ -109,8 +119,6 @@ export default function CommentarySelector({
       optionRefs.current[e.key === "Home" ? 0 : editions.length - 1]?.focus();
     }
   };
-
-  const triggerRect = open ? triggerRef.current?.getBoundingClientRect() : null;
 
   // When the picker opens, land focus on the currently selected option.
   useEffect(() => {
@@ -130,7 +138,7 @@ export default function CommentarySelector({
         aria-expanded={open}
         aria-controls={open ? LISTBOX_ID : undefined}
         aria-label="Switch commentary edition"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => (open ? close() : openPicker())}
         onKeyDown={handleTriggerKeyDown}
         className={
           triggerClassName ??

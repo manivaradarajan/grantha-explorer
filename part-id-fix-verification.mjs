@@ -14,10 +14,6 @@ import { chromium } from '@playwright/test';
 const wait = (ms) => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://localhost:3000';
 
-async function getHash(page) {
-  return page.evaluate(() => window.location.hash);
-}
-
 async function getState(page) {
   return page.evaluate(() => ({
     hash: window.location.hash,

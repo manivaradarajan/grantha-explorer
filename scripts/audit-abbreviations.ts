@@ -5,7 +5,6 @@ const dataDirPath = path.join(process.cwd(), 'public', 'data');
 const metaFilePath = path.join(dataDirPath, 'granthas-meta.json');
 
 const referenceRegex = /\(ref:([^)]+)\)/g;
-const devanagariRegex = /[\u0900-\u097F]/;
 
 async function auditAbbreviations() {
   try {

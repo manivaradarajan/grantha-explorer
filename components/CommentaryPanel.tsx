@@ -41,8 +41,6 @@ export default function CommentaryPanel({
   onEditionChange,
   updateHash,
   availableGranthaIds,
-  granthaIdToDevanagariTitle,
-  granthaIdToLatinTitle,
   hideHeader = false,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];

@@ -42,11 +42,6 @@ export default function BottomSheet({
   const sheetRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Check if user prefers reduced motion
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   useEffect(() => {
     if (isOpen) {
       // Prevent body scroll when sheet is open

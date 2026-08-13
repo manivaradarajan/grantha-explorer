@@ -54,11 +54,9 @@ const VALID_KINDS = new Set<string>([
  * Classification is a direct lookup on data.kind — no field-presence inference.
  *
  * @param data - Parsed JSON content of the file.
- * @param _filePath - Unused; retained for call-site compatibility with the
- *   duck-typing era classifier.
  * @returns The kind string if recognised, or null to skip the file.
  */
-function classifyFile(data: Record<string, unknown>, _filePath: string): FileKind {
+function classifyFile(data: Record<string, unknown>): FileKind {
   const kind = data.kind as string | undefined;
   return (kind !== undefined && VALID_KINDS.has(kind)) ? kind as FileKind : null;
 }
@@ -88,7 +86,7 @@ function getStructureDepth(levels: unknown[]): number {
   return depth;
 }
 
-function checkStructureConsistency(data: Record<string, unknown>, rel: string): string[] {
+function checkStructureConsistency(data: Record<string, unknown>): string[] {
   const errs: string[] = [];
   const levels = data.structure_levels as unknown[] | undefined;
   if (!levels || levels.length === 0) return errs; // schema will catch missing field
@@ -212,7 +210,7 @@ for (const filePath of allFiles) {
   const rel = path.relative(dataDir, filePath);
   const data = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as Record<string, unknown>;
 
-  const kind = classifyFile(data, filePath);
+  const kind = classifyFile(data);
   if (kind === null) continue;
 
   const validate = validatorForKind(kind);
@@ -226,7 +224,7 @@ for (const filePath of allFiles) {
   // Only run structure check for content files that have passages
   const structureErrors =
     kind === 'grantha' || kind === 'grantha-part'
-      ? checkStructureConsistency(data, rel)
+      ? checkStructureConsistency(data)
       : [];
 
   // Edition paths in grantha-level envelopes must resolve under the library.

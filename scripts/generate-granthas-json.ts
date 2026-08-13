@@ -9,6 +9,11 @@ type EditionStub = {
   commentary_title?: string;
 };
 
+type MetaEntry = {
+  title: { devanagari: string; iast: string };
+  abbreviations?: { devanagari: string[] };
+};
+
 async function readEnvelopeJson(
   dir: string
 ): Promise<Record<string, unknown> | null> {
@@ -182,9 +187,9 @@ async function generateGranthasJson() {
 
     // ========================= CHANGE ENDS HERE =========================
 
-    let granthas = Object.entries(metaData)
+    const granthas = Object.entries(metaData as Record<string, MetaEntry>)
       .filter(([id]) => granthaPathMap.has(id))
-      .map(([id, meta]: [string, any]) => {
+      .map(([id, meta]: [string, MetaEntry]) => {
         const textType = granthaTextTypeMap.get(id);
         const textTypeDisplay = textType ? textTypeLabels[textType]?.deva : undefined;
         return {

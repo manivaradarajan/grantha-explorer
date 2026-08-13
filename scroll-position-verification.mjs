@@ -17,19 +17,6 @@ import { chromium } from '@playwright/test';
 const wait = (ms) => new Promise(r => setTimeout(r, ms));
 const BASE = 'http://localhost:3000';
 
-async function getContainer(page) {
-  return page.evaluate(() => {
-    const c = Array.from(document.querySelectorAll('.overflow-y-auto'))
-      .find(el => el.className.includes('pb-6'));
-    if (!c) return null;
-    return {
-      scrollTop: c.scrollTop,
-      scrollHeight: c.scrollHeight,
-      clientHeight: c.clientHeight,
-    };
-  });
-}
-
 async function scrollContainer(page, deltaY) {
   await page.evaluate((dy) => {
     const c = Array.from(document.querySelectorAll('.overflow-y-auto'))

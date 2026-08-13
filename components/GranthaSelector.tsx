@@ -26,6 +26,7 @@ export default function GranthaSelector({
   triggerClassName,
 }: GranthaSelectorProps) {
   const [open, setOpen] = useState(false);
+  const [triggerRect, setTriggerRect] = useState<DOMRect | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const listboxRef = useRef<HTMLDivElement | null>(null);
   const optionRefs = useRef<Record<number, HTMLButtonElement | null>>({});
@@ -34,6 +35,11 @@ export default function GranthaSelector({
   const selectedTitle = selectedGrantha?.title_deva ?? "";
 
   const close = useCallback(() => setOpen(false), []);
+
+  const openPicker = useCallback(() => {
+    setTriggerRect(triggerRef.current?.getBoundingClientRect() ?? null);
+    setOpen(true);
+  }, []);
 
   // Close on outside click or Escape; Escape also returns focus to the trigger.
   useEffect(() => {
@@ -86,13 +92,17 @@ export default function GranthaSelector({
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
       if (!open) {
-        setOpen(true);
+        openPicker();
         return;
       }
       moveFocus(currentFocusIndex(), e.key === "ArrowDown" ? 1 : -1);
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      setOpen((o) => !o);
+      if (open) {
+        close();
+      } else {
+        openPicker();
+      }
     }
   };
 
@@ -105,8 +115,6 @@ export default function GranthaSelector({
       optionRefs.current[e.key === "Home" ? 0 : granthas.length - 1]?.focus();
     }
   };
-
-  const triggerRect = open ? triggerRef.current?.getBoundingClientRect() : null;
 
   // When the picker opens, land focus on the currently selected option so
   // keyboard/screen-reader users always start on the highlighted entry.
@@ -124,7 +132,7 @@ export default function GranthaSelector({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? LISTBOX_ID : undefined}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => (open ? close() : openPicker())}
         onKeyDown={handleTriggerKeyDown}
         className={
           triggerClassName ??

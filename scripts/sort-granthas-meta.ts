@@ -7,7 +7,7 @@ const metaFilePath = path.join(dataDirPath, 'granthas-meta.json');
 async function sortGranthasMeta() {
   try {
     const meta = JSON.parse(fs.readFileSync(metaFilePath, 'utf-8'));
-    const sortedMeta: { [key: string]: any } = {};
+    const sortedMeta: Record<string, unknown> = {};
     Object.keys(meta).sort().forEach(key => {
       sortedMeta[key] = meta[key];
     });

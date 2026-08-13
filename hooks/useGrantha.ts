@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Grantha, GranthaMetadata, getAvailableGranthas } from "@/lib/data";
+import { GranthaMetadata, getAvailableGranthas } from "@/lib/data";
 
 /**
  * Hook to load list of available granthas

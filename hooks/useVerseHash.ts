@@ -1,6 +1,5 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { parseHash, buildHash, UrlState } from "@/lib/hashUtils";
-import { Grantha, GranthaMeta } from "@/lib/data"; // Assuming Grantha and GranthaMeta are exported from lib/data
 
 interface UseVerseHashReturn {
   granthaId: string;
