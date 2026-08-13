@@ -35,7 +35,7 @@
         "required": ["alias", "scope"]
       }
     },
-    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "other"] },
+    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "other"] },
     "language": { "type": "string", "enum": ["sanskrit", "english"] },
     "tags": {
       "type": "array",
@@ -72,6 +72,11 @@
     "concluding_material": {
       "type": "array",
       "items": { "$ref": "#/definitions/passage" }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Optional curated navigation sections (e.g. Raghavachar §1–§16 for Vedārthasaṅgraha). Absent for texts without curated section data.",
+      "items": { "$ref": "#/definitions/section" }
     },
     "commentary": {
       "$ref": "#/definitions/commentary",
@@ -121,6 +126,47 @@
         "quality_notes",
         "last_updated"
       ]
+    },
+    "section_label": {
+      "type": "object",
+      "description": "Bilingual label for a section or subsection.",
+      "properties": {
+        "devanagari": { "type": "string" },
+        "english": { "type": "string" }
+      },
+      "required": ["devanagari", "english"],
+      "additionalProperties": false
+    },
+    "subsection": {
+      "type": "object",
+      "description": "A curated subtopic within a section, spanning a contiguous range of passages.",
+      "properties": {
+        "label": { "$ref": "#/definitions/section_label" },
+        "start_ref": { "type": "string", "description": "ref of the first passage in this subsection." },
+        "end_ref": { "type": "string", "description": "ref of the last passage in this subsection." }
+      },
+      "required": ["label", "start_ref", "end_ref"],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "description": "A curated top-level section spanning a contiguous range of passages.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Short slug identifier (e.g. 'preamble', 's1', 's5a')."
+        },
+        "label": { "$ref": "#/definitions/section_label" },
+        "start_ref": { "type": "string", "description": "ref of the first passage in this section." },
+        "end_ref": { "type": "string", "description": "ref of the last passage in this section." },
+        "subsections": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/subsection" }
+        }
+      },
+      "required": ["id", "label", "start_ref", "end_ref"],
+      "additionalProperties": false
     },
     "structure_level": {
       "type": "object",

@@ -17,6 +17,12 @@ import * as fs from "fs";
 import * as path from "path";
 import {
   Grantha,
+  GranthaSection,
+  Passage,
+  PassageGroup,
+  PrefatoryMaterial,
+  getCuratedActiveSubsection,
+  getCuratedSidebarSections,
   getPassageHierarchy,
   getSidebarFlatModel,
   StructureLevel,
@@ -72,9 +78,10 @@ function loadGrantha(entry: IndexEntry): Grantha {
   const isSingleFile = entry.path.endsWith(".json");
 
   let structure: StructureLevel[];
-  let passages: any[];
-  let prefatory: any[];
-  let concluding: any[];
+  let passages: Passage[];
+  let prefatory: PrefatoryMaterial[];
+  let concluding: PrefatoryMaterial[];
+  let sections: GranthaSection[];
   let parts: { file: string; id: string; first_ref: string }[] = [];
 
   if (isSingleFile) {
@@ -83,13 +90,14 @@ function loadGrantha(entry: IndexEntry): Grantha {
     passages = data.passages ?? [];
     prefatory = data.prefatory_material ?? [];
     concluding = data.concluding_material ?? [];
+    sections = data.sections ?? [];
     parts = [];
   } else {
     const env = JSON.parse(
       fs.readFileSync(path.join(libRoot, "envelope.json"), "utf-8"),
     );
     structure = env.structure_levels ?? [];
-    parts = (env.parts ?? []).map((p: any) => ({
+    parts = (env.parts ?? []).map((p: { file: string; first_ref: string }) => ({
       file: p.file,
       id: (p.first_ref ?? "").split(".")[0],
       first_ref: p.first_ref,
@@ -97,6 +105,7 @@ function loadGrantha(entry: IndexEntry): Grantha {
     passages = [];
     prefatory = [];
     concluding = [];
+    sections = [];
     for (const part of parts) {
       const partData = JSON.parse(
         fs.readFileSync(path.join(libRoot, part.file), "utf-8"),
@@ -119,6 +128,7 @@ function loadGrantha(entry: IndexEntry): Grantha {
     passages: passages,
     concluding_material: concluding,
     commentaries: [],
+    sections,
     parts,
   } as unknown as Grantha;
 }
@@ -217,7 +227,7 @@ function verifyGrantha(entry: IndexEntry) {
 
     // partIds must equal the containing top-level group's partIds
     const hierarchy = getPassageHierarchy(grantha);
-    const topGroupById = new Map<string, any>();
+    const topGroupById = new Map<string, PassageGroup>();
     for (const g of hierarchy.main) topGroupById.set(g.level, g);
 
     for (const s of model.sections) {
@@ -233,11 +243,152 @@ function verifyGrantha(entry: IndexEntry) {
   }
 }
 
+function verifyCuratedSections(entry: IndexEntry) {
+  const grantha = loadGrantha(entry);
+  const curated = getCuratedSidebarSections(grantha);
+
+  if (!grantha.sections || grantha.sections.length === 0) {
+    check(curated == null, `${entry.id}: no sections → curated model null`);
+    return;
+  }
+  if (!curated) {
+    check(false, `${entry.id}: sections present but curated model null`);
+    return;
+  }
+
+  // Same count as the raw sections array.
+  check(
+    curated.length === grantha.sections.length,
+    `${entry.id}: curated section count ${curated.length} vs raw ${grantha.sections.length}`,
+  );
+
+  const orderedPassages = [
+    ...grantha.prefatory_material,
+    ...grantha.passages,
+    ...grantha.concluding_material,
+  ];
+  const refSet = new Set(orderedPassages.map((p) => p.ref));
+
+  // Every curated section: single-segment path, marker/first refs = start_ref,
+  // and a subsections-or-passages body (never both empty).
+  for (const s of curated) {
+    const raw = grantha.sections.find((r) => r.start_ref === s.boundary.firstVerseRef);
+    check(
+      s.boundary.path.length === 1,
+      `${entry.id} ${s.boundary.markerRef}: single-segment path`,
+    );
+    check(
+      s.boundary.markerRef === raw?.start_ref,
+      `${entry.id} ${s.boundary.markerRef}: markerRef == start_ref`,
+    );
+    check(
+      s.boundary.firstVerseRef === raw?.start_ref,
+      `${entry.id} ${s.boundary.markerRef}: firstVerseRef == start_ref`,
+    );
+    check(
+      refSet.has(s.boundary.firstVerseRef),
+      `${entry.id} ${s.boundary.markerRef}: start_ref exists in passages`,
+    );
+    check(
+      s.passages.length > 0 || (s.subsections?.length ?? 0) > 0,
+      `${entry.id} ${s.boundary.markerRef}: body not empty`,
+    );
+    for (const sub of s.subsections ?? []) {
+      check(
+        !!sub.label,
+        `${entry.id} ${s.boundary.markerRef}: subsection has label`,
+      );
+      check(
+        refSet.has(sub.startRef),
+        `${entry.id} ${s.boundary.markerRef}: subsection start_ref exists`,
+      );
+      check(
+        sub.passages.length > 0,
+        `${entry.id} ${s.boundary.markerRef}: subsection spans passages`,
+      );
+      // Invariant: getCuratedSidebarSections already throws on empty
+      // subsections, so the check above is defense-in-depth, not a primary
+      // gate — a bad subsection surfaces as an ERROR from the model builder.
+    }
+  }
+
+  // Every passage (prefatory + main + concluding) appears in exactly one
+  // curated section's passages or subsections — full, gap-free coverage.
+  const seen = new Set<string>();
+  for (const s of curated) {
+    for (const p of s.passages) {
+      if (seen.has(p.ref)) {
+        check(false, `${entry.id} ${s.boundary.markerRef}: duplicate passage ${p.ref}`);
+      }
+      seen.add(p.ref);
+    }
+    for (const sub of s.subsections ?? []) {
+      for (const p of sub.passages) {
+        if (seen.has(p.ref)) {
+          check(false, `${entry.id} ${s.boundary.markerRef}: duplicate passage ${p.ref}`);
+        }
+        seen.add(p.ref);
+      }
+    }
+  }
+  check(
+    seen.size === orderedPassages.length &&
+      orderedPassages.every((p) => seen.has(p.ref)),
+    `${entry.id}: every passage covered exactly once (${seen.size}/${orderedPassages.length})`,
+  );
+
+  // Sections are in document order (ascending by ref).
+  const refOrder = curated.map((s) => s.boundary.firstVerseRef);
+  const sorted = [...refOrder].sort((a, b) => {
+    const na = a.split(".").map(Number);
+    const nb = b.split(".").map(Number);
+    for (let i = 0; i < Math.max(na.length, nb.length); i++) {
+      const diff = (na[i] ?? 0) - (nb[i] ?? 0);
+      if (diff) return diff;
+    }
+    return 0;
+  });
+  check(
+    JSON.stringify(refOrder) === JSON.stringify(sorted),
+    `${entry.id}: curated sections in ascending ref order`,
+  );
+
+  // Active-subsection resolution: every passage inside a subsection resolves
+  // to exactly that subsection; a direct passage of a sub-sectioned section
+  // resolves to undefined (data-gap defense).
+  for (const s of curated) {
+    if (!s.subsections?.length) continue;
+    for (const sub of s.subsections) {
+      for (const p of sub.passages) {
+        const active = getCuratedActiveSubsection(s, p.ref);
+        check(
+          active?.startRef === sub.startRef,
+          `${entry.id} ${s.boundary.markerRef}: ${p.ref} → active subsection ${sub.startRef}`,
+        );
+      }
+    }
+    for (const p of s.passages) {
+      check(
+        getCuratedActiveSubsection(s, p.ref) == null,
+        `${entry.id} ${s.boundary.markerRef}: direct passage ${p.ref} has no active subsection`,
+      );
+    }
+  }
+}
+
 const entries = loadIndex();
 console.log(`Verifying sidebar flat model across ${entries.length} granthas...`);
 for (const entry of entries) {
   try {
     verifyGrantha(entry);
+  } catch (e) {
+    failures += 1;
+    console.log(`\n  ${entry.id}: ERROR ${(e as Error).message}`);
+  }
+}
+for (const entry of entries) {
+  try {
+    verifyCuratedSections(entry);
   } catch (e) {
     failures += 1;
     console.log(`\n  ${entry.id}: ERROR ${(e as Error).message}`);

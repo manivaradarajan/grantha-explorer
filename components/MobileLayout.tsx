@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Grantha, GranthaMetadata, getAllPassagesForNavigation } from "@/lib/data";
+import { Grantha, GranthaMetadata, getAllPassagesForNavigation, hasCommentary } from "@/lib/data";
 import NavigationSidebar from "./NavigationSidebar";
 import TextContent from "./TextContent";
 import CommentaryPanel from "./CommentaryPanel";
@@ -48,6 +48,9 @@ export default function MobileLayout({
   isLoadingPart,
 }: MobileLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
+
+  // Granthas without commentary never render the commentary bottom sheet.
+  const hasCommentarySheet = hasCommentary(grantha);
 
   // Get all passages for navigation
   const allPassages = useMemo(
@@ -156,33 +159,35 @@ export default function MobileLayout({
         />
       </MobileDrawer>
 
-      {/* Commentary Bottom Sheet */}
-      <BottomSheet
-        isOpen={commentaryOpen}
-        onClose={() => updateCommentaryOpen(false)}
-        title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
-        subtitle={grantha.commentaries?.[0]?.commentator?.devanagari}
-        editions={grantha.editions}
-        selectedEditionId={editionId}
-        onEditionChange={onEditionChange}
-        verseRef={selectedRef}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        hasPrevious={hasPrevious}
-        hasNext={hasNext}
-      >
-        <CommentaryPanel
-          grantha={grantha}
-          selectedRef={selectedRef}
+      {/* Commentary Bottom Sheet — only for granthas that have commentary */}
+      {hasCommentarySheet && (
+        <BottomSheet
+          isOpen={commentaryOpen}
+          onClose={() => updateCommentaryOpen(false)}
+          title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
+          subtitle={grantha.commentaries?.[0]?.commentator?.devanagari}
+          editions={grantha.editions}
           selectedEditionId={editionId}
           onEditionChange={onEditionChange}
-          updateHash={updateHash}
-          availableGranthaIds={granthas.map((g) => g.id)}
-          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-          granthaIdToLatinTitle={granthaIdToLatinTitle}
-          hideHeader={true}
-        />
-      </BottomSheet>
+          verseRef={selectedRef}
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          hasPrevious={hasPrevious}
+          hasNext={hasNext}
+        >
+          <CommentaryPanel
+            grantha={grantha}
+            selectedRef={selectedRef}
+            selectedEditionId={editionId}
+            onEditionChange={onEditionChange}
+            updateHash={updateHash}
+            availableGranthaIds={granthas.map((g) => g.id)}
+            granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+            granthaIdToLatinTitle={granthaIdToLatinTitle}
+            hideHeader={true}
+          />
+        </BottomSheet>
+      )}
     </main>
   );
 }

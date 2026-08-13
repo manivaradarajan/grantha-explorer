@@ -6,6 +6,7 @@ import {
   SidebarFlatModel,
   SidebarSection,
   dropLastRefComponent,
+  getCuratedSidebarSections,
   getSidebarFlatModel,
 } from "@/lib/data";
 import GranthaSelector from "./GranthaSelector";
@@ -110,6 +111,11 @@ export default function NavigationSidebar({
   showGranthaSelector = false,
 }: NavigationSidebarProps) {
   const model = useMemo(() => getSidebarFlatModel(grantha), [grantha]);
+  const curatedSections = useMemo(
+    () => getCuratedSidebarSections(grantha),
+    [grantha],
+  );
+  const isCurated = curatedSections != null;
   const uiStrings = getUIStrings();
 
   // --- Pending-scroll state machine ---
@@ -129,6 +135,10 @@ export default function NavigationSidebar({
 
   const [quickJump, setQuickJump] = useState(selectedRef);
   const [jumpError, setJumpError] = useState(false);
+  const [prevSelectedRef, setPrevSelectedRef] = useState(selectedRef);
+  const [prevGranthaIdState, setPrevGranthaIdState] = useState(
+    grantha.grantha_id,
+  );
 
   // Reset ephemeral sync state when the grantha changes (refs can coincide
   // across texts; stale state must not suppress a needed sync).
@@ -138,17 +148,21 @@ export default function NavigationSidebar({
       lastAutoScroll.current = null;
       pendingSectionRef.current = null;
       pendingVerseRef.current = null;
-      setQuickJump(selectedRef);
-      setJumpError(false);
     }
-  }, [grantha.grantha_id, selectedRef]);
+  }, [grantha.grantha_id]);
 
   // Keep the quick-jump display in sync with the selected ref. Deliberately no
   // onBlur revert — the submit handler reads `quickJump` directly.
-  useEffect(() => {
+  if (prevSelectedRef !== selectedRef) {
+    setPrevSelectedRef(selectedRef);
     setQuickJump(selectedRef);
     setJumpError(false);
-  }, [selectedRef]);
+  }
+  if (prevGranthaIdState !== grantha.grantha_id) {
+    setPrevGranthaIdState(grantha.grantha_id);
+    setQuickJump(selectedRef);
+    setJumpError(false);
+  }
 
   // Auto-scroll / pending-section scroll. Explicit-only: fires once per
   // selection change (or when a not-yet-loaded part mounts), never on scroll.
@@ -241,10 +255,12 @@ export default function NavigationSidebar({
   };
 
   /** Select a section from the breadcrumb popup, then load everything from
-   *  the top down to it so the list stays gap-free. */
+   *  the top down to it so the list stays gap-free. Curated sections (single
+   *  file, no parts) skip the part-load step. */
   const handleSectionSelect = (section: SidebarSection) => {
     onVerseSelect(section.boundary.firstVerseRef);
     pendingSectionRef.current = section.boundary.markerRef;
+    if (isCurated) return;
     const targetIdx = model.sections.findIndex(
       (s) => s.boundary.markerRef === section.boundary.markerRef,
     );
@@ -362,15 +378,16 @@ export default function NavigationSidebar({
         ref={listRef}
         grantha={grantha}
         depth={model.depth}
-        sections={model.sections}
+        sections={curatedSections ?? model.sections}
         flatPassages={model.flatPassages}
-        prefatory={model.prefatory}
-        concluding={model.concluding}
+        prefatory={isCurated ? [] : model.prefatory}
+        concluding={isCurated ? [] : model.concluding}
         selectedRef={selectedRef}
         onVerseSelect={onVerseSelect}
         onSectionSelect={handleSectionSelect}
         loadPart={loadPart}
         passageRefs={passageRefs}
+        curated={isCurated}
       />
     </div>
   );

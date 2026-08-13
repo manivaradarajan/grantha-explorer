@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Grantha, GranthaMetadata } from "@/lib/data";
+import { Grantha, GranthaMetadata, hasCommentary } from "@/lib/data";
 import NavigationSidebar from "./NavigationSidebar";
 import TextContent from "./TextContent";
 import CommentaryPanel from "./CommentaryPanel";
@@ -46,6 +46,7 @@ export default function TabletLayout({
   // default state whenever the width permits them.
   const [commentaryCollapsed, setCommentaryCollapsed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [prevGranthaId, setPrevGranthaId] = useState(grantha.grantha_id);
   const [panelSizes, setPanelSizes] = useState<number[]>(() => {
     if (typeof window === "undefined") return [60, 40];
     try {
@@ -56,6 +57,16 @@ export default function TabletLayout({
       return [60, 40];
     }
   });
+
+  // Granthas without commentary never render a commentary panel or toggle.
+  const hasCommentaryPane = hasCommentary(grantha);
+
+  // Commentary is open by default for every new grantha; a manual collapse is
+  // scoped to the current text, not carried across grantha switches.
+  if (prevGranthaId !== grantha.grantha_id) {
+    setPrevGranthaId(grantha.grantha_id);
+    setCommentaryCollapsed(false);
+  }
 
   const handlePanelLayout = (sizes: number[]) => {
     setPanelSizes(sizes);
@@ -121,37 +132,41 @@ export default function TabletLayout({
           <AppWordmark aria-hidden="true" className="mt-5" />
         </div>
 
-        {/* Commentary Toggle Button — optional collapse; visible by default */}
-        <button
-          onClick={() => setCommentaryCollapsed((c) => !c)}
-          className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-medium ${
-            commentaryCollapsed
-              ? "bg-white text-gray-500 hover:bg-gray-100 border border-gray-300"
-              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-          }`}
-          aria-label={commentaryCollapsed ? "Show commentary" : "Hide commentary"}
-          aria-pressed={!commentaryCollapsed}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        {/* Commentary Toggle Button — optional collapse; visible by default.
+            Hidden entirely for granthas with no commentary. */}
+        {hasCommentaryPane && (
+          <button
+            onClick={() => setCommentaryCollapsed((c) => !c)}
+            className={`p-2 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center text-sm font-medium ${
+              commentaryCollapsed
+                ? "bg-white text-gray-500 hover:bg-gray-100 border border-gray-300"
+                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+            }`}
+            aria-label={commentaryCollapsed ? "Show commentary" : "Hide commentary"}
+            aria-pressed={!commentaryCollapsed}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+              />
+            </svg>
+          </button>
+        )}
       </header>
 
-      {/* Content: text alone, or text + commentary side-by-side (default) */}
+      {/* Content: text alone, or text + commentary side-by-side (default).
+          Granthas without commentary always render text alone. */}
       <div className="flex-1 overflow-hidden">
-        {!commentaryCollapsed ? (
+        {hasCommentaryPane && !commentaryCollapsed ? (
           <PanelGroup
             direction="horizontal"
             className="h-full"

@@ -1,12 +1,13 @@
 "use client";
 
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   Grantha,
   Passage,
   PrefatoryMaterial,
   SidebarSection,
+  getCuratedActiveSubsection,
 } from "@/lib/data";
 import { toDevanagariNumerals } from "@/lib/stringUtils";
 import PassageLink from "./PassageLink";
@@ -25,6 +26,11 @@ interface SidebarListProps {
   loadPart: (firstRef: string) => Promise<void>;
   /** Populated by each PassageLink's ref so the parent can auto-scroll. */
   passageRefs: React.MutableRefObject<Record<string, HTMLAnchorElement | null>>;
+  /** True when rendering curated sections (Vedārthasaṅgraha-style). Each
+   *  subsection label renders as a tappable band immediately above its own
+   *  paras, and main passages drop the structure-level prefix
+   *  (showNumberOnly). */
+  curated?: boolean;
 }
 
 interface MenuState {
@@ -36,6 +42,19 @@ interface MenuState {
 }
 
 const LISTBOX_ID = "sidebar-segments-listbox";
+
+// Curated two-band sticky coupling: the section band is h-11 (44px) and the
+// active subsection band sticks at top-11 (44px) to sit flush beneath it.
+const CURATED_SECTION_BAND_HEIGHT = "h-11";
+const CURATED_SUB_BAND_STICKY_TOP = "top-11";
+const CURATED_SUB_BAND_HEIGHT = "h-10";
+// 3rem = 2 × 1.5rem (the container's px-6), so the band bleeds edge-to-edge
+// past the sidebar's horizontal padding.
+const CURATED_FULL_BLEED = "w-[calc(100%+3rem)] -ml-6";
+// Section band must paint above the sticky sub band; the sub band paints
+// above the scrolling paras.
+const CURATED_SECTION_BAND_Z = "z-10";
+const CURATED_SUB_BAND_Z = "z-[9]";
 
 /** Chevron-right breadcrumb separator, matching the dropdown caret family. */
 function ChevronRightIcon() {
@@ -84,6 +103,12 @@ function CaretDownIcon() {
  * segment opens a scoped popup of that level's sibling sections; picking one
  * navigates. A scroll-sentinel lazy-loads the next part file (same pattern
  * as the reading panel's loaderRef).
+ *
+ * Curated mode (`curated` prop, for granthas with curated `sections` data):
+ * the section band holds a popup of all sections, and each subsection renders
+ * as a tappable band that jumps to its first para. The active subsection
+ * (the one containing `selectedRef`) is sticky beneath the section band and
+ * is the only one that expands its paras — a drill-down accordion.
  */
 const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
   function SidebarList(
@@ -99,6 +124,7 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
       onSectionSelect,
       loadPart,
       passageRefs,
+      curated = false,
     },
     ref,
   ) {
@@ -108,7 +134,10 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const optionRefs = useRef<Record<number, HTMLButtonElement | null>>({});
 
-  const closeMenu = useCallback(() => setMenu(null), []);
+  const closeMenu = useCallback(() => {
+    setMenu(null);
+    optionRefs.current = {};
+  }, []);
 
   // Close the popup on outside click, Escape, or the list scrolling. Escape
   // also returns focus to the segment button that opened the popup.
@@ -175,6 +204,7 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
       grantha={grantha}
       isSelected={passage.ref === selectedRef}
       onVerseSelect={onVerseSelect}
+      showNumberOnly={curated}
     />
   );
 
@@ -196,6 +226,9 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
   // heading's ancestor context. For a heading "अध्यायः 3 › ब्राह्मणम् 4":
   //   - tapping अध्यायः (level 0) → distinct adhyayas (deduped)
   //   - tapping ब्राह्मणम् (level 1) → brahmanas within अध्यायः 3
+  // For a curated section band the options are all curated sections (level 0).
+  // Curated subsection bands do not open popups — tapping one jumps directly to
+  // the subsection's first para.
   const openSection =
     menu != null ? sections.find((s) => s.boundary.markerRef === menu.sectionRef) : null;
   const menuOptions =
@@ -215,20 +248,30 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
         })()
       : [];
 
-  // Whether a popup option contains the currently selected verse. At the
-  // top level (adhyaya), an option represents a whole adhyaya but only holds
-  // the first brahmana's passages, so scan all sections under that adhyaya
-  // rather than only the option's own passages. At deeper levels the option
-  // already covers the full scope, so check its passages directly.
+  // Whether a section contains the currently selected verse — used both for
+  // popup-option highlighting and to decide whether a curated section's direct
+  // paras render. At the top level (adhyaya), an option represents a whole
+  // adhyaya but only holds the first brahmana's passages, so scan all sections
+  // under that adhyaya rather than only the option's own passages. At deeper
+  // levels the option already covers the full scope, so check its passages
+  // directly. Curated sections may hold passages inside subsections, so
+  // include those.
+  const sectionContainsSelection = (s: SidebarSection): boolean => {
+    if (s.passages.some((p) => p.ref === selectedRef)) return true;
+    return (s.subsections ?? []).some((sub) =>
+      sub.passages.some((p) => p.ref === selectedRef),
+    );
+  };
+
   const optionContainsSelection = (option: SidebarSection, level: number): boolean => {
     if (level === 0) {
       return sections.some(
         (s) =>
           s.boundary.path[0] === option.boundary.path[0] &&
-          s.passages.some((p) => p.ref === selectedRef),
+          sectionContainsSelection(s),
       );
     }
-    return option.passages.some((p) => p.ref === selectedRef);
+    return sectionContainsSelection(option);
   };
 
   // Focus the option containing the selected verse whenever the popup opens,
@@ -240,7 +283,8 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
     let idx = menuOptions.findIndex((o) => optionContainsSelection(o, menu.level));
     if (idx < 0) {
       idx = menuOptions.findIndex(
-        (o) => o.boundary.path[menu.level] === openSection.boundary.path[menu.level],
+        (o) =>
+          o.boundary.path[menu.level] === openSection.boundary.path[menu.level],
       );
     }
     optionRefs.current[idx >= 0 ? idx : 0]?.focus();
@@ -332,23 +376,38 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
 
   return (
     <div ref={ref} className="flex-1 overflow-y-auto overflow-x-hidden px-6">
-      {prefatory.map((passage) => renderPassage(passage, `pre-${passage.ref}`))}
+      {!curated &&
+        prefatory.map((passage) => renderPassage(passage, `pre-${passage.ref}`))}
 
-      {depth <= 1
-        ? flatPassages.map((passage) => renderPassage(passage, passage.ref))
-        : sections.map((section) => {
+      {curated || depth > 1
+        ? sections.map((section) => {
             const segments = section.boundary.path;
+            const hasSubsections = (section.subsections?.length ?? 0) > 0;
+            // The subsection whose passage range contains the selected ref.
+            // It is the sticky sub band and the only one that expands paras.
+            // (Only relevant in curated mode; structural sections carry no
+            // subsections, so `active` stays undefined there.)
+            const active =
+              curated && hasSubsections
+                ? getCuratedActiveSubsection(section, selectedRef)
+                : undefined;
             return (
-              <div key={section.boundary.markerRef}>
+              <div
+                key={section.boundary.markerRef}
+                className={curated ? "mt-4" : undefined}
+              >
                 {/* Section heading: full labeled path, top-down (e.g.
                     अध्यायः ३ › ब्राह्मणम् १). Each segment is a tappable
                     breadcrumb that opens a popup of that level's sibling
                     sections. Sticky within the scrolling list; native CSS
                     handles the handoff between sections — no JS scroll
-                    tracking. Full-bleed uniform gray band. */}
+                    tracking. Full-bleed uniform gray band. Curated bands get
+                    a fixed h-11 so the subsection band sticks flush below. */}
                 <div
                   data-marker={section.boundary.markerRef}
-                  className="flex items-center gap-1 sticky top-0 z-10 w-[calc(100%+3rem)] -ml-6 px-6 py-2.5 mt-4 mb-1.5 text-base font-bold text-black bg-gray-100"
+                  className={`flex items-center gap-1 sticky top-0 ${CURATED_SECTION_BAND_Z} ${CURATED_FULL_BLEED} px-6 text-base font-bold text-black bg-gray-100 ${
+                    curated ? CURATED_SECTION_BAND_HEIGHT : "py-2.5 mt-4 mb-1.5"
+                  }`}
                 >
                   {segments.map((segment, i) => {
                     // Display index equals the path level: index 0 is the
@@ -394,12 +453,55 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
                     );
                   })}
                 </div>
-                {section.passages.map((passage) => renderPassage(passage, passage.ref))}
+                {/* Curated subsection bands: every subsection of the section is
+                    a visible tappable row that jumps to its first para. The
+                    active one is sticky just below the section band
+                    (top-11 = h-11) and expands its paras directly beneath its
+                    own band; inactive rows scroll normally. */}
+                {curated &&
+                  section.subsections?.map((sub) => {
+                    const isActive = active?.startRef === sub.startRef;
+                    return (
+                      <Fragment key={sub.startRef}>
+                        <button
+                          type="button"
+                          onClick={() => onVerseSelect(sub.startRef)}
+                          aria-current={isActive ? "true" : undefined}
+                          className={`flex items-center ${CURATED_FULL_BLEED} pl-8 pr-6 ${CURATED_SUB_BAND_HEIGHT} text-sm font-semibold text-gray-700 bg-gray-50 text-left ${
+                            isActive
+                              ? `sticky ${CURATED_SUB_BAND_STICKY_TOP} ${CURATED_SUB_BAND_Z}`
+                              : ""
+                          }`}
+                        >
+                          <span className="flex-1 min-w-0 truncate rounded px-1.5 py-0.5 hover:bg-gray-200">
+                            {sub.label}
+                          </span>
+                        </button>
+                        {isActive &&
+                          sub.passages.map((passage) =>
+                            renderPassage(passage, passage.ref),
+                          )}
+                      </Fragment>
+                    );
+                  })}
+                {curated
+                  ? // Direct paras — section intro/preamble content, or paras
+                    // no subsection covers. Kept after all subsection bands;
+                    // only the section owning selectedRef renders them.
+                    sectionContainsSelection(section) &&
+                    section.passages.map((passage) =>
+                      renderPassage(passage, passage.ref),
+                    )
+                  : section.passages.map((passage) =>
+                      renderPassage(passage, passage.ref),
+                    )}
               </div>
             );
-          })}
+          })
+        : flatPassages.map((passage) => renderPassage(passage, passage.ref))}
 
-      {concluding.map((passage) => renderPassage(passage, `con-${passage.ref}`))}
+      {!curated &&
+        concluding.map((passage) => renderPassage(passage, `con-${passage.ref}`))}
 
       <div ref={loaderRef} />
       {menuEl}

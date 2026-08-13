@@ -14,10 +14,14 @@ interface PassageLinkProps {
   grantha: Grantha;
   isSelected: boolean;
   onVerseSelect: (ref: string) => void;
+  /** When true, main passages render with just their numeric ref (e.g. "१"),
+   *  dropping the structure-level prefix (e.g. "पाठः"). Used by curated
+   *  section sidebars. Prefatory/concluding passages keep their labels. */
+  showNumberOnly?: boolean;
 }
 
 const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
-  ({ passage, grantha, isSelected, onVerseSelect }, ref) => {
+  ({ passage, grantha, isSelected, onVerseSelect, showNumberOnly = false }, ref) => {
     if (!passage.ref) {
       // This can happen with bad data. Render nothing to avoid a crash.
       // A better solution might be to log this error.
@@ -33,7 +37,18 @@ const PassageLink = forwardRef<HTMLAnchorElement, PassageLinkProps>(
         return prefatoryPassage.label.devanagari || "प्रस्तावना";
       }
 
-      let deepestStructure = grantha.structure_levels[0];
+      if (showNumberOnly) {
+        const refParts = passage.ref.split(".");
+        const lastRefPart = refParts[refParts.length - 1] ?? "";
+        return toDevanagariNumerals(lastRefPart);
+      }
+
+      const deepest = grantha.structure_levels[0];
+      if (!deepest) {
+        const refParts = passage.ref.split(".");
+        return toDevanagariNumerals(refParts[refParts.length - 1] ?? "");
+      }
+      let deepestStructure = deepest;
       while (deepestStructure.children && deepestStructure.children.length > 0) {
         deepestStructure = deepestStructure.children[0];
       }

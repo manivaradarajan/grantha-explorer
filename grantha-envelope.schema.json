@@ -21,7 +21,7 @@
     "canonical_title": { "type": "string" },
     "text_type": {
       "type": "string",
-      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "other"]
+      "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "other"]
     },
     "language": {
       "type": "string",
@@ -134,7 +134,11 @@
             "required": ["file", "first_ref"],
             "additionalProperties": false
           }
-        }
+        },
+        "metadata": { "type": "object" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "variants_available": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } }
       },
       "required": [
         "kind",
@@ -161,9 +165,17 @@
           "required": ["devanagari"]
         },
         "children": {
-          "type": "array",
-          "description": "Ordered list of child structure levels.",
-          "items": { "$ref": "#/definitions/structure_level" }
+          "oneOf": [
+            {
+              "type": "array",
+              "description": "Array of child structure levels (preferred format)",
+              "items": { "$ref": "#/definitions/structure_level" }
+            },
+            {
+              "description": "Single child structure level (legacy format - will be converted to array)",
+              "$ref": "#/definitions/structure_level"
+            }
+          ]
         }
       },
       "required": ["key", "scriptNames"]

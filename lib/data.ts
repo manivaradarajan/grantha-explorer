@@ -102,6 +102,28 @@ export interface EditionStub {
   isDefault?: boolean;
 }
 
+/** Bilingual label for a curated navigation section or subsection. */
+export interface GranthaSectionLabel {
+  devanagari: string;
+  english: string;
+}
+
+/** A curated subtopic within a section, spanning a contiguous passage range. */
+export interface GranthaSubsection {
+  label: GranthaSectionLabel;
+  start_ref: string;
+  end_ref: string;
+}
+
+/** A curated top-level navigation section spanning a contiguous passage range. */
+export interface GranthaSection {
+  id: string;
+  label: GranthaSectionLabel;
+  start_ref: string;
+  end_ref: string;
+  subsections?: GranthaSubsection[];
+}
+
 export interface Grantha extends GranthaMetadata {
   grantha_id: string;
   canonical_title: string;
@@ -115,6 +137,9 @@ export interface Grantha extends GranthaMetadata {
   passages: Passage[];
   concluding_material: PrefatoryMaterial[]; // Changed to non-optional array
   commentaries: Commentary[]; // Changed to non-optional array
+  /** Optional curated navigation sections (e.g. Raghavachar §1–§16 for
+   *  Vedārthasaṅgraha). Absent for texts without curated section data. */
+  sections?: GranthaSection[];
   parts?: { file: string; id: string; first_ref: string }[];
   /** The edition this grantha object was loaded as. Undefined for single-edition granthas. */
   edition_id?: string;
@@ -346,19 +371,10 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
             }
             const content: GranthaPartContent = await response.json();
 
-            // Resolve commentary into a flat array regardless of source format.
-            // New schema (grantha-part.schema.json): commentary is a single object.
-            // Legacy format: commentaries is a keyed dict or array.
-            let commentariesArray: Commentary[] = [];
-            if (content.commentary) {
-              commentariesArray = [content.commentary];
-            } else if (content.commentaries) {
-              if (Array.isArray(content.commentaries)) {
-                commentariesArray = content.commentaries;
-              } else {
-                commentariesArray = Object.values(content.commentaries);
-              }
-            }
+            const commentariesArray = normalizeCommentaries(
+              content.commentary,
+              content.commentaries,
+            );
 
             return {
               prefatory_material: (content.prefatory_material || []).map(p => ({ ...p, part_id: partInfo.first_ref })),
@@ -435,19 +451,26 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         throw new Error(`Failed to load single-file grantha: ${granthaId}`);
       }
 
-      const data: any = await singleFileResponse.json();
+      // Raw JSON may carry the singular `commentary` (canonical flat schema)
+      // or a legacy plural `commentaries` dict/array; normalize into the
+      // runtime's flat `commentaries` array (absent → []) before stamping it
+      // on the Grantha. `Omit` keeps the union of plural shapes from being
+      // collapsed onto Grantha's already-array `commentaries`.
+      const rawData = (await singleFileResponse.json()) as Omit<
+        Grantha,
+        "commentaries"
+      > & {
+        commentary?: Commentary;
+        commentaries?: Commentary[] | Record<string, Commentary>;
+      };
 
-      // Normalize commentary into the runtime's flat array. The canonical
-      // single-file schema carries `commentary` (singular object); legacy files
-      // may carry `commentaries` (keyed dict or array).
-      if (data.commentary) {
-        data.commentaries = [data.commentary];
-        delete data.commentary;
-      } else if (data.commentaries && !Array.isArray(data.commentaries)) {
-        data.commentaries = Object.values(data.commentaries);
-      } else if (!data.commentaries) {
-        data.commentaries = [];
-      }
+      const data: Grantha = {
+        ...rawData,
+        commentaries: normalizeCommentaries(
+          rawData.commentary,
+          rawData.commentaries,
+        ),
+      };
 
       // Stamp the resolved edition identity on the returned object so callers
       // (switcher UI, lazy part loader) know which edition this represents.
@@ -525,6 +548,14 @@ export function getAllPassagesForNavigation(
   ];
 }
 
+/**
+ * Whether a grantha exposes any commentary. Granthas with no commentary (e.g.
+ * Vedārthasaṅgraha) hide the commentary pane entirely.
+ */
+export function hasCommentary(grantha: Grantha | null | undefined): boolean {
+  return (grantha?.commentaries?.length ?? 0) > 0;
+}
+
 export function getPassageByRef(
   grantha: Grantha,
   ref: string
@@ -562,7 +593,6 @@ export function commentaryPassageForRef(
   if (!match) {
     return undefined;
   }
-  const prefix = `${match[1]}.${match[2]}`;
   const num = parseInt(match[3], 10);
   return passages.find((p) => {
     const range = p.ref.match(/^(\d+)\.(\d+)\.(\d+)-(\d+)$/);
@@ -716,7 +746,12 @@ export interface SidebarBoundary {
 /** One loaded structural section: its boundary marker plus its main passages. */
 export interface SidebarSection {
   boundary: SidebarBoundary;
-  passages: Passage[];
+  /** Passages directly under the section heading. For curated sections this
+   *  includes prefatory/concluding items (e.g. the preamble's 0.1–0.3). */
+  passages: (Passage | PrefatoryMaterial)[];
+  /** Curated subsections (Vedārthasaṅgraha-style). When present, the body
+   *  renders subsection labels + their passages before the direct passages. */
+  subsections?: CuratedSidebarSubsection[];
 }
 
 /** A flattened, accordion-free view of a grantha's hierarchy for the sidebar. */
@@ -823,6 +858,197 @@ export function getSidebarFlatModel(grantha: Grantha): SidebarFlatModel {
     flatPassages,
     concluding: hierarchy.concluding,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Curated sidebar model (Raghavachar §-style sections for Vedārthasaṅgraha)
+// ---------------------------------------------------------------------------
+
+/** One curated subsection in sidebar render shape: label plus its passages. */
+export interface CuratedSidebarSubsection {
+  /** Devanagari subsection label. */
+  label: string;
+  /** Ref of the subsection's first passage (its jump target). */
+  startRef: string;
+  passages: (Passage | PrefatoryMaterial)[];
+}
+
+/**
+ * Normalize a commentary payload into a flat `Commentary[]`.
+ *
+ * Handles the three source shapes: singular `commentary` (canonical flat
+ * schema), plural `commentaries` as an array, and plural `commentaries` as a
+ * keyed object. Absent/null payloads resolve to `[]` so the runtime's
+ * non-optional `Grantha.commentaries` always holds an array.
+ *
+ * Args:
+ *     commentary: The singular commentary (or undefined).
+ *     commentaries: The plural payload (array, keyed object, or undefined).
+ *
+ * Returns:
+ *     The normalized flat array of commentaries.
+ */
+function normalizeCommentaries(
+  commentary: Commentary | undefined,
+  commentaries: Commentary[] | Record<string, Commentary> | undefined,
+): Commentary[] {
+  if (commentary) {
+    return [commentary];
+  }
+  if (!commentaries) {
+    return [];
+  }
+  return Array.isArray(commentaries)
+    ? commentaries
+    : Object.values(commentaries);
+}
+
+/** Map passage refs to their document-order index in the navigation list. */
+function buildRefIndexMap(
+  ordered: (Passage | PrefatoryMaterial)[],
+): Map<string, number> {
+  const map = new Map<string, number>();
+  for (let i = 0; i < ordered.length; i++) {
+    map.set(ordered[i].ref, i);
+  }
+  return map;
+}
+
+/**
+ * Build a flat, section-structured sidebar model from a grantha's curated
+ * `sections` data (see grantha.schema.json). Returns null when the grantha
+ * has no curated sections — callers then fall back to the structure-based
+ * model.
+ *
+ * Passages are assigned to sections and subsections by their ref markers in
+ * document order (prefatory + main + concluding), using start/end refs as
+ * inclusive index bounds. This is robust to dot-notation refs and any gaps;
+ * it never relies on numeric ref arithmetic. Every passage is placed in
+ * exactly one section; a passage inside a section but outside any of its
+ * subsection ranges is placed directly on the section.
+ *
+ * Each curated section becomes a `SidebarSection` with a single-segment
+ * boundary whose path is its Devanagari label, so the sidebar's breadcrumb
+ * popup lists every curated section as a sibling.
+ *
+ * Args:
+ *     grantha: The grantha to model.
+ *
+ * Returns:
+ *     Curated sections in document order as `SidebarSection`s, or null when
+ *     the grantha has no curated sections.
+ *
+ * Raises:
+ *     Error: When a curated start_ref/end_ref doesn't exist in the grantha,
+ *         when a section or subsection spans no passages (empty or
+ *         out-of-order range), or when subsection ranges overlap (a passage
+ *         would render twice).
+ */
+export function getCuratedSidebarSections(
+  grantha: Grantha,
+): SidebarSection[] | null {
+  if (!grantha.sections || grantha.sections.length === 0) {
+    return null;
+  }
+
+  const ordered = getAllPassagesForNavigation(grantha);
+  const indexByRef = buildRefIndexMap(ordered);
+
+  const locate = (ref: string, kind: string, id: string): number => {
+    const idx = indexByRef.get(ref);
+    if (idx === undefined) {
+      throw new Error(
+        `curated ${kind} ${id}: ref "${ref}" not found in grantha passages`,
+      );
+    }
+    return idx;
+  };
+
+  return grantha.sections.map((section) => {
+    const startIdx = locate(section.start_ref, "section", section.id);
+    const endIdx = locate(section.end_ref, "section", section.id);
+    const sectionPassages = ordered.slice(startIdx, endIdx + 1);
+    if (sectionPassages.length === 0) {
+      throw new Error(
+        `curated section ${section.id}: spans no passages (${section.start_ref}..${section.end_ref})`,
+      );
+    }
+
+    const subsections: CuratedSidebarSubsection[] = [];
+    const coveredRefs = new Set<string>();
+
+    for (const sub of section.subsections ?? []) {
+      const subStart = locate(
+        sub.start_ref,
+        "subsection",
+        `${section.id}/${sub.label.devanagari}`,
+      );
+      const subEnd = locate(
+        sub.end_ref,
+        "subsection",
+        `${section.id}/${sub.label.devanagari}`,
+      );
+      const passages = ordered.slice(subStart, subEnd + 1);
+      if (passages.length === 0) {
+        throw new Error(
+          `curated section ${section.id}: subsection "${sub.label.devanagari}" spans no passages (${sub.start_ref}..${sub.end_ref})`,
+        );
+      }
+      for (const p of passages) {
+        if (coveredRefs.has(p.ref)) {
+          throw new Error(
+            `curated section ${section.id}: passage ${p.ref} covered by more than one subsection`,
+          );
+        }
+        coveredRefs.add(p.ref);
+      }
+      subsections.push({
+        label: sub.label.devanagari,
+        startRef: sub.start_ref,
+        passages,
+      });
+    }
+
+    const directPassages = sectionPassages.filter(
+      (p) => !coveredRefs.has(p.ref),
+    );
+
+    return {
+      boundary: {
+        path: [section.label.devanagari],
+        markerRef: section.start_ref,
+        firstVerseRef: section.start_ref,
+        partIds: [],
+      },
+      passages: directPassages,
+      subsections,
+    };
+  });
+}
+
+/**
+ * Resolve the active subsection of a curated section for a selected passage
+ * ref — the subsection whose passage range contains the ref. Returns
+ * undefined when the ref is a direct passage (not covered by any subsection)
+ * or the section has no subsections.
+ *
+ * The active subsection drives the sidebar's drill-down: it is the sticky sub
+ * band and the only one that expands its paras.
+ *
+ * Args:
+ *     section: A curated sidebar section (from getCuratedSidebarSections).
+ *     selectedRef: The currently selected passage ref.
+ *
+ * Returns:
+ *     The containing subsection, or undefined when none applies.
+ */
+export function getCuratedActiveSubsection(
+  section: SidebarSection,
+  selectedRef: string,
+): CuratedSidebarSubsection | undefined {
+  return (section.subsections ?? []).find((sub) =>
+    sub.passages.some((p) => p.ref === selectedRef),
+  );
 }
 
 /**

@@ -15,7 +15,7 @@ import {
   getFirstMainPassageRef,
   validateAndNormalizeHash,
 } from "@/lib/hashUtils";
-import { getAllPassagesForNavigation } from "@/lib/data";
+import { getAllPassagesForNavigation, hasCommentary } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
 
@@ -42,6 +42,19 @@ export default function Home() {
     } catch (e) {
       console.error("Failed to load panel sizes:", e);
       return [20, 50, 30];
+    }
+  });
+
+  // Two-panel sizes for commentary-less granthas (nav | text). Stored under a
+  // separate key so a 2-length array never corrupts the 3-panel "panelSizes".
+  const [twoPanelSizes, setTwoPanelSizes] = useState<number[]>(() => {
+    if (typeof window === "undefined") return [20, 80];
+    try {
+      const saved = localStorage.getItem("panelSizesNoCommentary");
+      return saved ? JSON.parse(saved) : [20, 80];
+    } catch (e) {
+      console.error("Failed to load no-commentary panel sizes:", e);
+      return [20, 80];
     }
   });
 
@@ -201,7 +214,9 @@ export default function Home() {
   // Handle verse selection
   const handleVerseSelect = (ref: string) => {
     if (isMobile) {
-      updateHash(granthaId, ref, editionId, true);
+      // Only open the commentary bottom sheet when the grantha actually has
+      // commentary to show; otherwise the sheet would render its empty state.
+      updateHash(granthaId, ref, editionId, hasCommentary(currentGrantha));
     } else {
       updateHash(granthaId, ref, editionId);
     }
@@ -219,6 +234,16 @@ export default function Home() {
       localStorage.setItem("panelSizes", JSON.stringify(sizes));
     } catch (e) {
       console.error("Failed to save panel sizes:", e);
+    }
+  };
+
+  // Handle panel size changes for the commentary-less (two-panel) layout
+  const handleTwoPanelLayout = (sizes: number[]) => {
+    setTwoPanelSizes(sizes);
+    try {
+      localStorage.setItem("panelSizesNoCommentary", JSON.stringify(sizes));
+    } catch (e) {
+      console.error("Failed to save no-commentary panel sizes:", e);
     }
   };
 
@@ -348,75 +373,113 @@ export default function Home() {
   }
 
   // Render desktop layout for screens >1024px (default 3-column layout)
+  const showCommentaryPane = hasCommentary(currentGrantha);
+
+  const textContentPanel = (
+    <div className="h-full flex flex-col">
+      <div className="shrink-0 border-b border-gray-100 bg-white flex flex-col items-center justify-start pt-5 px-6 min-h-[5.5rem]">
+        <GranthaSelector
+          granthas={granthas}
+          selectedGranthaId={granthaId}
+          onSelect={handleGranthaChange}
+          triggerClassName="inline-flex items-center gap-2 font-serif text-[1.625rem] font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
+        />
+      </div>
+      <div className="flex-1 min-h-0">
+        <TextContent
+          grantha={currentGrantha}
+          selectedRef={verseRef}
+          onVerseSelect={handleVerseSelect}
+          title={currentGrantha.canonical_title}
+          hideTitle
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
+        />
+      </div>
+    </div>
+  );
+
+  const navPanel = (
+    <NavigationSidebar
+      grantha={currentGrantha}
+      selectedRef={verseRef}
+      onVerseSelect={handleVerseSelect}
+      loadPart={loadPart}
+      showWordmark
+    />
+  );
+
   return (
     <main className="h-screen bg-white">
-      <PanelGroup
-        direction="horizontal"
-        className="h-full"
-        onLayout={handlePanelLayout}
-      >
-        {/* Left Navigation Panel */}
-        <Panel defaultSize={panelSizes[0]} minSize={15} maxSize={35}>
-          <NavigationSidebar
-            grantha={currentGrantha}
-            selectedRef={verseRef}
-            onVerseSelect={handleVerseSelect}
-            loadPart={loadPart}
-            showWordmark
+      {showCommentaryPane ? (
+        <PanelGroup
+          direction="horizontal"
+          className="h-full"
+          onLayout={handlePanelLayout}
+        >
+          {/* Left Navigation Panel */}
+          <Panel defaultSize={panelSizes[0]} minSize={15} maxSize={35}>
+            {navPanel}
+          </Panel>
+
+          {/* Resize Handle - invisible but functional */}
+          <PanelResizeHandle
+            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? "bg-blue-500" : ""}`}
+            onDragging={setIsDraggingLeftHandle}
           />
-        </Panel>
 
-        {/* Resize Handle - invisible but functional */}
-        <PanelResizeHandle
-          className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? "bg-blue-500" : ""}`}
-          onDragging={setIsDraggingLeftHandle}
-        />
+          {/* Center Content Panel */}
+          <Panel defaultSize={panelSizes[1]} minSize={30}>
+            {textContentPanel}
+          </Panel>
 
-        {/* Center Content Panel */}
-        <Panel defaultSize={panelSizes[1]} minSize={30}>
-          <div className="h-full flex flex-col">
-            <div className="shrink-0 border-b border-gray-100 bg-white flex flex-col items-center justify-start pt-5 px-6 min-h-[5.5rem]">
-              <GranthaSelector
-                granthas={granthas}
-                selectedGranthaId={granthaId}
-                onSelect={handleGranthaChange}
-                triggerClassName="inline-flex items-center gap-2 font-serif text-[1.625rem] font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
-              />
-            </div>
-            <div className="flex-1 min-h-0">
-              <TextContent
-                grantha={currentGrantha}
-                selectedRef={verseRef}
-                onVerseSelect={handleVerseSelect}
-                title={currentGrantha.canonical_title}
-                hideTitle
-                loadPart={loadPart}
-                isLoadingPart={isLoadingPart}
-              />
-            </div>
-          </div>
-        </Panel>
-
-        {/* Resize Handle */}
-        <PanelResizeHandle
-          className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingRightHandle ? "bg-blue-500" : ""}`}
-          onDragging={setIsDraggingRightHandle}
-        />
-
-        {/* Right Commentary Panel */}
-        <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
-          <CommentaryPanel
-            grantha={currentGrantha}
-            selectedRef={verseRef}
-            selectedEditionId={editionId}
-            onEditionChange={handleEditionChange}
-            updateHash={updateHash}
-            availableGranthaIds={granthas.map((g) => g.id)}
-            granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
-            granthaIdToLatinTitle={granthaIdToLatinTitle}
+          {/* Resize Handle */}
+          <PanelResizeHandle
+            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingRightHandle ? "bg-blue-500" : ""}`}
+            onDragging={setIsDraggingRightHandle}
           />
-        </Panel>
-      </PanelGroup>
+
+          {/* Right Commentary Panel */}
+          <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
+            <CommentaryPanel
+              grantha={currentGrantha}
+              selectedRef={verseRef}
+              selectedEditionId={editionId}
+              onEditionChange={handleEditionChange}
+              updateHash={updateHash}
+              availableGranthaIds={granthas.map((g) => g.id)}
+              granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+              granthaIdToLatinTitle={granthaIdToLatinTitle}
+            />
+          </Panel>
+        </PanelGroup>
+      ) : (
+        <PanelGroup
+          direction="horizontal"
+          className="h-full"
+          onLayout={handleTwoPanelLayout}
+        >
+          {/* Left Navigation Panel */}
+          <Panel
+            defaultSize={twoPanelSizes[0]}
+            minSize={15}
+            maxSize={35}
+          >
+            {navPanel}
+          </Panel>
+
+          {/* Resize Handle */}
+          <PanelResizeHandle
+            className={`w-0.5 bg-gray-100 hover:bg-blue-500 transition-colors ${isDraggingLeftHandle ? "bg-blue-500" : ""}`}
+            onDragging={setIsDraggingLeftHandle}
+          />
+
+          {/* Text Content Panel — fills remaining width */}
+          <Panel defaultSize={twoPanelSizes[1]} minSize={40}>
+            {textContentPanel}
+          </Panel>
+        </PanelGroup>
+      )}
       <InvalidVerseModal
         isOpen={showInvalidVerseModal}
         onClose={handleCloseInvalidVerseModal}
