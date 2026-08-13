@@ -42,12 +42,17 @@ python3 scripts/convert_structured_md.py \
   `scripts/_build_parser.py`).
 - Emits `envelope.json` (`edition-sub-envelope`) + `partN.json`
   (`grantha-part`).
-- `_PASSAGE_KINDS` (`scripts/convert_structured_md.py:152`) is the **hardcoded
-  passage-heading set** — currently `{Mantra, Prefatory, Concluding, Para,
-  Verse}`. Unlike grantha-data's converter, it is NOT derived from
-  `structure_levels`; adding a new kind requires an edit here. (Bug #1.)
-- `_first_main_ref` raises when a part has no main passage; preface-only
-  source files are therefore dropped. (Bug #2.)
+- Passage-heading kinds are derived from each source file's `structure_levels`
+  leaf keys (matching grantha-data's `get_all_structure_keys`) plus the
+  `Prefatory` / `Concluding` framing kinds — see
+  `passage_kinds_for` (`scripts/convert_structured_md.py`). The module-level
+  `_PASSAGE_KINDS` is only a fallback for files without `structure_levels`,
+  so a new passage kind needs no converter edit. (Resolves Bug #1.)
+- `_first_main_ref` falls back to the first prefatory ref, so preface-only
+  parts (e.g. the gitabhashya mangalācaraṇa) are kept in the envelope.
+  (Resolves Bug #2.)
+- Mula extraction stops at the first `# Commentary:` sub-heading so a
+  Sanskrit-wrapped commentary block is not swept into the passage mula.
 
 ### 2.2 Multi-edition — `scripts/import_editions.py`
 
@@ -175,17 +180,14 @@ sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
    `public/data/granthas-order.json`, and `public/data/categories.json`
    (`text_categories`).
 5. `npm run build` (prebuild regenerates `granthas.json` and validates).
-6. If the text uses a new passage heading kind, add it to `_PASSAGE_KINDS`
-   (ideally: make the converter derive kinds from `structure_levels` like the
-   producer — see BUGS.md #1).
+6. New passage-heading kinds need **no** converter edit — kinds are derived
+   from `structure_levels` (see §2.1).
 
 ---
 
 ## 8. Known weaknesses (see also the canonical doc)
 
 - Two parallel converters (grantha-data vs explorer) must be kept in sync.
-- `_PASSAGE_KINDS` is hardcoded; `_first_main_ref` drops preface-only parts
-  (see `structured_md/bhagavad-gita/BUGS.md`).
 - Manual 3-file registry sync before a grantha appears in the UI.
 - `granthas.json` is gitignored and regenerated; a stale committed
   `granthas-meta.json`/`order` silently drops a grantha from the index.
