@@ -11,6 +11,8 @@ export interface UrlState {
    *  comparison view is designed. */
   editionId?: string;
   commentaryOpen?: boolean;
+  /** Active subcommentary IDs (comma-separated). Absent = show none; opt in by ID. */
+  subcommentaryIds?: string;
   script?: "deva" | "roman";
   language?: "both" | "san" | "eng";
   darkMode?: boolean;
@@ -55,6 +57,12 @@ export function parseHash(hash: string): UrlState | null {
       result.commentaryOpen = co === '1';
     }
 
+    // Active subcommentary IDs (comma-separated opt-in list)
+    const sc = params.get("sc");
+    if (sc) {
+      result.subcommentaryIds = sc;
+    }
+
     // Script
     const s = params.get("s");
     if (s === "roman" || s === "deva") {
@@ -96,7 +104,7 @@ export function buildHash(
   state: UrlState,
   includePreferences: boolean = false
 ): string {
-  const { granthaId, verseRef, editionId, commentaryOpen, script, language, darkMode, fontSize } =
+  const { granthaId, verseRef, editionId, commentaryOpen, subcommentaryIds, script, language, darkMode, fontSize } =
     state;
 
   // Build base hash
@@ -113,6 +121,11 @@ export function buildHash(
   // Always include commentary open state if true
   if (commentaryOpen) {
     params.set("co", "1");
+  }
+
+  // Always include active subcommentary IDs if present
+  if (subcommentaryIds) {
+    params.set("sc", subcommentaryIds);
   }
 
   // Only include display preferences if explicitly requested (Share My View)

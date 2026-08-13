@@ -25,6 +25,8 @@ interface MobileLayoutProps {
     editionId?: string
   ) => void;
   updateCommentaryOpen: (isOpen: boolean) => void;
+  activeSubcommentaryIds?: string;
+  onSubcommentaryToggle: (subcommentaryId: string, isOpen: boolean) => void;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
@@ -42,6 +44,8 @@ export default function MobileLayout({
   onEditionChange,
   updateHash,
   updateCommentaryOpen,
+  activeSubcommentaryIds,
+  onSubcommentaryToggle,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
   loadPart,
@@ -181,6 +185,8 @@ export default function MobileLayout({
             selectedEditionId={editionId}
             onEditionChange={onEditionChange}
             updateHash={updateHash}
+            activeSubcommentaryIds={activeSubcommentaryIds}
+            onSubcommentaryToggle={onSubcommentaryToggle}
             availableGranthaIds={granthas.map((g) => g.id)}
             granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
             granthaIdToLatinTitle={granthaIdToLatinTitle}

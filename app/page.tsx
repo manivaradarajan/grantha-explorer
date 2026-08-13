@@ -71,8 +71,10 @@ export default function Home() {
     verseRef,
     editionId,
     commentaryOpen,
+    subcommentaryIds,
     updateHash,
     updateCommentaryOpen,
+    updateSubcommentary,
   } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
 
   // Load current grantha data via the new loader hook
@@ -329,6 +331,8 @@ export default function Home() {
           onEditionChange={handleEditionChange}
           updateHash={updateHash}
           updateCommentaryOpen={updateCommentaryOpen}
+          activeSubcommentaryIds={subcommentaryIds}
+          onSubcommentaryToggle={updateSubcommentary}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
@@ -357,6 +361,8 @@ export default function Home() {
           onVerseSelect={handleVerseSelect}
           onEditionChange={handleEditionChange}
           updateHash={updateHash}
+          activeSubcommentaryIds={subcommentaryIds}
+          onSubcommentaryToggle={updateSubcommentary}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
@@ -447,6 +453,8 @@ export default function Home() {
               selectedEditionId={editionId}
               onEditionChange={handleEditionChange}
               updateHash={updateHash}
+              activeSubcommentaryIds={subcommentaryIds}
+              onSubcommentaryToggle={updateSubcommentary}
               availableGranthaIds={granthas.map((g) => g.id)}
               granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
               granthaIdToLatinTitle={granthaIdToLatinTitle}

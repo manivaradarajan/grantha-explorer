@@ -19,6 +19,8 @@ interface TabletLayoutProps {
   onVerseSelect: (ref: string) => void;
   onEditionChange: (editionId: string) => void;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
+  activeSubcommentaryIds?: string;
+  onSubcommentaryToggle: (subcommentaryId: string, isOpen: boolean) => void;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
@@ -34,6 +36,8 @@ export default function TabletLayout({
   onVerseSelect,
   onEditionChange,
   updateHash,
+  activeSubcommentaryIds,
+  onSubcommentaryToggle,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
   loadPart,
@@ -191,6 +195,8 @@ export default function TabletLayout({
                 selectedEditionId={editionId}
                 onEditionChange={onEditionChange}
                 updateHash={updateHash}
+                activeSubcommentaryIds={activeSubcommentaryIds}
+                onSubcommentaryToggle={onSubcommentaryToggle}
                 availableGranthaIds={granthas.map((g) => g.id)}
                 granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 granthaIdToLatinTitle={granthaIdToLatinTitle}

@@ -6,6 +6,7 @@ interface UseVerseHashReturn {
   verseRef: string;
   editionId?: string;
   commentaryOpen: boolean;
+  subcommentaryIds?: string;
   updateHash: (
     granthaId: string,
     verseRef: string,
@@ -14,6 +15,7 @@ interface UseVerseHashReturn {
     replaceHistory?: boolean
   ) => void; // Reverted to void
   updateCommentaryOpen: (isOpen: boolean) => void;
+  updateSubcommentary: (subcommentaryId: string, isOpen: boolean) => void;
 }
 
 /**
@@ -54,6 +56,7 @@ export function useVerseHash(
         verseRef: parsed.verseRef,
         editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
+        subcommentaryIds: parsed.subcommentaryIds,
       };
     }
 
@@ -93,6 +96,7 @@ export function useVerseHash(
         verseRef: parsed.verseRef,
         editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
+        subcommentaryIds: parsed.subcommentaryIds,
       });
     }
 
@@ -126,12 +130,19 @@ export function useVerseHash(
             ? undefined
             : state.editionId;
 
+    // Switching grantha also resets active subcommentaries: another grantha's
+    // subcommentary IDs are meaningless (resolved per-edition).
+    const newSubcommentaryIds = granthaChanged
+      ? undefined
+      : state.subcommentaryIds;
+
     const potentialUrlState: UrlState = {
       ...state,
       granthaId,
       verseRef,
       editionId: newEditionId,
       commentaryOpen: commentaryOpen ?? state.commentaryOpen,
+      subcommentaryIds: newSubcommentaryIds,
     };
 
     const newHash = buildHash(potentialUrlState);
@@ -159,12 +170,33 @@ export function useVerseHash(
     }
   };
 
+  const updateSubcommentary = (subcommentaryId: string, isOpen: boolean) => {
+    const ids = (state.subcommentaryIds || "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean);
+    const nextIds = isOpen
+      ? Array.from(new Set([...ids, subcommentaryId]))
+      : ids.filter((id) => id !== subcommentaryId);
+
+    const newHash = buildHash({
+      ...state,
+      subcommentaryIds: nextIds.length > 0 ? nextIds.join(",") : undefined,
+    });
+
+    if (typeof window !== "undefined" && window.location.hash !== newHash) {
+      window.location.hash = newHash;
+    }
+  };
+
   return {
     granthaId: state.granthaId,
     verseRef: state.verseRef,
     editionId: state.editionId,
     commentaryOpen: state.commentaryOpen || false,
+    subcommentaryIds: state.subcommentaryIds,
     updateHash,
     updateCommentaryOpen,
+    updateSubcommentary,
   };
 }

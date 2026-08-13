@@ -25,6 +25,10 @@ interface CommentaryPanelProps {
   /** Called when the reader switches the active commentary edition. */
   onEditionChange: (editionId: string) => void;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
+  /** Comma-separated active subcommentary IDs from the URL (?sc=). */
+  activeSubcommentaryIds?: string;
+  /** Toggle a subcommentary's expansion. */
+  onSubcommentaryToggle: (subcommentaryId: string, isOpen: boolean) => void;
   availableGranthaIds: string[];
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
@@ -40,6 +44,8 @@ export default function CommentaryPanel({
   selectedEditionId,
   onEditionChange,
   updateHash,
+  activeSubcommentaryIds,
+  onSubcommentaryToggle,
   availableGranthaIds,
   hideHeader = false,
 }: CommentaryPanelProps) {
@@ -48,6 +54,16 @@ export default function CommentaryPanel({
     (grantha.editions && grantha.editions.length > 1) || false;
 
   const script: Script = grantha.script || "devanagari";
+
+  const activeSubIds = useMemo(() => {
+    const set = new Set<string>();
+    for (const id of (activeSubcommentaryIds || "").split(",")) {
+      if (id.trim()) {
+        set.add(id.trim());
+      }
+    }
+    return set;
+  }, [activeSubcommentaryIds]);
 
   const uiStrings = useMemo(() => {
     const language = (grantha.language || "sanskrit") as Language;
@@ -204,6 +220,52 @@ export default function CommentaryPanel({
   }
 
   const commentary = commentaries[0];
+  const subcommentaries = commentary?.subcommentaries || [];
+
+  const renderSubcommentary = (sub: Commentary) => {
+    const isOpen = activeSubIds.has(sub.commentary_id);
+    const passage = commentaryPassageForRef(sub.passages || [], selectedRef);
+    const hasContent = Boolean(passage && passage.content?.sanskrit?.devanagari);
+
+    return (
+      <div key={sub.commentary_id} className="mt-8">
+        <button
+          type="button"
+          onClick={() => onSubcommentaryToggle(sub.commentary_id, !isOpen)}
+          className="w-full flex items-center gap-2 py-2 text-left border-t border-gray-200 text-gray-500 hover:text-gray-700 transition-colors"
+          aria-expanded={isOpen}
+          aria-controls={`sub-${sub.commentary_id}`}
+        >
+          <span aria-hidden="true" className="text-xs font-mono">
+            {isOpen ? "−" : "+"}
+          </span>
+          <span className="flex flex-col leading-tight">
+            <span className="text-sm font-serif font-semibold">
+              {sub.commentary_title}
+            </span>
+            {sub.commentator?.devanagari && (
+              <span className="text-xs text-gray-400">
+                {sub.commentator.devanagari}
+              </span>
+            )}
+          </span>
+        </button>
+
+        {isOpen && (
+          <div id={`sub-${sub.commentary_id}`} className="mt-2 pl-5">
+            {hasContent ? (
+              renderCommentary(sub)
+            ) : (
+              <div className="text-gray-500 italic">
+                {uiStrings.noCommentaryForVerse}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="h-full flex flex-col">
       {!hideHeader && (
@@ -223,6 +285,7 @@ export default function CommentaryPanel({
       )}
       <div className="flex-1 overflow-y-auto px-6 pb-6">
         {renderCommentary(commentary)}
+        {subcommentaries.map(renderSubcommentary)}
       </div>
     </div>
   );
