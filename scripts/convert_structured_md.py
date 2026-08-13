@@ -146,12 +146,13 @@ _HIDE_RE = re.compile(
 # Known main-passage type names. The set drives the passage-heading regex so
 # that non-Upanishad texts are parsed identically to mantra-based texts.
 # "Para" was added for prakarana texts like the Vedartha Sangraha, whose
-# passages are prose paragraphs rather than mantras. When adding a new
+# passages are prose paragraphs rather than mantras; "Verse" for the Bhagavad
+# Gita (gita-bhashya), whose passages are slokas. When adding a new
 # passage type used by a future grantha, add its PascalCase name here.
-_PASSAGE_KINDS = frozenset({"Mantra", "Prefatory", "Concluding", "Para"})
+_PASSAGE_KINDS = frozenset({"Mantra", "Prefatory", "Concluding", "Para", "Verse"})
 _PASSAGE_KINDS_ALT = "|".join(sorted(_PASSAGE_KINDS))
 
-# Matches passage-level headings (Mantra, Para, Prefatory, Concluding).
+# Matches passage-level headings (Mantra, Para, Verse, Prefatory, Concluding).
 # Group 1: kind, Group 2: ref, Group 3: optional devanagari label.
 _PASSAGE_HEADING_RE = re.compile(
     rf"^# ({_PASSAGE_KINDS_ALT})(?::?\s+)(\S+)"
