@@ -1,7 +1,8 @@
 {
   "categories": [
     { "id": "upanishads", "deva": "उपनिषदः", "iast": "Upaniṣadaḥ", "order": 1 },
-    { "id": "ramanuja", "deva": "रामानुजश्रीसूक्तयः", "iast": "Rāmānujaśrīsūktayaḥ", "order": 2 }
+    { "id": "ramanuja", "deva": "रामानुजश्रीसूक्तयः", "iast": "Rāmānujaśrīsūktayaḥ", "order": 2 },
+    { "id": "gita", "deva": "गीता", "iast": "Gītā", "order": 3 }
   ],
   "text_type_labels": {
     "upanishad": { "deva": "उपनिषत्" },
@@ -12,7 +13,8 @@
     "sutra": { "deva": "सूत्रम्" },
     "purana": { "deva": "पुराणम्" },
     "stotra": { "deva": "स्तोत्रम्" },
-    "other": { "deva": "ग्रन्थः" }
+    "other": { "deva": "ग्रन्थः" },
+    "gita": { "deva": "गीता" }
   },
   "text_categories": {
     "isavasya-upanishad": ["upanishads"],
@@ -28,6 +30,7 @@
     "brihadaranyaka-upanishad": ["upanishads"],
     "kaushitaki-upanishad": ["upanishads"],
     "svetasvatara-upanishad": ["upanishads"],
-    "vedarthasangraha": ["ramanuja"]
+    "vedarthasangraha": ["ramanuja"],
+    "bhagavad-gita": ["gita"]
   }
 }

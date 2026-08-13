@@ -80,6 +80,11 @@
           "additionalProperties": false
         },
         "commentary_title": { "type": "string" },
+        "commentary_of": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Parent commentary_id this edition comments on. Omitted for direct commentaries on the mula."
+        },
         "isDefault": {
           "type": "boolean",
           "description": "Mark exactly one edition stub as default in a multi-edition grantha. Moot for single-edition granthas."

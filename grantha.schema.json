@@ -221,13 +221,25 @@
           }
         }
       },
-      "required": ["ref", "passage_type", "content"],
-      "if": {
-        "properties": {
-          "passage_type": { "enum": ["prefatory", "concluding"] }
+      "required": ["ref", "passage_type"],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "passage_type": { "enum": ["prefatory", "concluding"] }
+            }
+          },
+          "then": { "required": ["label"] }
+        },
+        {
+          "if": {
+            "properties": {
+              "passage_type": { "const": "main" }
+            }
+          },
+          "then": { "required": ["content"] }
         }
-      },
-      "then": { "required": ["label"] }
+      ]
     },
     "commentary": {
       "type": "object",
@@ -241,6 +253,11 @@
             "roman": { "type": "string" }
           },
           "required": ["devanagari"]
+        },
+        "parent_commentary_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "When this commentary is a subcommentary, the commentary_id of its parent commentary. Omitted for direct commentaries on the mula."
         },
         "metadata": {
           "type": "object",

@@ -46,6 +46,7 @@ from convert_structured_md import (
     normalize_structure_levels,
     parse_body,
     parse_frontmatter,
+    passage_kinds_for,
 )
 
 # ---------------------------------------------------------------------------
@@ -277,7 +278,12 @@ def _write_edition(
 
     for idx, src_path in enumerate(files, start=1):
         frontmatter, body_text = parse_frontmatter(src_path)
-        body = parse_body(body_text)
+        heading_kinds, leaf_kinds = passage_kinds_for(frontmatter)
+        body = parse_body(
+            body_text,
+            passage_kinds=heading_kinds,
+            leaf_kinds=leaf_kinds,
+        )
         if first_frontmatter is None:
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])

@@ -515,7 +515,9 @@ export function getPassageFragment(
   passage: Passage | PrefatoryMaterial,
   maxLength: number = 80
 ): string {
-  const text = passage.content.sanskrit.devanagari || '';
+  // A label-only prefatory anchor (e.g. the gitabhashya mangalācaraṇa) has no
+  // mula content — render an empty fragment rather than crashing.
+  const text = passage.content?.sanskrit?.devanagari || '';
 
   // Remove newlines and extra spaces
   const cleanText = text.replace(/\n/g, " ").replace(/\s+/g, " ").trim();

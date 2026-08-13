@@ -760,5 +760,16 @@
         "यजु.आ"
       ]
     }
+  },
+  "bhagavad-gita": {
+    "title": {
+      "devanagari": "श्रीमद्भगवद्गीता",
+      "iast": "Shrimad Bhagavad Gita"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "भ.गी."
+      ]
+    }
   }
 }

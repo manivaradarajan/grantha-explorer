@@ -173,7 +173,7 @@ export default function TextContent({
             getSectionRef(passage.ref) !== getSectionRef(prevPassage.ref);
 
           const isSelected = passage.ref === selectedRef;
-          const sanskritText = stripMarkdown(passage.content.sanskrit?.devanagari);
+          const sanskritText = stripMarkdown(passage.content?.sanskrit?.devanagari);
           const uniqueKey = passage.part_id ? `${passage.part_id}-${passage.ref}` : passage.ref;
 
           return (

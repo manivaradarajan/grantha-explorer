@@ -147,18 +147,89 @@ _HIDE_RE = re.compile(
 # that non-Upanishad texts are parsed identically to mantra-based texts.
 # "Para" was added for prakarana texts like the Vedartha Sangraha, whose
 # passages are prose paragraphs rather than mantras; "Verse" for the Bhagavad
-# Gita (gita-bhashya), whose passages are slokas. When adding a new
-# passage type used by a future grantha, add its PascalCase name here.
+# Gita (gita-bhashya), whose passages are slokas.
+#
+# This set is only a FALLBACK: the converter derives the accepted kinds from
+# each source file's frontmatter `structure_levels` leaf keys (matching the
+# producer's `get_all_structure_keys`), plus the framing kinds `Prefatory` /
+# `Concluding`. Keeping this fallback means files without a `structure_levels`
+# frontmatter still parse, but new granthas no longer require editing here.
 _PASSAGE_KINDS = frozenset({"Mantra", "Prefatory", "Concluding", "Para", "Verse"})
-_PASSAGE_KINDS_ALT = "|".join(sorted(_PASSAGE_KINDS))
 
-# Matches passage-level headings (Mantra, Para, Verse, Prefatory, Concluding).
-# Group 1: kind, Group 2: ref, Group 3: optional devanagari label.
-_PASSAGE_HEADING_RE = re.compile(
-    rf"^# ({_PASSAGE_KINDS_ALT})(?::?\s+)(\S+)"
-    r"(?:\s+\(devanagari:\s*\"([^\"]+)\"\))?",
-    re.MULTILINE,
-)
+# Framing passage kinds that are not structural levels but always accepted.
+_FRAMING_KINDS = frozenset({"Prefatory", "Concluding"})
+
+
+def _collect_structure_keys(levels: object) -> list[str]:
+    """Return all structural level keys from a structure_levels tree.
+
+    Handles both the list form (``[{key, children}]``) and the legacy dict
+    form (``{key, children: {key, ...}}``), matching the producer's
+    ``get_all_structure_keys``.
+
+    Args:
+        levels: The raw ``structure_levels`` value from frontmatter.
+
+    Returns:
+        All level ``key`` values in tree order (outermost first).
+    """
+    if isinstance(levels, dict):
+        levels = [levels]
+    keys: list[str] = []
+    for level in levels or []:
+        if not isinstance(level, dict) or "key" not in level:
+            continue
+        keys.append(level["key"])
+        children = level.get("children")
+        if children:
+            keys.extend(_collect_structure_keys(children))
+    return keys
+
+
+def _lowest_structure_key(levels: object) -> str | None:
+    """Return the leaf (innermost) key of a structure_levels tree.
+
+    Args:
+        levels: The raw ``structure_levels`` value from frontmatter.
+
+    Returns:
+        The innermost level key, or None when the tree is empty/malformed.
+    """
+    keys = _collect_structure_keys(levels)
+    return keys[-1] if keys else None
+
+
+def passage_kinds_for(
+    frontmatter: dict[str, Any],
+) -> tuple[frozenset[str], frozenset[str]]:
+    """Derive the accepted passage-heading kinds for a source file.
+
+    Returns a ``(heading_kinds, leaf_kinds)`` pair:
+    - ``heading_kinds``: every structural level key of ``structure_levels``
+      plus the framing kinds ``Prefatory`` / ``Concluding``. The heading regex
+      matches all of these so interior headings (e.g. ``# Adhikarana N``)
+      segment content correctly without becoming passages.
+    - ``leaf_kinds``: the innermost structural key (the actual passage type,
+      e.g. ``Mantra`` / ``Verse`` / ``Sutra``), plus ``Prefatory`` /
+      ``Concluding``.
+
+    When the frontmatter has no ``structure_levels`` (or yields no keys), falls
+    back to the module-level ``_PASSAGE_KINDS`` for both.
+
+    Args:
+        frontmatter: The parsed YAML frontmatter dict.
+
+    Returns:
+        ``(heading_kinds, leaf_kinds)``.
+    """
+    levels = frontmatter.get("structure_levels")
+    if not levels:
+        return _PASSAGE_KINDS, _PASSAGE_KINDS
+    keys = _collect_structure_keys(levels)
+    leaf = keys[-1] if keys else None
+    if leaf is None:
+        return _PASSAGE_KINDS, _PASSAGE_KINDS
+    return frozenset(keys) | _FRAMING_KINDS, frozenset({leaf}) | _FRAMING_KINDS
 
 # Opening <!-- commentary: {...} --> tag; Group 1 = JSON metadata string.
 _COMMENTARY_OPEN_RE = re.compile(
@@ -215,11 +286,52 @@ _RESIDUAL_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 # Matches any Markdown level-1 heading that is NOT a passage heading and NOT a
 # commentary heading within a passage segment.  Used to detect trailing section
 # breaks (e.g. "# Appendix:") that should terminate the final passage segment
-# rather than being swept into its content.
+# rather than being swept into its content.  Built per-file from the derived
+# passage kinds (see ``parse_body``); this module-level value is the fallback
+# when ``structure_levels`` is absent.
 _SECTION_BREAK_RE = re.compile(
     rf"^# (?!{'|'.join(sorted(_PASSAGE_KINDS))}\b|Commentary:)\S",
     re.MULTILINE,
 )
+
+
+def _passage_heading_re(kinds: frozenset[str]) -> re.Pattern[str]:
+    """Build the passage-heading regex for a set of passage kinds.
+
+    Matches ``# <kind> <ref>`` with an optional ``(devanagari: "...")`` label.
+    Group 1: kind, Group 2: ref, Group 3: optional devanagari label.
+
+    Args:
+        kinds: The accepted passage-heading kinds for the file.
+
+    Returns:
+        A compiled MULTILINE regex.
+    """
+    alt = "|".join(re.escape(k) for k in sorted(kinds))
+    return re.compile(
+        rf"^# ({alt})(?::?\s+)(\S+)"
+        r"(?:\s+\(devanagari:\s*\"([^\"]+)\"\))?",
+        re.MULTILINE,
+    )
+
+
+def _section_break_re(kinds: frozenset[str]) -> re.Pattern[str]:
+    """Build the section-break regex for a set of passage kinds.
+
+    Matches a level-1 heading that is neither a passage heading nor a
+    ``# Commentary:`` heading.
+
+    Args:
+        kinds: The accepted passage-heading kinds for the file.
+
+    Returns:
+        A compiled MULTILINE regex.
+    """
+    alt = "|".join(re.escape(k) for k in sorted(kinds))
+    return re.compile(
+        rf"^# (?!({alt})\b|Commentary:)\S",
+        re.MULTILINE,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -476,17 +588,33 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, Any], str]:
     return fm, body
 
 
-def parse_body(text: str) -> BodyData:
+def parse_body(
+    text: str,
+    passage_kinds: frozenset[str] | None = None,
+    leaf_kinds: frozenset[str] | None = None,
+) -> BodyData:
     """Parse the body of a structured markdown file into structured data.
 
     Args:
         text: Body text (everything after the closing frontmatter ---).
+        passage_kinds: Accepted passage-heading kinds for the file, derived
+            from its ``structure_levels`` (see ``passage_kinds_for``). All
+            kinds are matched by the heading regex (so interior headings
+            segment content), but only leaf/framing kinds become passages.
+            When omitted, falls back to the module-level ``_PASSAGE_KINDS``.
+        leaf_kinds: The subset of ``passage_kinds`` that are actual passages
+            (the innermost structural key plus Prefatory/Concluding). Defaults
+            to ``passage_kinds`` when omitted.
 
     Returns:
         Populated BodyData instance.
     """
+    kinds = passage_kinds if passage_kinds is not None else _PASSAGE_KINDS
+    leaves = leaf_kinds if leaf_kinds is not None else kinds
+    heading_re = _passage_heading_re(kinds)
+    section_break_re = _section_break_re(kinds)
     text = _strip_hide_blocks(text)
-    headings = list(_PASSAGE_HEADING_RE.finditer(text))
+    headings = list(heading_re.finditer(text))
     data = BodyData()
 
     # Extract commentary blocks that appear before the first passage heading
@@ -505,7 +633,7 @@ def parse_body(text: str) -> BodyData:
                     )
 
     for i, match in enumerate(headings):
-        kind = match.group(1)   # any _PASSAGE_KINDS member (e.g. Mantra | Para | Prefatory | Concluding)
+        kind = match.group(1)  # a matched passage-heading kind (structural key or Prefatory/Concluding)
         ref = match.group(2)
         label = match.group(3) or ""
 
@@ -516,11 +644,21 @@ def parse_body(text: str) -> BodyData:
             # For the final passage, stop at any non-passage/non-commentary
             # level-1 heading (e.g. "# Appendix:") to avoid sweeping trailing
             # editorial sections into the last passage's content.
-            section_break = _SECTION_BREAK_RE.search(text, match.end())
+            section_break = section_break_re.search(text, match.end())
             seg_end = section_break.start() if section_break else len(text)
         segment = text[seg_start:seg_end]
 
-        mula_text = _extract_mula_text(segment)
+        # The mula text ends at the first ``# Commentary:`` sub-heading: the
+        # commentary's Sanskrit block (when the commentary prose is wrapped in
+        # one, e.g. the gitabhashya) must not be swept into the passage mula.
+        # ``_extract_commentary_blocks`` still sees the full segment.
+        commentary_heading = _COMMENTARY_SUBHEADING_RE.search(segment)
+        mula_segment = (
+            segment[: commentary_heading.start()]
+            if commentary_heading
+            else segment
+        )
+        mula_text = _extract_mula_text(mula_segment)
         commentary_by_cid = _extract_commentary_blocks(segment)
 
         passage = PassageData(ref=ref, mula_text=mula_text, label_devanagari=label)
@@ -529,7 +667,10 @@ def parse_body(text: str) -> BodyData:
             data.prefatory.append(passage)
         elif kind == "Concluding":
             data.concluding.append(passage)
-        else:
+        elif kind in leaves:
+            # Only the innermost structural key (the leaf passage type, e.g.
+            # Mantra / Verse / Sutra) becomes a main passage; interior headings
+            # (e.g. Adhikarana) only segment their content.
             data.passages.append(passage)
 
         # Use each sub-heading's stated ref as the commentary passage ref.
@@ -629,6 +770,10 @@ def normalize_structure_levels(raw: list[dict[str, Any]]) -> list[dict[str, Any]
 def _build_framing_entry(p: PassageData, passage_type: str) -> dict[str, Any]:
     """Build a prefatory or concluding material entry dict.
 
+    A framing passage may carry no mula text (e.g. a label-only mangalācaraṇa
+    anchor whose content lives in the commentary); ``content`` is then omitted
+    to match the schema's optional content for prefatory/concluding passages.
+
     Args:
         p: The framing PassageData (prefatory or concluding).
         passage_type: Either ``"prefatory"`` or ``"concluding"``.
@@ -636,12 +781,14 @@ def _build_framing_entry(p: PassageData, passage_type: str) -> dict[str, Any]:
     Returns:
         Dict matching the v1.0.0 prefatory_material / concluding_material shape.
     """
-    return {
+    entry: dict[str, Any] = {
         "ref": p.ref,
         "passage_type": passage_type,
         "label": {"devanagari": p.label_devanagari},
-        "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
+    if p.mula_text:
+        entry["content"] = {"sanskrit": {"devanagari": p.mula_text}}
+    return entry
 
 
 def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
@@ -682,13 +829,13 @@ def build_part_json(
     part_num: int = frontmatter["part_num"]
 
     prefatory = [
-        _build_framing_entry(p, "prefatory") for p in body.prefatory if p.mula_text
+        _build_framing_entry(p, "prefatory") for p in body.prefatory
     ]
     passages = [
         _build_main_passage_entry(p) for p in body.passages if p.mula_text
     ]
     concluding = [
-        _build_framing_entry(p, "concluding") for p in body.concluding if p.mula_text
+        _build_framing_entry(p, "concluding") for p in body.concluding
     ]
 
     result: dict[str, Any] = {
@@ -933,18 +1080,27 @@ def _collect_source_files(source_dir: Path) -> list[Path]:
 def _first_main_ref(body: BodyData) -> str:
     """Return the ref of the first main passage in body.
 
+    Falls back to the first prefatory ref when the part has no main passages
+    (matching ``build_part_json``, which drops main passages without mula
+    text), so a preface-only part (e.g. the gitabhashya mangalācaraṇa) is not
+    dropped from the envelope ``parts[].first_ref``.
+
     Args:
         body: Parsed body data.
 
     Returns:
-        The ref string of body.passages[0].
+        The ref string of the first main passage with mula text, or
+        body.prefatory[0].ref.
 
     Raises:
-        ValueError: If body.passages is empty.
+        ValueError: If body has neither a main-with-mula nor prefatory passage.
     """
-    if not body.passages:
-        raise ValueError("Part has no main passages; cannot determine first_ref")
-    return body.passages[0].ref
+    first_main = next((p.ref for p in body.passages if p.mula_text), None)
+    if first_main is not None:
+        return first_main
+    if body.prefatory:
+        return body.prefatory[0].ref
+    raise ValueError("Part has no main or prefatory passages; cannot determine first_ref")
 
 
 def convert_grantha(
@@ -973,7 +1129,12 @@ def convert_grantha(
         print(f"  [{idx}/{len(source_files)}] {src_path.name} → {part_filename}")
 
         frontmatter, body_text = parse_frontmatter(src_path)
-        body = parse_body(body_text)
+        heading_kinds, leaf_kinds = passage_kinds_for(frontmatter)
+        body = parse_body(
+            body_text,
+            passage_kinds=heading_kinds,
+            leaf_kinds=leaf_kinds,
+        )
 
         grantha_id: str = frontmatter["grantha_id"]
         edition_id = grantha_id  # Single-edition: edition_id == grantha_id
