@@ -89,6 +89,10 @@ export interface Commentary {
   metadata?: {
     source_file?: string;
   };
+  /** When this commentary is a subcommentary, the parent commentary_id. */
+  parent_commentary_id?: string;
+  /** Nested subcommentaries resolved at load time. */
+  subcommentaries?: Commentary[];
   passages: CommentaryPassage[];
 }
 
@@ -99,6 +103,8 @@ export interface EditionStub {
   path: string; // Relative path from /data/library/ to the edition file or directory
   commentator?: { devanagari: string; roman?: string };
   commentary_title?: string;
+  /** Parent commentary_id this edition comments on (subcommentary editions). */
+  commentary_of?: string;
   isDefault?: boolean;
 }
 
@@ -433,9 +439,14 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         });
       }
 
-        // Cache and return the partially assembled grantha
-        granthaCache.set(cacheKey, partialGrantha);
-        return partialGrantha;
+      // Nest subcommentaries under their parent commentary.
+      partialGrantha.commentaries = nestSubcommentaries(
+        partialGrantha.commentaries,
+      );
+
+      // Cache and return the partially assembled grantha.
+      granthaCache.set(cacheKey, partialGrantha);
+      return partialGrantha;
 
       } else if (envelopeResponse.status === 404) {
         throw new Error(`Multi-part grantha ${granthaId} directory found but envelope.json is missing`);
@@ -466,9 +477,11 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
 
       const data: Grantha = {
         ...rawData,
-        commentaries: normalizeCommentaries(
-          rawData.commentary,
-          rawData.commentaries,
+        commentaries: nestSubcommentaries(
+          normalizeCommentaries(
+            rawData.commentary,
+            rawData.commentaries,
+          ),
         ),
       };
 
@@ -901,6 +914,48 @@ function normalizeCommentaries(
   return Array.isArray(commentaries)
     ? commentaries
     : Object.values(commentaries);
+}
+
+/**
+ * Nest subcommentaries under their parent commentary in place.
+ *
+ * Entries carrying a `parent_commentary_id` are attached to the matching
+ * parent's `subcommentaries[]` and removed from the top level. Backward
+ * compatible: no `parent_commentary_id` entries yield an unchanged flat
+ * list. Orphaned subcommentaries (parent not present) are kept at top
+ * level so no commentary is ever dropped.
+ *
+ * Args:
+ *     commentaries: The flat list of commentaries.
+ *
+ * Returns:
+ *     The top-level commentaries with subcommentaries nested.
+ */
+function nestSubcommentaries(commentaries: Commentary[]): Commentary[] {
+  const byId = new Map<string, Commentary>();
+  const topLevel: Commentary[] = [];
+  for (const commentary of commentaries) {
+    byId.set(commentary.commentary_id, commentary);
+    topLevel.push(commentary);
+  }
+
+  for (const commentary of commentaries) {
+    const parentId = commentary.parent_commentary_id;
+    if (!parentId) {
+      continue;
+    }
+    const parent = byId.get(parentId);
+    if (!parent) {
+      continue;
+    }
+    parent.subcommentaries = parent.subcommentaries ?? [];
+    parent.subcommentaries.push(commentary);
+    const index = topLevel.indexOf(commentary);
+    if (index !== -1) {
+      topLevel.splice(index, 1);
+    }
+  }
+  return topLevel;
 }
 
 /** Map passage refs to their document-order index in the navigation list. */
