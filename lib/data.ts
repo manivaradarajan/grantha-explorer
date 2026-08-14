@@ -15,6 +15,8 @@ export interface Passage {
   passage_type: "main" | "prefatory" | "concluding";
   label?: string;
   content: Content;
+  /** Standalone mūla speaker attribution (e.g. "सञ्जय उवाच"). Verse-level only. */
+  speaker?: string;
   part_id?: string; // Changed from part_num
 }
 
@@ -26,6 +28,7 @@ export interface PrefatoryMaterial {
     roman?: string;
   };
   content: Content;
+  speaker?: string;
   part_id?: string; // Changed from part_num
 }
 
@@ -75,6 +78,8 @@ export interface CommentaryPrefatoryItem {
 
 export interface CommentaryPassage {
   ref: string;
+  /** The verse lead-in (avatārikā) that introduces this verse's gloss. */
+  intro?: Content;
   prefatory_material?: CommentaryPrefatoryItem[];
   content: {
     sanskrit: SanskritContent;
@@ -91,6 +96,8 @@ export interface Commentary {
   };
   /** When this commentary is a subcommentary, the parent commentary_id. */
   parent_commentary_id?: string;
+  /** The commentary's own opening for this part (whole-work mangala / chapter summary). */
+  intro?: Content;
   /** Nested subcommentaries resolved at load time. */
   subcommentaries?: Commentary[];
   passages: CommentaryPassage[];

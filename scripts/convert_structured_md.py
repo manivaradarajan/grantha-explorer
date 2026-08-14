@@ -110,6 +110,7 @@ class PassageData:
     ref: str
     mula_text: str = ""
     label_devanagari: str = ""
+    speaker: str = ""
 
 
 @dataclass(frozen=True)
@@ -118,6 +119,7 @@ class CommentaryPassage:
 
     ref: str
     text: str
+    intro: str = ""
 
 
 @dataclass
@@ -131,6 +133,10 @@ class BodyData:
     commentary_blocks: dict[str, list[CommentaryPassage]] = field(
         default_factory=dict
     )
+    # Part-level commentary intro (chapter / whole-work): commentary_id -> text.
+    # Set from an intro-only block (no gloss) placed before the first passage
+    # heading or under a # Prefatory: anchor.
+    commentary_intros: dict[str, str] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -283,6 +289,19 @@ _HIDE_OPEN_RE = re.compile(r"<!--\s*hide\b[^>]*-->")
 # data errors inside commentary blocks.
 _RESIDUAL_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 
+# --- v2 block markers (Grantha Markdown v2 spec) -----------------------------
+_INTRO_OPEN_RE = re.compile(r"<!--\s*intro\s*-->")
+_INTRO_CLOSE_RE = re.compile(r"<!--\s*/intro\s*-->")
+_SPEAKER_OPEN_RE = re.compile(r"<!--\s*speaker\s*-->")
+_SPEAKER_CLOSE_RE = re.compile(r"<!--\s*/speaker\s*-->")
+# A balanced verse-number block (v2 form or legacy hide form) including its
+# text; stripped from canonical content (the number is editorial metadata).
+_VERSE_NUMBER_BLOCK_RE = re.compile(
+    r"<!--\s*(?:hide\s+type:)?verse-number\s*-->.*?"
+    r"<!--\s*/(?:hide\s+type:)?verse-number\s*-->",
+    re.DOTALL,
+)
+
 # Matches any Markdown level-1 heading that is NOT a passage heading and NOT a
 # commentary heading within a passage segment.  Used to detect trailing section
 # breaks (e.g. "# Appendix:") that should terminate the final passage segment
@@ -348,6 +367,27 @@ def _strip_hide_blocks(text: str) -> str:
         Text with all hide blocks removed.
     """
     return _HIDE_RE.sub("", text)
+
+
+def _extract_mula_and_speaker(segment: str) -> tuple[str, str]:
+    """Extract a leading v2 ``<!-- speaker -->`` and the remaining mula text.
+
+    Args:
+        segment: A passage's mula segment (may include a leading speaker block).
+
+    Returns:
+        ``(mula_text, speaker)`` — speaker is "" when absent.
+    """
+    speaker_match = re.match(
+        r"\s*<!--\s*speaker\s*-->(.*?)<!--\s*/speaker\s*-->\s*",
+        segment,
+        flags=re.DOTALL,
+    )
+    speaker = ""
+    if speaker_match is not None:
+        speaker = speaker_match.group(1).strip()
+        segment = segment[speaker_match.end():]
+    return _extract_mula_text(segment), speaker
 
 
 def _extract_mula_text(segment: str) -> str:
@@ -421,7 +461,41 @@ def _extract_mula_text(segment: str) -> str:
         if text:
             results.append(text)
 
-    return "\n\n".join(results)
+    if results:
+        return "\n\n".join(results)
+
+    # v2 bare-content fallback: no `<!-- sanskirt:devanagari -->` blocks.
+    # The segment is bare Devanagari (plus a leading speaker block and inline
+    # verse-number/hide blocks), already truncated at the first commentary
+    # marker by the caller. Strip verse-number and editorial blocks and
+    # residual comment tags; what remains is the mula.
+    bare = _VERSE_NUMBER_BLOCK_RE.sub("", segment)
+    bare = _FULL_HIDE_BLOCK_RE.sub("", bare)
+    bare = _RESIDUAL_HTML_COMMENT_RE.sub("", bare).strip()
+    return bare
+
+
+def _split_commentary_intro(text: str) -> tuple[str, str]:
+    """Split a leading ``<!-- intro -->…<!-- /intro -->`` block off commentary text.
+
+    An unclosed ``<!-- intro -->`` is a **syntax error**: the caller aborts
+    rather than emitting intro-only JSON.
+
+    Args:
+        text: A commentary block's inner text (tags still present).
+
+    Returns:
+        ``(intro, gloss)`` — intro is "" when absent.
+    """
+    open_match = _INTRO_OPEN_RE.search(text)
+    if open_match is None:
+        return "", text
+    close_match = _INTRO_CLOSE_RE.search(text, open_match.end())
+    if close_match is None:
+        raise ValueError("Unclosed <!-- intro --> block (no <!-- /intro -->)")
+    intro = text[open_match.end(): close_match.start()]
+    gloss = text[close_match.end():]
+    return intro, gloss
 
 
 def _split_commentary_subheadings(
@@ -495,6 +569,7 @@ def _merge_duplicate_ref_passages(
             merged[idx] = CommentaryPassage(
                 ref=cp.ref,
                 text=existing.text + "\n\n" + cp.text,
+                intro=existing.intro or cp.intro,
             )
         else:
             seen[cp.ref] = len(merged)
@@ -549,10 +624,19 @@ def _extract_commentary_blocks(
         content = segment[content_start:content_end]
 
         for heading_ref, text in _split_commentary_subheadings(content):
+            # Split a leading v2 <!-- intro -->…<!-- /intro --> block first
+            # (the tags would otherwise be stripped below and the intro text
+            # merged into the gloss).
+            intro, gloss = _split_commentary_intro(text)
             # Strip any stray orphaned HTML comment tags (source data errors).
-            cleaned = _RESIDUAL_HTML_COMMENT_RE.sub("", text).strip()
-            if cleaned:
-                grouped.setdefault(cid, []).append((heading_ref, cleaned))
+            cleaned_gloss = _RESIDUAL_HTML_COMMENT_RE.sub("", gloss).strip()
+            cleaned_intro = (
+                _RESIDUAL_HTML_COMMENT_RE.sub("", intro).strip() if intro else ""
+            )
+            if cleaned_gloss or cleaned_intro:
+                grouped.setdefault(cid, []).append(
+                    (heading_ref, cleaned_gloss, cleaned_intro)
+                )
 
     return grouped
 
@@ -626,11 +710,14 @@ def parse_body(
     if headings:
         preamble = text[: headings[0].start()]
         for cid, sub_passages in _extract_commentary_blocks(preamble).items():
-            for heading_ref, content in sub_passages:
+            for heading_ref, gloss, intro in sub_passages:
                 if heading_ref is not None:
                     data.commentary_blocks.setdefault(cid, []).append(
-                        CommentaryPassage(ref=heading_ref, text=content)
+                        CommentaryPassage(ref=heading_ref, text=gloss, intro=intro)
                     )
+                elif intro and not gloss:
+                    # Heading-less preamble intro-only block: the chapter intro.
+                    data.commentary_intros[cid] = intro
 
     for i, match in enumerate(headings):
         kind = match.group(1)  # a matched passage-heading kind (structural key or Prefatory/Concluding)
@@ -648,20 +735,26 @@ def parse_body(
             seg_end = section_break.start() if section_break else len(text)
         segment = text[seg_start:seg_end]
 
-        # The mula text ends at the first ``# Commentary:`` sub-heading: the
-        # commentary's Sanskrit block (when the commentary prose is wrapped in
-        # one, e.g. the gitabhashya) must not be swept into the passage mula.
+        # The mula text ends at the first ``# Commentary:`` sub-heading (v1) or
+        # the first v2 ``<!-- commentary: -->`` open tag: the commentary's text
+        # must not be swept into the passage mula.
         # ``_extract_commentary_blocks`` still sees the full segment.
         commentary_heading = _COMMENTARY_SUBHEADING_RE.search(segment)
+        commentary_open = _COMMENTARY_OPEN_RE.search(segment)
+        cut_positions = [
+            m.start()
+            for m in (commentary_heading, commentary_open)
+            if m is not None
+        ]
         mula_segment = (
-            segment[: commentary_heading.start()]
-            if commentary_heading
-            else segment
+            segment[: min(cut_positions)] if cut_positions else segment
         )
-        mula_text = _extract_mula_text(mula_segment)
+        mula_text, speaker = _extract_mula_and_speaker(mula_segment)
         commentary_by_cid = _extract_commentary_blocks(segment)
 
-        passage = PassageData(ref=ref, mula_text=mula_text, label_devanagari=label)
+        passage = PassageData(
+            ref=ref, mula_text=mula_text, label_devanagari=label, speaker=speaker
+        )
 
         if kind == "Prefatory":
             data.prefatory.append(passage)
@@ -678,10 +771,16 @@ def parse_body(
         # is present (heading_ref is None) — the fallback handles the small
         # number of blocks in the corpus that carry no explicit heading.
         for cid, sub_passages in commentary_by_cid.items():
-            for heading_ref, content in sub_passages:
+            for heading_ref, gloss, intro in sub_passages:
+                if not gloss and intro:
+                    # Intro-only block: a # Prefatory: anchor (or a main
+                    # heading whose mula text is absent) — hoist to the
+                    # part-level commentary.intro.
+                    data.commentary_intros[cid] = intro
+                    continue
                 passage_ref = heading_ref if heading_ref is not None else ref
                 data.commentary_blocks.setdefault(cid, []).append(
-                    CommentaryPassage(ref=passage_ref, text=content)
+                    CommentaryPassage(ref=passage_ref, text=gloss, intro=intro)
                 )
 
     return data
@@ -786,6 +885,8 @@ def _build_framing_entry(p: PassageData, passage_type: str) -> dict[str, Any]:
         "passage_type": passage_type,
         "label": {"devanagari": p.label_devanagari},
     }
+    if p.speaker:
+        entry["speaker"] = p.speaker
     if p.mula_text:
         entry["content"] = {"sanskrit": {"devanagari": p.mula_text}}
     return entry
@@ -800,11 +901,14 @@ def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
     Returns:
         Dict matching the v1.0.0 passages entry shape.
     """
-    return {
+    entry: dict[str, Any] = {
         "ref": p.ref,
         "passage_type": "main",
         "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
+    if p.speaker:
+        entry["speaker"] = p.speaker
+    return entry
 
 
 def build_part_json(
@@ -862,22 +966,32 @@ def build_part_json(
         raw_blocks = body.commentary_blocks.get(target_commentary_id, [])
         # Merge any duplicate-ref blocks arising from split commentary tags in source.
         cid_blocks = _merge_duplicate_ref_passages(raw_blocks)
-        if meta and cid_blocks:
-            commentary_passages = [
-                {
+        part_intro = body.commentary_intros.get(target_commentary_id, "")
+        if meta and (cid_blocks or part_intro):
+            commentary_passages: list[dict[str, Any]] = []
+            for cp in cid_blocks:
+                if not cp.text:
+                    continue
+                entry: dict[str, Any] = {
                     "ref": cp.ref,
                     "content": {"sanskrit": {"devanagari": cp.text}},
                 }
-                for cp in cid_blocks
-                if cp.text
-            ]
-            if commentary_passages:
-                result["commentary"] = {
+                if cp.intro:
+                    entry["intro"] = {"sanskrit": {"devanagari": cp.intro}}
+                commentary_passages.append(entry)
+            if commentary_passages or part_intro:
+                commentary: dict[str, Any] = {
                     "commentary_id": target_commentary_id,
                     "commentary_title": meta.get("commentary_title", ""),
                     "commentator": meta.get("commentator", {}),
-                    "passages": commentary_passages,
                 }
+                if part_intro:
+                    commentary["intro"] = {
+                        "sanskrit": {"devanagari": part_intro}
+                    }
+                if commentary_passages:
+                    commentary["passages"] = commentary_passages
+                result["commentary"] = commentary
 
     return result
 
