@@ -201,6 +201,10 @@
           "type": "string",
           "enum": ["prefatory", "main", "concluding"]
         },
+        "speaker": {
+          "type": "string",
+          "description": "The standalone mula speaker attribution of a verse (e.g. 'सञ्जय उवाच', 'श्रीभगवानुवाच'). Set from a <!-- speaker --> block; verse-level only."
+        },
         "label": {
           "type": "object",
           "properties": { "devanagari": { "type": "string" } }
@@ -263,6 +267,10 @@
           "type": "object",
           "properties": { "source_file": { "type": "string" } }
         },
+        "intro": {
+          "$ref": "#/definitions/commentary_content",
+          "description": "The commentary's own opening prose for this part: whole-work mangalacarana on part 1, chapter summary on other parts. Set from an intro-only commentary block placed before the first verse or under a # Prefatory: anchor."
+        },
         "passages": {
           "type": "array",
           "items": { "$ref": "#/definitions/commentary_passage" }
@@ -275,10 +283,28 @@
         "passages"
       ]
     },
+    "commentary_content": {
+      "type": "object",
+      "properties": {
+        "sanskrit": {
+          "type": "object",
+          "properties": {
+            "devanagari": { "type": "string" },
+            "roman": { "type": ["string", "null"] },
+            "kannada": { "type": ["string", "null"] }
+          }
+        },
+        "english": { "type": "string" }
+      }
+    },
     "commentary_passage": {
       "type": "object",
       "properties": {
         "ref": { "type": "string" },
+        "intro": {
+          "$ref": "#/definitions/commentary_content",
+          "description": "The verse lead-in (avatārikā) that introduces this verse's gloss. Set from an <!-- intro --> child of the verse's commentary block."
+        },
         "prefatory_material": {
           "type": "array",
           "items": {
@@ -304,18 +330,7 @@
           }
         },
         "content": {
-          "type": "object",
-          "properties": {
-            "sanskrit": {
-              "type": "object",
-              "properties": {
-                "devanagari": { "type": ["string", "null"] },
-                "roman": { "type": ["string", "null"] },
-                "kannada": { "type": ["string", "null"] }
-              }
-            },
-            "english": { "type": "string" }
-          }
+          "$ref": "#/definitions/commentary_content"
         }
       },
       "required": ["ref", "content"]
