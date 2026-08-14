@@ -167,6 +167,28 @@ export default function CommentaryPanel({
     const passage = commentaryPassageForRef(commentary.passages || [], selectedRef);
 
     if (!passage) {
+      // Whole-work opening (mangalacarana) lives on the part-level commentary
+      // intro, keyed to the preface's label-only prefatory anchor (e.g. "0.1").
+      const prefaceAnchor = (grantha.prefatory_material ?? []).find(
+        (p) => p.ref === selectedRef,
+      );
+      if (prefaceAnchor && commentary.intro) {
+        const introHtml = DOMPurify.sanitize(
+          (commentary.intro.sanskrit?.devanagari || "")
+            .replace(/^#### (.+)$/gm, '<em class="text-base font-normal italic text-gray-500">$1</em>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
+        );
+        return (
+          <div className="mb-8">
+            <div className="text-sm text-gray-600 italic mb-3">
+              {prefaceAnchor.label.devanagari}
+            </div>
+            <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
+              {renderCommentaryWithReferences(introHtml)}
+            </div>
+          </div>
+        );
+      }
       return (
         <div className="text-gray-500 italic">
           {uiStrings.noCommentaryForVerse}

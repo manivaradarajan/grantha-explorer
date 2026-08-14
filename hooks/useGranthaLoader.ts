@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Commentary, Grantha, loadGrantha, loadGranthaPart } from "@/lib/data";
+import { Commentary, Grantha, loadGrantha, loadGranthaPart, sortPassagesByRef } from "@/lib/data";
 import { useState, useCallback } from "react";
 
 interface UseGranthaLoaderReturn {
@@ -74,7 +74,7 @@ export function useGranthaLoader(granthaId: string, editionId?: string): UseGran
           const newPassages = partContent.passages
             .filter(p => !existingRefs.has(p.ref))
             .map(p => ({ ...p, part_id: partInfo.first_ref }));
-          newData.passages = [...newData.passages, ...newPassages];
+          newData.passages = sortPassagesByRef([...newData.passages, ...newPassages]);
         }
 
         // Merge prefatory material, filtering out duplicates
@@ -110,6 +110,7 @@ export function useGranthaLoader(granthaId: string, editionId?: string): UseGran
             c => c.commentary_id === commentaryPart.commentary_id
           );
           if (existingCommentary) {
+            existingCommentary.passages = existingCommentary.passages ?? [];
             const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
             const newCommentaryPassages = commentaryPart.passages.filter(p => !existingCommentaryRefs.has(p.ref));
             existingCommentary.passages.push(...newCommentaryPassages);

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useCallback } from "react";
 import { Spin } from "antd";
-import { Grantha, getAllPassagesForNavigation } from "@/lib/data";
+import { Grantha, PrefatoryMaterial, getAllPassagesForNavigation } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { stripMarkdown } from "@/lib/stringUtils";
 
@@ -174,6 +174,13 @@ export default function TextContent({
 
           const isSelected = passage.ref === selectedRef;
           const sanskritText = stripMarkdown(passage.content?.sanskrit?.devanagari);
+          // Prefatory/concluding passages carry a label (e.g. the mangalācaraṇam
+          // anchor "मङ्गलाचरणम्") instead of mula content. Render it as a
+          // heading so the entry is visible rather than an empty gap.
+          const labelText =
+            passage.passage_type !== "main"
+              ? (passage as PrefatoryMaterial).label?.devanagari
+              : undefined;
           const uniqueKey = passage.part_id ? `${passage.part_id}-${passage.ref}` : passage.ref;
 
           return (
@@ -203,9 +210,15 @@ export default function TextContent({
                     {passage.passage_type === "main" ? passage.ref : ""}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-lg leading-relaxed whitespace-pre-line verse-text">
-                      {sanskritText}
-                    </p>
+                    {sanskritText ? (
+                      <p className="text-lg leading-relaxed whitespace-pre-line verse-text">
+                        {sanskritText}
+                      </p>
+                    ) : labelText ? (
+                      <p className="text-lg font-semibold leading-relaxed whitespace-pre-line">
+                        {labelText}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>

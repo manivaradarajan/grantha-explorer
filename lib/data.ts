@@ -423,7 +423,7 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         edition_id: resolvedEditionId,
         editions: granthaEditions,
         prefatory_material: combinedContent.prefatory_material || [],
-        passages: combinedContent.passages || [],
+        passages: sortPassagesByRef(combinedContent.passages || []),
         concluding_material: combinedContent.concluding_material || [],
         commentaries: multiPartMetadata.commentaries
           ? JSON.parse(JSON.stringify(multiPartMetadata.commentaries)).map((c: Commentary) => ({ ...c, passages: [] }))
@@ -438,6 +438,7 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
               c => c.commentary_id === commentaryPart.commentary_id
             );
             if (existingCommentary) {
+              existingCommentary.passages = existingCommentary.passages ?? [];
               existingCommentary.passages.push(...commentaryPart.passages);
             } else {
               partialGrantha.commentaries.push(commentaryPart);
@@ -553,6 +554,60 @@ export function getStructureLevelLabel(
     level = level.children[0];
   }
   return level.scriptNames[script] || level.scriptNames.devanagari;
+}
+
+/**
+ * Compare two passage refs in natural numeric order.
+ *
+ * Refs are dot-separated numeric paths (e.g. "1.1", "10.2", "3.4.7"); the
+ * comparison walks segment by segment numerically so "2.1" < "10.1" rather
+ * than the lexicographic "10.1" < "2.1". Non-numeric segments fall back to a
+ * string comparison, and a shorter ref sorts before its extension
+ * ("1.1" < "1.1.2").
+ *
+ * Args:
+ *     a: First ref.
+ *     b: Second ref.
+ *
+ * Returns:
+ *     Negative when ``a`` precedes ``b``, positive when it follows, else 0.
+ */
+export function compareRefs(a: string, b: string): number {
+  const aParts = a.split(".");
+  const bParts = b.split(".");
+  const len = Math.max(aParts.length, bParts.length);
+  for (let i = 0; i < len; i++) {
+    const aPart = aParts[i];
+    const bPart = bParts[i];
+    if (aPart === undefined) return -1;
+    if (bPart === undefined) return 1;
+    const aNum = Number(aPart);
+    const bNum = Number(bPart);
+    if (Number.isFinite(aNum) && Number.isFinite(bNum)) {
+      if (aNum !== bNum) return aNum - bNum;
+    } else if (aPart !== bPart) {
+      return aPart < bPart ? -1 : 1;
+    }
+  }
+  return 0;
+}
+
+/**
+ * Return a copy of ``passages`` sorted by natural ref order.
+ *
+ * The flat passage list is assembled incrementally as parts lazy-load, and
+ * load completion order can differ from document order; sorting at every
+ * assembly point keeps ``Grantha.passages`` in document order for all
+ * consumers. Sorting an already-ordered array is a stable no-op.
+ *
+ * Args:
+ *     passages: The passages to sort.
+ *
+ * Returns:
+ *     A new array sorted by ``compareRefs`` on each passage's ``ref``.
+ */
+export function sortPassagesByRef<T extends { ref: string }>(passages: T[]): T[] {
+  return [...passages].sort((a, b) => compareRefs(a.ref, b.ref));
 }
 
 /**
