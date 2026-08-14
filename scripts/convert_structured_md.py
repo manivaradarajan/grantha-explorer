@@ -989,8 +989,7 @@ def build_part_json(
                     commentary["intro"] = {
                         "sanskrit": {"devanagari": part_intro}
                     }
-                if commentary_passages:
-                    commentary["passages"] = commentary_passages
+                commentary["passages"] = commentary_passages
                 result["commentary"] = commentary
 
     return result
