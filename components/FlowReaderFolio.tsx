@@ -16,6 +16,7 @@ import {
   PrefatoryMaterial,
   SidebarFlatModel,
   SidebarSection,
+  dropLastRefComponent,
   getCuratedSidebarSections,
   getSidebarFlatModel,
 } from "@/lib/data";
@@ -218,7 +219,7 @@ function computeInitialExpanded(
 
 /**
  * Right folio panel — a collapsible outline tree of the grantha's structure,
- * with a jump-to-number input. On desktop it is a slim chapter/verse strip
+ * with a jump-to-number input. On desktop it is a slim section/verse strip
  * that expands to the full outline panel when opened; below lg it renders only
  * the fixed overlay (backdrop + panel) that slides in from the right — the
  * floating arrows trigger lives in FlowReader. The tree highlights the verse
@@ -261,10 +262,18 @@ export default function FlowReaderFolio({
   const [jumpFlash, setJumpFlash] = useState(false);
   const [jumpFocused, setJumpFocused] = useState(false);
   const flashTimer = useRef<number | null>(null);
-  // The chapter the collapsed strip lists — follows the reader's scroll.
-  const [activeSection, setActiveSection] = useState<string>(
-    selectedRef.split(".")[0] ?? selectedRef
-  );
+  // The section the collapsed strip lists — follows the reader's scroll. For a
+  // deep text this is the parent ref (everything except the last verse index,
+  // e.g. "5.4" for ref "5.4.1"); for a chapter→verse text it's the chapter.
+  // Mirrors the scrollspy guard below: a prefatory initial ref (e.g. the
+  // "0.1" mangalācaraṇa) must not collapse the strip onto an empty "section 0",
+  // so fall back to the first loaded passage's section.
+  const [activeSection, setActiveSection] = useState<string>(() => {
+    const loadedRef = grantha.passages.some((p) => p.ref === selectedRef)
+      ? selectedRef
+      : grantha.passages[0]?.ref ?? selectedRef;
+    return dropLastRefComponent(loadedRef);
+  });
   // The verse the reader is currently on, driven by the scrollspy ("where am
   // I"). The jump input displays this when not being edited.
   const [currentVerse, setCurrentVerse] = useState<string>(selectedRef);
@@ -294,40 +303,83 @@ export default function FlowReaderFolio({
     }
   }, []);
 
+  /**
+   * Scroll the folio's own scroll area so the highlighted item stays centered
+   * ("keep up" with the reading scroll): the active verse is aligned to the
+   * middle of the folio viewport whenever content permits (scrollTop is clamped
+   * at the list edges, so the first/last verses sit at the edge), so it never
+   * drifts offscreen. Tree and strip are mutually exclusive by render on
+   * desktop; on mobile the overlay tree is always mounted (harmlessly scrolled
+   * while hidden). A verse in a collapsed group isn't in the DOM and is a
+   * no-op. The container itself is scrolled directly (never `scrollIntoView`)
+   * so no other scrollable ancestor moves.
+   */
+  const scrollFolioToCurrent = useCallback((ref: string | null) => {
+    if (!ref) return;
+    const selector = `[data-ref="${ref}"]`;
+    const treeEl = treeRef.current?.querySelector<HTMLElement>(selector) ?? null;
+    const el =
+      treeEl ??
+      stripListRef.current?.querySelector<HTMLElement>(selector) ??
+      null;
+    if (!el) return;
+    const scroller = treeEl ? treeRef.current : stripListRef.current;
+    if (!scroller) return;
+    const top =
+      el.getBoundingClientRect().top -
+      scroller.getBoundingClientRect().top +
+      scroller.scrollTop;
+    scroller.scrollTop =
+      top - Math.max(0, (scroller.clientHeight - el.clientHeight) / 2);
+  }, []);
+
   useScrollspy(scrollContainerRef, [grantha], (ref) => {
     currentRef.current = ref;
     applyCurrent(ref);
     // "Where am I": reflect the verse currently in view in the jump input
     // (unless the user is mid-edit there).
     setCurrentVerse((prev) => (prev === ref ? prev : ref));
-    // Only main passages drive the strip's chapter. Prefatory/concluding
+    // Only main passages drive the strip's section. Prefatory/concluding
     // passages (e.g. the mangalācaraṇa "0.1" preface) must not collapse the
-    // strip onto an empty "chapter 0" when the reader scrolls up past a
-    // chapter's first verse — keep the last real chapter instead.
+    // strip onto an empty "section 0" when the reader scrolls up past a
+    // section's first verse — keep the last real section instead.
     if (grantha.passages.some((p) => p.ref === ref)) {
-      const section = ref.split(".")[0] ?? ref;
+      const section = dropLastRefComponent(ref);
       setActiveSection((prev) => (prev === section ? prev : section));
     }
   });
 
   // Re-apply the highlight whenever the tree is rebuilt (grantha/script change,
   // a group toggled open, the folio panel opening (the tree mounts fresh), the
-  // strip's chapter changing, or the selected verse changing) since leaf
+  // strip's section changing, or the selected verse changing) since leaf
   // elements are recreated at those points.
   useEffect(() => {
     applyCurrent(currentRef.current);
   }, [outline, expanded, open, selectedRef, activeSection, applyCurrent]);
 
+  // Keep the scrollspy-highlighted verse centered in the folio. Runs after the
+  // scrollspy updates `currentVerse`; `activeSection` only ever changes in the
+  // same scrollspy callback, so the strip's re-render on a section change is
+  // covered too. It also runs once on mount to center the initially-selected
+  // verse. Deliberately scrollspy-only — expanding a group or opening the
+  // panel never recenters the tree.
+  useEffect(() => {
+    scrollFolioToCurrent(currentVerse);
+  }, [currentVerse, scrollFolioToCurrent]);
+
   // Main verses for the collapsed strip's list. Depth-1 texts (isavasya, ...)
-  // have no chapters — show every verse with no section number. Depth >= 2
-  // texts list only the current chapter (the reader's adhyāya).
+  // have no sections — show every verse with no section number. Depth >= 2
+  // texts list only the current section (the reader's adhyāya/brāhmaṇa).
   const mainPassages = useMemo(
     () => grantha.passages.filter((p) => p.passage_type === "main"),
     [grantha]
   );
-  const stripHasChapters = model.depth >= 2;
-  const stripPassages = stripHasChapters
-    ? mainPassages.filter((p) => p.ref.split(".")[0] === activeSection)
+  const stripHasSections = model.depth >= 2;
+  // Group at the parent-ref granularity (the section the strip heads): chapter
+  // for depth-2 texts ("7.11" → "7"), brahmana for depth-3 texts ("5.4.1" →
+  // "5.4"). Depth-1 texts list every verse with no section heading.
+  const stripPassages = stripHasSections
+    ? mainPassages.filter((p) => dropLastRefComponent(p.ref) === activeSection)
     : mainPassages;
 
   useEffect(() => () => {
@@ -461,7 +513,7 @@ export default function FlowReaderFolio({
           setJumpValue("");
         }}
         placeholder="७.११"
-        aria-label="Jump to chapter.verse"
+        aria-label="Jump to section.verse"
         title="Current verse — type a ref to jump"
         className={`flex-1 min-w-0 border rounded-lg px-3 py-2 text-sm font-serif focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-100 ${
           jumpFlash ? "border-red-300" : "border-gray-200"
@@ -520,16 +572,17 @@ export default function FlowReaderFolio({
     </>
   );
 
-  // The collapsed strip's compact verse list — the current chapter's verse
-  // numbers with the adhyāya number at top, full-bleed like the old rail.
+  // The collapsed strip's compact verse list — the current section's verse
+  // numbers with the section ref at top (chapter for depth-2 texts, e.g. "5";
+  // brahmana for deeper texts, e.g. "5.4"), full-bleed like the old rail.
   // Desktop-only; below lg only the arrows affordance remains.
   const strip = (
     <div className="h-full flex flex-col items-center pt-3">
       {arrowsButton}
-      {stripHasChapters && (
+      {stripHasSections && (
         <span
           className="mt-6 mb-2 text-lg font-semibold tabular-nums leading-none text-gray-600"
-          title={script === "roman" ? "Current chapter" : "वर्तमान अध्यायः"}
+          title={script === "roman" ? "Current section" : "वर्तमान प्रकरणम्"}
         >
           {toDevanagariNumerals(activeSection)}
         </span>
@@ -555,7 +608,7 @@ export default function FlowReaderFolio({
 
   if (isDesktop) {
     // Desktop: a slim always-visible full-bleed strip when collapsed (the
-    // current chapter's verse numbers, with the arrows toggle aligned with the
+    // current section's verse numbers, with the arrows toggle aligned with the
     // left hamburger), expanding to the full outline panel when opened. The
     // width animates so the reading column reflows smoothly.
     return (
