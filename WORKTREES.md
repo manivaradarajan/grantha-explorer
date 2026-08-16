@@ -11,7 +11,7 @@ Worktree roots live under `~/git-worktrees/<repo>/<idea>/`.
 
 | Worktree dir | Branch | Idea | Plan file | Status |
 |---|---|---|---|---|
-| `~/git-worktrees/grantha-explorer/whitespace-normalization` | `whitespace-normalization` | Line-break / whitespace normalization of commentary prose | `plans/PLAN_LINEBREAK_WHITESPACE_NORMALIZATION.md` | In progress |
+
 
 ## Resume (after weeks away)
 
