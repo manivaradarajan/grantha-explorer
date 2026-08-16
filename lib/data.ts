@@ -1231,3 +1231,52 @@ export function nextUnloadedPartFirstRef(
   }
   return undefined;
 }
+
+/**
+ * Return the first_ref of the previous (earlier) unloaded part file for a
+ * multi-part grantha, or undefined when the earliest loaded part is the first
+ * declared part (nothing further back to load).
+ *
+ * Mirror of `nextUnloadedPartFirstRef` for scrolling backward: the reader uses
+ * this to lazy-load the parts before the current position as the user scrolls
+ * up, so earlier chapters (not just later ones) become available.
+ *
+ * Args:
+ *     grantha: The grantha (must be multi-part for anything to be returned).
+ *     loadedPassages: The currently loaded passages (prefatory + main +
+ *         concluding), used to test which part files are already present.
+ *
+ * Returns:
+ *     The previous unloaded part's first_ref, or undefined when nothing is
+ *     left to load backward.
+ */
+export function previousUnloadedPartFirstRef(
+  grantha: Grantha,
+  loadedPassages: (Passage | PrefatoryMaterial)[],
+): string | undefined {
+  if (!grantha.parts || grantha.parts.length === 0) {
+    return undefined;
+  }
+  const loadedFirstRefs = new Set(
+    grantha.parts
+      .filter((p) =>
+        loadedPassages.some((passage) => passage.ref === p.first_ref)
+      )
+      .map((p) => p.first_ref)
+  );
+  // The loaded set may have gaps (e.g. the preface part 0.1 and a deep-linked
+  // chapter 3 are loaded while chapters 1–2 are not). Return the part that
+  // immediately precedes the first loaded part which has an unloaded
+  // predecessor, so scrolling up fills the gap in reverse document order.
+  for (let i = 0; i < grantha.parts.length; i++) {
+    if (loadedFirstRefs.has(grantha.parts[i].first_ref)) {
+      if (i > 0) {
+        const prevPart = grantha.parts[i - 1];
+        if (prevPart && !loadedFirstRefs.has(prevPart.first_ref)) {
+          return prevPart.first_ref;
+        }
+      }
+    }
+  }
+  return undefined;
+}

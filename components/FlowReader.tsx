@@ -19,13 +19,16 @@ import {
   commentaryPassageForRef,
   getAllPassagesForNavigation,
   nextUnloadedPartFirstRef,
+  previousUnloadedPartFirstRef,
 } from "@/lib/data";
 import {
   sanitizeCommentaryHtml,
   stripMarkdown,
   toDevanagariNumerals,
+  withVerseNumber,
 } from "@/lib/stringUtils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useScrollspy } from "@/hooks/useScrollspy";
 import GranthaSelector from "./GranthaSelector";
 import FlowReaderDrawer from "./FlowReaderDrawer";
 import FlowReaderFolio from "./FlowReaderFolio";
@@ -215,8 +218,26 @@ export default function FlowReader({
   const verseRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
-  const lastAutoScroll = useRef<{ ref: string; found: boolean } | null>(null);
+  const lastAutoScroll = useRef<{
+    ref: string;
+    found: boolean;
+    /** The container scrollTop at which the selected verse's top was aligned. */
+    targetScrollTop: number;
+  } | null>(null);
   const justClicked = useRef(false);
+
+  // The adhyāya the reader is actually looking at, driven by the scrollspy so
+  // the header chapter title tracks the view across chapter boundaries — not
+  // just hash navigation. Initialized to the selected section; prefatory/
+  // concluding passages (e.g. the mangalācaraṇa preface) don't collapse it onto
+  // "chapter 0", mirroring the folio strip.
+  const [viewSection, setViewSection] = useState(currentSection);
+  useScrollspy(scrollContainerRef, [grantha], (ref) => {
+    if (grantha.passages.some((p) => p.ref === ref)) {
+      const section = ref.split(".")[0] ?? ref;
+      setViewSection((prev) => (prev === section ? prev : section));
+    }
+  });
 
   // Measure the reading area's available width so compare mode can choose
   // columns-vs-swipe live (availableWidth / count >= threshold). A ResizeObserver
@@ -232,33 +253,79 @@ export default function FlowReader({
     return () => ro.disconnect();
   }, []);
 
+  // Align the selected verse's top with the container top and record the
+  // scrollTop that achieves it, so later position checks know where "in view"
+  // was.
+  const alignVerseToTop = useCallback(
+    (ref: string): void => {
+      const container = scrollContainerRef.current;
+      const element = verseRefs.current[ref];
+      if (!container || !element) return;
+      const targetScrollTop =
+        element.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop;
+      lastAutoScroll.current = { ref, found: true, targetScrollTop };
+      element.scrollIntoView({ behavior: "auto", block: "start" });
+    },
+    []
+  );
+
   // Auto-scroll to the selected verse on mount and when the selection changes
-  // from external navigation (deep link, mode flip). Skips re-scrolling to the
-  // verse the user just clicked (they are already there) and suppresses
-  // re-yanking on lazy part loads that re-render the list. Retries when the
-  // element appears only after a part load.
+  // from external navigation (deep link, mode flip). Also re-positions it when
+  // a lazy load inserts content ABOVE it (e.g. the backward preload of the
+  // previous chapter), so the reader isn't left staring at a middle verse of
+  // the newly-inserted chapter — but ONLY when the user hasn't scrolled away
+  // from the position we set (compare the container scrollTop against the
+  // recorded target). Forward loads below never trigger a re-scroll. Retries
+  // when the element appears only after a part load.
   useEffect(() => {
     if (justClicked.current) {
       justClicked.current = false;
-      // Record the current position so a later part load (which re-runs this
-      // effect via `passages`) doesn't scroll the viewport back to it.
-      lastAutoScroll.current = { ref: selectedRef, found: true };
+      // The user just clicked this verse — they're already where they want to
+      // be. Record the current scrollTop as the "target" so a later lazy load
+      // only re-aligns if it shifts content above the selected verse while the
+      // reader is still here, never yanking them away from a manual scroll.
+      lastAutoScroll.current = {
+        ref: selectedRef,
+        found: true,
+        targetScrollTop: scrollContainerRef.current?.scrollTop ?? 0,
+      };
       return;
     }
+    const container = scrollContainerRef.current;
     const element = verseRefs.current[selectedRef];
     const prev = lastAutoScroll.current;
-    if (prev && prev.ref === selectedRef && prev.found) {
+
+    if (!element) {
+      // Element not mounted yet (part still loading); remember so we retry.
+      lastAutoScroll.current = { ref: selectedRef, found: false, targetScrollTop: 0 };
       return;
     }
-    if (element) {
-      lastAutoScroll.current = { ref: selectedRef, found: true };
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      lastAutoScroll.current = { ref: selectedRef, found: false };
-    }
-  }, [selectedRef, passages]);
 
-  useEffect(() => () => observer.current?.disconnect(), []);
+    if (prev && prev.ref === selectedRef && prev.found) {
+      // Same verse, re-render (e.g. a lazy part landed). Re-align only if the
+      // verse shifted because content was inserted above it AND the reader is
+      // still where we left them (scrollTop matches our last target).
+      if (
+        container &&
+        Math.abs(container.scrollTop - prev.targetScrollTop) < 32
+      ) {
+        alignVerseToTop(selectedRef);
+      }
+      return;
+    }
+
+    // New selection (or first mount): align.
+    alignVerseToTop(selectedRef);
+  }, [selectedRef, passages, alignVerseToTop]);
+
+  useEffect(
+    () => () => {
+      observer.current?.disconnect();
+    },
+    []
+  );
 
   // Sentinel observer: when the bottom of the loaded scroll comes into view and
   // more part files exist, load the next unloaded part.
@@ -278,6 +345,58 @@ export default function FlowReader({
     },
     [isLoadingPart, grantha, passages, loadPart]
   );
+
+  // On mount / grantha change: preload the part immediately before the selected
+  // verse's section, so a deep-linked verse always has the previous chapter
+  // available above it (e.g. loading 3.1 makes chapter 2 present before the
+  // user scrolls). Deterministic: computed from the envelope's parts array, not
+  // from the in-flight passage state, and keyed only on the grantha/section so
+  // it runs once and never chains eagerly.
+  useEffect(() => {
+    const parts = grantha.parts;
+    if (!parts || parts.length === 0) return;
+    const section = selectedRef.split(".")[0];
+    const sectionIdx = parts.findIndex(
+      (p) => p.first_ref.split(".")[0] === section
+    );
+    if (sectionIdx <= 0) return;
+    const prevPart = parts[sectionIdx - 1];
+    if (prevPart && !grantha.passages.some((p) => p.ref === prevPart.first_ref)) {
+      loadPart(prevPart.first_ref);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [grantha.grantha_id, grantha.edition_id, selectedRef.split(".")[0]]);
+
+  // Load the previous unloaded part in the gap (used by the scroll runway).
+  const loadPreviousPart = useCallback(() => {
+    if (!grantha.parts || isLoadingPart) return;
+    const prevFirstRef = previousUnloadedPartFirstRef(grantha, passages);
+    if (prevFirstRef) {
+      loadPart(prevFirstRef);
+    }
+  }, [grantha, passages, isLoadingPart, loadPart]);
+
+  // Backward lazy-loading via a scroll listener (an IntersectionObserver sentinel
+  // can't work here: an element above the scroll container's clip is never
+  // "intersecting", so a sentinel above the loaded content would only fire at
+  // scrollTop 0). When the reader scrolls within ~3 screen-heights of the top of
+  // the loaded content, load the previous unloaded part. The runway gives the
+  // fetch time to complete before the reader reaches the newly-inserted content.
+  const RUNWAY_SCREENS = 3;
+  const handleApproachScroll = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    if (container.scrollTop <= RUNWAY_SCREENS * container.clientHeight) {
+      loadPreviousPart();
+    }
+  }, [loadPreviousPart]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    container.addEventListener("scroll", handleApproachScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleApproachScroll);
+  }, [handleApproachScroll]);
 
   const handleVerseClick = (ref: string) => {
     if (ref !== selectedRef) {
@@ -452,7 +571,7 @@ export default function FlowReader({
               aria-label={script === "roman" ? "Select chapter" : "अध्याय चुनें"}
             >
               <span className="font-serif text-base font-semibold text-gray-700">
-                {structureLabel} {toDevanagariNumerals(currentSection)}
+                {structureLabel} {toDevanagariNumerals(viewSection)}
               </span>
               <svg
                 className="w-3.5 h-3.5 text-gray-400"
@@ -548,7 +667,7 @@ export default function FlowReader({
                   <Fragment key={passage.ref}>
                     <div
                       data-verse-ref={passage.ref}
-                      className="px-4 py-10"
+                      className="px-4 py-8"
                     >
                       {label && (
                         <div className="text-sm text-gray-600 italic mb-3">
@@ -589,7 +708,7 @@ export default function FlowReader({
                     ref={(el) => setVerseRef(passage.ref, el)}
                     data-verse-ref={passage.ref}
                     onClick={() => handleVerseClick(passage.ref)}
-                    className={`px-4 py-10 cursor-pointer transition-colors ${
+                    className={`px-4 py-8 cursor-pointer transition-colors ${
                       isSelected ? "bg-gray-50" : ""
                     }`}
                   >
@@ -603,33 +722,24 @@ export default function FlowReader({
                             }}
                           />
                         )}
-                        {/* Mūla verse: the verse number sits on the left rule in
-                            smaller type; the shloka keeps its source line break
-                            (which falls at the single-daṇḍā pāda boundary). The
-                            verse sits narrower and centered so the commentary
-                            runs wider than it, keeping the reading column
-                            centered like the mockup. */}
-                        <div className="mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-3 py-2 flex gap-3">
-                          <span
-                            className="w-6 shrink-0 text-center text-sm font-serif text-gray-400 mt-1"
-                            aria-hidden="true"
-                          >
-                            {toDevanagariNumerals(
-                              passage.ref.split(".").pop() ?? passage.ref
-                            )}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            {passage.speaker && (
-                              <div className="font-serif text-sm text-gray-600 mb-2">
-                                {stripMarkdown(passage.speaker)}
-                              </div>
-                            )}
-                            {mula && (
-                              <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
-                                {mula}
-                              </p>
-                            )}
-                          </div>
+                        {/* Mūla verse: the verse number closes it in double
+                            dandas (॥ N ॥, print convention, spec §6.1); the
+                            shloka keeps its source line break (which falls at
+                            the single-daṇḍā pāda boundary). The verse sits
+                            narrower and centered so the commentary runs wider
+                            than it, keeping the reading column centered like
+                            the mockup. */}
+                        <div className="mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2">
+                          {passage.speaker && (
+                            <div className="font-serif text-sm text-gray-600 mb-2">
+                              {stripMarkdown(passage.speaker)}
+                            </div>
+                          )}
+                          {mula && (
+                            <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
+                              {withVerseNumber(mula, passage.ref)}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="shrink-0 pl-3 pt-1">

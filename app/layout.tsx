@@ -45,8 +45,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // suppressHydrationWarning: some browser extensions inject a className onto
+  // <html> before React hydrates, which otherwise triggers a spurious "tree
+  // hydrated but attributes didn't match" console error. The element itself is
+  // fully static (lang only); this only suppresses the extension-induced
+  // attribute-mismatch warning, not any real hydration issues.
   return (
-    <html lang="sa">
+    <html lang="sa" suppressHydrationWarning>
       <body className={`${notoSans.variable} ${notoSerif.variable} ${anekDevanagari.variable} ${tiroSerif.variable} font-sans`}>
         <Providers>{children}</Providers>
       </body>

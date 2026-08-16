@@ -259,11 +259,15 @@ export default function FlowReaderFolio({
   const currentRef = useRef<string | null>(selectedRef);
   const [jumpValue, setJumpValue] = useState("");
   const [jumpFlash, setJumpFlash] = useState(false);
+  const [jumpFocused, setJumpFocused] = useState(false);
   const flashTimer = useRef<number | null>(null);
   // The chapter the collapsed strip lists — follows the reader's scroll.
   const [activeSection, setActiveSection] = useState<string>(
     selectedRef.split(".")[0] ?? selectedRef
   );
+  // The verse the reader is currently on, driven by the scrollspy ("where am
+  // I"). The jump input displays this when not being edited.
+  const [currentVerse, setCurrentVerse] = useState<string>(selectedRef);
 
   // Imperatively toggle the current-item highlight classes on the existing
   // leaf/strip elements — never re-render the tree on scroll.
@@ -293,17 +297,26 @@ export default function FlowReaderFolio({
   useScrollspy(scrollContainerRef, [grantha], (ref) => {
     currentRef.current = ref;
     applyCurrent(ref);
-    // The collapsed strip's verse list follows the reader's chapter.
-    const section = ref.split(".")[0] ?? ref;
-    setActiveSection((prev) => (prev === section ? prev : section));
+    // "Where am I": reflect the verse currently in view in the jump input
+    // (unless the user is mid-edit there).
+    setCurrentVerse((prev) => (prev === ref ? prev : ref));
+    // Only main passages drive the strip's chapter. Prefatory/concluding
+    // passages (e.g. the mangalācaraṇa "0.1" preface) must not collapse the
+    // strip onto an empty "chapter 0" when the reader scrolls up past a
+    // chapter's first verse — keep the last real chapter instead.
+    if (grantha.passages.some((p) => p.ref === ref)) {
+      const section = ref.split(".")[0] ?? ref;
+      setActiveSection((prev) => (prev === section ? prev : section));
+    }
   });
 
   // Re-apply the highlight whenever the tree is rebuilt (grantha/script change,
-  // a group toggled open, the strip's chapter changing, or the selected verse
-  // changing) since leaf elements are recreated at those points.
+  // a group toggled open, the folio panel opening (the tree mounts fresh), the
+  // strip's chapter changing, or the selected verse changing) since leaf
+  // elements are recreated at those points.
   useEffect(() => {
     applyCurrent(currentRef.current);
-  }, [outline, expanded, selectedRef, activeSection, applyCurrent]);
+  }, [outline, expanded, open, selectedRef, activeSection, applyCurrent]);
 
   // Main verses for the collapsed strip's list. Depth-1 texts (isavasya, ...)
   // have no chapters — show every verse with no section number. Depth >= 2
@@ -422,6 +435,7 @@ export default function FlowReaderFolio({
       target = section?.boundary.firstVerseRef ?? resolved.ref;
     }
     setJumpValue("");
+    setJumpFocused(false);
     onJump(target);
   };
 
@@ -433,13 +447,22 @@ export default function FlowReaderFolio({
       <input
         type="text"
         inputMode="numeric"
-        value={jumpValue}
+        value={jumpFocused ? jumpValue : currentVerse}
+        onFocus={() => {
+          setJumpFocused(true);
+          setJumpValue(currentVerse);
+        }}
         onChange={(e) => {
           setJumpValue(e.target.value);
           setJumpFlash(false);
         }}
+        onBlur={() => {
+          setJumpFocused(false);
+          setJumpValue("");
+        }}
         placeholder="७.११"
         aria-label="Jump to chapter.verse"
+        title="Current verse — type a ref to jump"
         className={`flex-1 min-w-0 border rounded-lg px-3 py-2 text-sm font-serif focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-100 ${
           jumpFlash ? "border-red-300" : "border-gray-200"
         }`}
@@ -521,7 +544,7 @@ export default function FlowReaderFolio({
             type="button"
             data-ref={p.ref}
             onClick={() => p.ref && onJump(p.ref)}
-            className="strip-verse w-7 mx-auto block text-center text-[11px] leading-4 py-0.5 tabular-nums rounded-full text-blue-600 hover:bg-blue-50"
+            className="strip-verse w-8 mx-auto block text-center text-[13px] leading-5 py-0.5 tabular-nums rounded-full text-blue-600 hover:bg-blue-50"
           >
             {toDevanagariNumerals(p.ref.split(".").pop() ?? p.ref)}
           </button>
@@ -539,12 +562,12 @@ export default function FlowReaderFolio({
       <aside
         className={`shrink-0 bg-white transition-all duration-200 ${
           open
-            ? "w-80 border-l border-gray-100"
+            ? "w-[220px] border-l border-gray-100"
             : "w-16 border-l border-gray-100"
         }`}
       >
         {open ? (
-          <div className="w-80 h-full flex flex-col">{tree}</div>
+          <div className="w-[220px] h-full flex flex-col">{tree}</div>
         ) : (
           strip
         )}
@@ -563,7 +586,7 @@ export default function FlowReaderFolio({
         onClick={onClose}
       />
       <aside
-        className={`fixed inset-y-0 right-0 z-40 w-80 max-w-[85vw] bg-white border-l border-gray-100 shadow-xl flex flex-col transition-transform duration-200 ${
+        className={`fixed inset-y-0 right-0 z-40 w-[220px] max-w-[85vw] bg-white border-l border-gray-100 shadow-xl flex flex-col transition-transform duration-200 ${
           open
             ? "translate-x-0 pointer-events-auto visible"
             : "translate-x-full pointer-events-none invisible"

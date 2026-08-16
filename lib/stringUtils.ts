@@ -45,3 +45,31 @@ export const sanitizeCommentaryHtml = (text: string): string =>
       )
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
   );
+
+/**
+ * Close a mūla verse with its danda number (`॥ N॥`, Devanagari), matching
+ * print convention (spec §6.1). The numeral sits flush against the closing
+ * danda (no space), while the opening danda keeps a space from the verse text.
+ * No-op when the mūla is empty or the ref's last segment isn't numeric. When
+ * the text already ends with a numbered danda it is left untouched; when it
+ * ends with a bare closing danda (a source that had its number stripped but
+ * kept the `॥`) that danda is replaced, so the result is always a single
+ * `॥ N॥`.
+ *
+ * Args:
+ *     mula: The verse's mūla text (already stripped of markdown).
+ *     ref: The passage ref (e.g. "7.1" → number "१").
+ *
+ * Returns:
+ *     The mūla text closed with ` ॥ N॥`, or the original unchanged.
+ */
+export const withVerseNumber = (mula: string, ref: string): string => {
+  if (!mula) return mula;
+  const lastSegment = ref.split(".").pop() ?? "";
+  if (!/^\d+$/.test(lastSegment)) return mula;
+  // Already closed with a numbered danda — never double-mark.
+  if (/॥\s*[०-९]+\s*॥\s*$/.test(mula)) return mula;
+  // Bare trailing danda (source kept `॥` but the number was stripped): replace.
+  const stripped = mula.replace(/॥\s*$/, "").trimEnd();
+  return `${stripped} ॥ ${toDevanagariNumerals(lastSegment)}॥`;
+};

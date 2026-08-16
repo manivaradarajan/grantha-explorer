@@ -19,7 +19,7 @@ import {
 import {
   sanitizeCommentaryHtml,
   stripMarkdown,
-  toDevanagariNumerals,
+  withVerseNumber,
 } from "@/lib/stringUtils";
 import FlowReaderCitation from "./FlowReaderCitation";
 
@@ -100,7 +100,7 @@ export default function FlowReaderCompare({
       const label = (passage as PrefatoryMaterial).label?.devanagari;
       const content = passage.content?.sanskrit?.devanagari;
       return (
-        <div data-verse-ref={passage.ref} className="px-4 py-10">
+        <div data-verse-ref={passage.ref} className="px-4 py-8">
           {label && (
             <div className="text-sm text-gray-600 italic mb-3">{label}</div>
           )}
@@ -234,18 +234,9 @@ export default function FlowReaderCompare({
   const renderVerseRow = useCallback(
     (passage: Passage): ReactNode => {
       const mula = stripMarkdown(passage.content?.sanskrit?.devanagari);
-      const verseNum = toDevanagariNumerals(
-        passage.ref.split(".").pop() ?? passage.ref
-      );
       return (
         <div data-verse-ref={passage.ref} className="flex justify-center mb-6">
-          <div className="text-center border-l-2 border-r-2 border-gray-400 px-4 py-2 flex items-center justify-center gap-3">
-            <span
-              className="w-5 shrink-0 text-sm font-serif text-gray-400"
-              aria-hidden="true"
-            >
-              {verseNum}
-            </span>
+          <div className="text-center border-l-2 border-r-2 border-gray-400 px-8 py-2">
             <div className="min-w-0">
               {passage.speaker && (
                 <div className="font-serif text-sm text-gray-600 mb-2">
@@ -254,7 +245,7 @@ export default function FlowReaderCompare({
               )}
               {mula && (
                 <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
-                  {mula}
+                  {withVerseNumber(mula, passage.ref)}
                 </p>
               )}
             </div>
@@ -372,39 +363,28 @@ export default function FlowReaderCompare({
             );
           }
           const mula = stripMarkdown(passage.content?.sanskrit?.devanagari);
-          const verseNum = toDevanagariNumerals(
-            passage.ref.split(".").pop() ?? passage.ref
-          );
           return (
             <div
               key={passage.ref}
               data-verse-ref={passage.ref}
-              className={`px-4 py-10 cursor-pointer ${
+              className={`px-4 py-8 cursor-pointer ${
                 passage.ref === selectedRef ? "bg-gray-50" : ""
               }`}
               onClick={() => onVerseSelect(passage.ref)}
             >
               <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">
-                  <div className="mb-5 max-w-2xl border-l-2 border-gray-400 pl-3 py-2 flex gap-3">
-                    <span
-                      className="w-6 shrink-0 text-center text-sm font-serif text-gray-400 mt-1"
-                      aria-hidden="true"
-                    >
-                      {verseNum}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      {passage.speaker && (
-                        <div className="font-serif text-sm text-gray-600 mb-2">
-                          {stripMarkdown(passage.speaker)}
-                        </div>
-                      )}
-                      {mula && (
-                        <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
-                          {mula}
-                        </p>
-                      )}
-                    </div>
+                  <div className="mb-5 max-w-2xl border-l-2 border-gray-400 pl-6 py-2">
+                    {passage.speaker && (
+                      <div className="font-serif text-sm text-gray-600 mb-2">
+                        {stripMarkdown(passage.speaker)}
+                      </div>
+                    )}
+                    {mula && (
+                      <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
+                        {withVerseNumber(mula, passage.ref)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="shrink-0 pl-3 pt-1">
