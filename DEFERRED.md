@@ -1,6 +1,7 @@
-# Deferred work — new-grantha-data branch
+# Deferred work
 
 Items deliberately left open as of the schema v1.0.0 checkpoint (eb217e4).
+The former `new-grantha-data` branch was deleted; its work landed in `main`.
 Update this file when an item is addressed or re-scoped.
 
 ---
