@@ -66,6 +66,9 @@ interface FlowReaderProps {
 
 const FONT_SCALE_MIN = 0.75;
 const FONT_SCALE_MAX = 1.4;
+/** Max scrollTop drift from the recorded target that still counts as "at the
+ *  verse" — beyond it the reader has scrolled away. */
+const RE_ALIGN_TOLERANCE_PX = 32;
 
 /**
  * Flow reader — a continuous-prose reading mode (verse, then its commentary,
@@ -232,12 +235,21 @@ export default function FlowReader({
   // concluding passages (e.g. the mangalācaraṇa preface) don't collapse it onto
   // "chapter 0", mirroring the folio strip.
   const [viewSection, setViewSection] = useState(currentSection);
-  useScrollspy(scrollContainerRef, [grantha], (ref) => {
-    if (grantha.passages.some((p) => p.ref === ref)) {
-      const section = ref.split(".")[0] ?? ref;
-      setViewSection((prev) => (prev === section ? prev : section));
+  // Re-observe when the observed `[data-verse-ref]` set changes: grantha/
+  // passage changes, entering/leaving compare (editionIds.length), the compare
+  // editions loading in (editions.length), and the columns↔swipe layout flip
+  // (availableWidth starts 0 and is then measured, which would otherwise leave
+  // the observer bound to detached nodes).
+  useScrollspy(
+    scrollContainerRef,
+    [grantha, editionIds.length, editions.length, availableWidth],
+    (ref) => {
+      if (grantha.passages.some((p) => p.ref === ref)) {
+        const section = ref.split(".")[0] ?? ref;
+        setViewSection((prev) => (prev === section ? prev : section));
+      }
     }
-  });
+  );
 
   // Measure the reading area's available width so compare mode can choose
   // columns-vs-swipe live (availableWidth / count >= threshold). A ResizeObserver
@@ -253,22 +265,40 @@ export default function FlowReader({
     return () => ro.disconnect();
   }, []);
 
+  // Resolve the DOM node for a verse ref across both reading surfaces: the
+  // single branch registers elements into `verseRefs`, compare only marks them
+  // with `data-verse-ref` — fall back to a container query so jumping works
+  // in compare mode too. `querySelector` returns the first match (the primary
+  // edition's element in swipe view).
+  const findVerseElement = useCallback((ref: string): HTMLElement | null => {
+    return (
+      verseRefs.current[ref] ??
+      scrollContainerRef.current?.querySelector<HTMLElement>(
+        `[data-verse-ref="${ref}"]`
+      ) ??
+      null
+    );
+  }, []);
+
   // Align the selected verse's top with the container top and record the
   // scrollTop that achieves it, so later position checks know where "in view"
   // was.
   const alignVerseToTop = useCallback(
     (ref: string): void => {
       const container = scrollContainerRef.current;
-      const element = verseRefs.current[ref];
+      const element = findVerseElement(ref);
       if (!container || !element) return;
       const targetScrollTop =
         element.getBoundingClientRect().top -
         container.getBoundingClientRect().top +
         container.scrollTop;
       lastAutoScroll.current = { ref, found: true, targetScrollTop };
-      element.scrollIntoView({ behavior: "auto", block: "start" });
+      // Set scrollTop directly (equivalent to scrollIntoView block:"start" for
+      // the vertical container) so the horizontal swipe track is never moved
+      // when the target element sits in a non-primary compare page.
+      container.scrollTop = targetScrollTop;
     },
-    []
+    [findVerseElement]
   );
 
   // Auto-scroll to the selected verse on mount and when the selection changes
@@ -294,12 +324,16 @@ export default function FlowReader({
       return;
     }
     const container = scrollContainerRef.current;
-    const element = verseRefs.current[selectedRef];
+    const element = findVerseElement(selectedRef);
     const prev = lastAutoScroll.current;
 
     if (!element) {
       // Element not mounted yet (part still loading); remember so we retry.
-      lastAutoScroll.current = { ref: selectedRef, found: false, targetScrollTop: 0 };
+      lastAutoScroll.current = {
+        ref: selectedRef,
+        found: false,
+        targetScrollTop: 0,
+      };
       return;
     }
 
@@ -309,7 +343,8 @@ export default function FlowReader({
       // still where we left them (scrollTop matches our last target).
       if (
         container &&
-        Math.abs(container.scrollTop - prev.targetScrollTop) < 32
+        Math.abs(container.scrollTop - prev.targetScrollTop) <
+          RE_ALIGN_TOLERANCE_PX
       ) {
         alignVerseToTop(selectedRef);
       }
@@ -318,7 +353,15 @@ export default function FlowReader({
 
     // New selection (or first mount): align.
     alignVerseToTop(selectedRef);
-  }, [selectedRef, passages, alignVerseToTop]);
+    // `availableWidth` is also a dep: a compare columns↔swipe flip changes
+    // the verse layout, so the selected verse re-aligns to the new layout.
+  }, [
+    selectedRef,
+    passages,
+    availableWidth,
+    alignVerseToTop,
+    findVerseElement,
+  ]);
 
   useEffect(
     () => () => {
@@ -808,6 +851,9 @@ export default function FlowReader({
         onJump={handleFolioJump}
         selectedRef={selectedRef}
         script={script}
+        isCompare={isCompare}
+        editionCount={editions.length}
+        availableWidth={availableWidth}
         scrollContainerRef={scrollContainerRef}
         loadPart={loadPart}
       />

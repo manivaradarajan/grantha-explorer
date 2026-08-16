@@ -223,8 +223,10 @@ export default function Home() {
     const sectionParts = currentGrantha.parts.filter(
       (p) => p.id === topLevelRef,
     );
+    // No part carries this top-level section id — a legitimate no-op for
+    // single-part granthas (the sole part's id is derived from its first_ref,
+    // e.g. "1") and for prefatory refs; those verses are already loaded.
     if (sectionParts.length === 0) {
-      console.warn(`Could not find any parts for topLevelRef: ${topLevelRef}`);
       return;
     }
 
