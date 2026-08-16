@@ -148,6 +148,18 @@ always.
   commentary pane mid-scroll violates the "preserve place" and "zero
   cognitive load" principles this screen is built on. Do not reintroduce
   scroll-driven focus tracking without re-evaluating this decision.
+
+  This prohibition covers *content focus* (URL hash, commentary, breadcrumb).
+  It does not cover the reading mode's **folio navigation chrome**: the
+  right-side outline follows the reader's scroll the way the collapsed strip
+  already does — the current verse's label is highlighted with a gray pill,
+  and crossing a section boundary opens the next accordion while collapsing
+  the previous (exclusive, one section open). This is pure navigation
+  affordance with zero side effects on reading state. Header-click remains a
+  browse-only expand/collapse; the exclusive reset fires only when a section
+  boundary is crossed (scroll or jump), never on every scroll tick, and
+  within-section scrolling still toggles highlight classes imperatively with
+  no tree re-render.
 - **Flagging (v1 scope):**
   - Unified entry point for both content errors and product feedback — one
     button, not two separate mechanisms.

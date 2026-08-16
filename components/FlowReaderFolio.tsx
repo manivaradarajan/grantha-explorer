@@ -35,12 +35,15 @@ interface OutlineNode {
   children?: OutlineNode[];
 }
 
-/** Tree-builder result: the outline nodes plus, for each group id, the
- *  part-file first_refs to lazy-load when that group is first expanded
- *  (unloaded sections render as placeholders until their parts arrive). */
+/** Tree-builder result: the outline nodes, the per-group part-file first_refs
+ *  to lazy-load when a group is first expanded (unloaded sections render as
+ *  placeholders until their parts arrive), and the structural section chain
+ *  map (markerRef → ordered ancestor group ids) that drives the folio's
+ *  exclusive scroll-follow. */
 interface OutlineResult {
   nodes: OutlineNode[];
   unloadedPartsByGroup: Map<string, string[]>;
+  sectionChain: Map<string, string[]>;
 }
 
 /** Strip newlines/collapse whitespace and truncate for a compact tree label. */
@@ -68,7 +71,10 @@ function buildOutlineTree(
     kind: "leaf",
     label:
       p.passage_type === "main"
-        ? `${toDevanagariNumerals(p.ref)} - ${truncatePreview(
+        ? // The accordion headers supply the chapter/brāhmaṇa context, so a
+          // leaf needs only its verse number (the strip's convention) plus a
+          // short text preview — not the full dotted ref repeated on every row.
+          `${toDevanagariNumerals(p.ref.split(".").pop() ?? p.ref)} - ${truncatePreview(
             p.content?.sanskrit?.devanagari ?? "",
             22
           )}`
@@ -83,7 +89,8 @@ function buildOutlineTree(
 
   const nestSections = (
     sections: SidebarSection[],
-    unloaded: Map<string, string[]>
+    unloaded: Map<string, string[]>,
+    recordChains: boolean
   ): OutlineNode[] => {
     const root: OutlineNode = {
       id: "__root",
@@ -96,6 +103,7 @@ function buildOutlineTree(
         section.boundary.path.length > 0
           ? section.boundary.path
           : [section.boundary.markerRef];
+      const groupIds: string[] = [];
       let node = root;
       for (const segment of path) {
         let child = node.children?.find(
@@ -111,6 +119,10 @@ function buildOutlineTree(
           node.children?.push(child);
         }
         node = child;
+        groupIds.push(node.id);
+      }
+      if (recordChains) {
+        sectionChain.set(section.boundary.markerRef, groupIds);
       }
       const isUnloaded =
         section.passages.length === 0 && section.boundary.partIds.length > 0;
@@ -142,9 +154,14 @@ function buildOutlineTree(
   };
 
   const unloadedPartsByGroup = new Map<string, string[]>();
+  const sectionChain = new Map<string, string[]>();
 
   if (curated) {
-    return { nodes: nestSections(curated, unloadedPartsByGroup), unloadedPartsByGroup };
+    return {
+      nodes: nestSections(curated, unloadedPartsByGroup, false),
+      unloadedPartsByGroup,
+      sectionChain,
+    };
   }
   if (model.depth <= 1) {
     return {
@@ -154,15 +171,17 @@ function buildOutlineTree(
         ...model.concluding.map(toLeaf),
       ],
       unloadedPartsByGroup,
+      sectionChain,
     };
   }
   return {
     nodes: [
       ...model.prefatory.map(toLeaf),
-      ...nestSections(model.sections, unloadedPartsByGroup),
+      ...nestSections(model.sections, unloadedPartsByGroup, true),
       ...model.concluding.map(toLeaf),
     ],
     unloadedPartsByGroup,
+    sectionChain,
   };
 }
 
@@ -230,6 +249,18 @@ function computeInitialExpanded(
   return set;
 }
 
+/** The initial folio section for a grantha/ref: the parent ref of the selected
+ *  verse (or of the first loaded passage when the selection isn't loaded yet).
+ *  Prefatory initial refs (e.g. the "0.1" mangalācaraṇa) must not collapse the
+ *  folio onto an empty "section 0", so fall back to the first loaded passage's
+ *  section. */
+function initialSectionRef(grantha: Grantha, selectedRef: string): string {
+  const loadedRef = grantha.passages.some((p) => p.ref === selectedRef)
+    ? selectedRef
+    : grantha.passages[0]?.ref ?? selectedRef;
+  return dropLastRefComponent(loadedRef);
+}
+
 /**
  * Right folio panel — a collapsible outline tree of the grantha's structure,
  * with a jump-to-number input. On desktop it is a slim section/verse strip
@@ -257,18 +288,41 @@ export default function FlowReaderFolio({
 }: FlowReaderFolioProps) {
   const model = useMemo(() => getSidebarFlatModel(grantha), [grantha]);
   const curated = useMemo(() => getCuratedSidebarSections(grantha), [grantha]);
-  const { nodes: outline, unloadedPartsByGroup } = useMemo(
+  const { nodes: outline, unloadedPartsByGroup, sectionChain } = useMemo(
     () => buildOutlineTree(grantha, model, curated),
     [grantha, model, curated]
   );
+  // The exclusive scroll-follow accordion applies to structural multi-level
+  // texts (chapter/brāhmaṇa). Curated sections and depth-1 texts keep the
+  // existing manual accordion + full-text leaf behavior.
+  const isStructuralOutline = curated == null && model.depth >= 2;
 
   const [prevGranthaId, setPrevGranthaId] = useState(grantha.grantha_id);
-  const [expanded, setExpanded] = useState<Set<string>>(() =>
-    computeInitialExpanded(outline, selectedRef)
+  // The section the collapsed strip lists and the scroll-follow accordion
+  // tracks — follows the reader's scroll (see the scrollspy callback). For a
+  // deep text this is the parent ref (e.g. "5.4" for ref "5.4.1"); for a
+  // chapter→verse text it's the chapter.
+  const [activeSection, setActiveSection] = useState<string>(() =>
+    initialSectionRef(grantha, selectedRef)
   );
+  const [expanded, setExpanded] = useState<Set<string>>(() =>
+    isStructuralOutline
+      ? new Set(sectionChain.get(activeSection) ?? [])
+      : computeInitialExpanded(outline, selectedRef)
+  );
+  // Previous active section, for the adjust-during-render exclusive reset (see
+  // the block near applyActiveSection below).
+  const [prevActiveSection, setPrevActiveSection] = useState(activeSection);
   if (prevGranthaId !== grantha.grantha_id) {
     setPrevGranthaId(grantha.grantha_id);
-    setExpanded(computeInitialExpanded(outline, selectedRef));
+    if (isStructuralOutline) {
+      const section = initialSectionRef(grantha, selectedRef);
+      setActiveSection(section);
+      setPrevActiveSection(section);
+      setExpanded(new Set(sectionChain.get(section) ?? []));
+    } else {
+      setExpanded(computeInitialExpanded(outline, selectedRef));
+    }
   }
 
   const treeRef = useRef<HTMLDivElement | null>(null);
@@ -280,48 +334,44 @@ export default function FlowReaderFolio({
   // The layout effects re-arm it; the timer effect clears it. Initialized true
   // so the mount deep-link flush is held too.
   const jumpHold = useRef(true);
-  const [jumpValue, setJumpValue] = useState("");
+  // The jump input is deliberately uncontrolled: it shows the live current
+  // verse while idle, but while focused it must own its value so keystrokes
+  // (typing, backspace, select-all) are never swallowed by a re-render — the
+  // old controlled `value` re-derived from `currentVerse` froze mid-edit
+  // whenever the scrollspy re-rendered this component.
+  const jumpInputRef = useRef<HTMLInputElement | null>(null);
   const [jumpFlash, setJumpFlash] = useState(false);
   const [jumpFocused, setJumpFocused] = useState(false);
   const flashTimer = useRef<number | null>(null);
-  // The section the collapsed strip lists — follows the reader's scroll. For a
-  // deep text this is the parent ref (everything except the last verse index,
-  // e.g. "5.4" for ref "5.4.1"); for a chapter→verse text it's the chapter.
-  // Mirrors the scrollspy guard below: a prefatory initial ref (e.g. the
-  // "0.1" mangalācaraṇa) must not collapse the strip onto an empty "section 0",
-  // so fall back to the first loaded passage's section.
-  const [activeSection, setActiveSection] = useState<string>(() => {
-    const loadedRef = grantha.passages.some((p) => p.ref === selectedRef)
-      ? selectedRef
-      : grantha.passages[0]?.ref ?? selectedRef;
-    return dropLastRefComponent(loadedRef);
-  });
   // The verse the reader is currently on, driven by the scrollspy ("where am
   // I"). The jump input displays this when not being edited.
   const [currentVerse, setCurrentVerse] = useState<string>(selectedRef);
 
   // Imperatively toggle the current-item highlight classes on the existing
-  // leaf/strip elements — never re-render the tree on scroll.
+  // leaf/strip elements — never re-render the tree on scroll. The tree's
+  // current verse renders as a gray pill around its label (see renderNode's
+  // .folio-leaf-label span); the strip's current verse is the same pill on its
+  // round number chip. Both share the current/navigable color convention.
   const applyCurrent = useCallback((ref: string | null) => {
+    const applyTo = (el: HTMLElement, isCurrent: boolean) => {
+      el.classList.toggle("bg-gray-100", isCurrent);
+      el.classList.toggle("text-gray-900", isCurrent);
+      el.classList.toggle("font-semibold", isCurrent);
+      el.classList.toggle("text-blue-600", !isCurrent);
+    };
     if (treeRef.current) {
-      treeRef.current.querySelectorAll<HTMLElement>(".folio-leaf").forEach((el) => {
-        const isCurrent = el.dataset.ref === ref;
-        el.classList.toggle("bg-gray-100", isCurrent);
-        el.classList.toggle("text-gray-900", isCurrent);
-        el.classList.toggle("font-semibold", isCurrent);
-        el.classList.toggle("text-blue-600", !isCurrent);
-      });
+      treeRef.current
+        .querySelectorAll<HTMLElement>(".folio-leaf-label")
+        .forEach((el) => {
+          const isCurrent =
+            el.closest("[data-ref]")?.getAttribute("data-ref") === ref;
+          applyTo(el, isCurrent);
+        });
     }
     if (stripListRef.current) {
       stripListRef.current
         .querySelectorAll<HTMLElement>(".strip-verse")
-        .forEach((el) => {
-          const isCurrent = el.dataset.ref === ref;
-          el.classList.toggle("bg-gray-100", isCurrent);
-          el.classList.toggle("text-gray-900", isCurrent);
-          el.classList.toggle("font-semibold", isCurrent);
-          el.classList.toggle("text-blue-600", !isCurrent);
-        });
+        .forEach((el) => applyTo(el, el.dataset.ref === ref));
     }
   }, []);
 
@@ -368,6 +418,42 @@ export default function FlowReaderFolio({
     },
     [grantha]
   );
+
+  // Exclusive scroll-follow: keep exactly the current section's accordion
+  // chain open so the folio tree follows the reading position like the
+  // collapsed strip. On crossing a section boundary (activeSection changes —
+  // from scroll or from a jump), reset `expanded` to that chain; anything the
+  // reader expanded by hand collapses on the next boundary cross. The reset is
+  // done during render (the adjust-during-render pattern used for
+  // prevSelectedRef/prevGranthaId above), never in an effect, so it can't
+  // cascade renders.
+  if (isStructuralOutline && prevActiveSection !== activeSection) {
+    setPrevActiveSection(activeSection);
+    setExpanded(new Set(sectionChain.get(activeSection) ?? []));
+  }
+
+  // Lazy-load parts the scroll-follow just opened (mirrors toggleGroup). A
+  // side effect only — it never sets state synchronously — so it belongs in an
+  // effect rather than in the render-phase reset above.
+  useEffect(() => {
+    if (!isStructuralOutline) return;
+    const chain = sectionChain.get(activeSection);
+    if (!chain || chain.length === 0) return;
+    for (const id of chain) {
+      const parts = unloadedPartsByGroup.get(id);
+      if (parts) {
+        for (const firstRef of parts) {
+          void loadPart(firstRef);
+        }
+      }
+    }
+  }, [
+    activeSection,
+    sectionChain,
+    unloadedPartsByGroup,
+    loadPart,
+    isStructuralOutline,
+  ]);
 
   // Re-observe when the observed `[data-verse-ref]` set changes: grantha/
   // passage changes, the single↔compare branch flip (isCompare), editions
@@ -442,6 +528,22 @@ export default function FlowReaderFolio({
     return () => window.clearTimeout(timer);
   }, [selectedRef, availableWidth, grantha]);
 
+  // Mirror the live current verse into the jump input, but only while the
+  // reader is not editing it. The input is uncontrolled (see jumpInputRef), so
+  // this is the single place the idle display updates — never a `value` prop
+  // that would clobber an in-progress edit on a scrollspy re-render.
+  useLayoutEffect(() => {
+    const el = jumpInputRef.current;
+    if (!el || jumpFocused) return;
+    // Present the current ref in the app's numeral script so the box matches
+    // the strip/header (deva: "७.११"); typing stays raw/IME-driven and is
+    // normalized at parse time in handleJump, so the idle display never
+    // touches an in-progress edit.
+    const display =
+      script === "deva" ? toDevanagariNumerals(currentVerse) : currentVerse;
+    if (el.value !== display) el.value = display;
+  }, [currentVerse, jumpFocused, script]);
+
   // Keep the scrollspy-highlighted verse centered in the folio. Runs after the
   // scrollspy updates `currentVerse`; `activeSection` only ever changes in the
   // same scrollspy callback, so the strip's re-render on a section change is
@@ -494,6 +596,21 @@ export default function FlowReaderFolio({
     setExpanded(next);
   };
 
+  // The scroll-follow current section's group chain (root → innermost group
+  // ids) and its structural path labels, used to make the current accordion
+  // header sticky so a verse-number-only row never loses its chapter context
+  // mid-scroll. Empty for curated/depth-1 texts (no scroll-follow).
+  const currentChain = isStructuralOutline
+    ? sectionChain.get(activeSection)
+    : undefined;
+  const currentSectionPath = useMemo(() => {
+    if (!isStructuralOutline) return [];
+    return (
+      model.sections.find((s) => s.boundary.markerRef === activeSection)
+        ?.boundary.path ?? []
+    );
+  }, [isStructuralOutline, model, activeSection]);
+
   const renderNode = (node: OutlineNode, depth: number): ReactNode => {
     const paddingLeft = `${0.5 + depth * 0.9}rem`;
     if (node.kind === "leaf") {
@@ -506,7 +623,13 @@ export default function FlowReaderFolio({
           className="folio-leaf block w-full text-left py-1.5 pr-4 text-sm font-serif text-blue-600 hover:bg-blue-50"
           style={{ paddingLeft }}
         >
-          {node.label}
+          {/* The current verse's highlight is a gray pill hugging the label
+              (matching the strip's round chip); the button stays full-width so
+              the whole row remains the click target and the hover tint spans
+              the row. */}
+          <span className="folio-leaf-label inline-block rounded-full px-2 py-0.5 -ml-2">
+            {node.label}
+          </span>
         </button>
       );
     }
@@ -522,13 +645,25 @@ export default function FlowReaderFolio({
       );
     }
     const isOpen = expanded.has(node.id);
+    // The current section's innermost accordion header sticks to the top of the
+    // tree scroll so the chapter context stays visible while its verse rows
+    // (which show verse numbers only) scroll past. Its label becomes a full
+    // breadcrumb of the section's path (e.g. "अध्यायः ५ › ब्राह्मणम् ४"),
+    // mirroring the column mode's sticky section heading.
+    const isCurrentHeader =
+      currentChain != null && currentChain[currentChain.length - 1] === node.id;
+    const headerLabel = isCurrentHeader && currentSectionPath.length > 1
+      ? currentSectionPath.map(toDevanagariNumerals).join(" › ")
+      : toDevanagariNumerals(node.label);
     return (
       <div key={node.id}>
         <button
           type="button"
           onClick={() => toggleGroup(node.id)}
           aria-expanded={isOpen}
-          className="folio-group w-full flex items-center gap-1.5 py-2 pr-4 text-sm font-serif font-semibold text-gray-800 hover:bg-gray-50"
+          className={`folio-group w-full flex items-center gap-1.5 py-2 pr-4 text-sm font-serif font-semibold text-gray-800 hover:bg-gray-50 ${
+            isCurrentHeader ? "sticky top-0 z-10 bg-white" : ""
+          }`}
           style={{ paddingLeft }}
         >
           <svg
@@ -541,7 +676,7 @@ export default function FlowReaderFolio({
           >
             <path d="M1 0.5 L7 4 L1 7.5 Z" />
           </svg>
-          <span className="truncate">{node.label}</span>
+          <span className="truncate">{headerLabel}</span>
         </button>
         {isOpen && node.children && (
           <div>{node.children.map((child) => renderNode(child, depth + 1))}</div>
@@ -552,7 +687,7 @@ export default function FlowReaderFolio({
 
   const handleJump = (e: FormEvent) => {
     e.preventDefault();
-    const q = jumpValue
+    const q = (jumpInputRef.current?.value ?? "")
       .replace(/[०-९]/g, (d) => String("०१२३४५६७८९".indexOf(d)))
       .trim();
     if (!q) return;
@@ -571,7 +706,17 @@ export default function FlowReaderFolio({
       );
       target = section?.boundary.firstVerseRef ?? resolved.ref;
     }
-    setJumpValue("");
+    // A bare top-level number ("7") means the chapter itself: land on its
+    // first verse even when only a later verse of that chapter is loaded
+    // (prefix resolution would otherwise pick the first *loaded* verse).
+    if (!q.includes(".")) {
+      const section = model.sections.find(
+        (s) => s.boundary.markerRef === q
+      );
+      if (section) {
+        target = section.boundary.firstVerseRef;
+      }
+    }
     setJumpFocused(false);
     onJump(target);
   };
@@ -579,37 +724,38 @@ export default function FlowReaderFolio({
   const jumpForm = (
     <form
       onSubmit={handleJump}
-      className="flex items-center gap-2 px-4 py-3 border-b border-gray-100"
+      className="px-4 py-3 border-b border-gray-100"
     >
-      <input
-        type="text"
-        inputMode="numeric"
-        value={jumpFocused ? jumpValue : currentVerse}
-        onFocus={() => {
-          setJumpFocused(true);
-          setJumpValue(currentVerse);
-        }}
-        onChange={(e) => {
-          setJumpValue(e.target.value);
-          setJumpFlash(false);
-        }}
-        onBlur={() => {
-          setJumpFocused(false);
-          setJumpValue("");
-        }}
-        placeholder="७.११"
-        aria-label="Jump to section.verse"
-        title="Current verse — type a ref to jump"
-        className={`flex-1 min-w-0 border rounded-lg px-3 py-2 text-sm font-serif focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-100 ${
-          jumpFlash ? "border-red-300" : "border-gray-200"
-        }`}
-      />
-      <button
-        type="submit"
-        className="shrink-0 px-3 h-9 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-600 text-gray-600 text-sm font-serif"
-      >
-        {script === "roman" ? "Gaccha" : "जाएं"}
-      </button>
+      <div className="relative">
+        <input
+          ref={jumpInputRef}
+          type="text"
+          inputMode="numeric"
+          defaultValue={currentVerse}
+          onFocus={(e) => {
+            setJumpFocused(true);
+            // Select the whole current ref so typing (or the arrow) replaces it
+            // in one gesture, matching the column mode's quick jump.
+            e.target.select();
+          }}
+          onChange={() => setJumpFlash(false)}
+          onBlur={() => setJumpFocused(false)}
+          placeholder="७.११"
+          aria-label="Jump to section.verse"
+          title="Current verse — type a ref to jump"
+          className={`w-full border rounded-lg pl-3 pr-9 py-2 text-sm font-serif focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-100 ${
+            jumpFlash ? "border-red-300" : "border-gray-200"
+          }`}
+        />
+        {/* Submit arrow inside the box, matching the column mode's quick jump. */}
+        <button
+          type="submit"
+          aria-label={script === "roman" ? "Gaccha" : "जाएं"}
+          className="absolute inset-y-0 right-0 w-9 flex items-center justify-center text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          →
+        </button>
+      </div>
     </form>
   );
 

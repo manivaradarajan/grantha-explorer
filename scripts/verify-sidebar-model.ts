@@ -175,6 +175,16 @@ function verifyGrantha(entry: IndexEntry) {
   } else {
     check(model.sections.length > 0 || mainRefs.length === 0, "depth >= 2 → sections present (or no passages)");
 
+    // B-fix: a prefatory-only part (e.g. the Gītā's maṅgalācaraṇa part, whose
+    // only passage "0.1" lives in prefatory_material) must never surface as a
+    // structural section. Every part is loaded here, so every real section must
+    // carry passages — an empty one means a loaded part was mislabeled as
+    // unloaded and got a bogus placeholder (the old "अध्यायः 0" bug).
+    check(
+      model.sections.every((s) => s.passages.length > 0),
+      "no empty structural section (prefatory-only parts excluded)",
+    );
+
     // ascending order by firstVerseRef numeric components
     const refOrder = model.sections.map((s) => s.boundary.firstVerseRef);
     const sorted = [...refOrder].sort((a, b) => {

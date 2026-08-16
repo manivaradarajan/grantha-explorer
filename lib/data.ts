@@ -744,11 +744,19 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
     if (grantha.parts) {
       const levelLabel = structure[0].scriptNames.devanagari;
 
-      // Determine which part files are loaded by checking for their first passage.
-      const loadedPassageRefs = new Set(grantha.passages.map(p => p.ref));
+      // Determine which part files are loaded by checking for their first ref.
+      // A part may be prefatory-only (e.g. the Gītā's maṅgalācaraṇa part, whose
+      // only passage "0.1" lives in prefatory_material, not passages) — counting
+      // main passages alone would mislabel such a loaded part as unloaded and
+      // invent a bogus structural placeholder for it (e.g. "अध्यायः 0").
+      const loadedRefs = new Set([
+        ...grantha.passages.map(p => p.ref),
+        ...(grantha.prefatory_material ?? []).map(p => p.ref),
+        ...(grantha.concluding_material ?? []).map(p => p.ref),
+      ]);
       const loadedFirstRefs = new Set(
         grantha.parts
-          .filter(p => loadedPassageRefs.has(p.first_ref))
+          .filter(p => loadedRefs.has(p.first_ref))
           .map(p => p.first_ref)
       );
 
