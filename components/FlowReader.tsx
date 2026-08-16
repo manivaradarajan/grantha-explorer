@@ -107,7 +107,7 @@ export default function FlowReader({
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [folioOpen, setFolioOpen] = useState(false);
-  const [fontScale, setFontScale] = useState(1);
+  const [fontScale, setFontScale] = useState(1.2);
   const [availableWidth, setAvailableWidth] = useState(0);
 
   const isCompare = editionIds.length >= 2;
@@ -125,7 +125,7 @@ export default function FlowReader({
 
   const passages = useMemo(
     () => getAllPassagesForNavigation(grantha),
-    [grantha]
+    [grantha],
   );
   const activeCommentary: Commentary | undefined = grantha.commentaries[0];
   const hasSubcommentaries =
@@ -151,7 +151,9 @@ export default function FlowReader({
 
   const topStructureLevel = grantha.structure_levels[0];
   const structureLabel =
-    topStructureLevel?.scriptNames[script === "roman" ? "roman" : "devanagari"] ??
+    topStructureLevel?.scriptNames[
+      script === "roman" ? "roman" : "devanagari"
+    ] ??
     topStructureLevel?.scriptNames.devanagari ??
     "";
 
@@ -188,7 +190,9 @@ export default function FlowReader({
   const currentSection = selectedRef.split(".")[0];
 
   const commentatorName =
-    activeCommentary?.commentator?.[script === "roman" ? "roman" : "devanagari"] ??
+    activeCommentary?.commentator?.[
+      script === "roman" ? "roman" : "devanagari"
+    ] ??
     activeCommentary?.commentator?.devanagari ??
     "";
 
@@ -212,10 +216,12 @@ export default function FlowReader({
       .filter((stub) => editionIds.includes(stub.edition_id))
       .map((stub) =>
         script === "roman"
-          ? stub.commentator?.roman || stub.commentator?.devanagari || stub.edition_id
-          : stub.commentator?.devanagari || stub.edition_id
+          ? stub.commentator?.roman ||
+            stub.commentator?.devanagari ||
+            stub.edition_id
+          : stub.commentator?.devanagari || stub.edition_id,
       );
-    return names.length ? names.join(" · ") : grantha.edition_id ?? "";
+    return names.length ? names.join(" · ") : (grantha.edition_id ?? "");
   }, [editionsMeta, editionIds, script, grantha.edition_id]);
 
   const verseRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -248,7 +254,7 @@ export default function FlowReader({
         const section = ref.split(".")[0] ?? ref;
         setViewSection((prev) => (prev === section ? prev : section));
       }
-    }
+    },
   );
 
   // Measure the reading area's available width so compare mode can choose
@@ -274,7 +280,7 @@ export default function FlowReader({
     return (
       verseRefs.current[ref] ??
       scrollContainerRef.current?.querySelector<HTMLElement>(
-        `[data-verse-ref="${ref}"]`
+        `[data-verse-ref="${ref}"]`,
       ) ??
       null
     );
@@ -298,7 +304,7 @@ export default function FlowReader({
       // when the target element sits in a non-primary compare page.
       container.scrollTop = targetScrollTop;
     },
-    [findVerseElement]
+    [findVerseElement],
   );
 
   // Auto-scroll to the selected verse on mount and when the selection changes
@@ -367,7 +373,7 @@ export default function FlowReader({
     () => () => {
       observer.current?.disconnect();
     },
-    []
+    [],
   );
 
   // Sentinel observer: when the bottom of the loaded scroll comes into view and
@@ -386,7 +392,7 @@ export default function FlowReader({
       });
       if (node) observer.current.observe(node);
     },
-    [isLoadingPart, grantha, passages, loadPart]
+    [isLoadingPart, grantha, passages, loadPart],
   );
 
   // On mount / grantha change: preload the part immediately before the selected
@@ -400,11 +406,14 @@ export default function FlowReader({
     if (!parts || parts.length === 0) return;
     const section = selectedRef.split(".")[0];
     const sectionIdx = parts.findIndex(
-      (p) => p.first_ref.split(".")[0] === section
+      (p) => p.first_ref.split(".")[0] === section,
     );
     if (sectionIdx <= 0) return;
     const prevPart = parts[sectionIdx - 1];
-    if (prevPart && !grantha.passages.some((p) => p.ref === prevPart.first_ref)) {
+    if (
+      prevPart &&
+      !grantha.passages.some((p) => p.ref === prevPart.first_ref)
+    ) {
       loadPart(prevPart.first_ref);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -437,7 +446,9 @@ export default function FlowReader({
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-    container.addEventListener("scroll", handleApproachScroll, { passive: true });
+    container.addEventListener("scroll", handleApproachScroll, {
+      passive: true,
+    });
     return () => container.removeEventListener("scroll", handleApproachScroll);
   }, [handleApproachScroll]);
 
@@ -473,7 +484,7 @@ export default function FlowReader({
   // today, so nothing renders, but the plumbing is data-driven, not hardcoded.
   const renderSubcommentary = (
     sub: Commentary,
-    verseRef: string
+    verseRef: string,
   ): ReactNode => {
     const subPassage = commentaryPassageForRef(sub.passages, verseRef);
     if (!subPassage) {
@@ -509,7 +520,7 @@ export default function FlowReader({
                 className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-700 mb-3"
                 dangerouslySetInnerHTML={{
                   __html: sanitizeCommentaryHtml(
-                    subPassage.intro.sanskrit.devanagari
+                    subPassage.intro.sanskrit.devanagari,
                   ),
                 }}
               />
@@ -518,7 +529,7 @@ export default function FlowReader({
               className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-600"
               dangerouslySetInnerHTML={{
                 __html: sanitizeCommentaryHtml(
-                  subPassage.content?.sanskrit?.devanagari || ""
+                  subPassage.content?.sanskrit?.devanagari || "",
                 ),
               }}
             />
@@ -588,258 +599,268 @@ export default function FlowReader({
       {/* Left column: header + reading content. The right folio panel is a
           full-bleed sibling below, spanning the full viewport height. */}
       <div className="flex flex-col flex-1 min-w-0">
-      <header className="relative shrink-0 border-b border-gray-100 bg-white">
-        {/* Centered title stack, matching the reference mockup. px-16 below lg
+        <header className="relative shrink-0 border-b border-gray-100 bg-white">
+          {/* Centered title stack, matching the reference mockup. px-16 below lg
             reserves the corners for the floating hamburger/arrows buttons so a
             long title can never slide under them; desktop (lg+) needs only px-6
             since the arrows live in the docked sidebar there. */}
-        <div className="flex flex-col items-center pt-6 pb-4 px-16 lg:px-6">
-          <div className="hidden lg:block mb-1.5">
-            <span className="font-serif text-xs text-gray-400 tracking-wide">
-              ग्रन्थपरिशीलकः
-            </span>
-          </div>
-          <GranthaSelector
-            granthas={granthas}
-            selectedGranthaId={grantha.grantha_id}
-            onSelect={onGranthaChange}
-            triggerClassName="inline-flex max-w-full items-center gap-2 font-serif text-[1.5rem] font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
-          />
-          {structureDepth >= 2 && (
-            <button
-              type="button"
-              onClick={() => setFolioOpen((v) => !v)}
-              className="flex items-center gap-1 mt-1.5 hover:opacity-70 transition-opacity"
-              title="Open table of contents"
-              aria-label={script === "roman" ? "Select chapter" : "अध्याय चुनें"}
-            >
-              <span className="font-serif text-base font-semibold text-gray-700">
-                {structureLabel} {toDevanagariNumerals(viewSection)}
+          <div className="flex flex-col items-center pt-6 pb-4 px-16 lg:px-6">
+            <div className="hidden lg:block mb-1.5">
+              <span className="font-serif text-xs text-gray-400 tracking-wide">
+                ग्रन्थपरिशीलकः
               </span>
-              <svg
-                className="w-3.5 h-3.5 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
+            </div>
+            <GranthaSelector
+              granthas={granthas}
+              selectedGranthaId={grantha.grantha_id}
+              onSelect={onGranthaChange}
+              triggerClassName="inline-flex max-w-full items-center gap-2 font-serif text-[1.5rem] font-semibold bg-transparent cursor-pointer hover:opacity-70 transition-opacity"
+            />
+            {structureDepth >= 2 && (
+              <button
+                type="button"
+                onClick={() => setFolioOpen((v) => !v)}
+                className="flex items-center gap-1 mt-1.5 hover:opacity-70 transition-opacity"
+                title="Open table of contents"
+                aria-label={
+                  script === "roman" ? "Select chapter" : "अध्याय चुनें"
+                }
               >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                  clipRule="evenodd"
+                <span className="font-serif text-base font-semibold text-gray-700">
+                  {structureLabel} {toDevanagariNumerals(viewSection)}
+                </span>
+                <svg
+                  className="w-3.5 h-3.5 text-gray-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            )}
+            {editionsMeta.length >= 2 && (
+              <div className="mt-3">
+                <ComparePicker
+                  editions={editionsMeta}
+                  selectedIds={
+                    editionIds.length ? editionIds : [grantha.edition_id ?? ""]
+                  }
+                  onConfirm={onEditionIdsChange}
+                  script={script}
+                  triggerLabel={compareSummary}
                 />
-              </svg>
-            </button>
-          )}
-          {editionsMeta.length >= 2 && (
-            <div className="mt-3">
-              <ComparePicker
-                editions={editionsMeta}
-                selectedIds={editionIds.length ? editionIds : [grantha.edition_id ?? ""]}
-                onConfirm={onEditionIdsChange}
-                script={script}
-                triggerLabel={compareSummary}
-              />
-            </div>
-          )}
-          {activeCommentary && (
-            <div className="text-sm text-gray-500 font-serif mt-1">
-              {activeCommentary.commentary_title}
-              {commentatorName ? ` — ${commentatorName}` : ""}
-            </div>
-          )}
-        </div>
-      </header>
+              </div>
+            )}
+            {activeCommentary && (
+              <div className="text-sm text-gray-500 font-serif mt-1">
+                {activeCommentary.commentary_title}
+                {commentatorName ? ` — ${commentatorName}` : ""}
+              </div>
+            )}
+          </div>
+        </header>
 
-      <div className="flex flex-1 min-h-0">
-        <div
-          ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto overflow-x-hidden"
-        >
-          <div className={`mx-auto px-8 py-10 ${contentWidthClass}`}>
-            {isCompare ? (
-              <FlowReaderCompare
-                editions={editions}
-                passages={passages}
-                selectedRef={selectedRef}
-                onVerseSelect={onVerseSelect}
-                script={script}
-                activeSubcommentaryIds={activeSubcommentaryIds}
-                onSubcommentaryToggle={onSubcommentaryToggle}
-                availableWidth={availableWidth}
-                grantha={grantha}
-                granthaTitleDeva={granthaTitleDeva}
-                granthaTitleIast={granthaTitleIast}
-              />
-            ) : (
-            passages.map((passage, index) => {
-              const isMain = passage.passage_type === "main";
-              const section = passage.ref.split(".")[0];
+        <div className="flex flex-1 min-h-0">
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-y-auto overflow-x-hidden"
+          >
+            <div className={`mx-auto px-8 py-10 ${contentWidthClass}`}>
+              {isCompare ? (
+                <FlowReaderCompare
+                  editions={editions}
+                  passages={passages}
+                  selectedRef={selectedRef}
+                  onVerseSelect={onVerseSelect}
+                  script={script}
+                  activeSubcommentaryIds={activeSubcommentaryIds}
+                  onSubcommentaryToggle={onSubcommentaryToggle}
+                  availableWidth={availableWidth}
+                  grantha={grantha}
+                  granthaTitleDeva={granthaTitleDeva}
+                  granthaTitleIast={granthaTitleIast}
+                />
+              ) : (
+                passages.map((passage, index) => {
+                  const isMain = passage.passage_type === "main";
+                  const section = passage.ref.split(".")[0];
 
-              // Chapter divider — label from the grantha's own structure_levels,
-              // never hardcoded to "अध्याय" (spec §3.3). Only main passages open
-              // a section, so dividers never precede prefatory/concluding items.
-              let divider: ReactNode = null;
-              if (isMain && structureLabel && sectionStartRefs.has(passage.ref)) {
-                divider = (
-                  <div
-                    key={`divider-${index}`}
-                    className="flex items-center gap-4 my-12"
-                  >
-                    <span className="flex-1 h-px bg-gray-200" />
-                    <span className="text-sm text-gray-400 font-serif tracking-wide">
-                      {structureLabel} {toDevanagariNumerals(section)}
-                    </span>
-                    <span className="flex-1 h-px bg-gray-200" />
-                  </div>
-                );
-              }
+                  // Chapter divider — label from the grantha's own structure_levels,
+                  // never hardcoded to "अध्याय" (spec §3.3). Only main passages open
+                  // a section, so dividers never precede prefatory/concluding items.
+                  let divider: ReactNode = null;
+                  if (
+                    isMain &&
+                    structureLabel &&
+                    sectionStartRefs.has(passage.ref)
+                  ) {
+                    divider = (
+                      <div
+                        key={`divider-${index}`}
+                        className="flex items-center gap-4 my-12"
+                      >
+                        <span className="flex-1 h-px bg-gray-200" />
+                        <span className="text-sm text-gray-400 font-serif tracking-wide">
+                          {structureLabel} {toDevanagariNumerals(section)}
+                        </span>
+                        <span className="flex-1 h-px bg-gray-200" />
+                      </div>
+                    );
+                  }
 
-              if (!isMain) {
-                const label = (passage as PrefatoryMaterial).label?.devanagari;
-                const content = passage.content?.sanskrit?.devanagari;
-                // The whole-work opening (e.g. the Gita's maṅgalācaraṇa) lives in
-                // commentary.intro, keyed to its label-only prefatory anchor — the
-                // same prefaceAnchor mechanism CommentaryPanel uses (§2.3). Render
-                // it only at that anchor's own position, once.
-                const prefaceAnchor =
-                  activeCommentary?.intro &&
-                  passage.ref === grantha.prefatory_material?.[0]?.ref
-                    ? activeCommentary.intro
-                    : null;
-                return (
-                  <Fragment key={passage.ref}>
-                    <div
-                      data-verse-ref={passage.ref}
-                      className="px-4 py-8"
-                    >
-                      {label && (
-                        <div className="text-sm text-gray-600 italic mb-3">
-                          {label}
+                  if (!isMain) {
+                    const label = (passage as PrefatoryMaterial).label
+                      ?.devanagari;
+                    const content = passage.content?.sanskrit?.devanagari;
+                    // The whole-work opening (e.g. the Gita's maṅgalācaraṇa) lives in
+                    // commentary.intro, keyed to its label-only prefatory anchor — the
+                    // same prefaceAnchor mechanism CommentaryPanel uses (§2.3). Render
+                    // it only at that anchor's own position, once.
+                    const prefaceAnchor =
+                      activeCommentary?.intro &&
+                      passage.ref === grantha.prefatory_material?.[0]?.ref
+                        ? activeCommentary.intro
+                        : null;
+                    return (
+                      <Fragment key={passage.ref}>
+                        <div data-verse-ref={passage.ref} className="px-4 py-8">
+                          {label && (
+                            <div className="text-sm text-gray-600 italic mb-3">
+                              {label}
+                            </div>
+                          )}
+                          {prefaceAnchor ? (
+                            <p
+                              className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line"
+                              dangerouslySetInnerHTML={{
+                                __html: sanitizeCommentaryHtml(
+                                  prefaceAnchor.sanskrit?.devanagari || "",
+                                ),
+                              }}
+                            />
+                          ) : content ? (
+                            <p className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line">
+                              {stripMarkdown(content)}
+                            </p>
+                          ) : null}
                         </div>
-                      )}
-                      {prefaceAnchor ? (
-                        <p
-                          className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line"
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeCommentaryHtml(
-                              prefaceAnchor.sanskrit?.devanagari || ""
-                            ),
-                          }}
-                        />
-                      ) : content ? (
-                        <p className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line">
-                          {stripMarkdown(content)}
-                        </p>
-                      ) : null}
-                    </div>
-                  </Fragment>
-                );
-              }
+                      </Fragment>
+                    );
+                  }
 
-              const cp =
-                activeCommentary && isMain
-                  ? commentaryPassageForRef(activeCommentary.passages, passage.ref)
-                  : undefined;
-              const isSelected = passage.ref === selectedRef;
-              const mula = stripMarkdown(passage.content?.sanskrit?.devanagari);
-              const introText = cp?.intro?.sanskrit?.devanagari;
+                  const cp =
+                    activeCommentary && isMain
+                      ? commentaryPassageForRef(
+                          activeCommentary.passages,
+                          passage.ref,
+                        )
+                      : undefined;
+                  const isSelected = passage.ref === selectedRef;
+                  const mula = stripMarkdown(
+                    passage.content?.sanskrit?.devanagari,
+                  );
+                  const introText = cp?.intro?.sanskrit?.devanagari;
 
-              return (
-                <Fragment key={passage.ref}>
-                  {divider}
-                  <div
-                    ref={(el) => setVerseRef(passage.ref, el)}
-                    data-verse-ref={passage.ref}
-                    onClick={() => handleVerseClick(passage.ref)}
-                    className={`px-4 py-8 cursor-pointer transition-colors ${
-                      isSelected ? "bg-gray-50" : ""
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="min-w-0 flex-1">
-                        {introText && (
-                          <p
-                            className="verse-text font-serif flow-intro leading-relaxed text-gray-700 mb-5"
-                            dangerouslySetInnerHTML={{
-                              __html: sanitizeCommentaryHtml(introText),
-                            }}
-                          />
-                        )}
-                        {/* Mūla verse: the verse number closes it in double
+                  return (
+                    <Fragment key={passage.ref}>
+                      {divider}
+                      <div
+                        ref={(el) => setVerseRef(passage.ref, el)}
+                        data-verse-ref={passage.ref}
+                        onClick={() => handleVerseClick(passage.ref)}
+                        className={`px-4 py-8 cursor-pointer transition-colors ${
+                          isSelected ? "bg-gray-50" : ""
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="min-w-0 flex-1">
+                            {introText && (
+                              <p
+                                className="verse-text font-serif flow-intro leading-relaxed text-gray-700 mb-5"
+                                dangerouslySetInnerHTML={{
+                                  __html: sanitizeCommentaryHtml(introText),
+                                }}
+                              />
+                            )}
+                            {/* Mūla verse: the verse number closes it in double
                             dandas (॥ N ॥, print convention, spec §6.1); the
                             shloka keeps its source line break (which falls at
                             the single-daṇḍā pāda boundary). The verse sits
                             narrower and centered so the commentary runs wider
                             than it, keeping the reading column centered like
                             the mockup. */}
-                        <div className="mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2">
-                          {passage.speaker && (
-                            <div className="font-serif text-sm text-gray-600 mb-2">
-                              {stripMarkdown(passage.speaker)}
+                            <div className="mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2">
+                              {passage.speaker && (
+                                <div className="font-serif text-sm text-gray-600 mb-2">
+                                  {stripMarkdown(passage.speaker)}
+                                </div>
+                              )}
+                              {mula && (
+                                <p className="verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line">
+                                  {withVerseNumber(mula, passage.ref)}
+                                </p>
+                              )}
                             </div>
-                          )}
-                          {mula && (
-                            <p className="verse-text font-serif flow-verse leading-7 text-gray-900 whitespace-pre-line">
-                              {withVerseNumber(mula, passage.ref)}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="shrink-0 pl-3 pt-1">
-                        <FlowReaderCitation
-                          grantha={grantha}
-                          verseRef={passage.ref}
-                          subcommentaryIds={activeSubcommentaryIds}
-                          script={script}
-                          granthaTitleDeva={granthaTitleDeva}
-                          granthaTitleIast={granthaTitleIast}
-                        />
-                      </div>
-                    </div>
-                    {cp && (
-                      <div>
-                        {cp.prefatory_material?.map((item, idx) => (
-                          <div key={idx} className="mb-4">
-                            {item.label && (
-                              <div className="text-sm text-gray-600 italic mb-3">
-                                {item.label}
-                              </div>
-                            )}
-                            <p className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
-                              {item.content?.sanskrit?.devanagari || ""}
-                            </p>
                           </div>
-                        ))}
-                        <p
-                          className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line"
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeCommentaryHtml(
-                              cp.content?.sanskrit?.devanagari || ""
-                            ),
-                          }}
-                        />
-                        {hasSubcommentaries &&
-                          activeCommentary?.subcommentaries?.map((sub) =>
-                            renderSubcommentary(sub, passage.ref)
-                          )}
+                          <div className="shrink-0 pl-3 pt-1">
+                            <FlowReaderCitation
+                              grantha={grantha}
+                              verseRef={passage.ref}
+                              subcommentaryIds={activeSubcommentaryIds}
+                              script={script}
+                              granthaTitleDeva={granthaTitleDeva}
+                              granthaTitleIast={granthaTitleIast}
+                            />
+                          </div>
+                        </div>
+                        {cp && (
+                          <div>
+                            {cp.prefatory_material?.map((item, idx) => (
+                              <div key={idx} className="mb-4">
+                                {item.label && (
+                                  <div className="text-sm text-gray-600 italic mb-3">
+                                    {item.label}
+                                  </div>
+                                )}
+                                <p className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
+                                  {item.content?.sanskrit?.devanagari || ""}
+                                </p>
+                              </div>
+                            ))}
+                            <p
+                              className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line"
+                              dangerouslySetInnerHTML={{
+                                __html: sanitizeCommentaryHtml(
+                                  cp.content?.sanskrit?.devanagari || "",
+                                ),
+                              }}
+                            />
+                            {hasSubcommentaries &&
+                              activeCommentary?.subcommentaries?.map((sub) =>
+                                renderSubcommentary(sub, passage.ref),
+                              )}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </Fragment>
-              );
-            })
-            )}
+                    </Fragment>
+                  );
+                })
+              )}
 
-            <div ref={loaderRef} />
-            {isLoadingPart && (
-              <div className="text-center py-4">
-                <span className="text-gray-400">…</span>
-              </div>
-            )}
+              <div ref={loaderRef} />
+              {isLoadingPart && (
+                <div className="text-center py-4">
+                  <span className="text-gray-400">…</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-      </div>
       </div>
 
       <FlowReaderFolio
@@ -867,9 +888,7 @@ export default function FlowReader({
         }
         fontScale={fontScale}
         onFontScaleChange={(next) =>
-          setFontScale(
-            Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, next))
-          )
+          setFontScale(Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, next)))
         }
         onExitFlow={onExitFlow}
       />
