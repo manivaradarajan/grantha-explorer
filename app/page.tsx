@@ -8,9 +8,11 @@ import TextContent from "@/components/TextContent";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
+import FlowReader from "@/components/FlowReader";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useAvailableGranthas } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
+import { useEditions } from "@/hooks/useEditions";
 import {
   getFirstMainPassageRef,
   validateAndNormalizeHash,
@@ -18,6 +20,20 @@ import {
 import { getAllPassagesForNavigation, hasCommentary } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
+
+/** Fixed, always-visible entry point into flow mode from the 3-pane view. */
+function FlowModeToggle({ onEnter }: { onEnter: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onEnter}
+      className="fixed bottom-5 right-5 z-40 px-4 py-2 rounded-full bg-white border border-gray-300 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 shadow-lg transition-colors"
+      title="Flow reader mode"
+    >
+      प्रवाहः
+    </button>
+  );
+}
 
 export default function Home() {
   // Media queries for responsive design
@@ -70,12 +86,23 @@ export default function Home() {
     granthaId,
     verseRef,
     editionId,
+    editionIds,
     commentaryOpen,
     subcommentaryIds,
+    mode,
+    script,
     updateHash,
     updateCommentaryOpen,
     updateSubcommentary,
+    updateMode,
+    updateScript,
+    updateEditionIds,
   } = useVerseHash(granthas[0]?.id || "isavasya-upanishad", "1");
+
+  // The primary edition is the first in the (possibly comma-separated) edition
+  // list — compare mode's extra editions are loaded by useEditions below, and
+  // the panes-side single loader must never be handed a comma-list.
+  const primaryEditionId = editionIds[0];
 
   // Load current grantha data via the new loader hook
   const {
@@ -84,7 +111,12 @@ export default function Home() {
     error: granthaError,
     loadPart,
     isLoadingPart,
-  } = useGranthaLoader(granthaId, editionId);
+  } = useGranthaLoader(granthaId, primaryEditionId);
+
+  // Sibling hook for compare mode: loads one grantha per active edition id via
+  // useGranthaLoader (its contract is unchanged). Single-edition callers above
+  // are unaffected by its existence.
+  const { editions: flowEditions } = useEditions(granthaId, editionIds);
 
   // Handle grantha changes - jump to first main passage when appropriate
   useEffect(() => {
@@ -224,6 +256,12 @@ export default function Home() {
     }
   };
 
+  // In flow mode, clicking a verse just moves the selection — it must not open
+  // the mobile commentary bottom sheet, which is a panes-mode affordance.
+  const handleFlowVerseSelect = (ref: string) => {
+    updateHash(granthaId, ref, editionId);
+  };
+
   // Handle commentary (edition) switch
   const handleEditionChange = (newEditionId: string) => {
     updateHash(granthaId, verseRef, newEditionId);
@@ -316,6 +354,43 @@ export default function Home() {
     );
   }
 
+  // Flow reader mode — a sibling reading mode to the 3-pane view, present at
+  // every breakpoint. Gated by the URL hash `m=flow` (spec §3).
+  if (mode === "flow") {
+    // The primary edition is always in the loaded set; compare adds the rest.
+    // Guard against a transient 1-of-2 load by only activating compare once
+    // both are present.
+    const loadedEditions = flowEditions.length >= 2 ? flowEditions : [currentGrantha];
+    return (
+      <>
+        <FlowReader
+          grantha={currentGrantha}
+          editions={loadedEditions}
+          editionsMeta={currentGrantha.editions ?? []}
+          editionIds={editionIds.length ? editionIds : [currentGrantha.edition_id ?? granthaId]}
+          onEditionIdsChange={updateEditionIds}
+          granthas={granthas}
+          selectedRef={verseRef}
+          onGranthaChange={handleGranthaChange}
+          onVerseSelect={handleFlowVerseSelect}
+          activeSubcommentaryIds={subcommentaryIds}
+          onSubcommentaryToggle={updateSubcommentary}
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
+          onExitFlow={() => updateMode("panes")}
+          script={script}
+          onScriptChange={updateScript}
+        />
+        <InvalidVerseModal
+          isOpen={showInvalidVerseModal}
+          onClose={handleCloseInvalidVerseModal}
+          title={invalidVerseTitle}
+          messageLines={invalidVerseMessageLines}
+        />
+      </>
+    );
+  }
+
   // Render mobile layout for screens <768px
   if (isMobile) {
     return (
@@ -344,6 +419,7 @@ export default function Home() {
           title={invalidVerseTitle}
           messageLines={invalidVerseMessageLines}
         />
+        <FlowModeToggle onEnter={() => updateMode("flow")} />
       </>
     );
   }
@@ -374,6 +450,7 @@ export default function Home() {
           title={invalidVerseTitle}
           messageLines={invalidVerseMessageLines}
         />
+        <FlowModeToggle onEnter={() => updateMode("flow")} />
       </>
     );
   }
@@ -494,6 +571,7 @@ export default function Home() {
         title={invalidVerseTitle}
         messageLines={invalidVerseMessageLines}
       />
+      <FlowModeToggle onEnter={() => updateMode("flow")} />
     </main>
   );
 }

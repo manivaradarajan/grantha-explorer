@@ -1,21 +1,33 @@
 import { useEffect, useState, useCallback } from "react";
-import { parseHash, buildHash, UrlState } from "@/lib/hashUtils";
+import { parseHash, buildHash, UrlState, ReadingMode, parseEditionIds } from "@/lib/hashUtils";
 
 interface UseVerseHashReturn {
   granthaId: string;
   verseRef: string;
   editionId?: string;
+  /** The active edition ids, in order — a single id, or a compare-mode
+   *  comma-separated list split out. Absent = default edition. */
+  editionIds: string[];
   commentaryOpen: boolean;
   subcommentaryIds?: string;
+  /** Active reading mode ("flow" | "panes"). Absent in the hash defaults to "panes". */
+  mode: ReadingMode;
+  /** Label script ("deva" | "roman"). Absent in the hash defaults to "deva". */
+  script: "deva" | "roman";
   updateHash: (
     granthaId: string,
     verseRef: string,
     editionId?: string,
     commentaryOpen?: boolean,
     replaceHistory?: boolean
-  ) => void; // Reverted to void
+  ) => void;
   updateCommentaryOpen: (isOpen: boolean) => void;
   updateSubcommentary: (subcommentaryId: string, isOpen: boolean) => void;
+  updateMode: (mode: ReadingMode) => void;
+  updateScript: (script: "deva" | "roman") => void;
+  /** Set the active edition set (compare mode) as a comma-separated list.
+   *  Call with a single id to return to single-commentator mode. */
+  updateEditionIds: (ids: string[]) => void;
 }
 
 /**
@@ -44,6 +56,7 @@ export function useVerseHash(
         granthaId: defaultGranthaId,
         verseRef: defaultVerseRef,
         commentaryOpen: false,
+        mode: "panes",
       };
     }
 
@@ -57,6 +70,8 @@ export function useVerseHash(
         editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
         subcommentaryIds: parsed.subcommentaryIds,
+        mode: parsed.mode ?? "panes",
+        script: parsed.script ?? "deva",
       };
     }
 
@@ -72,6 +87,7 @@ export function useVerseHash(
       granthaId: defaultGranthaId,
       verseRef: defaultVerseRef,
       commentaryOpen: false,
+      mode: "panes",
     };
   };
 
@@ -97,6 +113,8 @@ export function useVerseHash(
         editionId: parsed.editionId,
         commentaryOpen: parsed.commentaryOpen || false,
         subcommentaryIds: parsed.subcommentaryIds,
+        mode: parsed.mode ?? "panes",
+        script: parsed.script ?? "deva",
       });
     }
 
@@ -189,14 +207,64 @@ export function useVerseHash(
     }
   };
 
+  /** Switch between the flow reader and the 3-pane reading modes. */
+  const updateMode = useCallback((nextMode: ReadingMode) => {
+    const newHash = buildHash({
+      ...state,
+      mode: nextMode,
+    });
+
+    if (typeof window !== "undefined" && window.location.hash !== newHash) {
+      window.location.hash = newHash;
+    }
+  }, [state]);
+
+  /** Set the label script (Devanagari / roman), persisted to the hash (?s=) so
+   *  it travels with deep links and citations. The script is a display
+   *  preference, so it's written via the includePreferences path. */
+  const updateScript = useCallback((nextScript: "deva" | "roman") => {
+    const newHash = buildHash(
+      {
+        ...state,
+        script: nextScript,
+      },
+      true
+    );
+
+    if (typeof window !== "undefined" && window.location.hash !== newHash) {
+      window.location.hash = newHash;
+    }
+  }, [state]);
+
+  /** Set the active edition set (compare mode) as a comma-separated ?e= list.
+   *  A single id returns to single-commentator mode; an empty list clears the
+   *  edition entirely (default). */
+  const updateEditionIds = useCallback((ids: string[]) => {
+    const deduped = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
+    const newHash = buildHash({
+      ...state,
+      editionId: deduped.length > 0 ? deduped.join(",") : undefined,
+    });
+
+    if (typeof window !== "undefined" && window.location.hash !== newHash) {
+      window.location.hash = newHash;
+    }
+  }, [state]);
+
   return {
     granthaId: state.granthaId,
     verseRef: state.verseRef,
     editionId: state.editionId,
+    editionIds: parseEditionIds(state.editionId),
     commentaryOpen: state.commentaryOpen || false,
     subcommentaryIds: state.subcommentaryIds,
+    mode: state.mode ?? "panes",
+    script: state.script ?? "deva",
     updateHash,
     updateCommentaryOpen,
+    updateScript,
     updateSubcommentary,
+    updateMode,
+    updateEditionIds,
   };
 }

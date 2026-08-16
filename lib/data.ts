@@ -1184,4 +1184,50 @@ export async function loadGranthaPart(path: string, partFileName: string): Promi
   return response.json();
 }
 
-  
+/**
+ * Return the first_ref of the next unloaded part file for a multi-part
+ * grantha, or undefined when every declared part is loaded.
+ *
+ * Parts are considered loaded when their first passage is present in the
+ * grantha's navigation-ordered passage list. The scan walks the envelope's
+ * parts array in order to find the last loaded index and returns the next
+ * one — scroll sentinels use this to lazy-load parts as the reader reaches
+ * the end of the loaded content.
+ *
+ * Args:
+ *     grantha: The grantha (must be multi-part for anything to be returned).
+ *     loadedPassages: The currently loaded passages (prefatory + main +
+ *         concluding), used to test which part files are already present.
+ *
+ * Returns:
+ *     The next part file's first_ref, or undefined when nothing is left to
+ *     load.
+ */
+export function nextUnloadedPartFirstRef(
+  grantha: Grantha,
+  loadedPassages: (Passage | PrefatoryMaterial)[],
+): string | undefined {
+  if (!grantha.parts || grantha.parts.length === 0) {
+    return undefined;
+  }
+  const loadedFirstRefs = new Set(
+    grantha.parts
+      .filter((p) =>
+        loadedPassages.some((passage) => passage.ref === p.first_ref)
+      )
+      .map((p) => p.first_ref)
+  );
+  let lastLoadedPartIndex = -1;
+  for (let i = 0; i < grantha.parts.length; i++) {
+    if (loadedFirstRefs.has(grantha.parts[i].first_ref)) {
+      lastLoadedPartIndex = i;
+    }
+  }
+  if (lastLoadedPartIndex < grantha.parts.length - 1) {
+    const nextPart = grantha.parts[lastLoadedPartIndex + 1];
+    if (nextPart && !loadedFirstRefs.has(nextPart.first_ref)) {
+      return nextPart.first_ref;
+    }
+  }
+  return undefined;
+}

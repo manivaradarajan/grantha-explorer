@@ -6,12 +6,18 @@ interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  /** Accessible label for the dialog. Defaults to "Navigation menu" (today's
+   *  hardcoded value) so every existing caller is unaffected; other drawers
+   *  (e.g. the flow reader's preferences drawer) pass a context-appropriate
+   *  label. */
+  label?: string;
 }
 
 export default function MobileDrawer({
   isOpen,
   onClose,
   children,
+  label = "Navigation menu",
 }: MobileDrawerProps) {
   useEffect(() => {
     if (isOpen) {
@@ -50,7 +56,7 @@ export default function MobileDrawer({
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-label="Navigation menu"
+      aria-label={label}
     >
       {/* Backdrop */}
       <div

@@ -2,6 +2,7 @@
 
 @theme inline {
   --font-wordmark: var(--font-wordmark);
+  --font-reading: var(--font-reading);
 }
 
 /* Ensure text wrapping for long Sanskrit words */
@@ -44,4 +45,62 @@
   border: 1px solid #d1d5db;
   white-space: normal;
   font-size: 1rem;
+}
+
+/* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set
+   via the --reading-scale custom property on the flow reader root; these rules
+   apply it to the reader's body text only, so other reading surfaces are
+   unaffected. Font sizes stay em-relative (vs Tailwind's rem utilities) so the
+   single inherited scale multiplies them uniformly. Unlayered rules here
+   override the layered Tailwind utilities (e.g. text-xl) for these elements. */
+.flow-reader {
+  --reading-scale: 1;
+  /* Tiro Devanagari Sanskrit for the reading-mode body/serif text (spec §6.3);
+     UI chrome keeps Noto Sans. Unlayered so it overrides Tailwind's font-serif
+     utility inside the flow reader. */
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+}
+
+.flow-reader .font-serif {
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+}
+
+.flow-reader .flow-verse {
+  font-size: calc(1.25em * var(--reading-scale, 1));
+}
+
+.flow-reader .flow-intro,
+.flow-reader .flow-commentary {
+  font-size: calc(1em * var(--reading-scale, 1));
+}
+
+.flow-reader .flow-commentary-sub {
+  font-size: calc(0.875em * var(--reading-scale, 1));
+}
+
+/* Tiro Devanagari Sanskrit only ships a 400 weight, so bold is browser-
+   synthesized (faux) and comes out thin. Thicken the glyph strokes on bold
+   text to make it read as genuinely bold. */
+.flow-reader strong,
+.flow-reader b,
+.flow-reader .font-bold,
+.flow-reader .font-semibold {
+  -webkit-text-stroke: 0.3px currentColor;
+  paint-order: stroke fill;
+}
+
+/* Compare mode (2–3 commentators) tuned type scales (spec §6.4). 2-up keeps
+   commentary at 15px/1.7, 3-up at 13.5px/1.6; ṭīkā holds at 12.5px for both
+   tiers (only leading tightens in 3-up). Em-relative so --reading-scale still
+   multiplies uniformly. */
+.flow-reader .flow-compare-2up .flow-commentary {
+  font-size: calc(0.9375em * var(--reading-scale, 1));
+}
+
+.flow-reader .flow-compare-3up .flow-commentary {
+  font-size: calc(0.84375em * var(--reading-scale, 1));
+}
+
+.flow-reader .flow-compare .flow-commentary-sub {
+  font-size: calc(0.78125em * var(--reading-scale, 1));
 }

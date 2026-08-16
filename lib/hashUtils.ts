@@ -3,6 +3,8 @@ import { Grantha, Passage, PrefatoryMaterial } from "./data";
 /**
  * URL state interface
  */
+export type ReadingMode = "flow" | "panes";
+
 export interface UrlState {
   granthaId: string;
   verseRef: string;
@@ -17,6 +19,31 @@ export interface UrlState {
   language?: "both" | "san" | "eng";
   darkMode?: boolean;
   fontSize?: number;
+  /** Active reading mode. "flow" = continuous-prose flow reader; absent/"panes" = the
+   *  existing 3-pane view. Kept in the hash so the mode is linkable/shareable and survives
+   *  back/forward navigation, same as every other piece of reader state. */
+  mode?: ReadingMode;
+}
+
+/**
+ * Split a raw editionId (which may be a single id or a compare-mode
+ * comma-separated list) into its individual edition ids, in order.
+ *
+ * @param editionId - Raw `?e=` value from the hash, or undefined.
+ * @returns Ordered, de-duplicated edition ids (empty when absent/blank).
+ */
+export function parseEditionIds(editionId?: string): string[] {
+  if (!editionId) return [];
+  const seen = new Set<string>();
+  const ids: string[] = [];
+  for (const id of editionId.split(",")) {
+    const trimmed = id.trim();
+    if (trimmed && !seen.has(trimmed)) {
+      seen.add(trimmed);
+      ids.push(trimmed);
+    }
+  }
+  return ids;
 }
 
 /**
@@ -89,6 +116,12 @@ export function parseHash(hash: string): UrlState | null {
         result.fontSize = sizeNum;
       }
     }
+
+    // Reading mode (flow reader vs. panes). Absent = panes (the default).
+    const m = params.get("m");
+    if (m === "flow" || m === "panes") {
+      result.mode = m;
+    }
   }
 
   return result;
@@ -104,8 +137,18 @@ export function buildHash(
   state: UrlState,
   includePreferences: boolean = false
 ): string {
-  const { granthaId, verseRef, editionId, commentaryOpen, subcommentaryIds, script, language, darkMode, fontSize } =
-    state;
+  const {
+    granthaId,
+    verseRef,
+    editionId,
+    commentaryOpen,
+    subcommentaryIds,
+    script,
+    language,
+    darkMode,
+    fontSize,
+    mode,
+  } = state;
 
   // Build base hash
   let hash = `#${granthaId}:${verseRef}`;
@@ -126,6 +169,13 @@ export function buildHash(
   // Always include active subcommentary IDs if present
   if (subcommentaryIds) {
     params.set("sc", subcommentaryIds);
+  }
+
+  // Always include the reading mode when it differs from the default (panes).
+  // The mode is navigation state (like verseRef), not a display preference, so
+  // it travels regardless of includePreferences.
+  if (mode && mode !== "panes") {
+    params.set("m", mode);
   }
 
   // Only include display preferences if explicitly requested (Share My View)
@@ -241,18 +291,35 @@ export function validateAndNormalizeHash(
   // it doesn't have, correct to the default edition. If the grantha has no
   // editions (single-edition text), a stray ?e= from another grantha is
   // meaningless and is dropped.
+  //
+  // The edition param may be a single id or a compare-mode comma-separated
+  // list; each entry is validated independently. Valid entries are kept, an
+  // all-invalid list falls back to the default edition.
   if (grantha.editions?.length) {
-    const validEdition =
-      !parsed.editionId ||
-      grantha.editions.some(e => e.edition_id === parsed.editionId);
-    if (!validEdition) {
-      const defaultEdition =
-        grantha.editions.find(e => e.isDefault) ?? grantha.editions[0];
-      return {
-        ...parsed,
-        editionId: defaultEdition?.edition_id,
-        needsCorrection: true,
-      };
+    const editions = grantha.editions;
+    const requestedIds = parseEditionIds(parsed.editionId);
+    if (requestedIds.length === 0) {
+      // No edition requested — the default applies; nothing to correct.
+    } else {
+      const validIds = requestedIds.filter((id) =>
+        editions.some((e) => e.edition_id === id)
+      );
+      if (validIds.length !== requestedIds.length) {
+        if (validIds.length > 0) {
+          return {
+            ...parsed,
+            editionId: validIds.join(","),
+            needsCorrection: true,
+          };
+        }
+        const defaultEdition =
+          grantha.editions.find((e) => e.isDefault) ?? grantha.editions[0];
+        return {
+          ...parsed,
+          editionId: defaultEdition?.edition_id,
+          needsCorrection: true,
+        };
+      }
     }
   } else if (parsed.editionId) {
     return { ...parsed, editionId: undefined, needsCorrection: true };

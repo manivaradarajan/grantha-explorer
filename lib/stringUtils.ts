@@ -1,3 +1,5 @@
+import DOMPurify from "isomorphic-dompurify";
+
 const DEVANAGARI_DIGITS: Record<string, string> = {
   "0": "०",
   "1": "१",
@@ -27,3 +29,19 @@ export const stripMarkdown = (text: string | undefined): string => {
 export const toDevanagariNumerals = (text: string): string => {
   return text.replace(/[0-9]/g, (digit) => DEVANAGARI_DIGITS[digit] ?? digit);
 };
+
+/**
+ * Sanitize commentary/intro text, applying the same lightweight markdown
+ * transforms the 3-pane commentary pane uses (a `#### ` line becomes an italic
+ * caption, `**bold**` becomes `<strong>`). Shared so the flow reader and the
+ * panes commentary render identical output.
+ */
+export const sanitizeCommentaryHtml = (text: string): string =>
+  DOMPurify.sanitize(
+    text
+      .replace(
+        /^#### (.+)$/gm,
+        '<em class="text-base font-normal italic text-gray-500">$1</em>'
+      )
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
+  );
