@@ -166,7 +166,6 @@ function buildOutlineTree(
   if (model.depth <= 1) {
     return {
       nodes: [
-        ...model.prefatory.map(toLeaf),
         ...model.flatPassages.map(toLeaf),
         ...model.concluding.map(toLeaf),
       ],
@@ -176,7 +175,6 @@ function buildOutlineTree(
   }
   return {
     nodes: [
-      ...model.prefatory.map(toLeaf),
       ...nestSections(model.sections, unloadedPartsByGroup, true),
       ...model.concluding.map(toLeaf),
     ],

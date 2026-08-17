@@ -208,3 +208,37 @@ separately, and is out of scope for the current pass.
 filename containing `-sankara-` as preserved-not-published, matching the Sāyaṇa /
 śānti-vyākhyā precedent. When Śaṅkara publication is undertaken, remove those files from
 the pattern and add BUILD declarations instead.
+
+---
+
+## 13. Folio sidebar performance with deep multi-part granthas (blocker for merge)
+
+**Status:** ⚠️ **MUST be addressed before the Rāmāyaṇa work is merged.**
+
+**Symptom:** the flow-mode slideout folio is slow to open/respond on the
+`valmiki-ramayana` Bāla-kāṇḍa smoke test (75 parts, ~2000 verses + commentary).
+
+**What was already fixed:**
+- The initial eager load previously fetched **all 75 parts** because
+  `loadGrantha` grouped by the coarse `part.id` (kāṇḍa `"1"` for every bala
+  part). `lib/data.ts` now groups the eager fetch by the part's structural
+  section (`dropLastRefComponent(first_ref)`), so only sarga 1.1 loads up
+  front and the rest lazy-load on scroll.
+
+**What remains (not yet diagnosed):** the folio is *still* slow even after the
+eager-load fix, indicating a separate cost in the folio itself. Likely
+candidates, in order of suspicion:
+1. `FlowReaderFolio` builds the full outline tree (`getSidebarFlatModel` +
+   `buildOutlineTree`) over every loaded passage on each render; with many
+   sargas loaded this is O(n) per render and re-runs on scroll-state changes.
+2. The scrollspy / scroll-follow accordion (`applyCurrent`,
+   `scrollFolioToCurrent`) queries the DOM imperatively on every scroll event.
+3. `computeInitialExpanded` / `sectionChain` recompute across the whole tree.
+4. Lazy part loads interleave with folio re-renders, causing repeated full
+   tree rebuilds.
+
+**Action:** profile the folio with many sargas loaded (DevTools Performance),
+then optimize — e.g. memoize the outline tree on `grantha.passages.length`
+rather than re-deriving per render, defer `applyCurrent` DOM work, or
+virtualize the folio strip. Do **not** merge the Rāmāyaṇa branch until the
+folio interaction is responsive.

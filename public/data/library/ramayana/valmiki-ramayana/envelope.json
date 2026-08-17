@@ -1,0 +1,332 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.0.0",
+  "edition_id": "valmiki-ramayana",
+  "grantha_id": "valmiki-ramayana",
+  "structure_levels": [
+    {
+      "key": "Kanda",
+      "scriptNames": {
+        "devanagari": "काण्डः"
+      },
+      "children": [
+        {
+          "key": "Sarga",
+          "scriptNames": {
+            "devanagari": "सर्गः"
+          },
+          "children": [
+            {
+              "key": "Shloka",
+              "scriptNames": {
+                "devanagari": "श्लोकः"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "1.2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "1.4.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "1.5.1"
+    },
+    {
+      "file": "part5.json",
+      "first_ref": "1.6.1"
+    },
+    {
+      "file": "part6.json",
+      "first_ref": "1.7.1"
+    },
+    {
+      "file": "part7.json",
+      "first_ref": "1.9.1"
+    },
+    {
+      "file": "part8.json",
+      "first_ref": "1.10.1"
+    },
+    {
+      "file": "part9.json",
+      "first_ref": "1.11.1"
+    },
+    {
+      "file": "part10.json",
+      "first_ref": "1.12.1"
+    },
+    {
+      "file": "part11.json",
+      "first_ref": "1.13.1"
+    },
+    {
+      "file": "part12.json",
+      "first_ref": "1.14.1"
+    },
+    {
+      "file": "part13.json",
+      "first_ref": "1.15.1"
+    },
+    {
+      "file": "part14.json",
+      "first_ref": "1.16.1"
+    },
+    {
+      "file": "part15.json",
+      "first_ref": "1.17.1"
+    },
+    {
+      "file": "part16.json",
+      "first_ref": "1.18.1"
+    },
+    {
+      "file": "part17.json",
+      "first_ref": "1.19.1"
+    },
+    {
+      "file": "part18.json",
+      "first_ref": "1.20.1"
+    },
+    {
+      "file": "part19.json",
+      "first_ref": "1.21.1"
+    },
+    {
+      "file": "part20.json",
+      "first_ref": "1.22.1"
+    },
+    {
+      "file": "part21.json",
+      "first_ref": "1.23.1"
+    },
+    {
+      "file": "part22.json",
+      "first_ref": "1.24.1"
+    },
+    {
+      "file": "part23.json",
+      "first_ref": "1.25.1"
+    },
+    {
+      "file": "part24.json",
+      "first_ref": "1.26.1"
+    },
+    {
+      "file": "part25.json",
+      "first_ref": "1.27.1"
+    },
+    {
+      "file": "part26.json",
+      "first_ref": "1.28.1"
+    },
+    {
+      "file": "part27.json",
+      "first_ref": "1.29.1"
+    },
+    {
+      "file": "part28.json",
+      "first_ref": "1.30.1"
+    },
+    {
+      "file": "part29.json",
+      "first_ref": "1.31.1"
+    },
+    {
+      "file": "part30.json",
+      "first_ref": "1.32.1"
+    },
+    {
+      "file": "part31.json",
+      "first_ref": "1.33.1"
+    },
+    {
+      "file": "part32.json",
+      "first_ref": "1.34.1"
+    },
+    {
+      "file": "part33.json",
+      "first_ref": "1.35.1"
+    },
+    {
+      "file": "part34.json",
+      "first_ref": "1.36.1"
+    },
+    {
+      "file": "part35.json",
+      "first_ref": "1.37.1"
+    },
+    {
+      "file": "part36.json",
+      "first_ref": "1.38.1"
+    },
+    {
+      "file": "part37.json",
+      "first_ref": "1.39.1"
+    },
+    {
+      "file": "part38.json",
+      "first_ref": "1.40.1"
+    },
+    {
+      "file": "part39.json",
+      "first_ref": "1.41.1"
+    },
+    {
+      "file": "part40.json",
+      "first_ref": "1.42.1"
+    },
+    {
+      "file": "part41.json",
+      "first_ref": "1.43.1"
+    },
+    {
+      "file": "part42.json",
+      "first_ref": "1.44.1"
+    },
+    {
+      "file": "part43.json",
+      "first_ref": "1.45.1"
+    },
+    {
+      "file": "part44.json",
+      "first_ref": "1.46.1"
+    },
+    {
+      "file": "part45.json",
+      "first_ref": "1.47.1"
+    },
+    {
+      "file": "part46.json",
+      "first_ref": "1.48.1"
+    },
+    {
+      "file": "part47.json",
+      "first_ref": "1.49.1"
+    },
+    {
+      "file": "part48.json",
+      "first_ref": "1.50.1"
+    },
+    {
+      "file": "part49.json",
+      "first_ref": "1.51.1"
+    },
+    {
+      "file": "part50.json",
+      "first_ref": "1.52.1"
+    },
+    {
+      "file": "part51.json",
+      "first_ref": "1.53.1"
+    },
+    {
+      "file": "part52.json",
+      "first_ref": "1.54.1"
+    },
+    {
+      "file": "part53.json",
+      "first_ref": "1.55.1"
+    },
+    {
+      "file": "part54.json",
+      "first_ref": "1.56.1"
+    },
+    {
+      "file": "part55.json",
+      "first_ref": "1.57.1"
+    },
+    {
+      "file": "part56.json",
+      "first_ref": "1.58.1"
+    },
+    {
+      "file": "part57.json",
+      "first_ref": "1.59.1"
+    },
+    {
+      "file": "part58.json",
+      "first_ref": "1.60.1"
+    },
+    {
+      "file": "part59.json",
+      "first_ref": "1.61.1"
+    },
+    {
+      "file": "part60.json",
+      "first_ref": "1.62.1"
+    },
+    {
+      "file": "part61.json",
+      "first_ref": "1.63.1"
+    },
+    {
+      "file": "part62.json",
+      "first_ref": "1.64.1"
+    },
+    {
+      "file": "part63.json",
+      "first_ref": "1.65.1"
+    },
+    {
+      "file": "part64.json",
+      "first_ref": "1.66.1"
+    },
+    {
+      "file": "part65.json",
+      "first_ref": "1.67.1"
+    },
+    {
+      "file": "part66.json",
+      "first_ref": "1.68.1"
+    },
+    {
+      "file": "part67.json",
+      "first_ref": "1.69.1"
+    },
+    {
+      "file": "part68.json",
+      "first_ref": "1.70.1"
+    },
+    {
+      "file": "part69.json",
+      "first_ref": "1.71.1"
+    },
+    {
+      "file": "part70.json",
+      "first_ref": "1.72.1"
+    },
+    {
+      "file": "part71.json",
+      "first_ref": "1.73.1"
+    },
+    {
+      "file": "part72.json",
+      "first_ref": "1.74.1"
+    },
+    {
+      "file": "part73.json",
+      "first_ref": "1.75.1"
+    },
+    {
+      "file": "part74.json",
+      "first_ref": "1.76.1"
+    },
+    {
+      "file": "part75.json",
+      "first_ref": "1.77.1"
+    }
+  ]
+}

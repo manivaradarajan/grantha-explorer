@@ -372,9 +372,17 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
           throw new Error(`Multi-part grantha ${granthaId} has no parts defined in envelope.json`);
         }
 
-        // Fetch all parts that share the same ID as the first part.
-        const firstPartId = multiPartMetadata.parts[0]?.id;
-        const partsToLoad = multiPartMetadata.parts.filter(p => p.id === firstPartId);
+        // Fetch the parts that open the same structural section as the first
+        // part (e.g. all parts whose first_ref is in the same sarga "1.18" for
+        // a kāṇḍa→sarga→śloka text). Grouping by first_ref's parent — rather
+        // than the coarse `id` (kāṇḍa "1") — stops a whole kāṇḍa's parts from
+        // eager-loading at once; the reader lazy-loads the rest on scroll.
+        const firstPartSection = dropLastRefComponent(
+          multiPartMetadata.parts[0]?.first_ref ?? ""
+        );
+        const partsToLoad = multiPartMetadata.parts.filter(
+          (p) => dropLastRefComponent(p.first_ref) === firstPartSection
+        );
 
         const loadedPartsContent: GranthaPartContent[] = await Promise.all(
           partsToLoad.map(async (partInfo) => {

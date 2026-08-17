@@ -380,7 +380,6 @@ export default function NavigationSidebar({
         depth={model.depth}
         sections={curatedSections ?? model.sections}
         flatPassages={model.flatPassages}
-        prefatory={isCurated ? [] : model.prefatory}
         concluding={isCurated ? [] : model.concluding}
         selectedRef={selectedRef}
         onVerseSelect={onVerseSelect}

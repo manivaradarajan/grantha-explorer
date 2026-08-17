@@ -1,6 +1,6 @@
 # Grantha Data Flow — Consumer Side (grantha-explorer)
 
-**Last updated:** 2026-08-13
+**Last updated:** 2026-08-16
 **Status:** Living document. Read **first**: the canonical producer-side
 description in `../grantha-data/docs/DATA_FLOW.md` (source → BUILD → converter →
 on-disk shapes). This file documents only what the explorer does: ingestion
@@ -91,7 +91,9 @@ each build).
 - `grantha-envelope` → resolves the default edition path, records `editions[]`
   on the index entry; also scans sibling `.json` files for co-located granthas
   (e.g. mandukya-karika).
-- `edition-sub-envelope` → registers the directory path for its `grantha_id`.
+- `edition-sub-envelope` → registers the directory path for its `grantha_id`
+  (e.g. `ramayana/valmiki-ramayana`, currently the Bāla-kāṇḍa smoke test —
+  75 parts, one per sarga).
 - Flat `grantha` files → registered by `grantha_id`.
 - Cross-references `granthas-meta.json` (titles, abbreviations) +
   `granthas-order.json` (display order) + `categories.json`
@@ -182,6 +184,26 @@ sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
 5. `npm run build` (prebuild regenerates `granthas.json` and validates).
 6. New passage-heading kinds need **no** converter edit — kinds are derived
    from `structure_levels` (see §2.1).
+
+### Example: Vālmīki Rāmāyaṇa (Bāla-kāṇḍa smoke test)
+
+- Source: `grantha-data/structured_md/ramayana/valmiki-ramayana/` (626 parts,
+  all seven kāṇḍas). The explorer currently ingests the **Bāla-kāṇḍa subset**
+  (parts 001–075) as a smoke test under
+  `public/data/library/ramayana/valmiki-ramayana/`.
+- `text_type: ramayana` (new enum value in `grantha.schema.json` +
+  `grantha-envelope.schema.json`; re-synced to the mirrors).
+- `structure_levels: Kāṇḍa → Sarga → Śloka` (depth 3); passage kind `Shloka`
+  derived from `structure_levels`, so no converter edit was needed.
+- Each sarga's Govindarāja opening is a content-bearing `# Prefatory: K.N.0`
+  praveśa passage (label प्रवेश; sarga 1.1's whole-work mangalācaraṇa is
+  मङ्गलाचरणम्). Flow mode interleaves prefatory passages by ref so a praveśa
+  renders before its sarga's first verse, and hides the label.
+- Registered in all three data files; category `ramayana` (order 4) added to
+  `categories.json`.
+- All 75 part files carry the `ramayana-bhushana` commentary (Govindarāja).
+  When the full 626-part corpus is ingested it replaces this subset (same
+  `grantha_id`), no registry change required.
 
 ---
 

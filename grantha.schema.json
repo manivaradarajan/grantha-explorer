@@ -35,7 +35,7 @@
         "required": ["alias", "scope"]
       }
     },
-    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "other"] },
+    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "ramayana", "other"] },
     "language": { "type": "string", "enum": ["sanskrit", "english"] },
     "tags": {
       "type": "array",
@@ -193,6 +193,21 @@
       },
       "required": ["key", "scriptNames"]
     },
+    "span": {
+      "type": "object",
+      "description": "A mula<->bhashya word-link span: an id shared by a mula passage span and one-or-more bhashya (commentary_passage) spans, with half-open character offsets into the corresponding content.sanskrit.devanagari string.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:\\.[0-9]+)*-[a-zA-Z0-9-]+$",
+          "description": "Shared link id: <verse-ref>-<Harvard-Kyoto word(s)>, e.g. 2.59-dehinaH."
+        },
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["id", "start", "end"],
+      "additionalProperties": false
+    },
     "passage": {
       "type": "object",
       "properties": {
@@ -223,6 +238,11 @@
             },
             "english_translation": { "type": ["string", "null"] }
           }
+        },
+        "spans": {
+          "type": "array",
+          "description": "Mula<->bhashya word-link spans. Half-open character offsets into content.sanskrit.devanagari; identical id on a passage span and a commentary_passage span is the correspondence.",
+          "items": { "$ref": "#/definitions/span" }
         }
       },
       "required": ["ref", "passage_type"],
@@ -304,6 +324,11 @@
         "intro": {
           "$ref": "#/definitions/commentary_content",
           "description": "The verse lead-in (avatārikā) that introduces this verse's gloss. Set from an <!-- intro --> child of the verse's commentary block."
+        },
+        "spans": {
+          "type": "array",
+          "description": "Mula<->bhashya word-link spans. Half-open character offsets into content.sanskrit.devanagari; identical id on a passage span and a commentary_passage span is the correspondence.",
+          "items": { "$ref": "#/definitions/span" }
         },
         "prefatory_material": {
           "type": "array",
