@@ -498,8 +498,8 @@ export default function FlowReader({
   // where the sub has its own passage. All instances of the same subcommentary
   // id toggle together; visibility is derived from activeSubcommentaryIds, not
   // per-block local state (spec §2.5/§4). The whole subtree is gated on the
-  // commentary actually having subcommentaries — zero exist in the library
-  // today, so nothing renders, but the plumbing is data-driven, not hardcoded.
+  // commentary actually having subcommentaries; the plumbing is data-driven,
+  // not hardcoded.
   const renderSubcommentary = (
     sub: Commentary,
     verseRef: string,
@@ -554,6 +554,15 @@ export default function FlowReader({
           </div>
         )}
       </div>
+    );
+  };
+
+  const renderSubcommentaries = (verseRef: string): ReactNode => {
+    if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
+      return null;
+    }
+    return activeCommentary.subcommentaries.map((sub) =>
+      renderSubcommentary(sub, verseRef),
     );
   };
 
@@ -764,6 +773,7 @@ export default function FlowReader({
                               {stripMarkdown(content)}
                             </p>
                           ) : null}
+                          {renderSubcommentaries(passage.ref)}
                         </div>
                       </Fragment>
                     );
@@ -856,10 +866,7 @@ export default function FlowReader({
                                 ),
                               }}
                             />
-                            {hasSubcommentaries &&
-                              activeCommentary?.subcommentaries?.map((sub) =>
-                                renderSubcommentary(sub, passage.ref),
-                              )}
+                            {renderSubcommentaries(passage.ref)}
                           </div>
                         )}
                       </div>

@@ -80,7 +80,12 @@
     },
     "commentary": {
       "$ref": "#/definitions/commentary",
-      "description": "Exactly one commentary per edition. Absent if this is a mūla-only edition."
+      "description": "Exactly one commentary per edition. Absent if this is a mūla-only edition. Mutually exclusive with `commentaries`: emit `commentary` when exactly one commentary, `commentaries` when two or more. TODO (schema): eliminate this singular field and always emit the plural `commentaries` array (breaking → MAJOR). Retained for backward compatibility with the existing corpus."
+    },
+    "commentaries": {
+      "type": "array",
+      "description": "Two or more commentaries for one edition (e.g. a bhāṣya plus a subcommentary carrying parent_commentary_id). Mutually exclusive with the singular `commentary`. TODO (schema): make this the single canonical shape and drop `commentary` (breaking → MAJOR).",
+      "items": { "$ref": "#/definitions/commentary" }
     }
   },
   "required": [

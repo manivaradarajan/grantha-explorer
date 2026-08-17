@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Commentary, Grantha, loadGrantha, loadGranthaPart, sortPassagesByRef } from "@/lib/data";
+import { Commentary, Grantha, loadGrantha, loadGranthaPart, nestSubcommentaries, sortPassagesByRef } from "@/lib/data";
 import { useState, useCallback } from "react";
 
 interface UseGranthaLoaderReturn {
@@ -106,9 +106,22 @@ export function useGranthaLoader(granthaId: string, editionId?: string): UseGran
           ? rawCommentaries
           : Object.values(rawCommentaries);
         for (const commentaryPart of incomingCommentaries) {
-          const existingCommentary = newData.commentaries.find(
+          // Subcommentaries are nested under their parent at initial load
+          // (nestSubcommentaries), so a lazily-loaded subcommentary must merge
+          // into the nested instance — a top-level id lookup alone would miss it
+          // and create a duplicate top-level entry whose passages never render.
+          const parentId = commentaryPart.parent_commentary_id;
+          let existingCommentary = newData.commentaries.find(
             c => c.commentary_id === commentaryPart.commentary_id
           );
+          if (!existingCommentary && parentId) {
+            const parent = newData.commentaries.find(
+              c => c.commentary_id === parentId
+            );
+            existingCommentary = parent?.subcommentaries?.find(
+              c => c.commentary_id === commentaryPart.commentary_id
+            );
+          }
           if (existingCommentary) {
             existingCommentary.passages = existingCommentary.passages ?? [];
             const existingCommentaryRefs = new Set(existingCommentary.passages.map(p => p.ref));
@@ -123,6 +136,10 @@ export function useGranthaLoader(granthaId: string, editionId?: string): UseGran
           }
         }
         
+        // Re-nest so a subcommentary that lazy-loaded in a part before its
+        // parent (unlikely but possible) is still attached to the parent.
+        newData.commentaries = nestSubcommentaries(newData.commentaries);
+
         return newData;
       });
     } catch (error) {
