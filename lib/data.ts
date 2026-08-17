@@ -214,9 +214,9 @@ export interface GranthaPartContent {
   prefatory_material?: PrefatoryMaterial[];
   passages: Passage[];
   concluding_material?: PrefatoryMaterial[];
-  /** New schema format: single Commentary object per part (grantha-part.schema.json). */
+  /** Singular Commentary object per part (exactly one commentary). */
   commentary?: Commentary;
-  /** Legacy format: keyed object or array. Superseded by commentary. */
+  /** Plural commentaries array (two or more, e.g. a bhāṣya plus a subcommentary), or a legacy keyed object. */
   commentaries?: Commentary[] | Record<string, Commentary>;
 }
 
@@ -657,6 +657,29 @@ export function getPassageByRef(
  *     The matching commentary passage, or undefined when no passage covers the
  *     selected ref.
  */
+/**
+ * True when a commentary passage's range ref covers the selected verse ref.
+ *
+ * A range ref is "<segments>.LO-HI" (e.g. "1.26-39" or "8.3.8-12"): every
+ * segment before the last must equal the selected ref's, and the selected
+ * verse number must fall within [LO, HI].
+ */
+function refInRange(passageRef: string, selectedRef: string): boolean {
+  const range = passageRef.match(/^(\d+(?:\.\d+)*)-(\d+)$/);
+  if (!range) {
+    return false;
+  }
+  const prefix = range[1].split(".").map((s) => parseInt(s, 10));
+  const sel = selectedRef.split(".").map((s) => parseInt(s, 10));
+  if (prefix.length !== sel.length) {
+    return false;
+  }
+  const lo = prefix[prefix.length - 1];
+  const hi = parseInt(range[2], 10);
+  const last = sel[sel.length - 1];
+  return prefix.slice(0, -1).every((n, i) => n === sel[i]) && last >= lo && last <= hi;
+}
+
 export function commentaryPassageForRef(
   passages: CommentaryPassage[],
   selectedRef: string,
@@ -665,23 +688,7 @@ export function commentaryPassageForRef(
   if (exact) {
     return exact;
   }
-  // Range ref: "A.B.LOW-HIGH" within the same section prefix "A.B".
-  const match = selectedRef.match(/^(\d+)\.(\d+)\.(\d+)$/);
-  if (!match) {
-    return undefined;
-  }
-  const num = parseInt(match[3], 10);
-  return passages.find((p) => {
-    const range = p.ref.match(/^(\d+)\.(\d+)\.(\d+)-(\d+)$/);
-    if (!range) {
-      return false;
-    }
-    const [rp1, rp2, rpLo, rpHi] = range.slice(1).map((s) => parseInt(s, 10));
-    if (rp1 !== parseInt(match[1], 10) || rp2 !== parseInt(match[2], 10)) {
-      return false;
-    }
-    return num >= rpLo && num <= rpHi;
-  });
+  return passages.find((p) => refInRange(p.ref, selectedRef));
 }
 
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
@@ -1003,7 +1010,7 @@ function normalizeCommentaries(
  * Returns:
  *     The top-level commentaries with subcommentaries nested.
  */
-function nestSubcommentaries(commentaries: Commentary[]): Commentary[] {
+export function nestSubcommentaries(commentaries: Commentary[]): Commentary[] {
   const byId = new Map<string, Commentary>();
   const topLevel: Commentary[] = [];
   for (const commentary of commentaries) {
