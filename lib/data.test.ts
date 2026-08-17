@@ -12,6 +12,8 @@ import {
   getPassageFragment,
   getCuratedSidebarSections,
   getCuratedActiveSubsection,
+  sectionPartsToLoad,
+  PartSectionInfo,
   Passage,
   PrefatoryMaterial,
   GranthaSection,
@@ -330,5 +332,54 @@ describe("curated sidebar sections", () => {
     const model = getCuratedSidebarSections(g)!;
     expect(getCuratedActiveSubsection(model[0], "2")?.label).toBe("२");
     expect(getCuratedActiveSubsection(model[0], "1")?.label).toBe("१");
+  });
+});
+
+describe("sectionPartsToLoad (section-based eager part loading)", () => {
+  // The regression fixture is deliberately adversarial: every part shares the
+  // same kāṇḍa `id` ("1") because the Rāmāyaṇa's bala parts are all in kāṇḍa 1.
+  // Section identity MUST be derived from `first_ref` (the sarga), never from
+  // `id`, or selecting any verse would eager-load the whole kāṇḍa.
+  const balaParts: PartSectionInfo[] = Array.from({ length: 75 }, (_, i) => ({
+    file: `part${i + 1}.json`,
+    // kāṇḍa 1, sarga (i+1); sarga 3 is absent from the source (76 files for
+    // sargas 1–77 minus 3 and the excluded 8), so part i maps to sarga i for
+    // the first two and jumps after that — the exact shape doesn't matter.
+    first_ref: `1.${i + 1}.1`,
+  }));
+
+  const loaded = (...refs: string[]) => new Set(refs);
+
+  it("eager-loads only the selected sarga, not the whole kāṇḍa (regression)", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "1.1.2", loaded());
+    expect(toLoad).toEqual(["1.1.1"]);
+  });
+
+  it("matches a different sarga within the same kāṇḍa", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "1.18.5", loaded());
+    expect(toLoad).toEqual(["1.18.1"]);
+  });
+
+  it("skips parts that are already loaded", () => {
+    const toLoad = sectionPartsToLoad(
+      balaParts,
+      "1.2.3",
+      loaded("1.2.1"),
+    );
+    expect(toLoad).toEqual([]);
+  });
+
+  it("returns an empty array when no part opens the section", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "5.1.1", loaded());
+    expect(toLoad).toEqual([]);
+  });
+
+  it("supports chapter→verse texts where the section is the top-level segment", () => {
+    const gitaParts: PartSectionInfo[] = Array.from({ length: 18 }, (_, i) => ({
+      file: `part${i + 1}.json`,
+      first_ref: `${i + 1}.1`,
+    }));
+    expect(sectionPartsToLoad(gitaParts, "2.14", loaded())).toEqual(["2.1"]);
+    expect(sectionPartsToLoad(gitaParts, "2.14", loaded("2.1"))).toEqual([]);
   });
 });

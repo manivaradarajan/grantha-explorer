@@ -1303,3 +1303,45 @@ export function previousUnloadedPartFirstRef(
   }
   return undefined;
 }
+
+/** The part identity needed for section-based eager loading. `id` (the coarse
+ *  top-level segment, e.g. the kāṇḍa) is deliberately absent: section identity
+ *  is derived from `first_ref`, never from `id`, so parts sharing a kāṇḍa id
+ *  but different sargas are not treated as one section. */
+export interface PartSectionInfo {
+  file: string;
+  first_ref: string;
+}
+
+/**
+ * Return the first_refs of the parts that open the same structural section as
+ * `verseRef` and are not yet loaded, in declaration order.
+ *
+ * The structural section of a ref is its parent (drop the last component): for
+ * a kāṇḍa→sarga→śloka text this is the sarga (e.g. `"1.1"` for `"1.1.2"`), for
+ * a chapter→verse text the chapter (e.g. `"1"` for `"1.1"`). Matching the
+ * parent rather than the top-level segment means only the parts that open the
+ * same section as the selection are loaded eagerly; the rest lazy-load on
+ * scroll. The top-level segment would be a kāṇḍa (`"1"`) shared by every
+ * sarga, loading a whole kāṇḍa at once.
+ *
+ * Args:
+ *     parts: The grantha's declared parts (in document order).
+ *     verseRef: The selected verse ref.
+ *     loadedRefs: The set of passage refs already loaded (a part whose
+ *         first_ref is present is considered loaded).
+ *
+ * Returns:
+ *     The unloaded first_refs of parts opening `verseRef`'s section.
+ */
+export function sectionPartsToLoad(
+  parts: PartSectionInfo[],
+  verseRef: string,
+  loadedRefs: ReadonlySet<string>,
+): string[] {
+  const sectionRef = dropLastRefComponent(verseRef);
+  return parts
+    .filter((p) => dropLastRefComponent(p.first_ref) === sectionRef)
+    .map((p) => p.first_ref)
+    .filter((ref) => !loadedRefs.has(ref));
+}

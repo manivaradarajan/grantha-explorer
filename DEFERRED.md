@@ -211,34 +211,43 @@ the pattern and add BUILD declarations instead.
 
 ---
 
-## 13. Folio sidebar performance with deep multi-part granthas (blocker for merge)
+## 13. Folio sidebar performance with deep multi-part granthas — RESOLVED
 
-**Status:** ⚠️ **MUST be addressed before the Rāmāyaṇa work is merged.**
+**Status:** ✅ **Resolved.** The root cause was not the folio itself but an
+eager-load burst triggered by the 3-pane page loader.
 
-**Symptom:** the flow-mode slideout folio is slow to open/respond on the
+**Symptom:** the flow-mode slideout folio was slow to open/respond on the
 `valmiki-ramayana` Bāla-kāṇḍa smoke test (75 parts, ~2000 verses + commentary).
 
-**What was already fixed:**
-- The initial eager load previously fetched **all 75 parts** because
-  `loadGrantha` grouped by the coarse `part.id` (kāṇḍa `"1"` for every bala
-  part). `lib/data.ts` now groups the eager fetch by the part's structural
-  section (`dropLastRefComponent(first_ref)`), so only sarga 1.1 loads up
-  front and the rest lazy-load on scroll.
+**Root cause:** `app/page.tsx`'s section-load effect matched parts by their
+coarse top-level `id` (`p.id === topLevelRef`). For a kāṇḍa→sarga→śloka text
+every bala part shares `id: "1"` (the kāṇḍa), so selecting any verse
+synchronously burst-loaded all 75 parts (~2200 verses). The folio expand was
+fast (~130ms, 0 fetches); it only *felt* slow because the browser was still
+fetching/parsing the 75 parts.
 
-**What remains (not yet diagnosed):** the folio is *still* slow even after the
-eager-load fix, indicating a separate cost in the folio itself. Likely
-candidates, in order of suspicion:
-1. `FlowReaderFolio` builds the full outline tree (`getSidebarFlatModel` +
-   `buildOutlineTree`) over every loaded passage on each render; with many
-   sargas loaded this is O(n) per render and re-runs on scroll-state changes.
-2. The scrollspy / scroll-follow accordion (`applyCurrent`,
-   `scrollFolioToCurrent`) queries the DOM imperatively on every scroll event.
-3. `computeInitialExpanded` / `sectionChain` recompute across the whole tree.
-4. Lazy part loads interleave with folio re-renders, causing repeated full
-   tree rebuilds.
+**Resolution (commit `3d0f703`):** the effect now matches by the ref's
+structural section — `dropLastRefComponent(verseRef)` — so only the parts
+opening the selected sarga load eagerly and the rest lazy-load on scroll.
+The selection logic was extracted into `lib/data.ts`
+`sectionPartsToLoad(parts, verseRef, loadedRefs)` and is unit-tested (see
+`lib/data.test.ts`, including a regression fixture where all parts share a
+kāṇḍa `id`). Verified with Playwright: ramayana loads only part1 (100 verses,
+was 2218) and lazy-loads sargas on scroll; gita behavior unchanged.
 
-**Action:** profile the folio with many sargas loaded (DevTools Performance),
-then optimize — e.g. memoize the outline tree on `grantha.passages.length`
-rather than re-deriving per render, defer `applyCurrent` DOM work, or
-virtualize the folio strip. Do **not** merge the Rāmāyaṇa branch until the
-folio interaction is responsive.
+---
+
+## 14. `loadGrantha` eager-grouping has no unit test (deferred)
+
+**Status:** open gap, low risk.
+
+`lib/data.ts` `loadGrantha` has a second, related section-grouping fix: the
+initial part fetch groups by `dropLastRefComponent(first_ref)` (so a deep text
+loads only the first sarga's part up front). This behavior is **not**
+unit-tested — exercising it would require mocking `fetch` inside
+`loadGrantha`, a pattern the current node-env Vitest suite does not use
+(`lib/data.test.ts`, `hashUtils.test.ts` are pure-function tests only).
+
+The pure logic that *drives* the same section-grouping decision is covered by
+`sectionPartsToLoad` tests (#13). If a future change rewrites `loadGrantha`'s
+fetch path, add a fetch-mocked integration test for the eager-grouping there.
