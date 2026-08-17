@@ -35,7 +35,7 @@
         "required": ["alias", "scope"]
       }
     },
-    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "other"] },
+    "text_type": { "type": "string", "enum": ["upanishad", "smriti", "sutra", "purana", "stotra", "prakarana", "brahma-sutra-bhashya", "gita-bhashya", "gita", "ramayana", "other"] },
     "language": { "type": "string", "enum": ["sanskrit", "english"] },
     "tags": {
       "type": "array",

@@ -208,3 +208,46 @@ separately, and is out of scope for the current pass.
 filename containing `-sankara-` as preserved-not-published, matching the Sāyaṇa /
 śānti-vyākhyā precedent. When Śaṅkara publication is undertaken, remove those files from
 the pattern and add BUILD declarations instead.
+
+---
+
+## 13. Folio sidebar performance with deep multi-part granthas — RESOLVED
+
+**Status:** ✅ **Resolved.** The root cause was not the folio itself but an
+eager-load burst triggered by the 3-pane page loader.
+
+**Symptom:** the flow-mode slideout folio was slow to open/respond on the
+`valmiki-ramayana` Bāla-kāṇḍa smoke test (75 parts, ~2000 verses + commentary).
+
+**Root cause:** `app/page.tsx`'s section-load effect matched parts by their
+coarse top-level `id` (`p.id === topLevelRef`). For a kāṇḍa→sarga→śloka text
+every bala part shares `id: "1"` (the kāṇḍa), so selecting any verse
+synchronously burst-loaded all 75 parts (~2200 verses). The folio expand was
+fast (~130ms, 0 fetches); it only *felt* slow because the browser was still
+fetching/parsing the 75 parts.
+
+**Resolution (commit `3d0f703`):** the effect now matches by the ref's
+structural section — `dropLastRefComponent(verseRef)` — so only the parts
+opening the selected sarga load eagerly and the rest lazy-load on scroll.
+The selection logic was extracted into `lib/data.ts`
+`sectionPartsToLoad(parts, verseRef, loadedRefs)` and is unit-tested (see
+`lib/data.test.ts`, including a regression fixture where all parts share a
+kāṇḍa `id`). Verified with Playwright: ramayana loads only part1 (100 verses,
+was 2218) and lazy-loads sargas on scroll; gita behavior unchanged.
+
+---
+
+## 14. `loadGrantha` eager-grouping — RESOLVED
+
+**Status:** ✅ **Resolved.** The section-scoped part-loading refactor replaced
+the ad-hoc grouping in `loadGrantha` and `getPassageHierarchy` with shared,
+fully unit-tested helpers: `partRanges`, `partBacksPrefix`,
+`buildPartHierarchy`, and `sectionPartsToLoad` (see `lib/data.test.ts`). The
+eager-load path (`app/page.tsx`) and the sidebar builder both consume the same
+`partRanges`/`partBacksPrefix` pair, so the previous concern — the initial part
+fetch's grouping being untested and able to diverge from the sidebar's
+`partIds` — is eliminated by construction.
+
+The `loadGrantha` fetch itself is still not integration-tested (that would need
+fetch mocking, a pattern the node-env Vitest suite does not use), but the pure
+logic it depends on is now covered.

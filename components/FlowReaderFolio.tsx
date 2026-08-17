@@ -98,6 +98,13 @@ function buildOutlineTree(
       label: "",
       children: [],
     };
+    // Derived once (main + prefatory + concluding), mirroring the sidebar
+    // builder — used to spot unloaded tail parts of loaded sections.
+    const loadedFirstRefs = new Set([
+      ...grantha.passages.map((p) => p.ref),
+      ...(grantha.prefatory_material ?? []).map((p) => p.ref),
+      ...(grantha.concluding_material ?? []).map((p) => p.ref),
+    ]);
     for (const section of sections) {
       const path =
         section.boundary.path.length > 0
@@ -135,6 +142,16 @@ function buildOutlineTree(
         unloaded.set(node.id, section.boundary.partIds);
         continue;
       }
+      // A loaded section may still carry unloaded parts (a misaligned part whose
+      // range extends into this section but isn't fetched yet — the "tail" of a
+      // partially-loaded section). Register them so expanding the section loads
+      // them, mirroring the placeholder branch.
+      const unloadedTail = section.boundary.partIds.filter(
+        (firstRef) => !loadedFirstRefs.has(firstRef),
+      );
+      if (unloadedTail.length > 0) {
+        unloaded.set(node.id, unloadedTail);
+      }
       if (section.subsections?.length) {
         for (const sub of section.subsections) {
           node.children?.push({
@@ -166,7 +183,6 @@ function buildOutlineTree(
   if (model.depth <= 1) {
     return {
       nodes: [
-        ...model.prefatory.map(toLeaf),
         ...model.flatPassages.map(toLeaf),
         ...model.concluding.map(toLeaf),
       ],
@@ -176,7 +192,6 @@ function buildOutlineTree(
   }
   return {
     nodes: [
-      ...model.prefatory.map(toLeaf),
       ...nestSections(model.sections, unloadedPartsByGroup, true),
       ...model.concluding.map(toLeaf),
     ],
@@ -844,7 +859,7 @@ export default function FlowReaderFolio({
     // width animates so the reading column reflows smoothly.
     return (
       <aside
-        className={`shrink-0 bg-white transition-all duration-200 ${
+        className={`shrink-0 bg-white transition-all duration-120 ${
           open
             ? "w-[220px] border-l border-gray-100"
             : "w-16 border-l border-gray-100"
@@ -870,7 +885,7 @@ export default function FlowReaderFolio({
         onClick={onClose}
       />
       <aside
-        className={`fixed inset-y-0 right-0 z-40 w-[220px] max-w-[85vw] bg-white border-l border-gray-100 shadow-xl flex flex-col transition-transform duration-200 ${
+        className={`fixed inset-y-0 right-0 z-40 w-[220px] max-w-[85vw] bg-white border-l border-gray-100 shadow-xl flex flex-col transition-transform duration-120 ${
           open
             ? "translate-x-0 pointer-events-auto visible"
             : "translate-x-full pointer-events-none invisible"

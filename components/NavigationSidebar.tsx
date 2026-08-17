@@ -234,11 +234,12 @@ export default function NavigationSidebar({
   }, [grantha.passages, selectedRef]);
 
   /**
-   * Load the part files backing a section if it isn't loaded yet. No-op when
-   * the section already has passages.
+   * Load the part files backing a section if they aren't loaded yet. A loaded
+   * section may still carry unloaded parts (a misaligned part whose range
+   * extends into the section but isn't fetched yet), so this does NOT
+   * short-circuit on passages present — the per-part guard below handles it.
    */
   const ensureSectionLoaded = (section: SidebarSection) => {
-    if (section.passages.length > 0) return;
     for (const firstRef of section.boundary.partIds) {
       if (!grantha.passages.some((p) => p.ref === firstRef)) {
         void loadPart(firstRef);
@@ -380,7 +381,6 @@ export default function NavigationSidebar({
         depth={model.depth}
         sections={curatedSections ?? model.sections}
         flatPassages={model.flatPassages}
-        prefatory={isCurated ? [] : model.prefatory}
         concluding={isCurated ? [] : model.concluding}
         selectedRef={selectedRef}
         onVerseSelect={onVerseSelect}

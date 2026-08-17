@@ -372,9 +372,17 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
           throw new Error(`Multi-part grantha ${granthaId} has no parts defined in envelope.json`);
         }
 
-        // Fetch all parts that share the same ID as the first part.
-        const firstPartId = multiPartMetadata.parts[0]?.id;
-        const partsToLoad = multiPartMetadata.parts.filter(p => p.id === firstPartId);
+        // Fetch the parts that open the same structural section as the first
+        // part (e.g. all parts whose first_ref is in the same sarga "1.18" for
+        // a kāṇḍa→sarga→śloka text). Grouping by first_ref's parent — rather
+        // than the coarse `id` (kāṇḍa "1") — stops a whole kāṇḍa's parts from
+        // eager-loading at once; the reader lazy-loads the rest on scroll.
+        const firstPartSection = dropLastRefComponent(
+          multiPartMetadata.parts[0]?.first_ref ?? ""
+        );
+        const partsToLoad = multiPartMetadata.parts.filter(
+          (p) => dropLastRefComponent(p.first_ref) === firstPartSection
+        );
 
         const loadedPartsContent: GranthaPartContent[] = await Promise.all(
           partsToLoad.map(async (partInfo) => {
@@ -691,6 +699,394 @@ export function commentaryPassageForRef(
   return passages.find((p) => refInRange(p.ref, selectedRef));
 }
 
+/** Group passages into a nested PassageGroup tree from `refLevel` onward.
+ *  Shared by the hierarchical paths (deep single-file and the loaded leaves of
+ *  `buildPartHierarchy`). */
+function buildNestedGroups(
+  passages: Passage[],
+  structureLevel: StructureLevel,
+  refLevel: number,
+): PassageGroup[] {
+  const groups: { [key: string]: Passage[] } = {};
+
+  // Group passages by the current level's ref part
+  for (const passage of passages) {
+    const refParts = passage.ref.split(".");
+    if (refParts.length > refLevel) {
+      const refPart = refParts[refLevel];
+      const groupKey = `${structureLevel.scriptNames.devanagari} ${refPart}`;
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(passage);
+    }
+  }
+
+  // Get the keys and sort them numerically
+  const sortedGroupKeys = Object.keys(groups).sort((a, b) => {
+    const numA = parseInt(a.split(" ").pop() || "0", 10);
+    const numB = parseInt(b.split(" ").pop() || "0", 10);
+    return numA - numB;
+  });
+
+  // Create PassageGroup for each group
+  return sortedGroupKeys.map((groupKey) => {
+    const groupPassages = groups[groupKey];
+    const passageGroup: PassageGroup = {
+      level: groupKey,
+    };
+
+    if (structureLevel.children && structureLevel.children.length > 0) {
+      // If there are more levels, recurse
+      passageGroup.children = buildNestedGroups(
+        groupPassages,
+        structureLevel.children[0],
+        refLevel + 1,
+      );
+    } else {
+      // This is the last level of grouping, so add passages
+      passageGroup.passages = groupPassages;
+    }
+    return passageGroup;
+  });
+}
+
+/** The structural level at a given depth index (walks `children[0]` down). */
+function structureLevelAt(structure: StructureLevel[], index: number): StructureLevel {
+  let level = structure[0];
+  for (let i = 0; i < index; i++) {
+    level = level.children?.[0]!;
+  }
+  return level;
+}
+
+/** The part level index: the deepest structural level above the passage level,
+ *  or -1 for depth-1 texts that have no part level. */
+export function partLevelFor(structure: StructureLevel[]): number {
+  return getStructureDepth(structure) - 2;
+}
+
+/** Compare two numeric prefix tuples lexicographically (shorter sorts smaller). */
+function comparePrefixTuples(a: number[], b: number[]): number {
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    const av = a[i] ?? Number.MIN_SAFE_INTEGER;
+    const bv = b[i] ?? Number.MIN_SAFE_INTEGER;
+    if (av !== bv) return av - bv;
+  }
+  return 0;
+}
+
+/** The part-level structural prefix of a ref as a numeric tuple
+ *  (the first `partLevel + 1` dot-segments). */
+function sprefix(ref: string, partLevel: number): number[] {
+  return ref
+    .split(".")
+    .slice(0, partLevel + 1)
+    .map(Number);
+}
+
+/** A structural-group label for one segment of a level. */
+function levelLabel(level: StructureLevel, segment: number): string {
+  return `${level.scriptNames.devanagari} ${segment}`;
+}
+
+/** Numeric tail of a level label ("काण्डः 1" → 1). */
+function trailingNumber(label: string): number {
+  const match = label.match(/\s(\d+)$/);
+  return match ? parseInt(match[1], 10) : 0;
+}
+
+/** Recursively sort sibling groups by numeric level tail. */
+function sortGroupsByNumber(groups: PassageGroup[]): void {
+  groups.sort((a, b) => trailingNumber(a.level) - trailingNumber(b.level));
+  for (const g of groups) {
+    if (g.children) sortGroupsByNumber(g.children);
+  }
+}
+
+/** The part identity needed for section-based part loading. `id` (the coarse
+ *  top-level segment, e.g. the kāṇḍa) is deliberately absent: section identity
+ *  is derived from `first_ref`, never from `id`. */
+export interface PartSectionInfo {
+  file: string;
+  first_ref: string;
+}
+
+/** One part's declared ref range: [startRef, endRef), with the part-level
+ *  prefixes precomputed so consumers never re-derive them. */
+export interface PartRange {
+  part: PartSectionInfo;
+  /** == part.first_ref. */
+  startRef: string;
+  /** Next part's first_ref, or null for the last part. */
+  endRef: string | null;
+  /** sprefix(startRef, partLevel). */
+  startPrefix: number[];
+  /** sprefix(endRef, partLevel), or null when endRef is null. */
+  endPrefix: number[] | null;
+  /** Last dot-segment of endRef, or null when endRef is null. */
+  endFinalSegment: number | null;
+}
+
+/**
+ * Compute the tiling part ranges of a multi-part grantha.
+ *
+ * Precondition: `partLevel >= 0` (a depth >= 2 text). Guards throw on
+ * non-monotonic or duplicate `first_ref`s, and on a non-adjacent top-level
+ * skip (`1.77.1` → `3.1.1`); normal adjacent kāṇḍa boundaries and the gita
+ * prefatory `0.1 → 1.1` (difference 1) do not throw.
+ *
+ * Args:
+ *     parts: The declared parts (in document order).
+ *     partLevel: The part level index (see `partLevelFor`).
+ *
+ * Returns:
+ *     The tiling ranges, with prefixes precomputed.
+ */
+export function partRanges(
+  parts: PartSectionInfo[],
+  partLevel: number,
+): PartRange[] {
+  if (partLevel < 0) {
+    throw new Error(`partRanges requires partLevel >= 0, got ${partLevel}`);
+  }
+  for (let i = 0; i < parts.length - 1; i++) {
+    const cmp = compareRefs(parts[i].first_ref, parts[i + 1].first_ref);
+    if (cmp >= 0) {
+      throw new Error(
+        `Non-monotonic or duplicate part first_refs: ${parts[i].first_ref} then ${parts[i + 1].first_ref}`,
+      );
+    }
+  }
+  const ranges: PartRange[] = [];
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    const endRef = i + 1 < parts.length ? parts[i + 1].first_ref : null;
+    if (endRef !== null) {
+      const startTop = Number(part.first_ref.split(".")[0]);
+      const endTop = Number(endRef.split(".")[0]);
+      if (endTop - startTop > 1) {
+        throw new Error(
+          `Non-adjacent top-level skip: ${part.first_ref} -> ${endRef}`,
+        );
+      }
+    }
+    const endFinalSegment =
+      endRef !== null ? Number(endRef.split(".").pop()) : null;
+    ranges.push({
+      part,
+      startRef: part.first_ref,
+      endRef,
+      startPrefix: sprefix(part.first_ref, partLevel),
+      endPrefix: endRef !== null ? sprefix(endRef, partLevel) : null,
+      endFinalSegment,
+    });
+  }
+  return ranges;
+}
+
+/**
+ * Whether a part backs a part-level node with structural prefix P.
+ *
+ * Contract: true iff node prefix P lies within the part's main-passage ref
+ * interval [startRef, endRef). Lower bound: sprefix(startRef) <= P, exact
+ * because first_ref is by definition the part's first main passage. Upper
+ * bound: when endRef is null (last part) the interval is open above — hi is
+ * always true. Otherwise P <= sprefix(endRef) — a CLOSED bound, since the
+ * part's last passage is endRef - 1 — EXCEPT that when endRef's final segment
+ * is 1 (endRef is the first passage of its own section), the part ends in the
+ * previous node, so require P < sprefix(endRef).
+ *
+ * Node prefixes are enumerated from real data only (part first_refs + loaded
+ * passage refs), so phantom prefixes never materialize.
+ *
+ * Args:
+ *     range: A part's computed range.
+ *     P: The part-level prefix tuple of a candidate node.
+ *
+ * Returns:
+ *     True when the part's main-passage content includes refs under prefix P.
+ */
+export function partBacksPrefix(range: PartRange, P: number[]): boolean {
+  const lo = comparePrefixTuples(range.startPrefix, P) <= 0;
+  if (!lo) return false;
+  if (range.endPrefix === null) return true;
+  let hi = comparePrefixTuples(P, range.endPrefix) <= 0;
+  if (range.endFinalSegment === 1) {
+    hi = comparePrefixTuples(P, range.endPrefix) < 0;
+  }
+  return hi;
+}
+
+/**
+ * Build the structural hierarchy (PassageGroup tree) for a multi-part grantha
+ * with a part level (depth >= 2).
+ *
+ * Every part is placed at the structural location derived from its first_ref —
+ * never from the coarse top-level `id`. A part `1.2.1` under Kāṇḍa→Sarga lives
+ * at ["काण्डः 1", "सर्गः 2"]. Parts are assigned to a part-level node via
+ * `partBacksPrefix` (range intersection), so misaligned parts (a section
+ * spanning two parts, or a part spanning many sections) group correctly.
+ * Loaded parts attach their passages; unloaded parts become placeholder leaves
+ * carrying exactly the parts that back their span.
+ *
+ * Enumeration is head-only for multi-section parts: a part's `first_ref`
+ * enumerates its head section; middle sections appear only after its part
+ * loads. Prefatory-only parts (in `loadedFirstRefs` with no main passages) are
+ * excluded from enumeration (they rely on being first/eager-loaded — the gita
+ * `0.1` part).
+ *
+ * Args:
+ *     structure: The grantha's structure_levels (depth >= 2).
+ *     parts: Every declared part, in document order.
+ *     loadedMainPassages: Currently-loaded main passages (may carry part_id).
+ *     loadedFirstRefs: Part first_refs considered loaded (main+pref+concl).
+ *
+ * Returns:
+ *     The top-level PassageGroup[] tree, children numerically ordered.
+ */
+export function buildPartHierarchy(
+  structure: StructureLevel[],
+  parts: PartSectionInfo[],
+  loadedMainPassages: Passage[],
+  loadedFirstRefs: ReadonlySet<string>,
+): PassageGroup[] {
+  const partLevel = partLevelFor(structure);
+  if (partLevel < 0) {
+    throw new Error(
+      `buildPartHierarchy requires depth >= 2 (partLevel >= 0), got ${partLevel}`,
+    );
+  }
+  const ranges = partRanges(parts, partLevel);
+
+  // Detect prefatory-only parts: loaded, but with no main passage inside their
+  // range. Such parts are excluded from node enumeration so they never surface
+  // as an empty structural section (the gita "अध्यायः 0" case).
+  const hasMainPassageInRange = (range: PartRange): boolean =>
+    loadedMainPassages.some((mp) => {
+      const c = compareRefs(mp.ref, range.startRef);
+      if (c < 0) return false;
+      if (range.endRef === null) return true;
+      return compareRefs(mp.ref, range.endRef) < 0;
+    });
+  const prefatoryOnlyFirstRefs = new Set(
+    ranges
+      .filter((r) => loadedFirstRefs.has(r.part.first_ref) && !hasMainPassageInRange(r))
+      .map((r) => r.part.first_ref),
+  );
+
+  // Enumerate candidate part-level node prefixes from the union of part
+  // first_refs (excluding prefatory-only) and loaded main passage refs.
+  const candidatePrefixes = new Map<string, number[]>();
+  const addPrefix = (ref: string): void => {
+    const p = sprefix(ref, partLevel);
+    candidatePrefixes.set(p.join("."), p);
+  };
+  for (const p of parts) {
+    if (prefatoryOnlyFirstRefs.has(p.first_ref)) continue;
+    addPrefix(p.first_ref);
+  }
+  for (const mp of loadedMainPassages) {
+    addPrefix(mp.ref);
+  }
+
+  // Create the part-level leaf groups and assign parts by range intersection.
+  const partGroups = new Map<string, PassageGroup>();
+  for (const [, prefix] of candidatePrefixes) {
+    const group: PassageGroup = {
+      level: levelLabel(structureLevelAt(structure, partLevel), prefix[partLevel]),
+      children: [],
+      partIds: [],
+    };
+    partGroups.set(prefix.join("."), group);
+  }
+  for (const range of ranges) {
+    for (const [key, prefix] of candidatePrefixes) {
+      if (partBacksPrefix(range, prefix)) {
+        partGroups.get(key)!.partIds!.push(range.part.first_ref);
+      }
+    }
+  }
+
+  // Attach loaded passages (grouped to the passage level) to their part-level
+  // node. Loaded + unloaded backing parts are already in `partIds` (the flat
+  // partial-load representation).
+  const passagesByPrefix = new Map<string, Passage[]>();
+  for (const mp of loadedMainPassages) {
+    const key = sprefix(mp.ref, partLevel).join(".");
+    if (!passagesByPrefix.has(key)) passagesByPrefix.set(key, []);
+    passagesByPrefix.get(key)!.push(mp);
+  }
+  for (const [key, group] of partGroups) {
+    const passages = passagesByPrefix.get(key) ?? [];
+    if (passages.length > 0) {
+      group.children = buildNestedGroups(
+        passages,
+        structureLevelAt(structure, partLevel + 1),
+        partLevel + 1,
+      );
+    }
+  }
+
+  // Placement invariant (defense-in-depth): every non-prefatory part's head
+  // node exists after enumeration. Cannot fire on a well-formed corpus (the
+  // head is always enumerated) — guards against a future enumeration bug.
+  for (const range of ranges) {
+    if (prefatoryOnlyFirstRefs.has(range.part.first_ref)) continue;
+    if (!partGroups.has(range.startPrefix.join("."))) {
+      throw new Error(
+        `Placement invariant violated: part ${range.part.first_ref} has no head node`,
+      );
+    }
+  }
+
+  // Nest the part-level groups under their container groups (levels 0..partLevel-1).
+  const insertIntoTree = (
+    siblings: PassageGroup[],
+    level: number,
+    prefix: number[],
+    leaf: PassageGroup,
+  ): void => {
+    if (level === partLevel) {
+      if (!siblings.includes(leaf)) siblings.push(leaf);
+      return;
+    }
+    const label = levelLabel(structureLevelAt(structure, level), prefix[level]);
+    let container = siblings.find((g) => g.level === label);
+    if (!container) {
+      container = { level: label, children: [] };
+      siblings.push(container);
+    }
+    if (!container.children) container.children = [];
+    insertIntoTree(container.children, level + 1, prefix, leaf);
+  };
+  const root: PassageGroup[] = [];
+  for (const [key, group] of partGroups) {
+    const prefix = candidatePrefixes.get(key)!;
+    insertIntoTree(root, 0, prefix, group);
+  }
+
+  sortGroupsByNumber(root);
+  return root;
+}
+
+/** The first_refs of parts that are loaded (a part is loaded when its
+ *  first_ref appears in any loaded passage/prefatory/concluding ref). Shared by
+ *  the sidebar builder and the eager-load path. */
+export function loadedFirstRefsFor(grantha: Grantha): ReadonlySet<string> {
+  const loadedRefs = new Set([
+    ...grantha.passages.map((p) => p.ref),
+    ...(grantha.prefatory_material ?? []).map((p) => p.ref),
+    ...(grantha.concluding_material ?? []).map((p) => p.ref),
+  ]);
+  return new Set(
+    (grantha.parts ?? [])
+      .filter((p) => loadedRefs.has(p.first_ref))
+      .map((p) => p.first_ref),
+  );
+}
+
 export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
   const structure = grantha.structure_levels;
   const isHierarchical = structure && structure.length > 0;
@@ -701,113 +1097,21 @@ export function getPassageHierarchy(grantha: Grantha): PassageHierarchy {
     concluding: grantha.concluding_material || [],
   };
 
-  function buildNestedGroups(passages: Passage[], structureLevel: StructureLevel, refLevel: number): PassageGroup[] {
-    const groups: { [key: string]: Passage[] } = {};
-
-    // Group passages by the current level's ref part
-    for (const passage of passages) {
-      const refParts = passage.ref.split('.');
-      if (refParts.length > refLevel) {
-        const refPart = refParts[refLevel];
-        const groupKey = `${structureLevel.scriptNames.devanagari} ${refPart}`;
-        if (!groups[groupKey]) {
-          groups[groupKey] = [];
-        }
-        groups[groupKey].push(passage);
-      }
-    }
-
-    // Get the keys and sort them numerically
-    const sortedGroupKeys = Object.keys(groups).sort((a, b) => {
-      const numA = parseInt(a.split(' ').pop() || '0', 10);
-      const numB = parseInt(b.split(' ').pop() || '0', 10);
-      return numA - numB;
-    });
-
-    // Create PassageGroup for each group
-    return sortedGroupKeys.map(groupKey => {
-      const groupPassages = groups[groupKey];
-      const passageGroup: PassageGroup = {
-        level: groupKey,
-      };
-
-
-
-      if (structureLevel.children && structureLevel.children.length > 0) {
-        // If there are more levels, recurse
-        passageGroup.children = buildNestedGroups(groupPassages, structureLevel.children[0], refLevel + 1);
-      } else {
-        // This is the last level of grouping, so add passages
-        passageGroup.passages = groupPassages;
-      }
-      return passageGroup;
-    });
-  }
-
-  if (isHierarchical) {
-    hierarchy.main = buildNestedGroups(grantha.passages, structure[0], 0);
-
-    // Add placeholders for unloaded parts; tag loaded groups with their file first_refs.
-    if (grantha.parts) {
-      const levelLabel = structure[0].scriptNames.devanagari;
-
-      // Determine which part files are loaded by checking for their first ref.
-      // A part may be prefatory-only (e.g. the Gītā's maṅgalācaraṇa part, whose
-      // only passage "0.1" lives in prefatory_material, not passages) — counting
-      // main passages alone would mislabel such a loaded part as unloaded and
-      // invent a bogus structural placeholder for it (e.g. "अध्यायः 0").
-      const loadedRefs = new Set([
-        ...grantha.passages.map(p => p.ref),
-        ...(grantha.prefatory_material ?? []).map(p => p.ref),
-        ...(grantha.concluding_material ?? []).map(p => p.ref),
-      ]);
-      const loadedFirstRefs = new Set(
-        grantha.parts
-          .filter(p => loadedRefs.has(p.first_ref))
-          .map(p => p.first_ref)
+  if (isHierarchical && partLevelFor(structure) >= 0) {
+    // Depth >= 2. Multi-part: part-driven tree with section-scoped placeholders.
+    // Non-multi-part (a deep single-file text): the plain hierarchical path.
+    if (grantha.parts && grantha.parts.length > 0) {
+      hierarchy.main = buildPartHierarchy(
+        structure,
+        grantha.parts,
+        grantha.passages,
+        loadedFirstRefsFor(grantha),
       );
-
-      const groupsByKey = new Map<string, PassageGroup>(
-        hierarchy.main.map(g => [g.level, g])
-      );
-
-      // Tag existing loaded groups with first_refs from grantha.parts (not by parsing level labels).
-      for (const part of grantha.parts) {
-        if (!loadedFirstRefs.has(part.first_ref)) continue;
-        const groupKey = `${levelLabel} ${part.id}`;
-        const group = groupsByKey.get(groupKey);
-        if (group) {
-          group.partIds = [...(group.partIds ?? []), part.first_ref];
-        }
-      }
-
-      // Create placeholder entries for unloaded part files.
-      for (const part of grantha.parts) {
-        if (loadedFirstRefs.has(part.first_ref)) continue;
-        const groupKey = `${levelLabel} ${part.id}`;
-
-        const existing = groupsByKey.get(groupKey);
-        if (existing) {
-          // Section already has a loaded group — append unloaded first_ref to its partIds.
-          existing.partIds = [...(existing.partIds ?? []), part.first_ref];
-        } else {
-          const placeholder: PassageGroup = {
-            level: groupKey,
-            partIds: [part.first_ref],
-            children: [],
-          };
-          hierarchy.main.push(placeholder);
-          groupsByKey.set(groupKey, placeholder);
-        }
-      }
-
-      const extractTrailingNumber = (level: string): number => {
-        const match = level.match(/\s(\d+)$/);
-        return match ? parseInt(match[1], 10) : 0;
-      };
-      hierarchy.main.sort((a, b) => extractTrailingNumber(a.level) - extractTrailingNumber(b.level));
+    } else {
+      hierarchy.main = buildNestedGroups(grantha.passages, structure[0], 0);
     }
   } else {
+    // Depth 1 (with or without parts) — the flat path.
     hierarchy.main = [
       {
         level: "Passages",
@@ -1294,4 +1598,42 @@ export function previousUnloadedPartFirstRef(
     }
   }
   return undefined;
+}
+
+/**
+ * Return the first_refs of the parts whose range intersects the structural
+ * section of `verseRef` and are not yet loaded, in declaration order.
+ *
+ * The structural section of a ref is its part-level prefix (e.g. `"1.1"` for
+ * `"1.1.2"` in a kāṇḍa→sarga→śloka text). Matching by range intersection
+ * (via the shared `partBacksPrefix`) means a part that *extends into* a
+ * section from a previous one (a misaligned Brihadaranyaka part) is included,
+ * and a part that ends just before a section boundary is excluded. For aligned
+ * texts (gita/ramayana, one part per section) this is identical to exact
+ * section matching. Shares `partRanges` with `buildPartHierarchy`, so the
+ * eager-load path can never diverge from the sidebar's `partIds`.
+ *
+ * Args:
+ *     parts: The grantha's declared parts (in document order).
+ *     verseRef: The selected verse ref.
+ *     loadedRefs: The set of loaded passage/prefatory/concluding refs.
+ *     partLevel: The part level index (see `partLevelFor`); < 0 → [] (depth-1).
+ *
+ * Returns:
+ *     The unloaded first_refs of parts intersecting `verseRef`'s section.
+ */
+export function sectionPartsToLoad(
+  parts: PartSectionInfo[],
+  verseRef: string,
+  loadedRefs: ReadonlySet<string>,
+  partLevel: number,
+): string[] {
+  if (partLevel < 0 || parts.length === 0) return [];
+  const ranges = partRanges(parts, partLevel);
+  const sectionPrefix = sprefix(verseRef, partLevel);
+  return ranges
+    .filter(
+      (r) => partBacksPrefix(r, sectionPrefix) && !loadedRefs.has(r.part.first_ref),
+    )
+    .map((r) => r.part.first_ref);
 }

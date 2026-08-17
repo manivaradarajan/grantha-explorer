@@ -10,7 +10,7 @@
  *   - markerRefs are unique
  *   - sections group parent-of-leaves; firstVerseRef is the min of the section
  *   - path[last] numeric tail == last component of markerRef
- *   - partIds match getPassageHierarchy's PassageGroup.partIds
+ *   - partIds intersect the section's ref range (section-scoped loading)
  *   - every main/passage ref appears in exactly one section (or flatPassages)
  */
 import * as fs from "fs";
@@ -19,12 +19,15 @@ import {
   Grantha,
   GranthaSection,
   Passage,
-  PassageGroup,
   PrefatoryMaterial,
+  compareRefs,
+  dropLastRefComponent,
   getCuratedActiveSubsection,
   getCuratedSidebarSections,
-  getPassageHierarchy,
   getSidebarFlatModel,
+  partBacksPrefix,
+  partLevelFor,
+  partRanges,
   StructureLevel,
 } from "../lib/data";
 
@@ -41,23 +44,8 @@ function structureDepth(structure: StructureLevel[]): number {
   return depth;
 }
 
-function dropLast(ref: string): string {
-  const parts = ref.split(".");
-  return parts.length > 1 ? parts.slice(0, -1).join(".") : ref;
-}
-
 function numericTail(label: string): string {
   return label.split(" ").pop() ?? "";
-}
-
-function cmpRefs(a: string, b: string): number {
-  const na = a.split(".").map(Number);
-  const nb = b.split(".").map(Number);
-  for (let i = 0; i < Math.max(na.length, nb.length); i++) {
-    const diff = (na[i] ?? 0) - (nb[i] ?? 0);
-    if (diff) return diff;
-  }
-  return 0;
 }
 
 interface IndexEntry {
@@ -210,7 +198,7 @@ function verifyGrantha(entry: IndexEntry) {
     for (const s of model.sections) {
       const { boundary } = s;
       check(
-        boundary.markerRef === dropLast(boundary.firstVerseRef),
+        boundary.markerRef === dropLastRefComponent(boundary.firstVerseRef),
         `markerRef rule: ${boundary.firstVerseRef} → ${boundary.markerRef}`,
       );
       const lastLabel = boundary.path[boundary.path.length - 1];
@@ -227,7 +215,7 @@ function verifyGrantha(entry: IndexEntry) {
         check(allSharePrefix, `section passages share parent: ${boundary.markerRef}`);
         const minRef = [...s.passages]
           .map((p) => p.ref)
-          .sort(cmpRefs)[0];
+          .sort(compareRefs)[0];
         check(
           minRef === boundary.firstVerseRef,
           `firstVerseRef is min of section: ${boundary.markerRef} (${minRef} vs ${boundary.firstVerseRef})`,
@@ -235,20 +223,34 @@ function verifyGrantha(entry: IndexEntry) {
       }
     }
 
-    // partIds must equal the containing top-level group's partIds
-    const hierarchy = getPassageHierarchy(grantha);
-    const topGroupById = new Map<string, PassageGroup>();
-    for (const g of hierarchy.main) topGroupById.set(g.level, g);
-
-    for (const s of model.sections) {
-      const topLevel = s.boundary.path[0];
-      const topGroup = topLevel ? topGroupById.get(topLevel) : null;
-      const expected = topGroup?.partIds ?? [];
+    // partIds invariant (section-scoped loading): a section's partIds equals
+    // the set of parts whose range intersects its markerRef prefix; container
+    // groups (above the part level) carry none. This replaces the old
+    // "partIds match the containing top-level group" check, which assumed
+    // containers carry parts (the kāṇḍa-wide collapse this refactor removes).
+    const partLevel = partLevelFor(grantha.structure_levels);
+    if (partLevel < 0) {
       check(
-        JSON.stringify([...s.boundary.partIds].sort()) ===
-          JSON.stringify([...expected].sort()),
-        `partIds match top group: ${s.boundary.markerRef} vs ${JSON.stringify(expected)}`,
+        model.sections.length === 0,
+        "depth 1 → no sections (partLevelFor < 0)",
       );
+    } else if (grantha.parts && grantha.parts.length > 0) {
+      const ranges = partRanges(grantha.parts, partLevel);
+      const sectionPrefixes = model.sections.map((s) =>
+        s.boundary.markerRef.split(".").map(Number),
+      );
+      for (let i = 0; i < model.sections.length; i++) {
+        const s = model.sections[i];
+        const P = sectionPrefixes[i];
+        const expected = ranges
+          .filter((r) => partBacksPrefix(r, P))
+          .map((r) => r.part.first_ref);
+        check(
+          JSON.stringify([...s.boundary.partIds].sort()) ===
+            JSON.stringify([...expected].sort()),
+          `partIds intersect section: ${s.boundary.markerRef} vs ${JSON.stringify(expected)}`,
+        );
+      }
     }
   }
 }

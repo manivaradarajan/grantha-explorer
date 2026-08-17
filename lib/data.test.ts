@@ -12,6 +12,13 @@ import {
   getPassageFragment,
   getCuratedSidebarSections,
   getCuratedActiveSubsection,
+  sectionPartsToLoad,
+  partLevelFor,
+  partRanges,
+  partBacksPrefix,
+  buildPartHierarchy,
+  PartSectionInfo,
+  StructureLevel,
   Passage,
   PrefatoryMaterial,
   GranthaSection,
@@ -330,5 +337,293 @@ describe("curated sidebar sections", () => {
     const model = getCuratedSidebarSections(g)!;
     expect(getCuratedActiveSubsection(model[0], "2")?.label).toBe("२");
     expect(getCuratedActiveSubsection(model[0], "1")?.label).toBe("१");
+  });
+});
+
+describe("partLevelFor (depth-based part level)", () => {
+  const lv = (key: string, children?: StructureLevel[]): StructureLevel => ({
+    key,
+    scriptNames: { devanagari: key },
+    children,
+  });
+
+  it("returns the parent of the leaf level for depth >= 2", () => {
+    const kandaSargaShloka = [lv("Kanda", [lv("Sarga", [lv("Shloka")])])];
+    expect(partLevelFor(kandaSargaShloka)).toBe(1);
+    const adhyayaVerse = [lv("Adhyaya", [lv("Verse")])];
+    expect(partLevelFor(adhyayaVerse)).toBe(0);
+  });
+
+  it("returns -1 for depth-1 texts", () => {
+    expect(partLevelFor([lv("Mantra")])).toBe(-1);
+  });
+});
+
+describe("partRanges (tiling part ranges)", () => {
+  const parts = (refs: string[]): PartSectionInfo[] =>
+    refs.map((r) => ({ file: `${r}.json`, first_ref: r }));
+
+  it("tiles from first_refs and precomputes prefixes; last part open-ended", () => {
+    const ranges = partRanges(parts(["3.1.1", "3.3.20", "3.4.15"]), 1);
+    expect(ranges[0].endRef).toBe("3.3.20");
+    expect(ranges[0].startPrefix).toEqual([3, 1]);
+    expect(ranges[0].endPrefix).toEqual([3, 3]);
+    expect(ranges[0].endFinalSegment).toBe(20);
+    expect(ranges[2].endRef).toBeNull();
+    expect(ranges[2].endPrefix).toBeNull();
+  });
+
+  it("throws on duplicate first_refs", () => {
+    expect(() => partRanges(parts(["1.1.1", "1.1.1"]), 1)).toThrow();
+  });
+
+  it("does not throw on an adjacent kāṇḍa boundary or the gita 0.1→1.1 prefatory", () => {
+    expect(() => partRanges(parts(["1.77.1", "2.1.1"]), 1)).not.toThrow();
+    expect(() => partRanges(parts(["0.1", "1.1"]), 0)).not.toThrow();
+  });
+
+  it("throws on a non-adjacent top-level skip", () => {
+    expect(() => partRanges(parts(["1.77.1", "3.1.1"]), 1)).toThrow();
+  });
+
+  it("throws on partLevel < 0", () => {
+    expect(() => partRanges(parts(["1.1.1"]), -1)).toThrow();
+  });
+});
+
+describe("partBacksPrefix (range intersects prefix)", () => {
+  // Contiguous first_refs mirroring real BA part boundaries (each endRef is the
+  // next part's first_ref; no top-level skips).
+  const ranges = partRanges(
+    [
+      { file: "p1.json", first_ref: "3.1.1" },
+      { file: "p2.json", first_ref: "3.3.20" }, // →3.4.15, last 3.4.14
+      { file: "p3.json", first_ref: "3.4.15" },
+      { file: "p4.json", first_ref: "3.5.13" }, // →4.1.1, last 3.6.3
+      { file: "p5.json", first_ref: "4.1.1" }, // →5.1.1, last 4.6.3
+      { file: "p6.json", first_ref: "5.1.1" },
+      { file: "p7.json", first_ref: "5.6.1" },
+      { file: "p8.json", first_ref: "6.1.1" },
+      { file: "p9.json", first_ref: "7.1.1" }, // →8.1.1, last 7.15.1
+      { file: "p10.json", first_ref: "8.1.1" }, // open-ended
+    ],
+    1,
+  );
+  const p = (i: number) => ranges[i];
+
+  it("part2 backs its own and the next section (tail)", () => {
+    expect(partBacksPrefix(p(1), [3, 3])).toBe(true); // 3.3
+    expect(partBacksPrefix(p(1), [3, 4])).toBe(true); // 3.4 (ends 3.4.14)
+    expect(partBacksPrefix(p(1), [3, 5])).toBe(false);
+  });
+
+  it("part4 ends before the next top-level (final segment 1 exclusion)", () => {
+    // 3.5.13 → 4.1.1, last passage 3.6.3
+    expect(partBacksPrefix(p(3), [3, 5])).toBe(true);
+    expect(partBacksPrefix(p(3), [3, 6])).toBe(true);
+    expect(partBacksPrefix(p(3), [4, 1])).toBe(false);
+  });
+
+  it("part5 spans many middle brāhmaṇas but excludes the next head", () => {
+    // 4.1.1 → 5.1.1, last passage 4.6.3
+    for (const b of [1, 2, 3, 4, 5, 6]) {
+      expect(partBacksPrefix(p(4), [4, b])).toBe(true);
+    }
+    expect(partBacksPrefix(p(4), [5, 1])).toBe(false);
+  });
+
+  it("part9 (7.1.1) backs all 15 brāhmaṇas of adhyāya 7 but not adhyāya 8", () => {
+    for (const b of [1, 15]) {
+      expect(partBacksPrefix(p(8), [7, b])).toBe(true);
+    }
+    expect(partBacksPrefix(p(8), [8, 1])).toBe(false);
+  });
+
+  it("the last part is open-ended above", () => {
+    expect(partBacksPrefix(p(9), [9, 1])).toBe(true);
+  });
+});
+
+describe("buildPartHierarchy (section-scoped placeholder tree)", () => {
+  const structure = [
+    { key: "Kanda", scriptNames: { devanagari: "काण्डः" }, children: [
+      { key: "Sarga", scriptNames: { devanagari: "सर्गः" }, children: [
+        { key: "Shloka", scriptNames: { devanagari: "श्लोकः" } },
+      ]},
+    ]},
+  ] as unknown as StructureLevel[];
+  const balaParts = Array.from({ length: 75 }, (_, i) => ({
+    file: `part${i + 1}.json`,
+    first_ref: `1.${i + 1}.1`,
+  }));
+  const passage = (ref: string, partId: string): Passage => ({
+    ref,
+    passage_type: "main",
+    content: { sanskrit: { devanagari: ref }, english_translation: "" },
+    part_id: partId,
+  });
+  const shlokas = (n: number, partId: string): Passage[] =>
+    Array.from({ length: n }, (_, i) => passage(`1.1.${i + 1}`, partId));
+
+  it("places loaded passages at the sarga leaf with its partId", () => {
+    const tree = buildPartHierarchy(
+      structure,
+      balaParts,
+      shlokas(3, "1.1.1"),
+      new Set(["1.1.1"]),
+    );
+    expect(tree.length).toBe(1); // one kāṇḍa
+    const sarga = tree[0].children![0];
+    expect(sarga.level).toBe("सर्गः 1");
+    expect(sarga.partIds).toEqual(["1.1.1"]);
+    expect(sarga.children!.length).toBe(3);
+  });
+
+  it("regression: unloaded sargas are separate placeholder leaves, one partId each", () => {
+    const tree = buildPartHierarchy(structure, balaParts, [], new Set());
+    const sargas = tree[0].children!;
+    expect(sargas.length).toBe(75);
+    for (const s of sargas) {
+      expect(s.partIds!.length).toBe(1);
+      expect(s.children!.length).toBe(0);
+    }
+  });
+
+  it("groups a multi-section part's head and lets middle sections appear post-load", () => {
+    // part5 spans 4.1–4.6; head-only enumeration shows only 4.1 until loaded.
+    const baStructure = [
+      { key: "Adhyaya", scriptNames: { devanagari: "अध्यायः" }, children: [
+        { key: "Brahmana", scriptNames: { devanagari: "ब्राह्मणम्" }, children: [
+          { key: "Mantra", scriptNames: { devanagari: "मन्त्रः" } },
+        ]},
+      ]},
+    ] as unknown as StructureLevel[];
+    const baParts = [
+      { file: "p1.json", first_ref: "4.1.1" },
+      { file: "p2.json", first_ref: "5.1.1" },
+    ];
+    const unloadedTree = buildPartHierarchy(baStructure, baParts, [], new Set());
+    // two top-level adhyāya containers, each with a single head brāhmaṇa
+    expect(unloadedTree.map((a) => a.level)).toEqual(["अध्यायः 4", "अध्यायः 5"]);
+    expect(unloadedTree[0].children!.map((b) => b.level)).toEqual(["ब्राह्मणम् 1"]);
+    expect(unloadedTree[0].children![0].partIds).toEqual(["4.1.1"]);
+    expect(unloadedTree[1].children![0].partIds).toEqual(["5.1.1"]);
+
+    const loadedTree = buildPartHierarchy(
+      baStructure,
+      baParts,
+      [passage("4.1.1", "4.1.1"), passage("4.2.1", "4.1.1"), passage("4.3.1", "4.1.1")],
+      new Set(["4.1.1"]),
+    );
+    // middle brāhmaṇas appear once their part is loaded (via passage prefixes)
+    expect(loadedTree[0].children!.map((b) => b.level)).toEqual([
+      "ब्राह्मणम् 1", "ब्राह्मणम् 2", "ब्राह्मणम् 3",
+    ]);
+    expect(loadedTree[0].children![1].partIds).toEqual(["4.1.1"]);
+    expect(loadedTree[0].children![2].partIds).toEqual(["4.1.1"]);
+  });
+
+  it("supports a partially-loaded section carrying its unloaded tail part", () => {
+    // BA brāhmaṇa 3.3: part1 (3.1.1) loaded, part2 (3.3.20) unloaded tail.
+    const baStructure = [
+      { key: "Adhyaya", scriptNames: { devanagari: "अध्यायः" }, children: [
+        { key: "Brahmana", scriptNames: { devanagari: "ब्राह्मणम्" }, children: [
+          { key: "Mantra", scriptNames: { devanagari: "मन्त्रः" } },
+        ]},
+      ]},
+    ] as unknown as StructureLevel[];
+    const parts = [
+      { file: "p1.json", first_ref: "3.1.1" },
+      { file: "p2.json", first_ref: "3.3.20" },
+      { file: "p3.json", first_ref: "3.4.15" },
+    ];
+    const loaded = [passage("3.1.1", "3.1.1"), passage("3.3.19", "3.1.1")];
+    const tree = buildPartHierarchy(
+      baStructure,
+      parts,
+      loaded,
+      new Set(["3.1.1"]),
+    );
+    // the adhyāya 3 container holds the brāhmaṇa groups
+    expect(tree.map((a) => a.level)).toEqual(["अध्यायः 3"]);
+    const brahmana3 = tree[0].children!.find((b) => b.level === "ब्राह्मणम् 3")!;
+    // the loaded brāhmaṇa 3.3 carries both its own part and the unloaded tail
+    expect(brahmana3.partIds!.sort()).toEqual(["3.1.1", "3.3.20"]);
+    expect(brahmana3.children!.length).toBe(1); // the loaded mantra 3.3.19
+  });
+});
+
+describe("sectionPartsToLoad (section-based eager part loading)", () => {
+  // The regression fixture is deliberately adversarial: every part shares the
+  // same kāṇḍa `id` ("1") because the Rāmāyaṇa's bala parts are all in kāṇḍa 1.
+  // Section identity MUST be derived from `first_ref` (the sarga), never from
+  // `id`, or selecting any verse would eager-load the whole kāṇḍa.
+  const balaParts: PartSectionInfo[] = Array.from({ length: 75 }, (_, i) => ({
+    file: `part${i + 1}.json`,
+    first_ref: `1.${i + 1}.1`,
+  }));
+
+  const loaded = (...refs: string[]) => new Set(refs);
+
+  it("eager-loads only the selected sarga, not the whole kāṇḍa (regression)", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "1.1.2", loaded(), 1);
+    expect(toLoad).toEqual(["1.1.1"]);
+  });
+
+  it("matches a different sarga within the same kāṇḍa", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "1.18.5", loaded(), 1);
+    expect(toLoad).toEqual(["1.18.1"]);
+  });
+
+  it("skips parts that are already loaded", () => {
+    const toLoad = sectionPartsToLoad(balaParts, "1.2.3", loaded("1.2.1"), 1);
+    expect(toLoad).toEqual([]);
+  });
+
+  it("returns an empty array when no part opens the section", () => {
+    // kāṇḍa 0 (before the first part's kāṇḍa 1) is backed by no part.
+    const toLoad = sectionPartsToLoad(balaParts, "0.5.1", loaded(), 1);
+    expect(toLoad).toEqual([]);
+  });
+
+  it("supports chapter→verse texts where the section is the top-level segment", () => {
+    const gitaParts: PartSectionInfo[] = Array.from({ length: 18 }, (_, i) => ({
+      file: `part${i + 1}.json`,
+      first_ref: `${i + 1}.1`,
+    }));
+    expect(sectionPartsToLoad(gitaParts, "2.14", loaded(), 0)).toEqual(["2.1"]);
+    expect(sectionPartsToLoad(gitaParts, "2.14", loaded("2.1"), 0)).toEqual([]);
+  });
+
+  it("returns [] for depth-1 (partLevel < 0)", () => {
+    expect(sectionPartsToLoad([{ file: "p.json", first_ref: "1" }], "1", loaded(), -1)).toEqual([]);
+  });
+
+  it("BA misaligned: a tail part backs the section it ends in", () => {
+    const baParts = [
+      { file: "p1.json", first_ref: "3.1.1" },
+      { file: "p2.json", first_ref: "3.3.20" },
+      { file: "p3.json", first_ref: "3.4.15" },
+      { file: "p4.json", first_ref: "3.5.13" },
+    ];
+    // 3.4.1 and 3.4.15 are both in brāhmaṇa 3.4 → part2 (tail) + part3 (head)
+    expect(sectionPartsToLoad(baParts, "3.4.1", loaded(), 1)).toEqual(["3.3.20", "3.4.15"]);
+    expect(sectionPartsToLoad(baParts, "3.4.15", loaded(), 1)).toEqual(["3.3.20", "3.4.15"]);
+  });
+
+  it("BA long-span: a middle brāhmaṇa resolves to its spanning part", () => {
+    const baParts = [
+      { file: "p4.json", first_ref: "4.1.1" },
+      { file: "p5.json", first_ref: "5.1.1" },
+    ];
+    expect(sectionPartsToLoad(baParts, "4.3.1", loaded(), 1)).toEqual(["4.1.1"]);
+  });
+
+  it("BA exclusive boundary: part5 does not back brāhmaṇa 5.1", () => {
+    const baParts = [
+      { file: "p4.json", first_ref: "4.1.1" },
+      { file: "p5.json", first_ref: "5.1.1" },
+    ];
+    expect(sectionPartsToLoad(baParts, "5.1.1", loaded(), 1)).toEqual(["5.1.1"]);
   });
 });
