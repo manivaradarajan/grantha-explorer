@@ -40,7 +40,7 @@ import _build_parser
 from convert_structured_md import (
     _first_main_ref,
     _list_source_markdown_files,
-    _resolve_target_commentary_id,
+    _resolve_target_commentary_ids,
     build_envelope_json,
     build_part_json,
     normalize_structure_levels,
@@ -53,7 +53,7 @@ from convert_structured_md import (
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.2.0"
 
 _FILENAME_SUFFIX_RE = re.compile(r"(-\d+)+\.md$")
 
@@ -381,10 +381,10 @@ def _write_edition(
         if first_frontmatter is None:
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
-        target_cid = _resolve_target_commentary_id(
+        target_cids = _resolve_target_commentary_ids(
             frontmatter, frontmatter["grantha_id"]
         )
-        part_json = build_part_json(frontmatter, body, edition_id, target_cid)
+        part_json = build_part_json(frontmatter, body, edition_id, target_cids)
         part_path = out_dir / f"part{idx}.json"
         part_path.write_text(
             json.dumps(part_json, ensure_ascii=False, indent=2),

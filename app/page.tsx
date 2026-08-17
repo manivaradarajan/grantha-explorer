@@ -17,7 +17,13 @@ import {
   getFirstMainPassageRef,
   validateAndNormalizeHash,
 } from "@/lib/hashUtils";
-import { getAllPassagesForNavigation, hasCommentary } from "@/lib/data";
+import {
+  getAllPassagesForNavigation,
+  sectionPartsToLoad,
+  partLevelFor,
+  loadedFirstRefsFor,
+  hasCommentary,
+} from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
 
@@ -163,13 +169,17 @@ export default function Home() {
     if (currentGrantha.parts) {
       const allPassages = getAllPassagesForNavigation(currentGrantha);
       if (!allPassages.some((p) => p.ref === verseRef)) {
-        const topLevelRef = verseRef.split(".")[0];
-        const hasUnloadedPartForSection = currentGrantha.parts.some(
-          (p) =>
-            p.id === topLevelRef &&
-            !allPassages.some((a) => a.ref === p.first_ref)
+        // Defer only when the ref's section still has an unloaded part that
+        // might contain it. Section scope comes from the ref (never the coarse
+        // top-level id), matching the section-load effect.
+        const partLevel = partLevelFor(currentGrantha.structure_levels);
+        const pending = sectionPartsToLoad(
+          currentGrantha.parts,
+          verseRef,
+          loadedFirstRefsFor(currentGrantha),
+          partLevel,
         );
-        if (hasUnloadedPartForSection) {
+        if (pending.length > 0) {
           return;
         }
       }
@@ -214,29 +224,19 @@ export default function Home() {
       return;
     }
 
-    const refParts = verseRef.split(".");
-    if (refParts.length === 0) return;
+    // Depth-1 multi-part texts (isavasya, mandukya-karika editions) have no
+    // part level — nothing to section-load.
+    const partLevel = partLevelFor(currentGrantha.structure_levels);
+    if (partLevel < 0) return;
 
-    const topLevelRef = refParts[0];
-
-    // A structural section can span multiple part files. Load all unloaded files for the section.
-    const sectionParts = currentGrantha.parts.filter(
-      (p) => p.id === topLevelRef,
+    const toLoad = sectionPartsToLoad(
+      currentGrantha.parts,
+      verseRef,
+      loadedFirstRefsFor(currentGrantha),
+      partLevel,
     );
-    // No part carries this top-level section id — a legitimate no-op for
-    // single-part granthas (the sole part's id is derived from its first_ref,
-    // e.g. "1") and for prefatory refs; those verses are already loaded.
-    if (sectionParts.length === 0) {
-      return;
-    }
-
-    const loadedPassageRefs = new Set(
-      currentGrantha.passages.map((p) => p.ref),
-    );
-    for (const part of sectionParts) {
-      if (!loadedPassageRefs.has(part.first_ref)) {
-        loadPart(part.first_ref);
-      }
+    for (const firstRef of toLoad) {
+      loadPart(firstRef);
     }
   }, [currentGrantha, verseRef, loadPart]);
 

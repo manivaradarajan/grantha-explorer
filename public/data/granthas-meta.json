@@ -760,5 +760,16 @@
         "भ.गी."
       ]
     }
+  },
+  "valmiki-ramayana": {
+    "title": {
+      "devanagari": "श्रीमद्वाल्मीकीयरामायणम्",
+      "iast": "Valmiki Ramayana"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "वा.रा."
+      ]
+    }
   }
 }

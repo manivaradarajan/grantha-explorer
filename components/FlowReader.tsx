@@ -15,11 +15,11 @@ import {
   EditionStub,
   Grantha,
   GranthaMetadata,
-  PrefatoryMaterial,
   commentaryPassageForRef,
   getAllPassagesForNavigation,
   nextUnloadedPartFirstRef,
   previousUnloadedPartFirstRef,
+  sortPassagesByRef,
 } from "@/lib/data";
 import {
   sanitizeCommentaryHtml,
@@ -124,7 +124,7 @@ export default function FlowReader({
   }
 
   const passages = useMemo(
-    () => getAllPassagesForNavigation(grantha),
+    () => sortPassagesByRef(getAllPassagesForNavigation(grantha)),
     [grantha],
   );
   const activeCommentary: Commentary | undefined = grantha.commentaries[0];
@@ -294,10 +294,28 @@ export default function FlowReader({
   // Align the selected verse's top with the container top and record the
   // scrollTop that achieves it, so later position checks know where "in view"
   // was.
+  // Resolve the scroll target for a selected verse. A verse that follows a
+  // prefatory passage (a sarga praveśa / whole-work mangala, ref K.N.0) should
+  // land with that intro at the top of the viewport — the reader sees the
+  // praveśa first, then the verse. Only the immediately-preceding passage in
+  // the same sarga counts, so later verses of a sarga scroll to themselves.
+  const prefatoryScrollTargetFor = useCallback(
+    (ref: string): string => {
+      const idx = passages.findIndex((p) => p.ref === ref);
+      if (idx <= 0) return ref;
+      const prev = passages[idx - 1];
+      if (prev.passage_type !== "prefatory") return ref;
+      const refPrefix = ref.split(".").slice(0, -1).join(".");
+      const prevPrefix = prev.ref.split(".").slice(0, -1).join(".");
+      return prevPrefix === refPrefix ? prev.ref : ref;
+    },
+    [passages],
+  );
+
   const alignVerseToTop = useCallback(
     (ref: string): void => {
       const container = scrollContainerRef.current;
-      const element = findVerseElement(ref);
+      const element = findVerseElement(prefatoryScrollTargetFor(ref));
       if (!container || !element) return;
       const targetScrollTop =
         element.getBoundingClientRect().top -
@@ -309,7 +327,7 @@ export default function FlowReader({
       // when the target element sits in a non-primary compare page.
       container.scrollTop = targetScrollTop;
     },
-    [findVerseElement],
+    [findVerseElement, prefatoryScrollTargetFor],
   );
 
   // Auto-scroll to the selected verse on mount and when the selection changes
@@ -485,8 +503,8 @@ export default function FlowReader({
   // where the sub has its own passage. All instances of the same subcommentary
   // id toggle together; visibility is derived from activeSubcommentaryIds, not
   // per-block local state (spec §2.5/§4). The whole subtree is gated on the
-  // commentary actually having subcommentaries — zero exist in the library
-  // today, so nothing renders, but the plumbing is data-driven, not hardcoded.
+  // commentary actually having subcommentaries; the plumbing is data-driven,
+  // not hardcoded.
   const renderSubcommentary = (
     sub: Commentary,
     verseRef: string,
@@ -541,6 +559,15 @@ export default function FlowReader({
           </div>
         )}
       </div>
+    );
+  };
+
+  const renderSubcommentaries = (verseRef: string): ReactNode => {
+    if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
+      return null;
+    }
+    return activeCommentary.subcommentaries.map((sub) =>
+      renderSubcommentary(sub, verseRef),
     );
   };
 
@@ -719,13 +746,16 @@ export default function FlowReader({
                   }
 
                   if (!isMain) {
-                    const label = (passage as PrefatoryMaterial).label
-                      ?.devanagari;
+                    // Prefatory/concluding passages render their own prose
+                    // (e.g. a sarga praveśa or the whole-work mangalācaraṇa).
+                    // The passage label is navigation metadata, not display
+                    // text — it is deliberately not rendered here.
                     const content = passage.content?.sanskrit?.devanagari;
-                    // The whole-work opening (e.g. the Gita's maṅgalācaraṇa) lives in
-                    // commentary.intro, keyed to its label-only prefatory anchor — the
-                    // same prefaceAnchor mechanism CommentaryPanel uses (§2.3). Render
-                    // it only at that anchor's own position, once.
+                    // The whole-work opening (e.g. the Gita's maṅgalācaraṇa)
+                    // lives in commentary.intro, keyed to its label-only
+                    // prefatory anchor — the same prefaceAnchor mechanism
+                    // CommentaryPanel uses (§2.3). Render it only at that
+                    // anchor's own position, once.
                     const prefaceAnchor =
                       activeCommentary?.intro &&
                       passage.ref === grantha.prefatory_material?.[0]?.ref
@@ -734,11 +764,6 @@ export default function FlowReader({
                     return (
                       <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                         <div data-verse-ref={passage.ref} className="px-4 py-8">
-                          {label && (
-                            <div className="text-sm text-gray-600 italic mb-3">
-                              {label}
-                            </div>
-                          )}
                           {prefaceAnchor ? (
                             <p
                               className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line"
@@ -753,6 +778,7 @@ export default function FlowReader({
                               {stripMarkdown(content)}
                             </p>
                           ) : null}
+                          {renderSubcommentaries(passage.ref)}
                         </div>
                       </Fragment>
                     );
@@ -845,10 +871,7 @@ export default function FlowReader({
                                 ),
                               }}
                             />
-                            {hasSubcommentaries &&
-                              activeCommentary?.subcommentaries?.map((sub) =>
-                                renderSubcommentary(sub, passage.ref),
-                              )}
+                            {renderSubcommentaries(passage.ref)}
                           </div>
                         )}
                       </div>

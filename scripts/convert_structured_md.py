@@ -40,7 +40,7 @@ import _build_parser
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.2.0"
 
 # For aitareya: index-0 commentary is Rangaramanuja, index-1 is Sayana.
 AITAREYA_GRANTHA_ID = "aitareya-upanishad"
@@ -960,11 +960,59 @@ def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
     return entry
 
 
+def _build_commentary(
+    meta: dict[str, Any],
+    body: BodyData,
+) -> dict[str, Any] | None:
+    """Build one commentary dict from its frontmatter descriptor.
+
+    Args:
+        meta: One commentaries_metadata entry (commentary_id,
+            commentary_title, commentator, optional parent_commentary_id).
+        body: Parsed body data.
+
+    Returns:
+        The commentary dict, or None when this commentary carries no content
+        in this part (no passages and no part-level intro).
+    """
+    cid: str = meta["commentary_id"]
+    raw_blocks = body.commentary_blocks.get(cid, [])
+    # Merge any duplicate-ref blocks arising from split commentary tags in source.
+    cid_blocks = _merge_duplicate_ref_passages(raw_blocks)
+    part_intro = body.commentary_intros.get(cid, "")
+    if not (cid_blocks or part_intro):
+        return None
+
+    commentary_passages: list[dict[str, Any]] = []
+    for cp in cid_blocks:
+        if not cp.text:
+            continue
+        entry: dict[str, Any] = {
+            "ref": cp.ref,
+            "content": {"sanskrit": {"devanagari": cp.text}},
+        }
+        if cp.intro:
+            entry["intro"] = {"sanskrit": {"devanagari": cp.intro}}
+        commentary_passages.append(entry)
+
+    commentary: dict[str, Any] = {
+        "commentary_id": cid,
+        "commentary_title": meta.get("commentary_title", ""),
+        "commentator": meta.get("commentator", {}),
+    }
+    if meta.get("parent_commentary_id"):
+        commentary["parent_commentary_id"] = meta["parent_commentary_id"]
+    if part_intro:
+        commentary["intro"] = {"sanskrit": {"devanagari": part_intro}}
+    commentary["passages"] = commentary_passages
+    return commentary
+
+
 def build_part_json(
     frontmatter: dict[str, Any],
     body: BodyData,
     edition_id: str,
-    target_commentary_id: str | None,
+    target_commentary_ids: list[str],
 ) -> dict[str, Any]:
     """Assemble the full part JSON dict for one source file.
 
@@ -973,7 +1021,8 @@ def build_part_json(
         body: Parsed body data.
         edition_id: The edition_id to embed (equals grantha_id for
             single-edition texts; multi-edition texts pass the real edition id).
-        target_commentary_id: The commentary_id to include, or None to omit.
+        target_commentary_ids: The commentary_ids to include, in document
+            order; empty to omit commentary.
 
     Returns:
         Dict conforming to the v1.0.0 part file schema.
@@ -1005,41 +1054,25 @@ def build_part_json(
     if concluding:
         result["concluding_material"] = concluding
 
-    # Commentary block — omitted when target_commentary_id is None or absent
-    commentaries_meta: list[dict[str, Any]] | None = frontmatter.get("commentaries_metadata")
-    if commentaries_meta and target_commentary_id:
-        meta = next(
-            (c for c in commentaries_meta if c["commentary_id"] == target_commentary_id),
-            None,
-        )
-        raw_blocks = body.commentary_blocks.get(target_commentary_id, [])
-        # Merge any duplicate-ref blocks arising from split commentary tags in source.
-        cid_blocks = _merge_duplicate_ref_passages(raw_blocks)
-        part_intro = body.commentary_intros.get(target_commentary_id, "")
-        if meta and (cid_blocks or part_intro):
-            commentary_passages: list[dict[str, Any]] = []
-            for cp in cid_blocks:
-                if not cp.text:
-                    continue
-                entry: dict[str, Any] = {
-                    "ref": cp.ref,
-                    "content": {"sanskrit": {"devanagari": cp.text}},
-                }
-                if cp.intro:
-                    entry["intro"] = {"sanskrit": {"devanagari": cp.intro}}
-                commentary_passages.append(entry)
-            if commentary_passages or part_intro:
-                commentary: dict[str, Any] = {
-                    "commentary_id": target_commentary_id,
-                    "commentary_title": meta.get("commentary_title", ""),
-                    "commentator": meta.get("commentator", {}),
-                }
-                if part_intro:
-                    commentary["intro"] = {
-                        "sanskrit": {"devanagari": part_intro}
-                    }
-                commentary["passages"] = commentary_passages
-                result["commentary"] = commentary
+    # Commentary block(s). Emit the singular `commentary` when exactly one
+    # commentary carries content in this part, and the plural `commentaries`
+    # array when two or more do (e.g. a bhāṣya plus a subcommentary declaring
+    # parent_commentary_id). Omitted entirely when none carries content.
+    commentaries_meta: list[dict[str, Any]] | None = frontmatter.get(
+        "commentaries_metadata"
+    )
+    if commentaries_meta:
+        commentaries: list[dict[str, Any]] = []
+        for meta in commentaries_meta:
+            if meta["commentary_id"] not in target_commentary_ids:
+                continue
+            commentary = _build_commentary(meta, body)
+            if commentary:
+                commentaries.append(commentary)
+        if len(commentaries) == 1:
+            result["commentary"] = commentaries[0]
+        elif len(commentaries) > 1:
+            result["commentaries"] = commentaries
 
     return result
 
@@ -1124,29 +1157,32 @@ def append_sayana_deferred(
 # Commentary-id resolution
 # ---------------------------------------------------------------------------
 
-def _resolve_target_commentary_id(
+def _resolve_target_commentary_ids(
     frontmatter: dict[str, Any],
     grantha_id: str,
-) -> str | None:
-    """Determine the target commentary_id for a source file.
+) -> list[str]:
+    """Determine the target commentary_ids for a source file.
 
     Args:
         frontmatter: Parsed frontmatter dict for the file.
         grantha_id: The grantha_id of the text being processed.
 
     Returns:
-        The commentary_id string to include, or None if no commentary applies.
+        The commentary_id strings to include, in document order, or [] if no
+        commentary applies.
     """
     commentaries_meta: list[dict[str, Any]] | None = frontmatter.get("commentaries_metadata")
     if not commentaries_meta:
-        return None  # Mula-only part (e.g. kaushitaki part 2)
+        return []  # Mula-only part (e.g. kaushitaki part 2)
 
     if grantha_id == AITAREYA_GRANTHA_ID:
-        return AITAREYA_TARGET_COMMENTARY_ID
+        # Sayana is collected/deferred separately; only Rangaramanuja ships
+        # inline in the aitareya parts.
+        return [AITAREYA_TARGET_COMMENTARY_ID]
 
-    # All other texts: use the commentary_id from the file's own frontmatter
+    # All other texts: use every commentary_id from the file's own frontmatter
     # (preserving per-file variation rather than normalizing).
-    return commentaries_meta[0]["commentary_id"]
+    return [c["commentary_id"] for c in commentaries_meta]
 
 
 # ---------------------------------------------------------------------------
@@ -1305,13 +1341,13 @@ def convert_grantha(
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
 
-        target_cid = _resolve_target_commentary_id(frontmatter, grantha_id)
+        target_cids = _resolve_target_commentary_ids(frontmatter, grantha_id)
 
         # Aitareya: collect Sayana text from prefatory passage and defer it
         if grantha_id == AITAREYA_GRANTHA_ID:
             _handle_aitareya_sayana(body, grantha_explorer_root)
 
-        part_json = build_part_json(frontmatter, body, edition_id, target_cid)
+        part_json = build_part_json(frontmatter, body, edition_id, target_cids)
 
         out_path = out_dir / part_filename
         out_path.write_text(
@@ -1322,7 +1358,7 @@ def convert_grantha(
         first_ref = _first_main_ref(body)
         parts_info.append({"file": part_filename, "first_ref": first_ref})
         print(f"      first_ref={first_ref}, passages={len(body.passages)}, "
-              f"commentary={bool(part_json.get('commentary'))}")
+              f"commentary={bool(part_json.get('commentary') or part_json.get('commentaries'))}")
 
     if first_frontmatter is None:
         raise RuntimeError("No source files were processed")

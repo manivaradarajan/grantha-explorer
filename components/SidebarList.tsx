@@ -17,7 +17,6 @@ interface SidebarListProps {
   depth: number;
   sections: SidebarSection[];
   flatPassages: Passage[];
-  prefatory: (Passage | PrefatoryMaterial)[];
   concluding: (Passage | PrefatoryMaterial)[];
   selectedRef: string;
   onVerseSelect: (ref: string) => void;
@@ -117,7 +116,6 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
       depth,
       sections,
       flatPassages,
-      prefatory,
       concluding,
       selectedRef,
       onVerseSelect,
@@ -376,9 +374,6 @@ const SidebarList = forwardRef<HTMLDivElement, SidebarListProps>(
 
   return (
     <div ref={ref} className="flex-1 overflow-y-auto overflow-x-hidden px-6">
-      {!curated &&
-        prefatory.map((passage) => renderPassage(passage, `pre-${passage.ref}`))}
-
       {curated || depth > 1
         ? sections.map((section) => {
             const segments = section.boundary.path;

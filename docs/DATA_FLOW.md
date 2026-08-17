@@ -58,6 +58,13 @@ python3 scripts/convert_structured_md.py \
   (Resolves Bug #2.)
 - Mula extraction stops at the first `# Commentary:` sub-heading so a
   Sanskrit-wrapped commentary block is not swept into the passage mula.
+- Commentary emission: a part carrying exactly one non-empty commentary emits
+  the singular `commentary`; a part carrying two or more (e.g. a bhāṣya plus a
+  subcommentary that declares `parent_commentary_id`) emits the plural
+  `commentaries` array. `_resolve_target_commentary_ids` lists the ids; the
+  aitareya case still emits only Rangaramanuja (Sayana is deferred separately).
+- `SCHEMA_VERSION` (mirroring grantha-data's `VERSION`) is stamped on each
+  part; re-sync the schema mirrors and bump it when the producer schema changes.
 
 ### 2.2 Multi-edition — `scripts/import_editions.py`
 
@@ -106,7 +113,9 @@ each build).
 - `grantha-envelope` → resolves the default edition path, records `editions[]`
   on the index entry; also scans sibling `.json` files for co-located granthas
   (e.g. mandukya-karika).
-- `edition-sub-envelope` → registers the directory path for its `grantha_id`.
+- `edition-sub-envelope` → registers the directory path for its `grantha_id`
+  (e.g. `ramayana/valmiki-ramayana`, 626 parts, one per sarga across all
+  seven kāṇḍas).
 - Flat `grantha` files → registered by `grantha_id`.
 - Cross-references `granthas-meta.json` (titles, abbreviations) +
   `granthas-order.json` (display order) + `categories.json`
@@ -197,6 +206,26 @@ sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
 5. `npm run build` (prebuild regenerates `granthas.json` and validates).
 6. New passage-heading kinds need **no** converter edit — kinds are derived
    from `structure_levels` (see §2.1).
+
+### Example: Vālmīki Rāmāyaṇa (full corpus)
+
+- Source: `grantha-data/structured_md/ramayana/valmiki-ramayana/` (626 parts,
+  all seven kāṇḍas). The explorer ingests the full corpus under
+  `public/data/library/ramayana/valmiki-ramayana/`.
+- `text_type: ramayana` (new enum value in `grantha.schema.json` +
+  `grantha-envelope.schema.json`; re-synced to the mirrors).
+- `structure_levels: Kāṇḍa → Sarga → Śloka` (depth 3); passage kind `Shloka`
+  derived from `structure_levels`, so no converter edit was needed.
+- Each sarga's Govindarāja opening is a content-bearing `# Prefatory: K.N.0`
+  praveśa passage (label प्रवेश; sarga 1.1's whole-work mangalācaraṇa is
+  मङ्गलाचरणम्). Flow mode interleaves prefatory passages by ref so a praveśa
+  renders before its sarga's first verse, and hides the label.
+- Registered in all three data files; category `ramayana` (order 4) added to
+  `categories.json`.
+- All 626 part files carry the `ramayana-bhushana` commentary (Govindarāja).
+  Twenty source sargas (documented in grantha-data `SOURCE_ISSUES.md`) are
+  excluded from the producer, so the published corpus is 626 sargas; the
+  excluded ones will slot back in at their kāṇḍa positions after re-extraction.
 
 ---
 

@@ -3,7 +3,8 @@
     { "id": "upanishads", "deva": "उपनिषदः", "iast": "Upaniṣadaḥ", "order": 1 },
     { "id": "ramanuja", "deva": "रामानुजश्रीसूक्तयः", "iast": "Rāmānujaśrīsūktayaḥ", "order": 2 },
     { "id": "gita", "deva": "गीता", "iast": "Gītā", "order": 3 },
-    { "id": "brahma-sutra", "deva": "ब्रह्मसूत्रम्", "iast": "Brahma Sūtra", "order": 4 }
+    { "id": "brahma-sutra", "deva": "ब्रह्मसूत्रम्", "iast": "Brahma Sūtra", "order": 4 },
+    { "id": "ramayana", "deva": "रामायणम्", "iast": "Rāmāyaṇam", "order": 5 }
   ],
   "text_type_labels": {
     "upanishad": { "deva": "उपनिषत्" },
@@ -15,7 +16,8 @@
     "purana": { "deva": "पुराणम्" },
     "stotra": { "deva": "स्तोत्रम्" },
     "other": { "deva": "ग्रन्थः" },
-    "gita": { "deva": "गीता" }
+    "gita": { "deva": "गीता" },
+    "ramayana": { "deva": "रामायणम्" }
   },
   "text_categories": {
     "isavasya-upanishad": ["upanishads"],
@@ -33,6 +35,7 @@
     "svetasvatara-upanishad": ["upanishads"],
     "vedarthasangraha": ["ramanuja"],
     "bhagavad-gita": ["gita"],
-    "brahma-sutra": ["brahma-sutra"]
+    "brahma-sutra": ["brahma-sutra"],
+    "valmiki-ramayana": ["ramayana"]
   }
 }
