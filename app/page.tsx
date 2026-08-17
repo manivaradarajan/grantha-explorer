@@ -17,7 +17,7 @@ import {
   getFirstMainPassageRef,
   validateAndNormalizeHash,
 } from "@/lib/hashUtils";
-import { getAllPassagesForNavigation, hasCommentary } from "@/lib/data";
+import { getAllPassagesForNavigation, dropLastRefComponent, hasCommentary } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
 
@@ -217,11 +217,18 @@ export default function Home() {
     const refParts = verseRef.split(".");
     if (refParts.length === 0) return;
 
-    const topLevelRef = refParts[0];
+    // The structural section of the selected verse: for a kāṇḍa→sarga→śloka
+    // text this is the sarga (e.g. "1.1" for "1.1.2"), for a chapter→verse
+    // text the chapter (e.g. "1" for "1.1"). Matching the *parent* of the ref
+    // — rather than the top-level segment — means only the parts that open
+    // the same section as the selection are loaded eagerly; the rest lazy-load
+    // on scroll. The top-level segment would be a kāṇḍa ("1") shared by every
+    // sarga, loading the whole kāṇḍa at once.
+    const sectionRef = dropLastRefComponent(verseRef);
 
     // A structural section can span multiple part files. Load all unloaded files for the section.
     const sectionParts = currentGrantha.parts.filter(
-      (p) => p.id === topLevelRef,
+      (p) => dropLastRefComponent(p.first_ref) === sectionRef,
     );
     // No part carries this top-level section id — a legitimate no-op for
     // single-part granthas (the sole part's id is derived from its first_ref,
