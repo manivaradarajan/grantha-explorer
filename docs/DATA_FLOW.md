@@ -53,6 +53,13 @@ python3 scripts/convert_structured_md.py \
   (Resolves Bug #2.)
 - Mula extraction stops at the first `# Commentary:` sub-heading so a
   Sanskrit-wrapped commentary block is not swept into the passage mula.
+- Commentary emission: a part carrying exactly one non-empty commentary emits
+  the singular `commentary`; a part carrying two or more (e.g. a bhāṣya plus a
+  subcommentary that declares `parent_commentary_id`) emits the plural
+  `commentaries` array. `_resolve_target_commentary_ids` lists the ids; the
+  aitareya case still emits only Rangaramanuja (Sayana is deferred separately).
+- `SCHEMA_VERSION` (mirroring grantha-data's `VERSION`) is stamped on each
+  part; re-sync the schema mirrors and bump it when the producer schema changes.
 
 ### 2.2 Multi-edition — `scripts/import_editions.py`
 

@@ -18,7 +18,7 @@ import unittest
 # Allow importing from the parent scripts directory.
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
-from convert_structured_md import BodyData, build_part_json  # noqa: E402
+from convert_structured_md import BodyData, CommentaryPassage, build_part_json  # noqa: E402
 
 
 def _intro_only_frontmatter() -> dict[str, object]:
@@ -50,7 +50,7 @@ class TestPartJsonCommentary(unittest.TestCase):
             _intro_only_frontmatter(),
             body,
             "bhagavad-gita",
-            "gita-bhashyam",
+            ["gita-bhashyam"],
         )
         commentary = result["commentary"]
         self.assertEqual(commentary["passages"], [])
@@ -58,6 +58,37 @@ class TestPartJsonCommentary(unittest.TestCase):
             commentary["intro"],
             {"sanskrit": {"devanagari": "मङ्गलाचरणम्"}},
         )
+
+    def test_two_commentaries_emit_plural(self) -> None:
+        """Two commentaries with content emit ``commentaries`` (plural), not ``commentary``."""
+        frontmatter = _intro_only_frontmatter()
+        frontmatter["commentaries_metadata"].append(
+            {
+                "commentary_id": "tatparya-chandrika",
+                "commentary_title": "तात्पर्यचन्द्रिका",
+                "commentator": {
+                    "devanagari": "श्रीमद्वेदान्ताचार्यः",
+                    "roman": "śrīmadvēdāntācāryaḥ",
+                },
+                "parent_commentary_id": "gita-bhashyam",
+            }
+        )
+        body = BodyData()
+        body.commentary_intros = {"gita-bhashyam": "मङ्गलाचरणम्"}
+        body.commentary_blocks["tatparya-chandrika"] = [
+            CommentaryPassage(ref="0.1", text="तात्पर्यग्लोसः")
+        ]
+        result = build_part_json(
+            frontmatter,
+            body,
+            "bhagavad-gita",
+            ["gita-bhashyam", "tatparya-chandrika"],
+        )
+        self.assertNotIn("commentary", result)
+        self.assertEqual(len(result["commentaries"]), 2)
+        tika = next(c for c in result["commentaries"] if c["commentary_id"] == "tatparya-chandrika")
+        self.assertEqual(tika["parent_commentary_id"], "gita-bhashyam")
+        self.assertEqual(tika["passages"][0]["ref"], "0.1")
 
 
 if __name__ == "__main__":

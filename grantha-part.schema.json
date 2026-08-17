@@ -43,7 +43,12 @@
     },
     "commentary": {
       "$ref": "grantha.schema.json#/definitions/commentary",
-      "description": "Exactly one commentary per edition part. Absent if this is a mūla-only edition."
+      "description": "Exactly one commentary per edition part. Absent if this is a mūla-only edition. Mutually exclusive with `commentaries`: emit `commentary` when exactly one commentary, `commentaries` when two or more."
+    },
+    "commentaries": {
+      "type": "array",
+      "description": "Two or more commentaries for one edition part (e.g. a bhāṣya plus a subcommentary carrying parent_commentary_id). Mutually exclusive with the singular `commentary`.",
+      "items": { "$ref": "grantha.schema.json#/definitions/commentary" }
     }
   },
   "required": ["kind", "schema_version", "edition_id", "part_num"],

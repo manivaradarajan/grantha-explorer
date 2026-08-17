@@ -11,6 +11,7 @@ Worktree roots live under `~/git-worktrees/<repo>/<idea>/`.
 
 | Worktree dir | Branch | Idea | Plan file | Status |
 |---|---|---|---|---|
+| `~/git-worktrees/grantha-explorer/bring-in-tatparyachandrika` | `bring-in-tatparyachandrika` | Bring Deśika's Tātparya-candrikā in as the first subcommentary of the Gītābhāṣya | `plans/PLAN_BRING_IN_TATPARYACHANDRIKA.md` | Full text shipped (intro + all 18 adhyāyas) |
 
 
 ## Resume (after weeks away)
