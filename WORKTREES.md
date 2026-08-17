@@ -11,7 +11,7 @@ Worktree roots live under `~/git-worktrees/<repo>/<idea>/`.
 
 | Worktree dir | Branch | Idea | Plan file | Status |
 |---|---|---|---|---|
-| `~/git-worktrees/grantha-explorer/bring-in-tatparyachandrika` | `bring-in-tatparyachandrika` | Bring Deśika's Tātparya-candrikā in as the first subcommentary of the Gītābhāṣya | `plans/PLAN_BRING_IN_TATPARYACHANDRIKA.md` | Full text shipped (intro + all 18 adhyāyas) |
+| `~/git-worktrees/grantha-explorer/bring-in-tatparyachandrika` | `bring-in-tatparyachandrika` | Bring Deśika's Tātparya-candrikā in as the first subcommentary of the Gītābhāṣya | `plans/PLAN_BRING_IN_TATPARYACHANDRIKA.md` | Full text shipped (intro + all 18 adhyāyas). PRs open — see "Next steps" in the plan: confirm data CI green, merge data PR then explorer PR |
 
 
 ## Resume (after weeks away)
