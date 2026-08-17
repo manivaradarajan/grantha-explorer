@@ -237,17 +237,17 @@ was 2218) and lazy-loads sargas on scroll; gita behavior unchanged.
 
 ---
 
-## 14. `loadGrantha` eager-grouping has no unit test (deferred)
+## 14. `loadGrantha` eager-grouping — RESOLVED
 
-**Status:** open gap, low risk.
+**Status:** ✅ **Resolved.** The section-scoped part-loading refactor replaced
+the ad-hoc grouping in `loadGrantha` and `getPassageHierarchy` with shared,
+fully unit-tested helpers: `partRanges`, `partBacksPrefix`,
+`buildPartHierarchy`, and `sectionPartsToLoad` (see `lib/data.test.ts`). The
+eager-load path (`app/page.tsx`) and the sidebar builder both consume the same
+`partRanges`/`partBacksPrefix` pair, so the previous concern — the initial part
+fetch's grouping being untested and able to diverge from the sidebar's
+`partIds` — is eliminated by construction.
 
-`lib/data.ts` `loadGrantha` has a second, related section-grouping fix: the
-initial part fetch groups by `dropLastRefComponent(first_ref)` (so a deep text
-loads only the first sarga's part up front). This behavior is **not**
-unit-tested — exercising it would require mocking `fetch` inside
-`loadGrantha`, a pattern the current node-env Vitest suite does not use
-(`lib/data.test.ts`, `hashUtils.test.ts` are pure-function tests only).
-
-The pure logic that *drives* the same section-grouping decision is covered by
-`sectionPartsToLoad` tests (#13). If a future change rewrites `loadGrantha`'s
-fetch path, add a fetch-mocked integration test for the eager-grouping there.
+The `loadGrantha` fetch itself is still not integration-tested (that would need
+fetch mocking, a pattern the node-env Vitest suite does not use), but the pure
+logic it depends on is now covered.

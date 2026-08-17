@@ -99,8 +99,8 @@ each build).
   on the index entry; also scans sibling `.json` files for co-located granthas
   (e.g. mandukya-karika).
 - `edition-sub-envelope` → registers the directory path for its `grantha_id`
-  (e.g. `ramayana/valmiki-ramayana`, currently the Bāla-kāṇḍa smoke test —
-  75 parts, one per sarga).
+  (e.g. `ramayana/valmiki-ramayana`, 626 parts, one per sarga across all
+  seven kāṇḍas).
 - Flat `grantha` files → registered by `grantha_id`.
 - Cross-references `granthas-meta.json` (titles, abbreviations) +
   `granthas-order.json` (display order) + `categories.json`
@@ -192,11 +192,10 @@ sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
 6. New passage-heading kinds need **no** converter edit — kinds are derived
    from `structure_levels` (see §2.1).
 
-### Example: Vālmīki Rāmāyaṇa (Bāla-kāṇḍa smoke test)
+### Example: Vālmīki Rāmāyaṇa (full corpus)
 
 - Source: `grantha-data/structured_md/ramayana/valmiki-ramayana/` (626 parts,
-  all seven kāṇḍas). The explorer currently ingests the **Bāla-kāṇḍa subset**
-  (parts 001–075) as a smoke test under
+  all seven kāṇḍas). The explorer ingests the full corpus under
   `public/data/library/ramayana/valmiki-ramayana/`.
 - `text_type: ramayana` (new enum value in `grantha.schema.json` +
   `grantha-envelope.schema.json`; re-synced to the mirrors).
@@ -208,9 +207,10 @@ sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
   renders before its sarga's first verse, and hides the label.
 - Registered in all three data files; category `ramayana` (order 4) added to
   `categories.json`.
-- All 75 part files carry the `ramayana-bhushana` commentary (Govindarāja).
-  When the full 626-part corpus is ingested it replaces this subset (same
-  `grantha_id`), no registry change required.
+- All 626 part files carry the `ramayana-bhushana` commentary (Govindarāja).
+  Twenty source sargas (documented in grantha-data `SOURCE_ISSUES.md`) are
+  excluded from the producer, so the published corpus is 626 sargas; the
+  excluded ones will slot back in at their kāṇḍa positions after re-extraction.
 
 ---
 

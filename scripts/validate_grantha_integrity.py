@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 import glob
-from typing import List, Dict, Any
+from typing import Any
 
 # Ensure the scripts directory is in the path to allow importing ref_validator_utils
 import sys
@@ -10,11 +10,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from ref_validator_utils import is_monotonically_increasing, parse_ref
 
-def validate_commentary_metadata(part_data: Dict[str, Any], part_filename: str, error_log: List[str]):
+def validate_commentary_metadata(part_data: dict[str, Any], part_filename: str, error_log: list[str]) -> None:
+    """Validate that each commentary has a title and commentator.
+
+    Args:
+        part_data: The part file's parsed JSON.
+        part_filename: The part file's name (for error messages).
+        error_log: Accumulator for validation error messages.
     """
-    Validates that each commentary has a title and commentator.
-    """
-    commentaries = part_data.get('commentaries', {})
+    commentaries = part_data.get('commentaries') or {}
 
     # Handle both old array format and new object format
     if isinstance(commentaries, dict):
@@ -32,9 +36,12 @@ def validate_commentary_metadata(part_data: Dict[str, Any], part_filename: str, 
         if not commentator.get('devanagari', '').strip():
             error_log.append(f"Metadata Error in {part_filename}: Commentary '{commentary_id}' is missing a 'commentator.devanagari' name.")
 
-def validate_grantha_directory(grantha_dir: str, error_log: List[str]):
-    """
-    Performs a comprehensive integrity check on a multi-part grantha directory.
+def validate_grantha_directory(grantha_dir: str, error_log: list[str]) -> None:
+    """Run a comprehensive integrity check on a multi-part grantha directory.
+
+    Args:
+        grantha_dir: Path to the multi-part grantha directory.
+        error_log: Accumulator for validation error messages.
     """
     print(f"--- Running Integrity Validation for: {grantha_dir} ---")
     envelope_path = os.path.join(grantha_dir, 'envelope.json')
@@ -78,8 +85,17 @@ def validate_grantha_directory(grantha_dir: str, error_log: List[str]):
         validate_commentary_metadata(part_data, part_filename, error_log)
         
         passages = part_data.get('passages', [])
+        prefatory = part_data.get('prefatory_material', []) or []
+        concluding = part_data.get('concluding_material', []) or []
+        if not passages and not prefatory and not concluding:
+            error_log.append(
+                f"Data Error in {part_filename}: part has no passages, "
+                "no prefatory_material, and no concluding_material — it is "
+                "empty and would render as a placeholder that loads nothing."
+            )
+            continue
         if not passages:
-            print(f"  [INFO] Skipping checks for {part_filename} as it has no passages.")
+            print(f"  [INFO] Skipping passage checks for {part_filename} as it has no passages (prefatory-only).")
             continue
 
         # Part ID Consistency Check (e.g., Adhyayas)
@@ -93,7 +109,7 @@ def validate_grantha_directory(grantha_dir: str, error_log: List[str]):
         is_monotonically_increasing(main_refs, part_path, "main passages", error_log)
 
         # Handle commentaries (can be dict or array)
-        commentaries = part_data.get('commentaries', {})
+        commentaries = part_data.get('commentaries') or {}
         if isinstance(commentaries, dict):
             commentaries = commentaries.values()
 
