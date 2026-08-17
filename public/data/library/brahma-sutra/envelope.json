@@ -1,0 +1,38 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.0.0",
+  "grantha_id": "brahma-sutra",
+  "canonical_title": "ब्रह्मसूत्रम्",
+  "text_type": "sutra",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "brahma-sutra-sribhashya",
+      "path": "brahma-sutra/brahma-sutra-sribhashya",
+      "commentary_title": "श्रीभाष्यम्",
+      "commentator": {
+        "devanagari": "भगवद् रामानुजः",
+        "roman": "bhagavad rāmānujaḥ"
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "brahma-sutra-vedanta-deepam",
+      "path": "brahma-sutra/brahma-sutra-vedanta-deepam",
+      "commentary_title": "वेदान्तदीपः",
+      "commentator": {
+        "devanagari": "भगवद् रामानुजः",
+        "roman": "bhagavad rāmānujaḥ"
+      }
+    },
+    {
+      "edition_id": "brahma-sutra-vedanta-sara",
+      "path": "brahma-sutra/brahma-sutra-vedanta-sara",
+      "commentary_title": "श्रीवेदान्तसारः",
+      "commentator": {
+        "devanagari": "भगवद् रामानुजः",
+        "roman": "bhagavad rāmānujaḥ"
+      }
+    }
+  ]
+}

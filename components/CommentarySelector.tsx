@@ -199,14 +199,11 @@ export default function CommentarySelector({
                         : "font-normal text-gray-700 hover:bg-gray-100"
                     }`}
                   >
-                    <span className="block">
-                      {edition.commentator?.devanagari || edition.edition_id}
+                    <span className="block truncate">
+                      {[edition.commentary_title, edition.commentator?.devanagari]
+                        .filter(Boolean)
+                        .join(" - ") || edition.edition_id}
                     </span>
-                    {edition.commentary_title && (
-                      <span className="block text-xs text-gray-500">
-                        {edition.commentary_title}
-                      </span>
-                    )}
                   </button>
                 );
               })}

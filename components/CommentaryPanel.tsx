@@ -293,7 +293,11 @@ export default function CommentaryPanel({
       {!hideHeader && (
         <div className={PANEL_HEADER_CLASS}>
           <div className="flex items-center justify-center gap-2">
-            <h2 className="text-lg font-semibold font-serif">{commentary.commentary_title}</h2>
+            <h2 className="text-lg font-semibold font-serif">
+              {[commentary.commentary_title, commentary.commentator?.devanagari]
+                .filter(Boolean)
+                .join(" - ")}
+            </h2>
             {hasMultipleEditions && grantha.editions && (
               <CommentarySelector
                 editions={grantha.editions}
@@ -302,7 +306,6 @@ export default function CommentaryPanel({
               />
             )}
           </div>
-          <div className="text-sm text-gray-600 mt-1">{commentary.commentator?.devanagari}</div>
         </div>
       )}
       <div className="flex-1 overflow-y-auto px-6 pb-6">

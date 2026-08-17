@@ -67,7 +67,12 @@ function buildOutlineTree(
   curated: SidebarSection[] | null,
 ): OutlineResult {
   const toLeaf = (p: Passage | PrefatoryMaterial): OutlineNode => ({
-    id: `leaf-${p.ref}`,
+    // Key includes the passage kind: a grantha may legitimately reuse a ref
+    // between its prefatory and concluding anchors (e.g. brahma-sutra's
+    // maṅgalācaraṇa "0.1" and samāpana "0.1"). Without the kind prefix the
+    // two leaves would collide ("leaf-0.1"), tripping React's duplicate-key
+    // warning once both are loaded.
+    id: `${p.passage_type === "main" ? "leaf" : p.passage_type}-${p.ref}`,
     kind: "leaf",
     label:
       p.passage_type === "main"

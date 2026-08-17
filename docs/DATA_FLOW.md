@@ -1,6 +1,6 @@
 # Grantha Data Flow — Consumer Side (grantha-explorer)
 
-**Last updated:** 2026-08-13
+**Last updated:** 2026-08-16
 **Status:** Living document. Read **first**: the canonical producer-side
 description in `../grantha-data/docs/DATA_FLOW.md` (source → BUILD → converter →
 on-disk shapes). This file documents only what the explorer does: ingestion
@@ -48,6 +48,11 @@ python3 scripts/convert_structured_md.py \
   `passage_kinds_for` (`scripts/convert_structured_md.py`). The module-level
   `_PASSAGE_KINDS` is only a fallback for files without `structure_levels`,
   so a new passage kind needs no converter edit. (Resolves Bug #1.)
+- `Adhikarana` is always recognized as a *structural* heading kind
+  (`_STRUCTURAL_KINDS`) even though it is not a navigable `structure_levels`:
+  the Brahma-sūtra sūtra refs (Adhyaya.Pada.Sutra) carry no adhikarana number,
+  so `# Adhikarana <n>` must still segment content and anchor the
+  `<!-- adhikarana-intro -->` fold without becoming a passage.
 - `_first_main_ref` falls back to the first prefatory ref, so preface-only
   parts (e.g. the gitabhashya mangalācaraṇa) are kept in the envelope.
   (Resolves Bug #2.)
@@ -64,8 +69,18 @@ python3 scripts/import_editions.py \
   --default-edition isavasya-upanishad-vedantadesika
 ```
 
-- The `structured_md/<text>/BUILD` file is the authoritative edition
-  declaration (`grantha_id` per markdown file).
+- **Two source layouts** are supported by `discover_editions`:
+  - **Flat** (existing): the text directory's own BUILD declares md2json rules;
+    `grantha_id` per markdown file is authoritative.
+  - **Recursive** (new): the text directory has no md2json BUILD but has
+    one-level subdirectories each carrying a BUILD; each subdir's BUILD
+    `grantha_id` is the edition_id and its declared `.md` files are aggregated
+    under that edition. Example: `brahma-sutras/` with
+    `{sribhashya,vedanta-sara,vedanta-deepam}/BUILD`. Discovery does not
+    recurse deeper than `source_dir/*/BUILD`.
+- `frontmatter_by_name` is keyed by `path.name`, so edition source filenames
+  must be unique across subdirectories (true for brahma-sutra, whose editions
+  use `<commentary>-NN-NN.md` prefixes).
 - Groups editions into granthas by frontmatter `grantha_id`
   (`_group_editions_into_granthas`); editions whose id equals or extends the
   frontmatter `grantha_id` belong to that grantha, otherwise the edition is

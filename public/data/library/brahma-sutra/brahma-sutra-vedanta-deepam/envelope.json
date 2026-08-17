@@ -1,0 +1,96 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.0.0",
+  "edition_id": "brahma-sutra-vedanta-deepam",
+  "grantha_id": "brahma-sutra",
+  "structure_levels": [
+    {
+      "key": "Adhyaya",
+      "scriptNames": {
+        "devanagari": "अध्यायः"
+      },
+      "children": [
+        {
+          "key": "Pada",
+          "scriptNames": {
+            "devanagari": "पादः"
+          },
+          "children": [
+            {
+              "key": "Sutra",
+              "scriptNames": {
+                "devanagari": "सूत्रम्"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "1.2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "1.3.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "1.4.1"
+    },
+    {
+      "file": "part5.json",
+      "first_ref": "2.1.1"
+    },
+    {
+      "file": "part6.json",
+      "first_ref": "2.2.1"
+    },
+    {
+      "file": "part7.json",
+      "first_ref": "2.3.1"
+    },
+    {
+      "file": "part8.json",
+      "first_ref": "2.4.1"
+    },
+    {
+      "file": "part9.json",
+      "first_ref": "3.1.1"
+    },
+    {
+      "file": "part10.json",
+      "first_ref": "3.2.1"
+    },
+    {
+      "file": "part11.json",
+      "first_ref": "3.3.1"
+    },
+    {
+      "file": "part12.json",
+      "first_ref": "3.4.1"
+    },
+    {
+      "file": "part13.json",
+      "first_ref": "4.1.1"
+    },
+    {
+      "file": "part14.json",
+      "first_ref": "4.2.1"
+    },
+    {
+      "file": "part15.json",
+      "first_ref": "4.3.1"
+    },
+    {
+      "file": "part16.json",
+      "first_ref": "4.4.1"
+    }
+  ]
+}

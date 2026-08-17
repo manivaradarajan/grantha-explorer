@@ -209,19 +209,24 @@ export default function FlowReader({
       : "max-w-5xl"
     : "max-w-3xl";
 
-  // Summary shown on the compare-picker trigger: the active commentators' names
-  // joined, in selection order.
+  // Summary shown on the compare-picker trigger: the active editions' labels
+  // ("title - author") joined in selection order. The title distinguishes the
+  // editions; the author is shared across editions of the same grantha (e.g.
+  // Rāmānuja's three), so "title - author" is the single useful line.
   const compareSummary = useMemo(() => {
-    const names = editionsMeta
+    const labels = editionsMeta
       .filter((stub) => editionIds.includes(stub.edition_id))
       .map((stub) =>
-        script === "roman"
-          ? stub.commentator?.roman ||
-            stub.commentator?.devanagari ||
-            stub.edition_id
-          : stub.commentator?.devanagari || stub.edition_id,
+        [
+          stub.commentary_title,
+          script === "roman"
+            ? stub.commentator?.roman || stub.commentator?.devanagari
+            : stub.commentator?.devanagari,
+        ]
+          .filter(Boolean)
+          .join(" - ") || stub.edition_id,
       );
-    return names.length ? names.join(" · ") : (grantha.edition_id ?? "");
+    return labels.length ? labels.join(" · ") : (grantha.edition_id ?? "");
   }, [editionsMeta, editionIds, script, grantha.edition_id]);
 
   const verseRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -656,10 +661,10 @@ export default function FlowReader({
                 />
               </div>
             )}
-            {activeCommentary && (
+            {activeCommentary && editionsMeta.length < 2 && (
               <div className="text-sm text-gray-500 font-serif mt-1">
                 {activeCommentary.commentary_title}
-                {commentatorName ? ` — ${commentatorName}` : ""}
+                {commentatorName ? ` - ${commentatorName}` : ""}
               </div>
             )}
           </div>
@@ -727,7 +732,7 @@ export default function FlowReader({
                         ? activeCommentary.intro
                         : null;
                     return (
-                      <Fragment key={passage.ref}>
+                      <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                         <div data-verse-ref={passage.ref} className="px-4 py-8">
                           {label && (
                             <div className="text-sm text-gray-600 italic mb-3">
@@ -767,7 +772,7 @@ export default function FlowReader({
                   const introText = cp?.intro?.sanskrit?.devanagari;
 
                   return (
-                    <Fragment key={passage.ref}>
+                    <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                       {divider}
                       <div
                         ref={(el) => setVerseRef(passage.ref, el)}

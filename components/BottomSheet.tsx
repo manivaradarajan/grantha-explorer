@@ -9,7 +9,6 @@ interface BottomSheetProps {
   onClose: () => void;
   children: React.ReactNode;
   title?: string;
-  subtitle?: string;
   /** Multi-edition switching (renders a caret in the title bar). */
   editions?: EditionStub[];
   selectedEditionId?: string;
@@ -26,7 +25,6 @@ export default function BottomSheet({
   onClose,
   children,
   title,
-  subtitle,
   editions,
   selectedEditionId,
   onEditionChange,
@@ -178,9 +176,6 @@ export default function BottomSheet({
                 />
               )}
             </div>
-            {subtitle && (
-              <p className="text-base text-gray-600 mt-1">{subtitle}</p>
-            )}
           </div>
 
           {/* Next Button */}

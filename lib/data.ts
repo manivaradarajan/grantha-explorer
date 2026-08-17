@@ -398,12 +398,29 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
           })
         );
 
-      // Combine the content from all loaded parts
+      // Combine the content from all loaded parts, deduping prefatory and
+      // concluding material by ref. The lazy part loader (useGranthaLoader's
+      // loadPart) already filters by ref; this initial combine must match so a
+      // ref shared across loaded parts (e.g. a "0.1" maṅgalācaraṇa) never lands
+      // in the assembled grantha twice — a duplicated prefatory ref would
+      // produce duplicate React keys ("0.1", folio "leaf-0.1") in the readers.
       const combinedContent: GranthaPartContent = loadedPartsContent.reduce((acc, partContent) => {
+        const accPrefatory = acc.prefatory_material || [];
+        const accPrefatoryRefs = new Set(accPrefatory.map(p => p.ref));
+        const prefatory = [
+          ...accPrefatory,
+          ...(partContent.prefatory_material || []).filter(p => !accPrefatoryRefs.has(p.ref)),
+        ];
+        const accConcluding = acc.concluding_material || [];
+        const accConcludingRefs = new Set(accConcluding.map(p => p.ref));
+        const concluding = [
+          ...accConcluding,
+          ...(partContent.concluding_material || []).filter(p => !accConcludingRefs.has(p.ref)),
+        ];
         return {
-          prefatory_material: [...(acc.prefatory_material || []), ...(partContent.prefatory_material || [])],
+          prefatory_material: prefatory,
           passages: [...(acc.passages || []), ...(partContent.passages || [])],
-          concluding_material: [...(acc.concluding_material || []), ...(partContent.concluding_material || [])],
+          concluding_material: concluding,
           commentaries: [...((acc.commentaries as Commentary[]) || []), ...((partContent.commentaries as Commentary[]) || [])],
         };
       }, { passages: [] });

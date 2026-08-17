@@ -168,8 +168,12 @@ export default function MobileLayout({
         <BottomSheet
           isOpen={commentaryOpen}
           onClose={() => updateCommentaryOpen(false)}
-          title={grantha.commentaries?.[0]?.commentary_title || "Commentary"}
-          subtitle={grantha.commentaries?.[0]?.commentator?.devanagari}
+          title={[
+            grantha.commentaries?.[0]?.commentary_title,
+            grantha.commentaries?.[0]?.commentator?.devanagari,
+          ]
+            .filter(Boolean)
+            .join(" - ") || "Commentary"}
           editions={grantha.editions}
           selectedEditionId={editionId}
           onEditionChange={onEditionChange}

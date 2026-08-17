@@ -224,7 +224,15 @@ export default function ComparePicker({
                       )}
                     </span>
                     <span className="flex-1 truncate">
-                      {edition.commentator?.devanagari || edition.edition_id}
+                      {[
+                        edition.commentary_title,
+                        roman
+                          ? edition.commentator?.roman ||
+                            edition.commentator?.devanagari
+                          : edition.commentator?.devanagari,
+                      ]
+                        .filter(Boolean)
+                        .join(" - ") || edition.edition_id}
                     </span>
                     <span
                       className={`w-4 h-4 rounded-full bg-blue-600 text-white text-[10px] items-center justify-center font-sans ${

@@ -113,30 +113,37 @@ def _invert_build_rules(build_rules: dict[str, list[str]]) -> dict[str, str]:
     return lookup
 
 
-def discover_editions(
+def _discover_flat(
     source_dir: Path,
+    build_rules: dict[str, list[str]] | None = None,
 ) -> tuple[dict[str, list[Path]], dict[str, dict[str, Any]], list[str]]:
-    """Group source .md files into editions.
+    """Group one directory's .md files into editions (flat BUILD mode).
 
     The BUILD file's edition -> file mapping is authoritative. Files on disk
     not declared in the BUILD are skipped (they are not part of the release).
-    If the directory has no BUILD file, editions are derived from filenames
-    (safe only for single-file-per-edition directories).
+    If the directory has no BUILD (or one declaring no md2json rules),
+    editions are derived from filenames (safe only for single-file-per-edition
+    directories).
 
     Args:
-        source_dir: The structured_md directory for a text.
+        source_dir: A structured_md directory containing .md files and
+            optionally a BUILD file.
+        build_rules: Already-parsed BUILD rules, when the caller has them
+            (avoids re-reading and re-parsing the BUILD file). When None, the
+            BUILD is read and parsed here.
 
     Returns:
         Tuple of (edition_id -> ordered source Paths, filename -> parsed
         frontmatter dict, list of skipped-but-present filenames).
     """
     source_files = _list_source_markdown_files(source_dir)
-    build_path = source_dir / "BUILD"
-    build_rules = (
-        parse_build_rules(build_path.read_text(encoding="utf-8"))
-        if build_path.exists()
-        else {}
-    )
+    if build_rules is None:
+        build_path = source_dir / "BUILD"
+        build_rules = (
+            parse_build_rules(build_path.read_text(encoding="utf-8"))
+            if build_path.exists()
+            else {}
+        )
     rule_lookup = _invert_build_rules(build_rules)
 
     frontmatter_by_name: dict[str, dict[str, Any]] = {}
@@ -161,6 +168,93 @@ def discover_editions(
         files.sort(key=lambda p: frontmatter_by_name[p.name].get("part_num", 0))
 
     return editions, frontmatter_by_name, skipped
+
+
+def _edition_subdirectories(source_dir: Path) -> list[Path]:
+    """Return one-level subdirectories that each carry a BUILD file.
+
+    Only one level of nesting is considered (``source_dir/*/BUILD``); deeper
+    layouts are out of scope for the multi-edition source layout.
+
+    Args:
+        source_dir: The structured_md directory for a text.
+
+    Returns:
+        Sorted list of subdirectory paths that each contain a BUILD file.
+    """
+    return sorted(
+        d for d in source_dir.iterdir() if d.is_dir() and (d / "BUILD").exists()
+    )
+
+
+def discover_editions(
+    source_dir: Path,
+) -> tuple[dict[str, list[Path]], dict[str, dict[str, Any]], list[str]]:
+    """Group source .md files into editions.
+
+    Two layouts are supported:
+
+    - **Flat (backward compatible):** the source directory's own BUILD declares
+      the edition -> file mapping (e.g. ``upanishads/isavasya/BUILD``). Used
+      whenever that BUILD declares md2json rules.
+    - **Recursive (per-edition subdirectories):** the source directory has no
+      md2json BUILD rules and contains no top-level ``.md`` content files, but
+      has one-level subdirectories each carrying a BUILD (e.g.
+      ``brahma-sutras/{sribhashya,vedanta-sara,vedanta-deepam}/``). Each
+      subdirectory's BUILD declares its edition (its ``grantha_id`` is the
+      edition_id); all declared ``.md`` files across subdirectories are
+      aggregated into ``editions[edition_id]``.
+
+    ``frontmatter_by_name`` is keyed by ``path.name``, so edition source
+    filenames must be unique across subdirectories (true for the brahma-sutra
+    editions, which use ``<commentary>-NN-NN.md`` prefixes).
+
+    Args:
+        source_dir: The structured_md directory for a text.
+
+    Returns:
+        Tuple of (edition_id -> ordered source Paths, filename -> parsed
+        frontmatter dict, list of skipped-but-present filenames).
+    """
+    build_path = source_dir / "BUILD"
+    if build_path.exists():
+        build_rules = parse_build_rules(build_path.read_text(encoding="utf-8"))
+        if build_rules:
+            return _discover_flat(source_dir, build_rules)
+
+    # A directory with its own .md files is a flat layout even when its BUILD
+    # declares no md2json rules (a gate-only filegroup like brahma-sutras/BUILD,
+    # or no BUILD at all) — subdirectories that happen to carry a BUILD are not
+    # consulted. The recursive layout is signalled explicitly by the absence of
+    # top-level content files.
+    if _list_source_markdown_files(source_dir):
+        return _discover_flat(source_dir)
+
+    subdirs = _edition_subdirectories(source_dir)
+    if subdirs:
+        editions: dict[str, list[Path]] = {}
+        frontmatter_by_name: dict[str, dict[str, Any]] = {}
+        skipped: list[str] = []
+        for subdir in subdirs:
+            sub_editions, sub_front, sub_skipped = _discover_flat(subdir)
+            for edition_id, files in sub_editions.items():
+                if edition_id in editions:
+                    print(
+                        f"  WARNING: edition_id '{edition_id}' declared in "
+                        f"multiple subdirectories; merging source files"
+                    )
+                editions.setdefault(edition_id, []).extend(files)
+            for name, frontmatter in sub_front.items():
+                if name in frontmatter_by_name:
+                    print(
+                        f"  WARNING: source file '{name}' present in multiple "
+                        f"subdirectories; later frontmatter wins"
+                    )
+                frontmatter_by_name[name] = frontmatter
+            skipped.extend(sub_skipped)
+        return editions, frontmatter_by_name, skipped
+
+    return _discover_flat(source_dir)
 
 
 # ---------------------------------------------------------------------------

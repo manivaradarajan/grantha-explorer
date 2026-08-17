@@ -49,14 +49,14 @@ AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
 SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
 # Non-content files co-located with source .md files that must never be
-# treated as grantha sources (editorial notes, build files).  This set is the
-# fallback publication gate only for directories WITHOUT a BUILD file; when a
-# BUILD exists, its md2json `markdown_file(s)` declarations are authoritative
-# (see _collect_source_files), so this set is not consulted.
+# treated as grantha sources (editorial notes).  This set is the fallback
+# publication gate only for directories WITHOUT a BUILD file; when a BUILD
+# exists, its md2json `markdown_file(s)` declarations are authoritative (see
+# _collect_source_files), so this set is not consulted.  (BUILD files are
+# excluded implicitly: discovery globs only `*.md`.)
 _NON_SOURCE_MD_FILES = frozenset(
     {
         "SOURCE_ISSUES.md",
-        "BUILD",
     }
 )
 
@@ -137,6 +137,9 @@ class BodyData:
     # Set from an intro-only block (no gloss) placed before the first passage
     # heading or under a # Prefatory: anchor.
     commentary_intros: dict[str, str] = field(default_factory=dict)
+    # Adhikarana upodghata prose awaiting the next sutra: folded into the next
+    # leaf passage's commentary intro ("fold-into-first-sutra" v1 semantics).
+    pending_adhikarana_intro: str = ""
 
 
 # ---------------------------------------------------------------------------
@@ -164,6 +167,14 @@ _PASSAGE_KINDS = frozenset({"Mantra", "Prefatory", "Concluding", "Para", "Verse"
 
 # Framing passage kinds that are not structural levels but always accepted.
 _FRAMING_KINDS = frozenset({"Prefatory", "Concluding"})
+
+# Structural *grouping* headings that segment content but are never passages and
+# are not navigable structure_levels. The Brahma-sūtra corpus marks its
+# adhikāras with ``# Adhikarana <n>`` headings, yet the sutra refs (1.1.1 =
+# Adhyaya.Pada.Sutra) carry no adhikarana segment, so Adhikarana is not a
+# structure level; the heading still must be recognized so (a) it segments
+# content correctly and (b) the ``<!-- adhikarana-intro -->`` fold fires.
+_STRUCTURAL_KINDS = frozenset({"Adhikarana"})
 
 
 def _collect_structure_keys(levels: object) -> list[str]:
@@ -235,7 +246,10 @@ def passage_kinds_for(
     leaf = keys[-1] if keys else None
     if leaf is None:
         return _PASSAGE_KINDS, _PASSAGE_KINDS
-    return frozenset(keys) | _FRAMING_KINDS, frozenset({leaf}) | _FRAMING_KINDS
+    return (
+        frozenset(keys) | _FRAMING_KINDS | _STRUCTURAL_KINDS,
+        frozenset({leaf}) | _FRAMING_KINDS,
+    )
 
 # Opening <!-- commentary: {...} --> tag; Group 1 = JSON metadata string.
 _COMMENTARY_OPEN_RE = re.compile(
@@ -253,6 +267,16 @@ _COMMENTARY_CLOSE_RE = re.compile(
 _COMMENTARY_SUBHEADING_RE = re.compile(
     r"^#\s+Commentary:\s+(\S+)\s*$",
     re.MULTILINE,
+)
+
+# Adhikarana-level intro prose: <!-- adhikarana-intro -->...<!-- /adhikarana-intro -->.
+# This marks the upodghata prose that frames a whole adhikarana (introducing
+# its sutras) — distinct from any single sutra's commentary. It is folded into
+# the first following sutra's commentary intro for v1 (future-proof markup,
+# fold-into-first-sutra semantics).
+_ADHIKARANA_INTRO_RE = re.compile(
+    r"<!--\s*adhikarana-intro\s*-->(.*?)<!--\s*/adhikarana-intro\s*-->",
+    re.DOTALL,
 )
 
 # Opening <!-- sanskrit:devanagari --> tag.
@@ -579,7 +603,7 @@ def _merge_duplicate_ref_passages(
 
 def _extract_commentary_blocks(
     segment: str,
-) -> dict[str, list[tuple[str | None, str]]]:
+) -> dict[str, list[tuple[str | None, str, str]]]:
     """Extract commentary blocks from a segment, split by sub-heading refs.
 
     Handles two source variants:
@@ -598,10 +622,10 @@ def _extract_commentary_blocks(
 
     Returns:
         Mapping from commentary_id to a list of ``(heading_ref_or_None,
-        cleaned_text)`` pairs, one per sub-heading (or one per block when no
-        sub-heading is present).
+        cleaned_gloss, cleaned_intro)`` triples, one per sub-heading (or one
+        per block when no sub-heading is present).
     """
-    grouped: dict[str, list[tuple[str | None, str]]] = {}
+    grouped: dict[str, list[tuple[str | None, str, str]]] = {}
     opens = list(_COMMENTARY_OPEN_RE.finditer(segment))
     closes = list(_COMMENTARY_CLOSE_RE.finditer(segment))
 
@@ -756,6 +780,19 @@ def parse_body(
             ref=ref, mula_text=mula_text, label_devanagari=label, speaker=speaker
         )
 
+        # Adhikarana-level upodghata prose: capture <!-- adhikarana-intro -->
+        # content from an interior heading's segment and hold it for the next
+        # sutra's commentary intro (fold-into-first-sutra v1 semantics). Any
+        # prior pending value is cleared first so a heading without an intro
+        # never leaks stale prose into a later adhikarana's first sutra.
+        if kind not in leaves:
+            data.pending_adhikarana_intro = ""
+            adh_match = _ADHIKARANA_INTRO_RE.search(segment)
+            if adh_match:
+                data.pending_adhikarana_intro = (
+                    _RESIDUAL_HTML_COMMENT_RE.sub("", adh_match.group(1)).strip()
+                )
+
         if kind == "Prefatory":
             data.prefatory.append(passage)
         elif kind == "Concluding":
@@ -772,6 +809,18 @@ def parse_body(
         # number of blocks in the corpus that carry no explicit heading.
         for cid, sub_passages in commentary_by_cid.items():
             for heading_ref, gloss, intro in sub_passages:
+                if kind in leaves and data.pending_adhikarana_intro:
+                    # Fold the adhikarana upodghata into this (first) leaf's
+                    # commentary lead-in so it survives into the UI. Runs
+                    # before the intro-only hoist so the pending value is
+                    # consumed on the very first block of the leaf, even when
+                    # that block is intro-only.
+                    intro = (
+                        data.pending_adhikarana_intro
+                        + ("\n\n" if intro else "")
+                        + intro
+                    )
+                    data.pending_adhikarana_intro = ""
                 if not gloss and intro:
                     # Intro-only block: a # Prefatory: anchor (or a main
                     # heading whose mula text is absent) — hoist to the

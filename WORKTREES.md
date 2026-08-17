@@ -11,6 +11,7 @@ Worktree roots live under `~/git-worktrees/<repo>/<idea>/`.
 
 | Worktree dir | Branch | Idea | Plan file | Status |
 |---|---|---|---|---|
+| `~/git-worktrees/grantha-explorer/sribhashya-into-explorer` | `sribhashya-into-explorer` | Bring the Brahma-sūtras with Rāmānuja's three commentaries (Śrībhāṣya / Vedāntasāra / Vedāntadīpa) into the explorer as a multi-edition grantha | `plans/PLAN_BRAHMA_SUTRA_INTO_EXPLORER.md` | **Committed.** `brahma-sutra` grantha live with 3 editions (default Śrībhāṣya), 3-level sidebar, adhikarana-intro fold. Deferred: dedicated Adhikarana UI, `brahma-sutras/`→`brahma-sutra/` source-dir rename. See plan §0 RESUME for the pick-up instructions |
 
 
 ## Resume (after weeks away)

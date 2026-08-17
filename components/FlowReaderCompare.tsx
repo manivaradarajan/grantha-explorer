@@ -299,14 +299,14 @@ export default function FlowReaderCompare({
         {passages.map((passage) => {
           if (passage.passage_type !== "main") {
             return (
-              <Fragment key={passage.ref}>
+              <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                 {renderFraming(passage)}
               </Fragment>
             );
           }
           return (
             <div
-              key={passage.ref}
+              key={`${passage.passage_type}-${passage.ref}`}
               className={`mb-10 ${passage.ref === selectedRef ? "bg-gray-50" : ""}`}
             >
               {renderVerseRow(passage)}
@@ -357,7 +357,7 @@ export default function FlowReaderCompare({
         {passages.map((passage) => {
           if (passage.passage_type !== "main") {
             return (
-              <Fragment key={passage.ref}>
+              <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                 {renderFraming(passage)}
               </Fragment>
             );
