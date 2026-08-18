@@ -104,9 +104,13 @@ python3 scripts/import_editions.py \
 
 ## 3. Indexing — `scripts/generate-granthas-json.ts`
 
-Runs in `prebuild` (`npm run build` / `build:local`). Reads the `library/`
-tree and emits `public/data/generated/granthas.json` (gitignored, regenerated
-each build).
+Runs in `prebuild` (`npm run build` / `build:local`), and also at every
+`npm run dev` start. Reads the `library/` tree and emits
+`public/data/generated/granthas.json` (gitignored, regenerated on each build
+and dev start). `npm run dev` is `tsx scripts/generate-granthas-json.ts &&
+next dev` — it regenerates the index but does not run `validate:data` (that
+stays on `prebuild`). A stale committed `granthas.json` cannot silently drop a
+newly added grantha from dev.
 
 - Dispatches on the explicit `kind` field of each `envelope.json` / flat file
   — **never infers shape from field presence**.
