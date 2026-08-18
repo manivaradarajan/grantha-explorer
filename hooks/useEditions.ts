@@ -5,8 +5,7 @@ import { Grantha } from "@/lib/data";
 import { useGranthaLoader } from "./useGranthaLoader";
 
 export interface UseEditionsReturn {
-  /** Loaded grantha objects, one per active edition id, in selection order.
-   *  Entries beyond the active count are undefined (unused slots). */
+  /** One loaded grantha per active edition id, in selection order. */
   editions: Grantha[];
   /** True while any active edition is still loading. */
   isLoading: boolean;
@@ -19,7 +18,7 @@ export interface UseEditionsReturn {
   isLoadingPart: boolean;
 }
 
-const MAX_COMPARE_EDITIONS = 3;
+export const MAX_COMPARE_EDITIONS = 3;
 
 /**
  * Sibling hook to `useGranthaLoader` for compare mode — loads one grantha
@@ -69,17 +68,24 @@ export function useEditions(
   // (it would show another column's data in a loading column). Filter out any
   // grantha whose stamped edition_id doesn't match the requested id, so a
   // placeholder is treated as not-yet-loaded rather than shown as real content.
-  const editions = active
-    .map((r, i) => ({ r, id: ids[i] }))
-    .filter(({ r, id }) => r.grantha === undefined || r.grantha.edition_id === id)
-    .map(({ r }) => r.grantha as Grantha | undefined)
-    .filter((g): g is Grantha => g !== undefined);
+  // When the requested id is undefined (no `?e=` in the hash — the default
+  // edition), no edition_id match is required: the default edition is returned.
+  const editions = active.flatMap((r, i) => {
+    const id = ids[i];
+    const g = r.grantha;
+    if (g === undefined || (id !== undefined && g.edition_id !== id)) {
+      return [];
+    }
+    return [g];
+  });
 
   // Fan out a part request to every active edition's own loader. Memoized on
   // the inner `loadPart` callbacks (NOT the slot objects, which are fresh
   // object literals every render): an edition's loader is `useCallback`-stable
   // and only changes when that edition's grantha actually merges, so this
-  // composite identity is stable unless a part lands or the active set changes.
+  // composite identity is stable unless a part lands, the active set changes,
+  // or an inactive fallback slot's default-edition load completes (harmless —
+  // the effect re-runs once and `sectionPartsToLoad` returns []).
   // `activeCount` is a primitive, so it never breaks memoization.
   const activeCount = Math.max(1, ids.length);
   const loadPart = useCallback(

@@ -12,7 +12,7 @@ import FlowReader from "@/components/FlowReader";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useAvailableGranthas } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
-import { useEditions } from "@/hooks/useEditions";
+import { useEditions, MAX_COMPARE_EDITIONS } from "@/hooks/useEditions";
 import {
   getFirstMainPassageRef,
   validateAndNormalizeHash,
@@ -381,7 +381,7 @@ export default function Home() {
           grantha={currentGrantha}
           editions={loadedEditions}
           editionsMeta={currentGrantha.editions ?? []}
-          editionIds={editionIds.length ? editionIds : [currentGrantha.edition_id ?? granthaId]}
+          editionIds={editionIds.length ? editionIds.slice(0, MAX_COMPARE_EDITIONS) : [currentGrantha.edition_id ?? granthaId]}
           onEditionIdsChange={updateEditionIds}
           granthas={granthas}
           selectedRef={verseRef}

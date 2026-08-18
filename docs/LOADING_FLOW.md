@@ -200,12 +200,15 @@ Compare mode (`?e=a,b&m=flow`, up to 3 editions) loads one grantha per active
 edition via `useEditions` (`hooks/useEditions.ts`):
 
 - **Fixed 3 slots** (`r0/r1/r2`) of `useGranthaLoader` — React hooks can't be
-  called in a loop; slots beyond the active count get the default-edition query
-  (cheap / cached).
-- **Placeholder filtering** (lines 61-65): `useGranthaLoader.placeholderData`
+  called in a loop; slots beyond the active count receive the default-edition
+  query, but their results are sliced out of `active` and discarded (they are
+  never rendered or loaded via the fan-out).
+- **Placeholder filtering** (lines 67-76): `useGranthaLoader.placeholderData`
   would otherwise show another edition's data in a loading column; editions
   whose stamped `edition_id` doesn't match the requested id are dropped until
-  the real edition lands.
+  the real edition lands. When the requested id is `undefined` (no `?e=` in
+  the hash — the default-edition landing state), no id match is required: the
+  default edition is returned.
 - **`loadPart` fan-out** — the key contract:
 
   > **`loadPart(firstRef)` loads the part into EVERY active edition.**

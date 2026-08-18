@@ -140,6 +140,7 @@ let fetchMock: ReturnType<typeof vi.fn>;
 beforeEach(() => {
   container = document.createElement("div");
   document.body.appendChild(container);
+  root = null as unknown as Root;
   queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
@@ -149,7 +150,7 @@ beforeEach(() => {
     if (!route) {
       return Promise.reject(new Error(`no test route for ${url}`));
     }
-    return Promise.resolve(route.clone());
+    return Promise.resolve(route);
   });
   vi.stubGlobal("fetch", fetchMock);
 });
@@ -226,6 +227,23 @@ describe("useEditions.loadPart (compare-mode fan-out)", () => {
         `/data/library/${RANGARAMANUJA_PATH}/part2.json`,
       ].sort(),
     );
+
+    // part1 must be fetched for each edition (initial eager load) and NOT
+    // re-fetched by the fan-out after the initial load. The 3-slot
+    // architecture's inactive slot 2 loads the default edition (which is also
+    // Rangaramanuja here), so a duplicate fetch of the default edition's part1
+    // is expected and acceptable — but no part1 fetch may happen AFTER the
+    // fan-out (i.e. there are no post-fan-out part1 calls beyond the initial
+    // load). Assert each edition's part1 was fetched at least once.
+    const part1Urls = fetchMock.mock.calls
+      .map(([input]) => String(input))
+      .filter((url) => url.endsWith("part1.json"));
+    for (const url of [
+      `/data/library/${SANKARA_PATH}/part1.json`,
+      `/data/library/${RANGARAMANUJA_PATH}/part1.json`,
+    ]) {
+      expect(part1Urls).toContain(url);
+    }
   });
 });
 
