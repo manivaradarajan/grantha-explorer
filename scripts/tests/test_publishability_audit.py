@@ -22,7 +22,7 @@ import unittest
 # Allow importing from the parent scripts directory.
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
-from _build_parser import declared_markdown_files  # noqa: E402
+from _build_parser import declared_markdown_files, parse_build_rules  # noqa: E402
 from convert_structured_md import (  # noqa: E402
     _collect_source_files,
     _list_source_markdown_files,
@@ -32,20 +32,6 @@ _SCRIPT_DIR = pathlib.Path(__file__).parent.parent
 _EXPLORER_ROOT = _SCRIPT_DIR.parent
 _GRANTHA_DATA = _EXPLORER_ROOT.parent / "grantha-data" / "structured_md" / "upanishads"
 _LIBRARY = _EXPLORER_ROOT / "public" / "data" / "library" / "upanishads"
-
-# Text -> its grantha_id directory name in the library (flat single-edition).
-_FLAT_TEXTS: dict[str, str] = {
-    "aitareya": "aitareya-upanishad",
-    "brihadaranyaka": "brihadaranyaka-upanishad",
-    "chandogya": "chhandogya-upanishad",
-    "katha": "katha-upanishad",
-    "kaushitaki": "kaushitaki-upanishad",
-    "kena": "kena-upanishad",
-    "mundaka": "mundaka-upanishad",
-    "prashna": "prashna-upanishad",
-    "svetasvatara": "svetasvatara-upanishad",
-    "taittiriya": "taittiriya-upanishad",
-}
 
 # Files that are deliberately tracked-but-not-published: present in the source
 # directory, absent from the BUILD, and never emitted into the library.  They
@@ -59,14 +45,6 @@ _PRESERVED_NOT_PUBLISHED = frozenset(
     }
 )
 
-# Pattern-based preserved-not-published rule. Source files matching this are
-# imported-and-validated but deliberately withheld from the BUILD/publication
-# pipeline, preserved as seeds for a future edition. The Śaṅkara bhāṣya series
-# (44 files across 10 upanishads) is currently in this state: it shares each
-# upanishad's grantha_id and would require converting single-edition texts to
-# multi-edition granthas to publish — tracked in DEFERRED.md.
-_SANKARA_NAME_MARKER = "-sankara-"
-
 
 def _is_preserved_not_published(name: str) -> bool:
     """Return True for files exempt from the BUILD-declared publication gate.
@@ -75,11 +53,10 @@ def _is_preserved_not_published(name: str) -> bool:
         name: A source filename (e.g. "katha-upanishad-sankara-bhashya-01.md").
 
     Returns:
-        True when the file is a known preserved-not-published file: either
-        explicitly listed in _PRESERVED_NOT_PUBLISHED or matching the Śaṅkara
-        bhāṣya pattern.
+        True when the file is a known preserved-not-published file: listed in
+        _PRESERVED_NOT_PUBLISHED (sayana / shanti-vyakhya seeds).
     """
-    return name in _PRESERVED_NOT_PUBLISHED or _SANKARA_NAME_MARKER in name
+    return name in _PRESERVED_NOT_PUBLISHED
 
 
 class TestCollectSourceFiles(unittest.TestCase):
@@ -182,26 +159,52 @@ class TestCollectSourceFiles(unittest.TestCase):
 class TestPublishabilityAudit(unittest.TestCase):
     """Corpus audit: BUILD-declared sources match published parts."""
 
-    def test_flat_texts_build_matches_published_parts(self) -> None:
-        """For each flat text, BUILD-declared md files == published part count."""
-        for text, grantha_dir in _FLAT_TEXTS.items():
+    _MANDUKYA_KARIKA_ID_PREFIX = "mandukya-karika-"
+    _MANDUKYA_KARIKA_DIR = "mandukya-karika"
+
+    def _published_edition_dir(self, text: str, grantha_id: str) -> pathlib.Path:
+        """Return the library directory where a BUILD grantha_id's edition lives.
+
+        Flat single-edition texts publish directly under
+        ``upanishads/<text>/<grantha_id>/``. Multi-edition texts publish each
+        edition under ``upanishads/<text>/<edition_id>/`` (same path convention
+        since ``edition_id == grantha_id`` for the base edition). The one
+        exception is mandukya-karika, whose BUILD rules live in the mandukya
+        dir but whose editions publish under ``upanishads/mandukya-karika/``.
+
+        Args:
+            text: The source text directory name (e.g. "taittiriya").
+            grantha_id: The BUILD rule's grantha_id (edition identity).
+
+        Returns:
+            The published edition directory, whether or not it exists.
+        """
+        if grantha_id.startswith(self._MANDUKYA_KARIKA_ID_PREFIX):
+            return _LIBRARY / self._MANDUKYA_KARIKA_DIR / grantha_id
+        return _LIBRARY / text / grantha_id
+
+    def test_build_declared_matches_published_parts(self) -> None:
+        """Every BUILD grantha_id's edition dir has a matching part count."""
+        for text in sorted(p.name for p in _GRANTHA_DATA.iterdir() if p.is_dir()):
             with self.subTest(text=text):
                 build = _GRANTHA_DATA / text / "BUILD"
-                self.assertTrue(build.exists(), f"{text}: BUILD missing")
-                declared = declared_markdown_files(build.read_text(encoding="utf-8"))
-                self.assertGreater(len(declared), 0, f"{text}: BUILD declares nothing")
-                out_dir = _LIBRARY / text / grantha_dir
-                part_files = sorted(p.name for p in out_dir.glob("part*.json"))
-                self.assertEqual(
-                    len(declared),
-                    len(part_files),
-                    f"{text}: BUILD declares {len(declared)} files but "
-                    f"{len(part_files)} parts are published",
-                )
+                if not build.exists():
+                    continue
+                rules = parse_build_rules(build.read_text(encoding="utf-8"))
+                self.assertGreater(len(rules), 0, f"{text}: BUILD declares nothing")
+                for grantha_id, files in rules.items():
+                    edition_dir = self._published_edition_dir(text, grantha_id)
+                    part_files = sorted(p.name for p in edition_dir.glob("part*.json"))
+                    self.assertEqual(
+                        len(files),
+                        len(part_files),
+                        f"{text}/{grantha_id}: BUILD declares {len(files)} "
+                        f"files but {len(part_files)} parts are published",
+                    )
 
-    def test_flat_texts_no_stray_published_files(self) -> None:
+    def test_no_stray_published_files(self) -> None:
         """Every non-SOURCE_ISSUES md in a source dir is either declared or a known preserved-not-published file."""
-        for text in _FLAT_TEXTS:
+        for text in sorted(p.name for p in _GRANTHA_DATA.iterdir() if p.is_dir()):
             with self.subTest(text=text):
                 src_dir = _GRANTHA_DATA / text
                 build = src_dir / "BUILD"

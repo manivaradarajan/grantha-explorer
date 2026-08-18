@@ -30,6 +30,7 @@ __all__ = [
 ]
 
 import argparse
+import fnmatch
 import json
 import re
 from pathlib import Path
@@ -301,9 +302,10 @@ def _group_editions_into_granthas(
 
     An edition belongs to the grantha identified by its files' frontmatter
     ``grantha_id`` when the edition_id equals that id or extends it with "-".
-    Otherwise (e.g. the mandukya karika, whose frontmatter grantha_id is the
-    upanishad's but whose edition_id is unrelated) the edition is its own
-    grantha.
+    Otherwise (e.g. a co-located grantha whose edition_id does not extend the
+    upanishad's grantha_id) the edition is its own grantha. Example: the
+    mandukya karika files carry ``grantha_id: mandukya-karika``, so they group
+    under ``mandukya-karika`` even though they share the mandukya source dir.
 
     Args:
         editions: Mapping from edition_id to source files.
@@ -381,9 +383,7 @@ def _write_edition(
         if first_frontmatter is None:
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
-        target_cids = _resolve_target_commentary_ids(
-            frontmatter, frontmatter["grantha_id"]
-        )
+        target_cids = _resolve_target_commentary_ids(frontmatter)
         part_json = build_part_json(frontmatter, body, edition_id, target_cids)
         part_path = out_dir / f"part{idx}.json"
         part_path.write_text(
@@ -443,6 +443,8 @@ def import_grantha(
     library_root: Path,
     text_path: str,
     default_edition: str | None = None,
+    exclude_editions: list[str] | None = None,
+    grantha_ids: list[str] | None = None,
 ) -> None:
     """Derive and write edition data for one structured_md source directory.
 
@@ -451,6 +453,16 @@ def import_grantha(
         library_root: Root of the explorer's data library directory.
         text_path: Library-relative path for this text (e.g. "upanishads/isavasya").
         default_edition: Edition_id to mark as default, if any.
+        exclude_editions: Optional fnmatch patterns against edition_id; editions
+            matching any pattern are dropped before grouping. Defaults to
+            ``None`` (no exclusions).
+        grantha_ids: Optional exact grantha_id filters. Only granthas whose id
+            equals one of these values are imported. Defaults to ``None``
+            (no restriction).
+
+    Raises:
+        RuntimeError: If no editions are discovered, every edition is
+            excluded, or no grantha matches ``--grantha-id``.
     """
     source_dir = source_dir.resolve()
     library_root = library_root.resolve()
@@ -462,14 +474,42 @@ def import_grantha(
     for filename in skipped:
         print(f"  SKIP (not declared in BUILD): {filename}")
 
+    if exclude_editions:
+        # Iterate a sorted snapshot so in-place deletion during iteration is
+        # safe.
+        for edition_id in sorted(editions):
+            if any(
+                fnmatch.fnmatch(edition_id, pat) for pat in exclude_editions
+            ):
+                print(f"  EXCLUDE (--exclude-editions): {edition_id}")
+                del editions[edition_id]
+        if not editions:
+            raise RuntimeError(
+                f"All editions excluded in {source_dir} by "
+                f"--exclude-editions ({exclude_editions}); nothing to import."
+            )
+
     granthas = _group_editions_into_granthas(editions, frontmatter_by_name)
+    if grantha_ids:
+        # Iterate a sorted snapshot so in-place deletion during iteration is
+        # safe.
+        for grantha_id in sorted(granthas):
+            if grantha_id not in grantha_ids:
+                print(f"  SKIP (--grantha-id): {grantha_id}")
+                del granthas[grantha_id]
+        if not granthas:
+            raise RuntimeError(
+                f"No granthas matched --grantha-id ({grantha_ids}) in "
+                f"{source_dir}."
+            )
     for grantha_id, edition_ids in granthas.items():
         # Single-edition granthas are published as flat single-file editions
         # (e.g. mandukya-karika), not as edition directories. Leave them
         # untouched — they are not part of the multi-edition directory layout
         # this importer derives.
         if len(edition_ids) < 2:
-            print(f"SKIP (single-edition grantha): {grantha_id} — not part of this text's edition set")
+            print(f"  SKIP (single-edition grantha): {grantha_id} — "
+                  "not part of this text's edition set")
             continue
 
         default = _resolve_default_edition(source_dir, edition_ids, default_edition)
@@ -541,6 +581,23 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         help="Edition_id to mark isDefault. Falls back to a .default marker file, "
         "then to the first edition alphabetically.",
     )
+    parser.add_argument(
+        "--exclude-editions",
+        default=None,
+        action="append",
+        metavar="PATTERN",
+        help="fnmatch pattern against edition_id to exclude (repeatable). "
+        "e.g. --exclude-editions '*sankara*'.",
+    )
+    parser.add_argument(
+        "--grantha-id",
+        default=None,
+        action="append",
+        metavar="ID",
+        help="Exact grantha_id to import (repeatable). Only granthas whose id "
+        "equals a value are imported; useful for co-located grantha dirs "
+        "(e.g. --grantha-id mandukya-upanishad).",
+    )
     return parser
 
 
@@ -557,6 +614,8 @@ def main() -> None:
         library_root=args.library_root,
         text_path=args.text_path,
         default_edition=args.default_edition,
+        exclude_editions=args.exclude_editions,
+        grantha_ids=args.grantha_id,
     )
     print("Done.")
 

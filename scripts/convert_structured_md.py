@@ -42,10 +42,10 @@ import _build_parser
 
 SCHEMA_VERSION = "1.2.0"
 
-# For aitareya: index-0 commentary is Rangaramanuja, index-1 is Sayana.
+# For aitareya: Sayana is deferred via `_handle_aitareya_sayana`; each file
+# ships its own `commentaries_metadata` ids unmodified.
 AITAREYA_GRANTHA_ID = "aitareya-upanishad"
 SAYANA_COMMENTARY_ID = "sayana-bhashya"
-AITAREYA_TARGET_COMMENTARY_ID = "rangaramanuja-muni-prakashika"
 SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 
 # Non-content files co-located with source .md files that must never be
@@ -1159,13 +1159,11 @@ def append_sayana_deferred(
 
 def _resolve_target_commentary_ids(
     frontmatter: dict[str, Any],
-    grantha_id: str,
 ) -> list[str]:
     """Determine the target commentary_ids for a source file.
 
     Args:
         frontmatter: Parsed frontmatter dict for the file.
-        grantha_id: The grantha_id of the text being processed.
 
     Returns:
         The commentary_id strings to include, in document order, or [] if no
@@ -1175,13 +1173,10 @@ def _resolve_target_commentary_ids(
     if not commentaries_meta:
         return []  # Mula-only part (e.g. kaushitaki part 2)
 
-    if grantha_id == AITAREYA_GRANTHA_ID:
-        # Sayana is collected/deferred separately; only Rangaramanuja ships
-        # inline in the aitareya parts.
-        return [AITAREYA_TARGET_COMMENTARY_ID]
-
-    # All other texts: use every commentary_id from the file's own frontmatter
-    # (preserving per-file variation rather than normalizing).
+    # Return every commentary_id from the file's own frontmatter, preserving
+    # per-file variation rather than normalizing. This includes aitareya: the
+    # Rangaramanuja file ships only its own id, and the Sankara file ships
+    # `sankara-bhashyam`.
     return [c["commentary_id"] for c in commentaries_meta]
 
 
@@ -1245,10 +1240,29 @@ def _collect_source_files(source_dir: Path) -> list[Path]:
     Raises:
         FileNotFoundError: If no source .md files (other than non-content
             files) exist.
+        ValueError: If the BUILD declares more than one distinct grantha_id
+            (use import_editions.py for multi-edition texts).
     """
     candidates = _list_source_markdown_files(source_dir)
     if not candidates:
         raise FileNotFoundError(f"No .md files found in {source_dir}")
+
+    build_path = source_dir / "BUILD"
+    if build_path.exists():
+        rules = _build_parser.parse_build_rules(build_path.read_text(encoding="utf-8"))
+        # Multi-edition guard: a BUILD declaring md2json rules for more than
+        # one distinct grantha_id (e.g. a Rangaramanuja edition plus a Sankara
+        # edition) must be ingested with import_editions.py. Running the flat
+        # converter here would union all declared files into a single
+        # ``edition_id == frontmatter grantha_id`` stream, silently merging the
+        # Sankara files into the Rangaramanuja edition.
+        if len(rules) > 1:
+            raise ValueError(
+                f"{source_dir} declares multiple edition grantha_ids "
+                f"({sorted(rules)}); this text must be ingested with "
+                f"scripts/import_editions.py (multi-edition layout), not the "
+                f"flat converter."
+            )
 
     declared = _build_declared_files(source_dir)
     if declared:
@@ -1341,7 +1355,7 @@ def convert_grantha(
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
 
-        target_cids = _resolve_target_commentary_ids(frontmatter, grantha_id)
+        target_cids = _resolve_target_commentary_ids(frontmatter)
 
         # Aitareya: collect Sayana text from prefatory passage and defer it
         if grantha_id == AITAREYA_GRANTHA_ID:
