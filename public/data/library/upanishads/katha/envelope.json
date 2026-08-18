@@ -1,0 +1,29 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.2.0",
+  "grantha_id": "katha-upanishad",
+  "canonical_title": "कठोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "katha-upanishad",
+      "path": "upanishads/katha/katha-upanishad",
+      "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः",
+        "roman": "śrīraṅgarāmānujamuniḥ"
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "katha-upanishad-sankara-bhashya",
+      "path": "upanishads/katha/katha-upanishad-sankara-bhashya",
+      "commentary_title": "कठोपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    }
+  ]
+}

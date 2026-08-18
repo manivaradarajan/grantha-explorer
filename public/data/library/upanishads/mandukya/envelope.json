@@ -1,6 +1,6 @@
 {
   "kind": "grantha-envelope",
-  "schema_version": "1.0.0",
+  "schema_version": "1.2.0",
   "grantha_id": "mandukya-upanishad",
   "canonical_title": "माण्डूक्योपनिषत्",
   "text_type": "upanishad",
@@ -23,6 +23,15 @@
       "commentator": {
         "devanagari": "कूरनारायणमुनिः",
         "roman": ""
+      }
+    },
+    {
+      "edition_id": "mandukya-upanishad-sankara-bhashya",
+      "path": "upanishads/mandukya/mandukya-upanishad-sankara-bhashya",
+      "commentary_title": "माण्डूक्योपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
       }
     }
   ]

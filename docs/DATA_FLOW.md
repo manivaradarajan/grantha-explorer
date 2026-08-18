@@ -61,8 +61,12 @@ python3 scripts/convert_structured_md.py \
 - Commentary emission: a part carrying exactly one non-empty commentary emits
   the singular `commentary`; a part carrying two or more (e.g. a bhāṣya plus a
   subcommentary that declares `parent_commentary_id`) emits the plural
-  `commentaries` array. `_resolve_target_commentary_ids` lists the ids; the
-  aitareya case still emits only Rangaramanuja (Sayana is deferred separately).
+  `commentaries` array. `_resolve_target_commentary_ids` returns every
+  `commentary_id` in the file's own `commentaries_metadata` — there is no
+  grantha-id-keyed special case, so the aitareya Śaṅkara edition ships its
+  `sankara-bhashyam` while the Rangaramanuja edition ships only
+  `rangaramanuja-muni-prakashika`. (Sayana is deferred by the flat converter's
+  `_handle_aitareya_sayana` and never ships inline.)
 - `SCHEMA_VERSION` (mirroring grantha-data's `VERSION`) is stamped on each
   part; re-sync the schema mirrors and bump it when the producer schema changes.
 
@@ -98,7 +102,38 @@ python3 scripts/import_editions.py \
 - Default edition precedence: `--default-edition` → `.default` marker file in
   the source dir → first alphabetically.
 - Single-edition granthas found by this importer are **skipped** — they are
-  the flat/multipart path in §2.1, not the edition-directory layout.
+  the flat/multipart path in §2.1, not the edition-directory layout. When an
+  exclusion leaves a text with a single edition, the importer writes nothing
+  (no-op reversion to the flat layout) — a one-edition grantha-envelope is
+  never produced.
+- **`--exclude-editions PATTERN`** (repeatable, fnmatch against edition_id,
+  e.g. `--exclude-editions '*sankara*'`) drops matching editions **before**
+  grouping. Default: **include** everything the BUILD declares. This is the
+  consumer-side switch for optionally dropping the Śaṅkara bhāṣya editions
+  (the producer-side switch is removing the `:sankara_json` labels from
+  `upanishads/BUILD`'s `all_upanishads_json`).
+- **`--grantha-id ID`** (repeatable, **exact** match against the grouped
+  grantha_id — not a prefix) restricts import to the named granthas. Applied
+  to the grouped `granthas` dict immediately after `_group_editions_into_granthas`
+  and before the per-grantha loop, so co-located granthas (e.g. mandukya +
+  mandukya-karika in one source dir) can be imported one at a time without
+  overwriting each other's envelopes.
+- **Śaṅkara bhāṣya editions.** Each of the 10 upaniṣads with a Śaṅkara bhāṣya
+  now declares it as a separate edition (same multi-edition model). `kena` has
+  **two** Śaṅkara editions (pada + vakya). Re-ingest command per text passes
+  `--default-edition <base-edition>` explicitly (alphabetical fallback would
+  mis-select Śaṅkara for isavasya/mandukya).
+
+### 2.3 Flat converter multi-grantha guard
+
+`scripts/convert_structured_md.py` (`_collect_source_files`) now raises a clear
+`ValueError` when a source dir's BUILD declares md2json rules for **more than
+one distinct `grantha_id`** (e.g. a Rangaramanuja edition plus a Śaṅkara
+edition), directing the user to `import_editions.py`. Without the guard, the
+flat converter would union all declared files into a single
+`edition_id == frontmatter grantha_id` stream, silently merging the Śaṅkara
+files into the Rangaramanuja edition. Texts whose BUILD declares a single
+grantha_id (kaushitaki, svetasvatara) remain flat-converter safe.
 
 ---
 

@@ -1,0 +1,47 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.2.0",
+  "edition_id": "taittiriya-upanishad-sankara-bhashya",
+  "grantha_id": "taittiriya-upanishad",
+  "structure_levels": [
+    {
+      "key": "Valli",
+      "scriptNames": {
+        "devanagari": "वल्ली",
+        "roman": "vallī"
+      },
+      "children": [
+        {
+          "key": "Anuvaka",
+          "scriptNames": {
+            "devanagari": "अनुवाकः",
+            "roman": "anuvāka"
+          },
+          "children": [
+            {
+              "key": "Mantra",
+              "scriptNames": {
+                "devanagari": "मन्त्रः",
+                "roman": "mantra"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "2.1.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "3.1.1"
+    }
+  ]
+}

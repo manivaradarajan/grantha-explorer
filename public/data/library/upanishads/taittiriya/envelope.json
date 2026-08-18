@@ -1,0 +1,29 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.2.0",
+  "grantha_id": "taittiriya-upanishad",
+  "canonical_title": "तैत्तिरीयोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "taittiriya-upanishad",
+      "path": "upanishads/taittiriya/taittiriya-upanishad",
+      "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः",
+        "roman": ""
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "taittiriya-upanishad-sankara-bhashya",
+      "path": "upanishads/taittiriya/taittiriya-upanishad-sankara-bhashya",
+      "commentary_title": "तैत्तिरीयोपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    }
+  ]
+}

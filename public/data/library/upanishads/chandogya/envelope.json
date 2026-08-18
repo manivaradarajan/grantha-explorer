@@ -1,0 +1,29 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.2.0",
+  "grantha_id": "chhandogya-upanishad",
+  "canonical_title": "छान्दोग्योपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "chhandogya-upanishad",
+      "path": "upanishads/chandogya/chhandogya-upanishad",
+      "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः",
+        "roman": ""
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "chhandogya-upanishad-sankara-bhashya",
+      "path": "upanishads/chandogya/chhandogya-upanishad-sankara-bhashya",
+      "commentary_title": "छान्दोग्योपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    }
+  ]
+}

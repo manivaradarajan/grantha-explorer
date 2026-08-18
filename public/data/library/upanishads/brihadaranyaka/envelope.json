@@ -1,0 +1,28 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.2.0",
+  "grantha_id": "brihadaranyaka-upanishad",
+  "canonical_title": "बृहदारण्यकोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "brihadaranyaka-upanishad",
+      "path": "upanishads/brihadaranyaka/brihadaranyaka-upanishad",
+      "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः"
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+      "path": "upanishads/brihadaranyaka/brihadaranyaka-upanishad-sankara-bhashya",
+      "commentary_title": "बृहदारण्यकोपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    }
+  ]
+}

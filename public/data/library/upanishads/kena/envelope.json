@@ -1,0 +1,38 @@
+{
+  "kind": "grantha-envelope",
+  "schema_version": "1.2.0",
+  "grantha_id": "kena-upanishad",
+  "canonical_title": "केनोपनिषत्",
+  "text_type": "upanishad",
+  "language": "sanskrit",
+  "editions": [
+    {
+      "edition_id": "kena-upanishad",
+      "path": "upanishads/kena/kena-upanishad",
+      "commentary_title": "प्रकाशिका",
+      "commentator": {
+        "devanagari": "श्रीरङ्गरामानुजमुनिः",
+        "roman": "śrīraṅgarāmānujamuniḥ"
+      },
+      "isDefault": true
+    },
+    {
+      "edition_id": "kena-upanishad-sankara-pada-bhashya",
+      "path": "upanishads/kena/kena-upanishad-sankara-pada-bhashya",
+      "commentary_title": "केनोपनिषत्पदभाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    },
+    {
+      "edition_id": "kena-upanishad-sankara-vakya-bhashya",
+      "path": "upanishads/kena/kena-upanishad-sankara-vakya-bhashya",
+      "commentary_title": "केनोपनिषद्वाक्यभाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
+    }
+  ]
+}
