@@ -122,7 +122,19 @@ export default function Home() {
   // Sibling hook for compare mode: loads one grantha per active edition id via
   // useGranthaLoader (its contract is unchanged). Single-edition callers above
   // are unaffected by its existence.
-  const { editions: flowEditions } = useEditions(granthaId, editionIds);
+  const {
+    editions: flowEditions,
+    loadPart: flowLoadPart,
+    isLoadingPart: flowIsLoadingPart,
+  } = useEditions(granthaId, editionIds);
+
+  // Compare mode is active only when the user is in flow mode with >= 2 active
+  // editions. Single source of truth for choosing between the fan-out loader
+  // (compare) and the primary loader (single-edition flow + all panes layouts).
+  // Both loaders are useCallback-stable, so `sectionLoadPart`'s identity is
+  // stable unless `compareActive` flips or an edition's grantha merges.
+  const compareActive = mode === "flow" && flowEditions.length >= 2;
+  const sectionLoadPart = compareActive ? flowLoadPart : loadPart;
 
   // Handle grantha changes - jump to first main passage when appropriate
   useEffect(() => {
@@ -236,9 +248,9 @@ export default function Home() {
       partLevel,
     );
     for (const firstRef of toLoad) {
-      loadPart(firstRef);
+      sectionLoadPart(firstRef);
     }
-  }, [currentGrantha, verseRef, loadPart]);
+  }, [currentGrantha, verseRef, sectionLoadPart]);
 
   // Handle grantha change — verse ref "1" triggers the grantha-change effect to
   // skip to the first main passage of the new grantha. Edition resets to the
@@ -377,8 +389,8 @@ export default function Home() {
           onVerseSelect={handleFlowVerseSelect}
           activeSubcommentaryIds={subcommentaryIds}
           onSubcommentaryToggle={updateSubcommentary}
-          loadPart={loadPart}
-          isLoadingPart={isLoadingPart}
+          loadPart={sectionLoadPart}
+          isLoadingPart={compareActive ? flowIsLoadingPart : isLoadingPart}
           onExitFlow={() => updateMode("panes")}
           script={script}
           onScriptChange={updateScript}

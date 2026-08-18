@@ -212,6 +212,13 @@ demand and merges passages/commentary into the cached grantha in place.
 `components/TextContent.tsx` triggers lazy loads via an IntersectionObserver
 sentinel; `NavigationSidebar` renders placeholder groups for unloaded parts.
 
+**The full runtime loading architecture — initial assembly, `useGranthaLoader`,
+lazy-part triggers (section, sentinels, sidebar), and the compare-mode fan-out —
+is documented in depth in `docs/LOADING_FLOW.md`. Keep that file current when
+you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
+`app/page.tsx`, `components/FlowReader.tsx`, `components/TextContent.tsx`, or
+`components/NavigationSidebar.tsx`.**
+
 ---
 
 ## 6. URL hash routing and the UI

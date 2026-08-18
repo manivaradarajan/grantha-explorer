@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { Grantha } from "@/lib/data";
 import { useGranthaLoader } from "./useGranthaLoader";
 
@@ -11,8 +12,10 @@ export interface UseEditionsReturn {
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
-  /** The primary edition's lazy part loader (multi-part support). */
+  /** Load a part file into EVERY active edition (compare mode), or into the
+   *  single active edition otherwise. See the fan-out contract below. */
   loadPart: (firstRef: string) => Promise<void>;
+  /** True while any active edition is loading a part. */
   isLoadingPart: boolean;
 }
 
@@ -33,6 +36,14 @@ const MAX_COMPARE_EDITIONS = 3;
  * edition count receive `undefined` and fall back to the default-edition query
  * (which is either already cached or small); callers index only the active
  * entries.
+ *
+ * **`loadPart` fan-out contract.** "Load a part" is edition-agnostic: all
+ * editions of a grantha share the same envelope `parts[]` boundaries
+ * (`first_ref`s), so a request to load section X is fanned out to every active
+ * edition's own `loadPart` (each of which fetches from its resolved per-edition
+ * path and merges into its own cache key, including subcommentary re-nesting).
+ * It never rejects: each slot's loader swallows per-edition fetch failures, and
+ * a slot whose grantha is not yet loaded no-ops on `!grantha || !grantha.parts`.
  *
  * Args:
  *     granthaId: The grantha to load editions of.
@@ -64,12 +75,27 @@ export function useEditions(
     .map(({ r }) => r.grantha as Grantha | undefined)
     .filter((g): g is Grantha => g !== undefined);
 
+  // Fan out a part request to every active edition's own loader. Memoized on
+  // the inner `loadPart` callbacks (NOT the slot objects, which are fresh
+  // object literals every render): an edition's loader is `useCallback`-stable
+  // and only changes when that edition's grantha actually merges, so this
+  // composite identity is stable unless a part lands or the active set changes.
+  // `activeCount` is a primitive, so it never breaks memoization.
+  const activeCount = Math.max(1, ids.length);
+  const loadPart = useCallback(
+    async (firstRef: string): Promise<void> => {
+      const loaders = [r0.loadPart, r1.loadPart, r2.loadPart];
+      await Promise.all(loaders.slice(0, activeCount).map((l) => l(firstRef)));
+    },
+    [r0.loadPart, r1.loadPart, r2.loadPart, activeCount],
+  );
+
   return {
     editions,
     isLoading: active.some((r) => r.isLoading),
     isError: active.some((r) => r.isError),
     error: active.find((r) => r.error)?.error ?? null,
-    loadPart: r0.loadPart,
-    isLoadingPart: r0.isLoadingPart,
+    loadPart,
+    isLoadingPart: active.some((r) => r.isLoadingPart),
   };
 }

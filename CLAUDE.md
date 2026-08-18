@@ -11,7 +11,7 @@ product principles and `SCREENS.md` for screen behavior.
 ## Data-flow documentation — read before data work
 
 The pipeline that turns source texts into what the UI renders is documented in
-two places and **must be kept current**:
+three places and **must be kept current**:
 
 1. **`docs/DATA_FLOW.md`** (this repo) — the consumer-side runtime: how
    `public/data/library/` JSON is ingested, indexed, validated, and loaded
@@ -21,11 +21,18 @@ two places and **must be kept current**:
    `structured_md/` sources become JSON: BUILD publication gate, Bazel
    converter, on-disk shapes (flat single-file / multipart single-edition /
    multi-edition).
+3. **`docs/LOADING_FLOW.md`** (this repo) — the runtime loading architecture:
+   initial assembly, `useGranthaLoader`, lazy-part triggers (section,
+   scroll sentinels, sidebar), and the compare-mode fan-out.
 
-**Read both before touching `scripts/`, `lib/data.ts`, or any data loading.**
-When you change the ingestion, loader, indexer, or on-disk data shapes, update
-the relevant doc(s) in the same change. Known converter bugs and divergences
-are tracked in `../grantha-data/structured_md/<text>/BUGS.md` (e.g.
+**Read the relevant docs before touching `scripts/`, `lib/data.ts`, or any data
+loading.** When you change the ingestion, loader, indexer, on-disk data shapes,
+or runtime loading behavior, update the relevant doc(s) in the same change.
+In particular, changes to `lib/data.ts`, `hooks/useGranthaLoader.ts`,
+`hooks/useEditions.ts`, `app/page.tsx`, `components/FlowReader.tsx`,
+`components/TextContent.tsx`, or `components/NavigationSidebar.tsx` must keep
+`docs/LOADING_FLOW.md` current. Known converter bugs and divergences are
+tracked in `../grantha-data/structured_md/<text>/BUGS.md` (e.g.
 `bhagavad-gita/BUGS.md`).
 
 ## Architecture at a glance
