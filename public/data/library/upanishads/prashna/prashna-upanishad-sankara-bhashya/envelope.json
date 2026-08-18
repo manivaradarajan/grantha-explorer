@@ -1,0 +1,50 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.2.0",
+  "edition_id": "prashna-upanishad-sankara-bhashya",
+  "grantha_id": "prashna-upanishad",
+  "structure_levels": [
+    {
+      "key": "Prashna",
+      "scriptNames": {
+        "devanagari": "प्रश्नः",
+        "roman": "praśna"
+      },
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "3.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "4.1"
+    },
+    {
+      "file": "part5.json",
+      "first_ref": "5.1"
+    },
+    {
+      "file": "part6.json",
+      "first_ref": "6.1"
+    }
+  ]
+}

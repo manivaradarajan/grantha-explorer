@@ -1,6 +1,6 @@
 {
   "kind": "grantha-envelope",
-  "schema_version": "1.0.0",
+  "schema_version": "1.2.0",
   "grantha_id": "isavasya-upanishad",
   "canonical_title": "ईशावास्योपनिषत्",
   "text_type": "upanishad",
@@ -15,6 +15,15 @@
         "roman": "śrīmadvēdāntācāryaḥ"
       },
       "isDefault": true
+    },
+    {
+      "edition_id": "isavasya-upanishad-sankara-bhashya",
+      "path": "upanishads/isavasya/isavasya-upanishad-sankara-bhashya",
+      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
+        "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
+      }
     },
     {
       "edition_id": "isavasya-upanishad-srivatsanarayana",
