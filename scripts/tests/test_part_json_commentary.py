@@ -90,6 +90,53 @@ class TestPartJsonCommentary(unittest.TestCase):
         self.assertEqual(tika["parent_commentary_id"], "gita-bhashyam")
         self.assertEqual(tika["passages"][0]["ref"], "0.1")
 
+    def test_references_emitted_when_library_available(self) -> None:
+        """A citation in commentary text emits schema-shaped references.
+
+        Skips when the sibling grantha-data checkout is absent (CI without a
+        cross-repo checkout), matching the converter's best-effort behavior.
+        """
+        import os
+
+        tools_lib = _sibling_tools_lib()
+        if tools_lib is None:
+            self.skipTest("sibling grantha-data checkout not present")
+        os.environ["GRANTHA_DATA_TOOLS_LIB"] = str(tools_lib)
+        try:
+            import grantha_data_bootstrap
+            grantha_data_bootstrap.ensure_grantha_data_importable()
+            body = BodyData()
+            body.commentary_blocks["gita-bhashyam"] = [
+                CommentaryPassage(ref="1.1", text="इति (श्वे. उ. १.९) उक्तम्"),
+            ]
+            diagnostics: list[dict[str, object]] = []
+            result = build_part_json(
+                _intro_only_frontmatter(),
+                body,
+                "bhagavad-gita",
+                ["gita-bhashyam"],
+                diagnostics,
+            )
+        finally:
+            os.environ.pop("GRANTHA_DATA_TOOLS_LIB", None)
+        passage = result["commentary"]["passages"][0]
+        refs = passage["references"]
+        self.assertEqual(len(refs), 1)
+        self.assertEqual(refs[0]["grantha_id"], "svetasvatara-upanishad")
+        self.assertEqual(refs[0]["locator"], "1.9")
+        self.assertEqual(refs[0]["display_text"], "श्वे. उ. १.९")
+        self.assertFalse(refs[0]["unresolved"])
+        self.assertEqual(diagnostics, [])
+
+
+def _sibling_tools_lib() -> pathlib.Path | None:
+    """Return the sibling grantha-data ``tools/lib`` path, or None."""
+    explorer_root = pathlib.Path(__file__).parent.parent.parent
+    candidate = explorer_root.parent / "grantha-data" / "tools" / "lib"
+    if (candidate / "grantha_data").is_dir():
+        return candidate
+    return None
+
 
 if __name__ == "__main__":
     unittest.main()

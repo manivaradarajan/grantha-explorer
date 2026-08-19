@@ -94,11 +94,11 @@ library**. Citations to works not in the library render as unlinked plain text.
 |---|---|
 | 1 | **Structured references** in JSON (schema change), not inline markdown. Content stays byte-identical; `validation_hash` untouched. |
 | 2 | **Option A resolution split.** Compile (Python): abbreviation → `grantha_id` + normalize locator. Link (TS runtime): section-vs-leaf + "in library". Structure truth is read from the real target grantha at runtime, never a build-time *authoritative* copy. (`ref_structure` is retained as a compile-time **hint** only — see #10.) |
-| 3 | **Partial locators** (fewer segments than target depth) resolve to the **section ref** (prefix jump), e.g. `मु.उ. १-१` → section `1.1`. Explicit runtime semantics in §5. |
-| 4 | **Range refs** (a locator whose token count exceeds the target depth by one, e.g. `3.7.29-35` on a depth-3 target → `3.7.29..3.7.35`) link to the **first verse** (first endpoint). `locator_end` is preserved in the artifact for a future range-aware UI. Marked `TODO(references)` in the explorer code. (`म.भा.शां. ३३७-३४०` is **not** a range — see §4.1.1.) |
+| 3 | **Partial locators** (fewer segments than target depth) resolve to the **section ref** (prefix jump), e.g. `मु. उ. १.१` → section `1.1`. Explicit runtime semantics in §5. |
+| 4 | **Range refs** (a locator whose token count exceeds the target depth by one, e.g. `3.7.29-35` on a depth-3 target → `3.7.29..3.7.35`) link to the **first verse** (first endpoint). `locator_end` is preserved in the artifact for a future range-aware UI. Marked `TODO(references)` in the explorer code. (`म. भा. शां. ३३७-३४०` is **not** a range — see §4.1.1.) |
 | 5 | **Enumerations** (`वि.पु. ३-७-२९,३०`) expand to **N reference objects** grouped by a `group_id`, with explicit **prefix inheritance** (§4.1) so later members inherit the first member's locator prefix. |
 | 6 | **Undefined symbols** emit **errors with hints** (link-error model) at build time. `--strict` fails the build on any error; **default off** (emit-and-continue, `ld --noinhibit-exec` semantics). |
-| 7 | **Whole-work citations** (abbreviation, no locator — e.g. `(शत.ब्रा.)`) are **valid**, not errors: `grantha_id` resolved, `locator: null`, `unresolved: false`. Rendered as a link to the grantha root. (§3, §5) |
+| 7 | **Whole-work citations** (abbreviation, no locator — e.g. `(शत. ब्रा.)`) are **valid**, not errors: `grantha_id` resolved, `locator: null`, `unresolved: false`. Rendered as a link to the grantha root. (§3, §5) |
 | 8 | **Dev-mode diagnostics:** in `next dev`, any reference that would render unlinked surfaces a reason-coded diagnostic. In production, unlinked references just render unlinked. |
 | 9 | **Per-target suppression** lives in a committed config file (`reference-suppressions.json`), not localStorage. |
 | 10 | **Diagnostic page** is a hash-routed view (`#diagnostics`) inside the existing single-page app, intercepted **before** `parseHash`/`validateAndNormalizeHash` (no new Next.js route). |
@@ -118,7 +118,7 @@ byte-identical copies re-synced with `cp` (per `SCHEMAS.md`).
 // #/definitions/reference
 {
   "start": 33, "end": 47,                    // half-open offsets into content.sanskrit.devanagari
-  "display_text": "श्वे। उ। १-९",            // verbatim citation text as written
+  "display_text": "श्वे. उ. १.९",             // verbatim citation text as written
   "grantha_id": "svetasvatara-upanishad",     // null ONLY when abbreviation undefined (build error)
   "locator": "1.9",                          // canonical dotted target; null for whole-work; range → FIRST endpoint
   "locator_end": null,                       // present ONLY for ranges (normalized hi endpoint)
@@ -135,7 +135,7 @@ byte-identical copies re-synced with `cp` (per `SCHEMAS.md`).
 |---|---|---|---|
 | null | null | true | **undefined abbreviation** → build error `REF-UNDEFINED-ABBREV` |
 | set | string | false | **normal passage/section/range** link |
-| set | null | false | **whole-work citation** (`(शत.ब्रा.)`) → link to grantha root |
+| set | null | false | **whole-work citation** (`(शत. ब्रा.)`) → link to grantha root |
 
 `unresolved: true` is now *only* the undefined-abbrev case. A whole-work cite
 is **not** `unresolved` and **not** an error. `locator: null` with
@@ -145,7 +145,7 @@ should reject it.
 **Span convention for whole-work cites (same as ranges/enumerations).** A
 whole-work reference's `start`/`end` covers the citation text **excluding the
 surrounding parentheses**, exactly like the enumeration sub-spans (§3) and the
-range span. For `(शत.ब्रा.)` the span covers `शत.ब्रा.` only; the `(` `)` stay
+range span. For `(शत. ब्रा.)` the span covers `शत. ब्रा.` only; the `(` `)` stay
 plain text. The renderer treats all three shapes uniformly: split raw text at
 `[start, end)`, leave parens/punctuation as plain text, emit the span as the
 link node.
@@ -174,14 +174,14 @@ re-synthesis. Ranges are a single object (no grouping needed).
 ### Concrete examples (post-change, with `अग्नि.र.` now in the bimap)
 
 ```jsonc
-{ "display_text": "श्वे। उ। १-९",   "grantha_id": "svetasvatara-upanishad", "locator": "1.9",  "locator_end": null }
-{ "display_text": "मु.उ. १-१",       "grantha_id": "mundaka-upanishad",     "locator": "1.1",  "locator_end": null }   // 2 segs vs depth 3 → section
-{ "display_text": "म.भा.शां. १७-२२३", "grantha_id": "mahabharata-shanti-parva", "locator": "17.223", "locator_end": null }  // adhyāya 17, śloka 223
-{ "display_text": "म.भा.शां. ३३७-३४०", "grantha_id": "mahabharata-shanti-parva", "locator": "337.340", "locator_end": null }  // adhyāya 337, śloka 340 — NOT a range (§4.1.1)
-{ "display_text": "ई.उ.१६",         "grantha_id": "isavasya-upanishad",    "locator": "16",   "locator_end": null }   // self
-{ "display_text": "शत.ब्रा.",        "grantha_id": "shatapatha-brahmana",   "locator": null,  "locator_end": null }   // whole-work → grantha root
-{ "display_text": "अग्नि.र.१-१०-६",  "grantha_id": "agnirahasya",           "locator": "1.10.6", "locator_end": null }   // resolved post-change
-{ "display_text": "बघ.च.१-२-३",     "grantha_id": null, "locator": null, "unresolved": true }                        // undefined abbrev → build error
+{ "display_text": "श्वे. उ. १.९",   "grantha_id": "svetasvatara-upanishad", "locator": "1.9",  "locator_end": null }
+{ "display_text": "मु. उ. १.१",       "grantha_id": "mundaka-upanishad",     "locator": "1.1",  "locator_end": null }   // 2 segs vs depth 3 → section
+{ "display_text": "म. भा. शां. १७.२२३", "grantha_id": "mahabharata-shanti-parva", "locator": "17.223", "locator_end": null }  // adhyāya 17, śloka 223
+{ "display_text": "म. भा. शां. ३३७-३४०", "grantha_id": "mahabharata-shanti-parva", "locator": "337.340", "locator_end": null }  // adhyāya 337, śloka 340 — NOT a range (§4.1.1)
+{ "display_text": "ई. उ. १६",         "grantha_id": "isavasya-upanishad",    "locator": "16",   "locator_end": null }   // self
+{ "display_text": "शत. ब्रा.",        "grantha_id": "shatapatha-brahmana",   "locator": null,  "locator_end": null }   // whole-work → grantha root
+{ "display_text": "अग्नि. र. १.१०.६",  "grantha_id": "agnirahasya",           "locator": "1.10.6", "locator_end": null }   // resolved post-change
+{ "display_text": "बघ. च. १.२.३",     "grantha_id": null, "locator": null, "unresolved": true }                        // undefined abbrev → build error
 ```
 
 A genuine range (token count = depth + 1) for a depth-3 target, e.g.
@@ -204,9 +204,12 @@ Pipeline layers:
 1. **Extract** parenthetical citations in commentary Devanagari →
    `(start, end, display_text)`.
 2. **Resolve symbol:** `abbrev`/`aliases` → `grantha_id` (longest-first, with
-   separator tolerance `श्वे। उ।` ≡ `श्वे.उ.` ≡ `श्वे उ`, optional-space
-   tolerance, prefix handling `तै.ना.` → `तै.ना.उ.`). **No match → link error
-   `REF-UNDEFINED-ABBREV` with hint**, `grantha_id: null, unresolved: true`.
+   separator tolerance `श्वे। उ।` ≡ `श्वे.उ.` ≡ `श्वे. उ.` ≡ `श्वे उ`,
+   optional-space tolerance, prefix handling `तै.ना.` → `तै.ना.उ.`). The
+   corpus is normalized to the spaced-dot form (`श्वे. उ. १.९`), but dandas
+   and dashes still occur elsewhere; the matcher must accept all three.
+   **No match → link error `REF-UNDEFINED-ABBREV` with hint**, `grantha_id:
+   null, unresolved: true`.
 3. **Detect whole-work cite:** abbreviation present, remainder empty →
    `grantha_id` set, `locator: null`, `unresolved: false` (decision #7). Not an
    error. The "remainder empty" test runs on the **separator-stripped**
@@ -238,6 +241,16 @@ abbreviation itself encodes a structural level — e.g. `म.भा.शां.` 
 carries the **remaining** `ref_structure` (`[adhyaya, shloka]`), not the base
 work's full `[parva, adhyaya, shloka]`. `hint_depth = len(ref_structure)` is
 therefore the number of levels the *locator* is expected to express.
+
+When the encoded level is a **specific number** needed at link time AND the
+abbreviation maps to the *whole* base grantha (not a per-level id), the bimap
+entry carries a `locator_prefix` — a numeric dotted prefix prepended to the
+locator at emission. Example: `रा.सु.` (Rāmāyaṇa-Sundara) encodes kāṇḍa 5 but
+maps to `valmiki-ramayana`, so `रा. सु. ३५.५२` → `5.35.52` (Sundara sarga 35,
+śloka 52). Without the prefix the depth-2 hint made `35.52` look full-depth
+against the real `Kāṇḍa → Sarga → Shloka` target and it never resolved. (This
+differs from the katha case, where the *numbering scheme* differs — see §5's
+citation-scheme note.)
 
 **Rule (range gated on the dash glyph, not token count):**
 
@@ -292,24 +305,32 @@ two `म.भा.शां. N-M` citations of identical shape:
 
 | citation | line | resolution |
 |---|---|---|
-| `(म.भा.शां. १७-२२३)` | 454, 1033 | adhyāya 17, śloka 223 → `17.223` |
-| `(म.भा.शां. ३३७-३४०)` | 1043 | adhyāya 337, śloka 340 → `337.340` |
+| `(म. भा. शां. १७.२२३)` | 455, 1031 | adhyāya 17, śloka 223 → `17.223` |
+| `(म. भा. शां. ३३७-३४०)` | 1041 | adhyāya 337, śloka 340 → `337.340` |
 
-Both are **level separators**, not ranges: with `म.भा.शां. → ref_structure:
+Both are **level separators**, not ranges: with `म. भा. शां. → ref_structure:
 [adhyaya, shloka]`, `seg_count == 2 == hint_depth` for both → level separator,
 consistent. `m > n` is **not** a discriminator (`223 > 17` and `340 > 337` are
 both true), so the rule never uses it to decide separator-vs-range at full
-depth. The earlier §3 example that read `३३७-३४०` as a range was wrong and has
+depth. Note the corpus is **mixed**: after the linebreak-whitespace
+normalization merge (grantha-data #9) the Deśika text was re-derived, so
+`१७-२२३` became `१७.२२३` (dash → dot) while `३३७-३४०` **kept its dash** — which
+keeps the §4.1.1 dash-at-full-depth rule live in real data. The earlier §3
+example that read `३३७-३४०` as a range was wrong and has
 been corrected.
 
-> **Verification flag (not yet canonical).** The claim "adhyāya 337, śloka 340
-> is well-formed" is asserted, not sourced. Śrī Vaiṣṇava commentators typically
-> cite a *particular* edition (vulgate/Southern recension) whose adhyāya
-> numbering differs from the critical edition; `१७-२२३` and `३३७-३४०` may even
-> use different numbering systems. Before this becomes a canonical example, the
-> resolution must be **verified against the edition the text actually cites** —
-> a wrong `337.340` is a silent, correct-looking mislink. Add an explicit
-> verification step to Phase 2 (bimap audit) for both `म.भा.शां.` citations.
+> **Verification flag (resolved in Phase 2 — mostly).** The claim "adhyāya
+> 337, śloka 340 is well-formed" is now structurally confirmed: both `१७.२२३`
+> and `३३७.३४०` are within the critical edition's 353-adhyāya Śānti-parva, AND
+> the same text also cites `म. भा. शा. ३५८` — adhyāya 358 exceeds the critical
+> 353, which confirms the text uses **Southern-recension (vulgate) numbering**
+> where 337, 340, and 358 all exist. So the citation system is consistent, and
+> `337.340` (level separator) is well-formed within it. **Residual:** the exact
+> śloka correspondence (e.g. that Śānti 17.223 is the cite "अनन्तं बत मे वित्तम्")
+> still needs the cited edition; not confirmable from the corpus. A wrong
+> verse-text pairing would still be a silent mislink, so the probe tests pin the
+> *resolution*, and the §9 `REF-RUNTIME-UNRESOLVED` diagnostic guards the target
+> side once a Śānti-parva edition is ingested.
 
 The `+1` range branch is therefore **not exercised by the pilot's root text**;
 it is covered by synthetic golden tests (§8.1) so the rule is pinned even though
@@ -323,19 +344,29 @@ the hint. This cross-validation is the durable guard against hint drift.
 
 #### 4.1.2 Cross-repo integration (resolves M1 — pinned before Phase 3)
 
-The mechanism must be chosen **before** Phase-3 wiring and exercised by a golden
-test that imports `references` the same way both repos do:
+**Pinned (Phase 1):** the explorer imports `grantha_data.references` from the
+sibling `grantha-data` checkout via an **explicit, env-gated bootstrap** —
+`scripts/grantha_data_bootstrap.py` adds `<grantha-data>/tools/lib` to
+`sys.path` only when `GRANTHA_DATA_TOOLS_LIB` is set. The converters
+(`convert_structured_md.py`, `import_editions.py`) call it at import; the
+library is the same file both repos use, exercised by `test_imports_via_both_repos`
+(grantha-data) and `scripts/tests/test_grantha_data_bootstrap.py` (explorer).
 
-- **Preferred:** `grantha_data` is already an installable package
-  (`tools/lib/grantha_data/` with `__init__.py`, editable-installed in
-  grantha-data per its CLAUDE.md). Add an explicit `pip install -e` /
-  path-config step so the explorer's `scripts/convert_structured_md.py` and
-  `import_editions.py` can `import grantha_data.references` with no `sys.path`
-  hack. Document the exact invocation in the explorer README/docs.
-- **Fallback (if cross-repo pip install is rejected):** vendor a mirror of
-  `references.py` (and the bimap YAML) into the explorer `scripts/` with a
-  `sync_references.py` copy script + a CI check that the vendored copy is
-  byte-identical. This is the drift-prone option; avoid unless necessary.
+Rationale: a plain `pip install -e` (the plan's original preference) is
+fragile across the paired worktrees — the shared venv's editable install can
+silently point at a *different* checkout (it currently maps to `~/github/
+grantha-data`, not the active worktree). The env-gated bootstrap is the
+**documented fallback** from the plan, chosen as primary because it makes the
+active checkout explicit and verifiable. Invocation:
+
+```bash
+GRANTHA_DATA_TOOLS_LIB=../grantha-data/tools/lib \
+  python3 scripts/convert_structured_md.py --source … --out …
+```
+
+`pip install -e` remains valid and takes precedence (the bootstrap is a no-op
+when `grantha_data` is already importable). The vendored-mirror fallback is
+rejected.
 
 ### 4.2 Build diagnostics (link-error model)
 
@@ -358,6 +389,27 @@ build, even under `--strict`.
 
 ### 4.3 Bimap changes (resolves C2 — single authority)
 
+> **Phase-2 execution status (2026-08-18).** Executed **pilot-scoped**: the
+> bimap now covers the Īśāvāsya Deśika + Srīvatsanārāyaṇa editions' citations
+> plus zero-risk aliases of works already in the bimap. The consistency check
+> is implemented (`check_meta_consistency`) and the remaining problems are
+> **documented known gaps** (roman aliases in meta, non-bimap works such as
+> panini-sutra / prashna / patanjali-yoga-sutra / rigveda / amarakosha / per-
+> kāṇḍa Rāmāyaṇa) — not hard-failed in this phase. Decisions recorded:
+> - `gita` (duplicate of `bhagavad-gita`) removed from `granthas-meta.json`.
+> - `रा.सु.` resolves to **`valmiki-ramayana`** (kāṇḍa encoded in the abbrev,
+>   `ref_structure: [sarga, shloka]`); the corpus glosses it
+>   "श्रीरामायणप्रयोगात्". Not a per-kāṇḍa id (none on disk).
+> - `वरा.च.श्लो` (Vārāha-carama-śloka) → `varaha-upanishad`, whole-work cite
+>   (`ref_structure: []`).
+> - `निघण्टुः`/`निघण्टु`/`निघण्टु:` → `nighantu` (adhyaya, shloka).
+> - `पा.धा.` id renamed `panini-dhatupatha` → **`dhatu-patha`** (meta id).
+> - Deśika unresolved fell 13 → 9; the remaining 9 are all out-of-scope works
+>   (panini-sutra, prashna, patanjali-yoga-sutra, Śrībhāṣya) or regex noise
+>   (a `**…**`-wrapped sentence, the bare `(न्)` nasal, a frontmatter string).
+> - The Śānti-parva verification flag is resolved in §4.1.1 (Southern-recension
+>   numbering confirmed via the adhyāya-358 cite).
+
 - **Single abbreviation authority:** `data/citation_bimap.yaml` is the only
   abbreviation → `grantha_id` table. The `abbreviations` field in
   `granthas-meta.json` is **frozen/deprecated**: no new entries, and the
@@ -374,7 +426,7 @@ build, even under `--strict`.
     parva-qualified abbreviations (`म.भा.शां.`, `म.भा.अनु.`, …) and bare
     `म.भा.` maps to nothing → `REF-AMBIGUOUS-ABBREV`.
   - `तै.ना.` is currently a meta abbreviation of `taittiriya-aranyaka`
-    (`granthas-meta.json:609`), but the source (`तै.ना. ९२`, `तै.ना.1-1`) means
+    (`granthas-meta.json:609`), but the source (`तै. ना. ९२`, `तै. ना. १.१`) means
     the Mahanārāyaṇa Upaniṣad. Remove `तै.ना.` from the aranyaka entry and add it
     as an alias of `mahanarayana-upanishad` (whose bimap entry `तै.ना.उ.` is the
     canonical prefix; `तै.ना.` resolves to it by prefix).
@@ -419,6 +471,16 @@ build, even under `--strict`.
   order against the *loaded* target grantha:
   1. **Exact leaf** — `getPassageByRef(target, locator)` hits → jump to the
      passage (`isSection: false`).
+  1b. **Exact leaf in a later, not-yet-loaded part (added after pilot
+     field-finding).** A multi-part grantha loads only its first part, so a
+     full-depth locator whose passage lives in a later part (e.g. Chandogya
+     `6.8.7` in part 6) is absent from the loaded passages. The locator is a
+     valid passage ref: resolve it directly (hand it back as the jump target)
+     and let the reader's normal section loader
+     (`sectionPartsToLoad`/`loadPart`) fetch the containing part on navigation.
+     This is distinct from case 2(b) below: there the locator is *partial*
+     and the part `first_ref` is the jump target; here the locator is the
+     exact ref and the *navigation* must trigger the part load.
   2. **Section (partial locator)** — the locator names an interior level (fewer
      segments than the target depth). Resolve to the **lowest matching
      structural level**, consulting in order: (a) an envelope-level section
@@ -438,9 +500,28 @@ build, even under `--strict`.
   3. **Whole-work** — `locator: null` → jump to the grantha root (envelope /
      first part's first passage).
   4. **Depth overflow** — `locator` has more segments than the target's
-     `structure_levels` → diagnostic (`REF-RUNTIME-DEPTH-OVERFLOW`), unlinked.
+     structure depth → diagnostic (`REF-RUNTIME-DEPTH-OVERFLOW`), unlinked.
   5. **Unresolved** — none of the above → diagnostic
      (`REF-RUNTIME-UNRESOLVED`), unlinked.
+
+  > **Depth convention (added after pilot field-finding).** `structure_levels`
+  > on disk is a **nested tree** (e.g. Prapathaka → Khanda → Mantra), so its
+  > depth is **not** `structure_levels.length` (that returns the top-level
+  > count, 1). The resolver must compute depth via the existing
+  > `getStructureDepth` (walks the `children[0]` chain). Using `.length`
+  > wrongly treats every multi-level text as depth 1 and turns any 2-segment
+  > partial locator into `REF-RUNTIME-DEPTH-OVERFLOW` (mundaka `1.1` regression).
+  > Golden tests must therefore use **nested** structure fixtures that mirror
+  > the real on-disk shape.
+  >
+  > **Citation-scheme mismatches (documented, pilot decision).** Some citations
+  > use a numbering scheme the target edition does not. Katha's corpus cites use
+  > the continuous-6-valli convention (`क. उ. २.२४` → `1.2.24`), but the on-disk
+  > katha uses `adhyāya.valli.mantra`. The resolver correctly refuses these as
+  > `REF-RUNTIME-UNRESOLVED` ("could not resolve") rather than making a
+  > correct-looking wrong link. They are a **source-data triage** (suppress via
+  > `reference-suppressions.json` in Phase 5, or re-ingest the cited edition),
+  > not a resolver bug. Do not "fix" these by special-casing the resolver.
 
   `resolveJumpTarget` (`lib/jumpTarget.ts`) does **not** currently implement
   case 2 for partial locators (its prefix branch returns the first leaf with
@@ -585,7 +666,8 @@ Each phase independently verifiable.
 1. **Schema + shared library (grantha-data).** Extract/extend the
    `align_paragraphs.py` citation logic into
    `tools/lib/grantha_data/references.py`; add the `reference` definition +
-   `references[]` (three states, §3); **pin the cross-repo mechanism (§4.1.2)**.
+   `references[]` (three states, §3); **pin the cross-repo mechanism (§4.1.2)**
+   and mirror the schema into the explorer (`cp`, per SCHEMAS.md).
    Golden tests named for the *why*:
    - `test_danda_abbrev_normalizes_to_dot`
    - `test_range_links_first_endpoint_preserves_end`
@@ -593,22 +675,56 @@ Each phase independently verifiable.
    - `test_undefined_abbrev_emits_link_error_with_hint`
    - `test_whole_work_citation_is_not_an_error`
    - `test_nasal_only_does_not_match_abbrev`
-   - `test_dash_is_level_separator_at_full_depth` (`म.भा.शां. १७-२२३` → `17.223`; `म.भा.शां. ३३७-३४०` → `337.340`)
+   - `test_dash_is_level_separator_at_full_depth` (`म. भा. शां. १७.२२३` → `17.223`; `म. भा. शां. ३३७-३४०` → `337.340`) — note the normalized corpus keeps the dash on `३३७-३४०`, so the dash-at-full-depth rule stays live in real data
    - `test_dash_is_range_at_depth_plus_one` (`3.7.29-35` on depth-3 → `3.7.29`/`3.7.35`)
    - `test_dotted_over_depth_locator_is_not_a_range` (`3.7.29` on depth-2, trailing `.` → `REF-AMBIGUOUS-LOCATOR`, level separators, no `locator_end`)
    - `test_non_ascending_dash_is_not_a_range` (`1-10-6` on a depth-2 hint → `REF-AMBIGUOUS-LOCATOR`, level separators, no `locator_end`)
    - `test_comma_list_keeps_source_order`
    - `test_imports_via_both_repos` (imports `references` the Bazel way and the
      bare-script way)
+   - Synthetic tests keep the legacy danda/dash input forms as **tolerance
+     pins** — the corpus is now normalized (`श्वे. उ. १.९`), but dandas and
+     dashes still occur across the wider corpus, and the matcher must accept
+     both. The live-data probe asserts the normalized forms.
 2. **Bimap audit + single-authority rule + load validation + cross-file check.**
-3. **Converter wiring + build diagnostics.** Emit `references[]` from the
-   explorer converter (`convert_structured_md.py` / `import_editions.py` — the
-   path that actually produces the pilot's root text). **Scope note (resolves
-   M4):** the pilot verifies end-to-end via the explorer converter only; the
-   Bazel `md_to_json.py` path is wired and unit-tested but not exercised against
-   a real text in this pilot (isavasya-vd is an explorer-importer-produced
-   multi-edition layout). Assert content byte-identical, `validation_hash`
-   unchanged, report lists every undefined symbol with a hint.
+   **Done (pilot-scoped).** Bimap: per-parva `म.भा.शां./अनु./कर्णपर्व./भौ.`
+   replacing bare `म.भा.`; `तै.ना.उ.` → `mahanarayana-upanishad`;
+   `पू.मी.सू.` → `purva-mimamsa`; `पा.धा.` → `dhatu-patha`; new Deśika entries
+   + zero-risk aliases; `validate_bimap` + `check_meta_consistency` implemented
+   and tested. Meta: removed `gita`, `म.भा.`, `महा.भा.`, `तै.ना.`. Remaining
+   39 consistency gaps are documented known (out-of-pilot-scope). See §4.3.
+ 3. **Converter wiring + build diagnostics.** Emit `references[]` from the
+    explorer converter (`convert_structured_md.py` / `import_editions.py` — the
+    path that actually produces the pilot's root text). **Done.** Both
+    converters thread a diagnostics collector through
+    `build_part_json` → `_build_commentary` → `_extract_references` and write a
+    per-edition `references-report.json` (code, severity, source file,
+    passage_ref, offsets, hint). Isavasya re-ingested: 281 references across
+    the 3 editions, **offset integrity 281/281** (every `[start, end)` slices
+    the exact `display_text` out of `content.sanskrit.devanagari`). **Note on
+    "content byte-identical":** the committed library was rebuilt from source
+    after the linebreak-whitespace normalization merge, so the Devanagari
+    *content* changed (dandas→dots, spaced citations, `—` em-dashes) — that is
+    source drift, not the references feature; the references emission itself is
+    confirmed purely additive (stripping `references[]` leaves only the
+    normalization diffs). `schema_version` bumped 1.2.0 → 1.3.0 across the
+    re-ingested files. Report lists every undefined symbol with a hint (Deśika
+    8, all out-of-pilot-scope). **Scope note (resolves M4):** the pilot verifies
+    end-to-end via the explorer converter only; the Bazel `md_to_json.py` path
+    is wired and unit-tested but not exercised against a real text in this
+    pilot (isavasya-vd is an explorer-importer-produced multi-edition layout).
+    **Latent seam (documented, §9):** offsets are Python code-point based; the
+    JS renderer slices UTF-16. Verified aligned across all 281 pilot refs (0
+    astral chars before a ref); the spec should pin the convention.
+   **Promote to spec (Phase-3 deliverable):** with the compile side proven
+   end-to-end, distill the pilot into a permanent cross-repo spec under
+   `docs/`. It captures the locked decisions, the dash-glyph-gated range rule,
+   the three reference states, the bimap single-authority rule, what the probe
+   tests confirmed or corrected (Śānti-parva adhyāya counts, `अग्नि.र.` level
+   names), and what remains out of scope (Bazel path, non-final-level ranges,
+   per-corpus range rules). Link it from both `DATA_FLOW.md` docs; the `plans/`
+   doc then defers to it as the live contract. If Phase 4–6 runtime findings
+   change the spec, fold them back in and re-promote.
 4. **Explorer ingest + render + runtime resolution.** Re-ingest isavasya,
    re-sync schema mirrors, offset render restructure (§7), `ReferenceLink`
    wiring, `resolveReferenceTarget` (§5) with runtime golden tests:
@@ -617,6 +733,23 @@ Each phase independently verifiable.
    - `test_whole_work_resolves_to_grantha_root`
    - `test_depth_overflow_is_diagnostic`
    - enumeration grouping, range-first-verse.
+   **Done.** Re-ingest was completed in Phase 3. Render restructure (§7):
+   `components/renderCommentary.tsx` is a shared helper that splits the raw
+   `content.sanskrit.devanagari` at each reference's `[start, end)` and applies
+   the markdown/DOMPurify transform per segment; wired into `CommentaryPanel`
+   (pane mode), `FlowReader` (flow mode), and `FlowReaderCompare` (compare mode,
+   per-edition). The old regex/`abbreviationMap` path (`parseReferences`,
+   `createAbbreviationMap`) is removed. `lib/references.ts` now defines the
+   producer `Reference` shape, a Set-based `isReferenceInLibrary`, and
+   `resolveReferenceTarget` (exact leaf → section marker → part `first_ref` →
+   loaded-leaf prefix → runtime diagnostics). `ReferenceLink` resolves on
+   hover/click via `loadGrantha` (memoized, no eager target fan-out);
+   unresolved references (undefined abbrev) render as plain unlinked text.
+   Runtime golden tests added (13 in `lib/references.test.ts`) plus render
+   regression tests (`components/renderCommentary.test.tsx`, incl. the §7
+   bold-straddle case: verified **0** pilot citations straddle a `**` pair, and
+   the straddle behavior is pinned as acceptably-safe literal markers). A
+   `components/**/*.test.tsx` glob was added to `vitest.config.ts`.
 5. **Runtime diagnostic layer.** Dev gate, `ReferenceDiagnostic` log,
    suppression config, `#diagnostics` page (intercept before parse/validate).
 6. **Docs.** Update `grantha-data/docs/DATA_FLOW.md` and
@@ -649,3 +782,12 @@ Each phase independently verifiable.
   diagnostic page are the mitigation; verify they are sufficient at real scale.
 - **Vendored-mirror drift (if §4.1.2 fallback is chosen):** the `sync` script +
   CI byte-identity check is the only guard; prefer `pip install -e`.
+- **Offset unit drift (Python code-point vs JS UTF-16).** `references.py` emits
+  Python string indices (code points); the renderer slices with JS `substring`
+  (UTF-16 code units). They diverge only when an astral char (surrogate pair)
+  lies *before* a reference in the same passage. **Verified safe in the pilot:**
+  0 of 281 refs have an astral char in their prefix, so all offsets align with
+  the renderer's UTF-16 slicing today. The permanent spec should still pin one
+  convention (code-point offsets with a JS-aware splitter, or UTF-16 offsets
+  computed in the converter) so a future passage with an astral char before a
+  ref cannot silently mis-slice.

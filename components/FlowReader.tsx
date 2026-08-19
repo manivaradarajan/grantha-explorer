@@ -35,6 +35,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
+import { renderCommentaryWithReferences } from "./renderCommentary";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -62,6 +63,9 @@ interface FlowReaderProps {
   script: "deva" | "roman";
   /** Persist a script change to the hash so it travels with deep links. */
   onScriptChange: (script: "deva" | "roman") => void;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
+  availableGranthaIds: string[];
+  granthaIdToDevanagariTitle: Record<string, string>;
 }
 
 const FONT_SCALE_MIN = 0.75;
@@ -103,6 +107,9 @@ export default function FlowReader({
   onExitFlow,
   script,
   onScriptChange,
+  updateHash,
+  availableGranthaIds,
+  granthaIdToDevanagariTitle,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -548,14 +555,18 @@ export default function FlowReader({
                 }}
               />
             )}
-            <p
-              className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-600"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeCommentaryHtml(
-                  subPassage.content?.sanskrit?.devanagari || "",
-                ),
-              }}
-            />
+            <p className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-600">
+              {renderCommentaryWithReferences(
+                subPassage.content?.sanskrit?.devanagari || "",
+                subPassage.references,
+                {
+                  currentGranthaId: grantha.grantha_id,
+                  updateHash,
+                  availableGranthaIds,
+                  granthaIdToTitle: granthaIdToDevanagariTitle,
+                },
+              )}
+            </p>
           </div>
         )}
       </div>
@@ -716,6 +727,9 @@ export default function FlowReader({
                   grantha={grantha}
                   granthaTitleDeva={granthaTitleDeva}
                   granthaTitleIast={granthaTitleIast}
+                  updateHash={updateHash}
+                  availableGranthaIds={availableGranthaIds}
+                  granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 />
               ) : (
                 passages.map((passage, index) => {
@@ -863,14 +877,18 @@ export default function FlowReader({
                                 </p>
                               </div>
                             ))}
-                            <p
-                              className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line"
-                              dangerouslySetInnerHTML={{
-                                __html: sanitizeCommentaryHtml(
-                                  cp.content?.sanskrit?.devanagari || "",
-                                ),
-                              }}
-                            />
+                            <p className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
+                              {renderCommentaryWithReferences(
+                                cp.content?.sanskrit?.devanagari || "",
+                                cp.references,
+                                {
+                                  currentGranthaId: grantha.grantha_id,
+                                  updateHash,
+                                  availableGranthaIds,
+                                  granthaIdToTitle: granthaIdToDevanagariTitle,
+                                },
+                              )}
+                            </p>
                             {renderSubcommentaries(passage.ref)}
                           </div>
                         )}

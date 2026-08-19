@@ -162,18 +162,6 @@
       "devanagari": []
     }
   },
-  "gita": {
-    "title": {
-      "devanagari": "श्रीमद्भगवद्गीता",
-      "iast": "Bhagavad Gita"
-    },
-    "abbreviations": {
-      "devanagari": [
-        "भ.गी.",
-        "bhagavad-gita"
-      ]
-    }
-  },
   "harivamsha": {
     "title": {
       "devanagari": "हरिवंशः",
@@ -290,9 +278,7 @@
     "abbreviations": {
       "devanagari": [
         "म.भा.शां.",
-        "महा.भा.शां.",
-        "महा.भा.",
-        "म.भा."
+        "महा.भा.शां."
       ]
     }
   },
@@ -606,7 +592,6 @@
       "devanagari": [
         "तै.आ.",
         "तै.आर.",
-        "तै.ना.",
         "तै.आन."
       ]
     }

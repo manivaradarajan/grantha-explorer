@@ -85,6 +85,30 @@ export interface CommentaryPassage {
     sanskrit: SanskritContent;
     english: string;
   };
+  /** Structured cross-text citations in this passage, emitted by the
+   *  producer-side reference pipeline. Half-open offsets into
+   *  content.sanskrit.devanagari. */
+  references?: Reference[];
+}
+
+/** A structured cross-text citation (grantha.schema.json `reference`). */
+export interface Reference {
+  /** Half-open start offset into content.sanskrit.devanagari. */
+  start: number;
+  /** Half-open end offset into content.sanskrit.devanagari. */
+  end: number;
+  /** Verbatim citation text as written. */
+  display_text: string;
+  /** Resolved text id; null ONLY when the abbreviation was undefined (build error). */
+  grantha_id: string | null;
+  /** Canonical dotted target; null for a whole-work citation; range → first endpoint. */
+  locator: string | null;
+  /** Normalized high endpoint, present only for ranges. */
+  locator_end?: string | null;
+  /** Present only on enumeration members, grouping the expanded comma-list. */
+  group_id?: string | null;
+  /** True when a build REF-* error was emitted (undefined abbreviation). */
+  unresolved: boolean;
 }
 
 export interface Commentary {
@@ -1179,7 +1203,7 @@ export interface SidebarFlatModel {
   concluding: (Passage | PrefatoryMaterial)[];
 }
 
-function getStructureDepth(structure: StructureLevel[]): number {
+export function getStructureDepth(structure: StructureLevel[]): number {
   let depth = 1;
   let level = structure[0];
   while (level?.children && level.children.length > 0) {
@@ -1359,7 +1383,7 @@ export function nestSubcommentaries(commentaries: Commentary[]): Commentary[] {
 }
 
 /** Map passage refs to their document-order index in the navigation list. */
-function buildRefIndexMap(
+export function buildRefIndexMap(
   ordered: (Passage | PrefatoryMaterial)[],
 ): Map<string, number> {
   const map = new Map<string, number>();

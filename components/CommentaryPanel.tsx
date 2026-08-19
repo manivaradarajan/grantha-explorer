@@ -4,17 +4,13 @@ import {
   Grantha,
   Commentary,
   CommentaryPrefatoryItem,
-  getGranthasMeta,
-  createAbbreviationMap,
-  type GranthaMeta,
+  type Reference,
 } from "@/lib/data";
 import { getUIStrings, type Language, type Script } from "@/lib/i18n";
 import { commentaryPassageForRef } from "@/lib/data";
-import { useCallback, useMemo, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 
-import DOMPurify from "isomorphic-dompurify";
-import { parseReferences } from '@/lib/references';
-import ReferenceLink from './ReferenceLink';
+import { renderCommentaryWithReferences as renderCommentaryWithReferencesFn } from './renderCommentary';
 import CommentarySelector from './CommentarySelector';
 
 interface CommentaryPanelProps {
@@ -47,6 +43,7 @@ export default function CommentaryPanel({
   activeSubcommentaryIds,
   onSubcommentaryToggle,
   availableGranthaIds,
+  granthaIdToDevanagariTitle,
   hideHeader = false,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
@@ -70,97 +67,23 @@ export default function CommentaryPanel({
     return getUIStrings(language, script);
   }, [grantha.language, script]);
 
-  const [abbreviationMap, setAbbreviationMap] = useState<Record<string, string>>({});
-  const [granthasMeta, setGranthasMeta] = useState<GranthaMeta | null>(null);
-
-  useEffect(() => {
-    getGranthasMeta().then(meta => {
-      setGranthasMeta(meta);
-      setAbbreviationMap(createAbbreviationMap(meta, 'devanagari'));
-    });
-  }, []);
-
-  /** Map of grantha ID → Devanagari title, for use in cross-reference links. */
-  const granthaIdToTitle = useMemo<Record<string, string>>(
-    () =>
-      granthasMeta
-        ? Object.fromEntries(
-            Object.entries(granthasMeta).map(([id, data]) => [id, data.title.devanagari])
-          )
-        : {},
-    [granthasMeta]
-  );
+  // Map of grantha ID → Devanagari title, for use in cross-reference links.
+  const granthaIdToTitle = granthaIdToDevanagariTitle;
 
   // Same-grantha references preserve the active edition; cross-grantha refs
   // must not carry it (the target grantha has its own editions).
   const referenceEditionId = hasMultipleEditions ? grantha.edition_id : undefined;
 
   const renderCommentaryWithReferences = useCallback(
-    (text: string): React.ReactNode => {
-      const references = parseReferences(text, abbreviationMap);
-      if (references.length === 0) {
-        return <div dangerouslySetInnerHTML={{ __html: text }} />;
-      }
-
-      const parts: React.ReactNode[] = [];
-      let lastIndex = 0;
-
-      references.forEach((ref, i) => {
-        const startIndex = text.indexOf(ref.fullMatch, lastIndex);
-        const hasOpenParen = startIndex > 0 && text[startIndex - 1] === '(';
-        const refEndIndex = startIndex + ref.fullMatch.length;
-        const hasCloseParen = refEndIndex < text.length && text[refEndIndex] === ')';
-        const isParenthesized = hasOpenParen && hasCloseParen;
-
-        if (isParenthesized) {
-          if (startIndex > lastIndex + 1) {
-            parts.push(
-              <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex - 1) }} />
-            );
-          }
-          parts.push(
-            <span key={`paren-ref-${i}`} style={{ whiteSpace: 'nowrap' }}>
-              (<ReferenceLink
-                reference={ref}
-                currentGranthaId={grantha.grantha_id}
-                editionId={referenceEditionId}
-                updateHash={updateHash}
-                availableGranthaIds={availableGranthaIds}
-                granthaIdToTitle={granthaIdToTitle}
-              />)
-            </span>
-          );
-          lastIndex = refEndIndex + 1;
-        } else {
-          if (startIndex > lastIndex) {
-            parts.push(
-              <span key={`text-${i}`} dangerouslySetInnerHTML={{ __html: text.substring(lastIndex, startIndex) }} />
-            );
-          }
-          parts.push(
-            <ReferenceLink
-              key={`ref-${i}`}
-              reference={ref}
-              currentGranthaId={grantha.grantha_id}
-              editionId={referenceEditionId}
-              updateHash={updateHash}
-              availableGranthaIds={availableGranthaIds}
-              granthaIdToTitle={granthaIdToTitle}
-            />
-          );
-          lastIndex = startIndex + ref.fullMatch.length;
-        }
-      });
-
-      if (lastIndex < text.length) {
-        parts.push(
-          <span key="text-last" dangerouslySetInnerHTML={{ __html: text.substring(lastIndex) }} />
-        );
-      }
-
-      return <>{parts}</>;
-    },
-    [abbreviationMap, granthaIdToTitle, grantha.grantha_id, referenceEditionId, updateHash, availableGranthaIds]
+    (text: string, references?: Reference[]): React.ReactNode =>
+      renderCommentaryWithReferencesFn(text, references, {
+        currentGranthaId: grantha.grantha_id,
+        editionId: referenceEditionId,
+        updateHash,
+        availableGranthaIds,
+        granthaIdToTitle,
+      }),
+    [grantha.grantha_id, granthaIdToTitle, referenceEditionId, updateHash, availableGranthaIds]
   );
 
   const renderCommentary = (commentary: Commentary) => {
@@ -173,18 +96,14 @@ export default function CommentaryPanel({
         (p) => p.ref === selectedRef,
       );
       if (prefaceAnchor && commentary.intro) {
-        const introHtml = DOMPurify.sanitize(
-          (commentary.intro.sanskrit?.devanagari || "")
-            .replace(/^#### (.+)$/gm, '<em class="text-base font-normal italic text-gray-500">$1</em>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-        );
+        const introDev = commentary.intro.sanskrit?.devanagari || "";
         return (
           <div className="mb-8">
             <div className="text-sm text-gray-600 italic mb-3">
               {prefaceAnchor.label.devanagari}
             </div>
             <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-              {renderCommentaryWithReferences(introHtml)}
+              {renderCommentaryWithReferences(introDev, undefined)}
             </div>
           </div>
         );
@@ -198,11 +117,6 @@ export default function CommentaryPanel({
 
     const prefatoryMaterial = passage.prefatory_material || [];
     const mainContent = passage.content?.sanskrit?.devanagari || "";
-    const sanitizedHtml = DOMPurify.sanitize(
-      mainContent
-        .replace(/^#### (.+)$/gm, '<em class="text-base font-normal italic text-gray-500">$1</em>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
-    );
 
     return (
       <div className="mb-8">
@@ -220,7 +134,7 @@ export default function CommentaryPanel({
         )}
 
         <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-          {renderCommentaryWithReferences(sanitizedHtml)}
+          {renderCommentaryWithReferences(mainContent, passage.references)}
         </div>
       </div>
     );

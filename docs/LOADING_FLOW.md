@@ -189,6 +189,20 @@ multiple files loads them one at a time.
   guard: only parts whose `first_ref` passage is absent are fetched (a loaded
   section can still carry an unloaded misaligned part).
 
+### 5.5 Cross-reference target loading — `ReferenceLink` (pilot)
+
+Commentary `references[]` render as `ReferenceLink` (`components/ReferenceLink.tsx`,
+via the shared `renderCommentary.tsx` helper). Hover and click resolve against
+the **target** grantha, which is loaded on demand through the same
+`loadGrantha(granthaId)` used by the reader (memoized in `granthaCache`, so a
+repeatedly-cited target loads once). There is **no eager fan-out** of
+targets — a target is only loaded when a citation is actually hovered or
+clicked. Resolution (`lib/references.ts::resolveReferenceTarget`) consults the
+loaded target's passages, curated sections, and part `first_ref`s (§5 of the
+pilot plan); a partial locator may resolve to a later unloaded part's
+`first_ref`, but that part itself is **not** preloaded by the resolver — the
+target grantha's own lazy loader serves it if the user navigates there.
+
 All four share the same `loadPart` prop from `page.tsx` (§6), so a single
 correct loader serves every surface.
 

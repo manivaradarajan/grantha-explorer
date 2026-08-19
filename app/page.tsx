@@ -394,6 +394,9 @@ export default function Home() {
           onExitFlow={() => updateMode("panes")}
           script={script}
           onScriptChange={updateScript}
+          updateHash={updateHash}
+          availableGranthaIds={granthas.map((g) => g.id)}
+          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}

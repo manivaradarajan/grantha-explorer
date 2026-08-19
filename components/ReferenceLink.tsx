@@ -2,7 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Reference, isReferenceInLibrary, getPassagePreview } from '../lib/references';
+import { loadGrantha } from '../lib/data';
+import { getPassagePreview, isReferenceInLibrary, resolveReferenceTarget } from '../lib/references';
+import type { Reference } from '../lib/data';
 
 interface ReferenceLinkProps {
   reference: Reference;
@@ -19,6 +21,16 @@ const TOOLTIP_ESTIMATED_WIDTH = 200;
 const TOOLTIP_ESTIMATED_HEIGHT = 40;
 const TOOLTIP_VIEWPORT_PADDING = 10;
 
+/**
+ * Renders a structured cross-text citation (producer-emitted `references[]`).
+ *
+ * Unresolved references (undefined abbreviation: `grantha_id` null /
+ * `unresolved` true) render as plain unlinked text. References to works not in
+ * the library render as a link whose hover/click explains "not yet available".
+ * References to works in the library resolve on hover/click against the loaded
+ * target (plan §5): exact leaf, section, whole-work root, or a runtime
+ * diagnostic. Same-grantha references preserve the active edition.
+ */
 const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
@@ -27,7 +39,14 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const isTouchDevice = useRef(false);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isInLibrary = isReferenceInLibrary(reference.granthaId, availableGranthaIds);
+  const targetTitle = reference.grantha_id
+    ? granthaIdToTitle[reference.grantha_id] || reference.grantha_id
+    : "";
+  const locatorLabel = reference.locator ?? "whole work";
+  const renderPlain = !reference.grantha_id || reference.unresolved;
+  const isInLibrary =
+    reference.grantha_id != null &&
+    isReferenceInLibrary(reference.grantha_id, availableGranthaIds);
 
   // Detect if device supports touch
   useEffect(() => {
@@ -43,6 +62,36 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     };
   }, []);
 
+  // Close tooltip when clicking outside (touch devices). ShowTooltip is never
+  // set for unresolved references, so this is a no-op for plain-text refs.
+  const hideTooltip = () => {
+    setShowTooltip(false);
+    setTooltipContent(null);
+  };
+  useEffect(() => {
+    if (!isTouchDevice.current || !showTooltip) return;
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
+        hideTooltip();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showTooltip]);
+
+  // Unresolved references (undefined abbreviation / build error) render as
+  // plain text — never a link.
+  if (renderPlain) {
+    return <span className="reference-unresolved">{reference.display_text}</span>;
+  }
+
   const updateTooltipPosition = () => {
     if (!linkRef.current) return;
 
@@ -50,12 +99,10 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     let top = rect.top - 10;
     let left = rect.left + rect.width / 2;
 
-    // Clamp horizontally to keep tooltip within viewport
     const leftBound = TOOLTIP_ESTIMATED_WIDTH / 2 + TOOLTIP_VIEWPORT_PADDING;
     const rightBound = window.innerWidth - TOOLTIP_ESTIMATED_WIDTH / 2 - TOOLTIP_VIEWPORT_PADDING;
     left = Math.max(leftBound, Math.min(left, rightBound));
 
-    // If tooltip would clip the top edge, push it down enough to stay visible
     if (top - TOOLTIP_ESTIMATED_HEIGHT < TOOLTIP_VIEWPORT_PADDING) {
       top = TOOLTIP_VIEWPORT_PADDING + TOOLTIP_ESTIMATED_HEIGHT;
     }
@@ -64,29 +111,29 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   };
 
   const loadTooltipContent = async () => {
+    if (!reference.grantha_id) return;
+    const passageText = await getPassagePreview(
+      reference.grantha_id,
+      reference,
+      availableGranthaIds,
+    );
     if (isInLibrary) {
-      const passageText = await getPassagePreview(reference.granthaId, reference.path, availableGranthaIds);
-      const title = granthaIdToTitle[reference.granthaId] || reference.granthaId;
       setTooltipContent(
         <div className="text-center">
-          <p className="font-semibold">{`${title} ${reference.path}`}</p>
-          {passageText && <p className="mt-2">{passageText}</p>}
+          <p className="font-semibold">{`${targetTitle} ${locatorLabel}`}</p>
+          {passageText && passageText !== "Reference not available in this library." && (
+            <p className="mt-2">{passageText}</p>
+          )}
         </div>
       );
     } else {
-      const title = granthaIdToTitle[reference.granthaId] || reference.granthaId;
       setTooltipContent(
         <div className="text-center">
-          <p className="font-semibold">{`${title} ${reference.path}`}</p>
+          <p className="font-semibold">{`${targetTitle} ${locatorLabel}`}</p>
           <p className="mt-1 text-gray-400 italic">not yet available</p>
         </div>
       );
     }
-  };
-
-  const hideTooltip = () => {
-    setShowTooltip(false);
-    setTooltipContent(null);
   };
 
   const handleMouseEnter = () => {
@@ -116,18 +163,38 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!reference.grantha_id) return;
 
     if (isInLibrary) {
-      // Internal reference: navigate (synchronous). Same-grantha refs preserve
-      // the active edition (the reader stays in the same commentary); cross-
-      // grantha refs must not carry it — the target has its own editions.
-      updateHash(
-        reference.granthaId,
-        reference.path,
-        reference.granthaId === currentGranthaId ? editionId : undefined,
-      );
+      try {
+        const target = await loadGrantha(reference.grantha_id);
+        const resolution = resolveReferenceTarget(target, reference.locator);
+        if (resolution.kind === "passage" || resolution.kind === "root") {
+          updateHash(
+            reference.grantha_id,
+            resolution.ref,
+            reference.grantha_id === currentGranthaId ? editionId : undefined,
+          );
+        } else {
+          setTooltipContent(
+            <div className="text-center">
+              <p className="font-semibold">{`${targetTitle} ${locatorLabel}`}</p>
+              <p className="mt-1 text-amber-600 italic">
+                {resolution.code === "REF-RUNTIME-DEPTH-OVERFLOW"
+                  ? "reference has too many segments"
+                  : "could not resolve"}
+              </p>
+            </div>
+          );
+          updateTooltipPosition();
+          setShowTooltip(true);
+        }
+      } catch {
+        setTooltipContent(<span className="text-red-500">Failed to load</span>);
+        updateTooltipPosition();
+        setShowTooltip(true);
+      }
     } else {
-      // Not yet in corpus: toggle "not yet available" tooltip on any device
       if (showTooltip) {
         hideTooltip();
       } else {
@@ -142,38 +209,20 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     }
   };
 
-  // Close tooltip when clicking outside (touch devices)
-  useEffect(() => {
-    if (!isTouchDevice.current || !showTooltip) return;
-
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
-        hideTooltip();
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [showTooltip]);
-
   const linkClassName = `reference-link ${!isInLibrary ? 'external-reference' : ''}`;
+  const targetHash = `${reference.grantha_id}:${reference.locator ?? "1"}`;
 
   return (
     <span className="reference-container">
       <a
         ref={linkRef}
-        href={`#${reference.granthaId}:${reference.path}`}
+        href={`#${targetHash}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
         className={linkClassName}
       >
-        {reference.displayText}
+        {reference.display_text}
       </a>
       {showTooltip && ReactDOM.createPortal(
         <div

@@ -22,6 +22,7 @@ import {
   withVerseNumber,
 } from "@/lib/stringUtils";
 import FlowReaderCitation from "./FlowReaderCitation";
+import { renderCommentaryWithReferences } from "./renderCommentary";
 
 interface FlowReaderCompareProps {
   /** Active editions, ordered (always >= 2 here). */
@@ -38,6 +39,9 @@ interface FlowReaderCompareProps {
   grantha: Grantha;
   granthaTitleDeva: string;
   granthaTitleIast: string;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
+  availableGranthaIds: string[];
+  granthaIdToDevanagariTitle: Record<string, string>;
 }
 
 const TWO_UP_MIN_COL = 380;
@@ -69,6 +73,9 @@ export default function FlowReaderCompare({
   grantha,
   granthaTitleDeva,
   granthaTitleIast,
+  updateHash,
+  availableGranthaIds,
+  granthaIdToDevanagariTitle,
 }: FlowReaderCompareProps) {
   const count = editions.length;
   const roman = script === "roman";
@@ -158,12 +165,18 @@ export default function FlowReaderCompare({
           ))}
           <p
             className={`verse-text font-serif ${textClasses} whitespace-pre-line`}
-            dangerouslySetInnerHTML={{
-              __html: sanitizeCommentaryHtml(
-                cp.content?.sanskrit?.devanagari || ""
-              ),
-            }}
-          />
+          >
+            {renderCommentaryWithReferences(
+              cp.content?.sanskrit?.devanagari || "",
+              cp.references,
+              {
+                currentGranthaId: edition.grantha_id,
+                updateHash,
+                availableGranthaIds,
+                granthaIdToTitle: granthaIdToDevanagariTitle,
+              },
+            )}
+          </p>
           {(commentary?.subcommentaries?.length ?? 0) > 0 &&
             commentary?.subcommentaries?.map((sub) => {
               const subPassage = commentaryPassageForRef(
@@ -212,12 +225,18 @@ export default function FlowReaderCompare({
                       )}
                       <p
                         className={`verse-text font-serif ${tikaClasses}`}
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeCommentaryHtml(
-                            subPassage.content?.sanskrit?.devanagari || ""
-                          ),
-                        }}
-                      />
+                      >
+                        {renderCommentaryWithReferences(
+                          subPassage.content?.sanskrit?.devanagari || "",
+                          subPassage.references,
+                          {
+                            currentGranthaId: edition.grantha_id,
+                            updateHash,
+                            availableGranthaIds,
+                            granthaIdToTitle: granthaIdToDevanagariTitle,
+                          },
+                        )}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -226,7 +245,7 @@ export default function FlowReaderCompare({
         </div>
       );
     },
-    [activeSubIds, onSubcommentaryToggle, tikaLabel]
+    [activeSubIds, onSubcommentaryToggle, tikaLabel, updateHash, availableGranthaIds, granthaIdToDevanagariTitle]
   );
 
   // --- Shared centered verse row (used by the columns view) -----------------

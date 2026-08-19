@@ -1,0 +1,50 @@
+{
+  "grantha_id": "isavasya-upanishad",
+  "edition_id": "isavasya-upanishad-sankara-bhashya",
+  "reference_diagnostics": [
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1040,
+      "end": 1041,
+      "display_text": "?",
+      "hint": "'?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2",
+      "source_file": "isavasya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1216,
+      "end": 1217,
+      "display_text": "?",
+      "hint": "'?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2",
+      "source_file": "isavasya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1272,
+      "end": 1284,
+      "display_text": "तै. नारा. ७८",
+      "hint": "'तै. नारा. ७८' not in the citation bimap; closest matches: तै.ना, तै.ब्रा, तै.ना.उ",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2",
+      "source_file": "isavasya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1396,
+      "end": 1410,
+      "display_text": "मो. ध. २४१ । ६",
+      "hint": "'मो. ध. २४१ । ६' not in the citation bimap; closest matches: महो, वि.ध, मु.उ",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2",
+      "source_file": "isavasya-upanishad-sankara-bhashya-01.md"
+    }
+  ]
+}
