@@ -273,7 +273,7 @@
             "end": 3302,
             "display_text": "क. उ. ५.१३",
             "grantha_id": "katha-upanishad",
-            "locator": "5.13",
+            "locator": "2.5.13",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -502,7 +502,7 @@
             "start": 1419,
             "end": 1440,
             "display_text": "बृ. उ. मा. पा. ३.७.३०",
-            "grantha_id": "brihadaranyaka-upanishad",
+            "grantha_id": "brihadaranyaka-madhyandina",
             "locator": "3.7.30",
             "locator_end": null,
             "group_id": null,
@@ -670,7 +670,7 @@
             "start": 523,
             "end": 544,
             "display_text": "बृ. उ. मा. पा. ३.७.३०",
-            "grantha_id": "brihadaranyaka-upanishad",
+            "grantha_id": "brihadaranyaka-madhyandina",
             "locator": "3.7.30",
             "locator_end": null,
             "group_id": null,
@@ -721,7 +721,7 @@
             "end": 352,
             "display_text": "क. उ. ६.१४",
             "grantha_id": "katha-upanishad",
-            "locator": "6.14",
+            "locator": "2.6.14",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1159,7 +1159,7 @@
             "end": 1369,
             "display_text": "क. उ. २.२२",
             "grantha_id": "katha-upanishad",
-            "locator": "2.22",
+            "locator": "1.2.22",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1319,7 +1319,7 @@
             "end": 2086,
             "display_text": "क. उ. ४.११",
             "grantha_id": "katha-upanishad",
-            "locator": "4.11",
+            "locator": "2.4.11",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1709,7 +1709,7 @@
             "end": 3243,
             "display_text": "क. उ. २.१८",
             "grantha_id": "katha-upanishad",
-            "locator": "2.18",
+            "locator": "1.2.18",
             "locator_end": null,
             "group_id": null,
             "unresolved": false

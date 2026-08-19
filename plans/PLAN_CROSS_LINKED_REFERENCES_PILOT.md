@@ -217,7 +217,9 @@ Pipeline layers:
    abbreviation itself (`शत.ब्रा.` → `शत.ब्रा` + empty remainder), so a
    locator-less citation is not mistaken for a *present but unparseable* locator.
 4. **Normalize locator:** Devanagari→ASCII digits, `।`/`.`/space → `.`, strip
-   noise (`अधि.` in `ब्र. सू. अधि. 4-1-7`). `-` is **not** unconditionally a
+   *genuine* noise. **Caution — `अधि.` is NOT noise** (see the §4.1.1
+   adhikarana TODO): it marks an *adhikarana ordinal*, not a sutra, and
+   stripping it silently mislinks. `-` is **not** unconditionally a
    separator — see §4.1.1.
 5. **Split ranges / enumerations:** `A-B` → `locator=A`, `locator_end=B`
    **only when** the dash-gated depth-hint rule in §4.1.1 declares it a range
@@ -516,12 +518,122 @@ build, even under `--strict`.
   >
   > **Citation-scheme mismatches (documented, pilot decision).** Some citations
   > use a numbering scheme the target edition does not. Katha's corpus cites use
-  > the continuous-6-valli convention (`क. उ. २.२४` → `1.2.24`), but the on-disk
-  > katha uses `adhyāya.valli.mantra`. The resolver correctly refuses these as
-  > `REF-RUNTIME-UNRESOLVED` ("could not resolve") rather than making a
-  > correct-looking wrong link. They are a **source-data triage** (suppress via
-  > `reference-suppressions.json` in Phase 5, or re-ingest the cited edition),
-  > not a resolver bug. Do not "fix" these by special-casing the resolver.
+  > the continuous-6-valli convention (`क. उ. २.२४` = valli 2, mantra 24). The
+  > on-disk katha also numbers vallīs continuously across the two adhyāyas
+  > (adhyāya 1: vallīs 1-3, adhyāya 2: vallīs 4-6), so the cite maps to
+  > `1.2.24` by **injecting the adhyāya**. This is handled as a compile-side
+  > `locator_transform: katha_continuous_valli` on the katha bimap entry
+  > (valli ≤ 3 → adhyāya 1; valli > 3 → adhyāya 2; a 3-segment cite is already
+  > in on-disk form and left unchanged). Resolved in Phase 4: `क. उ. २.२४` →
+  > `1.2.24` (नाविरतो दुश्चरितात्), `क. उ. ६.१४` → `2.6.14`. Transforms that
+  > cannot be expressed as a deterministic function of the locator remain a
+  > **source-data triage** (suppress via `reference-suppressions.json` in Phase
+  > 5, or re-ingest the cited edition) — the resolver must never special-case
+  > a work.
+  >
+  > **Resolved (Phase 4): recension-specific citations (Mādhyandina).**
+  > `बृ. उ. मा. पा. ३.७.३०` cites the **Mādhyandina pāṭha** of the
+  > Bṛhadāraṇyaka — a *different text* from the Kāṇva recension on disk
+  > (readings and numbering differ). Same class: `शत.ब्रा.मा.पा.`,
+  > `शत.ना.मा.पा.`. **Resolution:** the bimap maps `बृ.उ.मा.पा.` →
+  > `brihadaranyaka-madhyandina` — a **deliberately non-existent** grantha_id
+  > — so the cite resolves to a target the runtime reports as not-in-library
+  > (renders "not yet available") instead of partially matching `बृ.उ.` and
+  > mislinking to the Kāṇva edition. The longer abbrev wins via longest-match.
+  > 13+ corpus cites across brihadaranyaka/chandogya/katha/kaushitaki/prashna/
+  > vedarthasangraha commentaries. **Deferred design:** ingest the Mādhyandina
+  > edition as a distinct grantha, then point the id at it. Not a resolver
+  > concern.
+  >
+  > **Resolved (Phase 4): Brahma-sūtra adhikarana refs.** `ब्र. सू. अधि. ४.१.७`
+  > is an **adhikarana ref**, not a sutra ref: `अधि.` marks an *adhikarana
+  > ordinal* (adhyāya 4, pāda 1, 7th adhikarana), and the cite means "in the
+  > adhikarana whose first sutra is …" ("तदधिगम
+  > उत्तरपूर्वाघयोरश्लेषविनाशौ तद्व्यपदेशात्" = Adhikarana 130 = first sutra
+  > `4.1.13`). Stripping `अधि.` as noise silently mislinks to sutra `4.1.7`
+  > (a *different* adhikarana, 128). **Resolution:** the bimap has a distinct
+  > `ब्र.सू.अधि.` abbrev (longest-match wins over `ब्र.सू.`) carrying the
+  > `brahma_sutra_adhikarana` `locator_transform`, which table-looks-up
+  > `(adhyāya, pāda, ordinal)` → first sutra in `data/brahma_sutra_adhikaranas.yaml`
+  > (156 entries derived from source, CI-verified). `ब्र. सू. अधि. ४.१.७` →
+  > `4.1.13`; a plain `ब्र. सू. ४.१.७` is unchanged. **Table miss:** the ordinal
+  > falls through to a non-existent sutra, which the runtime refuses
+  > (`REF-RUNTIME-UNRESOLVED`) — never a guessed link. `ब्र.सू.` `ref_structure`
+  > corrected to `[adhyaya, pada, sutra]` (the on-disk depth).
+  >
+  > **Deferred design (from field-finding):**
+  > - **Data exists.** Every śrībhāṣya pāda has `# Adhikarana N` (global
+  >   1–223) + `# Sutra` refs; a complete `(adhyāya, pāda, adhikarana-ordinal)
+  >   → first-sutra` map is derivable (156 entries, all 16 pādas; per-pāda
+  >   counts 5–26). Two live cites verified: `अधि. ४.१.७` → Adhikarana 130 →
+  >   `4.1.13`; `अधि. ३.१.१` → Adhikarana 69 → `3.1.1`. **Implemented** as
+  >   `data/brahma_sutra_adhikaranas.yaml` + the `brahma_sutra_adhikarana`
+  >   transform (see above).
+  > - **Side bug (fixed):** the bimap `ब्र.सू.` entry's `ref_structure` was
+  >   `[adhyaya, pada, adhikarana, sutra]` (4 levels) vs the on-disk
+  >   `[adhyaya, pada, sutra]` (3); corrected.
+  > - **Open question:** whether an adhikarana's *later* sutras (not just the
+  >   first) should be linkable, and whether the adhikarana-artha (topic)
+  >   intro should render at the anchor.
+  >
+  > **TODO (deferred — do not implement in the pilot): edition-targeted
+  > references (school/lineage-specific editions).** Citations inside a
+  > school's text refer to that school's *edition* of the target, not just the
+  > base grantha. Concrete, verified examples:
+  > - Deśika's (Śrī Vaiṣṇava) Bhagavad-Gītā refs mean **Rāmānuja's Gītābhāṣya**.
+  > - Śaṅkara's Upaniṣad-bhāṣya Gītā refs mean **Śaṅkara's Gītābhāṣya**.
+  > - By the same lineage rule: Rāmānuja-school refs to Brahma-sūtra mean
+  >   the **Śrībhāṣya** edition; refs to Bṛhadāraṇyaka likely mean the
+  >   Rāmānuja-tradition commentary (Rangarāmānuja's).
+  >
+  > **Why the current model is insufficient.** A reference carries
+  > `grantha_id` + `locator` only. Navigation loads the target's **default**
+  > edition, and `ReferenceLink` deliberately drops the edition on cross-
+  > grantha jumps. For single-edition targets (most Upaniṣads) that is fine,
+  > but for **multi-edition granthas** — brahma-sutra (3 editions: Śrībhāṣya /
+  > Vedāntasāra / Vedāntadīpa), isavasya, mandukya, mandukya-karika, the Gītā
+  > corpus — the *cited* edition is ambiguous and currently wrong (defaults to
+  > the default edition, which may be a different school).
+  >
+  > **The mapping is lineage-dependent, not abbreviation-dependent.** The same
+  > abbreviation (`भ.गी.`) resolves to a *different* edition depending on the
+  > citing work. So this cannot be solved in the bimap alone (a
+  > `target_edition_id` field on the abbreviation would be wrong for the
+  > other school's text); the target edition must be derived from the
+  > **citing grantha's lineage/school**.
+  >
+  > **Deferred design (unapproved — needs careful planning):**
+  > - **Survey first (prerequisite):** enumerate, per citing grantha in the
+  >   corpus, which targets it cites and which edition each implies. This
+  >   establishes whether a single lineage → per-target-edition map is
+  >   sufficient, or whether individual works override the lineage default
+  >   (e.g. a text in one school citing a commentary of another — rare but
+  >   possible, and must not be silently coerced).
+  > - **Candidate mechanism A (compile-side lineage map):** a
+  >   `data/edition_lineages.yaml` (citing-school → target work → edition_id),
+  >   consulted at emission to stamp an optional `edition_id` on the
+  >   `reference` artifact (schema change, MINOR — see §3). The reference then
+  >   navigates with `?e=<edition_id>`.
+  > - **Candidate mechanism B (runtime lineage resolution):** keep the artifact
+  >   edition-agnostic; `resolveReferenceTarget`/`ReferenceLink` derive the
+  >   target edition from the source grantha's lineage. No schema change, but
+  >   the lineage logic lives in the explorer and must know every citing work.
+  > - **Whole-work refs** (`(भ.गी.)`) need the same lineage treatment (link to
+  >   the school's edition root, not the default).
+  > - **Guard (like the other deferred TODOs):** the resolver must **never
+  >   guess** — a cite whose target edition cannot be determined stays
+  >   unresolved rather than landing on the wrong edition's commentary. The
+  >   current "drop edition on cross-grantha" behavior is correct as the
+  >   *fallback*, not the rule.
+  > - **Interaction with the recension TODO:** a school's "edition" may itself
+  >   be a recension we don't have (see the Mādhyandina TODO) — the two must
+  >   compose (edition targeting resolves to an edition we *have*; if the
+  >   cited edition is absent, defer).
+  > - **Schema:** adding `edition_id` (optional) to `references[]` is a MINOR
+  >   schema bump + mirror re-sync + re-ingest. Verify the `?e=` hash path
+  >   (`validateAndNormalizeHash`) accepts a foreign edition on a foreign
+  >   grantha (cross-grantha refs must carry `?e=` without the current
+  >   drop-the-edition normalization fighting it).
 
   `resolveJumpTarget` (`lib/jumpTarget.ts`) does **not** currently implement
   case 2 for partial locators (its prefix branch returns the first leaf with

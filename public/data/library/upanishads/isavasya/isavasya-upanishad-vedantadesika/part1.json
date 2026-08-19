@@ -403,7 +403,7 @@
             "end": 2064,
             "display_text": "क. उ. २.२४",
             "grantha_id": "katha-upanishad",
-            "locator": "2.24",
+            "locator": "1.2.24",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -413,7 +413,7 @@
             "end": 2143,
             "display_text": "ब्र. सू. अधि. ४.१.७",
             "grantha_id": "brahma-sutra",
-            "locator": "4.1.7",
+            "locator": "4.1.13",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -482,7 +482,7 @@
             "start": 1049,
             "end": 1070,
             "display_text": "बृ. उ. मा. पा. ३.७.३०",
-            "grantha_id": "brihadaranyaka-upanishad",
+            "grantha_id": "brihadaranyaka-madhyandina",
             "locator": "3.7.30",
             "locator_end": null,
             "group_id": null,
@@ -651,7 +651,7 @@
             "end": 312,
             "display_text": "क. उ. ६.१४",
             "grantha_id": "katha-upanishad",
-            "locator": "6.14",
+            "locator": "2.6.14",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1017,7 +1017,7 @@
             "end": 1001,
             "display_text": "क. उ. २.१८",
             "grantha_id": "katha-upanishad",
-            "locator": "2.18",
+            "locator": "1.2.18",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
