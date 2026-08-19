@@ -62,6 +62,9 @@ protobuf==4.25.8
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.23
+# TODO(python-pin): .python-version (3.13) exists because pydantic-core/jaconv
+# have no macOS 3.14 wheels. When 3.14 wheels ship, delete .python-version,
+# then run `worktree-venv --force <idea>` for each worktree.
 pydantic==2.11.10
 pydantic_core==2.33.2
 Pygments==2.19.2
