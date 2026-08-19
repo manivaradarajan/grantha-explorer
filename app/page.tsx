@@ -276,6 +276,13 @@ export default function Home() {
     updateHash(granthaId, ref, editionId);
   };
 
+  // Scrollspy-driven verse change while reading in flow mode: update the hash
+  // in place (replaceHistory) so scrolling through verses never spams the
+  // browser history — back/forward stay meaningful (verse clicks still push).
+  const handleFlowScrollVerseChange = (ref: string) => {
+    updateHash(granthaId, ref, editionId, undefined, true);
+  };
+
   // Handle commentary (edition) switch
   const handleEditionChange = (newEditionId: string) => {
     updateHash(granthaId, verseRef, newEditionId);
@@ -387,6 +394,7 @@ export default function Home() {
           selectedRef={verseRef}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleFlowVerseSelect}
+          onScrollVerseChange={handleFlowScrollVerseChange}
           activeSubcommentaryIds={subcommentaryIds}
           onSubcommentaryToggle={updateSubcommentary}
           loadPart={sectionLoadPart}
