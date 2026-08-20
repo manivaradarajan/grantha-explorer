@@ -603,22 +603,30 @@ build, even under `--strict`.
   > **citing grantha's lineage/school**.
   >
   > **Deferred design (unapproved — needs careful planning):**
+  > - **Framing: treat it as `namespace::symbol` resolution (analogous to
+  >   language namespaces).** The lineage is a *namespace*, the abbreviation a
+  >   *symbol*: `ramanuja::भ.गी.` → Rāmānuja's Gītābhāṣya, `sankara::भ.गी.` →
+  >   Śaṅkara's Gītābhāṣya. This reframes the bimap as a **per-namespace
+  >   symbol table** (`namespace → (abbrev → grantha_id+edition_id)`) rather
+  >   than one flat abbrev → id map. The citing grantha's namespace is the
+  >   lookup key, exactly as a language prefix scopes an identifier.
   > - **Survey first (prerequisite):** enumerate, per citing grantha in the
   >   corpus, which targets it cites and which edition each implies. This
-  >   establishes whether a single lineage → per-target-edition map is
-  >   sufficient, or whether individual works override the lineage default
-  >   (e.g. a text in one school citing a commentary of another — rare but
-  >   possible, and must not be silently coerced).
-  > - **Candidate mechanism A (compile-side lineage map):** a
-  >   `data/edition_lineages.yaml` (citing-school → target work → edition_id),
-  >   consulted at emission to stamp an optional `edition_id` on the
+  >   establishes the set of namespaces, whether a single namespace →
+  >   per-target-edition map is sufficient, and which works override the
+  >   namespace default (e.g. a text in one school citing a commentary of
+  >   another — rare but possible, and must not be silently coerced).
+  > - **Candidate mechanism A (compile-side namespaced bimap):** extend the
+  >   bimap to `namespace::abbrev` keys (or a `data/edition_lineages.yaml`
+  >   consulted at emission), stamping an optional `edition_id` on the
   >   `reference` artifact (schema change, MINOR — see §3). The reference then
   >   navigates with `?e=<edition_id>`.
-  > - **Candidate mechanism B (runtime lineage resolution):** keep the artifact
-  >   edition-agnostic; `resolveReferenceTarget`/`ReferenceLink` derive the
-  >   target edition from the source grantha's lineage. No schema change, but
-  >   the lineage logic lives in the explorer and must know every citing work.
-  > - **Whole-work refs** (`(भ.गी.)`) need the same lineage treatment (link to
+  > - **Candidate mechanism B (runtime namespace resolution):** keep the
+  >   artifact edition-agnostic; `resolveReferenceTarget`/`ReferenceLink`
+  >   derive the namespace from the source grantha's lineage and resolve
+  >   through it. No schema change, but the namespaced table lives in the
+  >   explorer and must know every citing work.
+  > - **Whole-work refs** (`(भ.गी.)`) need the same namespace treatment (link to
   >   the school's edition root, not the default).
   > - **Guard (like the other deferred TODOs):** the resolver must **never
   >   guess** — a cite whose target edition cannot be determined stays
@@ -634,6 +642,10 @@ build, even under `--strict`.
   >   (`validateAndNormalizeHash`) accepts a foreign edition on a foreign
   >   grantha (cross-grantha refs must carry `?e=` without the current
   >   drop-the-edition normalization fighting it).
+  > - **Parallel to the existing `grantha_data` namespacing:** this mirrors how
+  >   the codebase already scopes things by repo/namespace — the reference
+  >   system should do the same for citation lineages rather than flattening
+  >   them.
 
   `resolveJumpTarget` (`lib/jumpTarget.ts`) does **not** currently implement
   case 2 for partial locators (its prefix branch returns the first leaf with

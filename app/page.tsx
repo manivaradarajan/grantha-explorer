@@ -10,7 +10,7 @@ import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
 import FlowReader from "@/components/FlowReader";
 import { useVerseHash } from "@/hooks/useVerseHash";
-import { useAvailableGranthas } from "@/hooks/useGrantha";
+import { useAvailableGranthas, useGranthasMeta } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
 import { useEditions, MAX_COMPARE_EDITIONS } from "@/hooks/useEditions";
 import {
@@ -86,6 +86,12 @@ export default function Home() {
     isLoading: granthasLoading,
     error: granthasError,
   } = useAvailableGranthas();
+
+  // Meta registry: Devanagari/IAST titles for every known grantha, including
+  // works cited but not on disk (needed for not-in-library reference titles).
+  const {
+    data: granthasMeta = {},
+  } = useGranthasMeta();
 
   // Get current state from URL hash
   const {
@@ -308,15 +314,27 @@ export default function Home() {
     }
   };
 
-  const granthaIdToDevanagariTitle = useMemo(
-    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_deva])),
-    [granthas],
-  );
+  // Title maps for cross-reference links. On-disk titles come from the index;
+  // meta titles fill in not-in-library works (e.g. a Mādhyandina recension id
+  // or a cited-but-not-ingested work), so the reference tooltip shows the
+  // Devanagari title instead of the raw grantha id.
+  const granthaIdToDevanagariTitle = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const g of granthas) map[g.id] = g.title_deva;
+    for (const [id, meta] of Object.entries(granthasMeta)) {
+      if (!map[id]) map[id] = meta.title.devanagari;
+    }
+    return map;
+  }, [granthas, granthasMeta]);
 
-  const granthaIdToLatinTitle = useMemo(
-    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_iast])),
-    [granthas],
-  );
+  const granthaIdToLatinTitle = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const g of granthas) map[g.id] = g.title_iast;
+    for (const [id, meta] of Object.entries(granthasMeta)) {
+      if (!map[id]) map[id] = meta.title.iast;
+    }
+    return map;
+  }, [granthas, granthasMeta]);
 
   // Close modal handler
   const handleCloseInvalidVerseModal = () => {

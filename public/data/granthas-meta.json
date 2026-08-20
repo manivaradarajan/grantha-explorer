@@ -591,8 +591,7 @@
     "abbreviations": {
       "devanagari": [
         "तै.आ.",
-        "तै.आर.",
-        "तै.आन."
+        "तै.आर."
       ]
     }
   },
@@ -627,7 +626,8 @@
       "devanagari": [
         "तै.उ.",
         "taittiriya",
-        "taittiriya_upanishad"
+        "taittiriya_upanishad",
+        "तै.आन."
       ]
     }
   },
