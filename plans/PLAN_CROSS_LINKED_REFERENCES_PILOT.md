@@ -1,6 +1,9 @@
 # Plan: Cross-Linked References — One-Level Link Graph (E2E Pilot)
 
-**Status:** Ready for review (round 4 approved — no blockers). Do not implement yet.
+**Status:** IMPLEMENTED (Phases 1–5 done). **The live contract is now
+`docs/SPEC_CROSS_LINKED_REFERENCES.md`** — this plan is the historical
+field-finding narrative and phased record; the spec supersedes its decision
+sections (§2–§6) and absorbs the runtime findings (§7–§9 here).
 **Date:** 2026-08-18 (updated after review round 4)
 
 ## 0. Review response
@@ -889,7 +892,9 @@ Each phase independently verifiable.
    through the render context.
 6. **Docs.** Update `grantha-data/docs/DATA_FLOW.md` and
    `grantha-explorer/docs/DATA_FLOW.md` + `SCHEMAS.md` in the same change as the
-   code.
+   code. **Done.** The permanent cross-repo spec
+   `docs/SPEC_CROSS_LINKED_REFERENCES.md` is written and linked from both
+   DATA_FLOW docs; this plan defers to it as the live contract.
 
 ## 9. Risks & open questions (final-review pass)
 

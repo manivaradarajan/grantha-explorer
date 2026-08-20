@@ -252,14 +252,16 @@ you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
   against the target grantha (`loadGrantha` + `resolveReferenceTarget`,
   `lib/references.ts`): exact leaf, partial-locator section, whole-work root, or
   a runtime diagnostic. Cross-grantha reference links drop the edition;
-  same-grantha references preserve it. See the pilot plan §5 / §7.
+  same-grantha references preserve it. **The permanent cross-repo contract is
+  `docs/SPEC_CROSS_LINKED_REFERENCES.md`**; see the pilot plan §5 / §7 for the
+  field-finding narrative.
 - **Reference diagnostics (dev, pilot).** References that fail to resolve at
   runtime (target not in library, depth overflow, unresolved) are recorded, when
   dev-gated, to a `localStorage` log (`lib/referenceDiagnostics.ts`, deduped by
   source grantha + passage + offset + code) and triaged on the `#diagnostics`
   hash view inside the SPA (intercepted before `parseHash`). Per-target
   suppression is a committed config (`public/data/reference-suppressions.json`).
-  See the pilot plan §6.
+  See the permanent spec §6 and the pilot plan §6.
 
 ---
 
