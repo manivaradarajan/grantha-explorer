@@ -9,6 +9,8 @@ import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
 import FlowReader from "@/components/FlowReader";
+import ReferenceDiagnosticsPage from "@/components/ReferenceDiagnosticsPage";
+import { isDiagnosticsHash } from "@/lib/referenceDiagnostics";
 import { useVerseHash } from "@/hooks/useVerseHash";
 import { useAvailableGranthas, useGranthasMeta } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
@@ -42,6 +44,19 @@ function FlowModeToggle({ onEnter }: { onEnter: () => void }) {
 }
 
 export default function Home() {
+  // Leading branch for the `#diagnostics` view — recognized BEFORE the hash is
+  // parsed/validated (plan §6.5), so a bare #diagnostics fragment is not
+  // treated as a grantha:verse hash.
+  const [showDiagnostics, setShowDiagnostics] = useState(() =>
+    typeof window !== "undefined" && isDiagnosticsHash(window.location.hash),
+  );
+  useEffect(() => {
+    const handleHash = () =>
+      setShowDiagnostics(isDiagnosticsHash(window.location.hash));
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   // Media queries for responsive design
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
@@ -344,6 +359,10 @@ export default function Home() {
   };
 
   // Error states
+  if (showDiagnostics) {
+    return <ReferenceDiagnosticsPage />;
+  }
+
   if (granthasError) {
     return (
       <div className="flex items-center justify-center h-screen">

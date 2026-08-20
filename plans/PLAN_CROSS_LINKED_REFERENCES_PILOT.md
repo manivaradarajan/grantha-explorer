@@ -876,6 +876,17 @@ Each phase independently verifiable.
    `components/**/*.test.tsx` glob was added to `vitest.config.ts`.
 5. **Runtime diagnostic layer.** Dev gate, `ReferenceDiagnostic` log,
    suppression config, `#diagnostics` page (intercept before parse/validate).
+   **Done.** `lib/referenceDiagnostics.ts` (types, localStorage store deduped by
+   source+passage+offset+code, suppression loader, dev gate via NODE_ENV /
+   `?diagnostics=refs` / localStorage override). `ReferenceLink` records
+   `REF-NOT-IN-LIBRARY` (with Levenshtein near-match) on not-in-library clicks
+   and `REF-RUNTIME-DEPTH-OVERFLOW`/`REF-RUNTIME-UNRESOLVED` on resolution
+   failures. `components/ReferenceDiagnosticsPage.tsx` renders the `#diagnostics`
+   view — intercepted in `page.tsx` before parse (leading hash branch) — grouped
+   and filterable by code, with copy-suppression-line / copy-BUGS.md / clear
+   actions. `public/data/reference-suppressions.json` committed (empty). Unit
+   tests in `lib/referenceDiagnostics.test.ts` (7). `sourcePassageRef` threaded
+   through the render context.
 6. **Docs.** Update `grantha-data/docs/DATA_FLOW.md` and
    `grantha-explorer/docs/DATA_FLOW.md` + `SCHEMAS.md` in the same change as the
    code.

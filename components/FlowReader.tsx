@@ -588,6 +588,7 @@ export default function FlowReader({
                 subPassage.references,
                 {
                   currentGranthaId: grantha.grantha_id,
+                  sourcePassageRef: verseRef,
                   updateHash,
                   availableGranthaIds,
                   granthaIdToTitle: granthaIdToDevanagariTitle,
@@ -910,6 +911,7 @@ export default function FlowReader({
                                 cp.references,
                                 {
                                   currentGranthaId: grantha.grantha_id,
+                                  sourcePassageRef: passage.ref,
                                   updateHash,
                                   availableGranthaIds,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,

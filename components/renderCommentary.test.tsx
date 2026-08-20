@@ -24,6 +24,7 @@ const container = (): HTMLDivElement => {
 
 const context = {
   currentGranthaId: "isavasya-upanishad",
+  sourcePassageRef: "1",
   updateHash: () => {},
   availableGranthaIds: ["svetasvatara-upanishad"],
   granthaIdToTitle: { "svetasvatara-upanishad": "श्वेताश्वतरोपनिषत्" },

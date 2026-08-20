@@ -11,6 +11,7 @@ import {
   partLevelFor,
   sectionPartsToLoad,
 } from "./data";
+import type { ReferenceDiagCode } from "./referenceDiagnostics";
 
 /**
  * Runtime cross-reference resolution (§5 of the cross-linked-references pilot
@@ -22,7 +23,7 @@ import {
 export type ReferenceResolution =
   | { kind: "passage"; ref: string; isSection: boolean }
   | { kind: "root"; ref: string }
-  | { kind: "unresolved"; code: string };
+  | { kind: "unresolved"; code: ReferenceDiagCode };
 
 /**
  * Check whether a grantha id exists in the loaded library.

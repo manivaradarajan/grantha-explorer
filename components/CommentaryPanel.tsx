@@ -75,10 +75,11 @@ export default function CommentaryPanel({
   const referenceEditionId = hasMultipleEditions ? grantha.edition_id : undefined;
 
   const renderCommentaryWithReferences = useCallback(
-    (text: string, references?: Reference[]): React.ReactNode =>
+    (text: string, references?: Reference[], sourcePassageRef?: string): React.ReactNode =>
       renderCommentaryWithReferencesFn(text, references, {
         currentGranthaId: grantha.grantha_id,
         editionId: referenceEditionId,
+        sourcePassageRef: sourcePassageRef ?? "",
         updateHash,
         availableGranthaIds,
         granthaIdToTitle,
@@ -103,7 +104,7 @@ export default function CommentaryPanel({
               {prefaceAnchor.label.devanagari}
             </div>
             <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-              {renderCommentaryWithReferences(introDev, undefined)}
+              {renderCommentaryWithReferences(introDev, undefined, selectedRef)}
             </div>
           </div>
         );
@@ -134,7 +135,7 @@ export default function CommentaryPanel({
         )}
 
         <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-          {renderCommentaryWithReferences(mainContent, passage.references)}
+          {renderCommentaryWithReferences(mainContent, passage.references, passage.ref)}
         </div>
       </div>
     );

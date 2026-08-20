@@ -171,6 +171,7 @@ export default function FlowReaderCompare({
               cp.references,
               {
                 currentGranthaId: edition.grantha_id,
+                sourcePassageRef: verseRef,
                 updateHash,
                 availableGranthaIds,
                 granthaIdToTitle: granthaIdToDevanagariTitle,
@@ -231,6 +232,7 @@ export default function FlowReaderCompare({
                           subPassage.references,
                           {
                             currentGranthaId: edition.grantha_id,
+                            sourcePassageRef: verseRef,
                             updateHash,
                             availableGranthaIds,
                             granthaIdToTitle: granthaIdToDevanagariTitle,

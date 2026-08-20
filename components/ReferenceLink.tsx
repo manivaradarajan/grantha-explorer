@@ -5,6 +5,12 @@ import ReactDOM from 'react-dom';
 import { loadGrantha } from '../lib/data';
 import { getPassagePreview, isReferenceInLibrary, resolveReferenceTarget } from '../lib/references';
 import { toDevanagariNumerals } from '../lib/stringUtils';
+import {
+  addReferenceDiagnostic,
+  buildDiagnostic,
+  isDiagnosticsEnabled,
+  type ReferenceDiagCode,
+} from '../lib/referenceDiagnostics';
 import type { Reference } from '../lib/data';
 
 interface ReferenceLinkProps {
@@ -12,6 +18,8 @@ interface ReferenceLinkProps {
   currentGranthaId: string;
   /** Active edition to preserve on same-grantha reference jumps. */
   editionId?: string;
+  /** The commentary passage ref containing this citation (for diagnostics). */
+  sourcePassageRef: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   granthaIdToTitle: Record<string, string>;
@@ -31,7 +39,7 @@ const TOOLTIP_GAP = 8;
  * target (plan §5): exact leaf, section, whole-work root, or a runtime
  * diagnostic. Same-grantha references preserve the active edition.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, updateHash, availableGranthaIds, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, updateHash, availableGranthaIds, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipReady, setTooltipReady] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
@@ -195,6 +203,47 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     setTooltipReady(true);
   }, [showTooltip, tooltipContent]);
 
+  // Emit a runtime diagnostic (dev-gated) when a click fails to resolve —
+  // the triage channel for refs that render unlinked (plan §6).
+  const recordDiagnostic = useCallback(
+    (code: ReferenceDiagCode) => {
+      if (!isDiagnosticsEnabled()) return;
+      if (!reference.grantha_id) return;
+      const knownInMeta = Object.prototype.hasOwnProperty.call(
+        granthaIdToTitle,
+        reference.grantha_id,
+      );
+      // Near-match hint for REF-NOT-IN-LIBRARY: closest on-disk id by
+      // Levenshtein distance.
+      let nearMatchId: string | undefined;
+      if (code === "REF-NOT-IN-LIBRARY") {
+        let best: string | undefined;
+        let bestDist = Infinity;
+        for (const id of availableGranthaIds) {
+          const d = levenshtein(reference.grantha_id, id);
+          if (d < bestDist) {
+            bestDist = d;
+            best = id;
+          }
+        }
+        if (best && bestDist <= 3) nearMatchId = best;
+      }
+      addReferenceDiagnostic(
+        buildDiagnostic({
+          reference,
+          sourceGranthaId: currentGranthaId,
+          sourcePassageRef,
+          editionId,
+          code,
+          availableGranthaIds,
+          knownInMeta,
+          nearMatchId,
+        }),
+      );
+    },
+    [reference, currentGranthaId, sourcePassageRef, editionId, availableGranthaIds, granthaIdToTitle],
+  );
+
   const navigate = useCallback(async () => {
     if (!reference.grantha_id) return;
     try {
@@ -207,6 +256,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
           reference.grantha_id === currentGranthaId ? editionId : undefined,
         );
       } else {
+        recordDiagnostic(resolution.code);
         const message =
           resolution.code === "REF-RUNTIME-DEPTH-OVERFLOW"
             ? "reference has too many segments"
@@ -222,7 +272,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       );
       setShowTooltip(true);
     }
-  }, [reference, currentGranthaId, editionId, updateHash, renderTooltip]);
+  }, [reference, currentGranthaId, editionId, updateHash, renderTooltip, recordDiagnostic]);
 
   const handleMouseEnter = () => {
     if (isTouchDevice.current) return;
@@ -266,6 +316,8 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       // Mouse: hover already previewed, so a click navigates directly.
       navigate();
     } else {
+      // Not-in-library: clicking is the triage-worthy act — log it once.
+      recordDiagnostic("REF-NOT-IN-LIBRARY");
       if (showTooltip) {
         hideTooltip();
       } else {
@@ -317,3 +369,23 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
 };
 
 export default ReferenceLink;
+
+/** Classic Wagner–Fischer Levenshtein distance (for near-match id hints). */
+function levenshtein(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const curr = [i];
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      curr[j] = Math.min(
+        prev[j] + 1,
+        curr[j - 1] + 1,
+        prev[j - 1] + cost,
+      );
+    }
+    prev = curr;
+  }
+  return prev[n];
+}

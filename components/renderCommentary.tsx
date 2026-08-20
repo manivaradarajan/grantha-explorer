@@ -10,6 +10,8 @@ export interface ReferenceLinkContext {
   currentGranthaId: string;
   /** Active edition to preserve on same-grantha reference jumps. */
   editionId?: string;
+  /** The commentary passage ref that contains this citation (for diagnostics). */
+  sourcePassageRef: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   granthaIdToTitle: Record<string, string>;

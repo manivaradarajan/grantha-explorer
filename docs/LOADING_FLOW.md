@@ -203,6 +203,10 @@ pilot plan); a partial locator may resolve to a later unloaded part's
 `first_ref`, but that part itself is **not** preloaded by the resolver — the
 target grantha's own lazy loader serves it if the user navigates there.
 
+Failed resolutions are recorded (dev-gated) into the reference-diagnostic log
+(`lib/referenceDiagnostics.ts`) and triaged on the `#diagnostics` view — see
+`docs/DATA_FLOW.md` and pilot plan §6.
+
 All four share the same `loadPart` prop from `page.tsx` (§6), so a single
 correct loader serves every surface.
 
