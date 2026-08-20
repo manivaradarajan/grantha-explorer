@@ -213,6 +213,40 @@
       "required": ["id", "start", "end"],
       "additionalProperties": false
     },
+    "reference": {
+      "type": "object",
+      "description": "A structured cross-text citation emitted by the producer-side reference pipeline (grantha-data tools/lib/grantha_data/references.py). Half-open character offsets into the corresponding content.sanskrit.devanagari string. Three states: (1) undefined abbreviation -> grantha_id null, unresolved true (build error); (2) normal passage/section/range link -> grantha_id set, locator string, unresolved false; (3) whole-work citation -> grantha_id set, locator null, unresolved false.",
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 },
+        "display_text": {
+          "type": "string",
+          "description": "Verbatim citation text as written in the source."
+        },
+        "grantha_id": {
+          "type": ["string", "null"],
+          "description": "Resolved text id. Null ONLY when the abbreviation is undefined (build error)."
+        },
+        "locator": {
+          "type": ["string", "null"],
+          "description": "Canonical dotted target. Null for a whole-work citation; for a range this is the first endpoint."
+        },
+        "locator_end": {
+          "type": ["string", "null"],
+          "description": "Normalized high endpoint. Present only for ranges (when locator is the range's first endpoint)."
+        },
+        "group_id": {
+          "type": ["string", "null"],
+          "description": "Present only on enumeration members, grouping the expanded comma-list into one logical citation."
+        },
+        "unresolved": {
+          "type": "boolean",
+          "description": "True when a build REF-* error was emitted for this reference (undefined abbreviation)."
+        }
+      },
+      "required": ["start", "end", "display_text", "grantha_id", "locator", "unresolved"],
+      "additionalProperties": false
+    },
     "passage": {
       "type": "object",
       "properties": {
@@ -334,6 +368,11 @@
           "type": "array",
           "description": "Mula<->bhashya word-link spans. Half-open character offsets into content.sanskrit.devanagari; identical id on a passage span and a commentary_passage span is the correspondence.",
           "items": { "$ref": "#/definitions/span" }
+        },
+        "references": {
+          "type": "array",
+          "description": "Structured cross-text citations in this commentary passage. Half-open character offsets into content.sanskrit.devanagari.",
+          "items": { "$ref": "#/definitions/reference" }
         },
         "prefatory_material": {
           "type": "array",

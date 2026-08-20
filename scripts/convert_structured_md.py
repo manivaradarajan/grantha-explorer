@@ -34,13 +34,16 @@ from typing import Any
 import yaml
 
 import _build_parser
+import grantha_data_bootstrap
+
+grantha_data_bootstrap.ensure_grantha_data_importable()
 
 
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.3.0"
 
 # For aitareya: Sayana is deferred via `_handle_aitareya_sayana`; each file
 # ships its own `commentaries_metadata` ids unmodified.
@@ -960,9 +963,94 @@ def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
     return entry
 
 
+def _extract_references(
+    devanagari: str,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Extract structured references and diagnostics from commentary text.
+
+    Uses ``grantha_data.references`` (the shared producer-side library) when
+    it is importable. Importing requires the ``grantha_data`` package to be
+    on ``sys.path`` — either via ``pip install -e`` or the
+    ``GRANTHA_DATA_TOOLS_LIB`` bootstrap (see ``grantha_data_bootstrap.py``).
+
+    When the library is unavailable the converter is not blocked: reference
+    emission is best-effort and the ``references`` key is simply omitted.
+
+    Args:
+        devanagari: The commentary passage's ``content.sanskrit.devanagari``.
+
+    Returns:
+        A ``(references, diagnostics)`` pair; both empty when the library is
+        unavailable or no citations were found.
+    """
+    try:
+        from grantha_data.references import extract_references
+
+        bimap = _references_bimap()
+        refs, diags = extract_references(devanagari, bimap)
+        serialized_refs = [
+            {
+                "start": ref.start,
+                "end": ref.end,
+                "display_text": ref.display_text,
+                "grantha_id": ref.grantha_id,
+                "locator": ref.locator,
+                "locator_end": ref.locator_end,
+                "group_id": ref.group_id,
+                "unresolved": ref.unresolved,
+            }
+            for ref in refs
+        ]
+        serialized_diags = [
+            {
+                "code": diag.code,
+                "severity": diag.severity,
+                "start": diag.start,
+                "end": diag.end,
+                "display_text": diag.display_text,
+                "hint": diag.hint,
+            }
+            for diag in diags
+        ]
+        return serialized_refs, serialized_diags
+    except (ImportError, ValueError):
+        return [], []
+
+
+def _references_bimap() -> list[Any]:
+    """Load the citation bimap, resolving the grantha-data checkout path.
+
+    The bimap lives in the same grantha-data checkout as the library. When
+    ``GRANTHA_DATA_TOOLS_LIB`` is set it is derived from it; otherwise the
+    ``grantha_data`` package location is used. Returns [] when the bimap
+    cannot be located, so reference extraction degrades gracefully.
+
+    Returns:
+        The loaded bimap entries, or [] when the file is unavailable.
+    """
+    import os
+
+    from grantha_data.references import load_bimap
+
+    tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
+    if tools_lib:
+        bimap_path = Path(tools_lib).expanduser().parent.parent / "data" / "citation_bimap.yaml"
+    else:
+        import grantha_data
+
+        bimap_path = (
+            Path(grantha_data.__file__).resolve().parent.parent.parent
+            / "data" / "citation_bimap.yaml"
+        )
+    if not bimap_path.exists():
+        return []
+    return load_bimap(bimap_path)
+
+
 def _build_commentary(
     meta: dict[str, Any],
     body: BodyData,
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
     """Build one commentary dict from its frontmatter descriptor.
 
@@ -970,6 +1058,9 @@ def _build_commentary(
         meta: One commentaries_metadata entry (commentary_id,
             commentary_title, commentator, optional parent_commentary_id).
         body: Parsed body data.
+        diagnostics: Optional collector for build diagnostics; each
+            reference diagnostic is appended with ``source_file`` and
+            ``passage_ref`` context.
 
     Returns:
         The commentary dict, or None when this commentary carries no content
@@ -991,6 +1082,14 @@ def _build_commentary(
             "ref": cp.ref,
             "content": {"sanskrit": {"devanagari": cp.text}},
         }
+        refs, passage_diags = _extract_references(cp.text)
+        if refs:
+            entry["references"] = refs
+        if diagnostics is not None:
+            for diag in passage_diags:
+                diag["commentary_id"] = cid
+                diag["passage_ref"] = cp.ref
+                diagnostics.append(diag)
         if cp.intro:
             entry["intro"] = {"sanskrit": {"devanagari": cp.intro}}
         commentary_passages.append(entry)
@@ -1013,6 +1112,7 @@ def build_part_json(
     body: BodyData,
     edition_id: str,
     target_commentary_ids: list[str],
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Assemble the full part JSON dict for one source file.
 
@@ -1023,6 +1123,8 @@ def build_part_json(
             single-edition texts; multi-edition texts pass the real edition id).
         target_commentary_ids: The commentary_ids to include, in document
             order; empty to omit commentary.
+        diagnostics: Optional collector for build diagnostics, threaded into
+            ``_build_commentary``.
 
     Returns:
         Dict conforming to the v1.0.0 part file schema.
@@ -1066,7 +1168,7 @@ def build_part_json(
         for meta in commentaries_meta:
             if meta["commentary_id"] not in target_commentary_ids:
                 continue
-            commentary = _build_commentary(meta, body)
+            commentary = _build_commentary(meta, body, diagnostics)
             if commentary:
                 commentaries.append(commentary)
         if len(commentaries) == 1:
@@ -1335,6 +1437,7 @@ def convert_grantha(
     parts_info: list[dict[str, str]] = []
     first_frontmatter: dict[str, Any] | None = None
     structure_levels_raw: list[dict[str, Any]] | None = None
+    diagnostics: list[dict[str, Any]] = []
 
     for idx, src_path in enumerate(source_files, start=1):
         part_filename = f"part{idx}.json"
@@ -1361,7 +1464,12 @@ def convert_grantha(
         if grantha_id == AITAREYA_GRANTHA_ID:
             _handle_aitareya_sayana(body, grantha_explorer_root)
 
-        part_json = build_part_json(frontmatter, body, edition_id, target_cids)
+        diag_start = len(diagnostics)
+        part_json = build_part_json(
+            frontmatter, body, edition_id, target_cids, diagnostics
+        )
+        for diag in diagnostics[diag_start:]:
+            diag["source_file"] = src_path.name
 
         out_path = out_dir / part_filename
         out_path.write_text(
@@ -1391,6 +1499,24 @@ def convert_grantha(
         encoding="utf-8",
     )
     print(f"  envelope.json written ({len(parts_info)} parts)")
+
+    if diagnostics:
+        report = {
+            "grantha_id": first_frontmatter["grantha_id"],
+            "reference_diagnostics": diagnostics,
+        }
+        (out_dir / "references-report.json").write_text(
+            json.dumps(report, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        errors = sum(1 for d in diagnostics if d["severity"] == "error")
+        warnings = len(diagnostics) - errors
+        print(
+            f"  references-report.json written: {errors} error(s), "
+            f"{warnings} warning(s)"
+        )
+    else:
+        print("  no reference diagnostics; no references-report.json")
 
 
 def _handle_aitareya_sayana(

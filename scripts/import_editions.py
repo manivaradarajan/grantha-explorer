@@ -37,6 +37,9 @@ from pathlib import Path
 from typing import Any
 
 import _build_parser
+import grantha_data_bootstrap
+
+grantha_data_bootstrap.ensure_grantha_data_importable()
 
 from convert_structured_md import (
     _first_main_ref,
@@ -54,7 +57,7 @@ from convert_structured_md import (
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.3.0"
 
 _FILENAME_SUFFIX_RE = re.compile(r"(-\d+)+\.md$")
 
@@ -371,6 +374,7 @@ def _write_edition(
     parts_info: list[dict[str, str]] = []
     first_frontmatter: dict[str, Any] | None = None
     structure_levels_raw: list[dict[str, Any]] | None = None
+    diagnostics: list[dict[str, Any]] = []
 
     for idx, src_path in enumerate(files, start=1):
         frontmatter, body_text = parse_frontmatter(src_path)
@@ -384,7 +388,12 @@ def _write_edition(
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
         target_cids = _resolve_target_commentary_ids(frontmatter)
-        part_json = build_part_json(frontmatter, body, edition_id, target_cids)
+        diag_start = len(diagnostics)
+        part_json = build_part_json(
+            frontmatter, body, edition_id, target_cids, diagnostics
+        )
+        for diag in diagnostics[diag_start:]:
+            diag["source_file"] = src_path.name
         part_path = out_dir / f"part{idx}.json"
         part_path.write_text(
             json.dumps(part_json, ensure_ascii=False, indent=2),
@@ -403,6 +412,22 @@ def _write_edition(
         json.dumps(envelope, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+    if diagnostics:
+        report = {
+            "grantha_id": first_frontmatter["grantha_id"],
+            "edition_id": edition_id,
+            "reference_diagnostics": diagnostics,
+        }
+        (out_dir / "references-report.json").write_text(
+            json.dumps(report, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        errors = sum(1 for d in diagnostics if d["severity"] == "error")
+        print(
+            f"    references-report.json: {errors} error(s), "
+            f"{len(diagnostics) - errors} warning(s)"
+        )
 
 
 def _write_grantha_envelope(

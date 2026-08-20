@@ -35,6 +35,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
+import { renderCommentaryWithReferences } from "./renderCommentary";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -50,6 +51,9 @@ interface FlowReaderProps {
   selectedRef: string;
   onGranthaChange: (granthaId: string) => void;
   onVerseSelect: (ref: string) => void;
+  /** Scrollspy-driven verse change (no user click). Callers should update the
+   *  hash with history replacement so scrolling never pollutes back/forward. */
+  onScrollVerseChange?: (ref: string) => void;
   /** Comma-separated active subcommentary IDs from the URL (?sc=). */
   activeSubcommentaryIds?: string;
   /** Toggle a subcommentary's expansion. */
@@ -62,6 +66,9 @@ interface FlowReaderProps {
   script: "deva" | "roman";
   /** Persist a script change to the hash so it travels with deep links. */
   onScriptChange: (script: "deva" | "roman") => void;
+  updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
+  availableGranthaIds: string[];
+  granthaIdToDevanagariTitle: Record<string, string>;
 }
 
 const FONT_SCALE_MIN = 0.75;
@@ -96,6 +103,7 @@ export default function FlowReader({
   selectedRef,
   onGranthaChange,
   onVerseSelect,
+  onScrollVerseChange,
   activeSubcommentaryIds,
   onSubcommentaryToggle,
   loadPart,
@@ -103,6 +111,9 @@ export default function FlowReader({
   onExitFlow,
   script,
   onScriptChange,
+  updateHash,
+  availableGranthaIds,
+  granthaIdToDevanagariTitle,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -239,6 +250,10 @@ export default function FlowReader({
     targetScrollTop: number;
   } | null>(null);
   const justClicked = useRef(false);
+  // Set when a selection change came from the scrollspy (user scrolling), so
+  // the auto-scroll effect knows the verse is already in view and must not
+  // re-align (which would fight the user's scroll).
+  const scrollDrivenSelection = useRef(false);
 
   // The adhyāya the reader is actually looking at, driven by the scrollspy so
   // the header chapter title tracks the view across chapter boundaries — not
@@ -258,6 +273,13 @@ export default function FlowReader({
       if (grantha.passages.some((p) => p.ref === ref)) {
         const section = ref.split(".")[0] ?? ref;
         setViewSection((prev) => (prev === section ? prev : section));
+        // Scroll-driven selection: update the hash without adding history.
+        // Guarded so we only fire on an actual change and never for the same
+        // verse twice.
+        if (onScrollVerseChange && ref !== selectedRef) {
+          scrollDrivenSelection.current = true;
+          onScrollVerseChange(ref);
+        }
       }
     },
   );
@@ -339,6 +361,18 @@ export default function FlowReader({
   // recorded target). Forward loads below never trigger a re-scroll. Retries
   // when the element appears only after a part load.
   useEffect(() => {
+    if (scrollDrivenSelection.current) {
+      scrollDrivenSelection.current = false;
+      // The selection came from scrolling: the verse is already in the view
+      // band. Record the current scrollTop as the target (so a later lazy load
+      // only re-aligns if it shifts content above) but do NOT re-align.
+      lastAutoScroll.current = {
+        ref: selectedRef,
+        found: true,
+        targetScrollTop: scrollContainerRef.current?.scrollTop ?? 0,
+      };
+      return;
+    }
     if (justClicked.current) {
       justClicked.current = false;
       // The user just clicked this verse — they're already where they want to
@@ -548,14 +582,19 @@ export default function FlowReader({
                 }}
               />
             )}
-            <p
-              className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-600"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeCommentaryHtml(
-                  subPassage.content?.sanskrit?.devanagari || "",
-                ),
-              }}
-            />
+            <p className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-600">
+              {renderCommentaryWithReferences(
+                subPassage.content?.sanskrit?.devanagari || "",
+                subPassage.references,
+                {
+                  currentGranthaId: grantha.grantha_id,
+                  sourcePassageRef: verseRef,
+                  updateHash,
+                  availableGranthaIds,
+                  granthaIdToTitle: granthaIdToDevanagariTitle,
+                },
+              )}
+            </p>
           </div>
         )}
       </div>
@@ -716,6 +755,9 @@ export default function FlowReader({
                   grantha={grantha}
                   granthaTitleDeva={granthaTitleDeva}
                   granthaTitleIast={granthaTitleIast}
+                  updateHash={updateHash}
+                  availableGranthaIds={availableGranthaIds}
+                  granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 />
               ) : (
                 passages.map((passage, index) => {
@@ -863,14 +905,19 @@ export default function FlowReader({
                                 </p>
                               </div>
                             ))}
-                            <p
-                              className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line"
-                              dangerouslySetInnerHTML={{
-                                __html: sanitizeCommentaryHtml(
-                                  cp.content?.sanskrit?.devanagari || "",
-                                ),
-                              }}
-                            />
+                            <p className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
+                              {renderCommentaryWithReferences(
+                                cp.content?.sanskrit?.devanagari || "",
+                                cp.references,
+                                {
+                                  currentGranthaId: grantha.grantha_id,
+                                  sourcePassageRef: passage.ref,
+                                  updateHash,
+                                  availableGranthaIds,
+                                  granthaIdToTitle: granthaIdToDevanagariTitle,
+                                },
+                              )}
+                            </p>
                             {renderSubcommentaries(passage.ref)}
                           </div>
                         )}

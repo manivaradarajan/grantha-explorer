@@ -15,13 +15,30 @@
 
 .reference-container {
   position: relative;
-  display: inline-block;
+  /*display: inline-block;*/
+  display: inline;
 }
 
 .reference-link {
-  color: #2563eb;
-  text-decoration: none;
+  color: #6b7280;
   cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;  /* optional: underline thickness */
+  text-underline-offset: 0.27em;   /* ← add this; gap between text and underline */
+  word-spacing: -0.15em;   /* tightens EVERY space inside the link */
+}
+
+/* Discriminating signal: hover/focus "picks up" the citation span with a
+   steel tint + ink darken. Focus-visible makes the preview reachable by
+   keyboard; the tint is gated to hover/focus so it never flashes at rest. */
+.reference-link:hover,
+.reference-link:focus-visible {
+  color: #3d5a80;
+  background-color: rgba(61, 90, 128, 0.12);
+  border-radius: 3px;
+  padding: 0 1px;
+  box-decoration-break: clone;   /* pill follows glyphs when the cite wraps */
+  outline: none;
 }
 
 .reference-link.external-reference {
@@ -30,21 +47,79 @@
   text-decoration: none;
 }
 
+.reference-link.external-reference:hover,
+.reference-link.external-reference:focus-visible {
+  background-color: rgba(61, 90, 128, 0.10);   /* tint, no navigation affordance */
+  color: #6b7280;
+}
+
 .reference-tooltip {
   position: fixed;
-  transform: translate(-50%, -100%);
+  /* The cited passage must render in the reading face (Tiro), matching the
+     body text it previews; chrome lines override with .tooltip-meta. */
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
   background-color: white;
   color: black;
-  padding: 2px 4px;
-  border-radius: 4px;
-  z-index: 9999;
-  text-align: center !important;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.2s;
+  padding: 0;                          /* sections own their padding */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #d1d5db;
+  max-width: min(320px, 80vw);
+  z-index: 9999;
   white-space: normal;
-  font-size: 1rem;
+  overflow: hidden;                    /* clip the header band to the radius */
+  opacity: 0;                          /* gated until measured + positioned */
+  transition: opacity 0.15s;
+  pointer-events: none;                /* never intercept hover of the link */
+}
+
+.reference-tooltip.is-ready {
+  opacity: 1;
+}
+
+/* Header band: the work name + locator as the card's label — a full-width
+   tinted strip (not a floating pill) so the title gets structural presence
+   that scales with the card, while staying editorial rather than badge-y. */
+.tooltip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3em;
+  padding: 8px 10px;
+  background: rgba(61, 90, 128, 0.06);  /* faint steel, echoing the link tint */
+  border-bottom: 1px solid #e5e7eb;
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+}
+
+.tooltip-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.tooltip-locator {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.tooltip-passage {
+  padding: 8px 10px 10px;
+  /* Verses are stored with the pāda break as a literal newline after the
+     daṇḍā (e.g. svetasvatara 1.9). Honor it so verses render verse-shaped;
+     single-line sutras/prose have no newline and are unaffected. */
+  white-space: pre-line;
+  font-size: calc(1em * var(--reading-scale, 1));   /* follows अ+/अ− */
+  overflow-wrap: anywhere;
+  word-break: break-word;             /* long samāsa never bleeds the card */
+  line-height: 1.6;
+}
+
+.tooltip-status {
+  padding: 8px 10px 10px;
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+  font-size: 0.8125rem;
+  font-style: italic;
 }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set

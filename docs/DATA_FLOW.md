@@ -69,6 +69,18 @@ python3 scripts/convert_structured_md.py \
   `_handle_aitareya_sayana` and never ships inline.)
 - `SCHEMA_VERSION` (mirroring grantha-data's `VERSION`) is stamped on each
   part; re-sync the schema mirrors and bump it when the producer schema changes.
+- **Cross-text references (pilot).** Each commentary passage's Devanagari is
+  run through the shared producer-side library
+  (`grantha_data.references`, extracted by `_extract_references`), emitting a
+  schema-shaped `references[]` key when citations are found. The library lives
+  in the sibling `grantha-data` checkout and is imported via the env-gated
+  bootstrap (`scripts/grantha_data_bootstrap.py`): set
+  `GRANTHA_DATA_TOOLS_LIB=<grantha-data>/tools/lib` (or have `grantha_data`
+  installed) or the converter skips reference emission — best-effort, never
+  blocks a conversion. Both converters also write a per-edition
+  `references-report.json` (reference diagnostics: code, severity, source
+  file, passage_ref, offsets, hint) next to the part files whenever any
+  diagnostic was produced. See the pilot plan §4.1.2 / §8.1.
 
 ### 2.2 Multi-edition — `scripts/import_editions.py`
 
@@ -233,8 +245,23 @@ you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
   grantha has >1 edition) switches `?e=`. `CommentaryPanel` resolves the
   commentary passage for the selected ref, including `A.B.LO-HI` range refs
   (`commentaryPassageForRef`), and renders subcommentaries toggled by `?sc=`.
-- Cross-grantha reference links drop the edition (`ReferenceLink`); same-grantha
-  references preserve it.
+- **Cross-text references (pilot).** Commentary `references[]` (producer-emitted)
+  render as links via the shared `renderCommentary.tsx` helper, which splits the
+  raw Devanagari at each `[start, end)` offset and applies the markdown/DOMPurify
+  transform per segment. `ReferenceLink` resolves a clicked/hovered citation
+  against the target grantha (`loadGrantha` + `resolveReferenceTarget`,
+  `lib/references.ts`): exact leaf, partial-locator section, whole-work root, or
+  a runtime diagnostic. Cross-grantha reference links drop the edition;
+  same-grantha references preserve it. **The permanent cross-repo contract is
+  `docs/SPEC_CROSS_LINKED_REFERENCES.md`**; see the pilot plan §5 / §7 for the
+  field-finding narrative.
+- **Reference diagnostics (dev, pilot).** References that fail to resolve at
+  runtime (target not in library, depth overflow, unresolved) are recorded, when
+  dev-gated, to a `localStorage` log (`lib/referenceDiagnostics.ts`, deduped by
+  source grantha + passage + offset + code) and triaged on the `#diagnostics`
+  hash view inside the SPA (intercepted before `parseHash`). Per-target
+  suppression is a committed config (`public/data/reference-suppressions.json`).
+  See the permanent spec §6 and the pilot plan §6.
 
 ---
 

@@ -32,7 +32,7 @@ function jsonResponse(body: unknown): Response {
 function envelope(editionId: string): object {
   return {
     kind: "edition-sub-envelope",
-    schema_version: "1.2.0",
+    schema_version: "1.3.0",
     edition_id: editionId,
     grantha_id: GRANTHA,
     structure_levels: [
@@ -56,7 +56,7 @@ function part(
 ): object {
   return {
     kind: "grantha-part",
-    schema_version: "1.2.0",
+    schema_version: "1.3.0",
     grantha_id: GRANTHA,
     edition_id: editionId,
     part_num: partNum,

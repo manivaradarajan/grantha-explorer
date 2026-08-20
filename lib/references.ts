@@ -1,82 +1,238 @@
-import { loadGrantha, getPassageByRef } from './data';
+import {
+  Grantha,
+  Reference,
+  buildRefIndexMap,
+  getAllPassagesForNavigation,
+  getPassageByRef,
+  getStructureDepth,
+  loadGrantha,
+  loadGranthaPart,
+  loadedFirstRefsFor,
+  partLevelFor,
+  sectionPartsToLoad,
+} from "./data";
+import type { ReferenceDiagCode } from "./referenceDiagnostics";
 
-// This file will contain the core logic for parsing, resolving, and validating cross-text references.
+/**
+ * Runtime cross-reference resolution (§5 of the cross-linked-references pilot
+ * plan). Abbreviation → grantha_id + locator normalization is done producer-
+ * side (grantha_data.references); this module resolves a reference against a
+ * loaded target grantha at runtime.
+ */
 
-export interface Reference {
-  fullMatch: string;
-  displayText: string;
-  rawRef: string;
-  granthaId: string;
-  path: string;
+export type ReferenceResolution =
+  | { kind: "passage"; ref: string; isSection: boolean }
+  | { kind: "root"; ref: string }
+  | { kind: "unresolved"; code: ReferenceDiagCode };
+
+/**
+ * Check whether a grantha id exists in the loaded library.
+ *
+ * The membership set is derived from `availableGranthaIds` (the index over
+ * the on-disk library tree, not `granthas-meta.json`).
+ *
+ * Args:
+ *     granthaId: The target grantha id.
+ *     availableGranthaIds: All on-disk grantha ids.
+ *
+ * Returns:
+ *     True when the target is in the library.
+ */
+export const isReferenceInLibrary = (
+  granthaId: string,
+  availableGranthaIds: string[],
+): boolean => new Set(availableGranthaIds).has(granthaId);
+
+/**
+ * Resolve a reference's locator against a loaded target grantha (§5).
+ *
+ * Resolution order:
+ *   1. Exact leaf — the locator names a loaded passage.
+ *   2. Section (partial locator) — the locator names an interior level:
+ *      (a) an envelope section marker whose ref equals the locator
+ *          (`isSection: true`); (b) a part `first_ref` prefixed by the
+ *          locator (a leaf passage in a later, not-yet-loaded part);
+ *          (c) a loaded leaf whose ref is prefixed by the locator.
+ *      Cases (b)/(c) are concrete leaf passages → `isSection: false`.
+ *   3. Whole-work — `locator` is null → the grantha root (first main ref).
+ *   4. Depth overflow — more segments than the target's `structure_levels`
+ *      depth → unresolved (`REF-RUNTIME-DEPTH-OVERFLOW`).
+ *   5. Otherwise — unresolved (`REF-RUNTIME-UNRESOLVED`).
+ *
+ * Args:
+ *     target: The loaded target grantha.
+ *     locator: The reference's canonical locator (null = whole-work).
+ *
+ * Returns:
+ *     A `ReferenceResolution` describing the jump target or why it is
+ *     unresolved.
+ */
+export function resolveReferenceTarget(
+  target: Grantha,
+  locator: string | null,
+): ReferenceResolution {
+  if (locator == null) {
+    return { kind: "root", ref: firstMainRef(target) };
+  }
+
+  const depth = getStructureDepth(target.structure_levels);
+  const segCount = locator.split(".").length;
+  if (segCount > depth) {
+    return { kind: "unresolved", code: "REF-RUNTIME-DEPTH-OVERFLOW" };
+  }
+
+  // 1. Exact leaf.
+  const ordered = getAllPassagesForNavigation(target);
+  if (buildRefIndexMap(ordered).has(locator)) {
+    return { kind: "passage", ref: locator, isSection: false };
+  }
+
+  // 1b. Full-depth locator in a later, not-yet-loaded part. A multi-part
+  // grantha loads only its first part, so a leaf in a later part is absent
+  // from `ordered`. The locator is still a valid passage ref: hand it back
+  // and let the reader's section loader fetch the containing part (the same
+  // `sectionPartsToLoad` path used for normal navigation).
+  const partLevel = partLevelFor(target.structure_levels);
+  if (segCount === depth && partLevel >= 0 && (target.parts ?? []).length > 0) {
+    const toLoad = sectionPartsToLoad(
+      target.parts ?? [],
+      locator,
+      loadedFirstRefsFor(target),
+      partLevel,
+    );
+    if (toLoad.length > 0) {
+      return { kind: "passage", ref: locator, isSection: false };
+    }
+  }
+
+  // 2. Section (partial locator).
+  // (a) Envelope section marker whose ref equals the locator.
+  const sectionMarker = (target.sections ?? []).find(
+    (s) => s.start_ref === locator,
+  );
+  if (sectionMarker) {
+    return { kind: "passage", ref: sectionMarker.start_ref, isSection: true };
+  }
+  // (b) Part first_ref prefixed by the locator (later, unloaded part).
+  const partFirst = (target.parts ?? []).find(
+    (p) => p.first_ref === locator || p.first_ref.startsWith(locator + "."),
+  );
+  if (partFirst) {
+    return { kind: "passage", ref: partFirst.first_ref, isSection: false };
+  }
+  // (c) Loaded leaf whose ref is prefixed by the locator.
+  const prefixLeaf = ordered.find((p) => p.ref.startsWith(locator + "."));
+  if (prefixLeaf) {
+    return { kind: "passage", ref: prefixLeaf.ref, isSection: false };
+  }
+
+  // 5. Unresolved.
+  return { kind: "unresolved", code: "REF-RUNTIME-UNRESOLVED" };
 }
 
-// Regex to find markdown links with 'ref:' protocol, e.g., [text](ref:id/path)
-const referenceRegex = /\[([^\]]+)\]\(ref:([^\)]+)\)/g;
-
-
-
-
 /**
- * Parses a string to find all reference links.
- * @param text The text to parse.
- * @returns An array of Reference objects found in the text.
+ * Fetch a passage preview for a reference (hover tooltip).
+ *
+ * Returns the target passage's Devanagari text, or a status string when the
+ * target is not in the library / the locator does not resolve. When the
+ * passage lives in a later part of a multi-part grantha (not loaded by
+ * `loadGrantha`), the containing part is fetched on demand so the preview
+ * always shows the cited verse. Fetched parts are cached per path+file so
+ * repeated hovers don't refetch.
+ *
+ * Args:
+ *     granthaId: The target grantha id.
+ *     reference: The reference to preview.
+ *     availableGranthaIds: All on-disk grantha ids.
+ *
+ * Returns:
+ *     The passage text, or a status string.
  */
-export const parseReferences = (text: string, abbreviationMap: { [key: string]: string }): Reference[] => {
-  const references: Reference[] = [];
-  let match;
-  while ((match = referenceRegex.exec(text)) !== null) {
-    const [fullMatch, displayText, rawRef] = match;
-    const parts = rawRef.split('/');
-    const granthaAbbr = parts[0];
-    const path = parts.slice(1).join('/');
 
-    const granthaId = abbreviationMap[granthaAbbr] || granthaAbbr;
-    const normalizedPath = path.replace(/\/|\-/g, '.');
+const previewPartCache = new Map<string, { ref: string; text: string }[]>();
 
-    references.push({
-      fullMatch,
-      displayText,
-      rawRef,
-      granthaId: granthaId,
-      path: normalizedPath,
-    });
-  }
-  return references;
-};
+const previewCacheKey = (path: string, file: string): string => `${path}/${file}`;
 
-/**
- * Checks if a given granthaId is available in our library.
- * This is a placeholder and will need to be connected to the actual library data.
- * @param granthaId The ID of the grantha to check.
- * @returns boolean
- */
-export const isReferenceInLibrary = (granthaId: string, availableGranthaIds: string[]): boolean => {
-  return availableGranthaIds.includes(granthaId);
-};
-
-/**
- * Fetches a preview for a given reference.
- * This is a placeholder for now.
- * @param granthaId The ID of the grantha.
- * @param path The path to the passage.
- * @returns A preview string or null.
- */
-export const getPassagePreview = async (granthaId: string, path: string, availableGranthaIds: string[]): Promise<string | null> => {
+export const getPassagePreview = async (
+  granthaId: string,
+  reference: Reference,
+  availableGranthaIds: string[],
+): Promise<string | null> => {
   if (!isReferenceInLibrary(granthaId, availableGranthaIds)) {
-    return 'Reference not available in this library.';
+    return "Reference not available in this library.";
   }
-
   try {
-    const grantha = await loadGrantha(granthaId);
-    const passage = getPassageByRef(grantha, path);
-
-    if (passage) {
-      return passage.content.sanskrit.devanagari;
+    const target = await loadGrantha(granthaId);
+    const resolution = resolveReferenceTarget(target, reference.locator);
+    if (resolution.kind !== "passage") {
+      return null;
     }
 
-    return 'Passage not found.';
+    // 1. Loaded passage (first part, or a later part already merged in).
+    const loaded = getPassageByRef(target, resolution.ref);
+    if (loaded?.content?.sanskrit?.devanagari) {
+      return loaded.content.sanskrit.devanagari;
+    }
+
+    // 2. Passage in a later, not-yet-loaded part: find the containing part and
+    //    fetch it on demand.
+    const partLevel = partLevelFor(target.structure_levels);
+    if (partLevel >= 0 && target.parts) {
+      const toLoad = sectionPartsToLoad(
+        target.parts,
+        resolution.ref,
+        loadedFirstRefsFor(target),
+        partLevel,
+      );
+      if (toLoad.length > 0) {
+        const firstRef = toLoad[0];
+        const partInfo = target.parts.find((p) => p.first_ref === firstRef);
+        if (partInfo) {
+          const cacheKey = previewCacheKey(target.path, partInfo.file);
+          let passages = previewPartCache.get(cacheKey);
+          if (!passages) {
+            const part = await loadGranthaPart(target.path, partInfo.file);
+            passages = [
+              ...(part.prefatory_material ?? []),
+              ...(part.passages ?? []),
+              ...(part.concluding_material ?? []),
+            ]
+              .map((p) => ({
+                ref: p.ref,
+                text: p.content?.sanskrit?.devanagari ?? "",
+              }))
+              .filter((p) => p.text);
+            previewPartCache.set(cacheKey, passages);
+          }
+          return passages.find((p) => p.ref === resolution.ref)?.text ?? null;
+        }
+      }
+    }
+
+    return null;
   } catch (error) {
-    console.error(`Error fetching passage preview for ${granthaId}:${path}`, error);
-    return 'Error fetching preview.';
+    console.error(`Error fetching passage preview for ${granthaId}`, error);
+    return "Error fetching preview.";
   }
 };
+
+/**
+ * Return the grantha's root navigation ref (whole-work jump target).
+ *
+ * Prefers the first part's `first_ref` (the envelope's root for multi-part
+ * granthas), then the first main passage, then the first passage.
+ *
+ * Args:
+ *     grantha: The loaded grantha.
+ *
+ * Returns:
+ *     The root ref.
+ */
+function firstMainRef(grantha: Grantha): string {
+  const partRoot = grantha.parts?.[0]?.first_ref;
+  if (partRoot) {
+    return partRoot;
+  }
+  const main = grantha.passages.find((p) => p.passage_type === "main");
+  return (main ?? grantha.passages[0])?.ref ?? "1";
+}

@@ -9,8 +9,10 @@ import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
 import FlowReader from "@/components/FlowReader";
+import ReferenceDiagnosticsPage from "@/components/ReferenceDiagnosticsPage";
+import { isDiagnosticsHash } from "@/lib/referenceDiagnostics";
 import { useVerseHash } from "@/hooks/useVerseHash";
-import { useAvailableGranthas } from "@/hooks/useGrantha";
+import { useAvailableGranthas, useGranthasMeta } from "@/hooks/useGrantha";
 import { useGranthaLoader } from "@/hooks/useGranthaLoader";
 import { useEditions, MAX_COMPARE_EDITIONS } from "@/hooks/useEditions";
 import {
@@ -42,6 +44,19 @@ function FlowModeToggle({ onEnter }: { onEnter: () => void }) {
 }
 
 export default function Home() {
+  // Leading branch for the `#diagnostics` view — recognized BEFORE the hash is
+  // parsed/validated (plan §6.5), so a bare #diagnostics fragment is not
+  // treated as a grantha:verse hash.
+  const [showDiagnostics, setShowDiagnostics] = useState(() =>
+    typeof window !== "undefined" && isDiagnosticsHash(window.location.hash),
+  );
+  useEffect(() => {
+    const handleHash = () =>
+      setShowDiagnostics(isDiagnosticsHash(window.location.hash));
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   // Media queries for responsive design
   const isMobile = useMediaQuery("(max-width: 767px)");
   const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
@@ -86,6 +101,12 @@ export default function Home() {
     isLoading: granthasLoading,
     error: granthasError,
   } = useAvailableGranthas();
+
+  // Meta registry: Devanagari/IAST titles for every known grantha, including
+  // works cited but not on disk (needed for not-in-library reference titles).
+  const {
+    data: granthasMeta = {},
+  } = useGranthasMeta();
 
   // Get current state from URL hash
   const {
@@ -276,6 +297,13 @@ export default function Home() {
     updateHash(granthaId, ref, editionId);
   };
 
+  // Scrollspy-driven verse change while reading in flow mode: update the hash
+  // in place (replaceHistory) so scrolling through verses never spams the
+  // browser history — back/forward stay meaningful (verse clicks still push).
+  const handleFlowScrollVerseChange = (ref: string) => {
+    updateHash(granthaId, ref, editionId, undefined, true);
+  };
+
   // Handle commentary (edition) switch
   const handleEditionChange = (newEditionId: string) => {
     updateHash(granthaId, verseRef, newEditionId);
@@ -301,15 +329,27 @@ export default function Home() {
     }
   };
 
-  const granthaIdToDevanagariTitle = useMemo(
-    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_deva])),
-    [granthas],
-  );
+  // Title maps for cross-reference links. On-disk titles come from the index;
+  // meta titles fill in not-in-library works (e.g. a Mādhyandina recension id
+  // or a cited-but-not-ingested work), so the reference tooltip shows the
+  // Devanagari title instead of the raw grantha id.
+  const granthaIdToDevanagariTitle = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const g of granthas) map[g.id] = g.title_deva;
+    for (const [id, meta] of Object.entries(granthasMeta)) {
+      if (!map[id]) map[id] = meta.title.devanagari;
+    }
+    return map;
+  }, [granthas, granthasMeta]);
 
-  const granthaIdToLatinTitle = useMemo(
-    () => Object.fromEntries(granthas.map((g) => [g.id, g.title_iast])),
-    [granthas],
-  );
+  const granthaIdToLatinTitle = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const g of granthas) map[g.id] = g.title_iast;
+    for (const [id, meta] of Object.entries(granthasMeta)) {
+      if (!map[id]) map[id] = meta.title.iast;
+    }
+    return map;
+  }, [granthas, granthasMeta]);
 
   // Close modal handler
   const handleCloseInvalidVerseModal = () => {
@@ -319,6 +359,10 @@ export default function Home() {
   };
 
   // Error states
+  if (showDiagnostics) {
+    return <ReferenceDiagnosticsPage />;
+  }
+
   if (granthasError) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -387,6 +431,7 @@ export default function Home() {
           selectedRef={verseRef}
           onGranthaChange={handleGranthaChange}
           onVerseSelect={handleFlowVerseSelect}
+          onScrollVerseChange={handleFlowScrollVerseChange}
           activeSubcommentaryIds={subcommentaryIds}
           onSubcommentaryToggle={updateSubcommentary}
           loadPart={sectionLoadPart}
@@ -394,6 +439,9 @@ export default function Home() {
           onExitFlow={() => updateMode("panes")}
           script={script}
           onScriptChange={updateScript}
+          updateHash={updateHash}
+          availableGranthaIds={granthas.map((g) => g.id)}
+          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
         />
         <InvalidVerseModal
           isOpen={showInvalidVerseModal}
