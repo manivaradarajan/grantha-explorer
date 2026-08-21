@@ -1,0 +1,280 @@
+{
+  "kind": "grantha-part",
+  "schema_version": "1.2.0",
+  "grantha_id": "vishnu-purana",
+  "edition_id": "vishnu-purana",
+  "part_num": 67,
+  "passages": [
+    {
+      "ref": "4.11.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "अतः परं ययातेः प्रथमपुत्रस्य यदोर्वंशमहं कथयामि"
+        }
+      },
+      "speaker": "श्रीपराशर उवाच"
+    },
+    {
+      "ref": "4.11.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "यत्राशेषलोकनिवासो मनुष्यसिद्धगन्धर्वयक्षराक्षसगुह्यककिंपुरुषाप्सरोरगविहगदैत्यदानवादित्यरुद्रवस्वश्विमरुद्देवर्षिभिर्मुमुक्षुभिर्धर्मार्थकाममोक्षार्थिभिश्च तत्तत्फललाभाय सदाभिष्टुतोऽपरिच्छेद्यमाहात्म्यांशेन भगवाननादिनिधनो विष्णुरवततार"
+        }
+      }
+    },
+    {
+      "ref": "4.11.3",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "अत्र श्लोकः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.4",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "यदोर्वंशं नरः श्रुत्वा सर्वपापैः प्रमुच्यते ।\nयत्रावतीर्णं कृष्णाख्यंपरं ब्रह्मनराकृति"
+        }
+      }
+    },
+    {
+      "ref": "4.11.5",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "सहस्रजित्क्रोष्टुनलनहुषसंज्ञाश्चात्वारो यदुपुत्रा वभुवुः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.6",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "सहस्रजित्पुः शतजित्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.7",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्य हैहयहेहयवेणुहयास्त्रयः पुत्रा बभूवुः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.8",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "हैहयपुत्रो धर्मः तस्यापि धर्मनेत्रः ततः कुन्तिः कुन्तेः सहजित्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.9",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तत्तनयो महिष्मान् योऽसौ माहिष्मतों पुरीं निर्वापयामास"
+        }
+      }
+    },
+    {
+      "ref": "4.11.10",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्माद्भद्रश्रेण्यस्ततो दुर्दमस्तस्माद्धनकः धनकस्य कृतवीर्यकृताग्निकृतधर्मकृतौजसश्चत्वारः पुत्रा बभूवुः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.11",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "कृतवीर्यादर्जुःसप्तद्वीपाधिपतिर्बाहुसहस्रो जज्ञे"
+        }
+      }
+    },
+    {
+      "ref": "4.11.12",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "योऽसौ भगवदंशमत्रिकुलप्रसूतं दत्तात्रेयाख्यमाराध्य बाहुसहस्रमधर्मसेवानिवारणं स्वधर्मसेवित्वं रणे पृथिवीजयं धर्मतश्चानुपालनमारातिभ्योऽपराजयमखिलजगत्प्रख्यातपुरुषाच्च मृत्युमित्येतान्वरानभिलषितवांल्लेभे च"
+        }
+      }
+    },
+    {
+      "ref": "4.11.13",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तेनेयमशेषद्वीपवती पृथिवी सम्यक्परीपालिता"
+        }
+      }
+    },
+    {
+      "ref": "4.11.14",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "दशयज्ञसहस्राण्यसावयजत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.15",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्य च श्लोकोऽद्यापि गीयते"
+        }
+      }
+    },
+    {
+      "ref": "4.11.16",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "न नूनं कार्तवीर्यस्य गातिं यास्यन्ति पार्थिवाः ।\nयज्ञैर्दानैस्तपोभिर्वा प्रश्रयेण श्रुतेन च"
+        }
+      }
+    },
+    {
+      "ref": "4.11.17",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "अनष्टद्रव्यता च तस्य राज्येऽभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.18",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "एवं च पञ्चाशीतिवर्षसहस्रण्यव्याहतेरोग्यश्रीबलपराक्रमो राज्यमकरोत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.19",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "माहिष्मत्यां दिग्विजयाभ्यागतो स्थापितः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.20",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "यश्च पञ्चाशीतिवर्शसहस्रोपलक्षणकालावसाने भगवन्नारायणांशेन परशुरामेणोपसंहृतः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.21",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्य च पुत्रशतप्रधानाः पञ्चपुत्रा बभूवुः शूरशूरसेनवृषसेनमधुजयध्वजसंज्ञाः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.22",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "जयध्वजात्तालजङ्घः पुत्रोभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.23",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तालजङ्घस्य तालजङ्घाख्यं पुत्रशतमासीत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.24",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "एषां ज्येष्ठे वीतिहोत्रस्तथान्यो भरतः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.25",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "भरताद्वृषः"
+        }
+      }
+    },
+    {
+      "ref": "4.11.26",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "वृषस्य पुत्रो मधुरभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.27",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्यापि वृष्णिप्रमुखंपुत्रशतमासीत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.28",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "यतो वृष्णिसंज्ञामेतद्गोत्रमवाप"
+        }
+      }
+    },
+    {
+      "ref": "4.11.29",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "मधुसंज्ञाहेतुश्च मधुरभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.11.30",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "यादवाश्च यदुनामोपलक्षणादिति"
+        }
+      }
+    }
+  ]
+}

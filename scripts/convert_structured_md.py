@@ -57,6 +57,7 @@ SAYANA_DEFERRED_HEADING = "## Aitareya Upanishad — Sayana Bhashya (deferred)"
 _NON_SOURCE_MD_FILES = frozenset(
     {
         "SOURCE_ISSUES.md",
+        "BUGS.md",
     }
 )
 

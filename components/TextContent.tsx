@@ -210,6 +210,11 @@ export default function TextContent({
                     {passage.passage_type === "main" ? passage.ref : ""}
                   </span>
                   <div className="flex-1 min-w-0">
+                    {passage.speaker && (
+                      <p className="font-serif text-sm text-gray-600 mb-2">
+                        {stripMarkdown(passage.speaker)}
+                      </p>
+                    )}
                     {sanskritText ? (
                       <p className="text-lg leading-relaxed whitespace-pre-line verse-text">
                         {sanskritText}
