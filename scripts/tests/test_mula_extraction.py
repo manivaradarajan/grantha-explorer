@@ -24,6 +24,7 @@ import unittest
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
 from convert_structured_md import _extract_mula_text  # noqa: E402
+from convert_structured_md import _strip_hide_blocks  # noqa: E402
 
 
 class TestMulaExtraction(unittest.TestCase):
@@ -105,6 +106,50 @@ class TestMulaExtraction(unittest.TestCase):
             "<!-- /sanskrit:devanagari -->\n"
         )
         self.assertEqual(_extract_mula_text(segment), "मूलपाठः")
+
+
+class TestStripHideBlocks(unittest.TestCase):
+    """``_strip_hide_blocks`` must drop a hide block AND collapse the leftover
+    blank-line runs so a stripped block leaves exactly one paragraph break."""
+
+    def test_hide_block_leaves_single_paragraph_break(self) -> None:
+        """A blank-line-separated hide block vanishes cleanly: the two
+        surrounding blank lines must not stack into ``\\n\\n\\n\\n`` (which
+        would render as an excess blank line)."""
+        text = (
+            "अन्तिमग्लॉस् ।\n"
+            "\n"
+            "<!-- hide type:sub-heading -->\n"
+            "\n"
+            "सिद्धान्ते सामानाधिकरण्योपपत्तिः\n"
+            "\n"
+            "<!-- /hide -->\n"
+            "\n"
+            "विशिष्टैकत्वविवक्षा\n"
+        )
+        stripped = _strip_hide_blocks(text)
+        self.assertEqual(
+            stripped,
+            "अन्तिमग्लॉस् ।\n\nविशिष्टैकत्वविवक्षा\n",
+        )
+        self.assertNotIn("hide", stripped)
+
+    def test_hide_block_trailing_blank_collapsed(self) -> None:
+        """A hide block at the end of a region collapses its trailing blank
+        stack to exactly one paragraph break (not ``\\n\\n\\n\\n``)."""
+        text = (
+            "अन्तिमग्लॉस् ।\n"
+            "\n"
+            "<!-- hide type:section-marker -->\n"
+            "\n"
+            "द्वितीयो मन्त्रः\n"
+            "\n"
+            "<!-- /hide -->\n"
+            "\n"
+        )
+        stripped = _strip_hide_blocks(text)
+        self.assertEqual(stripped, "अन्तिमग्लॉस् ।\n\n")
+        self.assertEqual(stripped.count("\n\n\n"), 0)
 
 
 if __name__ == "__main__":
