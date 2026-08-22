@@ -1,0 +1,50 @@
+{
+  "grantha_id": "mandukya-upanishad",
+  "edition_id": "mandukya-upanishad-rangaramanuja",
+  "reference_diagnostics": [
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 150,
+      "end": 160,
+      "display_text": "ब्रह्मो. १",
+      "hint": "'ब्रह्मो. १' not in the citation bimap; closest matches: शत.ब्राह्म, ब्र.स्, अग्निरहस्यम्",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.1",
+      "source_file": "mandukya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 137,
+      "end": 149,
+      "display_text": "अ.को. २-६-७६",
+      "hint": "'अ.को. २-६-७६' not in the citation bimap; closest matches: कठो, को.उ, सा.का",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.4",
+      "source_file": "mandukya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 265,
+      "end": 278,
+      "display_text": "पा.सू. ५-४-२८",
+      "hint": "locator ambiguous; treating as level separators (5.4.28); check the bimap ref_structure depth hint",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.5",
+      "source_file": "mandukya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1035,
+      "end": 1045,
+      "display_text": "भाग. १-३-५",
+      "hint": "'भाग. १-३-५' not in the citation bimap; closest matches: भ.गी, शैवागम, भ.गीता",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.5",
+      "source_file": "mandukya-upanishad-rangaramanuja-01-01.md"
+    }
+  ]
+}

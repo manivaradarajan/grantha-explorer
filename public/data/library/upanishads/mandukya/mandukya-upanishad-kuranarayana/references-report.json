@@ -1,0 +1,116 @@
+{
+  "grantha_id": "mandukya-upanishad",
+  "edition_id": "mandukya-upanishad-kuranarayana",
+  "reference_diagnostics": [
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1036,
+      "end": 1049,
+      "display_text": "पा,सू. 7-2-25",
+      "hint": "'पा,सू. 7-2-25' not in the citation bimap; closest matches: पा.सू, पा.यो.सू, पु.सू",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "1.1",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1080,
+      "end": 1088,
+      "display_text": "लिङ्गान्",
+      "hint": "'लिङ्गान्' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "1.1",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 210,
+      "end": 223,
+      "display_text": "स.ना.पू.पी. 8",
+      "hint": "'स.ना.पू.पी. 8' not in the citation bimap; closest matches: ना.प.उ, पू.मी, म.ना.उ",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "1.2",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 890,
+      "end": 904,
+      "display_text": "पा.सू. 5-4-140",
+      "hint": "locator ambiguous; treating as level separators (5.4.140); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "1.2",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 383,
+      "end": 397,
+      "display_text": "पा.सू. 3-1-135",
+      "hint": "locator ambiguous; treating as level separators (3.1.135); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.1",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 431,
+      "end": 443,
+      "display_text": "पा.सू.6-4-64",
+      "hint": "locator ambiguous; treating as level separators (6.4.64); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.1",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 988,
+      "end": 1002,
+      "display_text": "पा.सू. 6-3-129",
+      "hint": "locator ambiguous; treating as level separators (6.3.129); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.1",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 425,
+      "end": 435,
+      "display_text": "प्र.उ. 4-5",
+      "hint": "locator ambiguous; treating as level separators (4.5); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.2",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 805,
+      "end": 819,
+      "display_text": "पा.सू. 3-3-113",
+      "hint": "locator ambiguous; treating as level separators (3.3.113); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.3",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 1696,
+      "end": 1710,
+      "display_text": "पा,सू. 3-3-106",
+      "hint": "'पा,सू. 3-3-106' not in the citation bimap; closest matches: पा.सू, पा.यो.सू, पु.सू",
+      "commentary_id": "kuranarayana-muni-bhashyam",
+      "passage_ref": "2.3",
+      "source_file": "mandukya-upanishad-kuranarayana-muni-01-01.md"
+    }
+  ]
+}

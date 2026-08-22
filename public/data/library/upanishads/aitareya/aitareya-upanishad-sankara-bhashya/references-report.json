@@ -1,0 +1,127 @@
+{
+  "grantha_id": "aitareya-upanishad",
+  "edition_id": "aitareya-upanishad-sankara-bhashya",
+  "reference_diagnostics": [
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 666,
+      "end": 681,
+      "display_text": "ऐ. उ. १ । २ । १",
+      "hint": "locator ambiguous; treating as level separators (1.2.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 1154,
+      "end": 1172,
+      "display_text": "ऋ. सं. १ । ११५ । १",
+      "hint": "locator ambiguous; treating as level separators (1.115.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 1418,
+      "end": 1438,
+      "display_text": "ऐ. आ. ३ । २ । ३ । १२",
+      "hint": "locator ambiguous; treating as level separators (3.2.3.12); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 1656,
+      "end": 1671,
+      "display_text": "ऐ. उ. ३ । १ । १",
+      "hint": "locator ambiguous; treating as level separators (3.1.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 1724,
+      "end": 1739,
+      "display_text": "ऐ. उ. ३ । १ । ३",
+      "hint": "locator ambiguous; treating as level separators (3.1.3); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 1964,
+      "end": 1979,
+      "display_text": "ऐ. उ. ३ । १ । १",
+      "hint": "locator ambiguous; treating as level separators (3.1.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 816,
+      "end": 831,
+      "display_text": "ऐ. उ. २ । १ । १",
+      "hint": "locator ambiguous; treating as level separators (2.1.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.2.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 427,
+      "end": 442,
+      "display_text": "ऐ. उ. १ । १ । १",
+      "hint": "locator ambiguous; treating as level separators (1.1.1); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-02.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 461,
+      "end": 477,
+      "display_text": "ऐ. उ. १ । ३ । १३",
+      "hint": "locator ambiguous; treating as level separators (1.3.13); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2.1.1",
+      "source_file": "aitareya-upanishad-sankara-bhashya-02.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
+      "start": 523,
+      "end": 539,
+      "display_text": "हरि. ३ । ७३ । ७१",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2.1.3",
+      "source_file": "aitareya-upanishad-sankara-bhashya-02.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
+      "start": 1913,
+      "end": 1926,
+      "display_text": "मनु. १२ । १२३",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "3.1.3",
+      "source_file": "aitareya-upanishad-sankara-bhashya-03.md"
+    }
+  ]
+}

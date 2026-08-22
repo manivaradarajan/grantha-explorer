@@ -1,6 +1,6 @@
 {
   "kind": "edition-sub-envelope",
-  "schema_version": "1.2.0",
+  "schema_version": "1.4.0",
   "edition_id": "kena-upanishad-sankara-vakya-bhashya",
   "grantha_id": "kena-upanishad",
   "structure_levels": [

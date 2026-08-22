@@ -1,0 +1,141 @@
+{
+  "grantha_id": "kena-upanishad",
+  "edition_id": "kena-upanishad",
+  "reference_diagnostics": [
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 56,
+      "end": 59,
+      "display_text": "न्त",
+      "hint": "'न्त' not in the citation bimap; closest matches: श्वेत, मन्त्रि.उ, स्तो.र",
+      "passage_ref": "3.2",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 94,
+      "end": 97,
+      "display_text": "नैन",
+      "hint": "'नैन' not in the citation bimap; closest matches: तै.ना, तै.आन, ना",
+      "passage_ref": "3.6",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 99,
+      "end": 102,
+      "display_text": "नैन",
+      "hint": "'नैन' not in the citation bimap; closest matches: तै.ना, तै.आन, ना",
+      "passage_ref": "3.10",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 101,
+      "end": 102,
+      "display_text": "स",
+      "hint": "'स' not in the citation bimap; closest matches: सु, सुबा, सु.उ",
+      "passage_ref": "4.2",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 55,
+      "end": 60,
+      "display_text": "मीमिष",
+      "hint": "'मीमिष' not in the citation bimap; closest matches: प.मी, महोपनिषत्, पू.मी",
+      "passage_ref": "4.4",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 20,
+      "end": 21,
+      "display_text": "न",
+      "hint": "'न' not in the citation bimap; closest matches: ना, ना.उ, उ.ना",
+      "passage_ref": "4.5",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 40,
+      "end": 47,
+      "display_text": "मनोऽनेन",
+      "hint": "'मनोऽनेन' not in the citation bimap; closest matches: मो, महो",
+      "passage_ref": "4.5",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 53,
+      "end": 54,
+      "display_text": "त",
+      "hint": "'त' not in the citation bimap; closest matches: शत, तै, ऐत",
+      "passage_ref": "4.5",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 43,
+      "end": 48,
+      "display_text": "यस्तु",
+      "hint": "'यस्तु' not in the citation bimap; closest matches: सु, स्तो.र, दे.स्त",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.3",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 176,
+      "end": 180,
+      "display_text": "अत्र",
+      "hint": "'अत्र' not in the citation bimap; closest matches: प्र, शत.ब्रा, शत,ब्रा",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.5",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 237,
+      "end": 241,
+      "display_text": "मीमि",
+      "hint": "'मीमि' not in the citation bimap; closest matches: प.मी, पू.मी, म.स्मृ",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.4",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 328,
+      "end": 338,
+      "display_text": "न्यमीमिषत्",
+      "hint": "'न्यमीमिषत्' not in the citation bimap; closest matches: आत्मोपनिषत्, महोपनिषत्, अग्निरहस्यम्",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.4",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 445,
+      "end": 449,
+      "display_text": "र्थ?",
+      "hint": "'र्थ?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.4",
+      "source_file": "kena-upanishad-rangaramanuja.md"
+    }
+  ]
+}

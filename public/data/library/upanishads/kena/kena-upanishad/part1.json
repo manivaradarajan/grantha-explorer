@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.4.0",
   "grantha_id": "kena-upanishad",
   "edition_id": "kena-upanishad",
   "part_num": 1,
@@ -161,7 +161,20 @@
         "sanskrit": {
           "devanagari": "तद्धेषां विजज्ञौ । तेभ्यो ह प्रादुर्बभूव । तन्न व्यजानत(न्त) किमिदं यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 56,
+          "end": 59,
+          "display_text": "न्त",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.3",
@@ -197,7 +210,20 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ, एतद्दहेति। तदुपप्रेयाय सर्वजवेन । तन्न शशाक दग्धुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुम्, यदेतद्यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 94,
+          "end": 97,
+          "display_text": "नैन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.7",
@@ -233,7 +259,20 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ एतदादत्स्वेति । तदुपप्रेयाय सर्वजवेन । तन्न शशाकाऽऽदातुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुं, यदेतद्यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 99,
+          "end": 102,
+          "display_text": "नैन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.11",
@@ -269,7 +308,20 @@
         "sanskrit": {
           "devanagari": "तस्माद्वा एते देवा अतितरामिवान्यान् देवान्। यदग्निर्वायुरिन्द्रः । ते ह्येनन्नेदिष्ठं पस्पृशुः । ते (स) ह्येनत् प्रथमो विदाञ्चकार ब्रह्मेति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 101,
+          "end": 102,
+          "display_text": "स",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.3",
@@ -287,7 +339,20 @@
         "sanskrit": {
           "devanagari": "तस्यैष आदेशो यदेतद्विद्युतो व्यद्युतदा इति, इन्न्यमिष (मीमिष)दा इत्यधिदैवतम् ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 55,
+          "end": 60,
+          "display_text": "मीमिष",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.5",
@@ -296,7 +361,42 @@
         "sanskrit": {
           "devanagari": "अथाध्यात्मम्, यदेत (न)दगच्छतीव च मनो न (मनोऽनेन) चैन(त) दुपस्मरत्यभीक्ष्णं सङ्कल्पः ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 20,
+          "end": 21,
+          "display_text": "न",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        },
+        {
+          "start": 40,
+          "end": 47,
+          "display_text": "मनोऽनेन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        },
+        {
+          "start": 53,
+          "end": 54,
+          "display_text": "त",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.6",
@@ -446,7 +546,53 @@
           "sanskrit": {
             "devanagari": "**यस्यामतं तस्य मतं मतं यस्य न वेद सः। यः (यस्तु) परिच्छिन्नत्वेन ब्रह्म न मनुते, स ब्रह्म मनुते । यस्तु परिच्छिन्नत्वेन ब्रह्म मनुते, स तु न जानाति इत्यर्थः । **अविज्ञातं विजानतां विज्ञातमविजानताम्\\*\\* – ब्रह्म एतावत् इति परिच्छेदज्ञानवतां ब्रह्माऽविज्ञातं भवति; परिच्छिन्नत्वज्ञानशून्यानां ब्रह्म विज्ञातं भवति इत्यर्थः ।।\n\nउक्तञ्च भगवता भाष्यकृता – **‘यतो वाचो निवर्तन्ते, अप्राप्य मनसा सह’** (तै.उ.आ.9) इति ब्रह्मणोऽनन्तस्य अपरिमितगुणस्य वाङ्मनसयोः **‘एतावत्’** इति परिच्छिदायोग्यत्वश्रवणेन **‘ब्रह्म एतावत्’** इति ब्रह्मपरिच्छेदज्ञानवतां ब्रह्म अविज्ञातम् अमतम् इत्युक्तम्; अपरि छिन्नत्वात् ब्रह्मणः । अन्यथा **‘यस्यामतं तस्य मतम्’**, **‘विज्ञातमविजानताम्’** इति तत्रैव मतत्व-विज्ञातत्ववचनं विरुद्ध्येत इति । ततश्च अविज्ञातत्वादिवचनं’ कात्र्सून्येन ज्ञानाविषयत्वपरम्; न तु सर्वात्मना ब्रह्मणः ज्ञानागोचरत्वपरम् इति द्रष्टव्यम् । तथाहि सति, **‘ब्रह्मविदाप्रोति परम्’** (तै.उ.आ.1), **‘तमेव विदित्वाऽतिमृत्युमेति’** (श्वे.उ.3.8) इत्यादि शास्त्राणाम् असंगतार्थकत्वप्रसङ्गात्, वेदान्तानां नैरर्थक्यप्रसंगाच्च ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 43,
+            "end": 48,
+            "display_text": "यस्तु",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 397,
+            "end": 405,
+            "display_text": "तै.उ.आ.9",
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": null,
+            "locator": "9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 874,
+            "end": 882,
+            "display_text": "तै.उ.आ.1",
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": null,
+            "locator": "1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 919,
+            "end": 929,
+            "display_text": "श्वे.उ.3.8",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "3.8",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "2.4",
@@ -454,7 +600,20 @@
           "sanskrit": {
             "devanagari": "**प्रतिबोधविदितं मतममृतत्वं हि विन्दते** । प्रतिनियतो बोधः प्रतिबोधः। सत्यत्व – ज्ञानत्व – अनन्तत्वादिरूपासाधारणधर्मविशिष्टतया ज्ञातम् अमृतम् – ब्रह्मस्वरूप, तत्क्रतुन्यायेन स्वोपासकस्याप्यमृतत्वं विन्दते – लम्भयति इत्यर्थः । अन्तर्भावितण्यर्थः अयं विदिधातुः । लम्भनप्रकारमेवाह – **आत्मना विन्दते वीर्यं विद्यया विन्दतेऽमृतम्** । **‘स नो देवः शुभया स्मृत्या संयुनक्तु’** (तै.ना. 84.) इत्युक्तरीत्या विद्यानिष्पत्त्यनुकूलं वीर्य प्रसन्नेन परमात्मना लभते प्रसन्नपरमात्माऽऽहितवीर्यार्जितया विद्यया अमृतत्वम् अश्नुत इत्यर्थः ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 372,
+            "end": 382,
+            "display_text": "तै.ना. 84.",
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "84",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "2.5",
@@ -462,7 +621,31 @@
           "sanskrit": {
             "devanagari": "तादृशब्रह्मज्ञाने त्वराम् उत्पादयति – **‘इह चेदवेदीदथ सत्यमस्ति; न चेदिहावेदीत्, महती विनष्टिः’**। इहैव जन्मनि, ब्रह्म ज्ञातवांश्चेत्, अथ – समनन्तरमेव अस्ति – सन् भवति । सत्य (अत्र) ज्ञानाभावे आत्मनोऽसत्ता भवति; **‘असन्नेव स भवति असत ब्रह्मेति वेद चेत् । अस्ति ब्रह्मेति चेद्वेद सन्तमेनं ततो विदुः’** (तै.आ.6) इति श्रुत्यनुरोधात् इति द्रष्टव्यम् । **‘भूतेषु भूतेषु विचित्य धीराः प्रेत्यास्माल्लोकादमृता भवन्ति** । भूतेषु भूतेषु – सर्वभूतस्थं परमात्मानं प्रज्ञाशालिनः’ स्वेतरसमस्तविलक्षणत्वेन निर्धार्य. अस्माल्लोकात् – अर्चिरादिमार्गेण परमात्मानं प्राप्य मुक्ता भवन्ति इत्यर्थः ।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 176,
+            "end": 180,
+            "display_text": "अत्र",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 302,
+            "end": 308,
+            "display_text": "तै.आ.6",
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "6",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.1",
@@ -558,7 +741,42 @@
           "sanskrit": {
             "devanagari": "**तस्यैष आदेशः** । तस्य – आविर्भूतस्य’ सद्यस्तिरोभूतस्य ब्रह्मण एष आदेश: वक्ष्यमाण उपमानोपदेश इत्यर्थः । **यदेतत् विद्युतो व्यद्युतदा’** इति । यथा विद्युतो विद्योतनं क्षणिकम, तद्वत इत्यर्थः । आ इति प्रसिद्धौ। उपमानान्तरमाह – **इन्न्यमि (मीमि)षदा** इति अत्रापि आ इत्येतत् पूर्ववत् । इच्छब्दः उपमानान्तरसमुच्चयार्थः। यथा न्यमिषत (न्यमीमिषत्) निमेषः, प्रकाशतिरोभावः क्षणेन, एवं ब्रह्माऽपि तिरोऽभूत् इत्यर्थः । यथा विद्यतस्तिरोहिता भवन्ति इत्यर्थः (र्थ?) **न्यममिषत्** इति वचनव्यत्ययश्छन्दसः । **इत्यधिदैवतम्** – अनात्मभूताकाशादिगतविद्युद्विषयं ब्रह्मण उपमानदर्शनमुक्तम् इत्यर्थः ।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 237,
+            "end": 241,
+            "display_text": "मीमि",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 328,
+            "end": 338,
+            "display_text": "न्यमीमिषत्",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 445,
+            "end": 449,
+            "display_text": "र्थ?",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "4.5",

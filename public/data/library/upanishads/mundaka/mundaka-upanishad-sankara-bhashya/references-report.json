@@ -1,0 +1,94 @@
+{
+  "grantha_id": "mundaka-upanishad",
+  "edition_id": "mundaka-upanishad-sankara-bhashya",
+  "reference_diagnostics": [
+    {
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
+      "start": 1998,
+      "end": 2008,
+      "display_text": "मनु. १ । ७",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.1",
+      "source_file": "mundaka-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
+      "start": 508,
+      "end": 520,
+      "display_text": "मनु. १२ । ९५",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.1.5",
+      "source_file": "mundaka-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
+      "start": 1114,
+      "end": 1126,
+      "display_text": "मनु. १२ । ५०",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "1.2.11",
+      "source_file": "mundaka-upanishad-sankara-bhashya-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 232,
+      "end": 239,
+      "display_text": "सन्धयीत",
+      "hint": "'सन्धयीत' not in the citation bimap; closest matches: स्तो.र, दे.स्त, न्या.सू",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2.2.3",
+      "source_file": "mundaka-upanishad-sankara-bhashya-02.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 135,
+      "end": 152,
+      "display_text": "का. उ. २ । ३ । १४",
+      "hint": "locator ambiguous; treating as level separators (2.3.14); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "2.2.9",
+      "source_file": "mundaka-upanishad-sankara-bhashya-02.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 217,
+      "end": 231,
+      "display_text": "मो. ध. २५० । ४",
+      "hint": "locator ambiguous; treating as level separators (250.4); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "3.1.5",
+      "source_file": "mundaka-upanishad-sankara-bhashya-03.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 576,
+      "end": 590,
+      "display_text": "प्र. उ. १ । १६",
+      "hint": "locator ambiguous; treating as level separators (1.16); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "3.1.5",
+      "source_file": "mundaka-upanishad-sankara-bhashya-03.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 888,
+      "end": 902,
+      "display_text": "मो. ध. १८१ । ९",
+      "hint": "locator ambiguous; treating as level separators (181.9); check the bimap ref_structure depth hint",
+      "commentary_id": "sankara-bhashyam",
+      "passage_ref": "3.2.6",
+      "source_file": "mundaka-upanishad-sankara-bhashya-03.md"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "grantha_id": "mandukya-karika",
+  "edition_id": "mandukya-karika-bharadvajaramanujacharya",
+  "reference_diagnostics": [
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 135,
+      "end": 142,
+      "display_text": "पु.सू.१",
+      "hint": "locator ambiguous; treating as level separators (1); check the bimap ref_structure depth hint",
+      "commentary_id": "bharadvajaramanujacharya-pratipadarthadipika",
+      "passage_ref": "6",
+      "source_file": "mandukya-karika-bharadvajaramanujacharya-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 183,
+      "end": 190,
+      "display_text": "तै.भृ.१",
+      "hint": "locator ambiguous; treating as level separators (1); check the bimap ref_structure depth hint",
+      "commentary_id": "bharadvajaramanujacharya-pratipadarthadipika",
+      "passage_ref": "7",
+      "source_file": "mandukya-karika-bharadvajaramanujacharya-01.md"
+    }
+  ]
+}

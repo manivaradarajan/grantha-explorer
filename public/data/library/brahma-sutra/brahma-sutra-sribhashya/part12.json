@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.0.0",
+  "schema_version": "1.4.0",
   "grantha_id": "brahma-sutra",
   "edition_id": "brahma-sutra-sribhashya",
   "part_num": 12,
@@ -480,6 +480,41 @@
             "devanagari": "गुणोपसंहारानुपसंहारफला विद्यैकत्वनानात्वचिन्ता कृता; इदानीं विद्यात: पुरुषार्थ:, उत विद्याङ्गकात्कर्मण इति चिन्त्यते।\n\nकिं युक्तम्? अत: - विद्यात: पुरुषार्थ इति भगवान् बादरायणो मन्यते; कुत:? शब्दात् - दृश्यते ह्यौपिनषदश्शब्दो विद्यात: पुरुषार्थं ब्रुवन् ब्रह्म विदाप्नोति परम् (तै.आ.१.अनु) वेदाहमेतं पुरुषं महान्तमादित्यवर्णं तमस : परस्तात्। तमेवं विद्वानमृत इह भवति। नान्य : पन्था विद्यतेऽयनाय (पु.सू.) यथा नद्य : स्यन्दमानास्समुद्रे अस्तं गच्छन्ति नामरूपे विहाय। तथा विद्वान्नामरूपाद्विमुक्त : परात्परं पुरुषमुपैति दिव्यम् (मु.३.२८) इत्यादि\n\nअत्र पूर्वपक्षी प्रत्यवतिष्ठते -"
           }
         },
+        "references": [
+          {
+            "start": 278,
+            "end": 288,
+            "display_text": "तै.आ.१.अनु",
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 396,
+            "end": 402,
+            "display_text": "पु.सू.",
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 526,
+            "end": 533,
+            "display_text": "मु.३.२८",
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": null,
+            "locator": "3.28",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ],
         "intro": {
           "sanskrit": {
             "devanagari": "श्रीभगवद्रामानुजविरचितेश्रीशारीरकमीमांसाभाष्ये\nतृतीये साधनाध्याये - चतुर्थ : अङ्गपाद :"
@@ -492,7 +527,141 @@
           "sanskrit": {
             "devanagari": "नैतदेवम् - यद्विद्यात: पुरुषार्थावाप्तिश्शब्दादवगम्यते - इति। न ह्येष: ब्रह्मविदाप्नोति परम् (तै.आ.१) इत्यादिशब्दो वेदनात्पुरुषार्थावाप्तिमवगमयति, कर्मसु कर्तृभूतस्याऽत्मनो याथात्म्यवेदनप्रतिपादनपरत्वात्। अत: कर्तुस्संस्कारद्वारेण विद्याया: क्रतुशेषत्वात्तत्र फलश्रुतिरर्थवादमात्रम्; यथाऽन्येषु द्रव्यादिषु - इति जैमिनिराचार्यो मन्यते। तदुक्तं द्रव्यगुणसंस्कारकर्मसु परार्थत्वात्फलश्रुतिरर्थवादस्स्यात् (जै.मी.सू.४.३.१) इति।\n\nननु च कर्मसु कर्तुर्जीवादन्यो मुमुक्षुभि: प्राप्यतया वेदान्तेषु वेद्य उपिदश्यत इति प्रागेवोपपादितं नेतरोऽनुपपत्ते : (ब्र.सू..१.१.१७) भेदव्यपदेशाच्च (शारी.१-१-१८) अनुपपत्तेस्तु न शारीर : (ब्र.सू.१.२.३) इतरपरामर्शात्स इति चेन्नासम्भवात् (शारी.१-३-१७) इत्येवमादिभिस्सूत्रै:; तदेव ब्रह्म तत्त्वमस्यादिसामानाधिकरण्येन जीवादनतिरिक्तमित्येतदपि अधिकं तु भेदनिर्देशात् (ब्र.सू.२.१.२२) इत्येवमादिभिर्निरस्तम्; सामानाधिकरण्यनिर्देशश्च ऐतदात्म्यमिदं सर्वं (छा.६.८.७) सर्वं खल्विदं ब्रह्म (छा.३.१४.१) इति चेतनाचेतनसाधारण:; य : पृथिव्यां तिष्ठन् (बृ.५.७.३) य आत्मनि तिष्ठन् (बृ.६.३.२२) इत्यादिनाऽवगततत्तदात्मतयाऽवस्थितिनिबन्धन इति अवस्थितेरिति काशकृत्स्न : (ब्र.सू.६.४.२२) इत्यादिभिरुपपादितम्; तत्कथं कर्मसु कर्तुरात्मनो याथात्म्योपदेशपरा वेदान्तशब्दा इति विद्याया: कर्माङ्गत्वं प्रतिपाद्यते?।\n\nउच्यते - वेदान्तवाक्येष्वेव विद्याया: कर्मप्राधान्यं सूचयद्भिर्लिगै: तदुपबृंहित-सामानाधिकरण्यनिर्देशेन च वेदान्तशब्दा देहातिरिक्तजीवस्वरूपयाथात्म्योपदेशपरा इति बलादभ्युपगमनीयमिति पूर्वपक्षिणोऽभिप्राय:।\n\nननु च कर्तृसंस्कारमुखेन विद्याया: क्रत्वनुप्रवेशो न शक्यते वक्तुम्, कर्तुर्लौकिकवैदिकसाधारणत्वेनाव्यभिचरितक्रतुसम्बन्धित्वाभावात्। नैवम्, लौकिकस्य कर्मण: कर्तुर्देहादव्यतिरिक्तत्वेऽप्युपपत्तेर्देहातिरक्तनित्यात्मस्वरूपस्य क्रतावेवोपयोगात् तत्स्वरूपप्रतिपादन-मुखेन क्रत्वनुप्रवेशो न विरुध्यते। अतो विद्याया: क्रतुशेषत्वान्नात: पुरुषार्थ:\n\nकानि पुनस्तानि लिङ्गानि; यदुपबृंहितसामानाधिकरण्यनिर्देशेन वेदान्तशब्दा जीवस्वरूपपरा इति निर्णीयन्ते। तत्राह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 94,
+            "end": 100,
+            "display_text": "तै.आ.१",
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 404,
+            "end": 418,
+            "display_text": "जै.मी.सू.४.३.१",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 543,
+            "end": 557,
+            "display_text": "ब्र.सू..१.१.१७",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.1.17",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 575,
+            "end": 586,
+            "display_text": "शारी.१-१-१८",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.1.18",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 613,
+            "end": 625,
+            "display_text": "ब्र.सू.१.२.३",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.2.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 662,
+            "end": 673,
+            "display_text": "शारी.१-३-१७",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.3.17",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 787,
+            "end": 800,
+            "display_text": "ब्र.सू.२.१.२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 871,
+            "end": 879,
+            "display_text": "छा.६.८.७",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "6.8.7",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 903,
+            "end": 912,
+            "display_text": "छा.३.१४.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "3.14.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 959,
+            "end": 967,
+            "display_text": "बृ.५.७.३",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.7.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 987,
+            "end": 996,
+            "display_text": "बृ.६.३.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.3.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1070,
+            "end": 1083,
+            "display_text": "ब्र.सू.६.४.२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.3",
@@ -500,7 +669,42 @@
           "sanskrit": {
             "devanagari": "ब्रह्मविदां प्राधान्येन कर्मस्वेवाचारो दृश्यते अश्वपति: केकय: किल आत्मवित्तम: तद्विज्ञानाय उपगतांस्तानृषीन् प्रत्याह - यक्ष्यमाणो ह वै भगवन्तोऽहमस्मि (छा.५.११.५) इति । तथा जनकादयो ब्रह्मविदग्रेसरा: कर्मनिष्ठा: स्मृतिषु दृश्यन्ते, कर्मणैव हि संसिद्धिमास्थिता जनकादय : (भ.गी.३.२०) इयाज सोऽपि सुबहून् यज्ञान् ज्ञानव्यपाश्रय : (वि.पु.६.६.१२) इति । अतो ब्रह्मविदां कर्मप्रधानत्वदर्शनाद्विद्याया: कर्तृस्वरूपवेदनरूपत्वेन कर्माङ्गत्वमेवेति न विद्यात: पुरुषार्थ:\n\nलिङ्गमिदम्; प्राप्तिरुच्यतामित्यत्राह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 151,
+            "end": 160,
+            "display_text": "छा.५.११.५",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.11.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 268,
+            "end": 277,
+            "display_text": "भ.गी.३.२०",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "3.20",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 324,
+            "end": 336,
+            "display_text": "वि.पु.६.६.१२",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "6.6.12",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.4",
@@ -508,7 +712,31 @@
           "sanskrit": {
             "devanagari": "श्रुतिरेव हि विद्याया: कर्माङ्गत्वमाह - यदेव विद्यया करोति श्रद्धयोपनिषदा तदेव वीर्यवत्तरं भवति (छा.१.१.१०) इति। नेयं श्रुति: प्रकरणादुद्गीथमात्रविषयेति व्यवस्थापयितुं शक्या; यत: प्रकरणाच्छुतिर्बलीयसी; यदेव विद्यया करोति (छा.१.१.१०) इति विद्यामात्रविषया हीयं श्रुति:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 97,
+            "end": 106,
+            "display_text": "छा.१.१.१०",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 222,
+            "end": 231,
+            "display_text": "छा.१.१.१०",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.5",
@@ -516,7 +744,20 @@
           "sanskrit": {
             "devanagari": "तं विद्याकर्मणी समन्वारभेते (बृ.६.४.२) इति विद्याकर्मणोस्साहित्यं च दृश्यते । साहित्यं चोक्तेन न्यायेन विद्याया: कर्माङ्गत्वे सत्येव भवति ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 29,
+            "end": 37,
+            "display_text": "बृ.६.४.२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.6",
@@ -524,7 +765,31 @@
           "sanskrit": {
             "devanagari": "विद्यावत: कर्मविधानाद्विद्या कर्माङ्गमित्यवगम्यते - आचार्यकुलाद्वेदमधीत्य यथाविधानं गुरो : कर्मातिशेषेणाभिसमावृत्य कुटुम्बे शुचौ देशे (छा.८.१५.१) इत्यादौ । वेदमधीत्य (छा.८.१५.१) इत्यध्ययनवत: कर्माणि विदधदर्थावबोधपर्यन्ताध्ययनवत एव विदधाति । अर्थावबोधपर्यन्तं ह्यध्ययनमिति स्थापितम् । अतो ब्रह्मविद्यापि कर्मसु विनियुक्तेति न पृथक्फलायावकल्पते"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 135,
+            "end": 144,
+            "display_text": "छा.८.१५.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.15.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 167,
+            "end": 176,
+            "display_text": "छा.८.१५.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.15.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.7",
@@ -532,7 +797,20 @@
           "sanskrit": {
             "devanagari": "इतश्च न विद्यात: पुरुषार्थ:। कुर्वन्नेवेह कर्माणि जिजीविषेच्छतं समा: (ईश.२) इत्यात्मविद:, पुरुषायुषस्य सर्वस्य कर्मसु नियमेन विनियोगात्कर्मण एव फलमित्यवगम्यते। विद्या तु कर्माङ्गमिति \n\nएवं प्राप्ते प्रचक्ष्महे -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 70,
+            "end": 74,
+            "display_text": "ईश.२",
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": null,
+            "locator": "2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.8",
@@ -540,7 +818,119 @@
           "sanskrit": {
             "devanagari": "तुशब्दात्पक्षो व्यावृत्त:; विद्यात एव पुरुषार्थ:; कुत:? अधिकोपदेशात् - कर्मसु कर्तुर्जीवात् हेयप्रत्यनीकानवधिकातिशयासंख्येयकल्याणगुणाकरत्वेनाधिकस्य अर्थान्तरभूतस्य परस्य ब्रह्मणो वेद्यतयोपदेशात् भगवतो बादरायणस्य विद्यात: फलं इत्येवमेव मतम् । लिङ्गानि तिष्ठन्तु; वेद्यतयोपदेशस्तु तावत्कर्तु: प्रत्यगात्मनोऽधिकस्यैव। कथम्? तद्दर्शनात् - प्रत्यगात्मन्यशुद्धे शुद्धेऽप्यसम्भावनीयानन्तगुणाकरस्य वेद्यस्य निरस्तनिखिलहेयगन्धस्य स्वसङ्कल्पकृत-जगदुदयविभवलयलीलस्य सर्वज्ञस्य सर्वशक्तेर्वाङ्मनसा अपरिच्छेद्यानन्दस्य जीवाधिपस्य कृत्स्नस्य प्रशासितु: परस्य ब्रह्मणो वेदनोपदेशवाक्येषु दर्शनात् - अपहतपाप्मा विजरो विमृत्युर्विशोको विजिघत्सोऽपिपासस्सत्यकामस्सत्यसङ्कल्प : (छा.८.१.५) तदैक्षत बहु स्यां प्रजायेयेति तत्तेजोऽसृजत (छा.६.२.३) यस्सर्वज्ञस्सर्ववित् (मुण्ड.१.१.९) पराऽस्य शक्तिर्विविधैव श्रूयते स्वाभाविकी ज्ञानबलक्रिया च (श्वे.६.८) स एको ब्रह्मण आनन्द : (तै.आन.८.४) यतो वाचो निवर्तन्ते अप्राप्य मनसा सह आनन्दं ब्रह्मणो विद्वान् न बिभेति कुतश्चनेति (तै.आन.४.१) एष सर्वेश्वर एष भूताधिपतिरेष भूतपाल एष सेतुर्विधरण : (बृ.६.४.२२) स कारणं करणाधिपाधिपो , नचास्य कश्चिज्जनिता नचाधिप : (श्वे.६-९) एतस्य वा अक्षरस्य प्रशासने गार्गि सूर्याचन्द्रमसौ विधृतौ तिष्ठत : (बृ.५.७.९) भीषास्माद्वात : पवते । भीषोदेति सूर्य :। भीषास्मादग्निश्चेन्द्रश्च। मृत्युर्धावति पञ्चम : (तै.आ.८.१) इत्यादिषु। तस्माद्वेदनोपदेशशब्देषु कर्तु: प्रत्यगात्मन: खद्योतकल्पस्य अविद्यादिदेहसम्बन्धयोग्यस्य गन्धोऽपि नास्तीति परमपुरुषविषयाया विद्यायास्तत्प्राप्तिरूपममृतत्वं तत्र तत्र श्रूयमाणं फलमिति विद्यात: पुरुषार्थ इति सुष्ठूक्तम् \n\nलिङ्गान्यपि निरस्यन्ते -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 657,
+            "end": 665,
+            "display_text": "छा.८.१.५",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.1.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 711,
+            "end": 719,
+            "display_text": "छा.६.२.३",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "6.2.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 743,
+            "end": 754,
+            "display_text": "मुण्ड.१.१.९",
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": null,
+            "locator": "1.1.9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 815,
+            "end": 823,
+            "display_text": "श्वे.६.८",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "6.8",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 848,
+            "end": 857,
+            "display_text": "तै.आन.८.४",
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": null,
+            "locator": "2.8.4",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 942,
+            "end": 951,
+            "display_text": "तै.आन.४.१",
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": null,
+            "locator": "2.4.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1007,
+            "end": 1016,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1071,
+            "end": 1079,
+            "display_text": "श्वे.६-९",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "6.9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1148,
+            "end": 1156,
+            "display_text": "बृ.५.७.९",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.7.9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1249,
+            "end": 1257,
+            "display_text": "तै.आ.८.१",
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "8.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.9",
@@ -548,7 +938,20 @@
           "sanskrit": {
             "devanagari": "यदुक्तं - ब्रह्मविदां कर्मानुष्ठानदर्शनाद्विद्या कर्माङ्गम् - इति; तन्न विद्याया अनङ्गत्वेऽपि तुल्यं दर्शनम्, ब्रह्मविदां कर्मानुष्ठानदर्शनमनैकान्तिकमित्यर्थ:, अननुष्ठानस्यापि दर्शनात् । दृश्यते हि ब्रह्मविदां कर्मत्याग: ऋषय: कावषेया: किमर्था वयमध्येष्यामहे किमर्था वयं यक्ष्यामहे इत्यादौ। अतो ब्रह्मविदां कर्मत्यागदर्शनान्न विद्या कर्माङ्गम् ।\n\nकथमिदमुपपद्यते - ब्रह्मविदां कर्मानुष्ठानमननुष्ठानञ्च फलाभिसन्धिरहितस्य यज्ञादिकर्मणो ब्रह्मविद्याङ्गत्वात्तथाविधस्य कर्मणोऽनुष्ठानदर्शनमुपपद्यते । वक्ष्यति च सर्वापेक्षा च यज्ञादिश्रुतेरश्ववत् (शारी.३.४.२६) इति । फलार्थस्य तस्यैव यज्ञादे: कर्मणो मोक्षैकफलब्रह्म-विद्याविरोधित्वात् तस्याननुष्ठानदर्शनमुपपन्नतरम्। विद्याया: कर्माङ्गत्वे कर्मत्याग: कथमपि नोपपद्यते \n\nयदुक्तं - श्रुत्यैव विद्याया: कर्माङ्गत्वमवगम्यते इति; तत्राह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 541,
+            "end": 552,
+            "display_text": "शारी.३.४.२६",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "3.4.26",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.10",
@@ -556,7 +959,42 @@
           "sanskrit": {
             "devanagari": "न सर्वविद्याविषयेयं श्रुति:; अपि तूद्गीथविद्याविषयैव यदेव विद्यया करोति (छा.१.१.१०) इति यच्छब्दस्यानिर्धारितविशेषस्य उद्गीथमुपासीत (छा.१.१.१) इति प्रस्तुतोद्गीथविशेषनिष्ठत्वात्। न हि यत्करोति, तद्विद्ययेति सम्बध्यते; यदेव विद्यया करोति, तदेव वीर्यवत्तरमिति विद्यया क्रियमाणं यच्छब्देन निर्दिश्य तस्य हि वीर्यवत्तरत्वमुच्यते \n\nयच्चेदमुक्तं तं विद्याकर्मणी समन्वारभेते (बृ.६.४.२) इति विद्याकर्मणोस्साहित्यदर्शनात् विद्या कर्माङ्गम् - इति; तत्राह-"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 73,
+            "end": 82,
+            "display_text": "छा.१.१.१०",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 132,
+            "end": 140,
+            "display_text": "छा.१.१.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 368,
+            "end": 376,
+            "display_text": "बृ.६.४.२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.11",
@@ -564,7 +1002,20 @@
           "sanskrit": {
             "devanagari": "तं विद्याकर्मणी समन्वारभेते (बृ.६.४.२) इत्यत्रोक्तेन न्यायेन विद्याकर्मणोर्भिन्नफलत्वात् विद्या स्वस्मै फलाय समन्वारभते, कर्म च स्वस्मै फलायेति विभागो द्रष्टव्य:। शतवत् - यथा क्षेत्ररत्नविक्रयिणं शतद्वयमन्वेतीत्युक्ते क्षेत्रार्थं शतम्, रत्नार्थंशतमिति विभाग:प्रतीयते; तथेहापि ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 29,
+            "end": 37,
+            "display_text": "बृ.६.४.२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.12",
@@ -572,7 +1023,20 @@
           "sanskrit": {
             "devanagari": "यदुक्तं विद्यावत: कर्मविधानाद्विद्या कर्माङ्गम् - इति; नैतद्युक्तम्, वेदमधीत्य (छा.८.१५.१) इत्यध्ययनमात्रवतो विधानात् । न चाध्ययनविधिरेवार्थबोधे प्रवर्तयति, आधानवदध्ययनस्याक्षरराशिग्रहणमात्रे पर्यवसानात् । गृहीतस्य च स्वाध्यायस्य फलवत्कर्मावबोधित्वदर्शनात्तन्निर्णयफले तदर्थविचारे पुरुष: स्वयमेव प्रवर्तते; तत: कर्मार्थी कर्मज्ञाने प्रवर्तते, मोक्षार्थी च ब्रह्मज्ञान इति न विद्या कर्माङ्गम् । यद्यप्यध्ययनविधिरेवार्थावबोधे प्रवर्तयति; तथापि न विद्या कर्माङ्गम्, अर्थज्ञानादर्थान्तरत्वाद्विद्याया:। यथा ज्योतिष्टोमादि-कर्मस्वरूपविज्ञानात् फलसाधनभूतं कर्मानुष्ठानमर्थान्तरम्; तथाऽर्थज्ञानरूपात् ब्रह्मस्वरूपविज्ञानात् अर्थान्तरमेव ध्यानोपासनादिशब्दवाच्या पुरुषार्थसाधनभूता विद्येति न तस्या: कर्मसम्बन्धगन्धो विद्यते"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 80,
+            "end": 89,
+            "display_text": "छा.८.१५.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.15.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.13",
@@ -580,7 +1044,42 @@
           "sanskrit": {
             "devanagari": "यच्चोक्तं कुर्वन्नेवेहे कर्माणि (ईशा.२) इत्यात्मविदं ज्ञानाद्व्यावर्त्य यावज्जीवं कर्मानुष्ठाने नियमयतीति; तन्नोपपद्यते; अविशेषात् - नह्ययं नियम: फलसाधनभूतस्वतन्त्रकर्मविषय इति विशेषहेतुरस्ति, विद्याङ्गभूतकर्मविषयतयाऽप्युपपत्ते:। कर्मणैव हि संसिद्धिमास्थिता जनकादय : (भ.गी.३.२०) इति च विदुषस्त्वाप्रयाणादुपासनस्य अनुवर्तमानत्वात् \n\nएवमर्थस्वाभाव्येन चोद्यं परिहृत्य कुर्वन्नेवेह कर्माणि (ई.२) इत्यस्य वाक्यस्यार्थमाह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 33,
+            "end": 38,
+            "display_text": "ईशा.२",
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": null,
+            "locator": "2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 268,
+            "end": 277,
+            "display_text": "भ.गी.३.२०",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "3.20",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 388,
+            "end": 391,
+            "display_text": "ई.२",
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": null,
+            "locator": "2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.14",
@@ -588,7 +1087,31 @@
           "sanskrit": {
             "devanagari": "वाशब्दोऽवधारणार्थ:; ईशावास्यिमदं सर्वम् (ईशा.१) इति विद्याप्रकरणाद्विद्यास्तुतये सर्वदा कर्मानुष्ठानानुमतिरियम्। विद्यामाहात्म्यात्सर्वदा कर्म कुर्वन्नपि न लिप्यते कर्मभिरिति हि विद्या स्तुता भवति । वाक्यशेषश्चैवमेव दर्शयति, एवं त्वयि नान्यथेतोऽस्ति न कर्म लिप्यते नरे (ईशा.२) इति। अतो न कर्माङ्गं विद्या"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 41,
+            "end": 46,
+            "display_text": "ईशा.१",
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": null,
+            "locator": "1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 270,
+            "end": 275,
+            "display_text": "ईशा.२",
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": null,
+            "locator": "2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.15",
@@ -596,7 +1119,20 @@
           "sanskrit": {
             "devanagari": "अपि चैवमेके शाखिन: कामकारेण ब्रह्मविद्यानिष्ठस्य गार्हास्थ्यत्यागमधीयते किं प्रजया करिष्यामो येषां नोऽयमात्माऽयं लोक : (बृ.६.४.२२) इति। विदुषो विरक्तस्य कामकारेण गार्हास्थ्यकर्मत्यागं ब्रुवदिदं वचनं ब्रह्मविद्याया: कर्मानङ्गत्वं दर्शयति । यज्ञादिकर्माङ्गत्वे हि विद्याया: विद्यानिष्ठस्य कामकारेण गार्हास्थ्यत्यागो न सम्भवति । अतो न विद्या कर्माङ्गम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 120,
+            "end": 129,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.16",
@@ -604,7 +1140,20 @@
           "sanskrit": {
             "devanagari": "पुण्यापुण्यरूपस्य समस्तसांसारिकदु:खमूलस्य कर्मणो ब्रह्मविद्ययोपमर्दं च प्रतिवेदान्तमधीयते। भिद्यते हृदयग्रन्थिश्छिद्यन्ते सर्वसंशया :। क्षीयन्ते चास्य कर्माणि तस्मिन्दृष्टे परावरे (मुण्ड.२.२.८) इत्यादिकम्। तद्विद्याया: कर्माङ्गत्वे न सङ्गच्छते"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 181,
+            "end": 192,
+            "display_text": "मुण्ड.२.२.८",
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": null,
+            "locator": "2.2.8",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.17",
@@ -612,7 +1161,53 @@
           "sanskrit": {
             "devanagari": "ऊर्ध्वरेतस्स्वाश्रमेषु ब्रह्मविद्यादर्शनात्तेष्वग्निहोत्रदर्शपूर्णमासादिकर्माभावाच्च न विद्या कर्माङ्गम्। ननूर्ध्वरेतस आश्रमा न सन्त्येव यावज्जीवमग्निहोत्रं जुहोति (आप.श्रौत.३-१४-५) इत्यादिनाऽग्निहोत्रदर्शपूर्णमासादीनां यावज्जीवाधिकारश्रुते:; श्रुतिविरुद्धानां स्मृतीनां चाप्रामाण्यात्। अत आह - शब्दे हि - इति । वैदिक एव हि शब्दे ते दृश्यन्ते त्रयो धर्मस्कन्धा : (छा.२.२३.१) ये चेमेऽरण्ये श्रद्धा तप इत्युपासते (छा.५.१०.१) एतमेव प्रव्राजिनो लोकिमिच्छन्त : प्रव्रजन्ति (बृह.६.४.२२) इत्यादौ। यावज्जीवश्रुतिस्त्वविरक्तविषया"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 165,
+            "end": 180,
+            "display_text": "आप.श्रौत.३-१४-५",
+            "grantha_id": "apastamba-shrauta-sutra",
+            "edition_id": null,
+            "locator": "3.14.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 364,
+            "end": 373,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 412,
+            "end": 421,
+            "display_text": "छा.५.१०.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.10.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 469,
+            "end": 479,
+            "display_text": "बृह.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.18",
@@ -620,7 +1215,75 @@
           "sanskrit": {
             "devanagari": "यदिदं त्रयो धर्मस्कन्धा : (छा.२.२.३) इत्यादौ वैदिके शब्दे ऊर्ध्वरेतस आश्रमा दृश्यन्ते; अतस्ते सन्त्येवेति; नैतदुपपद्यते; यत: त्रयो धर्मस्कन्धा : (छा.२.२३.१) इत्यादिषु वाक्येषु तेषामाश्रमाणां परामर्शमात्रं क्रियते - अनुवादमात्रमित्यर्थ:। कुत एतत्? अचोदनात् - अविधानादित्यर्थ:। न ह्यत्र विधिशब्द: श्रूयते; त्रयो धर्मस्कन्धा : (छां.२.२३.१) इत्यादिना हि प्रकृतं प्रणवेन ब्रह्मोपासनं स्तूयते, ब्रह्मसंस्थोऽमृतत्वमेति (छां.२.२३.१) इत्युपसंहारात् । अतोऽन्यार्थमनुवादमात्रमत्र क्रियते तेषामाश्रमाणाम् ।ये चेमेऽरण्ये श्रद्धा तप इत्युपासते (छा.५.१०.१) इति च देवयानविधिपरत्वात्तत्रापि नाश्रमान्तरविधिसम्भव: । अपि चापवदति हि श्रुतिराश्रमान्तरं वीरहा वा एष देवानां योऽग्निमुद्वासयते (यजु.१.कां.५.२) इत्यादिका । अत ऊर्ध्वरेतस आश्रमा न सन्तीति जैमिनिराचार्यो मन्यते"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 27,
+            "end": 35,
+            "display_text": "छा.२.२.३",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.2.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 146,
+            "end": 155,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 325,
+            "end": 335,
+            "display_text": "छां.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 413,
+            "end": 423,
+            "display_text": "छां.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 531,
+            "end": 540,
+            "display_text": "छा.५.१०.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.10.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 671,
+            "end": 684,
+            "display_text": "यजु.१.कां.५.२",
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "1.5.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.19",
@@ -628,7 +1291,119 @@
           "sanskrit": {
             "devanagari": "गृहस्थाश्रमवदाश्रमान्तरमप्यनुष्ठेयं भगवान् बादरायणो मन्यते । कुत:? साम्यश्रुते : - उपादेयतयाऽभिमतगृहस्थाश्रमसाम्यं हि तेषामप्याश्रमाणां श्रूयते। त्रयो धर्मस्कन्धा : (छां.२.२३.१) इत्यारभ्य ब्रह्मसंस्थस्तुत्यर्थतया सङ्कीर्तनं गृहस्थाश्रमस्येतरेषां च समानम्; अथ गृहस्थाश्रमस्यानुवाद: प्राप्तौ सत्यामेव संभवतीति तस्य प्राप्तिरवश्याभ्युपेत्येति मतम्; तदितरेषामपि समानमन्यत्राभिनिवेशात्।\n\nन च गार्हास्थ्यधर्म एव यज्ञोऽध्ययनं दानं तपो ब्रह्मचर्यम् (छां.२.२३.१) इति सर्वैश्शब्दैरभिधीयते, ब्रह्मचर्यतपसोर्गृहस्थस्यैव सम्भवादिति युक्तम्, त्रयो धर्मस्कन्धा : (छा.२.२३.१) इति त्रित्वेन संगृह्य प्रथम :… द्वितीय :…. तृतीय :…. (छां.२.२३.११) इति विभागवचनानुपपत्ते:। अत: यज्ञोऽध्ययनं दानम् (छा.२.२३.१) इति गृहस्थाश्रम उच्यते। अध्ययनशब्दो वेदाभ्यासपर:। तपश्शब्देन वैखानसपारिव्राज्ययोर्ग्रहणम्, उभयो: तप: प्रधानत्वात्। तपश्शब्दो हि कायक्लेशे रूढ:, स च द्वयोरपि समान:। ब्रह्मचारिधर्म एव ब्रह्मचर्यशब्देनाभिधीयते। ब्रह्मसंस्थोऽमृतत्वमेति (छा.२.२३.१) इति परत्र श्रूयमाणो ब्रह्मसंस्थशब्दो यौगिक: सर्वाश्रमसाधारण:, सर्वेषामाश्रमिणां ब्रह्मसंस्थासम्भवात्। ब्रह्मणि संस्था - संस्थिति: ब्रह्मसंस्थत्वम्; तच्च सर्वेषां सम्भवत्येव। ब्रह्मनिष्ठाविकला: केवलाश्रमिण: पुण्यलोकभाज:; तेष्वेव ब्रह्मनिष्ठोऽमृतत्वभाग्भवति। तदेतद्विस्पष्टमुक्तं भगवता पराशरेण प्राजापत्यं ब्राह्मणानाम् (वि.पु.१.६.३४) इत्यारभ्य ब्राह्मं संन्यासिनां स्मृतम् (वि.पु.१.६.३७) इत्यन्तेन वर्णानामाश्रमाणां च केवलानां ब्रह्मलोकप्राप्त्यन्तं फलमभिधाय एकान्तिनस्सदा ब्रह्मध्यायिनो योगिनो हि ये। तेषां तत्परमं स्थानं यद्वै पश्यन्ति सूरय : (वि.पु.१.६.३९) इति तेष्वेव ब्रह्मनिष्ठानां ब्रह्मप्राप्तिमभिदधता। अतो गृहस्थाश्रमतुल्या: ऊर्ध्वरेतस आश्रमा अपि दृश्यन्त इति तेऽप्यनुष्ठेया:। ये चेमेऽरण्ये श्रद्धा तप इत्युपासते (छा.५.१०.१) इति च अरण्ये इति तप: प्रधानाश्रमप्राप्त्यपेक्षत्वाद्देवयानविधानस्य तत्रापि तत्प्राप्तिरङ्गीकरणीया \n\nपरामर्शपक्षे विधानपक्षे च गृहस्थाश्रमतुल्यमेषामप्यनुष्ठेयत्वमित्युपपाद्य विधिरेवायामाश्रमाणां सर्वेषां, नानुवाद इत्युपपादयितुमाह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 166,
+            "end": 176,
+            "display_text": "छां.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 442,
+            "end": 452,
+            "display_text": "छां.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 549,
+            "end": 558,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 614,
+            "end": 625,
+            "display_text": "छां.२.२३.११",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.11",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 675,
+            "end": 684,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 919,
+            "end": 928,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1249,
+            "end": 1261,
+            "display_text": "वि.पु.१.६.३४",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.6.34",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1303,
+            "end": 1315,
+            "display_text": "वि.पु.१.६.३७",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.6.37",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1475,
+            "end": 1487,
+            "display_text": "वि.पु.१.६.३९",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.6.39",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1652,
+            "end": 1661,
+            "display_text": "छा.५.१०.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.10.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.20",
@@ -636,7 +1411,31 @@
           "sanskrit": {
             "devanagari": "वा शब्दोऽवधारणार्थ: । विधिरेवायमाश्रमाणाम्; धारणवत् - यथा दिष्टाग्निहोत्रे, अधस्तात्समिधं धारयन्ननुद्रवेदुपरि हि देवेभ्यो धारयति इत्यत्रानुवादसरूपादपि वाक्यादुपरि धारणस्याप्राप्तत्वाद्विधिराश्रीयते; तदुक्तं शेषलक्षणे विधिस्तु धारणोऽपूर्वत्वात् (पू.मी.सू.३.४.१५) इति; तथाऽत्राप्यप्राप्तत्वाद्विधिरेवाश्रयणीय: ॥\n\nब्रह्मचर्यं समाप्य गृही भवेत् गृहाद्वनी भूत्वा प्रव्रजेत् यदि वेतरथा ब्रह्मचर्यादेव प्रव्रजेत् गृहाद्वा वनाद्वा यदहरेव विरजेत् तदहरेव प्रव्रजेत् (जाबा.उ.४) इति जाबालानामाश्रमविधिमसन्तमिव कृत्वा, एतेष्वन्यपरेष्वपि वाक्येष्वाश्रमप्राप्तिरवश्याश्रयणीया इत्युपपादितम् ।\n\nएवमाश्रमान्तरविधानात् ऋणश्रुतिर्यावज्जीवश्रुतिरपवादश्रुतिश्चाविरक्तविषया एवेति वेदितव्या:। अन्याश्च ब्रह्मविद: कर्मणामाप्रयाणात् अवश्यकर्तव्यताविधायिन्य: श्रुतय: स्मृतयश्च स्वस्वाश्रमधर्मविषया: ।\n\nअत ऊर्ध्वरेतस्सु च ब्रह्मविद्याविधानाद्विद्यात: पुरुषार्थ इति सिद्धम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 245,
+            "end": 260,
+            "display_text": "पू.मी.सू.३.४.१५",
+            "grantha_id": "purva-mimamsa",
+            "edition_id": null,
+            "locator": "3.4.15",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 457,
+            "end": 465,
+            "display_text": "जाबा.उ.४",
+            "grantha_id": "jabala-upanishad",
+            "edition_id": null,
+            "locator": "4",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.21",
@@ -644,7 +1443,20 @@
           "sanskrit": {
             "devanagari": "इदमिदानीं चिन्त्यते स एष रसानां रसतम : परम : परार्थ्योऽष्टमो यदुद्गीथ : (छा.१.१.३) इति एवंजातीयकानि वाक्यानि क्रत्ववयवभूतोद्गीथादिस्तुतिमात्रपराणि, आहोस्विदुद्गीथादिषु रसतमादिदृष्टिविधानार्थानीति ।\n\nअत्र प्रतिपादितमुपासनपरत्वमङ्गीकृत्योपासनस्य पुरुषार्थत्वेन क्रतुषूपादानानियम उक्त:।\n\nकिं युक्तम्? स्तुतिमात्रपराणीति ।\n\nकुत:? उद्गीथाद्युपादानात्। क्रत्वङ्गभूतानि ह्युद्गीथादीन्युपादाय तेषां रसतमादित्वं प्रतिपादतम्; यथा जुह्वादीनां पृथिव्यादित्वं प्रतिपादयतो वचनस्य इयमेव जुहू: स्वर्गो लोक आहवनीय: इत्यादिकस्य तत्स्तुतिमात्रपरत्वम्, तथेहापि । तदिदमाशङ्कते - स्तुतिमात्रमुपादानादिति चेत् - इति। उद्गीथाद्युपादानात्तत्स्तुतिमात्रमेवैषां वाक्यानां विवक्षितमिति चेत्\n\nअत्रोत्तरं - नापूर्वत्वात् - इति। न स्तुतिमात्रत्वमुपपद्यते; कुत:? अपूर्वत्वात् - अप्राप्तत्वात्। न ह्युद्गीथादयो रसतमादितया प्रमाणान्तरेण प्रतिपन्ना:; येन तत्प्राशस्त्यबुद्ध्युत्पत्त्यर्थं रसतमादित्वेनानूद्येरन्। नचोद्गीथादिविधिरत्र सन्निहित:; येन इयमेव जुहूस्स्वर्गो लोक आहवनीय: इत्यादिवत्तदेकवाक्यत्वेन यया कयाचनविधया तत्स्तुतिपरत्वमाश्रीयेत । अत: क्रतुवीर्यवत्तरत्वादिफलसिद्ध्यर्थं उद्गीथादिषु रसतमादिदृष्टिविधानमेव न्याय्यम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 73,
+            "end": 81,
+            "display_text": "छा.१.१.३",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.22",
@@ -652,7 +1464,20 @@
           "sanskrit": {
             "devanagari": "उपासीत (छा.१.१.१) इत्यादिभावशब्दाच्च विधिपरत्वमेव न्याय्यम् । विधिप्रत्यययुक्तो हि क्रियाशब्दो विधेयमेव स्वार्थमवगमयति । तस्मादुपासनविधानार्था एताश्श्रुतय:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 8,
+            "end": 16,
+            "display_text": "छा.१.१.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.23",
@@ -660,7 +1485,31 @@
           "sanskrit": {
             "devanagari": "प्रतर्दनो ह वै दैवोदासिरिन्द्रस्य प्रियं धामोपजगाम (कौ.३.१) श्वेतकेतुर्हारुणेय आस (छा.६.१.१) इत्येवमादीनि वेदान्तेष्वाख्यानानि किं पारिप्लवप्रयोगार्थानि, उत विद्याविशेषप्रतिपादनार्थानीति चिन्तायाम् -\n\nआख्यानानि शंसन्ति (?) इत्याख्यानानां पारिप्लवे विनियोगान्न विद्याप्रधानत्वं न्याय्यमिति चेत्\n\nन सर्वाण्याख्यानानि पारिप्लवप्रयोगे विनियोगमर्हान्ति; कुत:? विशेषितत्वाद्विनियोगस्य। आख्यानानि शंसन्ति इत्युक्त्वा तत्रैव मनुर्वैवस्वतो राजा इत्यादिना मन्वादीनामाख्यानानि विशेष्यन्ते, अतस्तेषामेव तत्र विनियोग इति गम्यते । तस्मान्न सर्वा वेदान्तेष्वाख्यानश्रुतय: पारिप्लवप्रयोगार्था:; अपि तु विद्याविध्यर्था:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 52,
+            "end": 58,
+            "display_text": "कौ.३.१",
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": null,
+            "locator": "3.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 83,
+            "end": 91,
+            "display_text": "छा.६.१.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "6.1.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.24",
@@ -668,7 +1517,31 @@
           "sanskrit": {
             "devanagari": "आत्मा वा अरे द्रष्टव्य : (बृ.६-५-६) इत्यादिविधिनैकवाक्यतयोपबन्धाच्चाख्यानानां विद्याविध्यर्थान्येव तानीति गम्यते; यथासोऽरोदीत् (यजु.१-५-१) इत्येवमादे: कर्मविध्यर्थत्वम्; न पारिप्लवार्थत्वम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 26,
+            "end": 34,
+            "display_text": "बृ.६-५-६",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.5.6",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 128,
+            "end": 137,
+            "display_text": "यजु.१-५-१",
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "1.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.25",
@@ -676,7 +1549,64 @@
           "sanskrit": {
             "devanagari": "स्तुतिप्रसङगादवान्तरसङ्गतिविशेषेणार्थद्वयं चिन्तितम् । विद्यावन्त ऊर्ध्वरेतस आश्रमिण: सन्तीत्युक्तम् ऊर्ध्वरेतस्सु च शब्दे हि (शारी.३.४.२७) इत्यादिभिस्सूत्रै:।\n\nइदानीमूर्ध्वरेतसो यज्ञाद्यभावात्तदङ्गिका विद्या न सम्भवतीत्याशङ्क्याह - अत एव चाग्नीन्धनाद्यनपेक्षा - इति । यत ऊर्ध्वरेतस आश्रमिणो विद्यासम्बन्धित्वेन श्रुत्या परिगृह्यन्ते ब्रह्मसंस्थोऽमृतत्वमेति (छा.२.२३.१) ये चेमेऽरण्ये श्रद्धा तप इत्युपासते (छा.५.१०.१) एतमेव प्रव्राजिनो लोकमिच्छन्त : प्रव्रजन्ति (बृ.६.४.२२) यदिच्छन्तो ब्रह्मचर्यं चरन्ति (कठ.१.२.१५) इत्यादिकया; अत एवोर्ध्वरेतस्सु विद्या अग्नीन्धनाद्यनपेक्षा अग्नीन्धनम् - अग्न्याधानम्; आधानपूर्वकाग्निहोत्रदर्शपूर्णमासादिकर्मानपेक्षा तेषु विद्या । केवलस्वाश्रमविहितकर्मापेक्षेत्यर्थ:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 127,
+            "end": 138,
+            "display_text": "शारी.३.४.२७",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "3.4.27",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 359,
+            "end": 368,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 407,
+            "end": 416,
+            "display_text": "छा.५.१०.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.10.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 463,
+            "end": 472,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 505,
+            "end": 514,
+            "display_text": "कठ.१.२.१५",
+            "grantha_id": "katha-upanishad",
+            "edition_id": null,
+            "locator": "1.2.15",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.26",
@@ -684,7 +1614,64 @@
           "sanskrit": {
             "devanagari": "यदि विद्या यज्ञाद्यनपेक्षैवामृतत्वं साधयति; तर्हि गृहस्थेष्वपि तदनपेक्षैव साधयितुमर्हति, यज्ञादिश्रुतिरपि विविदिषन्ति (बृ.६.४.२२) इति शब्दात्कर्मणो वेदनाङ्गतां न प्रतिपादयतीति -\n\nअत आह - सर्वापेक्षा इति। अग्निहोत्रादिसर्वकर्मापेक्षैव विद्या कर्मवत्सु गृहस्थेषु; कुत:? यज्ञादिश्रुते: । तमेतं वेदानुवचनेन ब्राह्मणा विविदिषन्ति यज्ञेन दानेन तपसाऽनाशकेन (बृ.६.४.२२) इत्यादिना यज्ञादयो हि विद्याङ्गत्वेन श्रूयन्ते। यज्ञादिना विविदिषन्ति वेदितुमिच्छन्ति, यज्ञादिभिर्वेदनं प्राप्तुमिच्छन्तीत्यर्थ:। यज्ञादीनां ज्ञानसाधनत्वे सत्येव यज्ञादिभि: ज्ञानं प्राप्तुमिच्छन्तीति व्यपदेश उपपद्यते; यथा असेर्हाननसाधनत्वे सति असिना जिघांसतीति व्यपदेश:। अतो यज्ञादीनां ज्ञानसाधनत्वमवगम्यते ॥\n\nज्ञानं च वाक्यार्थज्ञानादर्थान्तरभूतं ध्यानोपासनादिशब्दवाच्यं विशदतमप्रत्यक्षतापन्न-स्मृतिरूपं निरतिशयप्रियमहरहरभ्यासाधेयातिशयमाप्रयाणादनुवर्तमानं मोक्षसाधनमित्युक्तमस्माभि: पूर्वमेव; वक्ष्यति च आवृत्तिरसकृदुपदेशात् (ब्र.सू.४.१.१) इत्यादिना।\n\nएवं रूपं च ध्यानमहरहरनुष्ठीयमानैर्नित्यनैमित्तिककर्मभि: परमपुरुषाराधनरूपै: परमपुरुषप्रसादद्वारेण जायत इति यज्ञादिना विविदिषन्तीति शास्त्रेण प्रतिपाद्यते । अत: कर्मवत्सु गृहस्थेषु यज्ञादिनित्यनैमित्तिकसर्वकर्मापेक्षा विद्या। अश्ववत् - यथा गमनसाधनभूतोऽश्व: स्वपरिकरबन्ध-परिकर्मापेक्ष:; एवं मोक्षसाधनभूताऽपि विद्या नित्यनैमित्तिककर्मपरिकरापेक्षा । तदिदमाह स्वयमेव भगवान् यज्ञदानतप : कर्म न त्याज्यं कार्यमेव तत्। यज्ञो दानं तपश्चैव पावनानि मनीषिणाम् (भ.गी.१८.५) यत : प्रवृत्तिर्भूतानां येन सर्वमिदं ततम्। स्वकर्मणा तमभ्यर्च्य सिद्धिं विन्दति मानव : (भ.गी.१८.४६) इति"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 119,
+            "end": 128,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 351,
+            "end": 360,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 889,
+            "end": 901,
+            "display_text": "ब्र.सू.४.१.१",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "4.1.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1363,
+            "end": 1372,
+            "display_text": "भ.गी.१८.५",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "18.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1462,
+            "end": 1472,
+            "display_text": "भ.गी.१८.४६",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "18.46",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.27",
@@ -692,7 +1679,20 @@
           "sanskrit": {
             "devanagari": "गृहस्थस्य शमदमादीन्यप्यनुष्ठेयानि, उत नेति चिन्तायाम् - आन्तर-बाह्यकरणव्यापाररूपत्वात्कर्मानुष्ठानस्य, शमदमादीनां तद्विपरीतरूपत्वाच्चाननुष्ठेयानि -\n\nइति प्राप्त उच्यते ॥ यद्यपि गृहस्थ: करणव्यापाररूपकर्मसु प्रवृत्त:, तथाऽपि स विद्वान् शमदमाद्युपेतस्स्यात् कुत:? तदङ्गतया तद्विधे: - विद्याङ्गतया तेषां विधे: तस्मादेवंविच्छान्तो दान्त उपरतस्तितिक्षुस्समाहितो भूत्वाऽऽत्मन्येवाऽत्मानं पश्येत् (बृ.६.४.२३) इति । विद्योत्पत्तेश्चित्तसमाधानरूपत्वेन दृष्टपरिकरत्वाच्छमादीनां, विद्यानिर्वृत्तये तेषां - शमादीनामप्यवश्यानुष्ठेयत्वाच्च तान्यप्यनुष्ठेयानि ।\n\nन च करणव्यापारतद्विपर्ययरूपत्वेन कर्मणां शमदमादीनां च परस्परविरोध: भिन्नविषयत्वात् विहितेषु करणव्यापार:; अविहितेषु प्रयोजनशून्येषु च तदुपशम इति । न च करणव्यापाररूपकर्मसु वर्तमानस्य वासनावशाच्छमादीनामुपादेयत्वासम्भव:; विहितानां कर्मणां परमपुरुषाराधनतया तत्प्रसादद्वारेण निखिलविपरीतवासनोच्छेदहेतुत्वात् । अतो गृहस्थस्य शमदमादयोऽप्यनुष्ठेया:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 390,
+            "end": 399,
+            "display_text": "बृ.६.४.२३",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.23",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.28",
@@ -700,7 +1700,64 @@
           "sanskrit": {
             "devanagari": "वाजिनां छन्दोगानां च प्राणविद्यायां न ह वा अस्यानन्नं दग्धं भवति नानन्नं परिगृहीतं भवति (बृ.८.१.१४) न ह वा एवंविदि किञ्चनानन्नं भवति (छा.५.२.१) इति प्राणविद: सर्वान्नानुमति: सङ्कीर्त्यते ॥\n\nकिमियं प्राणविद्यानिष्ठस्य सर्वान्नानुमति: सर्वदा, उत प्राणात्ययापत्ताविति विशये,\n\nविशेषानुपादानात्सर्वदा - इति प्राप्ते\n\nउच्यते - प्राणात्यये इति। च शब्दोऽवधारणे; प्राणात्ययापत्तावेवेत्यर्थ:। कुत:? तद्दर्शनात् - दृश्यते ह्यन्यत्र ब्रह्मविदामपि प्राणात्ययापत्तावेव सर्वान्नाभ्यनुज्ञा; किं पुन: प्राणविद:। उषस्ति: किल चाक्रायणो ब्रह्मविदग्रेसरो मटचीहतेषु कुरुषु दुर्भिक्षदूषितेष्विभ्यग्रामे वसन्ननशनेन प्राणसंशयमापन्नो ब्रह्मविद्यानिष्पत्तये प्राणानामनवसादमाकाङ्क्षमाण: इभ्यं कुल्माषान् खादन्तं भिक्षमाणस्तेन च उच्छिष्टेभ्योऽन्ये न विद्यन्त इति प्रत्युक्त: पुनरपिएतेषां मे देहि (छा.१.१०.३) इत्युक्त्वा तेन चेभ्येनोच्छिष्टेभ्य आदाय दत्तान् कुल्माषान् प्रतिगृह्यानुपानप्रतिग्रहमिभ्येनार्थित: उच्छिष्टं वै मे पीतं स्यात् (छा.१.१०.४१) इति वदंश्चाक्रायण: किमेते कुल्माषा अनुच्छिष्टा इति इभ्येन पर्यनुयुक्त : न वा अजीविष्यमिमानखादन् … कामो मे उदपानम् (छा.१.१०.४) इति कुल्माषाखादने स्वस्य प्राणसंशयापत्तेस्तावन्मात्रखादनेन धृतप्राणस्य स्वस्योच्छिष्टोदकपानं कामकारितं निषिद्धं स्यात् इत्युक्त्वा स्वखादितशेषं जायायै दत्वा तया च रक्षितानपरेद्युर्याजनेनार्जिजीषया जिगमिषु: पुनरपि प्राणसंशयमापन्नस्तानेवेभ्योच्छिष्टान् स्वोच्छिष्टभूतान् पर्युषितांश्चखाद ।\n\nअतो ब्रह्मविदामपि प्राणसंशय एव सर्वान्नानुमतिदर्शनात् अत्राविशेषेण कीर्तितमपि प्राणविदस्सर्वान्नीनत्वं प्राणात्ययापत्तावेवेति निश्चीयते"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 89,
+            "end": 98,
+            "display_text": "बृ.८.१.१४",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "8.1.14",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 134,
+            "end": 142,
+            "display_text": "छा.५.२.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "5.2.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 768,
+            "end": 777,
+            "display_text": "छा.१.१०.३",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.10.3",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 908,
+            "end": 918,
+            "display_text": "छा.१.१०.४१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.10.41",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1035,
+            "end": 1044,
+            "display_text": "छा.१.१०.४",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.10.4",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.29",
@@ -708,7 +1765,20 @@
           "sanskrit": {
             "devanagari": "आहारशुद्धौ सत्त्वशुद्धि : सत्त्वशुद्धौ ध्रुवा स्मृति : (छा.७.२६.२) इति ब्रह्मविद्योत्पत्तौ आहारशुद्धिविधानाबाधादपि ब्रह्मविदां सर्वान्नीनत्वमापद्विषयमवगम्यते। एवं ब्रह्मविदामतिशयितशक्तीनामपि सर्वान्नीनत्वस्यापद्विषयत्वात्प्राणविदोऽल्पशक्ते: सर्वान्नानुमति: आपद्विषयैव"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 56,
+            "end": 65,
+            "display_text": "छा.७.२६.२",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "7.26.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.30",
@@ -732,7 +1802,20 @@
           "sanskrit": {
             "devanagari": "यज्ञादिकर्माङ्गिका ब्रह्मविद्येत्युक्तम्; तानि च यज्ञादीनि कर्माण्यमुमुक्षुणा केवलाश्रमिणाऽप्यनुष्ठेयानि, उत नेति चिन्तायां,\n\nविद्याङ्गानां सतां केवलाश्रमशेषत्वे नित्यानित्यसंयोगविरोध: प्रसज्यत इति यज्ञादीनां केवलाश्रमधर्मत्वं न सम्भवति - इति प्राप्ते\n\nउच्यते आश्रमकर्मापि - इति । आश्रमस्य कर्मापि भवति। केवलाश्रमिणापि अनुष्ठेयानीत्यर्थ:। कुत:? यावज्जीवमग्निहोत्रं जुहोति इत्यादिना विहितत्वात् - जीवननिमित्ततया नित्यवद्विहितत्वादित्यर्थ: \n\nतथा च विद्याङ्गतया तमेतं वेदानुवचनेन (बृह.६.४.२२) इत्यादिना विहितत्वात् विद्याशेषतया अप्यनुष्ठेयानीत्याह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 478,
+            "end": 488,
+            "display_text": "बृह.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.33",
@@ -756,7 +1839,20 @@
           "sanskrit": {
             "devanagari": "धर्मेण पापमपनुदति (तै.ना.५०) इत्यादिभिश्च तानेव यज्ञादिधर्मान्निर्दिश्य तैर्विद्याया अनभिभवं - पापकर्मभिरुत्पत्तिप्रतिबन्धाभावं दर्शयति । अहरहरनुष्ठीयमानैर्हि यज्ञादिभि: विशुद्धेऽन्त:करणे प्रत्यहं प्रकृष्यमाणा विद्योत्पद्यते । अतस्त एवोभयत्र यज्ञादय:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 19,
+            "end": 27,
+            "display_text": "तै.ना.५०",
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "50",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.36",
@@ -764,7 +1860,20 @@
           "sanskrit": {
             "devanagari": "चतुर्णामाश्रमिणां ब्रह्मविद्यायामधिकारोऽस्ति, विद्यासहकारिण आश्रमधर्मा इति चोक्तम्।\n\nये पुनराश्रमानन्तरा वर्तन्ते विधुरादय:; तेषां ब्रह्मविद्यायामधिकारोऽस्ति, न वेति विशये-\n\nआश्रमधर्मेतिकर्तव्यताकत्वाद्विद्याया:, अनाश्रमिणां चाश्रमधर्माभावान्नास्त्यधिकार इति प्राप्ते :-\n\nउच्यते - अन्तरा चापि तु - इति। तुशब्द: पक्षव्यावृत्त्यर्थ:; चशब्दोऽवधारणे। अन्तरा वर्तमानानाम् अनाश्रिमणामपि विद्यायामधिकारोऽस्त्येव। कुत:? तद्दृष्टे: - दृश्यते हि रैक्वभीष्मसंवर्तादीनामनाश्रमिणामपि ब्रह्मविद्यानिष्ठत्वम् । न चाश्रमधर्मैरेव विद्यानुग्रह इति शक्यं वक्तुम्, यज्ञेन दानेन तपसानाशकेन (बृ.६.४.२२) इति दानादीनामाश्रमेषु अनैकान्तिकानामपि अनुग्राहकत्वदर्शनात् । यथोर्ध्वरेतस्सु विद्यानिष्ठत्वदर्शनादग्निहोत्रादिव्यतिरिक्तैरेव विद्यानुग्रह: क्रियते; तथाऽनाश्रमिष्वपि विद्यादर्शनादाश्रमानियतैर्जपोपवासदानदेवताराधनादिभि: विद्यानुग्रहश्शक्यते कर्तुम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 570,
+            "end": 579,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.37",
@@ -772,7 +1881,20 @@
           "sanskrit": {
             "devanagari": "अपि च अनाश्रिमणामपि जपादिभिरेव विद्यानुग्रह: स्मर्यते - जप्येनापि च संसिध्येद्ब्राह्मणो नात्र संशय :। कुर्यादन्यन्न वा कुर्यान्मैत्रो ब्राह्मण उच्यते (मनु.२.८७) इति। संसिध्येत् - जपाद्यनुगृहीतया विद्यया सिद्धो भवतीत्यर्थ:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 151,
+            "end": 159,
+            "display_text": "मनु.२.८७",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.38",
@@ -780,7 +1902,20 @@
           "sanskrit": {
             "devanagari": "न केवलं न्यायस्मृतिभ्यामयमर्थस्साधनीय:; श्रूयते चानाश्रमनियतैर्धर्मविशेषैर्विद्यानुग्रह: तपसा ब्रह्मचर्येण श्रद्धया विद्ययाऽऽत्मानमन्विष्येत् (प्रश्न.१.१०) इति"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 143,
+            "end": 154,
+            "display_text": "प्रश्न.१.१०",
+            "grantha_id": "prashna-upanishad",
+            "edition_id": null,
+            "locator": "1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.39",
@@ -788,7 +1923,20 @@
           "sanskrit": {
             "devanagari": "तुशब्दोऽवधारणे; अत: - अनाश्रमित्वात् इतरत् - आश्रमित्वमेव ज्याय:, अनाश्रमित्वमापद्विषयम्; शक्तस्य त्वाश्रमित्वमेवोपादेयमित्यर्थ:; भूयोधर्मकाल्पधर्मकयोः अतुल्यकार्यत्वात्; लिङ्गाच्च - स्मृतेरित्यर्थ:। स्मर्यते च शक्तं प्रत्याश्रमस्योपादेयत्वम् । अनाश्रमी न तिष्ठेत्तु दिनमेकमपि द्विज : (दक्ष.स्मृ.१.१६) इत्यादिना। निवृत्तब्रह्मचर्यस्य मृतभार्यस्य च अवैराग्ये सति दारालाभ आपत्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 286,
+            "end": 300,
+            "display_text": "दक्ष.स्मृ.१.१६",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.40",
@@ -796,7 +1944,42 @@
           "sanskrit": {
             "devanagari": "नैष्ठिकवैखानसपरिव्राजकाश्रमेभ्य: प्रच्युतानामपि ब्रह्मविद्यायामधिकारोऽस्ति, नेति चिन्तायां- विधुरादिवदनाश्रमैकान्तैर्दानादिभिर्विद्यानुग्रहसम्भवादस्त्यधिकार: -\n\nइति प्राप्त उच्यते - तद्भूतस्य तु नातद्भाव: - इति। तुशब्द: पक्षव्यावृत्त्यर्थ:; तद्भूतस्य नैष्ठिकाद्याश्रमनिष्ठस्य, नातद्भाव: - अतथाभाव:, अनाश्रमित्वेनावस्थानं न सम्भवति; कुत:? तद्रूपाभावेभ्यो नियमात् - तद्रूपाणि तेषां नैष्ठिकादीनां रूपाणि वेषा:, धर्मा इत्यर्थ:; तेषामभावा: - तद्रूपाभावा:; तेभ्य: शास्त्रैर्नियमात् । नैष्ठिकाद्याश्रमप्रविष्टान् स्वाश्रमधर्मनिवृत्तिभ्यो नियच्छन्ति हि शास्त्राणि ब्रह्मचार्याचार्यकुलवासी तृतीयोत्यन्तमात्मानमाचार्यकुलेऽवसादयन् (छा.२.२३.१) इति,  अरण्यमियात्ततो न पुनरेयात् इति, सन्न्यस्याग्निं न पुनरावर्तयेत् (यजुषि.काठके) इति च । अतो विधुरादिवत् नैष्ठिकादीनामनाश्रमित्वेनावस्थानासम्भवान्न तानधिकरोति ब्रह्मविद्या । जैमिनेरपि - इत्यविगानं दर्शयन्नुक्तं स्वाभिमतं द्रढयति\n\nअथ स्यात् - नैष्ठिकादीनां ब्रह्मचर्यात्प्रच्युतानां प्रायश्चित्ताधिकारस्सम्भवति; अस्ति च प्रायश्चित्तमधिकारलक्षणे निरूपितम् अवकीर्णिपशुश्च तद्वत् (जै.मी.सू.६.८.२२) इति। अत: प्रच्युतब्रह्मचर्यस्य प्रायश्चित्तसम्भवात्कृतप्रायश्चित्तो ब्रह्मविद्यायामधिकरिष्यति - इति; तत्राह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 621,
+            "end": 630,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 703,
+            "end": 714,
+            "display_text": "यजुषि.काठके",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 1012,
+            "end": 1027,
+            "display_text": "जै.मी.सू.६.८.२२",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.41",
@@ -804,7 +1987,20 @@
           "sanskrit": {
             "devanagari": "अधिकारलक्षणोक्तमपि प्रायश्चित्तं नैष्ठिकादीनां तद्भ्रष्टानां न सम्भवति; कुत:? पतनानुमानात्तदयोगात् - नैष्ठिकादीनां प्रच्युतानां पतनस्मृतेस्तस्य प्रायश्चित्तस्यासम्भवात् - आरूढो नैष्ठिकं धर्मं यस्तु प्रच्यवते द्विज : । प्रायश्चित्तं न पश्यामि येन शुध्येत्स आत्महा (आग्नेय.१६.५.२३,अत्रि.स्मृ.८.१६) इति। अतोऽधिकारलक्षणोक्तं प्रायश्चित्तमितरब्रह्मचारि-विषयम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 264,
+            "end": 294,
+            "display_text": "आग्नेय.१६.५.२३,अत्रि.स्मृ.८.१६",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.42",
@@ -812,7 +2008,20 @@
           "sanskrit": {
             "devanagari": "नैष्ठिकादीनां ब्रह्मचर्यप्रच्यवनमुपपूर्वम् - उपपातकम्, महापातकेष्वपरिगणितत्वादिति तत्र प्रायश्चित्तस्य भावं - विद्यमानतामप्येके आचार्या मन्यन्ते; अशनवत् - यथा मध्वशनादि-निषेधस्तत्प्रायश्चित्तं चोपकुर्वाणस्य नैष्ठिकादीनां च समानम्; तदुक्तं स्मृतिकारै: उत्तरेषां चैतदविरोधि (गौत.१.३.४) इति। गुरुकुलवासिनो यदुक्तं, तत्स्वाश्रमाविरोधि उत्तरेषामप्याश्रमिणां भवतीत्यर्थ:। तद्वदिहापि ब्रह्मचर्यप्रच्यवने प्रायश्चित्तसम्भवाद्ब्रह्मविद्यायोग्यताप्यस्ति"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 273,
+            "end": 282,
+            "display_text": "गौत.१.३.४",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.43",
@@ -820,7 +2029,20 @@
           "sanskrit": {
             "devanagari": "तु शब्दो मतान्तरव्यावृत्त्यर्थ:; उपपातकत्वे महापातकत्वेऽप्येते बहिर्भूता एव ब्रह्मविद्याधिकारिभ्य:; ब्रह्मविद्यायामनधिकृता इत्यर्थ: । कुत:? स्मृते: - पूर्वोक्तात् पतनस्मरणात्। यद्यपि कल्मषनिर्हारणाय कैश्चिद्वचनै: प्रायश्चित्ताधिकारो विद्यते तथापि कर्माधिकारानुगुणशुद्धिहेतुप्रायश्चित्तं न सम्भवति, प्रायश्चित्तं न पश्यामि येन शुध्येत्स आत्महा (आग्नेय.१६५.२३, अत्रि.स्मृ.८.१६) इति स्मृतेरित्यर्थ:। आचाराच्च - शिष्टा हि नैष्टिकादीन् भ्रष्टान् कृतप्रायश्चित्तानपि वर्जयन्ति, तेभ्यो ब्रह्मविद्यादिकं नोपदिशन्ति; अतस्तेषां नास्ति ब्रह्मविद्यायामधिकार:"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 344,
+            "end": 374,
+            "display_text": "आग्नेय.१६५.२३, अत्रि.स्मृ.८.१६",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.44",
@@ -836,7 +2058,42 @@
           "sanskrit": {
             "devanagari": "आर्त्विज्यम् - ऋत्विज: कर्मोद्गीथाद्युपासनमित्यौडुलोमिराचार्यो मन्यते, कुत:? तस्मै हि - प्रयोजनाय ऋत्विक्परिक्रियते, फलसाधनभूतस्य साङ्गस्य क्रतोरुपादानायेत्यर्थ:।\n\nकर्मविधिषु ऋत्विजो वृणीते (तै.सं.६-३-७) ऋत्विग्भ्यो दक्षिणां ददाति इति ऋत्विक्कर्तृकत्वशास्त्रेण फलसाधनभूतं साङ्गं कर्म ऋत्विग्भिरनुष्ठेयमित्यवगम्यते, तदन्तर्गतानि कायिकानि मानसानि च कर्माणि ऋत्विक्कर्तृकाण्येव; न च शक्त्यशक्ती तस्य निबन्धनम्।\n\nयद्यप्युद्गीथाद्युपासनं पुरुषार्थ:, तथापि क्रत्वधिकृताधिकारत्वात्क्रतोश्च साङ्गस्य ऋत्विक्कर्तृकत्वात्, यदेव विद्यया करोति …तदेव वीर्यवत्तरम् (छा.१.१.१०) इति ऋत्त्विक्कर्तृकक्रियोपयोगित्वेन विद्यायास्तदेककर्तृकत्वश्रवणात्, ऋत्विक्कर्तृकाण्येतानि; दहरादिषूपासनेषु ऋत्विक्कर्तृकत्वाश्रवणात् शास्त्रफलं प्रयोक्तरि (जै.मी.सू.३.७.१८) इति न्यायाच्च फलिकर्तृकत्वमेव"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 191,
+            "end": 202,
+            "display_text": "तै.सं.६-३-७",
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "6.3.7",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 552,
+            "end": 561,
+            "display_text": "छा.१.१.१०",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 721,
+            "end": 736,
+            "display_text": "जै.मी.सू.३.७.१८",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.4.46",
@@ -844,7 +2101,196 @@
           "sanskrit": {
             "devanagari": "तस्माद्ब्राह्मण: पाण्डित्यं निर्विद्य बाल्येन तिष्ठासेत् बाल्यं च पाण्डित्यं च निर्विद्याथ मुनि : (बृ.५.५.१) इत्यत्र बाल्यपाण्डित्यवन्मौनमपि विधीयते, उतानूद्यत इति विषये -\n\nमौनपाण्डित्यशब्दयो: ज्ञानार्थत्वात्, पाण्डित्यं निर्विद्य (बृ.५.५.१) इति विहितमेव ज्ञानम् अथ मुनि : (बृ.५.५.१) इत्यनूद्यते; विधिशब्दो नह्यत्र श्रूयत इति ॥\n\nएवं प्राप्ते ब्रूम: - सहकार्यन्तरविधि: - इति। तद्वत: - विद्यावत:; विध्यादिवत् - विधीयते इति यज्ञादिस्सर्वाश्रमधर्म: शमदमादिश्च विधिशब्देनोच्यते; आदिशब्देन श्रवणमनने गृह्येते; सहकार्यन्तरविधिरित्यत्रापि विधीयत इति विधि:; सहकार्यन्तरं विधिश्चेति सहकार्यन्तरिविधि:;\n\nएतदुक्तं भवति - यथा तमेतं वेदानुवचनेन ब्राह्मणा विविदिषन्ति यज्ञेन दानेन (बृ.६.४.२२) इत्यादिना शान्तो दान्त : (बृ.६.४.२३) इत्यादिना च सहकारी यज्ञादिश्शमदमादिश्च विधीयते; यथा च श्रोतव्यो मन्तव्य : (बृ.४.४.५) इति श्रवणमनने चार्थप्राप्ते विद्यासहकारित्वेन गृह्येते; तथा तस्माद्ब्राह्मण : पाण्डित्यं निर्विद्य (बृ.५.५.१) इत्यादिना पाण्डित्यं, बाल्यं, मौनमिति त्रितयं विद्यायास्सहकार्यन्तरं विधीयते - इति।\n\nमौनं च पाण्डित्यादर्थान्तरमित्याह - पक्षेणेति। मुनिशब्दस्य पक्षेण प्रकृष्टमननशीले व्यासादौ प्रयोगदर्शनात् मौनं पाण्डित्यबाल्योर्द्वयोस्तृतीयम्।\n\nयद्यपि अथ मुनि : (बृ.५.५.१) इत्यत्र विधिप्रत्ययो न श्रूयते; तथापि मौनस्याप्राप्तत्वात् विधेयत्वं अङ्गीकरणीयम् - अथ मुनिस्स्यात् - इति इदं च मौनं श्रवणप्रतिष्ठार्थान्मननात् अर्थान्तरभूतमुपासनालम्बनस्य पुन: पुनस्संशीलनं तद्भावनारूपम् ।\n\nतदेवं वाक्यार्थ: - ब्राह्मण: - विद्यावान् पाण्डित्यं निर्विद्य - उपास्यं ब्रह्मतत्त्वं परिशुद्धं परिपूर्णं च विदित्वा श्रवणमननाभ्यामप्राप्तं वेदनं प्रतिलभ्येत्यर्थ;; तच्च भगवद्भक्तिकृतसत्त्वविवृद्धिकृतम्; यथोक्तं नाहं वेदै : (भ.गी.११.५३) इत्यारभ्य भक्त्या त्वनन्यया शक्य :…ज्ञातुम् (भ.गी.११.५४) इति। श्रुतिश्च यस्य देवे परा भक्ति : (श्वे.६.२३) नायमात्मा प्रवचनेन (कठ.२.२३) इत्यादिका। बाल्येन तिष्ठासेत्; बाल्यस्वरूपं चानन्तरमेव वक्ष्यते; बाल्यं च पाण्डित्यं च निर्विद्याथ मुनिस्स्यात् - बाल्यपाण्डित्ये यथावदुपादाय परिशुद्धे परिपूर्णे ब्रह्मणि मननशीलो भवेत्, निदिध्यासनरूपविद्यावाप्तये । एवमेव त्रितयोपादानेन लब्धविद्यो भवतीत्याह अमौनं च मौनं च निर्विद्याथ ब्राह्मण : (बृ.५.५.१) इति । अमौनं - मौनेतरसहकारिकलाप:; तं च मौनं च यथावदुपाददानो विद्याकाष्टां तदेकनिष्पाद्यां लभेतेत्यर्थ:। स ब्राह्मण : केन स्यात् (बृ.५.५.१) इति उक्तादुपायात्किमन्योऽप्युपायोऽस्तीति पृष्टे येन स्यात्तेनेदृश एव (बृ.५-५-१) इति येन मौनपर्यन्तेन ब्राह्मणस्स्यादित्युक्तम्, तेनैवेदृशस्स्यात्; न केनाप्यन्येनोपायेनेति परिहृतम्। अतस्सर्वेष्वाश्रमेषु स्थितस्य विदुषो यज्ञादिस्वाश्रमधर्मवत्पाण्डित्यादिकं मौनतृतीयं विद्यायास्सहकार्यन्तरं विधीयते \n\nअथ स्यात् - यदि सर्वेष्वाश्रमेषु स्थितानां विदुषां तत्तदाश्रमधर्मसहकारिणी मौनतृतीयसचिवा विद्या ब्रह्मप्राप्तिसाधनमुच्यते; कथं तर्हि छान्दोग्ये अभिसमावृत्य कुटुम्बे शुचौ देशे (छा.८.१५.१) इत्यारभ्य स खल्वेवं वर्तयन्यावदायुषं ब्रह्मलोकमभिसम्पद्यते न च पुनरावर्तते (छां.८.१५.२) इति यावदायुषं गार्हास्थ्यधर्मेण स्थितिदर्शनुमपपद्यते; अत आह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 99,
+            "end": 107,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 232,
+            "end": 240,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 274,
+            "end": 282,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 667,
+            "end": 676,
+            "display_text": "बृ.६.४.२२",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 704,
+            "end": 713,
+            "display_text": "बृ.६.४.२३",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.4.23",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 790,
+            "end": 798,
+            "display_text": "बृ.४.४.५",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "4.4.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 900,
+            "end": 908,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1158,
+            "end": 1166,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1601,
+            "end": 1611,
+            "display_text": "भ.गी.११.५३",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "11.53",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1658,
+            "end": 1668,
+            "display_text": "भ.गी.११.५४",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "11.54",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1708,
+            "end": 1717,
+            "display_text": "श्वे.६.२३",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "6.23",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1739,
+            "end": 1746,
+            "display_text": "कठ.२.२३",
+            "grantha_id": "katha-upanishad",
+            "edition_id": null,
+            "locator": "2.23",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2044,
+            "end": 2052,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2182,
+            "end": 2190,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2262,
+            "end": 2270,
+            "display_text": "बृ.५-५-१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2665,
+            "end": 2674,
+            "display_text": "छा.८.१५.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.15.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2752,
+            "end": 2762,
+            "display_text": "छां.८.१५.२",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.15.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.47",
@@ -852,7 +2298,31 @@
           "sanskrit": {
             "devanagari": "तुशब्दश्चोद्यं व्यावर्तयति; कृत्स्नभावात् - कृत्स्नेषु भावात्, कृत्स्नेष्वाश्रमेषु विद्यायास्सद्भावात् गृहिणोऽप्यस्तीति तेनोपसंसार:; तस्मात्सर्वाश्रमधर्मप्रदर्शनार्थो गृहिणोपसंहार इत्यभिप्राय: \n\nतथैतस्मिन्नपि वाक्ये ब्राह्मण : पुत्रेषणायाश्च वित्तेषणायाश्च लोकेषणायाश्च व्युत्थायाथ भिक्षाचर्यं चरति (बृह.५.५.१) इति पारिव्राज्यैकान्तधर्मं प्रतिपाद्य तस्माद्ब्राह्मण: पाण्डित्यं निर्विद्य (बृ.५.५.१) इत्यादिना पारिव्राज्यधर्मस्थितिहेतुकमौनतृतीयसहकारिविधानं प्रदर्शनार्थमित्याह -"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 300,
+            "end": 309,
+            "display_text": "बृह.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 388,
+            "end": 396,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.48",
@@ -860,7 +2330,31 @@
           "sanskrit": {
             "devanagari": "सर्वेषणाविनिर्मुक्तस्य भिक्षाचरणपूर्वकमौनोपदेश: सर्वेषामाश्रमधर्माणां प्रदर्शनार्थ:; कुत:? एवं विधमौनोपदेशवदितरेषामाश्रमिणामपि त्रयो धर्मस्कन्धा : (छां.२.२३.१) इत्यारभ्य ब्रह्मसंस्थोऽमृतत्वमेति (छा.२.२३.१) इति ब्रह्मप्राप्त्युपदेशात्। उपपादितश्च पूर्वमेव ब्रह्मसंस्थशब्द: सर्वाश्रमिसाधारण इति। अतस्सुष्ठूक्तं - यज्ञादिसर्वाश्रमधर्मवन्मौनतृतीय: पाण्डित्यादिर्विद्या-सहकारित्वेन विधीयते - इति"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 148,
+            "end": 158,
+            "display_text": "छां.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 195,
+            "end": 204,
+            "display_text": "छा.२.२३.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "2.23.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.49",
@@ -868,7 +2362,53 @@
           "sanskrit": {
             "devanagari": "तस्माद्ब्राह्मण : पाण्डित्यं निर्विद्य बाल्येन तिष्ठासेत् (बृह.५.५.१) इत्यत्र विदुषा बाल्यमुपादेयतया श्रुतम् । बालस्य भाव:, कर्म वा बाल्यम् । बालभावस्य वयोऽवस्थाविशेषस्य अनुपादेयत्वात् कर्मैवेह गृह्यते। तत्र किं बालस्य कर्म कामचारादिकं सर्वं विदुषोपादेयम्; उत डम्भादिरहितत्वमेवेति विशये -\n\nविशेषाभावात्सर्वमुपादेयम्; नियमशास्त्राणि च विशेषविधिनाऽनेन बाध्यन्त इति॥\n\nएवं प्राप्तेऽभिधीयते - अनाविर्ष्कुर्वन्निति । बालस्य यत्स्वभावानाविष्काररूपं कर्म; तदुपाददानो वर्तेत विद्वान्। कुत:? अन्वयात् - तस्यैवान्वयात्। बाल्येन तिष्ठासेत् (बृ.५.५.१) इत्यस्मिन्विधौ तस्यैव ह्यन्वयसम्भव:; इतरेषां विद्याविरोधित्वश्रवणात् नाविरतो दुश्चिरतान्नाशान्तो नासमाहित :। नाशान्तमानसो वापि प्रज्ञानेनैनमाप्नुयात् (कठ.२.२४) आहारशुद्धौ सत्त्वशुद्धि : (छा.७.२६.२) इत्यादिषु"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 59,
+            "end": 68,
+            "display_text": "बृह.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 529,
+            "end": 537,
+            "display_text": "बृ.५.५.१",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.5.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 690,
+            "end": 697,
+            "display_text": "कठ.२.२४",
+            "grantha_id": "katha-upanishad",
+            "edition_id": null,
+            "locator": "2.24",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 726,
+            "end": 735,
+            "display_text": "छा.७.२६.२",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "7.26.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.50",
@@ -876,7 +2416,31 @@
           "sanskrit": {
             "devanagari": "द्विविधा विद्या - अभ्युदयफला, मुक्तिफला च । तत्राभ्युदयफला स्वसाधनभूतै: पुण्यकर्मभि: पुण्यकर्मानन्तरमेव उत्पद्यते, उतानन्तरं कालान्तरे वेत्यनियम इति संशय:।\n\nपूर्वकृतै: पुण्यकर्मभिर्हि विद्वान् जायते; यथोक्तं भगवता चतुर्विधा भजन्ते मां जनास्सुकृतिनोऽर्जुन (भ.गी.७.१९) इति। साधने निर्वृत्ते विलम्बहेत्वभावादनन्तरमेव -\n\nइति प्राप्ते उच्यते - ऐहिकमप्रस्तुतप्रतिबन्धे - इति । ऐहिकम् - अभ्युदयफलमुपासनम्, अप्रस्तुतप्रतिबन्धे - अप्रस्तुते - प्रबलकर्मान्तरप्रतिबन्धे सत्यनन्तरम्, प्रतिबन्धे सति तदुत्तरकालमित्यनियम:। कुत:? तद्दर्शनात् - दृश्यते हि प्रबलकर्मान्तरेण कर्मफलप्रतिबन्धाभ्युपगम: श्रुतौ यदेव विद्यया करोति श्रद्धयोपनिषदा तदेव वीर्यवत्तरम् (छा.१.१.१०) इत्युद्गीथविद्यायुक्तस्य कर्मण: फलाप्रतिबन्धश्रवणात्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 256,
+            "end": 265,
+            "display_text": "भ.गी.७.१९",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "7.19",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 642,
+            "end": 651,
+            "display_text": "छा.१.१.१०",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "1.1.10",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "3.4.51",

@@ -1,0 +1,215 @@
+{
+  "grantha_id": "aitareya-upanishad",
+  "edition_id": "aitareya-upanishad",
+  "reference_diagnostics": [
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 612,
+      "end": 617,
+      "display_text": "किंचन",
+      "hint": "'किंचन' not in the citation bimap; closest matches: हरिवं, केन.उ",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "1.1",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 627,
+      "end": 632,
+      "display_text": "सर्वं",
+      "hint": "'सर्वं' not in the citation bimap; closest matches: हरिवं, हरि.वं, पूर्वमी",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "1.1",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 556,
+      "end": 559,
+      "display_text": "अब?",
+      "hint": "'अब?' not in the citation bimap; closest matches: बृ",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "1.4",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 160,
+      "end": 166,
+      "display_text": "स्ताः?",
+      "hint": "'स्ताः?' not in the citation bimap; closest matches: स्तो.र, दे.स्त, जित.स्तो",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.1",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 775,
+      "end": 821,
+      "display_text": "अशनायापिपासाविशिष्टाया एव देवताया भागवत्वात् ?",
+      "hint": "'अशनायापिपासाविशिष्टाया एव देवताया भागवत्वात् ?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "2.4",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 220,
+      "end": 240,
+      "display_text": "अभिध्याताभ्यः ताभ्यः",
+      "hint": "'अभिध्याताभ्यः ताभ्यः' not in the citation bimap; closest matches: अध्यात्म.उ, अष्टाध्याय्यां",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.2",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 568,
+      "end": 592,
+      "display_text": "द्वाचाग्रहीतुं, नाशक्नो?",
+      "hint": "'द्वाचाग्रहीतुं, नाशक्नो?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.10",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 748,
+      "end": 754,
+      "display_text": "आवयत्?",
+      "hint": "'आवयत्?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.10",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 882,
+      "end": 901,
+      "display_text": "अन्नमेव आयुः जीवनं?",
+      "hint": "'अन्नमेव आयुः जीवनं?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.10",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 359,
+      "end": 389,
+      "display_text": "कस्याहं स्वामी ; शेषित्वं मे ?",
+      "hint": "'कस्याहं स्वामी ; शेषित्वं मे ?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.11",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 392,
+      "end": 417,
+      "display_text": "कः स्यामहम् ,शेषित्वं मे?",
+      "hint": "'कः स्यामहम् ,शेषित्वं मे?' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.11",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 107,
+      "end": 128,
+      "display_text": "वैक्षत् नामरूपव्याकरण",
+      "hint": "'वैक्षत् नामरूपव्याकरण' not in the citation bimap; closest matches: तै.नारायणे, तै.नारा",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.13",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 751,
+      "end": 797,
+      "display_text": "ब्रह्म तततमं ब्रह्मणा व्याप्तं पुरुषम् अपश्यत्",
+      "hint": "'ब्रह्म तततमं ब्रह्मणा व्याप्तं पुरुषम् अपश्यत्' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "3.13",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 378,
+      "end": 379,
+      "display_text": "च",
+      "hint": "'च' not in the citation bimap; closest matches: none within threshold",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.3",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 633,
+      "end": 643,
+      "display_text": "ऐ.बा. ३३-१",
+      "hint": "locator ambiguous; treating as level separators (33.1); check the bimap ref_structure depth hint",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.3",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 502,
+      "end": 507,
+      "display_text": "एतद्?",
+      "hint": "'एतद्?' not in the citation bimap; closest matches: आत्मसिद्धौ, आत्मसिद्धि",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.5",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 109,
+      "end": 116,
+      "display_text": "विनाशा?",
+      "hint": "'विनाशा?' not in the citation bimap; closest matches: वा.रा, वि, ना",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "4.6",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-UNDEFINED-ABBREV",
+      "severity": "error",
+      "start": 583,
+      "end": 586,
+      "display_text": "रे?",
+      "hint": "'रे?' not in the citation bimap; closest matches: ऐतरेय, के",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "5.2",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    },
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 166,
+      "end": 176,
+      "display_text": "ते.आन. १-२",
+      "hint": "locator ambiguous; treating as level separators (1.2); check the bimap ref_structure depth hint",
+      "commentary_id": "rangaramanuja-muni-prakashika",
+      "passage_ref": "5.4",
+      "source_file": "aitareya-upanishad-rangaramanuja-01-01.md"
+    }
+  ]
+}

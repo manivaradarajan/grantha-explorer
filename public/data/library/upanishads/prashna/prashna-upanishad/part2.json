@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.4.0",
   "grantha_id": "prashna-upanishad",
   "edition_id": "prashna-upanishad",
   "part_num": 2,
@@ -201,7 +201,20 @@
           "sanskrit": {
             "devanagari": "इन्द्रस्त्वम् इति । हे प्राण ! त्वम् इन्द्रः – परमेश्वर इत्यर्थः । इदि परमश्चर्ये (धा.पा. ६३) इति हि धातुः । तेजसा – सर्वसंहरणसामर्थ्यलक्षणेन तेजसा त्वं रुद्रः – रोदनहेतुः, स्थितिकाले परिरक्षकञ्च इत्यर्थः । त्वमन्तरिक्षे इति । ज्योतिषाम् – प्रकाशकानाम् पतिः – श्रेष्ठः सूर्यो भूत्वा अन्तरिक्षे चरसि ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 83,
+            "end": 92,
+            "display_text": "धा.पा. ६३",
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "63",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "2.10",
@@ -209,7 +222,20 @@
           "sanskrit": {
             "devanagari": "यदा त्वमभिवर्षसीति । हे प्राण ! त्वम् यदा मेघरूपी अभितो वर्षसि, तदा ते – त्वदीया इमाः प्रजाः – आनन्दिन्यो भवन्ति । कस्य हेतोः ? कामाय – अभिलषितार्थाय पर्याप्तम् अन्नं भविष्यति इति । तत् यदा सुवृष्टिः भवति, आनन्दिनः प्राणा भवन्ति अन्नं बहु भविष्यति इति (छां.उ. ७-१०-१) इति छान्दोग्ये श्रवणात् इति द्रष्टव्यम् ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 253,
+            "end": 266,
+            "display_text": "छां.उ. ७-१०-१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "7.10.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "2.11",

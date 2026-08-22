@@ -1,0 +1,17 @@
+{
+  "grantha_id": "mandukya-karika",
+  "edition_id": "mandukya-karika-kuranarayana",
+  "reference_diagnostics": [
+    {
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
+      "start": 589,
+      "end": 598,
+      "display_text": "मुद्ग.उ.३",
+      "hint": "locator ambiguous; treating as level separators (3); check the bimap ref_structure depth hint",
+      "commentary_id": "kuranarayana-muni-karika-bhashyam",
+      "passage_ref": "19",
+      "source_file": "mandukya-karika-kuranarayana-muni-01.md"
+    }
+  ]
+}

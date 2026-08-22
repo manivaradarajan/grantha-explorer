@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.4.0",
   "grantha_id": "prashna-upanishad",
   "edition_id": "prashna-upanishad",
   "part_num": 6,
@@ -108,7 +108,42 @@
           "sanskrit": {
             "devanagari": "ननु षोडशकलासर्गहेतुत्वे जीवपरमात्मनोरविशिष्टे तद्भोक्तृत्वं जीवस्यैव न परमात्मन इत्यत्र किं नियामकमित्यत्राह – स ईक्षांचक्रे इत्यादि । इदं वाक्यं जीवाभिसन्धिप्रकारप्रदर्शनपरम् सोऽध्यक्षे तदुपगमादिभ्यः (ब्र.सू. ४-२-४) इति भाष्ये तथोक्तत्वात् मदुत्क्रान्तिप्रतिष्ठासहभूतोत्क्रान्तिप्रतिष्ठः को वेति पर्यालोचितवानित्यर्थः । ततश्च स्वोपकाराभिसन्धिपूर्वकं जीवस्य प्राणादिस्रष्टृत्वात्तभोक्तृत्वं सम्भवति परमात्मनस्तु –\n\nन च **माम्** **ता** नि क **र्माणि** **नि** बध्नन्ति धन **ञ्ज** य ।\n\nउदासीनवदासीनमसक्तं तेषु कर्म **सु** **।।** (**भ**.**गी**. ९-९)\n\nन मां कर्माणि लिम्पन्ति न मे कर्मफले स्पृहा । (भ.गी.४-१४)\n\nइत्युक्तरीत्या स्वोपकाराभिसन्धिपूर्वकस्रष्टृत्वाभावान्न तस्य षोडशकलाभोक्तृत्वमिति भावः ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 202,
+            "end": 215,
+            "display_text": "ब्र.सू. ४-२-४",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "4.2.4",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 527,
+            "end": 544,
+            "display_text": "**भ**.**गी**. ९-९",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 594,
+            "end": 603,
+            "display_text": "भ.गी.४-१४",
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "4.14",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       },
       {
         "ref": "6.4",
@@ -148,7 +183,328 @@
           "sanskrit": {
             "devanagari": "ते तमर्चयन्तः इति । ते ‘षडपि शिष्याः’, तम् – पिप्पलादम् , त्वम् अस्माकम् संसाराकूपार तीरप्रापकतया पिताऽसि । तस्मात् त्वत्तो जन्मैव श्रेष्ठं जन्म; स **हि** **विद्यात** स्तं जनयति । तच्छ्रेष्ठं जन्म (आप.ध.सू. १-१६,१७) इति श्रवणात् इति अर्चयन्तः पूजयन्तो बभूवुः । नमः परमऋषिभ्यो नमः परमऋषिभ्यः । उत्तरशान्तिस्थाने नमः परमऋषिभ्यः इति वाक्यम् । अभ्यासः उपनिषत्समाप्त्यर्थः ।\n\nन च – एतावदेवाहं परं ब्रह्म वेद, नातः परमस्ति परम अस्ति इति षोडशकल जीवातिरिक्तपरब्रह्मनिषेधः किं न स्यात् इति वाच्यम् । अधिकं तु भेदनिर्देशात् (ब्र.सू.२-१-२२) इत्यादिभिः विरोधप्रसङ्गात् । तत्र हि जीवाभेदाद्ब्रह्मणो जगत्कारणत्वे हिताकरणादि दोषमाशंक्य जीवभेदाद्दोषाभावस्सिद्धान्तितः । तथा हि तदधिकरणभाष्यं – जगतो ब्रह्मानन्यत्वं प्रतिपादयद्भिः – तत्त्व **मसि** (**छां**.उ. ६-८-७), **अयमा** त्मा ब्रह्म (मा.उ. १-२) इत्यादिभिः जीवस्यापि ब्रह्म अनन्यत्वं व्यपदिश्यत इत्युक्तम् । तत्रेदं चोद्यते – यदि इतरस्य जीवस्य ब्रह्मभावोऽमीभिः वाक्यैर्व्यपदिश्यते । तदा ब्रह्मणः सार्वज्ञ्यसत्यसंकल्पत्वादियुक्तस्यात्मनः हितरूपजगदकरणम् अहितरूपजगत्करणमित्यादयो दोषाः प्रसज्येरन् । आध्यात्मिकाधिदैविकाधिभौतिकानन्तदुःखाकरं च इदं जगत् । न चेदृशे स्वानर्थे स्वाधीनो बुद्धिमान्प्रवर्तते । जीवाद्ब्रह्मणो भेदवादिन्यः श्रुतयो जगद्ब्रह्मणोनन्यत्वं वदता त्वयैव परित्यक्ताः । भेदे सति अनन्यत्वासिद्धेः, औपाधिकभेदविषयाः भेदश्रुतयः । स्वाभाविकाभेदविषयाच्च अभेदश्रुतयः इति चेत् । तत्रेदं वक्तव्यम् – स्वभावतः स्वस्मादभिन्नं जीवं किमनुपहितं जगत्कारणम् ब्रह्म जानाति वा न वा । न जानाति चेत्सर्वज्ञत्वहानिः, जानाति चेत् स्वस्मादभिन्नस्य जीवस्य दुःखं स्वदुःखमेव जानतो ब्रह्मणो, हिताकरणाहितकरणादि दोषप्रसक्तिरनिवार्या, जीवब्रह्मणोः अज्ञानकृतो भेदः, तद्विषयाभेदश्रुतिरिति चेत् । तत्रापि जीवाज्ञानपक्षे पूर्वोक्ते विकल्पः तत्फलं च तदवस्थम् । ब्रह्माज्ञानपक्षे स्वप्रकाशस्वरूपस्य ब्रह्मणोऽज्ञानसाक्षित्वं तत्कृतजगत्सृष्टिश्च न सम्भवति । अज्ञानेन प्रकाशस्तिरोहितश्चेत् तिरोधानस्य प्रकाशनिवृत्तिकरत्वेन प्रकाशस्यैव स्वरूपत्वात्स्वरूप निवृत्तिरेवेति स्वरूपनाशादिदोषसहस्रं प्रागेवोदीरितम् । अत इदमसङ्गतम् । ब्रह्मणो जगत्कारणत्वमिति । इतरव्यपदेशाद्धिताकरणादिदोषासक्तिः (ब्र.सू.२-१-२१) इति सूत्रेण पूर्वपक्षं प्रापय्य सिद्धान्तोऽभिधीयते – अधिकं तु भेदनिर्देशात् (ब्र.सू. २-१-२२) इति । तु शब्दः पक्षं व्यावर्तयति। आध्यात्मिकादिदुःखयोगार्हप्रत्यगात्मनोऽधिकमर्थान्तरभूतं ब्रह्म कुतः ? भेदनिर्देशात् प्रत्यगात्मनो हि भेदेन निर्दिश्यते परब्रह्म – य आत्मनि तिष्ठन्नात्मनोऽन्तरो यमात्मा न वेद यस्यात्मा शरीरं य आत्मानमन्तरो यमयति स त आत्माऽन्ताम्यमृतः (बृ.उ. ५-७-२६), पृथगात्मानं **प्रेरि** तारं च मत्वा जुष्टस्ततस्तेनामृतत्त्वमति, (श्वे.उ.१-६) स कारणं करणाधिपाधिपः (श्वे.उ. ६-९), त **यो** रन्यः पिप्पलं स्वाद्वत्त्यनश्रन्नन्यो अभिचाक **शी** ति (श्वे.उ. ४-६), ज्ञा **र्ज्ञा** द्वावजावीशनीशा (श्वे.उ. १-९), प्राज्ञेनाऽऽत्मना सम्परिष्वक्तः (ब.उ. ६-३-२१), प्राज्ञेनात्मनाऽन्वारूढ (बृ.उ.६-३-३५), अस्मान् **मायी** सूजते विश्वमेतत्तस्मिंश्चान्यो मायया सान्निरुद्धः (श्वे.उ. ४-१), **प्रधा** नक्षेत्रज्ञपतिर्गुणशः (श्वे.उ. ६-१६), नित्यो नित्यानां चेतनश्चेतनानाम् एको बहूनां यो विदधाति कामान् (क.उ. ५-१३), योऽव्यक्तमन्तरे सञ्चरन् यस्याव्यक्तं शरीरं यमव्यक्तं न वेद योऽक्षरमन्तरे सञ्चरन् यस्याक्षरं शरीरं यमक्षरं न वेद एष सर्वभूतान्तरात्माऽपहतपाप्मा दिव्यो देव एको **नारा** यणः । (सु.उ. ७) इत्यादिभिः। अश्मादिवञ्च तदनुपपत्तिः (ब्र.सू.२-१-२३) इति अश्मकाष्ठलोष्ठतृणादीनामत्यन्तहेयानां सततविकारास्पदानामचिद्विशेषाणां निरवद्य निर्विकारनिखिलहेयप्रत्यनीककल्याणैकतानस्वेतरसमस्तवस्तुविलक्षणानन्दज्ञाननन्दैक स्वरूपनानाविधानन्तमहाविभूति ब्रह्मस्वरूपैक्यं यथा नोपपद्यते, तथा चेतनस्यापि अनन्तदुःखार्हस्य खद्योतकल्पस्य अप **ह** त **पा** प्मा(छां.उ.८-१-५) इत्यादिवाक्यावगतसकलहेयप्रत्यनीकानवधिकातिशयसंख्येयकल्याणगुणगणाकरब्रह्मभावानुपपत्तिः । सामानाधिकरण्यनिर्देशः यस्यात्मा शरीरम् (बृ.उ.मा.पा. ५-७-२६) इत्यादि श्रुतेर्जीवस्य ब्रह्मशरीरत्वाद्ब्रह्मणो जीवशरीरतया तदात्मत्वेनावस्थितेः, जीवप्रकारकब्रह्मप्रतिपादनपरश्चैतदविरोधि । प्रत्युतैतस्यार्थस्योपपादकश्चेति – अवस्थितेरिति काशकृत्स्नः (ब्र.सू. १-४-२२) इत्यादिभिरसकृदुपपादितम् । अतः सर्वावस्थं ब्रह्म चिदचिद्वस्तुशरीरं इति सूक्ष्मचिदचिद्वस्तुशरीरं ब्रह्म कारणं, तदेव ब्रह्म स्थूलचिदचिद्वस्तुशरीरं जगदाख्यं कार्यमिति जगद्ब्रह्मणोः सामानाधिकरण्योपपत्तिः जगतो ब्रह्मकार्यत्वं ब्रह्मणोऽनन्यत्वम् अचिद्वस्तुनो जीवस्य ब्रह्मणश्च परिणामित्वदुःखित्वकल्याणगुणाकरत्वस्वभावासंकरः सर्वश्रुत्यविरोधश्च भवति । सदेव सोम्येदम **ग्र** **आसी** त् एकमेव(छा.उ. ६-२-१) इत्यविभागावस्थायामपि अचिद्युक्तजीवस्य ब्रह्मशरीरतया सूक्ष्मरूपेणावस्थानमवश्याभ्युपगन्तव्यम् । वैषम्यनैर्घृण्ये न **सापेक्ष** त्वात् (ब्र.सू. २-१-३४), न कर्माविभा **गा** त् इति चेन्न अनादित्वादुपपद्यते चाप्युपलभ्यते च (ब्र.सू. २-१-३५) इति सूत्रद्वयोदितत्त्वात्तदानीमपि सूक्ष्मरूपेणावस्थानस्य अविभागस्तु नामरूपविभागाभावादुपपद्यते । अतो ब्रह्मकारणत्वं सम्भवत्येव इति । एवं अधिकोपदेशात्तु बादरायणस्यैवं तद्दर्शनात् (ब्र.सू. ३-४-८), भेदव्यपदेशाच्चान्यः (ब्र.सू. १-१-२२), सुषुमप्त्युत्क्रान्त्योर्भेदेन (ब्र.सू. १-३-४३), उभयेऽपि हि भेदेनैनमधीयते (ब्र.सू. १-२-२१) इत्यादि न्यायाः प्रकुप्येयुरित्यलं प्रपञ्चेन ।।\n\nक्षेमाय यः करुणया क्षितिनिर्जराणां\n\nभूमावजृम्भयत भाष्यसुधामुदारः ।\n\nवामागमाध्वगवदावदतूलवातो\n\nरामानुजः स मुनिराद्रियतां मदुक्तिम् ।।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 207,
+            "end": 211,
+            "display_text": "१-१६",
+            "grantha_id": "apastamba-dharma-sutra",
+            "edition_id": null,
+            "locator": "1.16",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 212,
+            "end": 214,
+            "display_text": "१७",
+            "grantha_id": "apastamba-dharma-sutra",
+            "edition_id": null,
+            "locator": "1.17",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 515,
+            "end": 528,
+            "display_text": "ब्र.सू.२-१-२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 731,
+            "end": 747,
+            "display_text": "**छां**.उ. ६-८-७",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 772,
+            "end": 781,
+            "display_text": "मा.उ. १-२",
+            "grantha_id": "mandukya-upanishad",
+            "edition_id": null,
+            "locator": "1.2",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 1996,
+            "end": 2009,
+            "display_text": "ब्र.सू.२-१-२१",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.21",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2088,
+            "end": 2102,
+            "display_text": "ब्र.सू. २-१-२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2371,
+            "end": 2383,
+            "display_text": "बृ.उ. ५-७-२६",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "5.7.26",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2451,
+            "end": 2461,
+            "display_text": "श्वे.उ.१-६",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "1.6",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2485,
+            "end": 2496,
+            "display_text": "श्वे.उ. ६-९",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "6.9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2564,
+            "end": 2575,
+            "display_text": "श्वे.उ. ४-६",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "4.6",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2610,
+            "end": 2621,
+            "display_text": "श्वे.उ. १-९",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "1.9",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2657,
+            "end": 2668,
+            "display_text": "ब.उ. ६-३-२१",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          },
+          {
+            "start": 2696,
+            "end": 2707,
+            "display_text": "बृ.उ.६-३-३५",
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": null,
+            "locator": "6.3.35",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2778,
+            "end": 2789,
+            "display_text": "श्वे.उ. ४-१",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "4.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2825,
+            "end": 2837,
+            "display_text": "श्वे.उ. ६-१६",
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": null,
+            "locator": "6.16",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 2903,
+            "end": 2912,
+            "display_text": "क.उ. ५-१३",
+            "grantha_id": "katha-upanishad",
+            "edition_id": null,
+            "locator": "2.5.13",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 3089,
+            "end": 3096,
+            "display_text": "सु.उ. ७",
+            "grantha_id": "subala-upanishad",
+            "edition_id": null,
+            "locator": "7",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 3135,
+            "end": 3148,
+            "display_text": "ब्र.सू.२-१-२३",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.23",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 3437,
+            "end": 3448,
+            "display_text": "छां.उ.८-१-५",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "8.1.5",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 3575,
+            "end": 3593,
+            "display_text": "बृ.उ.मा.पा. ५-७-२६",
+            "grantha_id": "brihadaranyaka-madhyandina",
+            "edition_id": null,
+            "locator": "5.7.26",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 3779,
+            "end": 3793,
+            "display_text": "ब्र.सू. १-४-२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.4.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4177,
+            "end": 4188,
+            "display_text": "छा.उ. ६-२-१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": null,
+            "locator": "6.2.1",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4323,
+            "end": 4337,
+            "display_text": "ब्र.सू. २-१-३४",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.34",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4408,
+            "end": 4422,
+            "display_text": "ब्र.सू. २-१-३५",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "2.1.35",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4602,
+            "end": 4615,
+            "display_text": "ब्र.सू. ३-४-८",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "3.4.8",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4639,
+            "end": 4653,
+            "display_text": "ब्र.सू. १-१-२२",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.1.22",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4688,
+            "end": 4702,
+            "display_text": "ब्र.सू. १-३-४३",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.3.43",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          },
+          {
+            "start": 4731,
+            "end": 4745,
+            "display_text": "ब्र.सू. १-२-२१",
+            "grantha_id": "brahma-sutra",
+            "edition_id": null,
+            "locator": "1.2.21",
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": false
+          }
+        ]
       }
     ]
   }

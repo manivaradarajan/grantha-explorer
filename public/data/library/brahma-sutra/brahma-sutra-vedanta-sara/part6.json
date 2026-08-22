@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.0.0",
+  "schema_version": "1.4.0",
   "grantha_id": "brahma-sutra",
   "edition_id": "brahma-sutra-vedanta-sara",
   "part_num": 6,
@@ -422,7 +422,20 @@
           "sanskrit": {
             "devanagari": "क्षीरीभवद्धेनूपयुक्ततृणादिवत् प्रधानमपीति न युक्तं वक्तुम्, अनडुहा(दा)दिष्वदर्शनात्, तद्धि प्राज्ञाधिष्ठितम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 67,
+            "end": 69,
+            "display_text": "दा",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "2.2.5",
@@ -590,7 +603,20 @@
           "sanskrit": {
             "devanagari": "ज्ञानाकारवैचित्र्येण ज्ञाने स्वाकारं समर्प्य विनष्टमप्यर्थमनुमिनोति इति वादश्च न संभवति, असतो विनष्टस्य धर्मिणो धर्मसंक्रमणस्यादृष्टत्वात्। (ज्ञाने नीलाद्याकार उपलभ्यते, स विनष्टस्यासतोऽर्थस्याकारो भवितुं नार्हाति। कुत:? अदृष्टत्वात्। न खलु धर्मिणि विनष्टे तद्धर्मस्यार्थान्तरे संक्रमणं दृष्टम्।)"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 141,
+            "end": 295,
+            "display_text": "ज्ञाने नीलाद्याकार उपलभ्यते, स विनष्टस्यासतोऽर्थस्याकारो भवितुं नार्हाति। कुत:? अदृष्टत्वात्। न खलु धर्मिणि विनष्टे तद्धर्मस्यार्थान्तरे संक्रमणं दृष्टम्।",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "2.2.26",
@@ -614,7 +640,20 @@
           "sanskrit": {
             "devanagari": "क(का)रण दोषबाधकप्रत्ययराहित्यरूपवैषम्याच्च न स्वप्नादिवज्जागरितज्ञानस्य मिथ्यात्वम्"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 2,
+            "end": 4,
+            "display_text": "का",
+            "grantha_id": null,
+            "edition_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "2.2.29",
