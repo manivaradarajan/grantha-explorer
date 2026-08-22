@@ -1043,6 +1043,25 @@ _references_bimap_cache: Any = None
 _references_bimap_cache_key: str | None = None
 
 
+def _tools_lib_dir() -> Path:
+    """Return the grantha-data ``tools/lib`` directory for the active checkout.
+
+    When ``GRANTHA_DATA_TOOLS_LIB`` is set it is derived from it; otherwise
+    the installed ``grantha_data`` package location is used.
+
+    Returns:
+        The ``tools/lib`` Path.
+    """
+    import os
+
+    tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
+    if tools_lib:
+        return Path(tools_lib).expanduser()
+    import grantha_data
+
+    return Path(grantha_data.__file__).resolve().parent
+
+
 def _references_bimap() -> list[Any]:
     """Load the citation bimap, resolving the grantha-data checkout path.
 
@@ -1069,15 +1088,7 @@ def _references_bimap() -> list[Any]:
     if _references_bimap_cache is not None and _references_bimap_cache_key == cache_key:
         return _references_bimap_cache
 
-    if tools_lib:
-        bimap_path = Path(tools_lib).expanduser().parent.parent / "data" / "citation_bimap.yaml"
-    else:
-        import grantha_data
-
-        bimap_path = (
-            Path(grantha_data.__file__).resolve().parent.parent.parent
-            / "data" / "citation_bimap.yaml"
-        )
+    bimap_path = _tools_lib_dir().parent.parent / "data" / "citation_bimap.yaml"
     loaded: list[Any] = []
     if bimap_path.exists():
         loaded = load_bimap(bimap_path)
@@ -1149,32 +1160,33 @@ def _build_commentary(
     return commentary
 
 
-def _citation_context(edition_id: str) -> str:
-    """Derive the citing edition's school namespace from its edition id.
+def _citation_context(frontmatter: dict[str, Any]) -> str:
+    """Derive the citing edition's school namespace from its frontmatter.
 
-    The school is encoded in the edition id (school-namespace design §4.2):
-    a ``sankara`` edition (e.g. ``isavasya-upanishad-sankara-bhashya``) is the
-    śaṅkara namespace; the rāmānuja-school editions are the rāmānuja namespace;
-    everything else (mula / neutral) is the base table. This avoids frontmatter
-    edits — the edition id is the authoritative compile-time context.
+    The school is declared in the source frontmatter (design §4.2): a
+    ``citation_namespace`` value inside ``commentaries_metadata`` (per
+    commentary) or as a grantha-level field (mula-author works like
+    vedarthasangraha, which have no ``commentaries_metadata``). Absent →
+    school-neutral (base table). A grantha-level value that disagrees with a
+    commentary-level value is a hard error.
 
     Args:
-        edition_id: The citing edition's id (equals grantha_id for mula).
+        frontmatter: Parsed YAML frontmatter dict.
 
     Returns:
         The namespace string, or "" when school-neutral.
     """
-    if "sankara" in edition_id:
-        return "sankara"
-    if any(
-        marker in edition_id
-        for marker in (
-            "desika", "srivatsanarayana", "rangaramanuja", "sribhashya",
-            "deepam", "sara", "gitabhashya", "bharadvaja", "kuranarayana",
-        )
-    ):
-        return "ramanuja"
-    return ""
+    grantha_level: str = frontmatter.get("citation_namespace") or ""
+    for meta in frontmatter.get("commentaries_metadata") or []:
+        ns: str = meta.get("citation_namespace") or ""
+        if ns:
+            if grantha_level and ns != grantha_level:
+                raise ValueError(
+                    "conflicting citation_namespace across the edition: "
+                    f"grantha-level {grantha_level!r} vs commentary {ns!r}"
+                )
+            grantha_level = ns
+    return grantha_level
 
 
 def build_part_json(
@@ -1201,7 +1213,7 @@ def build_part_json(
     """
     grantha_id: str = frontmatter["grantha_id"]
     part_num: int = frontmatter["part_num"]
-    context = _citation_context(edition_id)
+    context = _citation_context(frontmatter)
 
     prefatory = [
         _build_framing_entry(p, "prefatory") for p in body.prefatory
