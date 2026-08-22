@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "grantha_id": "brahma-sutra",
   "edition_id": "brahma-sutra-vedanta-deepam",
   "part_num": 9,
@@ -287,7 +287,19 @@
           "sanskrit": {
             "devanagari": "यत्रास्य पुरुषस्य मृतस्याग्निं वागप्येति वातं प्राणश्चक्षुरादित्यं इति मरणवेलायां वागादीनामग्न्यादिष्वप्ययश्रुतेर्जीवेन सह गमनश्रुतिरन्यथा नेयेति चे(त्त)न्न, भाक्तत्वात् - तत्र वागादिशब्दानाम्, वागाद्यभिमानिदेवतासु हि तत्र वागादयश्शब्दा:, ओषधीर्लोमानि वनस्पतीन्केशा इत्यनपियद्भिर्लोमादिभिस्सह पाठात्॥४॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 149,
+            "end": 152,
+            "display_text": "त्त",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.1.5",

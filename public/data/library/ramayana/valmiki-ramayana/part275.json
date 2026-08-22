@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 275,
@@ -529,7 +529,19 @@
           "sanskrit": {
             "devanagari": "ताविति । युध्येताम् अयुध्यताम् । तर्जमा(या)नाविति उभयत्र आगमशासनस्यानित्यत्वादडभावः मुमभावश्च ॥ ४.१६.२९,३० ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 40,
+            "end": 42,
+            "display_text": "या",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "4.16.31",

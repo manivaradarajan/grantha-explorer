@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 123,
@@ -565,7 +565,19 @@
           "sanskrit": {
             "devanagari": "स राममिति । सर्वकामैः प्रतिजग्राह अतिथियोग्यसत्कारैर्वशीकृतवानित्यर्थः । (पाठभेदः । प्रतिजग्राह उपचचार) ॥ २.५४.३३ ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 74,
+            "end": 102,
+            "display_text": "पाठभेदः । प्रतिजग्राह उपचचार",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "2.54.36",

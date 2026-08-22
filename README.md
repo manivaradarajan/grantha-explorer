@@ -130,6 +130,102 @@ it never infers type from field presence.
    display position.
 4. Commit and push — the deploy workflow rebuilds and redeploys automatically.
 
+### Regenerating the JSON library from `../grantha-data`
+
+The committed `public/data/library/` is **re-derived** from the sibling
+`grantha-data/structured_md/` checkout by the explorer's own Python scripts
+(`scripts/convert_structured_md.py`, `scripts/import_editions.py`). These are
+parallel to the grantha-data Bazel converter (see `docs/DATA_FLOW.md` §1–2).
+Run them after any grantha-data edit; commit + push the result here.
+
+Prereqs:
+
+- The `grantha_data` shared library is importable (set
+  `GRANTHA_DATA_TOOLS_LIB=<grantha-data>/tools/lib`, or `pip install -e .` in
+  grantha-data). It is used for cross-text `references[]` extraction; when
+  absent the converters run but omit references.
+- `<grantha-data>` is the sibling checkout whose `structured_md/` you want.
+
+1. **Multi-edition texts** (grantha-envelope + per-edition dirs) —
+   `scripts/import_editions.py`, one run per text. Always pass
+   `--default-edition` so the intended commentary stays default (alphabetical
+   fallback would mis-select Śaṅkara editions):
+
+   ```
+   python3 scripts/import_editions.py \
+     --source ../grantha-data/structured_md/upanishads/taittiriya \
+     --library-root public/data/library --text-path upanishads/taittiriya \
+     --default-edition taittiriya-upanishad
+   ```
+
+   | Text | `--text-path` | `--default-edition` |
+   |---|---|---|
+   | taittiriya | upanishads/taittiriya | taittiriya-upanishad |
+   | aitareya | upanishads/aitareya | aitareya-upanishad |
+   | brihadaranyaka | upanishads/brihadaranyaka | brihadaranyaka-upanishad |
+   | chandogya | upanishads/chandogya | chhandogya-upanishad |
+   | katha | upanishads/katha | katha-upanishad |
+   | kena | upanishads/kena | kena-upanishad |
+   | mundaka | upanishads/mundaka | mundaka-upanishad |
+   | prashna | upanishads/prashna | prashna-upanishad |
+   | isavasya | upanishads/isavasya | isavasya-upanishad-vedantadesika |
+   | mandukya | upanishads/mandukya | mandukya-upanishad-rangaramanuja |
+   | mandukya-karika | upanishads/mandukya-karika | mandukya-karika-bharadvajaramanujacharya |
+   | brahma-sutra | brahma-sutra | brahma-sutra-sribhashya |
+
+   **mandukya / mandukya-karika** are co-located in one source dir and must be
+   imported one grantha at a time with `--grantha-id`:
+
+   ```
+   python3 scripts/import_editions.py \
+     --source ../grantha-data/structured_md/upanishads/mandukya \
+     --library-root public/data/library --text-path upanishads/mandukya \
+     --default-edition mandukya-upanishad-rangaramanuja \
+     --grantha-id mandukya-upanishad
+
+   python3 scripts/import_editions.py \
+     --source ../grantha-data/structured_md/upanishads/mandukya \
+     --library-root public/data/library --text-path upanishads/mandukya-karika \
+     --default-edition mandukya-karika-bharadvajaramanujacharya \
+     --grantha-id mandukya-karika
+   ```
+
+2. **Flat + multipart single-edition texts** (edition-sub-envelope +
+   `partN.json`) — `scripts/convert_structured_md.py`:
+
+   ```
+   python3 scripts/convert_structured_md.py \
+     --source ../grantha-data/structured_md/upanishads/kaushitaki \
+     --out public/data/library/upanishads/kaushitaki/kaushitaki-upanishad
+   ```
+
+   Texts: kaushitaki, svetasvatara, `../grantha-data/structured_md/bhagavad-gita/bhagavad-gita`
+   → `public/data/library/bhagavad-gita/bhagavad-gita`,
+   `../grantha-data/structured_md/ramayana/valmiki-ramayana` →
+   `public/data/library/ramayana/valmiki-ramayana` (626 parts),
+   `../grantha-data/structured_md/purana/vishnu-purana` →
+   `public/data/library/purana/vishnu-purana` (126 parts).
+
+3. **Flat single-file grantha** (vedarthasangraha) — the producer CLI
+   `grantha-converter md2json` (installed from grantha-data), then copy:
+
+   ```
+   cd ../grantha-data
+   grantha-converter md2json -i structured_md/vedarthasangraha/vedarthasangraha-01.md \
+     -o /tmp/vedarthasangraha.json
+   cp /tmp/vedarthasangraha.json ../grantha-explorer/public/data/library/vedarthasangraha/vedarthasangraha.json
+   ```
+
+4. **Validate** — `npm run build` (prebuild regenerates `granthas.json` +
+   `validate:data` + `validate:integrity`), or just
+   `npm run validate:data`. The `schema_version` in the output comes from the
+   producer `VERSION`; the mirrors stay byte-identical unless
+   `grantha-data/formats/schemas/` changed (see `SCHEMAS.md`).
+
+The grantha-data side also produces a flattened `json_library.zip` via Bazel
+(`bazel build //structured_md:json_library_zip`) — a **gitignored build
+artifact**, not the source of `public/data/library/`.
+
 ## Deployment
 
 Deploying is a push to `main`. The GitHub Actions workflow

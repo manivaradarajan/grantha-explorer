@@ -35,6 +35,17 @@ In particular, changes to `lib/data.ts`, `hooks/useGranthaLoader.ts`,
 tracked in `../grantha-data/structured_md/<text>/BUGS.md` (e.g.
 `bhagavad-gita/BUGS.md`).
 
+## Keeping README.md current (critical step)
+
+`README.md` documents how to regenerate `public/data/library/` from the
+sibling `grantha-data` checkout (the `import_editions.py` /
+`convert_structured_md.py` / producer-CLI commands, the `--default-edition`
+table, and the flat single-file copy step). **Whenever you change the ingestion
+scripts, the on-disk shapes, or the regeneration procedure, update README.md in
+the same change** — including the `grantha-data` README section on the Bazel
+build outputs if the handoff changes. A stale README leaves the next engineer
+with a wrong mental model of how to update the committed JSON library.
+
 ## Architecture at a glance
 
 - **Data:** `public/data/library/` (source of truth on disk, committed) +

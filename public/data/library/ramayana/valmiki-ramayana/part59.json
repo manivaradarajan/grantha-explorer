@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 59,
@@ -311,7 +311,19 @@
           "sanskrit": {
             "devanagari": "तमिति, सार्द्ध एकान्वयः । तं मुनिम् । इदं वक्ष्यमाणं वच उवाच । (ब्रवीति) ब्रुवतिर्द्विकर्मकः ॥ १.६१.१२ ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 64,
+            "end": 71,
+            "display_text": "ब्रवीति",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "1.61.13",

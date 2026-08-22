@@ -262,11 +262,11 @@
             "start": 494,
             "end": 511,
             "display_text": "बृ. उ. ४ । ५ । १३",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "4.5.13",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },
@@ -298,11 +298,11 @@
             "start": 638,
             "end": 655,
             "display_text": "बृ. उ. ३ । ७ । २३",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "3.7.23",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },
@@ -318,141 +318,141 @@
             "start": 123,
             "end": 130,
             "display_text": "ई. उ. १",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "1",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 213,
             "end": 220,
             "display_text": "ई. उ. २",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "2",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 361,
             "end": 378,
             "display_text": "बृ. उ. १ । ४ । १७",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.4.17",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 445,
             "end": 462,
             "display_text": "बृ. उ. १ । ४ । १७",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.4.17",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 467,
             "end": 483,
             "display_text": "बृ. उ. १ । ५ । २",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.5.2",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 750,
             "end": 767,
             "display_text": "बृ. उ. ४ । ४ । २२",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "4.4.22",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 837,
             "end": 844,
             "display_text": "ई. उ. ३",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "3",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 911,
             "end": 918,
             "display_text": "ई. उ. ८",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "8",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1082,
             "end": 1097,
             "display_text": "श्वे. उ. ६ । २१",
-            "grantha_id": "svetasvatara-upanishad",
-            "locator": "6.21",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1208,
             "end": 1215,
             "display_text": "ई. उ. ९",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "9",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1388,
             "end": 1395,
             "display_text": "ई. उ. ७",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "7",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1696,
             "end": 1713,
             "display_text": "बृ. उ. १ । ५ । १६",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.5.16",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1870,
             "end": 1887,
             "display_text": "बृ. उ. १ । ५ । १६",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.5.16",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 1933,
             "end": 1950,
             "display_text": "बृ. उ. १ । ५ । १६",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.5.16",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },
@@ -468,11 +468,11 @@
             "start": 298,
             "end": 315,
             "display_text": "बृ. उ. १ । ५ । १६",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "1.5.16",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },
@@ -504,11 +504,11 @@
             "start": 250,
             "end": 257,
             "display_text": "ई. उ. ९",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "9",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },
@@ -532,21 +532,21 @@
             "start": 590,
             "end": 597,
             "display_text": "ई. उ. १",
-            "grantha_id": "isavasya-upanishad",
-            "locator": "1",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           },
           {
             "start": 744,
             "end": 760,
             "display_text": "बृ. उ. ५ । ५ । २",
-            "grantha_id": "brihadaranyaka-upanishad",
-            "locator": "5.5.2",
+            "grantha_id": null,
+            "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": false
+            "unresolved": true
           }
         ]
       },

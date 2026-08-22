@@ -37,6 +37,9 @@ next-env.d.ts
 # generated files
 public/data/generated/
 
+# reference diagnostics (regenerable; not library data)
+**/references-report.json
+
 __pycache__/
 
 # local Claude Code settings (personal permission approvals, not shared)
