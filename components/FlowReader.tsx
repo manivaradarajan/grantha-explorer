@@ -76,6 +76,14 @@ const FONT_SCALE_MAX = 1.4;
 /** Max scrollTop drift from the recorded target that still counts as "at the
  *  verse" — beyond it the reader has scrolled away. */
 const RE_ALIGN_TOLERANCE_PX = 32;
+/** How long a programmatic selection (deep link, jump, part-load re-align)
+ *  suppresses the header/hash scrollspy consumers after its scroll settles,
+ *  so the observer flush can't rewrite the deliberate selection. */
+const SPY_HOLD_MS = 300;
+
+/** A scrollspy consumer sink: receives the in-view verse ref plus whether the
+ *  reader is currently inside the FlowReader's programmatic-selection hold. */
+export type SpySink = (ref: string, held: boolean) => void;
 
 /**
  * Flow reader — a continuous-prose reading mode (verse, then its commentary,
@@ -255,32 +263,108 @@ export default function FlowReader({
   // re-align (which would fight the user's scroll).
   const scrollDrivenSelection = useRef(false);
 
+  // Single scrollspy, shared by every consumer (header section, scroll→hash,
+  // and the folio marker via the spy sink). A programmatic selection (deep
+  // link, folio jump, click, part-load re-align) pins the selected verse above
+  // the spy band, so the observer's post-scroll flush would report the verse
+  // below it and rewrite the deliberate selection. `holdUntil` suppresses the
+  // header/hash consumers for a short window after any programmatic scroll;
+  // the folio sink is still notified (with `held` true) so its own guard keeps
+  // the marker pinned. `pendingRef` buffers the last in-band verse during the
+  // hold so a user scroll that lands inside the window is still flushed once
+  // the hold expires — but only if the reader actually moved off the pinned
+  // position (see `armSpyHold`).
+  const holdUntil = useRef(0);
+  const pendingRef = useRef<string | null>(null);
+  const holdTimer = useRef<number | null>(null);
+  // The folio registers its marker callback here (one observer, many sinks).
+  const spySinkRef = useRef<SpySink | null>(null);
+  // Latest-value refs so the stable scrollspy callback never goes stale.
+  const granthaRef = useRef(grantha);
+  granthaRef.current = grantha;
+  const selectedRefRef = useRef(selectedRef);
+  selectedRefRef.current = selectedRef;
+  const onScrollVerseChangeRef = useRef(onScrollVerseChange);
+  onScrollVerseChangeRef.current = onScrollVerseChange;
+
   // The adhyāya the reader is actually looking at, driven by the scrollspy so
   // the header chapter title tracks the view across chapter boundaries — not
   // just hash navigation. Initialized to the selected section; prefatory/
   // concluding passages (e.g. the mangalācaraṇa preface) don't collapse it onto
   // "chapter 0", mirroring the folio strip.
   const [viewSection, setViewSection] = useState(currentSection);
+
+  // Register the folio's marker sink so a single scrollspy feeds both the
+  // chrome and the content hash. The sink is stored in a ref — re-registering
+  // is cheap and idempotent (FlowReaderFolio calls this once per grantha).
+  const registerSpySink = useCallback((sink: SpySink | null) => {
+    spySinkRef.current = sink;
+  }, []);
+
+  // The single scrollspy consumer: notifies the folio sink always (it owns its
+  // own held-guard), and while not held updates the header chapter and the URL
+  // hash (scroll→hash, replaceState) for main passages only.
+  const handleSpyReport = useCallback((ref: string, held: boolean) => {
+    spySinkRef.current?.(ref, held);
+    if (held) return;
+    const g = granthaRef.current;
+    if (!g.passages.some((p) => p.passage_type === "main" && p.ref === ref)) {
+      return;
+    }
+    const section = ref.split(".")[0] ?? ref;
+    setViewSection((prev) => (prev === section ? prev : section));
+    const onChange = onScrollVerseChangeRef.current;
+    if (onChange && ref !== selectedRefRef.current) {
+      scrollDrivenSelection.current = true;
+      onChange(ref);
+    }
+  }, []);
+
+  // Arm a short programmatic-selection hold. When it expires, flush the
+  // buffered in-band verse — but only if the reader actually scrolled off the
+  // pinned position, otherwise the deliberate selection (deep link / jump)
+  // would be rewritten by the mount flush alone.
+  const armSpyHold = useCallback(() => {
+    holdUntil.current = performance.now() + SPY_HOLD_MS;
+    pendingRef.current = null;
+    if (holdTimer.current) window.clearTimeout(holdTimer.current);
+    holdTimer.current = window.setTimeout(() => {
+      const ref = pendingRef.current;
+      pendingRef.current = null;
+      if (!ref) return;
+      const container = scrollContainerRef.current;
+      const target = lastAutoScroll.current;
+      if (
+        !container ||
+        !target ||
+        Math.abs(container.scrollTop - target.targetScrollTop) <
+          RE_ALIGN_TOLERANCE_PX
+      ) {
+        return;
+      }
+      handleSpyReport(ref, false);
+    }, SPY_HOLD_MS);
+  }, [handleSpyReport]);
+
+  useEffect(() => () => {
+    if (holdTimer.current) window.clearTimeout(holdTimer.current);
+  }, []);
+
   // Re-observe when the observed `[data-verse-ref]` set changes: grantha/
   // passage changes, entering/leaving compare (editionIds.length), the compare
   // editions loading in (editions.length), and the columns↔swipe layout flip
   // (availableWidth starts 0 and is then measured, which would otherwise leave
-  // the observer bound to detached nodes).
+  // the observer bound to detached nodes). The callback reads latest values
+  // through refs, so its identity is stable across re-renders.
   useScrollspy(
     scrollContainerRef,
     [grantha, editionIds.length, editions.length, availableWidth],
     (ref) => {
-      if (grantha.passages.some((p) => p.ref === ref)) {
-        const section = ref.split(".")[0] ?? ref;
-        setViewSection((prev) => (prev === section ? prev : section));
-        // Scroll-driven selection: update the hash without adding history.
-        // Guarded so we only fire on an actual change and never for the same
-        // verse twice.
-        if (onScrollVerseChange && ref !== selectedRef) {
-          scrollDrivenSelection.current = true;
-          onScrollVerseChange(ref);
-        }
+      const held = performance.now() < holdUntil.current;
+      if (held) {
+        pendingRef.current = ref;
       }
+      handleSpyReport(ref, held);
     },
   );
 
@@ -409,12 +493,14 @@ export default function FlowReader({
         Math.abs(container.scrollTop - prev.targetScrollTop) <
           RE_ALIGN_TOLERANCE_PX
       ) {
+        armSpyHold();
         alignVerseToTop(selectedRef);
       }
       return;
     }
 
     // New selection (or first mount): align.
+    armSpyHold();
     alignVerseToTop(selectedRef);
     // `availableWidth` is also a dep: a compare columns↔swipe flip changes
     // the verse layout, so the selected verse re-aligns to the new layout.
@@ -424,6 +510,7 @@ export default function FlowReader({
     availableWidth,
     alignVerseToTop,
     findVerseElement,
+    armSpyHold,
   ]);
 
   useEffect(
@@ -846,7 +933,7 @@ export default function FlowReader({
                         ref={(el) => setVerseRef(passage.ref, el)}
                         data-verse-ref={passage.ref}
                         onClick={() => handleVerseClick(passage.ref)}
-                        className={`px-4 py-8 cursor-pointer transition-colors ${
+                        className={`group px-4 py-8 transition-colors ${
                           isSelected ? "bg-gray-50" : ""
                         }`}
                       >
@@ -888,6 +975,7 @@ export default function FlowReader({
                               script={script}
                               granthaTitleDeva={granthaTitleDeva}
                               granthaTitleIast={granthaTitleIast}
+                              revealOnHover
                             />
                           </div>
                         </div>
@@ -947,10 +1035,7 @@ export default function FlowReader({
         onJump={handleFolioJump}
         selectedRef={selectedRef}
         script={script}
-        isCompare={isCompare}
-        editionCount={editions.length}
-        availableWidth={availableWidth}
-        scrollContainerRef={scrollContainerRef}
+        registerSpySink={registerSpySink}
         loadPart={loadPart}
       />
 

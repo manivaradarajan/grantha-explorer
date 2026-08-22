@@ -9,7 +9,6 @@ import {
   useState,
   type FormEvent,
   type ReactNode,
-  type RefObject,
 } from "react";
 import {
   Grantha,
@@ -23,7 +22,7 @@ import {
 } from "@/lib/data";
 import { resolveJumpTarget } from "@/lib/jumpTarget";
 import { toDevanagariNumerals } from "@/lib/stringUtils";
-import { useScrollspy } from "@/hooks/useScrollspy";
+import { type SpySink } from "./FlowReader";
 
 /** A single node in the folio outline tree (group = collapsible section). */
 interface OutlineNode {
@@ -51,9 +50,6 @@ function truncatePreview(html: string, n: number): string {
   const text = html.replace(/\n/g, " ").replace(/\s+/g, " ").trim();
   return text.length > n ? `${text.slice(0, n)}…` : text;
 }
-
-/** How long to hold the scrollspy after a jump/layout/part change settles. */
-const JUMP_HOLD_MS = 300;
 
 /**
  * Build the folio outline tree from the same data NavigationSidebar uses
@@ -218,17 +214,9 @@ interface FlowReaderFolioProps {
   /** Initially-highlighted ref (the selected verse). */
   selectedRef: string;
   script: "deva" | "roman";
-  /** True in compare mode (>= 2 selected editions) — re-observe key for the
-   *  single↔compare branch flip. */
-  isCompare: boolean;
-  /** Loaded edition count (single=1, compare=2/3) — re-observe key for
-   *  editions loading in (each swipe page duplicates the verse nodes). */
-  editionCount: number;
-  /** Reading-area width driving the compare columns↔swipe flip — the
-   *  re-observe key (verse nodes change on that flip). */
-  availableWidth: number;
-  /** The reader's scroll container (scrollspy root). */
-  scrollContainerRef: RefObject<HTMLElement | null>;
+  /** Register this component's scrollspy sink. The FlowReader owns the single
+   *  IntersectionObserver and fans reports to every registered sink. */
+  registerSpySink: (sink: SpySink | null) => void;
   /** Lazy part loader — used to fill in unloaded outline sections when the
    *  user expands their group. */
   loadPart: (firstRef: string) => Promise<void>;
@@ -300,10 +288,7 @@ export default function FlowReaderFolio({
   onJump,
   selectedRef,
   script,
-  isCompare,
-  editionCount,
-  availableWidth,
-  scrollContainerRef,
+  registerSpySink,
   loadPart,
 }: FlowReaderFolioProps) {
   const model = useMemo(() => getSidebarFlatModel(grantha), [grantha]);
@@ -348,12 +333,6 @@ export default function FlowReaderFolio({
   const treeRef = useRef<HTMLDivElement | null>(null);
   const stripListRef = useRef<HTMLDivElement | null>(null);
   const currentRef = useRef<string | null>(selectedRef);
-  // True briefly after a verse jump: the auto-scroll pins the jumped verse at
-  // the container top, above the scrollspy band, so the observer would fire
-  // for a lower verse and steal the highlight from the verse the user chose.
-  // The layout effects re-arm it; the timer effect clears it. Initialized true
-  // so the mount deep-link flush is held too.
-  const jumpHold = useRef(true);
   // The jump input is deliberately uncontrolled: it shows the live current
   // verse while idle, but while focused it must own its value so keystrokes
   // (typing, backspace, select-all) are never swallowed by a re-render — the
@@ -475,30 +454,41 @@ export default function FlowReaderFolio({
     isStructuralOutline,
   ]);
 
-  // Re-observe when the observed `[data-verse-ref]` set changes: grantha/
-  // passage changes, the single↔compare branch flip (isCompare), editions
-  // loading in (editionCount), and the columns↔swipe layout flip
-  // (availableWidth starts 0 and is then measured, which would otherwise leave
-  // the observer bound to detached nodes).
-  useScrollspy(
-    scrollContainerRef,
-    [grantha, isCompare, editionCount, availableWidth],
-    (ref) => {
-      // Right after a jump the auto-scroll pins the jumped verse above the
-      // scrollspy band; the observer's post-jump flush would report a lower
-      // verse and steal the highlight. Hold briefly — but still accept a
-      // report for the currently-highlighted verse itself (single-mode blocks
-      // are tall enough to overlap the band, and a part load re-observes to
-      // it), so the strip's section can catch up after a deep link.
-      if (jumpHold.current && ref !== currentRef.current) return;
+  // The FlowReader owns the single scrollspy; this component registers a sink
+  // that receives every in-view report with a `held` flag (true while the
+  // FlowReader's programmatic-selection hold is active — e.g. right after a
+  // jump the auto-scroll pins the jumped verse above the spy band, so the
+  // observer flush would otherwise report a lower verse and steal the
+  // highlight). Re-register when the grantha changes (the sink closes over
+  // `grantha` for the main-passage guard and `applyActiveSection`).
+  useEffect(() => {
+    const sink: SpySink = (ref, held) => {
+      // The strip/tree only represent main passages. Prefatory/concluding
+      // refs (e.g. the mangalācaraṇa "0.1" preface, whose tall block can
+      // dominate the spy band) must not clear the highlight or collapse the
+      // section — skip them outright.
+      if (
+        !grantha.passages.some(
+          (p) => p.passage_type === "main" && p.ref === ref,
+        )
+      ) {
+        return;
+      }
+      // While held, accept only a report for the currently-highlighted verse
+      // itself (single-mode blocks are tall enough to overlap the band, and a
+      // part load re-observes to it), so the strip's section can catch up
+      // after a deep link.
+      if (held && ref !== currentRef.current) return;
       currentRef.current = ref;
       applyCurrent(ref);
       // "Where am I": reflect the verse currently in view in the jump input
       // (unless the user is mid-edit there).
       setCurrentVerse((prev) => (prev === ref ? prev : ref));
       applyActiveSection(ref);
-    }
-  );
+    };
+    registerSpySink(sink);
+    return () => registerSpySink(null);
+  }, [grantha, applyActiveSection, applyCurrent, registerSpySink]);
 
   // Re-apply the highlight whenever the tree is rebuilt (grantha/script change,
   // a group toggled open, the folio panel opening (the tree mounts fresh), the
@@ -512,9 +502,8 @@ export default function FlowReaderFolio({
   // jumped verse in the folio immediately: the auto-scroll pins it at the
   // container top, above the scrollspy band, so the observer would otherwise
   // report a lower verse. Sync the state on the prop change (the
-  // adjust-during-render pattern), then arm the scrollspy hold in a layout
-  // effect (before any IntersectionObserver flush) so the post-jump flush
-  // can't overwrite the jump — the next real scroll resumes tracking.
+  // adjust-during-render pattern); the FlowReader's shared hold suppresses the
+  // post-jump flush, and this mirror keeps the marker on the jumped verse.
   const [prevSelectedRef, setPrevSelectedRef] = useState(selectedRef);
   if (prevSelectedRef !== selectedRef) {
     setPrevSelectedRef(selectedRef);
@@ -523,30 +512,11 @@ export default function FlowReaderFolio({
   }
 
   // Mirror the jumped verse into currentRef (so the re-apply effect highlights
-  // it) and arm the hold. Selection-only: arming on layout changes (below)
-  // must not clobber currentRef when the reader has already scrolled away from
-  // the selected verse.
+  // it). Selection-only: must not clobber currentRef when the reader has
+  // already scrolled away from the selected verse.
   useLayoutEffect(() => {
     currentRef.current = selectedRef;
-    jumpHold.current = true;
   }, [selectedRef]);
-
-  // Arm the hold on the remaining re-observe triggers — the columns↔swipe
-  // flip (availableWidth re-aligns the selected verse via the auto-scroll
-  // effect's own availableWidth dep) and part loads (grantha) — so their
-  // post-flush can't steal the highlight. currentRef is left untouched.
-  useLayoutEffect(() => {
-    jumpHold.current = true;
-  }, [availableWidth, grantha]);
-  // Clear the post-jump/layout/part-load scrollspy hold shortly after it
-  // settles; any report for the currently-highlighted verse is still accepted
-  // while held (see the scrollspy callback guard).
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      jumpHold.current = false;
-    }, JUMP_HOLD_MS);
-    return () => window.clearTimeout(timer);
-  }, [selectedRef, availableWidth, grantha]);
 
   // Mirror the live current verse into the jump input, but only while the
   // reader is not editing it. The input is uncontrolled (see jumpInputRef), so
