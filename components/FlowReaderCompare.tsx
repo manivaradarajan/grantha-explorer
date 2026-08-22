@@ -41,6 +41,8 @@ interface FlowReaderCompareProps {
   granthaTitleIast: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
 }
 
@@ -75,6 +77,7 @@ export default function FlowReaderCompare({
   granthaTitleIast,
   updateHash,
   availableGranthaIds,
+  granthaById,
   granthaIdToDevanagariTitle,
 }: FlowReaderCompareProps) {
   const count = editions.length;
@@ -174,6 +177,7 @@ export default function FlowReaderCompare({
                 sourcePassageRef: verseRef,
                 updateHash,
                 availableGranthaIds,
+                granthaById,
                 granthaIdToTitle: granthaIdToDevanagariTitle,
               },
             )}
@@ -235,6 +239,7 @@ export default function FlowReaderCompare({
                             sourcePassageRef: verseRef,
                             updateHash,
                             availableGranthaIds,
+                            granthaById,
                             granthaIdToTitle: granthaIdToDevanagariTitle,
                           },
                         )}
@@ -247,7 +252,7 @@ export default function FlowReaderCompare({
         </div>
       );
     },
-    [activeSubIds, onSubcommentaryToggle, tikaLabel, updateHash, availableGranthaIds, granthaIdToDevanagariTitle]
+    [activeSubIds, onSubcommentaryToggle, tikaLabel, updateHash, availableGranthaIds, granthaById, granthaIdToDevanagariTitle]
   );
 
   // --- Shared centered verse row (used by the columns view) -----------------

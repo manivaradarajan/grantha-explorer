@@ -14,7 +14,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import { act } from "react-dom/test-utils";
 import { createRoot, Root } from "react-dom/client";
 import { Reference } from "@/lib/data";
-import { renderCommentaryWithReferences } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
 
 const container = (): HTMLDivElement => {
   const el = document.createElement("div");
@@ -27,6 +27,9 @@ const context = {
   sourcePassageRef: "1",
   updateHash: () => {},
   availableGranthaIds: ["svetasvatara-upanishad"],
+  granthaById: {
+    "svetasvatara-upanishad": { editions: [], default_school: undefined },
+  },
   granthaIdToTitle: { "svetasvatara-upanishad": "श्वेताश्वतरोपनिषत्" },
 };
 
@@ -55,6 +58,8 @@ describe("renderCommentaryWithReferences", () => {
       renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
+        // Empty target metadata → not linkable → renders as external.
+        granthaById: {},
       })
       );
     });
@@ -105,6 +110,8 @@ describe("renderCommentaryWithReferences", () => {
       renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
+        // Empty target metadata → not linkable → renders as external.
+        granthaById: {},
       })
       );
     });
@@ -166,6 +173,77 @@ describe("renderCommentaryWithReferences", () => {
     });
     expect(el.querySelector(".reference-link")).not.toBeNull();
     expect(el.querySelector(".reference-link")?.textContent).toBe("शत. ब्रा.");
+    cleanUp(root, el);
+  });
+});
+
+describe("renderMulaWithReferences", () => {
+  it("splits raw mula at offsets and wraps references as links", () => {
+    const text = "तदाह (बृ. उ. १.४.१७) इति ।";
+    const refs: Reference[] = [
+      {
+        start: 6,
+        end: 19,
+        display_text: "बृ. उ. १.४.१७",
+        grantha_id: "brihadaranyaka-upanishad",
+        locator: "1.4.17",
+        unresolved: false,
+      },
+    ];
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+        root.render(
+      renderMulaWithReferences(text, refs, {
+        ...context,
+        availableGranthaIds: ["brihadaranyaka-upanishad"],
+      })
+      );
+    });
+    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
+    expect(el.textContent).toContain("तदाह");
+    expect(el.textContent).toContain("इति ।");
+    cleanUp(root, el);
+  });
+
+  it("strips markdown per segment without shifting offsets", () => {
+    // A citation preceded by a `**…**` pair; offsets are into the RAW string.
+    // "**अथ** " = 0..7, then `(` at 7, `बृ` at 8; "बृ. उ. १.४.१७" = 13 chars → 8..21.
+    const text = "**अथ** (बृ. उ. १.४.१७) इति ।";
+    const refs: Reference[] = [
+      {
+        start: 8,
+        end: 21,
+        display_text: "बृ. उ. १.४.१७",
+        grantha_id: "brihadaranyaka-upanishad",
+        locator: "1.4.17",
+        unresolved: false,
+      },
+    ];
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+        root.render(
+      renderMulaWithReferences(text, refs, {
+        ...context,
+        availableGranthaIds: ["brihadaranyaka-upanishad"],
+      })
+      );
+    });
+    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
+    expect(el.textContent).toContain("अथ");
+    cleanUp(root, el);
+  });
+
+  it("renders plain mula when there are no references", () => {
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+        root.render(
+      renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context)
+      );
+    });
+    expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा ।");
     cleanUp(root, el);
   });
 });

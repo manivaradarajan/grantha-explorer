@@ -3,6 +3,7 @@ import { Grantha, Reference } from "./data";
 import {
   getPassagePreview,
   isReferenceInLibrary,
+  isReferenceLinkable,
   resolveReferenceTarget,
 } from "./references";
 import { makePassage } from "@/tests/fixtures";
@@ -181,6 +182,75 @@ describe("isReferenceInLibrary", () => {
     const ids = ["bhagavad-gita", "taittiriya-upanishad"];
     expect(isReferenceInLibrary("bhagavad-gita", ids)).toBe(true);
     expect(isReferenceInLibrary("missing", ids)).toBe(false);
+  });
+});
+
+describe("edition-aware link gate (design §4.4 / Ground Rule #7)", () => {
+  const granthaById = {
+    "brihadaranyaka-upanishad": {
+      editions: [
+        { edition_id: "brihadaranyaka-upanishad" },
+        { edition_id: "brihadaranyaka-upanishad-sankara-bhashya" },
+      ],
+      default_school: "ramanuja",
+    },
+    "brahma-sutra": {
+      editions: [
+        { edition_id: "brahma-sutra-sribhashya" },
+        { edition_id: "brahma-sutra-vedanta-deepam" },
+      ],
+      default_school: "ramanuja",
+    },
+    "bhagavad-gita": {
+      editions: [],
+      default_school: undefined,
+    },
+    "vishnu-purana": {
+      editions: [],
+      default_school: undefined,
+    },
+  };
+
+  const withEdition = (granthaId: string, editionId?: string | null): Reference =>
+    ref({ grantha_id: granthaId, edition_id: editionId, locator: "1.1" });
+
+  it("links a present edition explicitly", () => {
+    expect(
+      isReferenceLinkable(
+        withEdition("brahma-sutra", "brahma-sutra-sribhashya"),
+        granthaById,
+      ),
+    ).toBe(true);
+  });
+
+  it("defers an absent edition (never another school's default)", () => {
+    expect(
+      isReferenceLinkable(
+        withEdition("brahma-sutra", "brahma-sutra-sankara-bhashya"),
+        granthaById,
+      ),
+    ).toBe(false);
+  });
+
+  it("defers an edition-less ref to a school-flavored default (GR#7)", () => {
+    expect(
+      isReferenceLinkable(withEdition("brahma-sutra"), granthaById),
+    ).toBe(false);
+  });
+
+  it("links an edition-less ref to an attribution-safe (mula) default", () => {
+    expect(
+      isReferenceLinkable(withEdition("vishnu-purana"), granthaById),
+    ).toBe(true);
+    expect(
+      isReferenceLinkable(withEdition("bhagavad-gita"), granthaById),
+    ).toBe(true);
+  });
+
+  it("defers a not-in-library grantha", () => {
+    expect(
+      isReferenceLinkable(withEdition("nonexistent"), granthaById),
+    ).toBe(false);
   });
 });
 

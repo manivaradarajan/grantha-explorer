@@ -15,6 +15,7 @@ import {
   EditionStub,
   Grantha,
   GranthaMetadata,
+  Reference,
   commentaryPassageForRef,
   getAllPassagesForNavigation,
   nextUnloadedPartFirstRef,
@@ -35,7 +36,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
-import { renderCommentaryWithReferences } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -68,6 +69,8 @@ interface FlowReaderProps {
   onScriptChange: (script: "deva" | "roman") => void;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
 }
 
@@ -113,6 +116,7 @@ export default function FlowReader({
   onScriptChange,
   updateHash,
   availableGranthaIds,
+  granthaById,
   granthaIdToDevanagariTitle,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -591,6 +595,7 @@ export default function FlowReader({
                   sourcePassageRef: verseRef,
                   updateHash,
                   availableGranthaIds,
+                  granthaById,
                   granthaIdToTitle: granthaIdToDevanagariTitle,
                 },
               )}
@@ -757,6 +762,7 @@ export default function FlowReader({
                   granthaTitleIast={granthaTitleIast}
                   updateHash={updateHash}
                   availableGranthaIds={availableGranthaIds}
+                  granthaById={granthaById}
                   granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 />
               ) : (
@@ -834,9 +840,9 @@ export default function FlowReader({
                         )
                       : undefined;
                   const isSelected = passage.ref === selectedRef;
-                  const mula = stripMarkdown(
-                    passage.content?.sanskrit?.devanagari,
-                  );
+                  const rawMula = passage.content?.sanskrit?.devanagari;
+                  const mula = stripMarkdown(rawMula);
+                  const mulaRefs = (passage as { references?: Reference[] }).references;
                   const introText = cp?.intro?.sanskrit?.devanagari;
 
                   return (
@@ -875,7 +881,25 @@ export default function FlowReader({
                               )}
                               {mula && (
                                 <p className="verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line">
-                                  {withVerseNumber(mula, passage.ref)}
+                                  {mulaRefs && mulaRefs.length > 0 ? (
+                                    <>
+                                      {renderMulaWithReferences(
+                                        rawMula ?? "",
+                                        mulaRefs,
+                                        {
+                                          currentGranthaId: grantha.grantha_id,
+                                          sourcePassageRef: passage.ref,
+                                          updateHash,
+                                          availableGranthaIds,
+                                          granthaById,
+                                          granthaIdToTitle: granthaIdToDevanagariTitle,
+                                        },
+                                      )}
+                                      {" "}॥ {toDevanagariNumerals(passage.ref)} ॥
+                                    </>
+                                  ) : (
+                                    withVerseNumber(mula, passage.ref)
+                                  )}
                                 </p>
                               )}
                             </div>
@@ -914,6 +938,7 @@ export default function FlowReader({
                                   sourcePassageRef: passage.ref,
                                   updateHash,
                                   availableGranthaIds,
+                                  granthaById,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,
                                 },
                               )}

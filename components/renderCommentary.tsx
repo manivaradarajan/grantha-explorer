@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Reference } from "@/lib/data";
-import { sanitizeCommentaryHtml } from "@/lib/stringUtils";
+import { sanitizeCommentaryHtml, stripMarkdown } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
 
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
@@ -14,6 +14,8 @@ export interface ReferenceLinkContext {
   sourcePassageRef: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToTitle: Record<string, string>;
 }
 
@@ -93,5 +95,63 @@ export function renderCommentaryWithReferences(
     );
   }
 
+  return <>{parts}</>;
+}
+
+/**
+ * Render a main (mula) passage's Devanagari with its cross-text references.
+ *
+ * The mula render path differs from commentary in two ways: markdown is
+ * stripped (``**`` → plain, via ``stripMarkdown``) rather than transformed,
+ * and the verse number is appended by the caller (``withVerseNumber``). The
+ * offsets are into the RAW ``content.sanskrit.devanagari``, so the split must
+ * happen on the raw string FIRST and markdown stripped per segment — stripping
+ * the whole string before splitting would shift the offsets. References are
+ * wrapped as `ReferenceLink`; the caller appends the verse number.
+ *
+ * Args:
+ *     rawText: The passage's raw mula Devanagari.
+ *     references: The passage's `references[]`, or undefined/[].
+ *     linkContext: Context threaded into each `ReferenceLink`.
+ *
+ * Returns:
+ *     A React fragment of stripped mula text interleaved with reference links.
+ */
+export function renderMulaWithReferences(
+  rawText: string,
+  references: Reference[] | undefined,
+  linkContext: ReferenceLinkContext,
+): React.ReactNode {
+  if (!references || references.length === 0) {
+    return <>{stripMarkdown(rawText)}</>;
+  }
+  const sorted = [...references].sort((a, b) => a.start - b.start);
+  const parts: React.ReactNode[] = [];
+  let cursor = 0;
+  for (const ref of sorted) {
+    if (ref.end <= cursor) {
+      continue;
+    }
+    const segStart = Math.max(cursor, ref.start);
+    if (segStart > cursor) {
+      parts.push(
+        <span key={`seg-${cursor}`}>{stripMarkdown(rawText.slice(cursor, segStart))}</span>,
+      );
+    }
+    const displayText = rawText.slice(segStart, ref.end) || ref.display_text;
+    parts.push(
+      <ReferenceLink
+        key={`ref-${segStart}`}
+        reference={{ ...ref, display_text: displayText }}
+        {...linkContext}
+      />
+    );
+    cursor = ref.end;
+  }
+  if (cursor < rawText.length) {
+    parts.push(
+      <span key="seg-last">{stripMarkdown(rawText.slice(cursor))}</span>,
+    );
+  }
   return <>{parts}</>;
 }
