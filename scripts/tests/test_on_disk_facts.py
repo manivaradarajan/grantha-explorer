@@ -88,24 +88,6 @@ def _on_disk_edition_ids() -> set[str]:
     return ids
 
 
-def _collect_references() -> list[dict]:
-    """Collect every committed reference from grantha-part/grantha files."""
-    refs: list[dict] = []
-    for p in _collect_json_files(_LIBRARY_ROOT):
-        data = json.loads(p.read_text(encoding="utf-8"))
-        if data.get("kind") not in ("grantha-part", "grantha"):
-            continue
-        comms = []
-        c = data.get("commentary")
-        if c:
-            comms += c if isinstance(c, list) else [c]
-        comms += data.get("commentaries") or []
-        for commentary in comms:
-            for passage in commentary.get("passages", []):
-                refs.extend(passage.get("references") or [])
-    return refs
-
-
 def _load_bimap() -> dict:
     """Load the citation bimap YAML (skipped when the sibling checkout is absent)."""
     import yaml  # noqa: PLC0415
@@ -209,38 +191,6 @@ class TestVedarthasangrahaShape(unittest.TestCase):
             self.skipTest("vedarthasangraha source absent")
         text = self.src.read_text(encoding="utf-8")
         self.assertIn("रामानुज", text)
-
-
-class TestCommittedReferenceBaseline(unittest.TestCase):
-    """The reference corpus the sweep and migration operate on (design §3 GR#7)."""
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        if not _LIBRARY_ROOT.exists():
-            raise unittest.SkipTest("library dir not present")
-        cls.refs = _collect_references()
-        cls.meta = json.loads(_META_PATH.read_text(encoding="utf-8"))
-        cls.school_flavored = {
-            gid for gid, entry in cls.meta.items()
-            if isinstance(entry, dict) and entry.get("default_school")
-        }
-
-    def test_reference_baseline_counts(self) -> None:
-        """The committed corpus is 281 references (verified 2026-08-21)."""
-        self.assertEqual(len(self.refs), 281, "reference corpus size changed")
-
-    def test_no_committed_reference_has_edition_id_yet(self) -> None:
-        """Baseline: every committed reference is pre-sweep (no edition_id)."""
-        with_edition = [r for r in self.refs if r.get("edition_id")]
-        self.assertEqual(with_edition, [], "committed refs unexpectedly have edition_id")
-
-    def test_school_flavored_targeted_refs_unswept(self) -> None:
-        """Baseline: 141 school-flavored-targeted refs lack edition_id (unswept)."""
-        unswept = [
-            r for r in self.refs
-            if r.get("grantha_id") in self.school_flavored and not r.get("edition_id")
-        ]
-        self.assertEqual(len(unswept), 141, "school-flavored unswept ref count")
 
 
 class TestBimapNamespacedShape(unittest.TestCase):

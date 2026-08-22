@@ -1039,6 +1039,10 @@ def _extract_references(
         return [], []
 
 
+_references_bimap_cache: Any = None
+_references_bimap_cache_key: str | None = None
+
+
 def _references_bimap() -> list[Any]:
     """Load the citation bimap, resolving the grantha-data checkout path.
 
@@ -1047,14 +1051,24 @@ def _references_bimap() -> list[Any]:
     ``grantha_data`` package location is used. Returns [] when the bimap
     cannot be located, so reference extraction degrades gracefully.
 
+    The result is cached per ``GRANTHA_DATA_TOOLS_LIB`` value: this is called
+    once per passage, and re-parsing the YAML on every call makes a 626-part
+    corpus conversion (tens of thousands of passages) spend its time in the
+    YAML parser instead of extracting.
+
     Returns:
         The loaded bimap entries, or [] when the file is unavailable.
     """
+    global _references_bimap_cache, _references_bimap_cache_key
     import os
 
     from grantha_data.references import load_bimap
 
     tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
+    cache_key = tools_lib or "default"
+    if _references_bimap_cache is not None and _references_bimap_cache_key == cache_key:
+        return _references_bimap_cache
+
     if tools_lib:
         bimap_path = Path(tools_lib).expanduser().parent.parent / "data" / "citation_bimap.yaml"
     else:
@@ -1064,9 +1078,12 @@ def _references_bimap() -> list[Any]:
             Path(grantha_data.__file__).resolve().parent.parent.parent
             / "data" / "citation_bimap.yaml"
         )
-    if not bimap_path.exists():
-        return []
-    return load_bimap(bimap_path)
+    loaded: list[Any] = []
+    if bimap_path.exists():
+        loaded = load_bimap(bimap_path)
+    _references_bimap_cache = loaded
+    _references_bimap_cache_key = cache_key
+    return loaded
 
 
 def _build_commentary(
