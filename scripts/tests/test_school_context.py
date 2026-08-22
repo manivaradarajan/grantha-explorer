@@ -88,49 +88,37 @@ _RAMANUJA_FRONTMATTER: dict[str, object] = {
 
 @unittest.skipUnless(_bootstrap_ready(), "grantha-data sibling checkout absent")
 class TestCitationContext(unittest.TestCase):
-    """Deriving the citing edition's school namespace from frontmatter."""
+    """Deriving the citing edition's school namespace from its edition id."""
 
-    def test_sankara_namespace_read_from_commentary(self) -> None:
-        """A Śaṅkara commentary declares citation_namespace: sankara."""
-        self.assertEqual(_citation_context(_SANKARA_FRONTMATTER), "sankara")
+    def test_sankara_edition_id_maps_to_sankara(self) -> None:
+        """A śaṅkara edition id (…-sankara-bhashya) → the sankara namespace."""
+        self.assertEqual(
+            _citation_context("isavasya-upanishad-sankara-bhashya"), "sankara"
+        )
 
-    def test_ramanuja_namespace_read_from_commentary(self) -> None:
-        """A Rāmānuja commentary declares citation_namespace: ramanuja."""
-        self.assertEqual(_citation_context(_RAMANUJA_FRONTMATTER), "ramanuja")
+    def test_ramanuja_edition_ids_map_to_ramanuja(self) -> None:
+        """Rāmānuja-school edition ids → the ramanuja namespace."""
+        for eid in [
+            "isavasya-upanishad-vedantadesika",
+            "isavasya-upanishad-srivatsanarayana",
+            "brahma-sutra-sribhashya",
+            "brahma-sutra-vedanta-deepam",
+            "brahma-sutra-vedanta-sara",
+            "katha-upanishad-rangaramanuja",
+            "mandukya-karika-bharadvajaramanujacharya",
+        ]:
+            self.assertEqual(_citation_context(eid), "ramanuja", eid)
 
-    def test_absent_namespace_is_base_context(self) -> None:
-        """No citation_namespace → school-neutral (base table)."""
-        fm = {
-            "grantha_id": "isavasya-upanishad",
-            "part_num": 1,
-            "commentaries_metadata": [
-                {"commentary_id": "x", "commentary_title": "",
-                 "commentator": {"devanagari": "X"}}
-            ],
-        }
-        self.assertEqual(_citation_context(fm), "")
+    def test_mula_edition_is_base_context(self) -> None:
+        """A mula edition id (edition_id == grantha_id) → school-neutral."""
+        for eid in ["vishnu-purana", "valmiki-ramayana", "vedarthasangraha"]:
+            self.assertEqual(_citation_context(eid), "", eid)
 
-    def test_grantha_level_namespace_supported(self) -> None:
-        """vedarthasangraha-style grantha-level citation_namespace is read."""
-        fm = {"grantha_id": "vedarthasangraha", "citation_namespace": "ramanuja"}
-        self.assertEqual(_citation_context(fm), "ramanuja")
-
-    def test_conflicting_namespace_is_error(self) -> None:
-        """A grantha-level namespace disagreeing with a commentary one fails."""
-        fm = {
-            "grantha_id": "vedarthasangraha",
-            "citation_namespace": "ramanuja",
-            "commentaries_metadata": [
-                {
-                    "commentary_id": "x",
-                    "citation_namespace": "sankara",
-                    "commentary_title": "",
-                    "commentator": {"devanagari": "X"},
-                }
-            ],
-        }
-        with self.assertRaises(ValueError):
-            _citation_context(fm)
+    def test_kena_sankara_vakya_maps_to_sankara(self) -> None:
+        """kena-sankara-vakya-bhashya is also a śaṅkara edition."""
+        self.assertEqual(
+            _citation_context("kena-upanishad-sankara-vakya-bhashya"), "sankara"
+        )
 
 
 @unittest.skipUnless(_bootstrap_ready(), "grantha-data sibling checkout absent")

@@ -1132,32 +1132,32 @@ def _build_commentary(
     return commentary
 
 
-def _citation_context(frontmatter: dict[str, Any]) -> str:
-    """Derive the citing edition's school namespace from frontmatter.
+def _citation_context(edition_id: str) -> str:
+    """Derive the citing edition's school namespace from its edition id.
 
-    The namespace lives in ``commentaries_metadata`` (per-commentary) or as a
-    grantha-level ``citation_namespace`` field (for mula-author works like
-    vedarthasangraha, which have no ``commentaries_metadata``). The value must
-    name an existing bimap namespace (``ramanuja``, ``sankara``) or be absent
-    → school-neutral (base table).
+    The school is encoded in the edition id (school-namespace design §4.2):
+    a ``sankara`` edition (e.g. ``isavasya-upanishad-sankara-bhashya``) is the
+    śaṅkara namespace; the rāmānuja-school editions are the rāmānuja namespace;
+    everything else (mula / neutral) is the base table. This avoids frontmatter
+    edits — the edition id is the authoritative compile-time context.
 
     Args:
-        frontmatter: Parsed YAML frontmatter dict.
+        edition_id: The citing edition's id (equals grantha_id for mula).
 
     Returns:
         The namespace string, or "" when school-neutral.
     """
-    grantha_level: str = frontmatter.get("citation_namespace") or ""
-    for meta in frontmatter.get("commentaries_metadata") or []:
-        ns: str = meta.get("citation_namespace") or ""
-        if ns:
-            if grantha_level and ns != grantha_level:
-                raise ValueError(
-                    "conflicting citation_namespace across the edition: "
-                    f"grantha-level {grantha_level!r} vs commentary {ns!r}"
-                )
-            grantha_level = ns
-    return grantha_level
+    if "sankara" in edition_id:
+        return "sankara"
+    if any(
+        marker in edition_id
+        for marker in (
+            "desika", "srivatsanarayana", "rangaramanuja", "sribhashya",
+            "deepam", "sara", "gitabhashya", "bharadvaja", "kuranarayana",
+        )
+    ):
+        return "ramanuja"
+    return ""
 
 
 def build_part_json(
@@ -1184,7 +1184,7 @@ def build_part_json(
     """
     grantha_id: str = frontmatter["grantha_id"]
     part_num: int = frontmatter["part_num"]
-    context = _citation_context(frontmatter)
+    context = _citation_context(edition_id)
 
     prefatory = [
         _build_framing_entry(p, "prefatory") for p in body.prefatory
