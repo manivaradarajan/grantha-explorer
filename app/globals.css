@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme inline {
   --font-wordmark: var(--font-wordmark);
@@ -30,9 +30,9 @@
   color: #6b7280;
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-thickness: 1px;  /* optional: underline thickness */
-  text-underline-offset: 0.27em;   /* ← add this; gap between text and underline */
-  word-spacing: -0.15em;   /* tightens EVERY space inside the link */
+  text-decoration-thickness: 1px; /* optional: underline thickness */
+  text-underline-offset: 0.27em; /* ← add this; gap between text and underline */
+  word-spacing: -0.15em; /* tightens EVERY space inside the link */
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
@@ -44,7 +44,7 @@
   background-color: rgba(61, 90, 128, 0.12);
   border-radius: 3px;
   padding: 0 1px;
-  box-decoration-break: clone;   /* pill follows glyphs when the cite wraps */
+  box-decoration-break: clone; /* pill follows glyphs when the cite wraps */
   outline: none;
 }
 
@@ -56,7 +56,7 @@
 
 .reference-link.external-reference:hover,
 .reference-link.external-reference:focus-visible {
-  background-color: rgba(61, 90, 128, 0.10);   /* tint, no navigation affordance */
+  background-color: rgba(61, 90, 128, 0.1); /* tint, no navigation affordance */
   color: #6b7280;
 }
 
@@ -67,17 +67,17 @@
   font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
   background-color: white;
   color: black;
-  padding: 0;                          /* sections own their padding */
+  padding: 0; /* sections own their padding */
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1px solid #d1d5db;
   max-width: min(320px, 80vw);
   z-index: 9999;
   white-space: normal;
-  overflow: hidden;                    /* clip the header band to the radius */
-  opacity: 0;                          /* gated until measured + positioned */
+  overflow: hidden; /* clip the header band to the radius */
+  opacity: 0; /* gated until measured + positioned */
   transition: opacity 0.15s;
-  pointer-events: none;                /* never intercept hover of the link */
+  pointer-events: none; /* never intercept hover of the link */
 }
 
 .reference-tooltip.is-ready {
@@ -93,7 +93,7 @@
   align-items: baseline;
   gap: 0.3em;
   padding: 8px 10px;
-  background: rgba(61, 90, 128, 0.06);  /* faint steel, echoing the link tint */
+  background: rgba(61, 90, 128, 0.06); /* faint steel, echoing the link tint */
   border-bottom: 1px solid #e5e7eb;
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
 }
@@ -116,9 +116,9 @@
      daṇḍā (e.g. svetasvatara 1.9). Honor it so verses render verse-shaped;
      single-line sutras/prose have no newline and are unaffected. */
   white-space: pre-line;
-  font-size: calc(1em * var(--reading-scale, 1));   /* follows अ+/अ− */
+  font-size: calc(1em * var(--reading-scale, 1)); /* follows अ+/अ− */
   overflow-wrap: anywhere;
-  word-break: break-word;             /* long samāsa never bleeds the card */
+  word-break: break-word; /* long samāsa never bleeds the card */
   line-height: 1.6;
 }
 
@@ -127,6 +127,21 @@
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
   font-size: 0.8125rem;
   font-style: italic;
+}
+
+/* Highlight of the quoted span inside the tooltip passage — a soft yellow
+   marker (classic highlight). The generous padding + box-decoration-break:
+   clone give Devanagari ascenders (शिरोरेखा, candrabindu, repha) and
+   descenders (lower conjunct forms) full paint room on each wrapped line
+   fragment, instead of a tight box that clips them. */
+
+.reference-tooltip .tooltip-passage mark.reference-tooltip-mark {
+  padding: 0.3em 0 0.15em;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-color: #fff176;
+  color: inherit;
 }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set
@@ -140,11 +155,13 @@
   /* Tiro Devanagari Sanskrit for the reading-mode body/serif text (spec §6.3);
      UI chrome keeps Noto Sans. Unlayered so it overrides Tailwind's font-serif
      utility inside the flow reader. */
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
 }
 
 .flow-reader .font-serif {
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
 }
 
 .flow-reader .flow-verse {

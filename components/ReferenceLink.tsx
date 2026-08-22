@@ -10,6 +10,7 @@ import {
   type ReferenceTargetMeta,
 } from '../lib/references';
 import { toDevanagariNumerals } from '../lib/stringUtils';
+import { findQuotedSpan } from '../lib/quotedMatch';
 import {
   addReferenceDiagnostic,
   buildDiagnostic,
@@ -25,6 +26,9 @@ interface ReferenceLinkProps {
   editionId?: string;
   /** The commentary passage ref containing this citation (for diagnostics). */
   sourcePassageRef: string;
+  /** Source text immediately before the citation; fuzzy-matched against the
+   *  preview so the tooltip can highlight the quoted span. */
+  sourceLookback?: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   /** Per-grantha target metadata (editions + default_school) for the edition-aware gate. */
@@ -46,7 +50,7 @@ const TOOLTIP_GAP = 8;
  * target (plan §5): exact leaf, section, whole-work root, or a runtime
  * diagnostic. Same-grantha references preserve the active edition.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, sourceLookback, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipReady, setTooltipReady] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
@@ -153,14 +157,27 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       reference,
       availableGranthaIds,
     );
-    setTooltipContent(
-      renderTooltip(
-        passageText && passageText !== "Reference not available in this library."
-          ? <p className="tooltip-passage">{passageText}</p>
-          : <p className="tooltip-passage text-gray-400">no preview</p>,
-      ),
+    let body: React.ReactNode = (
+      <p className="tooltip-passage text-gray-400">no preview</p>
     );
-  }, [reference, renderPlain, linkable, availableGranthaIds, renderTooltip]);
+    if (passageText && passageText !== "Reference not available in this library.") {
+      const span = sourceLookback
+        ? findQuotedSpan(sourceLookback, passageText)
+        : null;
+      body = span ? (
+        <p className="tooltip-passage">
+          {passageText.slice(0, span.start)}
+          <mark className="reference-tooltip-mark">
+            {passageText.slice(span.start, span.end)}
+          </mark>
+          {passageText.slice(span.end)}
+        </p>
+      ) : (
+        <p className="tooltip-passage">{passageText}</p>
+      );
+    }
+    setTooltipContent(renderTooltip(body));
+  }, [reference, renderPlain, linkable, availableGranthaIds, renderTooltip, sourceLookback]);
 
   // Load content FIRST, then show: the card only ever appears fully measured
   // (opacity 0 until the layout effect positions it), eliminating the flicker.

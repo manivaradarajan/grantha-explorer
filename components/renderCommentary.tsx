@@ -8,6 +8,7 @@ import {
   stripMarkdown,
 } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
+import { buildSourceWindow } from "@/lib/quotedMatch";
 
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
 export interface ReferenceLinkContext {
@@ -86,6 +87,7 @@ export function renderCommentaryWithReferences(
       <ReferenceLink
         key={`ref-${segStart}`}
         reference={{ ...ref, display_text: displayText }}
+        sourceLookback={buildSourceWindow(rawText, ref.start)}
         {...linkContext}
       />
     );
@@ -153,6 +155,7 @@ export function renderMulaWithReferences(
       <ReferenceLink
         key={`ref-${segStart}`}
         reference={{ ...ref, display_text: displayText }}
+        sourceLookback={buildSourceWindow(rawText, ref.start)}
         {...linkContext}
       />
     );
