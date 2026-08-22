@@ -388,13 +388,21 @@ def _section_break_re(kinds: frozenset[str]) -> re.Pattern[str]:
 def _strip_hide_blocks(text: str) -> str:
     """Remove all <!-- hide type:... -->...<!-- /hide --> blocks.
 
+    A source hide block is blank-line-separated from the prose on both sides
+    (``… ।\\n\\n<!-- hide … -->\\n\\n…\\n\\n<!-- /hide -->\\n\\n…``). Removing
+    it leaves the two surrounding blank lines adjacent (``\\n\\n\\n\\n``), which
+    would render as an excess blank line in the explorer. Collapse any 3+
+    newline run to exactly 2 (Grantha Markdown §1) so the block vanishes
+    cleanly, leaving one paragraph break.
+
     Args:
         text: Raw source text.
 
     Returns:
-        Text with all hide blocks removed.
+        Text with all hide blocks removed and newline runs collapsed.
     """
-    return _HIDE_RE.sub("", text)
+    text = _HIDE_RE.sub("", text)
+    return re.sub(r"\n{3,}", "\n\n", text)
 
 
 def _extract_mula_and_speaker(segment: str) -> tuple[str, str]:
