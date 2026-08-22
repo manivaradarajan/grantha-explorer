@@ -57,7 +57,7 @@ from convert_structured_md import (
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.3.0"
+SCHEMA_VERSION = "1.4.0"
 
 _FILENAME_SUFFIX_RE = re.compile(r"(-\d+)+\.md$")
 

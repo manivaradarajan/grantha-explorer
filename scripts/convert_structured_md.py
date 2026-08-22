@@ -43,7 +43,7 @@ grantha_data_bootstrap.ensure_grantha_data_importable()
 # Constants
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = "1.3.0"
+SCHEMA_VERSION = "1.4.0"
 
 # For aitareya: Sayana is deferred via `_handle_aitareya_sayana`; each file
 # ships its own `commentaries_metadata` ids unmodified.
@@ -944,11 +944,21 @@ def _build_framing_entry(p: PassageData, passage_type: str) -> dict[str, Any]:
     return entry
 
 
-def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
+def _build_main_passage_entry(
+    p: PassageData,
+    context: str = "",
+    diagnostics: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Build a main passages entry dict.
+
+    Extracts cross-text references from the mula text when it carries
+    citations (e.g. vedarthasangraha's ``# Para N`` prose), so main passages
+    can carry ``references[]`` like commentary passages.
 
     Args:
         p: The main PassageData.
+        context: The citing edition's school namespace ("" = school-neutral).
+        diagnostics: Optional collector for reference diagnostics.
 
     Returns:
         Dict matching the v1.0.0 passages entry shape.
@@ -958,6 +968,13 @@ def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
         "passage_type": "main",
         "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
+    refs, passage_diags = _extract_references(p.mula_text, context)
+    if refs:
+        entry["references"] = refs
+    if diagnostics is not None:
+        for diag in passage_diags:
+            diag["passage_ref"] = p.ref
+            diagnostics.append(diag)
     if p.speaker:
         entry["speaker"] = p.speaker
     return entry
@@ -965,8 +982,9 @@ def _build_main_passage_entry(p: PassageData) -> dict[str, Any]:
 
 def _extract_references(
     devanagari: str,
+    context: str = "",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Extract structured references and diagnostics from commentary text.
+    """Extract structured references and diagnostics from a Devanagari string.
 
     Uses ``grantha_data.references`` (the shared producer-side library) when
     it is importable. Importing requires the ``grantha_data`` package to be
@@ -977,7 +995,10 @@ def _extract_references(
     emission is best-effort and the ``references`` key is simply omitted.
 
     Args:
-        devanagari: The commentary passage's ``content.sanskrit.devanagari``.
+        devanagari: The passage's ``content.sanskrit.devanagari``.
+        context: The citing work's school namespace (``ramanuja``,
+            ``sankara``), read from the edition's frontmatter. Empty =
+            school-neutral → base table.
 
     Returns:
         A ``(references, diagnostics)`` pair; both empty when the library is
@@ -987,13 +1008,14 @@ def _extract_references(
         from grantha_data.references import extract_references
 
         bimap = _references_bimap()
-        refs, diags = extract_references(devanagari, bimap)
+        refs, diags = extract_references(devanagari, bimap, context=context)
         serialized_refs = [
             {
                 "start": ref.start,
                 "end": ref.end,
                 "display_text": ref.display_text,
                 "grantha_id": ref.grantha_id,
+                "edition_id": ref.edition_id or None,
                 "locator": ref.locator,
                 "locator_end": ref.locator_end,
                 "group_id": ref.group_id,
@@ -1051,6 +1073,7 @@ def _build_commentary(
     meta: dict[str, Any],
     body: BodyData,
     diagnostics: list[dict[str, Any]] | None = None,
+    context: str = "",
 ) -> dict[str, Any] | None:
     """Build one commentary dict from its frontmatter descriptor.
 
@@ -1061,6 +1084,8 @@ def _build_commentary(
         diagnostics: Optional collector for build diagnostics; each
             reference diagnostic is appended with ``source_file`` and
             ``passage_ref`` context.
+        context: The citing edition's school namespace (from
+            ``citation_namespace`` in frontmatter); empty = school-neutral.
 
     Returns:
         The commentary dict, or None when this commentary carries no content
@@ -1082,7 +1107,7 @@ def _build_commentary(
             "ref": cp.ref,
             "content": {"sanskrit": {"devanagari": cp.text}},
         }
-        refs, passage_diags = _extract_references(cp.text)
+        refs, passage_diags = _extract_references(cp.text, context)
         if refs:
             entry["references"] = refs
         if diagnostics is not None:
@@ -1105,6 +1130,34 @@ def _build_commentary(
         commentary["intro"] = {"sanskrit": {"devanagari": part_intro}}
     commentary["passages"] = commentary_passages
     return commentary
+
+
+def _citation_context(frontmatter: dict[str, Any]) -> str:
+    """Derive the citing edition's school namespace from frontmatter.
+
+    The namespace lives in ``commentaries_metadata`` (per-commentary) or as a
+    grantha-level ``citation_namespace`` field (for mula-author works like
+    vedarthasangraha, which have no ``commentaries_metadata``). The value must
+    name an existing bimap namespace (``ramanuja``, ``sankara``) or be absent
+    → school-neutral (base table).
+
+    Args:
+        frontmatter: Parsed YAML frontmatter dict.
+
+    Returns:
+        The namespace string, or "" when school-neutral.
+    """
+    grantha_level: str = frontmatter.get("citation_namespace") or ""
+    for meta in frontmatter.get("commentaries_metadata") or []:
+        ns: str = meta.get("citation_namespace") or ""
+        if ns:
+            if grantha_level and ns != grantha_level:
+                raise ValueError(
+                    "conflicting citation_namespace across the edition: "
+                    f"grantha-level {grantha_level!r} vs commentary {ns!r}"
+                )
+            grantha_level = ns
+    return grantha_level
 
 
 def build_part_json(
@@ -1131,12 +1184,15 @@ def build_part_json(
     """
     grantha_id: str = frontmatter["grantha_id"]
     part_num: int = frontmatter["part_num"]
+    context = _citation_context(frontmatter)
 
     prefatory = [
         _build_framing_entry(p, "prefatory") for p in body.prefatory
     ]
     passages = [
-        _build_main_passage_entry(p) for p in body.passages if p.mula_text
+        _build_main_passage_entry(p, context, diagnostics)
+        for p in body.passages
+        if p.mula_text
     ]
     concluding = [
         _build_framing_entry(p, "concluding") for p in body.concluding
@@ -1168,7 +1224,7 @@ def build_part_json(
         for meta in commentaries_meta:
             if meta["commentary_id"] not in target_commentary_ids:
                 continue
-            commentary = _build_commentary(meta, body, diagnostics)
+            commentary = _build_commentary(meta, body, diagnostics, context)
             if commentary:
                 commentaries.append(commentary)
         if len(commentaries) == 1:

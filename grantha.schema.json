@@ -227,6 +227,11 @@
           "type": ["string", "null"],
           "description": "Resolved text id. Null ONLY when the abbreviation is undefined (build error)."
         },
+        "edition_id": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9-]+$",
+          "description": "The concrete resolved edition (school-namespace design §4.3). Empty/absent for mula or school-neutral targets; set for school-resolved targets. The runtime links only when the exact (grantha, edition) is on disk; an edition_id for an edition not in the library renders not-in-library (never another school's default)."
+        },
         "locator": {
           "type": ["string", "null"],
           "description": "Canonical dotted target. Null for a whole-work citation; for a range this is the first endpoint."
@@ -282,6 +287,11 @@
           "type": "array",
           "description": "Mula<->bhashya word-link spans. Half-open character offsets into content.sanskrit.devanagari; identical id on a passage span and a commentary_passage span is the correspondence.",
           "items": { "$ref": "#/definitions/span" }
+        },
+        "references": {
+          "type": "array",
+          "description": "Structured cross-text citations in the main (mula) passage text (school-namespace design §4.3). Present only when the mula prose carries citations (e.g. vedarthasangraha).",
+          "items": { "$ref": "#/definitions/reference" }
         }
       },
       "required": ["ref", "passage_type"],
