@@ -90,12 +90,12 @@
       "source_file": "svetasvatara-upanishad-rangaramanuja-01-01.md"
     },
     {
-      "code": "REF-UNDEFINED-ABBREV",
-      "severity": "error",
+      "code": "REF-AMBIGUOUS-ABBREV",
+      "severity": "warning",
       "start": 45,
       "end": 48,
       "display_text": "श्र",
-      "hint": "'श्र' not in the citation bimap; closest matches: श.ब्रा, प्र, शत.ब्रा",
+      "hint": "abbreviation resolves to multiple bimap entries (e.g. a bare parva-less Mahābhārata); add a parva qualifier",
       "passage_ref": "2.10",
       "source_file": "svetasvatara-upanishad-rangaramanuja-02-01.md"
     },
@@ -181,7 +181,7 @@
       "start": 146,
       "end": 154,
       "display_text": "श्रेष्टं",
-      "hint": "'श्रेष्टं' not in the citation bimap; closest matches: श्वे, श्वेत, अष्टा",
+      "hint": "'श्रेष्टं' not in the citation bimap; closest matches: श्रीभाष्ये, श्वे, श्वेत",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "2.7",
       "source_file": "svetasvatara-upanishad-rangaramanuja-02-01.md"
@@ -269,7 +269,7 @@
       "start": 119,
       "end": 129,
       "display_text": "विशेषाख्य?",
-      "hint": "'विशेषाख्य?' not in the citation bimap; closest matches: सांख्य.का, विष्णुधर्म",
+      "hint": "'विशेषाख्य?' not in the citation bimap; closest matches: सांख्य.का, श्रीभाष्ये, विष्णुधर्म",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "2.14",
       "source_file": "svetasvatara-upanishad-rangaramanuja-02-01.md"
@@ -907,7 +907,7 @@
       "start": 586,
       "end": 594,
       "display_text": "प्रतीयते",
-      "hint": "'प्रतीयते' not in the citation bimap; closest matches: प्र, आप.श्रौत, प्र.उ",
+      "hint": "'प्रतीयते' not in the citation bimap; closest matches: श्रीभाष्ये, प्र, आप.श्रौत",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "6.23",
       "source_file": "svetasvatara-upanishad-rangaramanuja-06-01.md"
@@ -1017,7 +1017,7 @@
       "start": 6220,
       "end": 6231,
       "display_text": "दत्ताञ्जलये",
-      "hint": "'दत्ताञ्जलये' not in the citation bimap; closest matches: तत्त्व.सा",
+      "hint": "'दत्ताञ्जलये' not in the citation bimap; closest matches: श्रीभाष्ये, तत्त्व.सा",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "6.23",
       "source_file": "svetasvatara-upanishad-rangaramanuja-06-01.md"

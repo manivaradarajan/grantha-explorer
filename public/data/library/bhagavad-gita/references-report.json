@@ -1140,7 +1140,7 @@
       "start": 1006,
       "end": 1017,
       "display_text": "प्राधान्येऽ",
-      "hint": "'प्राधान्येऽ' not in the citation bimap; closest matches: पा.धा, पाञ्चरात्र, छान्दोग्ये",
+      "hint": "'प्राधान्येऽ' not in the citation bimap; closest matches: श्रीभाष्ये, पा.धा, पाञ्चरात्र",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "9.22",
       "source_file": "bhagavad-gita-10.md"
@@ -1855,7 +1855,7 @@
       "start": 29,
       "end": 41,
       "display_text": "भक्तिशैघ्र्य",
-      "hint": "'भक्तिशैघ्र्य' not in the citation bimap; closest matches: अग्निरहस्ये, अग्निरहस्यं, तै.ब्रा",
+      "hint": "'भक्तिशैघ्र्य' not in the citation bimap; closest matches: श्रीभाष्ये, अग्निरहस्ये, अग्निरहस्यं",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "12.13",
       "source_file": "bhagavad-gita-13.md"
@@ -3593,7 +3593,7 @@
       "start": 641,
       "end": 655,
       "display_text": "क्षीरस्याप्येक",
-      "hint": "'क्षीरस्याप्येक' not in the citation bimap; closest matches: अग्निरहस्ये, अग्निरहस्यम्, मोक्षधर्म",
+      "hint": "'क्षीरस्याप्येक' not in the citation bimap; closest matches: श्रीभाष्ये, अग्निरहस्ये, अग्निरहस्यम्",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "18.20",
       "source_file": "bhagavad-gita-19.md"
@@ -3659,7 +3659,7 @@
       "start": 2243,
       "end": 2250,
       "display_text": "श्रीश्च",
-      "hint": "'श्रीश्च' not in the citation bimap; closest matches: शारी, प्रश्न.उ, शत.ब्राह्म",
+      "hint": "'श्रीश्च' not in the citation bimap; closest matches: श्रीभाष्ये, श्री.भा, शारी",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "18.54",
       "source_file": "bhagavad-gita-19.md"
@@ -3769,7 +3769,7 @@
       "start": 17836,
       "end": 17846,
       "display_text": "यं प्राप्य",
-      "hint": "'यं प्राप्य' not in the citation bimap; closest matches: तां.ब्रा, शत.ब्राह्म, श.ब्रा",
+      "hint": "'यं प्राप्य' not in the citation bimap; closest matches: तां.ब्रा, श्रीभाष्ये, शत.ब्राह्म",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "18.66",
       "source_file": "bhagavad-gita-19.md"
@@ -3802,7 +3802,7 @@
       "start": 1819,
       "end": 1825,
       "display_text": "श्रृणु",
-      "hint": "'श्रृणु' not in the citation bimap; closest matches: श.ब्रा, शत.ब्रा, शत,ब्रा",
+      "hint": "'श्रृणु' not in the citation bimap; closest matches: श.ब्रा, श्री.भा, शत.ब्रा",
       "commentary_id": "tatparya-chandrika",
       "passage_ref": "18.78",
       "source_file": "bhagavad-gita-19.md"

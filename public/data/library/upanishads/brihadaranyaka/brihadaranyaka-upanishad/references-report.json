@@ -190,12 +190,12 @@
       "source_file": "brihadaranyaka-upanishad-rangaramanuja-03-03-20.md"
     },
     {
-      "code": "REF-UNDEFINED-ABBREV",
-      "severity": "error",
+      "code": "REF-AMBIGUOUS-LOCATOR",
+      "severity": "warning",
       "start": 743,
       "end": 756,
       "display_text": "श्री.भा.१-४-८",
-      "hint": "'श्री.भा.१-४-८' not in the citation bimap; closest matches: द्र.भा, श.ब्रा, का.श्री.सू",
+      "hint": "locator ambiguous; treating as level separators (1.4.8); check the bimap ref_structure depth hint",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "3.4.1",
       "source_file": "brihadaranyaka-upanishad-rangaramanuja-03-03-20.md"
@@ -501,7 +501,7 @@
       "start": 2293,
       "end": 2301,
       "display_text": "शरीरादि-",
-      "hint": "'शरीरादि-' not in the citation bimap; closest matches: शारीरक, शारी, उणादि",
+      "hint": "'शरीरादि-' not in the citation bimap; closest matches: शारीरक, श्री.भा, शारी",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "4.4.12",
       "source_file": "brihadaranyaka-upanishad-rangaramanuja-04-01-01.md"
@@ -1336,7 +1336,7 @@
       "start": 1094,
       "end": 1102,
       "display_text": "स्वकीयाः",
-      "hint": "'स्वकीयाः' not in the citation bimap; closest matches: सुवाल, पूर्वमी, न्या.सू",
+      "hint": "'स्वकीयाः' not in the citation bimap; closest matches: सुवाल, श्री.भा, पूर्वमी",
       "commentary_id": "rangaramanuja-muni-prakashika",
       "passage_ref": "7.3.1",
       "source_file": "brihadaranyaka-upanishad-rangaramanuja-07-01-01.md"
