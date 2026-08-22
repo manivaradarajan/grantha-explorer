@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 237,
@@ -465,7 +465,19 @@
           "sanskrit": {
             "devanagari": "ततः किमित्यत्राह नूनमिति । हे राम आत्मनो म(ह)द्व्यसनं न जानासि किमिति काकुः, जानास्येव । यस्मान्मदर्थं मदपरणसूचनप्रयोजनमुद्दिश्य मृगपक्षिणः काकुत्स्थं त्वामभिधावन्ति । नूनं सम्प्रति मद्व्यसनसूचकाः मृगपक्षिणः काकुत्स्थं त्वामभिधावन्ति । तेन निमित्तेन मद्व्यसनं जानास्येवेत्यर्थः ॥ ३.५२.५ ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 43,
+            "end": 44,
+            "display_text": "ह",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "3.52.6",

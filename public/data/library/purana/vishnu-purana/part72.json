@@ -1,0 +1,28 @@
+{
+  "kind": "grantha-part",
+  "schema_version": "1.3.0",
+  "grantha_id": "vishnu-purana",
+  "edition_id": "vishnu-purana",
+  "part_num": 72,
+  "passages": [
+    {
+      "ref": "4.16.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "इत्येष समासतस्ते कथितः, तूर्व्वसोर्वशमवधारय"
+        }
+      },
+      "speaker": "पराशर उवाच"
+    },
+    {
+      "ref": "4.16.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तुर्व्वसोर्वह्रिरात्मजः, वह्रर्गोभानुः त्रैशाम्बः, तस्माज्व करन्धमः, तस्मादपि\nततश्व मरुत्तः, सोऽनपत्योऽभवत् । ततश्व पौरवं दुष्मन्त पुत्रमकल्पयत् ।\nएवं ययातिशापात् तद्वंशः पौरवं वंशमाश्रितवान्"
+        }
+      }
+    }
+  ]
+}

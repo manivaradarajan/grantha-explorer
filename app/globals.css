@@ -19,6 +19,13 @@
   display: inline;
 }
 
+/* Passage blocks are selectable/copyable text; hover shows the I-beam, not the
+   link hand. Clicking still selects the verse. Unlayered so it overrides
+   Tailwind's cursor-pointer utility on these elements. */
+[data-verse-ref] {
+  cursor: text;
+}
+
 .reference-link {
   color: #6b7280;
   cursor: pointer;

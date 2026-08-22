@@ -160,6 +160,21 @@ always.
   boundary is crossed (scroll or jump), never on every scroll tick, and
   within-section scrolling still toggles highlight classes imperatively with
   no tree re-render.
+
+  **Flow-mode exception.** The flow reader tracks the in-view verse in the
+  URL hash while the reader scrolls, via `replaceState` — an explicit carve-out
+  from the panes-mode prohibition above. This is a different surface, and the
+  two reasons scroll-driven focus was reverted in panes mode do not apply:
+  there is no separate content pane to jar mid-scroll (mūla + commentary flow
+  in one continuous column), and the flow reader's per-verse citation/deep
+  link must always name the verse actually in view. `replaceState` keeps
+  back/forward meaningful (one back returns to the session start, not every
+  intermediate verse); verse clicks, folio jumps, and the jump-input still
+  `pushState`. Programmatic selections (deep link, jump, click, part-load
+  re-align) hold the scrollspy briefly so the observer's post-scroll flush can
+  never rewrite the deliberate selection. Display preferences (`?s=`, `?l=`,
+  etc.) travel with every hash write so a scroll never silently resets the
+  script.
 - **Flagging (v1 scope):**
   - Unified entry point for both content errors and product feedback — one
     button, not two separate mechanisms.

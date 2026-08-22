@@ -196,11 +196,12 @@ export default function TextContent({
                     delete verseRefs.current[uniqueKey];
                   }
                 }}
+                data-verse-ref={passage.ref}
                 onClick={() => {
                   clickedInternally.current = true;
                   onVerseSelect(passage.ref);
                 }}
-                className={`px-4 py-3 mb-4 transition-all duration-150 cursor-pointer hover:bg-gray-100 hover:rounded-lg ${
+                className={`px-4 py-3 mb-4 transition-all duration-150 hover:bg-gray-100 hover:rounded-lg ${
                   isSelected ? "bg-gray-200 rounded-lg" : "bg-white"
                 }`}
               >
@@ -210,6 +211,11 @@ export default function TextContent({
                     {passage.passage_type === "main" ? passage.ref : ""}
                   </span>
                   <div className="flex-1 min-w-0">
+                    {passage.speaker && (
+                      <p className="font-serif text-sm text-gray-600 mb-2">
+                        {stripMarkdown(passage.speaker)}
+                      </p>
+                    )}
                     {sanskritText ? (
                       <p className="text-lg leading-relaxed whitespace-pre-line verse-text">
                         {sanskritText}

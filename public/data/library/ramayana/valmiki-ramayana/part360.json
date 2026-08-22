@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 360,
@@ -422,7 +422,19 @@
           "sanskrit": {
             "devanagari": "अथाब्रवीदित्यादि । अयं यः यादृशः । यद्वा कार्यं करिष्यति तद्यूयमेवाभिजानीतेति संबन्धः । नैनं जानामीति । “विवाहकाले रतिसंप्रयोगे प्राणात्यये सर्वधनापहारे । (विप्रस्य) मित्रस्य चार्थेप्यनृतं वदेयुः पञ्चानृतान्याहुरपातकानि ॥” इति स्मरणादसत्योक्तिः॥ ५.४२.८१० ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 156,
+            "end": 164,
+            "display_text": "विप्रस्य",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "5.42.15",

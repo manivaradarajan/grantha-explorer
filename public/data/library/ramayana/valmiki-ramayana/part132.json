@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 132,
@@ -802,7 +802,19 @@
           "sanskrit": {
             "devanagari": "मुनिमिति । सज्जमानया स्खलन्त्या । हीनव्यञ्जनया अस्पष्टाक्षरया । “व्यञ्जनं श्मश्रुनिष्ठानचिह्नेष्ववयवे ऽक्षरे” इति वैजयन्ती । अव्यक्तया वाचा अब्रवमिति सम्बन्धः । भीतोपि सन् भीतः भीतोभीतः, अत्यन्तभीत इत्यर्थः (पाठभेदः । भीतो ऽपि सन्नभीत इवाब्रवम् ।) इवशब्दो वाक्यालङ्कारे ॥ २.६४.११ ॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 208,
+            "end": 246,
+            "display_text": "पाठभेदः । भीतो ऽपि सन्नभीत इवाब्रवम् ।",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "2.64.12",

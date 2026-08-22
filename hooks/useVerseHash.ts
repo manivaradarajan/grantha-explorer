@@ -125,7 +125,10 @@ export function useVerseHash(
     };
   }, []); // Empty deps - listener created once
 
-  // Function to update hash (called by components)
+  // Function to update hash (called by components). Display preferences
+  // (script, language, dark mode, font size) always travel with the update, so
+  // navigation (verse click, scroll→hash, mode switch) never silently resets
+  // them — the hash stays shareable/deep-linkable at every step.
   const updateHash = useCallback((
     granthaId: string,
     verseRef: string,
@@ -163,7 +166,7 @@ export function useVerseHash(
       subcommentaryIds: newSubcommentaryIds,
     };
 
-    const newHash = buildHash(potentialUrlState);
+    const newHash = buildHash(potentialUrlState, true);
 
     // Only update if different from current hash
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
@@ -178,10 +181,13 @@ export function useVerseHash(
   }, [state]);
 
   const updateCommentaryOpen = (isOpen: boolean) => {
-    const newHash = buildHash({
-      ...state,
-      commentaryOpen: isOpen,
-    });
+    const newHash = buildHash(
+      {
+        ...state,
+        commentaryOpen: isOpen,
+      },
+      true
+    );
 
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
       window.location.hash = newHash;
@@ -197,10 +203,13 @@ export function useVerseHash(
       ? Array.from(new Set([...ids, subcommentaryId]))
       : ids.filter((id) => id !== subcommentaryId);
 
-    const newHash = buildHash({
-      ...state,
-      subcommentaryIds: nextIds.length > 0 ? nextIds.join(",") : undefined,
-    });
+    const newHash = buildHash(
+      {
+        ...state,
+        subcommentaryIds: nextIds.length > 0 ? nextIds.join(",") : undefined,
+      },
+      true
+    );
 
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
       window.location.hash = newHash;
@@ -209,10 +218,13 @@ export function useVerseHash(
 
   /** Switch between the flow reader and the 3-pane reading modes. */
   const updateMode = useCallback((nextMode: ReadingMode) => {
-    const newHash = buildHash({
-      ...state,
-      mode: nextMode,
-    });
+    const newHash = buildHash(
+      {
+        ...state,
+        mode: nextMode,
+      },
+      true
+    );
 
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
       window.location.hash = newHash;
@@ -241,10 +253,13 @@ export function useVerseHash(
    *  edition entirely (default). */
   const updateEditionIds = useCallback((ids: string[]) => {
     const deduped = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
-    const newHash = buildHash({
-      ...state,
-      editionId: deduped.length > 0 ? deduped.join(",") : undefined,
-    });
+    const newHash = buildHash(
+      {
+        ...state,
+        editionId: deduped.length > 0 ? deduped.join(",") : undefined,
+      },
+      true
+    );
 
     if (typeof window !== "undefined" && window.location.hash !== newHash) {
       window.location.hash = newHash;

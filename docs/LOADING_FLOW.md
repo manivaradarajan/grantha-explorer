@@ -159,6 +159,20 @@ effect re-runs when `currentGrantha`, `verseRef`, or the chosen `loadPart`
 identity changes; `sectionPartsToLoad` is idempotent on completed loads, so it
 terminates.
 
+In flow mode `verseRef` also changes while reading: the flow reader owns a
+single scrollspy (an `IntersectionObserver` on the reading container) that
+feeds three consumers — the header chapter, the folio marker (via a
+registered sink), and the scroll→hash update. `app/page.tsx`
+(`handleFlowScrollVerseChange`) rewrites the hash **in place**
+(`replaceHistory`) so scrolling never spams the browser history — verse clicks
+still push. A short programmatic-selection hold (`SPY_HOLD_MS`) suppresses the
+header/hash consumers after a deliberate jump (deep link, click, part-load
+re-align) so the observer's post-scroll flush can't rewrite it; the folio sink
+still receives the report with a `held` flag and applies its own guard. Display
+preferences travel with every hash write, so a scroll across a section boundary
+triggers the same §5.1 eager load as a click/navigation would — and never
+resets the script. See DESIGN.md for the flow-mode exception rationale.
+
 ### 5.2 Scroll sentinel — `TextContent.tsx` (`components/TextContent.tsx:71-105`)
 
 An `IntersectionObserver` on a sentinel at the bottom of the loaded scroll

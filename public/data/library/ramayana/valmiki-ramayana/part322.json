@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 322,
@@ -275,7 +275,19 @@
           "sanskrit": {
             "devanagari": "विषादो यं ( विषादो ऽयं ) प्रसहते अभिभवति । सिद्ध्यतीत्यनन्तरम् इतिकरणं बोध्यम् ॥ ४.६४.१२२३ ॥ व्यपदेश्यकुले जाताः पूजिताश्चाप्यभीक्ष्णशः ।"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 12,
+            "end": 22,
+            "display_text": "विषादो ऽयं",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "4.64.24",

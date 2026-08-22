@@ -1,0 +1,208 @@
+{
+  "kind": "grantha-part",
+  "schema_version": "1.3.0",
+  "grantha_id": "vishnu-purana",
+  "edition_id": "vishnu-purana",
+  "part_num": 64,
+  "passages": [
+    {
+      "ref": "4.8.1",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "पुरूरवसो ज्येष्ठः पुत्रो यस्त्वायुर्नामा स राहोर्दुहितरमुपयेमे"
+        }
+      },
+      "speaker": "श्रीपराशर उवाच"
+    },
+    {
+      "ref": "4.8.2",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्यां च पंच पुत्रानुत्पादयामास"
+        }
+      }
+    },
+    {
+      "ref": "4.8.3",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "नहुषक्षत्रवृद्धरंभरजिसंज्ञास्तथैवानेनाः पंचमः पुत्रोऽभूत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.4",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "क्षत्रवृद्धात्सुहोत्रः पुत्रोऽभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.5",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "काश्यपकाशगृत्समदास्त्रयस्तस्य पुत्रा बभूवुः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.6",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "गृत्समदस्य शौनकश्चातुर्वर्ण्यप्रवर्त्तयिताऽभूत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.7",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "काश्यस्य काश्योः काशीराजः तस्माद्राष्ट्रः राष्ट्रस्य दीर्घतपाः पुत्रोऽभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.8",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "धन्वंतरिस्तु दीर्घतपसः पुत्रोऽभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.9",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "स हि संसिद्धकार्यकरणस्सकलसंभूतिष्वशेषो ज्ञानविदा भगवता नारायणेन चातीत संभूतौ तस्मै वरो दत्तः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.10",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "काशीराजगोत्रेऽवतीर्य त्वमष्टधा सम्यगायुर्वेदं करिष्यसि यज्ञभागभुग्भविष्यसीति"
+        }
+      }
+    },
+    {
+      "ref": "4.8.11",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्य च धन्वंतरेः पुत्रः केतुमान् केतुमतो भीमरथः तस्यापि दिवोदासः तस्यापि प्रतर्दनः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.12",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "स च भद्रश्रेण्यवंशविनाशनादशेषशत्रवोनेन जिता इति शत्रुजिदभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.13",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तेन च प्रीतिमतात्मपुत्रो वत्सवत्सेत्यभिहितो वत्सोऽभवत्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.14",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "सत्यपरतया ऋतध्वजसंज्ञामवाप"
+        }
+      }
+    },
+    {
+      "ref": "4.8.15",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "ततश्च कुवलयनामानमश्वं लेभे ततः कुवलयाश्व इत्यस्यां पृथिव्यां प्रथितः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.16",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्य च वत्सस्य पुत्रोऽलर्कनामाभवत् यस्यायमद्यापि श्लोको गीयते"
+        }
+      }
+    },
+    {
+      "ref": "4.8.17",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "षष्टिवर्षसहस्राणि षष्टिवर्षशतानि च ।\nअलर्कादपरो नान्यो बुभुजे मेदिनीं युवा"
+        }
+      }
+    },
+    {
+      "ref": "4.8.18",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तस्याप्यलर्कस्य सन्नतिनामाऽभवदात्मजः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.19",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "सन्नतेः सुनीथः तस्यापि सुकेतुः तस्माच्च धर्मकेतुर्जज्ञे"
+        }
+      }
+    },
+    {
+      "ref": "4.8.20",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "ततश्च सत्यकेतुः तस्माद्विभुः तत्तयस्सुविभुः ततश्च सुकुमारस्तस्यापि दृष्टकेतुः ततश्च वीतिहोत्रः तस्माद्भार्गः भार्गस्य भार्गभूमिः ततश्चातुर्वर्ण्यप्रवृत्तिरित्येते काश्यपभूभृतः कथिताः"
+        }
+      }
+    },
+    {
+      "ref": "4.8.21",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "रजेस्तु संततिः श्रूयताम्"
+        }
+      }
+    },
+    {
+      "ref": "4.8.22",
+      "passage_type": "main",
+      "content": {
+        "sanskrit": {
+          "devanagari": "इति श्रीविष्णुमाहापुराणे चतुर्थांशोऽष्टमोऽध्याय"
+        }
+      }
+    }
+  ]
+}

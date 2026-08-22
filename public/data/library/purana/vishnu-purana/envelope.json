@@ -1,0 +1,536 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.3.0",
+  "edition_id": "vishnu-purana",
+  "grantha_id": "vishnu-purana",
+  "structure_levels": [
+    {
+      "key": "Amsha",
+      "scriptNames": {
+        "devanagari": "अंशः"
+      },
+      "children": [
+        {
+          "key": "Adhyaya",
+          "scriptNames": {
+            "devanagari": "अध्यायः"
+          },
+          "children": [
+            {
+              "key": "Shloka",
+              "scriptNames": {
+                "devanagari": "श्लोकः"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "1.2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "1.3.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "1.4.1"
+    },
+    {
+      "file": "part5.json",
+      "first_ref": "1.5.1"
+    },
+    {
+      "file": "part6.json",
+      "first_ref": "1.6.1"
+    },
+    {
+      "file": "part7.json",
+      "first_ref": "1.7.1"
+    },
+    {
+      "file": "part8.json",
+      "first_ref": "1.8.1"
+    },
+    {
+      "file": "part9.json",
+      "first_ref": "1.9.1"
+    },
+    {
+      "file": "part10.json",
+      "first_ref": "1.10.1"
+    },
+    {
+      "file": "part11.json",
+      "first_ref": "1.11.1"
+    },
+    {
+      "file": "part12.json",
+      "first_ref": "1.12.1"
+    },
+    {
+      "file": "part13.json",
+      "first_ref": "1.13.1"
+    },
+    {
+      "file": "part14.json",
+      "first_ref": "1.14.1"
+    },
+    {
+      "file": "part15.json",
+      "first_ref": "1.15.1"
+    },
+    {
+      "file": "part16.json",
+      "first_ref": "1.16.1"
+    },
+    {
+      "file": "part17.json",
+      "first_ref": "1.17.1"
+    },
+    {
+      "file": "part18.json",
+      "first_ref": "1.18.1"
+    },
+    {
+      "file": "part19.json",
+      "first_ref": "1.19.1"
+    },
+    {
+      "file": "part20.json",
+      "first_ref": "1.20.1"
+    },
+    {
+      "file": "part21.json",
+      "first_ref": "1.21.1"
+    },
+    {
+      "file": "part22.json",
+      "first_ref": "1.22.1"
+    },
+    {
+      "file": "part23.json",
+      "first_ref": "2.1.1"
+    },
+    {
+      "file": "part24.json",
+      "first_ref": "2.2.1"
+    },
+    {
+      "file": "part25.json",
+      "first_ref": "2.3.1"
+    },
+    {
+      "file": "part26.json",
+      "first_ref": "2.4.1"
+    },
+    {
+      "file": "part27.json",
+      "first_ref": "2.5.1"
+    },
+    {
+      "file": "part28.json",
+      "first_ref": "2.6.1"
+    },
+    {
+      "file": "part29.json",
+      "first_ref": "2.7.1"
+    },
+    {
+      "file": "part30.json",
+      "first_ref": "2.8.1"
+    },
+    {
+      "file": "part31.json",
+      "first_ref": "2.9.1"
+    },
+    {
+      "file": "part32.json",
+      "first_ref": "2.10.1"
+    },
+    {
+      "file": "part33.json",
+      "first_ref": "2.11.1"
+    },
+    {
+      "file": "part34.json",
+      "first_ref": "2.12.1"
+    },
+    {
+      "file": "part35.json",
+      "first_ref": "2.13.1"
+    },
+    {
+      "file": "part36.json",
+      "first_ref": "2.14.1"
+    },
+    {
+      "file": "part37.json",
+      "first_ref": "2.15.1"
+    },
+    {
+      "file": "part38.json",
+      "first_ref": "2.16.1"
+    },
+    {
+      "file": "part39.json",
+      "first_ref": "3.1.1"
+    },
+    {
+      "file": "part40.json",
+      "first_ref": "3.2.1"
+    },
+    {
+      "file": "part41.json",
+      "first_ref": "3.3.1"
+    },
+    {
+      "file": "part42.json",
+      "first_ref": "3.4.1"
+    },
+    {
+      "file": "part43.json",
+      "first_ref": "3.5.1"
+    },
+    {
+      "file": "part44.json",
+      "first_ref": "3.6.1"
+    },
+    {
+      "file": "part45.json",
+      "first_ref": "3.7.1"
+    },
+    {
+      "file": "part46.json",
+      "first_ref": "3.8.1"
+    },
+    {
+      "file": "part47.json",
+      "first_ref": "3.9.1"
+    },
+    {
+      "file": "part48.json",
+      "first_ref": "3.10.1"
+    },
+    {
+      "file": "part49.json",
+      "first_ref": "3.11.1"
+    },
+    {
+      "file": "part50.json",
+      "first_ref": "3.12.1"
+    },
+    {
+      "file": "part51.json",
+      "first_ref": "3.13.1"
+    },
+    {
+      "file": "part52.json",
+      "first_ref": "3.14.1"
+    },
+    {
+      "file": "part53.json",
+      "first_ref": "3.15.1"
+    },
+    {
+      "file": "part54.json",
+      "first_ref": "3.16.1"
+    },
+    {
+      "file": "part55.json",
+      "first_ref": "3.17.1"
+    },
+    {
+      "file": "part56.json",
+      "first_ref": "3.18.1"
+    },
+    {
+      "file": "part57.json",
+      "first_ref": "4.1.1"
+    },
+    {
+      "file": "part58.json",
+      "first_ref": "4.2.1"
+    },
+    {
+      "file": "part59.json",
+      "first_ref": "4.3.1"
+    },
+    {
+      "file": "part60.json",
+      "first_ref": "4.4.1"
+    },
+    {
+      "file": "part61.json",
+      "first_ref": "4.5.1"
+    },
+    {
+      "file": "part62.json",
+      "first_ref": "4.6.1"
+    },
+    {
+      "file": "part63.json",
+      "first_ref": "4.7.1"
+    },
+    {
+      "file": "part64.json",
+      "first_ref": "4.8.1"
+    },
+    {
+      "file": "part65.json",
+      "first_ref": "4.9.1"
+    },
+    {
+      "file": "part66.json",
+      "first_ref": "4.10.1"
+    },
+    {
+      "file": "part67.json",
+      "first_ref": "4.11.1"
+    },
+    {
+      "file": "part68.json",
+      "first_ref": "4.12.1"
+    },
+    {
+      "file": "part69.json",
+      "first_ref": "4.13.1"
+    },
+    {
+      "file": "part70.json",
+      "first_ref": "4.14.1"
+    },
+    {
+      "file": "part71.json",
+      "first_ref": "4.15.1"
+    },
+    {
+      "file": "part72.json",
+      "first_ref": "4.16.1"
+    },
+    {
+      "file": "part73.json",
+      "first_ref": "4.17.1"
+    },
+    {
+      "file": "part74.json",
+      "first_ref": "4.18.1"
+    },
+    {
+      "file": "part75.json",
+      "first_ref": "4.19.1"
+    },
+    {
+      "file": "part76.json",
+      "first_ref": "4.20.1"
+    },
+    {
+      "file": "part77.json",
+      "first_ref": "4.21.1"
+    },
+    {
+      "file": "part78.json",
+      "first_ref": "4.22.1"
+    },
+    {
+      "file": "part79.json",
+      "first_ref": "4.23.1"
+    },
+    {
+      "file": "part80.json",
+      "first_ref": "4.24.1"
+    },
+    {
+      "file": "part81.json",
+      "first_ref": "5.1.1"
+    },
+    {
+      "file": "part82.json",
+      "first_ref": "5.2.1"
+    },
+    {
+      "file": "part83.json",
+      "first_ref": "5.3.1"
+    },
+    {
+      "file": "part84.json",
+      "first_ref": "5.4.1"
+    },
+    {
+      "file": "part85.json",
+      "first_ref": "5.5.1"
+    },
+    {
+      "file": "part86.json",
+      "first_ref": "5.6.1"
+    },
+    {
+      "file": "part87.json",
+      "first_ref": "5.7.1"
+    },
+    {
+      "file": "part88.json",
+      "first_ref": "5.8.1"
+    },
+    {
+      "file": "part89.json",
+      "first_ref": "5.9.1"
+    },
+    {
+      "file": "part90.json",
+      "first_ref": "5.10.1"
+    },
+    {
+      "file": "part91.json",
+      "first_ref": "5.11.1"
+    },
+    {
+      "file": "part92.json",
+      "first_ref": "5.12.1"
+    },
+    {
+      "file": "part93.json",
+      "first_ref": "5.13.1"
+    },
+    {
+      "file": "part94.json",
+      "first_ref": "5.14.1"
+    },
+    {
+      "file": "part95.json",
+      "first_ref": "5.15.1"
+    },
+    {
+      "file": "part96.json",
+      "first_ref": "5.16.1"
+    },
+    {
+      "file": "part97.json",
+      "first_ref": "5.17.1"
+    },
+    {
+      "file": "part98.json",
+      "first_ref": "5.18.1"
+    },
+    {
+      "file": "part99.json",
+      "first_ref": "5.19.1"
+    },
+    {
+      "file": "part100.json",
+      "first_ref": "5.20.1"
+    },
+    {
+      "file": "part101.json",
+      "first_ref": "5.21.1"
+    },
+    {
+      "file": "part102.json",
+      "first_ref": "5.22.1"
+    },
+    {
+      "file": "part103.json",
+      "first_ref": "5.23.1"
+    },
+    {
+      "file": "part104.json",
+      "first_ref": "5.24.1"
+    },
+    {
+      "file": "part105.json",
+      "first_ref": "5.25.1"
+    },
+    {
+      "file": "part106.json",
+      "first_ref": "5.26.1"
+    },
+    {
+      "file": "part107.json",
+      "first_ref": "5.27.1"
+    },
+    {
+      "file": "part108.json",
+      "first_ref": "5.28.1"
+    },
+    {
+      "file": "part109.json",
+      "first_ref": "5.29.1"
+    },
+    {
+      "file": "part110.json",
+      "first_ref": "5.30.1"
+    },
+    {
+      "file": "part111.json",
+      "first_ref": "5.31.1"
+    },
+    {
+      "file": "part112.json",
+      "first_ref": "5.32.1"
+    },
+    {
+      "file": "part113.json",
+      "first_ref": "5.33.1"
+    },
+    {
+      "file": "part114.json",
+      "first_ref": "5.34.1"
+    },
+    {
+      "file": "part115.json",
+      "first_ref": "5.35.1"
+    },
+    {
+      "file": "part116.json",
+      "first_ref": "5.36.1"
+    },
+    {
+      "file": "part117.json",
+      "first_ref": "5.37.1"
+    },
+    {
+      "file": "part118.json",
+      "first_ref": "5.38.1"
+    },
+    {
+      "file": "part119.json",
+      "first_ref": "6.1.1"
+    },
+    {
+      "file": "part120.json",
+      "first_ref": "6.2.1"
+    },
+    {
+      "file": "part121.json",
+      "first_ref": "6.3.1"
+    },
+    {
+      "file": "part122.json",
+      "first_ref": "6.4.1"
+    },
+    {
+      "file": "part123.json",
+      "first_ref": "6.5.1"
+    },
+    {
+      "file": "part124.json",
+      "first_ref": "6.6.1"
+    },
+    {
+      "file": "part125.json",
+      "first_ref": "6.7.1"
+    },
+    {
+      "file": "part126.json",
+      "first_ref": "6.8.1"
+    }
+  ]
+}

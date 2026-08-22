@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 353,
@@ -711,7 +711,19 @@
           "sanskrit": {
             "devanagari": "स श्रुत्वेति । अत्यर्थं (बिष्मभ) इति । आत्मवद्रामस्यापि दुःखहेतुश्रवणादिति भावः । यद्वा रामापेक्षया अत्यन्तनिष्प्रभः । रामः सीताविरहेण निष्प्रभो ऽभूत्, सुग्रीवस्तु तयोस्साहित्यादर्शनाद्रामक्लेशदर्शनाच्चात्यर्थं निष्प्रभो ऽभूत् ॥ ५.३५.३६३७॥"
           }
-        }
+        },
+        "references": [
+          {
+            "start": 25,
+            "end": 31,
+            "display_text": "बिष्मभ",
+            "grantha_id": null,
+            "locator": null,
+            "locator_end": null,
+            "group_id": null,
+            "unresolved": true
+          }
+        ]
       },
       {
         "ref": "5.35.38",

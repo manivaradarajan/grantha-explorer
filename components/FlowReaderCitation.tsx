@@ -16,6 +16,10 @@ interface FlowReaderCitationProps {
   verseRef: string;
   subcommentaryIds?: string;
   script: "deva" | "roman";
+  /** Reveal the trigger only while its passage is hovered (or the trigger is
+   *  keyboard-focused). Flow mode passes this to keep the reading surface
+   *  clean; compare mode keeps the trigger always-visible. */
+  revealOnHover?: boolean;
   /** Devanagari and IAST grantha titles, from the index metadata when
    *  available (the index always carries both; the loaded Grantha object may
    *  not, depending on the source shape). */
@@ -40,17 +44,16 @@ function workTitleOf(edition: Grantha): string {
 }
 
 /**
- * Per-verse citation/permalink trigger — a small, always-visible (touch-safe)
- * icon opening a popover with two actions: copy the deep link and copy a
- * formatted citation. Copy feedback is a brief inline confirmation on the
- * button itself (the same lightweight non-modal family as the folio's
- * invalid-jump flash) — no toast library, no new UI primitive.
+ * Per-verse citation trigger — a small copy icon that copies a formatted
+ * citation and briefly flips to a checkmark (the same lightweight non-modal
+ * feedback family as the folio's invalid-jump flash) — no toast library, no
+ * new UI primitive.
  *
  * In compare mode the trigger sits on the shared verse row (one per row, never
  * per column) and cites whichever commentators are active for that row, in
- * column order, plus any open ṭīkā. The trigger is not hover-only, so it works
- * on touch. Clicking it or the popover must not propagate to the verse's own
- * selection handler.
+ * column order, plus any open ṭīkā. Flow mode sets `revealOnHover` so the icon
+ * appears only while the passage is hovered/focused. Clicking it must not
+ * propagate to the verse's own selection handler.
  */
 export default function FlowReaderCitation({
   grantha,
@@ -61,11 +64,10 @@ export default function FlowReaderCitation({
   script,
   granthaTitleDeva,
   granthaTitleIast,
+  revealOnHover = false,
 }: FlowReaderCitationProps) {
-  const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState<"link" | "citation" | null>(null);
+  const [copied, setCopied] = useState(false);
   const timer = useRef<number | null>(null);
-  const rootRef = useRef<HTMLDivElement | null>(null);
 
   const roman = script === "roman";
   const granthaTitle = roman ? granthaTitleIast : granthaTitleDeva;
@@ -91,28 +93,6 @@ export default function FlowReaderCitation({
   useEffect(() => () => {
     if (timer.current) window.clearTimeout(timer.current);
   }, []);
-
-  // Close on outside interaction and Escape, so the popover behaves like the
-  // app's other small menus rather than requiring a second tap on the icon.
-  useEffect(() => {
-    if (!open) return;
-    const onDocInteraction = (e: Event) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("mousedown", onDocInteraction);
-    document.addEventListener("touchstart", onDocInteraction);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocInteraction);
-      document.removeEventListener("touchstart", onDocInteraction);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
 
   // Compare mode carries the full edition set in the deep link; single mode
   // keeps the Stage-4 behavior (only a genuine multi-edition grantha carries
@@ -164,35 +144,29 @@ export default function FlowReaderCitation({
     url: deepLink,
   });
 
-  const flashCopied = (kind: "link" | "citation") => {
-    const text = kind === "link" ? deepLink : citation;
+  const flashCopied = () => {
     void navigator.clipboard
-      .writeText(text)
+      .writeText(citation)
       .catch(() => {
         // Clipboard access can be denied (permissions/headless); the inline
         // confirmation still shows so the user can copy manually.
       })
       .finally(() => {
         if (timer.current) window.clearTimeout(timer.current);
-        setCopied(kind);
-        timer.current = window.setTimeout(() => setCopied(null), CONFIRM_MS);
+        setCopied(true);
+        timer.current = window.setTimeout(() => setCopied(false), CONFIRM_MS);
       });
-  };
-
-  const actionLabel = (kind: "link" | "citation"): string => {
-    if (copied === kind) {
-      return roman ? "Copied" : "कॉपी किया";
-    }
-    if (kind === "link") {
-      return roman ? "Copy link" : "लिङ्कम्";
-    }
-    return roman ? "Copy citation" : "उद्धरणम्";
   };
 
   return (
     <div
-      ref={rootRef}
-      className="relative"
+      className={`relative transition-opacity ${
+        revealOnHover
+          ? copied
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+          : ""
+      }`}
       onClick={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
       onTouchStart={(e) => e.stopPropagation()}
@@ -200,54 +174,43 @@ export default function FlowReaderCitation({
       <button
         type="button"
         data-citation-trigger
-        onClick={() => setOpen((v) => !v)}
-        aria-label={roman ? "Copy link or citation" : "लिङ्कम् / उद्धरणम्"}
-        aria-expanded={open}
-        className="inline-flex items-center justify-center w-7 h-7 rounded-lg text-gray-300 hover:text-gray-500 hover:bg-gray-100 transition-colors"
+        onClick={flashCopied}
+        aria-label={roman ? "Copy citation" : "प्रतिलिपि"}
+        className={`inline-flex items-center justify-center w-7 h-7 rounded-lg transition-colors ${
+          copied ? "text-gray-900" : "text-gray-500 hover:text-gray-800"
+        }`}
       >
-        <svg
-          className="w-4 h-4"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.6}
-          aria-hidden="true"
-        >
-          <path
+        {copied ? (
+          // Checkmark confirmation, Lucide `check`.
+          <svg
+            className="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M13 7l-3.5 3.5a2.1 2.1 0 01-3-3L9 5.5M7 13l3.5-3.5a2.1 2.1 0 013 3L13 14"
-          />
-        </svg>
+            aria-hidden="true"
+          >
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        ) : (
+          // Copy icon, Lucide `copy`.
+          <svg
+            className="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+          </svg>
+        )}
       </button>
-
-      {open && (
-        <div
-          className="absolute right-0 mt-1 w-44 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20"
-          role="menu"
-        >
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => flashCopied("link")}
-            className={`block w-full text-left px-3 py-2 text-sm font-serif hover:bg-gray-50 ${
-              copied === "link" ? "text-green-700" : "text-gray-700"
-            }`}
-          >
-            {actionLabel("link")}
-          </button>
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => flashCopied("citation")}
-            className={`block w-full text-left px-3 py-2 text-sm font-serif hover:bg-gray-50 ${
-              copied === "citation" ? "text-green-700" : "text-gray-700"
-            }`}
-          >
-            {actionLabel("citation")}
-          </button>
-        </div>
-      )}
     </div>
   );
 }
