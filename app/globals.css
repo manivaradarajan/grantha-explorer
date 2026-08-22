@@ -77,7 +77,13 @@
   overflow: hidden; /* clip the header band to the radius */
   opacity: 0; /* gated until measured + positioned */
   transition: opacity 0.15s;
-  pointer-events: none; /* never intercept hover of the link */
+  pointer-events: auto; /* reachable: hover bridge + selectable text + go */
+}
+
+/* During the fade-in the tooltip must not intercept the pointer (it is not yet
+   positioned where the user's cursor is). */
+.reference-tooltip:not(.is-ready) {
+  pointer-events: none;
 }
 
 .reference-tooltip.is-ready {
@@ -99,15 +105,56 @@
 }
 
 .tooltip-title {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #1f2937;
 }
 
 .tooltip-locator {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: #374151;
+}
+
+/* When linkable, a footer row carries the navigation affordance — placed at
+   the bottom of the card, nearest the cursor's origin (the tooltip sits above
+   the link), instead of in the header at the far edge. */
+.tooltip-open {
+  border-top: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tooltip-open-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  color: #3d5a80; /* app link ink (matches .reference-link hover) */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.tooltip-open-link:hover {
+  color: #2c4460;
+  background-color: rgba(61, 90, 128, 0.12);
+  border-radius: 3px;
+}
+
+.tooltip-open-link:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: 1px;
+  border-radius: 3px;
+}
+
+.tooltip-open-icon {
+  width: 0.85em;
+  height: 0.85em;
+  flex-shrink: 0;
 }
 
 .tooltip-passage {

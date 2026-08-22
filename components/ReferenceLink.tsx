@@ -37,6 +37,7 @@ interface ReferenceLinkProps {
 }
 
 const HOVER_DELAY_MS = 400;
+const TOOLTIP_CLOSE_DELAY_MS = 350;
 const TOOLTIP_VIEWPORT_PADDING = 10;
 const TOOLTIP_GAP = 8;
 
@@ -60,6 +61,10 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const tooltipRef = useRef<HTMLDivElement>(null);
   const isTouchDevice = useRef(false);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Stable holder for `navigate` (defined later) so the tooltip's go handler
+  // can call it without a definition-order cycle.
+  const navigateRef = useRef<() => void>(() => {});
   // First tap on touch previews; a second tap navigates (or dismisses for
   // not-in-library refs). Reset on blur/leave/outside-click.
   const previewedRef = useRef(false);
@@ -70,6 +75,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const locatorLabel = reference.locator
     ? toDevanagariNumerals(reference.locator)
     : "whole work";
+  const targetHash = `${reference.grantha_id}:${reference.locator ?? "1"}`;
   const renderPlain = !reference.grantha_id || reference.unresolved;
   // The edition-aware gate: linkable iff the concrete (grantha, edition) is on
   // disk, or the edition-less target's default is attribution-safe.
@@ -82,34 +88,26 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
   }, []);
 
-  // Clear pending hover timeout on unmount
+  // Clear pending hover/hide timeouts on unmount
   useEffect(() => {
     return () => {
       if (hoverTimeout.current !== null) {
         clearTimeout(hoverTimeout.current);
       }
+      if (hideTimeout.current !== null) {
+        clearTimeout(hideTimeout.current);
+      }
     };
   }, []);
-
-  // Shared tooltip surface: chrome (meta/status) split from the passage so the
-  // passage renders in the reading face (Tiro) and the chrome in the UI sans.
-  const renderTooltip = useCallback(
-    (body: React.ReactNode, status?: React.ReactNode): React.ReactNode => (
-      <>
-        <div className="tooltip-meta">
-          <span className="tooltip-title">{targetTitle}</span>
-          {locatorLabel && <span className="tooltip-locator">{locatorLabel}</span>}
-        </div>
-        {status ?? body}
-      </>
-    ),
-    [targetTitle, locatorLabel],
-  );
 
   const hideTooltip = useCallback(() => {
     if (hoverTimeout.current !== null) {
       clearTimeout(hoverTimeout.current);
       hoverTimeout.current = null;
+    }
+    if (hideTimeout.current !== null) {
+      clearTimeout(hideTimeout.current);
+      hideTimeout.current = null;
     }
     previewedRef.current = false;
     setTooltipReady(false);
@@ -117,13 +115,112 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     setTooltipContent(null);
   }, []);
 
+  // The hover bridge: leaving the link (or the tooltip) schedules a hide so
+  // the cursor can cross the gap and the popup stays open while hovered;
+  // re-entering cancels it. The grace keeps the popup from vanishing the
+  // instant the pointer moves toward it.
+  const scheduleHide = useCallback(() => {
+    if (hideTimeout.current !== null) {
+      clearTimeout(hideTimeout.current);
+    }
+    hideTimeout.current = setTimeout(() => {
+      hideTimeout.current = null;
+      hideTooltip();
+    }, TOOLTIP_CLOSE_DELAY_MS);
+  }, [hideTooltip]);
+
+  const cancelHide = useCallback(() => {
+    if (hideTimeout.current !== null) {
+      clearTimeout(hideTimeout.current);
+      hideTimeout.current = null;
+    }
+  }, []);
+
+  // Shared tooltip surface: chrome (meta/status) split from the passage so the
+  // passage renders in the reading face (Tiro) and the chrome in the UI sans.
+  // The header is informational; when linkable, a bottom "उद्घाटय" footer
+  // carries the navigation affordance (nearest the cursor's origin).
+  const handleGo = useCallback(
+    (e?: React.SyntheticEvent) => {
+      e?.preventDefault();
+      cancelHide();
+      navigateRef.current();
+    },
+    [cancelHide],
+  );
+
+  const renderTooltip = useCallback(
+    (body: React.ReactNode, status?: React.ReactNode): React.ReactNode => {
+      const meta = (
+        <div className="tooltip-meta">
+          <span className="tooltip-title">{targetTitle}</span>
+          {locatorLabel && <span className="tooltip-locator">{locatorLabel}</span>}
+        </div>
+      );
+      const open = linkable ? (
+        <div className="tooltip-open">
+          <a
+            href={`#${targetHash}`}
+            onClick={handleGo}
+            className="tooltip-open-link"
+          >
+            उद्घाटय
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="tooltip-open-icon"
+              aria-hidden="true"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" />
+            </svg>
+          </a>
+        </div>
+      ) : null;
+      return (
+        <>
+          {meta}
+          {status ?? body}
+          {open}
+        </>
+      );
+    },
+    [targetTitle, locatorLabel, linkable, handleGo, targetHash],
+  );
+
+  // Don't close while the user is actively selecting text in the popup —
+  // a mid-copy mouseup (cursor briefly outside) would otherwise dismiss it.
+  useEffect(() => {
+    const handleMouseUp = () => {
+      const sel = window.getSelection();
+      const tooltipEl = tooltipRef.current;
+      if (!sel || sel.isCollapsed || !tooltipEl) return;
+      if (
+        sel.anchorNode &&
+        tooltipEl.contains(sel.anchorNode) &&
+        sel.anchorNode.nodeType === Node.TEXT_NODE
+      ) {
+        cancelHide();
+      }
+    };
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => document.removeEventListener('mouseup', handleMouseUp);
+  }, [cancelHide]);
+
   // Close tooltip when clicking outside (touch devices). Resets the
   // first-tap-preview state so the next tap previews again.
   useEffect(() => {
     if (!isTouchDevice.current || !showTooltip) return;
 
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      const insideLink = linkRef.current?.contains(target);
+      const insideTooltip = tooltipRef.current?.contains(target);
+      if (!insideLink && !insideTooltip) {
         hideTooltip();
       }
     };
@@ -306,8 +403,15 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     }
   }, [reference, currentGranthaId, editionId, updateHash, renderTooltip, recordDiagnostic]);
 
+  // Expose `navigate` to the tooltip's go handler (defined earlier) without a
+  // render-time ref write — the effect runs before any hover can click Go.
+  useEffect(() => {
+    navigateRef.current = navigate;
+  }, [navigate]);
+
   const handleMouseEnter = () => {
     if (isTouchDevice.current) return;
+    cancelHide();
     hoverTimeout.current = setTimeout(() => {
       openTooltip();
     }, HOVER_DELAY_MS);
@@ -315,7 +419,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
 
   const handleMouseLeave = () => {
     if (isTouchDevice.current) return;
-    hideTooltip();
+    scheduleHide();
   };
 
   // Keyboard users get the preview immediately (no hover delay).
@@ -366,7 +470,6 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   }
 
   const linkClassName = `reference-link ${!linkable ? 'external-reference' : ''}`;
-  const targetHash = `${reference.grantha_id}:${reference.locator ?? "1"}`;
 
   return (
     <span className="reference-container">
@@ -391,6 +494,8 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
             left: tooltipPosition.left,
             ['--reading-scale' as string]: tooltipScale,
           }}
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleHide}
         >
           {tooltipContent}
         </div>,
