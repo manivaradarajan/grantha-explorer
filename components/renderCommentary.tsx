@@ -2,7 +2,11 @@
 
 import React from "react";
 import { Reference } from "@/lib/data";
-import { sanitizeCommentaryHtml, stripMarkdown } from "@/lib/stringUtils";
+import {
+  assertCodePointOffsetAligned,
+  sanitizeCommentaryHtml,
+  stripMarkdown,
+} from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
 
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
@@ -55,6 +59,10 @@ export function renderCommentaryWithReferences(
   let cursor = 0;
 
   for (const ref of sorted) {
+    // Assert the producer's code-point offsets are valid UTF-16 slice
+    // boundaries (SPEC §7) — fail loudly if a non-BMP char would be split.
+    assertCodePointOffsetAligned(rawText, ref.start);
+    assertCodePointOffsetAligned(rawText, ref.end);
     // Defensively skip spans that overlap the already-emitted range (stale
     // offsets after a source change) — never double-render text.
     if (ref.end <= cursor) {
@@ -129,6 +137,8 @@ export function renderMulaWithReferences(
   const parts: React.ReactNode[] = [];
   let cursor = 0;
   for (const ref of sorted) {
+    assertCodePointOffsetAligned(rawText, ref.start);
+    assertCodePointOffsetAligned(rawText, ref.end);
     if (ref.end <= cursor) {
       continue;
     }

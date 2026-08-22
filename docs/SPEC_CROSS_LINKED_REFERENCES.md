@@ -286,12 +286,6 @@ reference renders.
 
 ## 8. Deferred / out of scope
 
-- **Edition-targeted (school/lineage) refs.** Frame as `namespace::symbol`:
-  `ramanuja::भ.गी.` → Rāmānuja's Gītābhāṣya; `sankara::भ.गी.` → Śaṅkara's.
-  Requires a corpus survey first (which citing grantha cites which target,
-  which edition implied). Candidate mechanisms: compile-side namespaced bimap
-  + optional `edition_id` on the artifact (MINOR schema bump), or runtime
-  namespace resolution. Never-guess guard applies.
 - **Adhikarana open questions:** linkability of an adhikarana's *later*
   sutras; whether the adhikarana-artha (topic) intro renders at the anchor.
 - **Mādhyandina / Śatapatha-Mādhyandina:** still needs the actual recension
@@ -299,6 +293,9 @@ reference renders.
 - **Bazel `md_to_json.py`** end-to-end verification (wired + unit-tested only).
 - **Non-final-level ranges**, per-corpus range rules.
 - **Range-aware UI** (currently links to the first verse only).
+
+> School/lineage edition-targeted references are **implemented** — see §10.
+> `docs/DESIGN_SCHOOL_NAMESPACES.md` is the design narrative that §10 distills.
 
 ---
 
@@ -320,3 +317,77 @@ reference renders.
   The bar for a new transform is that the scheme genuinely cannot be expressed
   as a static bimap/table entry (a value-dependent rewrite); a scheme that can
   be a table entry must be one.
+
+---
+
+## 10. School namespaces (implemented)
+
+Edition-targeted (school/lineage) references are **live** (was the deferred
+"Edition-targeted refs" §8 item). Full design narrative:
+`docs/DESIGN_SCHOOL_NAMESPACES.md`.
+
+### 10.1 The model
+
+A citation's *type* is the concrete `(grantha_id, edition_id)`. The producer
+elaborates every cite to that type at compile time; the runtime only answers
+"is this exact (grantha, edition) on disk?" — link or defer. Two separable
+steps:
+
+1. **Name resolution** — overloaded by school. The citing edition's school is
+   declared in its **source frontmatter** (`citation_namespace` in
+   `commentaries_metadata`, or grantha-level for mula-author works like
+   vedarthasangraha). Absent → school-neutral (base table).
+2. **Coercion** — `grantha → default edition` is the single guarded step. It
+   is legal only when the default is attribution-safe: mula, or the citing
+   text's **own** school (design §5 `S == X`). Everything else is a type error
+   → `unresolved` (deferral).
+
+### 10.2 Bimap shape
+
+`data/citation_bimap.yaml` is namespaced:
+
+- `granthas:` — base table (implicit default, checked last). Each grantha has
+  `ref_structure` + `default_school` (its display-default's school, when
+  school-flavored) + `default_edition_id` (the concrete default edition a
+  same-school cite resolves to).
+- `namespaces:` — `ramanuja` / `sankara`. Each has `symbols` (school-only
+  abbreviations like `श्री.भा.`) and `granthas` (per-grantha edition
+  decorators: `grantha_id` → `edition_id`; a deliberately-absent edition id =
+  deferral, never a fallback to another school's default).
+
+### 10.3 Resolution
+
+For a citing edition with school `S` and an abbreviation:
+
+- `S`-namespace symbol → its `edition_id` (present → link, absent → defer).
+- base symbol → its grantha's `default_school`:
+  - `default_school == S` → stamped `default_edition_id` (concrete link).
+  - `default_school ≠ S` and `S` scopes the grantha → `S`'s edition
+    (present → link, absent → defer).
+  - otherwise → edition-less → runtime defers (GR#7).
+
+Same-school stamps make every school→own-school cite concrete; cross-school
+cites without a school edition on disk defer (never another school's default).
+
+### 10.4 Artifact
+
+`reference.edition_id` (optional): the concrete edition. Mula/school-neutral
+refs omit it; school-resolved refs carry it. Single-edition (flat) granthas
+stamp `edition_id == grantha_id`, which the runtime accepts as the flat
+edition's own id (a stray `?e=` from another grantha is still dropped).
+
+### 10.5 Sweep-before-gate enforcement
+
+`scripts/validate-reference-sweep.ts` (run in `validate:data`/`prebuild`)
+fails the build while `EDITION_AWARE_GATE_ENABLED` is true and any ref from a
+school text citing its **own** school's default lacks `edition_id` (the
+producer should have stamped it). Cross-school deferrals and neutral-target
+refs are legitimate GR#7 behavior, not gate-blockers. The gate is currently
+**ON** and the sweep clean.
+
+### 10.6 Reserved absent ids
+
+Deferral-by-absence ids (`brihadaranyaka-madhyandina`, the three
+`*-sankara-bhashya` editions with no on-disk counterpart) are reserved; a
+regression test (`test_reserved_absent_ids.py`) asserts they stay absent so
+ingesting a grantha with such an id is a loud, reviewed change.
