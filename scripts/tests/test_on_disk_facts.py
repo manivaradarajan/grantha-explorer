@@ -1,9 +1,11 @@
-"""On-disk fact pins for the school-namespace phase (design §1, §4).
+"""On-disk invariant pins for the school-namespace design (design §1, §4).
 
-Phase-0 baseline: these tests lock the *before* state the migration must
-preserve, verifying the plan's assumptions against the committed library and
-the citation bimap. They must pass immediately on the current tree — a failure
-here means the plan's premise is wrong, not the implementation.
+These lock the *current* on-disk facts the namespace design depends on — the
+śaṅkara editions present and the deferral-by-absence targets, the
+`default_school` declarations in granthas-meta.json, the gita-bhashya fold-in
+(C1), the vedarthasangraha shape (C2), and the namespaced bimap shape. A
+failure means an invariant the resolver relies on has changed, not that the
+code is wrong.
 
 Re-run this on every reference-pipeline change.
 """
