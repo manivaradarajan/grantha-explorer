@@ -47,6 +47,39 @@ export const sanitizeCommentaryHtml = (text: string): string =>
   );
 
 /**
+ * Assert that a code-point offset (producer-side) is a valid UTF-16 slice
+ * boundary — i.e. it does not split a non-BMP (surrogate-pair) character.
+ *
+ * The producer emits reference offsets as Python code points; JS slices are
+ * UTF-16. For the current corpus they coincide because Devanagari is BMP-only,
+ * but that is a property of the corpus, not a guarantee. This fails loudly
+ * (never silently misaligns) if a non-BMP character precedes an offset, per
+ * SPEC §7's defensive assertion.
+ *
+ * Args:
+ *     text: The raw string being sliced.
+ *     offset: A code-point offset (half-open start/end) into `text`.
+ *
+ * Raises:
+ *     Error: If `offset` falls inside a surrogate pair (a non-BMP char would
+ *         be split).
+ */
+export const assertCodePointOffsetAligned = (text: string, offset: number): void => {
+  if (offset < 1 || offset >= text.length) return;
+  const prev = text.charCodeAt(offset - 1);
+  const next = text.charCodeAt(offset);
+  // A boundary inside a surrogate pair: either the char before is a high
+  // surrogate (0xD800-0xDBFF) whose low half is at `offset`, or the char at
+  // `offset` is a low surrogate (0xDC00-0xDFFF) preceded by its high half.
+  if ((prev >= 0xd800 && prev <= 0xdbff) || (next >= 0xdc00 && next <= 0xdfff)) {
+    throw new Error(
+      `non-BMP character split at offset ${offset} — reference offsets are ` +
+        `code points, JS slices are UTF-16 (SPEC §7 defensive assertion)`,
+    );
+  }
+};
+
+/**
  * Close a mūla verse with its danda number (`॥ N॥`, Devanagari), matching
  * print convention (spec §6.1). The numeral sits flush against the closing
  * danda (no space), while the opening danda keeps a space from the verse text.

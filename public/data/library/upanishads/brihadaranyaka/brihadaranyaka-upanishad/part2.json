@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "brihadaranyaka-upanishad",
   "edition_id": "brihadaranyaka-upanishad",
   "part_num": 2,
@@ -248,21 +248,23 @@
             "start": 177,
             "end": 186,
             "display_text": "धा.पा.४६५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "465",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 940,
             "end": 953,
             "display_text": "ब्र.सू.२-४-१२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.4.12",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -286,11 +288,12 @@
             "start": 211,
             "end": 223,
             "display_text": "पा.सू.४-१-९५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "panini-sutra",
+            "edition_id": null,
+            "locator": "4.1.95",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -338,71 +341,89 @@
             "start": 415,
             "end": 422,
             "display_text": "तै.आन-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 606,
             "end": 613,
             "display_text": "तै.आन-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 655,
             "end": 662,
             "display_text": "तै.आन-५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 743,
             "end": 756,
             "display_text": "श्री.भा.१-४-८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 938,
             "end": 950,
             "display_text": "सुबा.उ.३-२-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "subala-upanishad",
+            "edition_id": null,
+            "locator": "3.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 1306,
-            "end": 1324,
-            "display_text": "म.भा.शां.१७५-१५,१६",
-            "grantha_id": null,
-            "locator": null,
+            "start": 1315,
+            "end": 1321,
+            "display_text": "१७५-१५",
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "175.15",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 1322,
+            "end": 1324,
+            "display_text": "१६",
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "175.16",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
           },
           {
             "start": 2018,
             "end": 2027,
             "display_text": "धा.पा.६९६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "696",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -426,27 +447,41 @@
             "start": 759,
             "end": 770,
             "display_text": "वि.पु.१-७-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.7.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 1016,
-            "end": 1035,
-            "display_text": "वि.पु.१.७-११,१२.१४4",
-            "grantha_id": null,
-            "locator": null,
+            "start": 1022,
+            "end": 1028,
+            "display_text": "१.७-११",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.7.11",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 1029,
+            "end": 1035,
+            "display_text": "१२.१४4",
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.12.144",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
           },
           {
             "start": 1144,
             "end": 1155,
             "display_text": "भाग.३-१२-५२",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -456,11 +491,12 @@
             "start": 1941,
             "end": 1953,
             "display_text": "वि.पु.१.७.१७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.7.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -476,11 +512,12 @@
             "start": 863,
             "end": 872,
             "display_text": "धा.पा.७०६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "706",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -512,307 +549,371 @@
             "start": 2146,
             "end": 2153,
             "display_text": "तै.आन.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 4632,
             "end": 4646,
             "display_text": "ब्र.सू.अ.१-४-४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 4717,
             "end": 4727,
             "display_text": "छा.उ.६-२-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 4792,
-            "end": 4819,
-            "display_text": "शत.ना.मा.पा.६-१-१,तै.आन.७-१",
-            "grantha_id": null,
-            "locator": null,
+            "start": 4795,
+            "end": 4809,
+            "display_text": "ना.मा.पा.६-१-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.1.1",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 4810,
+            "end": 4819,
+            "display_text": "तै.आन.७-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.7.1",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
           },
           {
             "start": 4982,
             "end": 4992,
             "display_text": "बृ.उ.३-४-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.4.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5174,
             "end": 5187,
             "display_text": "ब्र.सू.१-४-१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5201,
             "end": 5214,
             "display_text": "ब्र.सू.१-४-१५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5265,
             "end": 5277,
             "display_text": "ब्र.सू.१-१-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5395,
             "end": 5404,
             "display_text": "तै.आन.१-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5461,
             "end": 5474,
             "display_text": "ब्र.सू.१-४-१५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 5497,
-            "end": 5527,
-            "display_text": "शत.ब्रा.मा.पा.६-१-१, तै.आन.७-१",
-            "grantha_id": null,
-            "locator": null,
+            "start": 5505,
+            "end": 5516,
+            "display_text": "मा.पा.६-१-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.1.1",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-2",
+            "unresolved": false
+          },
+          {
+            "start": 5518,
+            "end": 5527,
+            "display_text": "तै.आन.७-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.7.1",
+            "locator_end": null,
+            "group_id": "ref-2",
+            "unresolved": false
           },
           {
             "start": 5547,
             "end": 5556,
             "display_text": "तै.आन.६-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.6.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5606,
             "end": 5615,
             "display_text": "तै.आन.६-३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.6.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 5651,
-            "end": 5680,
-            "display_text": "शत.ब्रा.मा.पा.६-१-१,तै.आन.७-१",
-            "grantha_id": null,
-            "locator": null,
+            "start": 5659,
+            "end": 5670,
+            "display_text": "मा.पा.६-१-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.1.1",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-3",
+            "unresolved": false
+          },
+          {
+            "start": 5671,
+            "end": 5680,
+            "display_text": "तै.आन.७-१",
+            "grantha_id": "shatapatha-brahmana",
+            "edition_id": null,
+            "locator": "6.7.1",
+            "locator_end": null,
+            "group_id": "ref-3",
+            "unresolved": false
           },
           {
             "start": 5770,
             "end": 5780,
             "display_text": "बृ.उ.३-४-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.4.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 6119,
             "end": 6131,
             "display_text": "ब्र.सू.२-१-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 6186,
             "end": 6197,
             "display_text": "छां.उ.६-२-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 6228,
             "end": 6238,
             "display_text": "बृ.उ.३-४-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.4.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 6550,
             "end": 6562,
             "display_text": "तै.सं.२-२-१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "2.2.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 6850,
             "end": 6860,
             "display_text": "म.स्मृ.१-५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "manu-smriti",
+            "edition_id": null,
+            "locator": "1.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7051,
             "end": 7063,
             "display_text": "म.स्मृ.१-६-८",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
+            "grantha_id": "manu-smriti",
+            "edition_id": null,
+            "locator": "1.6",
+            "locator_end": "1.8",
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7131,
             "end": 7139,
             "display_text": "भ.गी.७-६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "7.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7185,
             "end": 7194,
             "display_text": "भ.गी.१०-८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "10.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7300,
             "end": 7312,
             "display_text": "म.भा.शां.८-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "8.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7368,
             "end": 7381,
             "display_text": "म.भा.शां.८-१२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "8.12",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7443,
             "end": 7456,
             "display_text": "म.भा.शां.८-१३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "8.13",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7512,
             "end": 7524,
             "display_text": "म.भा.शा.८-१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahabharata-shanti-parva",
+            "edition_id": null,
+            "locator": "8.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7644,
             "end": 7656,
             "display_text": "वि.पु.१-१-३१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "vishnu-purana",
+            "edition_id": null,
+            "locator": "1.1.31",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7732,
             "end": 7744,
             "display_text": "आप.ध.सू.२२-६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "apastamba-dharma-sutra",
+            "edition_id": null,
+            "locator": "22.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7819,
             "end": 7833,
             "display_text": "आप.ध.सू.२६-१-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "apastamba-dharma-sutra",
+            "edition_id": null,
+            "locator": "26.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 8037,
             "end": 8049,
             "display_text": "ब्र.सु.२-१-२",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -822,67 +923,74 @@
             "start": 8266,
             "end": 8280,
             "display_text": "ब्र.सू.अ.२-२-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 8354,
             "end": 8366,
             "display_text": "ब्र.सू.२-२-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 8773,
             "end": 8785,
             "display_text": "ब्र.सू.२-२-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 9033,
             "end": 9045,
             "display_text": "ब्र.सू.२-२-४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 9307,
             "end": 9319,
             "display_text": "ब्र.सू.२-२-५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 9699,
             "end": 9711,
             "display_text": "ब्र.सू.२-२-६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 9905,
             "end": 9917,
             "display_text": "ब्र.सु.२-२-७",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -892,51 +1000,56 @@
             "start": 10054,
             "end": 10066,
             "display_text": "ब्र.सू.२-२-८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 10266,
             "end": 10278,
             "display_text": "ब्र.सू.२-२-९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "2.2.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 10500,
             "end": 10510,
             "display_text": "बृ.उ.३-४-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.4.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 12426,
             "end": 12438,
             "display_text": "ब्र.सू.४-१-८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 12913,
             "end": 12924,
             "display_text": "मुं.उ.२-२-५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "2.2.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -968,51 +1081,56 @@
             "start": 406,
             "end": 416,
             "display_text": "श्वे.उ.६-९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": "svetasvatara-upanishad",
+            "locator": "6.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 809,
             "end": 820,
             "display_text": "अथर्वशिखा.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "atharva-shikha-upanishad",
+            "edition_id": null,
+            "locator": "3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 4249,
             "end": 4259,
             "display_text": "श्वे.उ.१-६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": "svetasvatara-upanishad",
+            "locator": "1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 4703,
             "end": 4715,
             "display_text": "ब्र.सू.४-१-३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 4777,
             "end": 4787,
             "display_text": "वरा.उ.२-३४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "varaha-upanishad",
+            "edition_id": null,
+            "locator": "2.34",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1028,21 +1146,23 @@
             "start": 881,
             "end": 893,
             "display_text": "पा.सू.५-४-५६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "panini-sutra",
+            "edition_id": null,
+            "locator": "5.4.56",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1052,
             "end": 1063,
             "display_text": "तै.सं.५-४-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "5.4.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },

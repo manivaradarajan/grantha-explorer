@@ -41,6 +41,15 @@ New `#/definitions/reference`, emitted as `references[]` on
 `content.sanskrit.devanagari`. The explorer schema mirrors are byte-identical
 copies re-synced with `cp` (per `SCHEMAS.md`).
 
+**Cross-repo schema sync (contract):** the explorer's schema mirrors must
+never drift from `grantha-data/formats/schemas/`. A CI check must compare the
+mirror files' checksums against the producer copies and fail loudly on drift —
+the `cp` sync is the operator's action, but drift detection is automation's.
+A schema change therefore lands as: producer edit → version bump → `cp`
+re-sync → CI-green in both repos. Without the check, a producer-side change
+that isn't mirrored silently makes the explorer validate against a stale
+schema.
+
 ```jsonc
 {
   "start": 33, "end": 47,                    // half-open offsets into content.sanskrit.devanagari
@@ -64,16 +73,22 @@ copies re-synced with `cp` (per `SCHEMAS.md`).
 `locator: null` with `grantha_id: null` is impossible in the schema by
 construction; validation rejects it.
 
-**Span convention:** whole-work and enumeration sub-spans cover the citation
-text **excluding** surrounding parentheses; the renderer splits raw text at
-`[start, end)` and leaves parens/punctuation as plain text.
+**Span convention:** every reference's `[start, end)` covers the citation text
+**excluding** the surrounding parentheses — whole-work, enumeration sub-spans,
+**and ordinary passage/section/range references alike**. The renderer splits
+raw text at `[start, end)` and leaves parens/punctuation as plain text; for a
+normal single cite `(श्वे. उ. १.९)` the span covers `श्वे. उ. १.९` only.
 
 ### 2.2 Enumeration + prefix inheritance
 
 `(वि.पु. ३-७-२९,३०)` → two objects tied by `group_id` (`ref-N`, 1-based over
-enumeration parentheticals in the text), later member inheriting the first
-member's prefix (`३०` → `3.7.30`). The renderer emits the literal `,` between
-sub-spans. Ranges are a single object (no grouping).
+enumeration parentheticals in the **text passed to `extract_references`** —
+i.e. one commentary passage's Devanagari string), later member inheriting the
+first member's prefix (`३०` → `3.7.30`). The renderer emits the literal `,`
+between sub-spans. Ranges are a single object (no grouping). **`group_id`
+uniqueness is scoped per `extract_references` call (per commentary passage)**:
+two passages both starting at `ref-1` are expected and fine; `group_id` is a
+renderer grouping hint within one passage, never a corpus-wide key.
 
 ---
 
@@ -101,12 +116,21 @@ errors.
     abbreviation (longest-match wins over `ब्र.सू.`); its transform looks up
     `(adhyāya, pāda, ordinal)` → first sutra in
     `data/brahma_sutra_adhikaranas.yaml` (156 entries derived from source). A
-    table miss falls through to a non-existent sutra, which the runtime
-    refuses — never a guessed link.
+    table miss raises at compile time: the transform leaves the locator
+    untransformed (so the runtime refuses it — never a guessed link) **and**
+    the compiler emits `REF-TRANSFORM-MISS` (warning) with the source
+    location. The failure is therefore visible in `references-report.json`,
+    not only as a runtime refusal.
 - **Recension deferral by id:** `बृ.उ.मा.पा.` maps to
   `brihadaranyaka-madhyandina` — a deliberately absent id — so the cite is
   not-in-library at runtime instead of mislinking to the Kāṇva edition. The
-  longer abbrev wins via longest-match.
+  longer abbrev wins via longest-match. **Reserved-id convention:** ids used
+  for deferral-by-absence are semantically reserved as "intentionally absent".
+  A bimap entry with a deliberately-absent id must carry a `note:` stating
+  this, and a **regression test asserts the id is absent from the on-disk
+  library / `granthas-meta.json`** so that adding a real grantha with that id
+  (or ingesting the deferred recension) is a loud, reviewed change, not a
+  silent accidental re-resolution.
 
 ### 3.2 Dash-glyph-gated range rule
 
@@ -125,6 +149,24 @@ not token count:
   (with a "check the bimap depth" hint). Unreachable with a correct hint.
 - `seg_count > hint_depth + 1` → `REF-AMBIGUOUS-LOCATOR` + conservative
   reading.
+
+**Order of operations (fixed):** the dash-gated rule above always runs on the
+**raw citation segments**, *before* any `locator_prefix` is prepended or
+`locator_transform` applied. `hint_depth = len(ref_structure)` always counts
+the levels the **cite as written** is expected to express — never the final,
+post-transform locator. Consequences:
+
+- `रा. सु. ३५.५२` — the raw cite is 2 segments and `रा.सु.`'s
+  `ref_structure: [sarga, shloka]` has depth 2 → gated at `seg_count ==
+  hint_depth` → `35.52`, then the prefix yields `5.35.52`. The prefix does not
+  change `hint_depth`.
+- `ब्र. सू. अधि. ४.१.७` — the raw cite is 3 segments and `ब्र.सू.अधि.`'s
+  `ref_structure: [adhyaya, pada, adhikarana]` has depth 3 → gated at
+  `seg_count == hint_depth` → `4.1.7`, then the transform *replaces* the
+  locator via the table (`→ 4.1.13`). Dash-gating never runs on the
+  transformed sutra locator.
+- A range (`locator`/`locator_end`) is only ever decided on the raw segments;
+  prefix and transform are then applied to both endpoints identically.
 
 Known limitation: a range is expressible only on the **final** level. A
 top-level range on a depth-2 target parses as a level separator.
@@ -152,7 +194,9 @@ top-level range on a depth-2 target parses as a level separator.
 via an env-gated bootstrap (`GRANTHA_DATA_TOOLS_LIB`), or a real
 `pip install -e` (preferred when present). The Bazel `md_to_json.py` path is
 wired + unit-tested but **out of scope** for the pilot's end-to-end
-verification.
+verification. **Both import paths must be exercised in CI** (`test_imports_via_both_repos`
+on the producer side; the explorer's bootstrap test) so one path can never
+drift stale while the other produces committed output.
 
 ---
 
@@ -194,8 +238,25 @@ Reason codes: `REF-NOT-IN-LIBRARY` (with `knownInMeta` + Levenshtein
 `nearMatchId`), `REF-RUNTIME-DEPTH-OVERFLOW`, `REF-RUNTIME-UNRESOLVED`.
 
 Per-target suppression: `public/data/reference-suppressions.json`
-(`grantha_ids`, `refs` `"id:locator"`, `codes`). Suppression hides a
-diagnostic from the view; it does not change how the reference renders.
+(`grantha_ids`, `refs` `"id:locator"`, `codes`). **The three axes are OR'd**:
+a diagnostic is suppressed if it matches *any* configured axis. A
+`grantha_ids` entry alone suppresses every code for that target grantha; a
+`codes` entry alone suppresses that code for every target; a `refs` entry
+suppresses one `granthaId:locator` regardless of code. Worked example:
+
+```jsonc
+{
+  "grantha_ids": ["vishnu-purana"],          // all codes for vishnu-purana
+  "refs": ["mundaka-upanishad:1.1"],         // any code for that exact ref
+  "codes": []                                 // no code-level suppression
+}
+```
+
+`(vishnu-purana, 1.2.22, REF-NOT-IN-LIBRARY)` → suppressed (grantha_ids);
+`(mundaka-upanishad, 1.1, REF-RUNTIME-UNRESOLVED)` → suppressed (refs);
+`(katha-upanishad, 1.2.24, REF-RUNTIME-DEPTH-OVERFLOW)` → **not** suppressed.
+Suppression hides a diagnostic from the view; it does not change how the
+reference renders.
 
 ---
 
@@ -215,18 +276,16 @@ diagnostic from the view; it does not change how the reference renders.
 - **Offset convention.** Offsets are Python code points; JS slices UTF-16.
   Verified aligned across the pilot corpus (0 astral chars precede a ref), but
   the spec pins **code-point offsets with a JS-aware splitter** as the durable
-  contract.
+  contract. **Defensive assertion:** the splitter must fail loudly (not
+  silently misalign) if a non-BMP character ever appears in
+  `content.sanskrit.devanagari` — the code-point/UTF-16 coincidence is a
+  property of the current corpus (Devanagari is BMP-only), not an encoding
+  guarantee.
 
 ---
 
 ## 8. Deferred / out of scope
 
-- **Edition-targeted (school/lineage) refs.** Frame as `namespace::symbol`:
-  `ramanuja::भ.गी.` → Rāmānuja's Gītābhāṣya; `sankara::भ.गी.` → Śaṅkara's.
-  Requires a corpus survey first (which citing grantha cites which target,
-  which edition implied). Candidate mechanisms: compile-side namespaced bimap
-  + optional `edition_id` on the artifact (MINOR schema bump), or runtime
-  namespace resolution. Never-guess guard applies.
 - **Adhikarana open questions:** linkability of an adhikarana's *later*
   sutras; whether the adhikarana-artha (topic) intro renders at the anchor.
 - **Mādhyandina / Śatapatha-Mādhyandina:** still needs the actual recension
@@ -234,6 +293,9 @@ diagnostic from the view; it does not change how the reference renders.
 - **Bazel `md_to_json.py`** end-to-end verification (wired + unit-tested only).
 - **Non-final-level ranges**, per-corpus range rules.
 - **Range-aware UI** (currently links to the first verse only).
+
+> School/lineage edition-targeted references are **implemented** — see §10.
+> `docs/DESIGN_SCHOOL_NAMESPACES.md` is the design narrative that §10 distills.
 
 ---
 
@@ -248,4 +310,84 @@ diagnostic from the view; it does not change how the reference renders.
   heuristics.
 - **Verify cross-seam mappings against on-disk data** before committing.
 - **Data > functions** — citation-scheme variations are bimap/table entries,
-  not parser special-cases.
+  not parser special-cases. **`locator_transform` is the deliberate, rare
+  exception to this principle:** only two transforms exist
+  (`katha_continuous_valli`, `brahma_sutra_adhikarana`), each pinned by a
+  golden test, and adding a third requires a code change in `references.py`.
+  The bar for a new transform is that the scheme genuinely cannot be expressed
+  as a static bimap/table entry (a value-dependent rewrite); a scheme that can
+  be a table entry must be one.
+
+---
+
+## 10. School namespaces (implemented)
+
+Edition-targeted (school/lineage) references are **live** (was the deferred
+"Edition-targeted refs" §8 item). Full design narrative:
+`docs/DESIGN_SCHOOL_NAMESPACES.md`.
+
+### 10.1 The model
+
+A citation's *type* is the concrete `(grantha_id, edition_id)`. The producer
+elaborates every cite to that type at compile time; the runtime only answers
+"is this exact (grantha, edition) on disk?" — link or defer. Two separable
+steps:
+
+1. **Name resolution** — overloaded by school. The citing edition's school is
+   declared in its **source frontmatter** (`citation_namespace` in
+   `commentaries_metadata`, or grantha-level for mula-author works like
+   vedarthasangraha). Absent → school-neutral (base table).
+2. **Coercion** — `grantha → default edition` is the single guarded step. It
+   is legal only when the default is attribution-safe: mula, or the citing
+   text's **own** school (design §5 `S == X`). Everything else is a type error
+   → `unresolved` (deferral).
+
+### 10.2 Bimap shape
+
+`data/citation_bimap.yaml` is namespaced:
+
+- `granthas:` — base table (implicit default, checked last). Each grantha has
+  `ref_structure` + `default_school` (its display-default's school, when
+  school-flavored) + `default_edition_id` (the concrete default edition a
+  same-school cite resolves to).
+- `namespaces:` — `ramanuja` / `sankara`. Each has `symbols` (school-only
+  abbreviations like `श्री.भा.`) and `granthas` (per-grantha edition
+  decorators: `grantha_id` → `edition_id`; a deliberately-absent edition id =
+  deferral, never a fallback to another school's default).
+
+### 10.3 Resolution
+
+For a citing edition with school `S` and an abbreviation:
+
+- `S`-namespace symbol → its `edition_id` (present → link, absent → defer).
+- base symbol → its grantha's `default_school`:
+  - `default_school == S` → stamped `default_edition_id` (concrete link).
+  - `default_school ≠ S` and `S` scopes the grantha → `S`'s edition
+    (present → link, absent → defer).
+  - otherwise → edition-less → runtime defers (GR#7).
+
+Same-school stamps make every school→own-school cite concrete; cross-school
+cites without a school edition on disk defer (never another school's default).
+
+### 10.4 Artifact
+
+`reference.edition_id` (optional): the concrete edition. Mula/school-neutral
+refs omit it; school-resolved refs carry it. Single-edition (flat) granthas
+stamp `edition_id == grantha_id`, which the runtime accepts as the flat
+edition's own id (a stray `?e=` from another grantha is still dropped).
+
+### 10.5 Sweep-before-gate enforcement
+
+`scripts/validate-reference-sweep.ts` (run in `validate:data`/`prebuild`)
+fails the build while `EDITION_AWARE_GATE_ENABLED` is true and any ref from a
+school text citing its **own** school's default lacks `edition_id` (the
+producer should have stamped it). Cross-school deferrals and neutral-target
+refs are legitimate GR#7 behavior, not gate-blockers. The gate is currently
+**ON** and the sweep clean.
+
+### 10.6 Reserved absent ids
+
+Deferral-by-absence ids (`brihadaranyaka-madhyandina`, the three
+`*-sankara-bhashya` editions with no on-disk counterpart) are reserved; a
+regression test (`test_reserved_absent_ids.py`) asserts they stay absent so
+ingesting a grantha with such an id is a loud, reviewed change.

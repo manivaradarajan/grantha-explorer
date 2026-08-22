@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "mandukya-upanishad",
   "edition_id": "mandukya-upanishad-sankara-bhashya",
   "part_num": 4,
@@ -1022,11 +1022,12 @@
             "start": 32,
             "end": 49,
             "display_text": "बृ. उ. ४ । ५ । १५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "4.5.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1082,21 +1083,23 @@
             "start": 111,
             "end": 125,
             "display_text": "मा. का. ४ । १५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 150,
             "end": 164,
             "display_text": "मा. का. ४ । १६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.16",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1120,11 +1123,12 @@
             "start": 566,
             "end": 582,
             "display_text": "छा. उ. ६ । ४ । ४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.4.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1180,11 +1184,12 @@
             "start": 29,
             "end": 43,
             "display_text": "मा. का. ४ । २५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.25",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1224,11 +1229,12 @@
             "start": 44,
             "end": 58,
             "display_text": "मा. का. ४ । २५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.25",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1276,11 +1282,12 @@
             "start": 288,
             "end": 304,
             "display_text": "मु. उ. २ । १ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad-sankara-bhashya",
+            "locator": "2.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1320,11 +1327,12 @@
             "start": 511,
             "end": 525,
             "display_text": "मा. का. ३ । १५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "3.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1364,11 +1372,12 @@
             "start": 312,
             "end": 319,
             "display_text": "ई. उ. ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "isavasya-upanishad",
+            "edition_id": "isavasya-upanishad-sankara-bhashya",
+            "locator": "7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1384,11 +1393,12 @@
             "start": 256,
             "end": 270,
             "display_text": "मा. का. ४ । ४५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.45",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1492,11 +1502,12 @@
             "start": 304,
             "end": 320,
             "display_text": "तै. उ. २ । ९ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad-sankara-bhashya",
+            "locator": "2.9.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1568,11 +1579,12 @@
             "start": 155,
             "end": 172,
             "display_text": "बृ. उ. ४ । ३ । १५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "4.3.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1588,21 +1600,23 @@
             "start": 327,
             "end": 341,
             "display_text": "मा. का. १ । १८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "1.18",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 493,
             "end": 507,
             "display_text": "मा. का. ४ । ७२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.72",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1682,11 +1696,12 @@
             "start": 450,
             "end": 465,
             "display_text": "क. उ. १ । २ । ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "katha-upanishad",
+            "edition_id": "katha-upanishad-sankara-bhashya",
+            "locator": "1.2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1718,31 +1733,34 @@
             "start": 83,
             "end": 100,
             "display_text": "बृ. उ. ३ । ८ । १०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "3.8.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 134,
             "end": 151,
             "display_text": "बृ. उ. ४ । ४ । २३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "4.4.23",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 430,
             "end": 443,
             "display_text": "भ. गी. ३ । १८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "3.18",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1862,21 +1880,23 @@
             "start": 325,
             "end": 338,
             "display_text": "मा. का. ४ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mandukya-karika",
+            "edition_id": null,
+            "locator": "4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 594,
             "end": 611,
             "display_text": "बृ. उ. ४ । ३ । २३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "4.3.23",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },

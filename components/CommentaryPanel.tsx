@@ -26,6 +26,8 @@ interface CommentaryPanelProps {
   /** Toggle a subcommentary's expansion. */
   onSubcommentaryToggle: (subcommentaryId: string, isOpen: boolean) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   hideHeader?: boolean;
@@ -43,6 +45,7 @@ export default function CommentaryPanel({
   activeSubcommentaryIds,
   onSubcommentaryToggle,
   availableGranthaIds,
+  granthaById,
   granthaIdToDevanagariTitle,
   hideHeader = false,
 }: CommentaryPanelProps) {
@@ -82,9 +85,10 @@ export default function CommentaryPanel({
         sourcePassageRef: sourcePassageRef ?? "",
         updateHash,
         availableGranthaIds,
+        granthaById,
         granthaIdToTitle,
       }),
-    [grantha.grantha_id, granthaIdToTitle, referenceEditionId, updateHash, availableGranthaIds]
+    [grantha.grantha_id, granthaIdToTitle, referenceEditionId, updateHash, availableGranthaIds, granthaById]
   );
 
   const renderCommentary = (commentary: Commentary) => {

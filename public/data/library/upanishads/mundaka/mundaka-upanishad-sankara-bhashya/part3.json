@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "mundaka-upanishad",
   "edition_id": "mundaka-upanishad-sankara-bhashya",
   "part_num": 3,
@@ -239,21 +239,23 @@
             "start": 1405,
             "end": 1421,
             "display_text": "मु. उ. २ । २ । ५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad-sankara-bhashya",
+            "locator": "2.2.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1441,
             "end": 1457,
             "display_text": "मु. उ. ३ । २ । ६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad-sankara-bhashya",
+            "locator": "3.2.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -269,21 +271,23 @@
             "start": 217,
             "end": 231,
             "display_text": "मो. ध. २५० । ४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "moksadharma",
+            "edition_id": null,
+            "locator": "250.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 576,
             "end": 590,
             "display_text": "प्र. उ. १ । १६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "prashna-upanishad",
+            "edition_id": "prashna-upanishad-sankara-bhashya",
+            "locator": "1.16",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -333,19 +337,7 @@
           "sanskrit": {
             "devanagari": "यस्मात् स वेद जानाति एतत् यथोक्तलक्षणं ब्रह्म परमं प्रकृष्टं धाम सर्वकामानामाश्रयमास्पदम् , यत्र यस्मिन्ब्रह्मणि धाम्नि विश्वं समस्तं जगत् निहितम् अर्पितम् , यच्च स्वेन ज्योतिषा भाति शुभ्रं शुद्धम् , तमप्येवंविधमात्मज्ञं पुरुषं ये हि अकामाः विभूतितृष्णावर्जिता मुमुक्षवः सन्तः उपासते परमिव देवम् , ते शुक्रं नृबीजं यदेतत्प्रसिद्धं शरीरोपादानकारणम् अतिवर्तन्ति अतिगच्छन्ति धीराः बुद्धिमन्तः, न पुनर्योनिं प्रसर्पन्ति ।\n‘न पुनः क्व रतिं करोति’ ( ? )\n इति श्रुतेः । अतस्तं पूजयेदित्यभिप्रायः ॥"
           }
-        },
-        "references": [
-          {
-            "start": 444,
-            "end": 445,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.2.2",
@@ -391,21 +383,12 @@
             "start": 888,
             "end": 902,
             "display_text": "मो. ध. १८१ । ९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "moksadharma",
+            "edition_id": null,
+            "locator": "181.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 935,
-            "end": 936,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -437,11 +420,12 @@
             "start": 733,
             "end": 749,
             "display_text": "मु. उ. २ । २ । ९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad-sankara-bhashya",
+            "locator": "2.2.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },

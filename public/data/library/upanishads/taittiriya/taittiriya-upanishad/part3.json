@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "taittiriya-upanishad",
   "edition_id": "taittiriya-upanishad",
   "part_num": 3,
@@ -287,11 +287,12 @@
             "start": 461,
             "end": 471,
             "display_text": "धा.पा.१०५०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "1050",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       }

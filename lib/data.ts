@@ -101,6 +101,9 @@ export interface Reference {
   display_text: string;
   /** Resolved text id; null ONLY when the abbreviation was undefined (build error). */
   grantha_id: string | null;
+  /** The concrete resolved edition (school-namespace design §4.3). Optional —
+   * pre-sweep 1.3.0 references omit it. Absent = no reading specified. */
+  edition_id?: string | null;
   /** Canonical dotted target; null for a whole-work citation; range → first endpoint. */
   locator: string | null;
   /** Normalized high endpoint, present only for ranges. */
@@ -224,6 +227,10 @@ export interface GranthaMeta {
     abbreviations: {
       devanagari: string[];
     };
+    /** The school of the grantha's display-default edition, when that default
+     *  is a school commentary (school-namespace design §4.1). Declared, and
+     *  cross-validated by the sweep check (§6 check #4). */
+    default_school?: string;
   };
 }
 
