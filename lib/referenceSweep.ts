@@ -16,12 +16,19 @@ export interface CommittedReference {
   targetGranthaId: string | null;
   /** The concrete edition the reference was elaborated to (1.4.0+). */
   editionId?: string | null;
+  /** The citing edition's school namespace ('' = school-neutral). */
+  sourceSchool?: string;
+  /** The target grantha's default school ('' = mula / school-neutral). */
+  targetDefaultSchool?: string;
 }
 
 export interface SweepReadiness {
   /** Whether the edition-aware gate is currently enabled. */
   gateEnabled: boolean;
-  /** References whose target is school-flavored but lack an edition_id. */
+  /** References that SHOULD have been stamped but lack an edition_id —
+   *  same-school-target refs (a school text citing its own school's default)
+   *  that the producer failed to stamp. Cross-school / neutral-target
+   *  deferrals are legitimate and not flagged. */
   unswept: CommittedReference[];
   /** Human-readable report lines (both gate on and off). */
   report: string[];
@@ -33,18 +40,16 @@ export interface SweepReadiness {
  * Check whether the committed reference corpus is swept for the edition-aware
  * gate.
  *
- * A reference is "unswept" when its target grantha is school-flavored (its
- * default reading is a school commentary) and it carries no `edition_id`.
- * Under Ground Rule #7 of the design, such a reference would render
- * unresolved once the gate ships, so it must not exist while the gate is
- * enabled. References to mula / school-neutral targets are always safe
- * (their absent edition resolves to the attribution-safe default) and are
- * never flagged.
+ * A reference is "unswept" (a gate-blocker) when its target grantha's default
+ * is school-flavored, the citing edition is in THAT same school, and the
+ * reference carries no `edition_id` — the producer should have stamped the
+ * same-school default (§5 `S == X`), so its absence is a real gap. References
+ * from a school text to a DIFFERENT school's default (cross-school, no edition
+ * on disk) defer by design (GR#7) and are not gate-blockers; references to
+ * mula / school-neutral targets are always safe.
  *
  * Args:
  *     gateEnabled: Whether the edition-aware runtime gate is enabled.
- *     schoolFlavoredGranthas: Granthas whose default reading is a school
- *         commentary (from `granthas-meta.json` `default_school`).
  *     references: All committed references in the library.
  *
  * Returns:
@@ -53,21 +58,21 @@ export interface SweepReadiness {
  */
 export const checkSweepReadiness = (
   gateEnabled: boolean,
-  schoolFlavoredGranthas: ReadonlySet<string>,
   references: readonly CommittedReference[],
 ): SweepReadiness => {
-  const schoolTargeted = references.filter(
+  const unswept = references.filter(
     (r) =>
       r.targetGranthaId != null &&
-      schoolFlavoredGranthas.has(r.targetGranthaId),
+      r.sourceSchool != null &&
+      r.sourceSchool !== "" &&
+      r.targetDefaultSchool === r.sourceSchool &&
+      !r.editionId,
   );
-  const unswept = schoolTargeted.filter((r) => !r.editionId);
 
   const report: string[] = [];
   report.push(
     `[sweep] ${references.length} references scanned; ` +
-      `${schoolTargeted.length} target school-flavored granthas; ` +
-      `${unswept.length} lack edition_id`,
+      `${unswept.length} same-school-targeted refs lack edition_id`,
   );
   for (const r of unswept.slice(0, 20)) {
     report.push(`[sweep]   ${r.targetGranthaId} (no edition_id)`);

@@ -17,7 +17,7 @@ import { checkSweepReadiness } from '../lib/referenceSweep';
 import type { CommittedReference } from '../lib/referenceSweep';
 
 /** Flip to true in the same change that ships the edition-aware gate. */
-const EDITION_AWARE_GATE_ENABLED = false;
+const EDITION_AWARE_GATE_ENABLED = true;
 
 const root = path.resolve(__dirname, '..');
 const libraryRoot = path.join(root, 'public/data/library');
@@ -55,15 +55,23 @@ const collectJsonFiles = (dir: string): string[] => {
   return results;
 };
 
-/** Collect every committed reference from a grantha/grantha-part payload. */
-const collectReferences = (data: Record<string, unknown>): CommittedReference[] => {
+/** Collect every committed reference from a grantha/grantha-part payload,
+ *  tagging the citing edition's school and the target's default school. */
+const collectReferences = (
+  data: Record<string, unknown>,
+  sourceSchool: string,
+  targetDefaultSchool: (gid: string | null) => string,
+): CommittedReference[] => {
   const refs: CommittedReference[] = [];
   const walkCommentary = (commentary: Record<string, unknown>) => {
     for (const passage of (commentary.passages as Array<Record<string, unknown>>) || []) {
       for (const r of (passage.references as Array<Record<string, unknown>>) || []) {
+        const gid = (r.grantha_id as string | null) ?? null;
         refs.push({
-          targetGranthaId: (r.grantha_id as string | null) ?? null,
+          targetGranthaId: gid,
           editionId: (r.edition_id as string | null | undefined) ?? undefined,
+          sourceSchool,
+          targetDefaultSchool: targetDefaultSchool(gid),
         });
       }
     }
@@ -78,22 +86,55 @@ const collectReferences = (data: Record<string, unknown>): CommittedReference[] 
 
 const main = (): void => {
   const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8')) as Record<string, MetaEntry>;
-  const schoolFlavored = new Set(
-    Object.entries(meta)
-      .filter(([, entry]) => typeof entry.default_school === 'string')
-      .map(([gid]) => gid),
-  );
+  const targetDefaultSchool = (gid: string | null): string => {
+    if (!gid) return '';
+    const entry = meta[gid];
+    return typeof entry?.default_school === 'string' ? entry.default_school : '';
+  };
+
+  // Source edition → school from the frontmatter stamps in grantha-data
+  // (design §4.2 — the source frontmatter is the school authority).
+  // edition derivation mirrors import_editions.edition_id_for_file (strip the
+  // trailing -NN suffix); a flat single-edition file falls back to grantha_id.
+  const sourceSchoolByEdition: Record<string, string> = {};
+  const structuredMdRoot = path.join(root, '..', 'grantha-data', 'structured_md');
+  if (fs.existsSync(structuredMdRoot)) {
+    const editionSuffixRe = /-\d+(?:-\d+)*\.md$/;
+    const walk = (dir: string): void => {
+      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) walk(full);
+        else if (entry.name.endsWith('.md') && !/(SOURCE_ISSUES|README|BUGS|diff_log)/.test(entry.name)) {
+          const text = fs.readFileSync(full, 'utf-8');
+          const fmM = /^---\n([\s\S]*?)\n---/.exec(text);
+          if (!fmM) continue;
+          const fm = fmM[1];
+          const ns = /citation_namespace:\s*(\w+)/.exec(fm)?.[1];
+          if (!ns) continue;
+          const gid = /grantha_id:\s*(\S+)/.exec(fm)?.[1];
+          const derivedEdition = entry.name.replace(editionSuffixRe, '');
+          sourceSchoolByEdition[derivedEdition] = ns;
+          if (gid && gid !== derivedEdition) {
+            // Flat single-edition files: grantha_id is the edition id.
+            sourceSchoolByEdition[gid] = ns;
+          }
+        }
+      }
+    };
+    walk(structuredMdRoot);
+  }
 
   const references: CommittedReference[] = [];
   for (const filePath of collectJsonFiles(libraryRoot)) {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as Record<string, unknown>;
     const kind = classify(data);
     if (kind === 'grantha-part' || kind === 'grantha') {
-      references.push(...collectReferences(data));
+      const editionId = (data.edition_id as string | undefined) ?? (data.grantha_id as string | undefined) ?? '';
+      references.push(...collectReferences(data, sourceSchoolByEdition[editionId] ?? '', targetDefaultSchool));
     }
   }
 
-  const result = checkSweepReadiness(EDITION_AWARE_GATE_ENABLED, schoolFlavored, references);
+  const result = checkSweepReadiness(EDITION_AWARE_GATE_ENABLED, references);
   for (const line of result.report) {
     console.log(line);
   }

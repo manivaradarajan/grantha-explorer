@@ -81,7 +81,13 @@ export const isReferenceLinkable = (
   if (!meta) return false;
   const editionId = reference.edition_id ?? undefined;
   if (editionId) {
-    return (meta.editions ?? []).some((e) => e.edition_id === editionId);
+    const editions = meta.editions;
+    // Single-edition granthas (flat, edition_id == grantha_id) expose no
+    // editions array; the stamped edition IS the grantha itself.
+    if (!editions || editions.length === 0) {
+      return editionId === granthaId;
+    }
+    return editions.some((e) => e.edition_id === editionId);
   }
   return !meta.default_school;
 };
