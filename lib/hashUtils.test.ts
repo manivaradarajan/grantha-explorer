@@ -88,6 +88,7 @@ describe("validateAndNormalizeHash", () => {
 
   const singleEditionGrantha = (): Grantha =>
     ({
+      grantha_id: "g",
       passages: [makePassage("1.1"), makePassage("1.2")],
       prefatory_material: [],
       concluding_material: [],
@@ -131,6 +132,19 @@ describe("validateAndNormalizeHash", () => {
       granthaId: "g",
       verseRef: "1.1",
       needsCorrection: true,
+    });
+  });
+
+  it("keeps an explicit edition_id equal to the single-edition grantha_id", () => {
+    // School-namespace refs carry edition_id == grantha_id on flat granthas;
+    // it is the flat edition's own id, not a stray ?e= — must not pop the
+    // "not found" dialog (regression: sribhashya → svetasvatara:1.8 click).
+    const state: UrlState = { granthaId: "g", verseRef: "1.2", editionId: "g" };
+    expect(validateAndNormalizeHash(state, singleEditionGrantha())).toEqual({
+      granthaId: "g",
+      verseRef: "1.2",
+      editionId: "g",
+      needsCorrection: false,
     });
   });
 

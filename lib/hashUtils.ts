@@ -322,7 +322,12 @@ export function validateAndNormalizeHash(
       }
     }
   } else if (parsed.editionId) {
-    return { ...parsed, editionId: undefined, needsCorrection: true };
+    // Single-edition (flat) grantha: edition_id == grantha_id is the flat
+    // edition's own id — valid (school-namespace refs carry it explicitly),
+    // so keep it. Only a genuinely foreign ?e= is dropped as stray.
+    if (parsed.editionId !== grantha.grantha_id) {
+      return { ...parsed, editionId: undefined, needsCorrection: true };
+    }
   }
 
   // Validate verse ref
