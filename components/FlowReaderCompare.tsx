@@ -388,7 +388,7 @@ export default function FlowReaderCompare({
             <div
               key={passage.ref}
               data-verse-ref={passage.ref}
-              className={`px-4 py-8 cursor-pointer ${
+              className={`px-4 py-8 ${
                 passage.ref === selectedRef ? "bg-gray-50" : ""
               }`}
               onClick={() => onVerseSelect(passage.ref)}

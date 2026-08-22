@@ -62,7 +62,8 @@ tracked in `../grantha-data/structured_md/<text>/BUGS.md` (e.g.
 - When a grantha has no commentary, the commentary pane is hidden (two-panel
   layout).
 - Do not reintroduce scroll-driven focus tracking (see DESIGN.md — it was
-  implemented, tested, and reverted).
+  implemented, tested, and reverted; the flow reader has a documented
+  `replaceState` carve-out, panes mode does not).
 - Run `npm run lint` and the tests (`pytest tests scripts/tests`,
   `npm run validate:data`) after changes that touch data or scripts.
 

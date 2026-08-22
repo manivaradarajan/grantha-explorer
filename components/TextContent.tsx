@@ -196,11 +196,12 @@ export default function TextContent({
                     delete verseRefs.current[uniqueKey];
                   }
                 }}
+                data-verse-ref={passage.ref}
                 onClick={() => {
                   clickedInternally.current = true;
                   onVerseSelect(passage.ref);
                 }}
-                className={`px-4 py-3 mb-4 transition-all duration-150 cursor-pointer hover:bg-gray-100 hover:rounded-lg ${
+                className={`px-4 py-3 mb-4 transition-all duration-150 hover:bg-gray-100 hover:rounded-lg ${
                   isSelected ? "bg-gray-200 rounded-lg" : "bg-white"
                 }`}
               >
