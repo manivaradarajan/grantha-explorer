@@ -45,11 +45,18 @@ const hist = () => page.evaluate(() => history.length);
 const goto = (url) => page.goto(`${BASE}/${url}`, { waitUntil: "networkidle" });
 
 const scrollTo = async (top) => {
+  // Simulate a real user scroll: a wheel gesture (which the reader treats as
+  // user intent to scroll — the gate for scroll→hash) followed by the actual
+  // scrollTop movement. Setting scrollTop alone does not constitute a user
+  // scroll (programmatic aligns and scroll anchoring also move it).
   await page.evaluate((t) => {
     const c = [...document.querySelectorAll(".flow-reader div")].find((d) =>
       d.classList.contains("overflow-y-auto")
     );
-    if (c) c.scrollTop = t;
+    if (c) {
+      c.dispatchEvent(new WheelEvent("wheel", { deltaY: t, bubbles: true }));
+      c.scrollTop = t;
+    }
   }, top);
   await page.waitForTimeout(1200);
 };
@@ -161,6 +168,39 @@ check(
   "compare edition list survives scroll",
   decoded.includes(`e=${EDITION_A},${EDITION_B}`),
   decoded
+);
+
+// 8. Edition deep link: a mid-text verse with a specific edition (e.g. the
+//    sankara bhashya on isavasya mantra 8) must not be rewritten to the first
+//    verse on mount. The mount scrollspy report fires at scrollTop 0 (verse 1)
+//    before the deep-linked verse is aligned to — it must not clobber the URL.
+await goto(
+  `#${COMPARE_GRANTHA}:8?e=${EDITION_B}&m=flow`
+);
+await page.waitForTimeout(3500);
+check(
+  "isavasya 8 + sankara edition deep link stays",
+  (await hash()).includes(`${COMPARE_GRANTHA}:8?`),
+  await hash()
+);
+check(
+  "isavasya 8 deep link keeps the edition",
+  (await hash()).includes(`e=${EDITION_B}`),
+  await hash()
+);
+
+// 9. Multi-part deep link: a verse in a late part (brihadaranyaka 8.3.4 lives
+//    in the final part file, loaded lazily after eager sections 3.x). The hash
+//    must survive the mount report AND the late part load inserting content
+//    above (which shifts verse midpoints / triggers scroll anchoring).
+await goto(
+  "#brihadaranyaka-upanishad:8.3.4?e=brihadaranyaka-upanishad-sankara-bhashya&m=flow"
+);
+await page.waitForTimeout(5000);
+check(
+  "brihadaranyaka 8.3.4 deep link stays",
+  (await hash()).includes("brihadaranyaka-upanishad:8.3.4?"),
+  await hash()
 );
 
 log(`\nPASS: ${pass}  FAIL: ${fail}`);
