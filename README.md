@@ -66,6 +66,14 @@ npm install
 npm run dev
 ```
 
+`npm install` also runs a `postinstall` step that points git at the
+version-controlled hooks (`scripts/hooks/`, `core.hooksPath`). If hooks aren't
+active, set them manually:
+
+```bash
+git config core.hooksPath scripts/hooks
+```
+
 Open http://localhost:3000. The `prebuild` step runs automatically before the
 dev server: it scans `public/data/library/` and regenerates
 `public/data/generated/granthas.json` (auto-generated — never edit it).

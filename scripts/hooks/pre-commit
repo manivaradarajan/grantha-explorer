@@ -1,0 +1,7 @@
+#!/bin/sh
+# Code-map reminder (non-blocking)
+changed=$(git diff --cached --name-only | grep -E '^(components|lib|app|hooks|scripts)/' || true)
+if [ -n "$changed" ]; then
+  echo "Reminder: check docs/CODEMAP.md for entries affected by this commit."
+fi
+exit 0
