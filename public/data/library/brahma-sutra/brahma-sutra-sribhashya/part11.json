@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "brahma-sutra",
   "edition_id": "brahma-sutra-sribhashya",
   "part_num": 11,
@@ -602,51 +602,56 @@
             "start": 428,
             "end": 437,
             "display_text": "मु.३.२.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "3.2.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 679,
             "end": 697,
             "display_text": "छा.१.१.१; बृ.३.४.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1.3.4.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 709,
             "end": 716,
             "display_text": "कठ.६.१७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "katha-upanishad",
+            "edition_id": "katha-upanishad",
+            "locator": "6.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 797,
             "end": 811,
             "display_text": "पूर्व.मी.२.४.९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "purva-mimamsa",
+            "edition_id": null,
+            "locator": "2.4.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 992,
             "end": 1001,
             "display_text": "छा.५.१८.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.18.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ],
         "intro": {
@@ -675,21 +680,23 @@
             "start": 260,
             "end": 269,
             "display_text": "मु.३.२.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "3.2.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 407,
             "end": 414,
             "display_text": "मु.३.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "3.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -705,31 +712,34 @@
             "start": 100,
             "end": 108,
             "display_text": "छा.८.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 156,
             "end": 164,
             "display_text": "छा.८.१.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 356,
             "end": 369,
             "display_text": "तै.नारा.१०.२३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "10.23",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -753,141 +763,155 @@
             "start": 264,
             "end": 272,
             "display_text": "बृ.३.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 333,
             "end": 342,
             "display_text": "बृह.३.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 458,
             "end": 466,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 519,
             "end": 527,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 583,
             "end": 591,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 687,
             "end": 696,
             "display_text": "छां.१.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 753,
             "end": 762,
             "display_text": "छां.१.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 889,
             "end": 898,
             "display_text": "छां.१.२.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1025,
             "end": 1034,
             "display_text": "छां.१.२.८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1855,
             "end": 1863,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1982,
             "end": 1991,
             "display_text": "छां.१.२.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2622,
             "end": 2630,
             "display_text": "बृ.३.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2715,
             "end": 2723,
             "display_text": "छा.१.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2772,
             "end": 2780,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -903,101 +927,111 @@
             "start": 103,
             "end": 111,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 193,
             "end": 202,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 233,
             "end": 241,
             "display_text": "छा.१.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 306,
             "end": 314,
             "display_text": "छा.१-२-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 435,
             "end": 443,
             "display_text": "बृ.३.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 516,
             "end": 524,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 684,
             "end": 693,
             "display_text": "छां.१.२.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 910,
             "end": 918,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 967,
             "end": 975,
             "display_text": "बृ.३.३.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1082,
             "end": 1090,
             "display_text": "बृ.३.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "3.3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1021,11 +1055,12 @@
             "start": 147,
             "end": 155,
             "display_text": "छा.१.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1041,41 +1076,45 @@
             "start": 142,
             "end": 150,
             "display_text": "छा.५.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1305,
             "end": 1313,
             "display_text": "छा.५.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1338,
             "end": 1346,
             "display_text": "बृ.८.१.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1690,
             "end": 1700,
             "display_text": "छां.१.५.१३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.5.13",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1091,11 +1130,12 @@
             "start": 398,
             "end": 407,
             "display_text": "तै.आन.५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ],
         "intro": {
@@ -1116,11 +1156,12 @@
             "start": 268,
             "end": 276,
             "display_text": "तै.आ.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1136,41 +1177,45 @@
             "start": 242,
             "end": 251,
             "display_text": "तै.भृगु.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 316,
             "end": 324,
             "display_text": "तै.आ.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 341,
             "end": 352,
             "display_text": "तै.भृगु.६.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "6.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 865,
             "end": 873,
             "display_text": "कठ.१.३.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "katha-upanishad",
+            "edition_id": "katha-upanishad",
+            "locator": "1.3.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1186,31 +1231,34 @@
             "start": 112,
             "end": 120,
             "display_text": "तै.आ.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 324,
             "end": 332,
             "display_text": "तै.आ.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 412,
             "end": 420,
             "display_text": "तै.आ.२.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "2.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1226,41 +1274,45 @@
             "start": 28,
             "end": 37,
             "display_text": "तै.आन.५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 191,
             "end": 200,
             "display_text": "तै.आन.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 227,
             "end": 236,
             "display_text": "तै.आन.३.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.3.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 315,
             "end": 323,
             "display_text": "तै.आन.५२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.52",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1276,31 +1328,34 @@
             "start": 28,
             "end": 36,
             "display_text": "तै.आ.५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 146,
             "end": 154,
             "display_text": "ऐत.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "aitareya-upanishad",
+            "edition_id": "aitareya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 257,
             "end": 266,
             "display_text": "तै.आन.६.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.6.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1316,21 +1371,23 @@
             "start": 187,
             "end": 196,
             "display_text": "तै.आन.१.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 412,
             "end": 421,
             "display_text": "तै.आन.६.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.6.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1346,101 +1403,111 @@
             "start": 308,
             "end": 316,
             "display_text": "छा.५.२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 347,
             "end": 356,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 497,
             "end": 506,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 572,
             "end": 581,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 692,
             "end": 701,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 758,
             "end": 767,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1156,
             "end": 1165,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1178,
             "end": 1187,
             "display_text": "बृ.८.१.१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.1.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1205,
             "end": 1213,
             "display_text": "छा.५.२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1480,
             "end": 1488,
             "display_text": "छा.५.२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1457,6 +1524,7 @@
             "end": 125,
             "display_text": "वाजसनेयके अग्निरहस्ये १०.६",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1467,6 +1535,7 @@
             "end": 230,
             "display_text": "वाजसनेयके अग्निरहस्ये १०.६",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1476,11 +1545,12 @@
             "start": 443,
             "end": 451,
             "display_text": "बृ.७.६.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.6.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1496,41 +1566,45 @@
             "start": 36,
             "end": 43,
             "display_text": "बृ.७.४२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.42",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 133,
             "end": 141,
             "display_text": "बृ.७.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 256,
             "end": 264,
             "display_text": "बृ.७.५.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 294,
             "end": 302,
             "display_text": "बृ.७.५.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1554,11 +1628,12 @@
             "start": 82,
             "end": 91,
             "display_text": "छां.१.७.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.7.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1574,21 +1649,23 @@
             "start": 780,
             "end": 789,
             "display_text": "छा.३.१४.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.14.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 837,
             "end": 845,
             "display_text": "छा.८.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1604,77 +1681,85 @@
             "start": 118,
             "end": 128,
             "display_text": "तै.नारा.५२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "52",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 222,
             "end": 231,
             "display_text": "छा.३.१६.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.16.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 418,
             "end": 427,
             "display_text": "छा.३.१६.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.16.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 722,
             "end": 732,
             "display_text": "तै.नारा.५२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "52",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1074,
             "end": 1086,
             "display_text": "तै.नारा.५१.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "51.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1147,
             "end": 1158,
             "display_text": "तै.नारा.५२.",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "52",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1189,
             "end": 1197,
             "display_text": "तै.ना.५२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "52",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1354,
             "end": 1367,
             "display_text": "मीमांसान्याय:",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1694,17 +1779,19 @@
             "start": 55,
             "end": 64,
             "display_text": "अथर्व.उ.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "atharva-shikha-upanishad",
+            "edition_id": null,
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 151,
             "end": 165,
             "display_text": "साम.ब्रा.१.१.१",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1714,101 +1801,111 @@
             "start": 229,
             "end": 236,
             "display_text": "तै.शि.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 581,
             "end": 590,
             "display_text": "अथर्व.उ.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "atharva-shikha-upanishad",
+            "edition_id": null,
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 608,
             "end": 619,
             "display_text": "तै.शिक्षा.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 913,
             "end": 918,
             "display_text": "तै.शी",
-            "grantha_id": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 931,
             "end": 938,
             "display_text": "तै.आन.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1180,
             "end": 1191,
             "display_text": "तै.शिक्षा.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1218,
             "end": 1234,
             "display_text": "तै.उ.शिक्षा.१२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "12.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1271,
             "end": 1282,
             "display_text": "तै.भृगु.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1489,
             "end": 1504,
             "display_text": "तै.शिक्षा.१.अनु",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1583,
             "end": 1594,
             "display_text": "तै.शिक्षा.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1824,67 +1921,74 @@
             "start": 124,
             "end": 133,
             "display_text": "छा.८.१३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.13.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 210,
             "end": 218,
             "display_text": "मु.३.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "3.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 403,
             "end": 413,
             "display_text": "कौषी.१.अ.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "1.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2108,
             "end": 2122,
             "display_text": "तै.सं.कां.६.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "6.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2189,
             "end": 2201,
             "display_text": "पू.मी.१०.४.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "purva-mimamsa",
+            "edition_id": null,
+            "locator": "10.4.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2243,
             "end": 2260,
             "display_text": "तै.सं.६.कां.३.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "6.3.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2568,
             "end": 2582,
             "display_text": "जैमि.सू.१०.८.४",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1904,61 +2008,67 @@
             "start": 259,
             "end": 269,
             "display_text": "कौषी.१.३.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "1.3.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 347,
             "end": 357,
             "display_text": "कौषी.१.३.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "1.3.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 530,
             "end": 539,
             "display_text": "छा.८.१.१३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.13",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1216,
             "end": 1226,
             "display_text": "छां.८.१२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.12.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1311,
             "end": 1321,
             "display_text": "छां.६.१२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.12.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1372,
             "end": 1381,
             "display_text": "छा.६.१४.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.14.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1974,21 +2084,23 @@
             "start": 169,
             "end": 179,
             "display_text": "कौषी.१.४.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "1.4.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 232,
             "end": 242,
             "display_text": "कौषी.१.४.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "1.4.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2012,41 +2124,45 @@
             "start": 178,
             "end": 187,
             "display_text": "छा.८.१२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.12.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 227,
             "end": 237,
             "display_text": "छां.८.१२.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.12.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 287,
             "end": 296,
             "display_text": "छा.७.२५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.25.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 323,
             "end": 333,
             "display_text": "छां.७.२६.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.26.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2070,87 +2186,96 @@
             "start": 186,
             "end": 195,
             "display_text": "छा.५.१०.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.10.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 219,
             "end": 228,
             "display_text": "बृ.८.२.१५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.2.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 687,
             "end": 696,
             "display_text": "बृ.८.२.१५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "8.2.15",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 788,
             "end": 797,
             "display_text": "छा.५.१०.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.10.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 970,
             "end": 977,
             "display_text": "तै.आन.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1009,
             "end": 1016,
             "display_text": "छा.७.१७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1197,
             "end": 1204,
             "display_text": "छा.७.१७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1249,
             "end": 1256,
             "display_text": "छा.७.१९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.19",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1370,
             "end": 1377,
             "display_text": "गी.८.२४",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2170,37 +2295,41 @@
             "start": 280,
             "end": 289,
             "display_text": "बृह.५.८.८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.8.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 396,
             "end": 404,
             "display_text": "मु.१.१.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "1.1.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1792,
             "end": 1813,
             "display_text": "ताण्ड्य.ब्रा.२१.१०.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "tandya-brahmana",
+            "edition_id": null,
+            "locator": "21.10.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1960,
             "end": 1971,
             "display_text": "जै.सू.३.२.९",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2210,11 +2339,12 @@
             "start": 2093,
             "end": 2102,
             "display_text": "छा.३.१४.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.14.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2238,181 +2368,199 @@
             "start": 100,
             "end": 108,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 384,
             "end": 392,
             "display_text": "बृ.५.४.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 504,
             "end": 512,
             "display_text": "बृ.५.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 644,
             "end": 652,
             "display_text": "बृ.५.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1722,
             "end": 1730,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1927,
             "end": 1935,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2107,
             "end": 2115,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2205,
             "end": 2214,
             "display_text": "तै.आन.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2314,
             "end": 2322,
             "display_text": "बृ.५.७.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.7.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2366,
             "end": 2375,
             "display_text": "बृ.५.७.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.7.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2474,
             "end": 2482,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2815,
             "end": 2823,
             "display_text": "बृ.५.४.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3049,
             "end": 3058,
             "display_text": "तै.आन.७.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.7.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3240,
             "end": 3248,
             "display_text": "बृ.५.४.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3441,
             "end": 3449,
             "display_text": "छा.६.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3508,
             "end": 3516,
             "display_text": "छा.६.१.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.1.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3547,
             "end": 3555,
             "display_text": "छा.६.५.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.5.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3611,
             "end": 3619,
             "display_text": "छा.६.९.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.9.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2428,31 +2576,34 @@
             "start": 214,
             "end": 222,
             "display_text": "बृ.५.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 349,
             "end": 357,
             "display_text": "बृ.५.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 500,
             "end": 508,
             "display_text": "बृ.५.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "5.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2468,151 +2619,166 @@
             "start": 63,
             "end": 71,
             "display_text": "छा.६.३.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.3.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 98,
             "end": 106,
             "display_text": "छा.६.८.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.8.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 157,
             "end": 165,
             "display_text": "छा.६.९.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.9.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 246,
             "end": 254,
             "display_text": "छा.६.८.७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.8.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 610,
             "end": 619,
             "display_text": "छा.३.१४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.14.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 643,
             "end": 652,
             "display_text": "छा.६.१६.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.16.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 665,
             "end": 675,
             "display_text": "छां.६.१६.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "6.16.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 811,
             "end": 823,
             "display_text": "ब्र.सू.४.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1016,
             "end": 1024,
             "display_text": "बृ.७.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1140,
             "end": 1149,
             "display_text": "बृह.७.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1292,
             "end": 1303,
             "display_text": "शारी.३.३.२१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "3.3.21",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1412,
             "end": 1420,
             "display_text": "बृ.७.५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1487,
             "end": 1495,
             "display_text": "बृ.७.४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1604,
             "end": 1612,
             "display_text": "बृ.४.७.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "4.7.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1708,
             "end": 1716,
             "display_text": "बृ.७.५.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "7.5.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2628,91 +2794,100 @@
             "start": 122,
             "end": 130,
             "display_text": "छा.८.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 262,
             "end": 271,
             "display_text": "बृ।६-४-२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1036,
             "end": 1044,
             "display_text": "छा.८-३-४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.3.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1067,
             "end": 1076,
             "display_text": "बृ.६-४-२५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.25",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1167,
             "end": 1178,
             "display_text": "शारी.१-३-१३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.3.13",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1327,
             "end": 1339,
             "display_text": "तै.ना.११.अनु",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1658,
             "end": 1667,
             "display_text": "बृ.६-४-१९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.19",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1707,
             "end": 1717,
             "display_text": "बृह.६-४-२०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.20",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1761,
             "end": 1770,
             "display_text": "बृ.६-४-२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2728,141 +2903,166 @@
             "start": 98,
             "end": 106,
             "display_text": "छा.८.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 192,
             "end": 200,
             "display_text": "छा.८.१.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 229,
             "end": 238,
             "display_text": "बृ.६.४.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 313,
             "end": 322,
             "display_text": "बृ.६.४.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 544,
             "end": 552,
             "display_text": "छा.८.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 694,
             "end": 703,
             "display_text": "छां.८.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 840,
             "end": 850,
             "display_text": "बृह.६.४.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1140,
             "end": 1149,
             "display_text": "बृ.६.४.१९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.19",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1172,
             "end": 1181,
             "display_text": "बृ.६.४.२०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.20",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1347,
             "end": 1356,
             "display_text": "बृ.६.४.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1615,
             "end": 1624,
             "display_text": "बृ.६.४.२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 1844,
-            "end": 1854,
-            "display_text": "छा.८.१.५,६",
-            "grantha_id": null,
-            "locator": null,
+            "start": 1847,
+            "end": 1852,
+            "display_text": "८.१.५",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.5",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 1853,
+            "end": 1854,
+            "display_text": "६",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.6",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
           },
           {
             "start": 2052,
             "end": 2061,
             "display_text": "छां.८.१.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2235,
             "end": 2243,
             "display_text": "छा.८.३.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.3.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2878,11 +3078,12 @@
             "start": 363,
             "end": 371,
             "display_text": "छा.८.३.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.3.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2898,31 +3099,34 @@
             "start": 29,
             "end": 38,
             "display_text": "छां.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 247,
             "end": 256,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 615,
             "end": 624,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -2938,47 +3142,52 @@
             "start": 69,
             "end": 77,
             "display_text": "छा.८.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 140,
             "end": 149,
             "display_text": "छां.८.१.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 596,
             "end": 604,
             "display_text": "छा.८.१.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "8.1.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 827,
             "end": 836,
             "display_text": "यजु.२.३.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "2.3.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 986,
             "end": 996,
             "display_text": "संक.काण्डे",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2998,37 +3207,41 @@
             "start": 147,
             "end": 154,
             "display_text": "तै.ना.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 518,
             "end": 526,
             "display_text": "तै.ना.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 587,
             "end": 595,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1308,
             "end": 1323,
             "display_text": "जै.मी.सू.३.३.१४",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -3038,71 +3251,78 @@
             "start": 1360,
             "end": 1368,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1554,
             "end": 1562,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1661,
             "end": 1669,
             "display_text": "तै.ना.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1776,
             "end": 1788,
             "display_text": "तै.ना.११.अनु",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1812,
             "end": 1820,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1928,
             "end": 1936,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2030,
             "end": 2038,
             "display_text": "तै.ना.११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3118,21 +3338,23 @@
             "start": 123,
             "end": 134,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 484,
             "end": 495,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3148,11 +3370,12 @@
             "start": 107,
             "end": 119,
             "display_text": "अग्निरहस्यम्",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3168,31 +3391,34 @@
             "start": 250,
             "end": 269,
             "display_text": "अग्निरहस्यम् १०.५.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
+            "locator": "10.5.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 407,
             "end": 426,
             "display_text": "अग्निरहस्यम् १०.५.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
+            "locator": "10.5.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 719,
             "end": 740,
             "display_text": "अग्निरहस्यम् १०.५.३.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
+            "locator": "10.5.3.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3208,41 +3434,45 @@
             "start": 152,
             "end": 163,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 218,
             "end": 229,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 366,
             "end": 377,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 420,
             "end": 431,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3258,17 +3488,19 @@
             "start": 201,
             "end": 212,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 605,
             "end": 617,
             "display_text": "जै.सू.३.५.२१",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -3278,11 +3510,12 @@
             "start": 668,
             "end": 679,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3298,11 +3531,12 @@
             "start": 198,
             "end": 218,
             "display_text": "अग्निरहस्यं - ३०-५-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
+            "locator": "30.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3318,21 +3552,23 @@
             "start": 175,
             "end": 186,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 257,
             "end": 268,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3348,41 +3584,45 @@
             "start": 110,
             "end": 122,
             "display_text": "ब्र.सू.१.४.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "1.4.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 222,
             "end": 234,
             "display_text": "ब्र.सू.४.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 823,
             "end": 833,
             "display_text": "छां.३.१४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.14.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 920,
             "end": 931,
             "display_text": "मुद्गल.उप.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mudgala-upanishad",
+            "edition_id": null,
+            "locator": "3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3398,41 +3638,45 @@
             "start": 305,
             "end": 314,
             "display_text": "छा.३.१४.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "3.14.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 342,
             "end": 355,
             "display_text": "मुद्गल.उप.३.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mudgala-upanishad",
+            "edition_id": null,
+            "locator": "3.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 667,
             "end": 678,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 918,
             "end": 927,
             "display_text": "यजु.२.५.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "2.5.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3448,51 +3692,56 @@
             "start": 29,
             "end": 37,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 66,
             "end": 74,
             "display_text": "छा.२.२.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "2.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 134,
             "end": 147,
             "display_text": "ऐतरेय आ.२.१.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "aitareya-upanishad",
+            "edition_id": "aitareya-upanishad",
+            "locator": "2.1.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 176,
             "end": 187,
             "display_text": "अग्निरहस्यं",
-            "grantha_id": null,
+            "grantha_id": "agnirahasya",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 511,
             "end": 520,
             "display_text": "छां.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3516,151 +3765,177 @@
             "start": 23,
             "end": 33,
             "display_text": "छां.५.११.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 573,
             "end": 583,
             "display_text": "छां.५.११.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 850,
             "end": 860,
             "display_text": "छां.५.१२.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.12.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1013,
             "end": 1022,
             "display_text": "छा.५.१८.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.18.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1310,
             "end": 1319,
             "display_text": "छा.५.१८.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.18.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1433,
             "end": 1441,
             "display_text": "छा.७.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1520,
             "end": 1529,
             "display_text": "छा.७.२५.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.25.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
-            "start": 1807,
-            "end": 1818,
-            "display_text": "छा.५.११.१,२",
-            "grantha_id": null,
-            "locator": null,
+            "start": 1810,
+            "end": 1816,
+            "display_text": "५.११.१",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.1",
             "locator_end": null,
-            "group_id": null,
-            "unresolved": true
+            "group_id": "ref-1",
+            "unresolved": false
+          },
+          {
+            "start": 1817,
+            "end": 1818,
+            "display_text": "२",
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.2",
+            "locator_end": null,
+            "group_id": "ref-1",
+            "unresolved": false
           },
           {
             "start": 1920,
             "end": 1930,
             "display_text": "छां.५.११.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2137,
             "end": 2146,
             "display_text": "छा.५.११.६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.11.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2490,
             "end": 2500,
             "display_text": "यजु.२.२.५ु",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "2.2.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2549,
             "end": 2562,
             "display_text": "यजु.२.२.५ अनु",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "yajurveda",
+            "edition_id": null,
+            "locator": "2.2.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2724,
             "end": 2733,
             "display_text": "छा.५-१२-२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.12.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2772,
             "end": 2782,
             "display_text": "छां.५.१३.२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.13.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 2970,
             "end": 2979,
             "display_text": "छा.७.१६.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.16.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3677,6 +3952,7 @@
             "end": 1045,
             "display_text": "जै.सू.१-१-२",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -3696,31 +3972,34 @@
             "start": 630,
             "end": 639,
             "display_text": "तै.आन.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 688,
             "end": 697,
             "display_text": "तै.आन.८.४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "2.8.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 818,
             "end": 826,
             "display_text": "मु.३.१.३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad",
+            "locator": "3.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3744,51 +4023,56 @@
             "start": 60,
             "end": 68,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 316,
             "end": 327,
             "display_text": "शारी.३.३.४१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "3.3.41",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 430,
             "end": 439,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 652,
             "end": 660,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 758,
             "end": 767,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3804,11 +4088,12 @@
             "start": 49,
             "end": 58,
             "display_text": "छां.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3824,11 +4109,12 @@
             "start": 38,
             "end": 47,
             "display_text": "छां.१.५.५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.5.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3844,21 +4130,23 @@
             "start": 116,
             "end": 124,
             "display_text": "छा.१-१-९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 175,
             "end": 183,
             "display_text": "छा.१.१.९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3874,41 +4162,45 @@
             "start": 180,
             "end": 188,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 309,
             "end": 318,
             "display_text": "छा.१.१.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 439,
             "end": 447,
             "display_text": "छा.१.१.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.1.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 942,
             "end": 952,
             "display_text": "छां.१.२.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "1.2.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -3924,11 +4216,12 @@
             "start": 98,
             "end": 108,
             "display_text": "छा.४.१७.१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "4.17.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       }

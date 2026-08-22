@@ -351,6 +351,24 @@ export default function Home() {
     return map;
   }, [granthas, granthasMeta]);
 
+  // Edition-aware link gate metadata: editions from the index + default_school
+  // from the meta registry (school-namespace design §4.4).
+  const granthaById = useMemo(() => {
+    const map: Record<
+      string,
+      { editions?: { edition_id: string }[]; default_school?: string }
+    > = {};
+    for (const g of granthas) {
+      map[g.id] = { editions: g.editions };
+    }
+    for (const [id, meta] of Object.entries(granthasMeta)) {
+      if (meta.default_school) {
+        map[id] = { ...map[id], default_school: meta.default_school };
+      }
+    }
+    return map;
+  }, [granthas, granthasMeta]);
+
   // Close modal handler
   const handleCloseInvalidVerseModal = () => {
     setShowInvalidVerseModal(false);
@@ -441,6 +459,7 @@ export default function Home() {
           onScriptChange={updateScript}
           updateHash={updateHash}
           availableGranthaIds={granthas.map((g) => g.id)}
+          granthaById={granthaById}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
         />
         <InvalidVerseModal
@@ -470,6 +489,7 @@ export default function Home() {
           updateCommentaryOpen={updateCommentaryOpen}
           activeSubcommentaryIds={subcommentaryIds}
           onSubcommentaryToggle={updateSubcommentary}
+          granthaById={granthaById}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
@@ -501,6 +521,7 @@ export default function Home() {
           updateHash={updateHash}
           activeSubcommentaryIds={subcommentaryIds}
           onSubcommentaryToggle={updateSubcommentary}
+          granthaById={granthaById}
           granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
           granthaIdToLatinTitle={granthaIdToLatinTitle}
           loadPart={loadPart}
@@ -595,6 +616,7 @@ export default function Home() {
               activeSubcommentaryIds={subcommentaryIds}
               onSubcommentaryToggle={updateSubcommentary}
               availableGranthaIds={granthas.map((g) => g.id)}
+              granthaById={granthaById}
               granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
               granthaIdToLatinTitle={granthaIdToLatinTitle}
             />

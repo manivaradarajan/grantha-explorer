@@ -21,6 +21,8 @@ interface TabletLayoutProps {
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   activeSubcommentaryIds?: string;
   onSubcommentaryToggle: (subcommentaryId: string, isOpen: boolean) => void;
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   loadPart: (partId: string) => Promise<void>;
@@ -38,6 +40,7 @@ export default function TabletLayout({
   updateHash,
   activeSubcommentaryIds,
   onSubcommentaryToggle,
+  granthaById,
   granthaIdToDevanagariTitle,
   granthaIdToLatinTitle,
   loadPart,
@@ -198,6 +201,7 @@ export default function TabletLayout({
                 activeSubcommentaryIds={activeSubcommentaryIds}
                 onSubcommentaryToggle={onSubcommentaryToggle}
                 availableGranthaIds={granthas.map((g) => g.id)}
+                granthaById={granthaById}
                 granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 granthaIdToLatinTitle={granthaIdToLatinTitle}
               />

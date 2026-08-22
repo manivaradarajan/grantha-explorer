@@ -15,6 +15,7 @@ import {
   EditionStub,
   Grantha,
   GranthaMetadata,
+  Reference,
   commentaryPassageForRef,
   getAllPassagesForNavigation,
   nextUnloadedPartFirstRef,
@@ -35,7 +36,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
-import { renderCommentaryWithReferences } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -68,6 +69,8 @@ interface FlowReaderProps {
   onScriptChange: (script: "deva" | "roman") => void;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata for the edition-aware link gate. */
+  granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
 }
 
@@ -121,6 +124,7 @@ export default function FlowReader({
   onScriptChange,
   updateHash,
   availableGranthaIds,
+  granthaById,
   granthaIdToDevanagariTitle,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -262,6 +266,36 @@ export default function FlowReader({
   // the auto-scroll effect knows the verse is already in view and must not
   // re-align (which would fight the user's scroll).
   const scrollDrivenSelection = useRef(false);
+  // True once the auto-scroll effect has pinned the current selectedRef (or
+  // recorded a scroll/click-driven target). Until then the URL selection is
+  // authoritative: the scrollspy's initial mount report fires at scrollTop 0
+  // (the first rendered verse) before the deep-linked verse has been aligned
+  // to, and must not rewrite the hash to that first verse. Suppressing scroll→
+  // hash until the selection is pinned keeps deep links, folio jumps, and mode
+  // flips from being clobbered a frame after load.
+  const selectionPinned = useRef(false);
+  // Whether the user has actually scrolled since the last programmatic align.
+  // The scrollspy also fires for programmatic aligns, scroll anchoring,
+  // content insertions, and font-load reflows — none of those are the user
+  // reading, and none may rewrite the URL. Only a real user scroll (wheel /
+  // touch / keyboard / scrollbar drag) opens the gate; the auto-scroll effect
+  // re-arms it whenever it (re)aligns a selection.
+  const userScrolled = useRef(false);
+
+  // A selection change (deep link, cross-reference, back/forward) makes the
+  // URL authoritative again until the new verse is aligned AND the user has
+  // scrolled past that alignment. Without this reset, a hash-only navigation
+  // (the component stays mounted) would inherit the previous reading session's
+  // `userScrolled`/`selectionPinned` state, and a mid-transition scrollspy
+  // report could rewrite the URL to an un-aligned verse. Reset during render
+  // (the "adjust state when a prop changes" pattern), so the gate closes before
+  // any effect or observer can fire.
+  const [prevSelectedRef, setPrevSelectedRef] = useState(selectedRef);
+  if (prevSelectedRef !== selectedRef) {
+    setPrevSelectedRef(selectedRef);
+    selectionPinned.current = false;
+    userScrolled.current = false;
+  }
 
   // Single scrollspy, shared by every consumer (header section, scroll→hash,
   // and the folio marker via the spy sink). A programmatic selection (deep
@@ -314,7 +348,22 @@ export default function FlowReader({
     const section = ref.split(".")[0] ?? ref;
     setViewSection((prev) => (prev === section ? prev : section));
     const onChange = onScrollVerseChangeRef.current;
-    if (onChange && ref !== selectedRefRef.current) {
+    // Scroll→hash must reflect a real user scroll, never an artifact of a
+    // programmatic selection or a content shift. Two windows are excluded:
+    //   - before the auto-scroll effect has pinned the current selection
+    //     (the mount report fires at scrollTop 0, ahead of the deep-linked
+    //     verse's alignment), and
+    //   - while no user scroll has happened since the last programmatic align.
+    //     A late part load or font-load reflow shifts verse midpoints without
+    //     the reader moving, so the scrollspy reports a neighbor verse; the
+    //     URL must keep the deliberate selection. `userScrolled` re-arms on
+    //     every programmatic align and opens only on a real user scroll.
+    if (
+      onChange &&
+      ref !== selectedRefRef.current &&
+      selectionPinned.current &&
+      userScrolled.current
+    ) {
       scrollDrivenSelection.current = true;
       onChange(ref);
     }
@@ -428,6 +477,10 @@ export default function FlowReader({
         container.getBoundingClientRect().top +
         container.scrollTop;
       lastAutoScroll.current = { ref, found: true, targetScrollTop };
+      // Programmatic align: re-arm the scroll→hash gate — the scrollspy will
+      // fire for this scroll and must not rewrite the URL until the user
+      // actually scrolls again.
+      userScrolled.current = false;
       // Set scrollTop directly (equivalent to scrollIntoView block:"start" for
       // the vertical container) so the horizontal swipe track is never moved
       // when the target element sits in a non-primary compare page.
@@ -476,11 +529,14 @@ export default function FlowReader({
 
     if (!element) {
       // Element not mounted yet (part still loading); remember so we retry.
+      // The selection is not pinned — the URL stays authoritative until the
+      // verse appears and is aligned to.
       lastAutoScroll.current = {
         ref: selectedRef,
         found: false,
         targetScrollTop: 0,
       };
+      selectionPinned.current = false;
       return;
     }
 
@@ -502,6 +558,7 @@ export default function FlowReader({
     // New selection (or first mount): align.
     armSpyHold();
     alignVerseToTop(selectedRef);
+    selectionPinned.current = true;
     // `availableWidth` is also a dep: a compare columns↔swipe flip changes
     // the verse layout, so the selected verse re-aligns to the new layout.
   }, [
@@ -596,6 +653,45 @@ export default function FlowReader({
     return () => container.removeEventListener("scroll", handleApproachScroll);
   }, [handleApproachScroll]);
 
+  // Mark real user scrolls. The scrollspy also fires for programmatic aligns,
+  // scroll anchoring, content insertions, and font-load reflows — none of which
+  // may rewrite the URL (the reader did not move). A wheel / touch / keyboard
+  // gesture is the only signal that unambiguously means the user scrolled; the
+  // auto-scroll effect re-arms it (back to false) on every programmatic align.
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const SCROLL_KEYS = new Set([
+      "ArrowUp",
+      "ArrowDown",
+      "PageUp",
+      "PageDown",
+      "Home",
+      "End",
+      " ",
+      "Spacebar",
+    ]);
+    const onWheel = () => {
+      userScrolled.current = true;
+    };
+    const onTouch = () => {
+      userScrolled.current = true;
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (SCROLL_KEYS.has(e.key)) {
+        userScrolled.current = true;
+      }
+    };
+    container.addEventListener("wheel", onWheel, { passive: true });
+    container.addEventListener("touchstart", onTouch, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      container.removeEventListener("wheel", onWheel);
+      container.removeEventListener("touchstart", onTouch);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
   const handleVerseClick = (ref: string) => {
     if (ref !== selectedRef) {
       justClicked.current = true;
@@ -678,6 +774,7 @@ export default function FlowReader({
                   sourcePassageRef: verseRef,
                   updateHash,
                   availableGranthaIds,
+                  granthaById,
                   granthaIdToTitle: granthaIdToDevanagariTitle,
                 },
               )}
@@ -844,6 +941,7 @@ export default function FlowReader({
                   granthaTitleIast={granthaTitleIast}
                   updateHash={updateHash}
                   availableGranthaIds={availableGranthaIds}
+                  granthaById={granthaById}
                   granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
                 />
               ) : (
@@ -921,9 +1019,9 @@ export default function FlowReader({
                         )
                       : undefined;
                   const isSelected = passage.ref === selectedRef;
-                  const mula = stripMarkdown(
-                    passage.content?.sanskrit?.devanagari,
-                  );
+                  const rawMula = passage.content?.sanskrit?.devanagari;
+                  const mula = stripMarkdown(rawMula);
+                  const mulaRefs = (passage as { references?: Reference[] }).references;
                   const introText = cp?.intro?.sanskrit?.devanagari;
 
                   return (
@@ -962,7 +1060,25 @@ export default function FlowReader({
                               )}
                               {mula && (
                                 <p className="verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line">
-                                  {withVerseNumber(mula, passage.ref)}
+                                  {mulaRefs && mulaRefs.length > 0 ? (
+                                    <>
+                                      {renderMulaWithReferences(
+                                        rawMula ?? "",
+                                        mulaRefs,
+                                        {
+                                          currentGranthaId: grantha.grantha_id,
+                                          sourcePassageRef: passage.ref,
+                                          updateHash,
+                                          availableGranthaIds,
+                                          granthaById,
+                                          granthaIdToTitle: granthaIdToDevanagariTitle,
+                                        },
+                                      )}
+                                      {" "}॥ {toDevanagariNumerals(passage.ref)} ॥
+                                    </>
+                                  ) : (
+                                    withVerseNumber(mula, passage.ref)
+                                  )}
                                 </p>
                               )}
                             </div>
@@ -1002,6 +1118,7 @@ export default function FlowReader({
                                   sourcePassageRef: passage.ref,
                                   updateHash,
                                   availableGranthaIds,
+                                  granthaById,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,
                                 },
                               )}

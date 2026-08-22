@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "prashna-upanishad",
   "edition_id": "prashna-upanishad",
   "part_num": 1,
@@ -21,7 +21,20 @@
         "sanskrit": {
           "devanagari": "तान् ह स ऋषिरुवाच, भूय एव तपसा ब्रह्मचर्येण श्रद्धया संवत्सरं संवत्स्यथ । यथाकामं प्रश्नान् पृच्छत (थ) । यदि विज्ञास्यामः, सर्वं ह वो वक्ष्याम इति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 100,
+          "end": 101,
+          "display_text": "थ",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "1.3",
@@ -171,6 +184,7 @@
             "end": 779,
             "display_text": "अ.को. ३-३-११४",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -222,11 +236,12 @@
             "start": 1205,
             "end": 1216,
             "display_text": "ऐ.उ. १-३-१४",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
+            "grantha_id": "aitareya-upanishad",
+            "edition_id": "aitareya-upanishad",
+            "locator": "1.3",
+            "locator_end": "1.14",
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -250,21 +265,23 @@
             "start": 313,
             "end": 322,
             "display_text": "तै.ना. ९९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "99",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 419,
             "end": 430,
             "display_text": "भ.गी. १५-१४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "15.14",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -280,21 +297,23 @@
             "start": 844,
             "end": 856,
             "display_text": "छा.उ. ५-१०-३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "5.10.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1389,
             "end": 1399,
             "display_text": "भ.गी. ८-२५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "8.25",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -310,57 +329,63 @@
             "start": 80,
             "end": 92,
             "display_text": "बृ.उ. ६-४-२२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad",
+            "locator": "6.4.22",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 353,
             "end": 366,
             "display_text": "छां.उ. ४-१५-५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "4.15.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 778,
             "end": 788,
             "display_text": "कौ.उ. ३-६१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad",
+            "locator": "3.61",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 975,
             "end": 985,
             "display_text": "भ.गी. ८-१६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "8.16",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1091,
             "end": 1100,
             "display_text": "प्र.उ.१-४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "prashna-upanishad",
+            "edition_id": "prashna-upanishad",
+            "locator": "1.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1412,
             "end": 1417,
             "display_text": "१-४-८",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -413,6 +438,7 @@
             "end": 545,
             "display_text": "हितो. मित्रलाभे – १०२",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

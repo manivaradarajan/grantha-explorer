@@ -43,6 +43,55 @@ export const isReferenceInLibrary = (
   availableGranthaIds: string[],
 ): boolean => new Set(availableGranthaIds).has(granthaId);
 
+/** The per-grantha metadata the link gate needs (editions + school default). */
+export interface ReferenceTargetMeta {
+  /** Available editions for a multi-edition grantha; absent for single-edition. */
+  editions?: { edition_id: string }[];
+  /** The school of the grantha's display-default edition, when school-flavored. */
+  default_school?: string;
+}
+
+/**
+ * Edition-aware link gate (design §4.4 / Ground Rule #7).
+ *
+ * A reference is linkable iff the target grantha is on disk AND either:
+ *   - it carries a concrete `edition_id` that the grantha exposes, or
+ *   - it is edition-less AND the grantha's display default is attribution-safe
+ *     (no `default_school` — i.e. mula / school-neutral).
+ * An edition-less reference to a school-flavored-default grantha is deferred
+ * (unresolved), never silently defaulted to another school's commentary. This
+ * is the single gate for both pre-sweep (1.3.0, no edition_id) and post-sweep
+ * (1.4.0) content; the runtime never branches on schema version.
+ *
+ * Args:
+ *     reference: The reference to gate.
+ *     granthaById: Metadata keyed by grantha id, from the grantha index
+ *         (editions) + granthas-meta.json (default_school).
+ *
+ * Returns:
+ *     True when the reference's concrete target is linkable.
+ */
+export const isReferenceLinkable = (
+  reference: Reference,
+  granthaById: Record<string, ReferenceTargetMeta>,
+): boolean => {
+  const granthaId = reference.grantha_id;
+  if (!granthaId) return false;
+  const meta = granthaById[granthaId];
+  if (!meta) return false;
+  const editionId = reference.edition_id ?? undefined;
+  if (editionId) {
+    const editions = meta.editions;
+    // Single-edition granthas (flat, edition_id == grantha_id) expose no
+    // editions array; the stamped edition IS the grantha itself.
+    if (!editions || editions.length === 0) {
+      return editionId === granthaId;
+    }
+    return editions.some((e) => e.edition_id === editionId);
+  }
+  return !meta.default_school;
+};
+
 /**
  * Resolve a reference's locator against a loaded target grantha (§5).
  *
@@ -162,7 +211,7 @@ export const getPassagePreview = async (
     return "Reference not available in this library.";
   }
   try {
-    const target = await loadGrantha(granthaId);
+    const target = await loadGrantha(granthaId, reference.edition_id ?? undefined);
     const resolution = resolveReferenceTarget(target, reference.locator);
     if (resolution.kind !== "passage") {
       return null;

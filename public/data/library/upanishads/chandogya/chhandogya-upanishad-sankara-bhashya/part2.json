@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "chhandogya-upanishad",
   "edition_id": "chhandogya-upanishad-sankara-bhashya",
   "part_num": 2,
@@ -764,11 +764,12 @@
             "start": 550,
             "end": 566,
             "display_text": "छा. उ. २ । १ । ४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "2.1.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -808,11 +809,12 @@
             "start": 665,
             "end": 681,
             "display_text": "छा. उ. २ । १ । ४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "2.1.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -886,19 +888,7 @@
           "sanskrit": {
             "devanagari": "पशुषु पञ्चविधं साम उपासीत । संयग्वृत्तेष्वृतुषु पशव्यः काल इत्यानन्तर्यम् । अजा हिङ्कारः, प्राधान्यात् , प्राथम्याद्वा —\n‘अजः पशूनां प्रथमः’ ( ? )\n इति श्रुतेः ; अवयः प्रस्तावः, साहचर्यदर्शनादजावीनाम् ; गाव उद्गीथः, श्रैष्ठ्यात् ; अश्वाः प्रतिहारः, प्रतिहारणात्पुरुषाणाम् ; पुरुषो निधनम् , पुरुषाश्रयत्वात्पशूनाम् ॥"
           }
-        },
-        "references": [
-          {
-            "start": 143,
-            "end": 144,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.6.2",
@@ -1056,21 +1046,23 @@
             "start": 166,
             "end": 180,
             "display_text": "ऐ. ब्रा. ४ । ५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "aitareya-brahmana",
+            "edition_id": null,
+            "locator": "4.5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 185,
             "end": 207,
             "display_text": "तां. ब्रा. १० । १ । १०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "tandya-brahmana",
+            "edition_id": null,
+            "locator": "10.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1240,19 +1232,7 @@
           "sanskrit": {
             "devanagari": "विद्वत्फलम् — एतासामेवाग्न्यादीनां देवतानां सलोकतां समानलोकतां सार्ष्टितां समानर्द्धित्वं सायुज्यं सयुग्भावम् एकदेहदेहित्वमित्येतत् , वा - शब्दोऽत्र लुप्तो द्रष्टव्यः ; सलोकतां वा इत्यादि ; भावनाविशेषतः फलविशेषोपपत्तेः । गच्छति प्राप्नोति ; समुच्चयानुपपत्तेश्च । ब्राह्मणान् न निन्देत् , तद्व्रतम् ।\n‘एते वै देवाः प्रत्यक्षं यद्ब्राह्मणाः’ ( ? )\n इति श्रुतेः ब्राह्मणनिन्दा देवतानिन्दैवेति ॥"
           }
-        },
-        "references": [
-          {
-            "start": 342,
-            "end": 343,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.21.1",
@@ -1338,151 +1318,166 @@
             "start": 1889,
             "end": 1905,
             "display_text": "क. उ. १ । २ । १६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "katha-upanishad",
+            "edition_id": "katha-upanishad-sankara-bhashya",
+            "locator": "1.2.16",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3364,
             "end": 3380,
             "display_text": "छा. उ. ६ । २ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3403,
             "end": 3420,
             "display_text": "छा. उ. ७ । २६ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "7.26.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3801,
             "end": 3817,
             "display_text": "छा. उ. ६ । २ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3833,
             "end": 3849,
             "display_text": "छा. उ. ६ । ८ । ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.8.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 3871,
             "end": 3887,
             "display_text": "छा. उ. ६ । १ । ४",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.1.4",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 5893,
             "end": 5910,
             "display_text": "बृ. उ. १ । ४ । १७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "1.4.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7477,
             "end": 7485,
             "display_text": "जा. उ. ५",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "jabala-upanishad",
+            "edition_id": null,
+            "locator": "5",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7536,
             "end": 7551,
             "display_text": "श्वे. उ. ६ । २१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": "svetasvatara-upanishad-sankara-bhashya",
+            "locator": "6.21",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7607,
             "end": 7621,
             "display_text": "मो. ध. २४२ । ९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "moksadharma",
+            "edition_id": null,
+            "locator": "242.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7692,
             "end": 7706,
             "display_text": "मो. ध. २४१ । ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "moksadharma",
+            "edition_id": null,
+            "locator": "241.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7746,
             "end": 7759,
             "display_text": "अश्व. ४६ । ५१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "asvalayana-shrauta-sutra",
+            "edition_id": null,
+            "locator": "46.51",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 7763,
             "end": 7773,
             "display_text": "व. १० । १२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "va",
+            "edition_id": null,
+            "locator": "10.12",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 8324,
             "end": 8341,
             "display_text": "तै. सं. १ । ५ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-samhita",
+            "edition_id": null,
+            "locator": "1.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 8439,
             "end": 8455,
             "display_text": "छा. उ. ६ । ४ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.4.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1506,11 +1501,12 @@
             "start": 295,
             "end": 310,
             "display_text": "ऐ. आ. २ । ३ । ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "aitareya-aranyaka",
+            "edition_id": null,
+            "locator": "2.3.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1528,19 +1524,7 @@
           "sanskrit": {
             "devanagari": "अतः क्व तर्हि यजमानस्य लोकः, यदर्थं यजते ; न क्वचिल्लोकोऽस्तीत्यभिप्रायः —\n‘लोकाय वै यजते यो यजते’ ( ? )\n इति श्रुतेः । लोकाभावे च स यो यजमानः तं लोकस्वीकरणोपायं सामहोममन्त्रोत्थानलक्षणं न विद्यात् न विजानीयात् , सोऽज्ञः कथं कुर्यात् यज्ञम् , न कथञ्चन तस्य कर्तृत्वमुपपद्यत इत्यर्थः । सामादिविज्ञानस्तुतिपरत्वात् न अविदुषः कर्तृत्वं कर्ममात्रविदः प्रतिषिध्यते — स्तुतये च सामादिविज्ञानस्य, अविद्वत्कर्तृत्वप्रतिषेधाय च इति हि भिद्येत वाक्यम् । आद्ये च औषस्त्ये काण्डे अविदुषोऽपि कर्मास्तीति हेतुमवोचाम । अथ एतद्वक्ष्यमाणं सामाद्युपायं विद्वान्कुर्यात् ॥"
           }
-        },
-        "references": [
-          {
-            "start": 101,
-            "end": 102,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.24.3",

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "kena-upanishad",
   "edition_id": "kena-upanishad",
   "part_num": 1,
@@ -161,7 +161,20 @@
         "sanskrit": {
           "devanagari": "तद्धेषां विजज्ञौ । तेभ्यो ह प्रादुर्बभूव । तन्न व्यजानत(न्त) किमिदं यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 56,
+          "end": 59,
+          "display_text": "न्त",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.3",
@@ -197,7 +210,20 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ, एतद्दहेति। तदुपप्रेयाय सर्वजवेन । तन्न शशाक दग्धुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुम्, यदेतद्यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 94,
+          "end": 97,
+          "display_text": "नैन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.7",
@@ -233,7 +259,20 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ एतदादत्स्वेति । तदुपप्रेयाय सर्वजवेन । तन्न शशाकाऽऽदातुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुं, यदेतद्यक्षमिति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 99,
+          "end": 102,
+          "display_text": "नैन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.11",
@@ -269,7 +308,20 @@
         "sanskrit": {
           "devanagari": "तस्माद्वा एते देवा अतितरामिवान्यान् देवान्। यदग्निर्वायुरिन्द्रः । ते ह्येनन्नेदिष्ठं पस्पृशुः । ते (स) ह्येनत् प्रथमो विदाञ्चकार ब्रह्मेति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 101,
+          "end": 102,
+          "display_text": "स",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.3",
@@ -287,7 +339,20 @@
         "sanskrit": {
           "devanagari": "तस्यैष आदेशो यदेतद्विद्युतो व्यद्युतदा इति, इन्न्यमिष (मीमिष)दा इत्यधिदैवतम् ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 55,
+          "end": 60,
+          "display_text": "मीमिष",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.5",
@@ -296,7 +361,42 @@
         "sanskrit": {
           "devanagari": "अथाध्यात्मम्, यदेत (न)दगच्छतीव च मनो न (मनोऽनेन) चैन(त) दुपस्मरत्यभीक्ष्णं सङ्कल्पः ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 20,
+          "end": 21,
+          "display_text": "न",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        },
+        {
+          "start": 40,
+          "end": 47,
+          "display_text": "मनोऽनेन",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        },
+        {
+          "start": 53,
+          "end": 54,
+          "display_text": "त",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.6",
@@ -358,19 +458,7 @@
           "sanskrit": {
             "devanagari": "श्रीरङ्गरामानुजमुनिविरचिता\n\n\n\nयेनोपनिषदां भाष्यं रामानुजमतानुगम् ।\nरम्यं कृतं प्रपद्ये तं रङ्गरामानुजं मुनिम् ।\n\n\n\nअतसीगुच्छसच्छायमञ्चितोरसंस्थलं श्रिया।\nअञ्जनाचलश्रृङ्गारमञ्जलिर्मम गाहताम् ।।\nव्यासं लक्ष्मणयोगीन्द्र प्रणम्यान्यान् गुरूनपि ।\nव्याख्यां तलवकारोपनिषदः करवाण्यहम् ।\n\n\n\nपरमात्मस्वरूपं प्रश्नप्रतिवचनरूपप्रकारेण प्रकाशयितुं प्रस्तौति- **‘केनेषितं पतति प्रेषितं मनः केन प्राणः प्रथमः प्रैति युक्तः । केनेषितां वाचमिमां वदन्ति चक्षुःश्रोत्रं क उ देवो युनक्ति’** । मनः केन वा (?) प्रेषितम् – प्रेरितं सत् स्वविषये प्रवर्तत इति भावः ।। इषितम् – इष्टम्; मतम् । प्राणानां मध्ये प्रथमः प्राणः – मुख्यः प्राणः केन प्रेरितस्सन् प्रैति – प्रकर्षण सञ्चरति । तथा, केन वा प्रेरिताम्’ इमां वाचम् – वागिन्द्रियमवलंब्य व्यवहरन्ति लोकाः । तथा चक्षुःश्रोत्रयोश्च कः प्रेरकः? अचेतनानामेषां चेतनाप्रेरितानां कार्यकरत्वासम्भवात् इति गुरुमुपेत्य शिष्यः पप्रच्छ इत्यर्थः ।।"
           }
-        },
-        "references": [
-          {
-            "start": 485,
-            "end": 486,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.2",
@@ -465,6 +553,7 @@
             "end": 48,
             "display_text": "यस्तु",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -474,31 +563,34 @@
             "start": 397,
             "end": 405,
             "display_text": "तै.उ.आ.9",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 874,
             "end": 882,
             "display_text": "तै.उ.आ.1",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-upanishad",
+            "edition_id": "taittiriya-upanishad",
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 919,
             "end": 929,
             "display_text": "श्वे.उ.3.8",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": "svetasvatara-upanishad",
+            "locator": "3.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -514,11 +606,12 @@
             "start": 372,
             "end": 382,
             "display_text": "तै.ना. 84.",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
+            "locator": "84",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -535,6 +628,7 @@
             "end": 180,
             "display_text": "अत्र",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -544,11 +638,12 @@
             "start": 302,
             "end": 308,
             "display_text": "तै.आ.6",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "taittiriya-aranyaka",
+            "edition_id": null,
+            "locator": "6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -653,6 +748,7 @@
             "end": 241,
             "display_text": "मीमि",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -663,6 +759,7 @@
             "end": 338,
             "display_text": "न्यमीमिषत्",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -673,6 +770,7 @@
             "end": 449,
             "display_text": "र्थ?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

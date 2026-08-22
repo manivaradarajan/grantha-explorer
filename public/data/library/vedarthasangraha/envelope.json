@@ -1,0 +1,20 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.4.0",
+  "edition_id": "vedarthasangraha",
+  "grantha_id": "vedarthasangraha",
+  "structure_levels": [
+    {
+      "key": "Para",
+      "scriptNames": {
+        "devanagari": "पाठः"
+      }
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1"
+    }
+  ]
+}

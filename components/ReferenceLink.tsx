@@ -3,7 +3,12 @@
 import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { loadGrantha } from '../lib/data';
-import { getPassagePreview, isReferenceInLibrary, resolveReferenceTarget } from '../lib/references';
+import {
+  getPassagePreview,
+  isReferenceLinkable,
+  resolveReferenceTarget,
+  type ReferenceTargetMeta,
+} from '../lib/references';
 import { toDevanagariNumerals } from '../lib/stringUtils';
 import {
   addReferenceDiagnostic,
@@ -22,6 +27,8 @@ interface ReferenceLinkProps {
   sourcePassageRef: string;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
+  /** Per-grantha target metadata (editions + default_school) for the edition-aware gate. */
+  granthaById: Record<string, ReferenceTargetMeta>;
   granthaIdToTitle: Record<string, string>;
 }
 
@@ -39,7 +46,7 @@ const TOOLTIP_GAP = 8;
  * target (plan §5): exact leaf, section, whole-work root, or a runtime
  * diagnostic. Same-grantha references preserve the active edition.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, updateHash, availableGranthaIds, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipReady, setTooltipReady] = useState(false);
   const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
@@ -60,9 +67,11 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     ? toDevanagariNumerals(reference.locator)
     : "whole work";
   const renderPlain = !reference.grantha_id || reference.unresolved;
-  const isInLibrary =
+  // The edition-aware gate: linkable iff the concrete (grantha, edition) is on
+  // disk, or the edition-less target's default is attribution-safe.
+  const linkable =
     reference.grantha_id != null &&
-    isReferenceInLibrary(reference.grantha_id, availableGranthaIds);
+    isReferenceLinkable(reference, granthaById);
 
   // Detect if device supports touch
   useEffect(() => {
@@ -132,8 +141,9 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       return;
     }
     if (!reference.grantha_id) return;
-    if (!isInLibrary) {
-      // Not in the library: same — show the work + location, no "not yet
+    if (!linkable) {
+      // Not linkable (not in library, or absent edition / school-flavored
+      // default without an edition): show the work + location, no "not yet
       // available" line.
       setTooltipContent(renderTooltip(null));
       return;
@@ -150,7 +160,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
           : <p className="tooltip-passage text-gray-400">no preview</p>,
       ),
     );
-  }, [reference, renderPlain, isInLibrary, availableGranthaIds, renderTooltip]);
+  }, [reference, renderPlain, linkable, availableGranthaIds, renderTooltip]);
 
   // Load content FIRST, then show: the card only ever appears fully measured
   // (opacity 0 until the layout effect positions it), eliminating the flicker.
@@ -247,13 +257,18 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   const navigate = useCallback(async () => {
     if (!reference.grantha_id) return;
     try {
-      const target = await loadGrantha(reference.grantha_id);
+      const target = await loadGrantha(
+        reference.grantha_id,
+        reference.edition_id ?? undefined,
+      );
       const resolution = resolveReferenceTarget(target, reference.locator);
       if (resolution.kind === "passage" || resolution.kind === "root") {
         updateHash(
           reference.grantha_id,
           resolution.ref,
-          reference.grantha_id === currentGranthaId ? editionId : undefined,
+          reference.grantha_id === currentGranthaId
+            ? editionId
+            : reference.edition_id ?? undefined,
         );
       } else {
         recordDiagnostic(resolution.code);
@@ -301,7 +316,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     e.stopPropagation();
     if (!reference.grantha_id) return;
 
-    if (isInLibrary) {
+    if (linkable) {
       if (isTouchDevice.current) {
         // First tap previews; second tap navigates.
         if (previewedRef.current) {
@@ -333,7 +348,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     return <span className="reference-unresolved">{reference.display_text}</span>;
   }
 
-  const linkClassName = `reference-link ${!isInLibrary ? 'external-reference' : ''}`;
+  const linkClassName = `reference-link ${!linkable ? 'external-reference' : ''}`;
   const targetHash = `${reference.grantha_id}:${reference.locator ?? "1"}`;
 
   return (

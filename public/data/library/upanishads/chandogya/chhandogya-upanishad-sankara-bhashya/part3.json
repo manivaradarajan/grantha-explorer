@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "chhandogya-upanishad",
   "edition_id": "chhandogya-upanishad-sankara-bhashya",
   "part_num": 3,
@@ -875,19 +875,7 @@
           "sanskrit": {
             "devanagari": "‘असौ वा आदित्यः’ इत्यादि अध्यायारम्भे सम्बन्धः । अतीतानन्तराध्यायान्ते उक्तम् ‘यज्ञस्य मात्रां वेद’ इति । यज्ञविषयाणि च सामहोममन्त्रोत्थानानि विशिष्टफलप्राप्तये यज्ञाङ्गभूतान्युपदिष्टानि । सर्वयज्ञानां च कार्यनिर्वृत्तिरूपः सविता महत्या श्रिया दीप्यते । स एष सर्वप्राणिकर्मफलभूतः प्रत्यक्षं सर्वैरुपजीव्यते । अतो यज्ञव्यपदेशानन्तरं तत्कार्यभूतसवितृविषयमुपासनं सर्वपुरुषार्थेभ्यः श्रेष्ठतमफलं विधास्यामीत्येवमारभते श्रुतिः —\n\nअसौ वा आदित्यो देवमध्वित्यादि । देवानां मोदनात् मध्विव मधु असौ आदित्यः । वस्वादीनां च मोदनहेतुत्वं वक्ष्यति सर्वयज्ञफलरूपत्वादादित्यस्य । कथं मधुत्वमिति, आह — तस्य मधुनः द्यौरेव भ्रामरस्येव मधुनः तिरश्चीनवंशः तिरश्चीनश्चासौ वंशश्चेति तिरश्चीनवंशः । तिर्यग्गतेव हि द्यौर्लक्ष्यते । अन्तरिक्षं च मध्वपूपः द्युवंशे लग्नः सन् लम्बत इव, अतो मध्वपूपसामान्यात् अन्तरिक्षं मध्वपूपः, मधुनः सवितुराश्रयत्वाच्च । मरीचयः रश्मयः रश्मिस्था आपो भौमाः सवित्राकृष्टाः ।\n‘एता वा आपः स्वराजो यन्मरीचयः’ ( ? )\n इति हि विज्ञायन्ते । ता अन्तरिक्षमध्वपूपस्थरश्म्यन्तर्गतत्वात् भ्रमरबीजभूताः पुत्रा इव हिता लक्ष्यन्त इति पुत्रा इव पुत्राः, मध्वपूपनाड्यन्तर्गता हि भ्रमरपुत्राः ॥"
           }
-        },
-        "references": [
-          {
-            "start": 911,
-            "end": 912,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.1.2",
@@ -973,51 +961,56 @@
             "start": 166,
             "end": 182,
             "display_text": "छा. उ. ३ । १ । ३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "3.1.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 186,
             "end": 202,
             "display_text": "छा. उ. ३ । २ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "3.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 205,
             "end": 221,
             "display_text": "छा. उ. ३ । ३ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "3.3.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 224,
             "end": 240,
             "display_text": "छा. उ. ३ । ४ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "3.4.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 243,
             "end": 259,
             "display_text": "छा. उ. ३ । ५ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "3.5.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1129,11 +1122,12 @@
             "start": 158,
             "end": 174,
             "display_text": "बृ. उ. २ । ३ । ६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "2.3.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1165,21 +1159,23 @@
             "start": 248,
             "end": 265,
             "display_text": "छा. उ. ७ । १५ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "7.15.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 289,
             "end": 306,
             "display_text": "छा. उ. ८ । १५ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "8.15.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1221,19 +1217,7 @@
           "sanskrit": {
             "devanagari": "अयं वाव सः, योऽयमन्तर्हृदये हृदयपुण्डरीके आकाशः । कथमेकस्य सत आकाशस्य त्रिधा भेद इति, उच्यते — बाह्येन्द्रियविषये जागरितस्थाने नभसि दुःखबाहुल्यं दृश्यते । ततोऽन्तःशरीरे स्वप्नस्थानभूते मन्दतरं दुःखं भवति । स्वप्नान्पश्यतो हृदयस्थे पुनर्नभसि न कञ्चन कामं कामयते न कञ्चन स्वप्नं पश्यति । अतः सर्वदुःखनिवृत्तिरूपमाकाशं सुषुप्तस्थानम् । अतो युक्तमेकस्यापि त्रिधा भेदान्वाख्यानम् । बहिर्धा पुरुषादारभ्य आकाशस्य हृदये सङ्कोचकरणं चेतःसमाधानस्थानस्तुतये — यथा\n‘त्रयाणामपि लोकानां कुरुक्षेत्रं विशिष्यते । अर्धतस्तु कुरुक्षेत्रमर्धतस्तु पृथूदकम्’ ( ? )\n इति, तद्वत् । तदेतद्धार्दाकाशाख्यं ब्रह्म पूर्णं सर्वगतम् , न हृदयमात्रपरिच्छिन्नमिति मन्तव्यम् , यद्यपि हृदयाकाशे चेतः समाधीयते । अप्रवर्ति न कुतश्चित्क्वचित्प्रवर्तितुं शीलमस्येत्यप्रवर्ति, तदनुच्छित्तिधर्मकम् । यथा अन्यानि भूतानि परिच्छिन्नान्युच्छित्तिधर्मकाणि, न तथा हार्दं नभः । पूर्णामप्रवर्तिनीमनुच्छेदात्मिकां श्रियं विभूतिं गुणफलं लभते दृष्टम् । य एवं यथोक्तं पूर्णाप्रवर्तिगुणं ब्रह्म वेद जानाति इहैव जीवन् तद्भावं प्रतिपद्यत इत्यर्थः ॥"
           }
-        },
-        "references": [
-          {
-            "start": 540,
-            "end": 541,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.13.1",
@@ -1247,21 +1231,23 @@
             "start": 617,
             "end": 630,
             "display_text": "प्र. उ. ३ । ८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "prashna-upanishad",
+            "edition_id": "prashna-upanishad-sankara-bhashya",
+            "locator": "3.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 726,
             "end": 743,
             "display_text": "बृ. उ. ३ । ९ । २०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "3.9.20",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1293,11 +1279,12 @@
             "start": 197,
             "end": 208,
             "display_text": "ऐ. आ. २ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "aitareya-aranyaka",
+            "edition_id": null,
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1345,11 +1332,12 @@
             "start": 1401,
             "end": 1413,
             "display_text": "भ. गी. ८ । ६",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "8.6",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1365,81 +1353,89 @@
             "start": 261,
             "end": 273,
             "display_text": "कौ. उ. ३ । ३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "kaushitaki-upanishad",
+            "edition_id": "kaushitaki-upanishad-sankara-bhashya",
+            "locator": "3.3",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 343,
             "end": 359,
             "display_text": "मु. उ. २ । २ । ८",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "mundaka-upanishad",
+            "edition_id": "mundaka-upanishad-sankara-bhashya",
+            "locator": "2.2.8",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 667,
             "end": 683,
             "display_text": "छा. उ. ८ । ३ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "8.3.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 906,
             "end": 923,
             "display_text": "बृ. उ. ४ । ४ । १३",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "4.4.13",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1021,
             "end": 1034,
             "display_text": "भ. गी. ७ । ११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "7.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1329,
             "end": 1341,
             "display_text": "भ. गी. ७ । ९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "7.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1505,
             "end": 1521,
             "display_text": "छा. उ. १ । २ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "1.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1985,
             "end": 2000,
             "display_text": "श्वे. उ. ३ । १९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "svetasvatara-upanishad",
+            "edition_id": "svetasvatara-upanishad-sankara-bhashya",
+            "locator": "3.19",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1463,31 +1459,34 @@
             "start": 283,
             "end": 299,
             "display_text": "छा. उ. ६ । ८ । ७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.8.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 322,
             "end": 339,
             "display_text": "छा. उ. ७ । २५ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "7.25.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 597,
             "end": 614,
             "display_text": "छा. उ. ६ । १४ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.14.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1503,11 +1502,12 @@
             "start": 103,
             "end": 120,
             "display_text": "बृ. उ. १ । ५ । १७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brihadaranyaka-upanishad",
+            "edition_id": "brihadaranyaka-upanishad-sankara-bhashya",
+            "locator": "1.5.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1539,11 +1539,12 @@
             "start": 110,
             "end": 127,
             "display_text": "छा. उ. ७ । १३ । १",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "7.13.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -1711,11 +1712,12 @@
             "start": 247,
             "end": 263,
             "display_text": "छा. उ. ६ । २ । २",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad-sankara-bhashya",
+            "locator": "6.2.2",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
