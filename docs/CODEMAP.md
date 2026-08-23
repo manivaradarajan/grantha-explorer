@@ -3,17 +3,21 @@
 Index of non-obvious code locations — features whose implementation is spread
 across files or doesn't match an obvious name.
 
-## Reference hover tooltip
+## Reference citation panel
 
-Hover-to-preview tooltip for cross-text citations.
+Click/tap a cross-text citation to open a docked, non-modal preview panel at
+the bottom of the reading surface's scroll container. Replaces the old
+hover-tooltip. No hover-to-reveal.
 
-- `components/ReferenceLink.tsx` — client component rendered per citation
-  - `handleMouseEnter` → `openTooltip()` after `HOVER_DELAY_MS` (400ms)
-  - `openTooltip` loads preview via `getPassagePreview` (`lib/references.ts`), then shows tooltip
-  - `loadTooltipContent` builds card: title + locator header + preview text; when `sourceLookback` is set, `findQuotedSpan` (`lib/quotedMatch.ts`) fuzzy-matches the source window against the preview and highlights the quoted span (`<mark class="reference-tooltip-mark">`)
-  - Tooltip is a React portal to `document.body`, positioned via `useLayoutEffect` edge-anchored to the citation
-  - Sticky hover bridge: link/tooltip `mouseenter`/`mouseleave` via `scheduleHide`/`cancelHide` (`TOOLTIP_CLOSE_DELAY_MS`), `pointer-events` gated to `.is-ready`, selection guard on `mouseup` — so the popup is reachable and selectable
-  - Go affordance: when linkable, a bottom footer link `.tooltip-open` ("उद्घाटय" + lucide `arrow-up-right`) sits nearest the cursor's origin and navigates via `handleGo`/`navigateRef`
-- Styling: `.reference-tooltip` / `.tooltip-*` classes; `.reference-tooltip-mark` for the quote highlight
-- Wired into commentary rendering via `renderCommentaryWithReferences` and `renderMulaWithReferences` (`components/renderCommentary.tsx`), which thread `sourceLookback` (`rawText.slice(max(0, ref.start - MAX_LOOKBACK), ref.start)`) into each `ReferenceLink`
+- `components/CitationPanel.tsx` — the panel + its mount
+  - `CitationPanelHost` IS the flex-column wrapper: provider + `<div>{scrollArea}<CitationPanel/></div>`, so the context is an ancestor of the links and the panel is a block sibling of the scroll area (width tracks the container structurally)
+  - `useCitationPanel` consumed by `ReferenceLink`; `openCitation(request)` carries `{reference, targetTitle, locatorLabel, linkable, availableGranthaIds, navigate, sourceLookback}`
+  - `surfaceKey` prop: host closes the citation via effect when it changes (grantha/verse/sheet state) — single source of truth for `onExpandedChange`
+  - `heightCapVh` (cap) + `minHeightVh` (floor so short passages still pop up) + `panelWidthClass` (match the reading column, not the window)
+  - `requestId` latest-wins guard so a slow earlier fetch never overwrites a newer citation
+  - Content loaded via `getPassagePreview` (`lib/references.ts`); quote highlight via `findQuotedSpan` (`lib/quotedMatch.ts`) when `sourceLookback` present
+- `components/ReferenceLink.tsx` — pure click/tap trigger (no hover): `renderPlain` gate (unresolved → plain text), `linkable` gate, `recordDiagnostic` on not-in-library click, `navigate` (→ Promise<bool>)
+- Docked in: `components/FlowReader.tsx` (`:923` wrapper; `panelWidthClass={contentWidthClass}`; mobile fixed via `.flow-reader { height: 100dvh }`) and `components/CommentaryPanel.tsx` (`:211` root), which also serves the mobile sheet (`components/BottomSheet.tsx` grows `h-[80vh]` → `h-[85vh]` via `heightClass` when a citation is open — `components/MobileLayout.tsx`)
+- Styling: `.citation-panel` (max-height collapse + flex column + width/center), `.citation-header`, `.citation-source` (header-as-navigate-button, hover-tinted), `.citation-close`, `.citation-content`, `.citation-mark`
+- Wired into commentary rendering via `renderCommentaryWithReferences` / `renderMulaWithReferences` (`components/renderCommentary.tsx`), which thread `sourceLookback` (`buildSourceWindow`, `lib/quotedMatch.ts`) into each `ReferenceLink`
 - `lib/quotedMatch.ts` — needle→haystack fuzzy quote match (Smith–Waterman local alignment); `buildMatchString` (NFC + strip + whitespace collapse, with original-index map), `findQuotedSpan` returns the haystack span to highlight; `clampToGraphemeBoundaries` (via `Intl.Segmenter`) prevents splitting a syllable (no dotted circle); span edges trimmed of punctuation/dandas; `MAX_COVERAGE=0.8` suppresses whole-passage highlights as noise (coverage measured against content, stripping inline verse-number chrome like " ॥ १-४-८ ॥"); `MAX_LOOKBACK=60`, `MIN_MATCH_CHARS=10`, `MIN_SIMILARITY=0.7`

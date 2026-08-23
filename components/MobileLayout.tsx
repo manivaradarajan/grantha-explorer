@@ -55,6 +55,9 @@ export default function MobileLayout({
   isLoadingPart,
 }: MobileLayoutProps) {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  // Tracks whether a citation panel is open inside the commentary sheet, so
+  // the sheet can grow to make room (§4.2). Fed only by the host's callback.
+  const [citationOpen, setCitationOpen] = useState(false);
 
   // Granthas without commentary never render the commentary bottom sheet.
   const hasCommentarySheet = hasCommentary(grantha);
@@ -185,6 +188,7 @@ export default function MobileLayout({
           onNext={handleNext}
           hasPrevious={hasPrevious}
           hasNext={hasNext}
+          heightClass={citationOpen ? "h-[85vh]" : "h-[80vh]"}
         >
           <CommentaryPanel
             grantha={grantha}
@@ -199,6 +203,10 @@ export default function MobileLayout({
             granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
             granthaIdToLatinTitle={granthaIdToLatinTitle}
             hideHeader={true}
+            citationHeightCapVh={35}
+            citationMinHeightVh={20}
+            onCitationExpandedChange={setCitationOpen}
+            surfaceKeyExtra={String(commentaryOpen)}
           />
         </BottomSheet>
       )}

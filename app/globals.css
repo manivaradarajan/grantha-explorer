@@ -60,129 +60,156 @@
   color: #6b7280;
 }
 
-.reference-tooltip {
-  position: fixed;
-  /* The cited passage must render in the reading face (Tiro), matching the
-     body text it previews; chrome lines override with .tooltip-meta. */
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
+/* Docked citation preview panel — a non-modal bottom-anchored panel that
+   expands from the bottom edge of its scroll container. Non-modal (no
+   backdrop/overlay/pointer blocking), independently scrolling content, and a
+   genuine height collapse when closed: `max-height: 0` shrinks the box's real
+   layout size to zero (never a transform, which would still reserve height). */
+
+.citation-panel {
+  /* Closed: the box occupies zero layout height. */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s ease;
   background-color: white;
-  color: black;
-  padding: 0; /* sections own their padding */
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #d1d5db;
-  max-width: min(320px, 80vw);
-  z-index: 9999;
-  white-space: normal;
-  overflow: hidden; /* clip the header band to the radius */
-  opacity: 0; /* gated until measured + positioned */
-  transition: opacity 0.15s;
-  pointer-events: auto; /* reachable: hover bridge + selectable text + go */
-}
-
-/* During the fade-in the tooltip must not intercept the pointer (it is not yet
-   positioned where the user's cursor is). */
-.reference-tooltip:not(.is-ready) {
-  pointer-events: none;
-}
-
-.reference-tooltip.is-ready {
-  opacity: 1;
-}
-
-/* Header band: the work name + locator as the card's label — a full-width
-   tinted strip (not a floating pill) so the title gets structural presence
-   that scales with the card, while staying editorial rather than badge-y. */
-.tooltip-meta {
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.3em;
-  padding: 8px 10px;
-  background: rgba(61, 90, 128, 0.06); /* faint steel, echoing the link tint */
+  flex-direction: column;
+  /* Fill the container, then cap to the reading-column max-width (when a
+     width class is applied) and center — instead of shrink-wrapping to the
+     content, which would make a short passage produce a stubby card. */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.citation-panel.is-open {
+  /* A floor so short passages still pop up to a usable size, and a cap for
+     long ones (content scrolls). In flow mode the host passes a
+     panelWidthClass so the card matches the reading column, not the window. */
+  max-height: var(--citation-cap, 45vh);
+  min-height: var(--citation-min, 22vh);
+}
+
+.citation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 6px 10px;
   border-bottom: 1px solid #e5e7eb;
+  background: rgba(61, 90, 128, 0.06); /* faint steel, echoing the link tint */
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
 }
 
-.tooltip-title {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-.tooltip-locator {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-/* When linkable, a footer row carries the navigation affordance — placed at
-   the bottom of the card, nearest the cursor's origin (the tooltip sits above
-   the link), instead of in the header at the far edge. */
-.tooltip-open {
-  border-top: 1px solid #e5e7eb;
-  padding: 6px 10px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.tooltip-open-link {
+.citation-source {
   display: inline-flex;
   align-items: center;
-  gap: 0.3em;
+  gap: 0.4em;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
   color: #3d5a80; /* app link ink (matches .reference-link hover) */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
-  font-size: 0.875rem;
+  text-align: left;
   cursor: pointer;
 }
 
-.tooltip-open-link:hover {
+.citation-source:hover {
   color: #2c4460;
   background-color: rgba(61, 90, 128, 0.12);
   border-radius: 3px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
 }
 
-.tooltip-open-link:focus-visible {
+.citation-source:focus-visible {
   outline: 2px solid rgba(61, 90, 128, 0.5);
   outline-offset: 1px;
   border-radius: 3px;
 }
 
-.tooltip-open-icon {
+.citation-source-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.citation-source-locator {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.citation-source-icon {
   width: 0.85em;
   height: 0.85em;
   flex-shrink: 0;
+  color: #374151;
 }
 
-.tooltip-passage {
-  padding: 8px 10px 10px;
-  /* Verses are stored with the pāda break as a literal newline after the
-     daṇḍā (e.g. svetasvatara 1.9). Honor it so verses render verse-shaped;
-     single-line sutras/prose have no newline and are unaffected. */
-  white-space: pre-line;
-  font-size: calc(1em * var(--reading-scale, 1)); /* follows अ+/अ− */
-  overflow-wrap: anywhere;
-  word-break: break-word; /* long samāsa never bleeds the card */
+.citation-close {
+  appearance: none;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.9375rem;
+  line-height: 1;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.citation-close:hover {
+  color: #374151;
+  background-color: rgba(61, 90, 128, 0.12);
+}
+
+.citation-close:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: 1px;
+}
+
+/* Content area: scrolls independently of the container around it, and flexes
+   to fill the panel's min-height so short passages get whitespace below. */
+.citation-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-contain: none;
+}
+
+.citation-content-text {
+  /* Bind the measure to the reading column, not the panel's full width, so
+     long unbroken Sanskrit compounds wrap like the surrounding text. */
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 10px 12px 12px;
+  white-space: pre-line; /* honor pāda-break newlines in the stored text */
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
+  font-size: calc(1em * var(--reading-scale, 1));
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-.tooltip-status {
-  padding: 8px 10px 10px;
+.citation-content-text.text-gray-400 {
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
   font-size: 0.8125rem;
   font-style: italic;
 }
 
-/* Highlight of the quoted span inside the tooltip passage — a soft yellow
-   marker (classic highlight). The generous padding + box-decoration-break:
-   clone give Devanagari ascenders (शिरोरेखा, candrabindu, repha) and
-   descenders (lower conjunct forms) full paint room on each wrapped line
-   fragment, instead of a tight box that clips them. */
-
-.reference-tooltip .tooltip-passage mark.reference-tooltip-mark {
+/* Highlight of the quoted span inside the panel — a soft yellow marker
+   (classic highlight). The generous padding + box-decoration-break: clone
+   give Devanagari ascenders (शिरोरेखा, candrabindu, repha) and descenders
+   (lower conjunct forms) full paint room on each wrapped line fragment. */
+.citation-content-text mark.citation-mark {
   padding: 0.3em 0 0.15em;
   border-radius: 3px;
   -webkit-box-decoration-break: clone;
@@ -199,6 +226,12 @@
    override the layered Tailwind utilities (e.g. text-xl) for these elements. */
 .flow-reader {
   --reading-scale: 1;
+  /* Use the dynamic viewport height on mobile: `h-screen` (100vh) is taller
+     than the visible viewport once the browser chrome is accounted for, so a
+     bottom-docked citation panel would sit below the fold. 100dvh tracks the
+     actual on-screen area (100vh fallback for older browsers). */
+  height: 100vh;
+  height: 100dvh;
   /* Tiro Devanagari Sanskrit for the reading-mode body/serif text (spec §6.3);
      UI chrome keeps Noto Sans. Unlayered so it overrides Tailwind's font-serif
      utility inside the flow reader. */

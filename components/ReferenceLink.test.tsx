@@ -1,18 +1,11 @@
 // @vitest-environment jsdom
 /**
- * Interaction tests for `ReferenceLink`'s tooltip hover bridge and "go"
- * affordance.
+ * Trigger behavior of `ReferenceLink` under the docked citation-panel design.
  *
- * The tooltip must be reachable (pointer-events + a close grace so the cursor
- * can cross the gap and select/copy the passage), and when the reference is
- * linkable the whole header band is a navigate button (arrow-up-right glyph)
- * that jumps to the cited passage. These tests pin: the header button is
- * present only when linkable, clicking it navigates, the close-grace window,
- * re-entering the tooltip cancels a pending close, and an active text
- * selection in the popup prevents it closing mid-copy.
- *
- * The real production resolution path runs against the committed corpus via a
- * fetch shim, so navigation resolves like it does in the app.
+ * The link is now a pure click/tap trigger: clicking opens the citation panel
+ * (via the surrounding `CitationPanelHost`); there is NO hover-to-reveal.
+ * Unresolved references stay plain text; not-in-library references still open
+ * a panel explaining "not available" and are diagnostic-logged.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -22,6 +15,7 @@ import fs from "fs";
 import path from "path";
 import { Reference } from "@/lib/data";
 import ReferenceLink from "./ReferenceLink";
+import { CitationPanelHost } from "./CitationPanel";
 
 const ROOT = path.resolve(__dirname, "..");
 
@@ -41,12 +35,6 @@ const LINKABLE_REF: Reference = {
   unresolved: false,
 };
 
-const NOT_LINKABLE_REF: Reference = {
-  ...LINKABLE_REF,
-  grantha_id: "panini-sutra",
-  display_text: "पा. सू.",
-};
-
 const BASE_PROPS = {
   currentGranthaId: "isavasya-upanishad",
   sourcePassageRef: "1",
@@ -54,24 +42,15 @@ const BASE_PROPS = {
   availableGranthaIds: ["svetasvatara-upanishad"],
   granthaById: {
     "svetasvatara-upanishad": { editions: [], default_school: undefined },
-    // A school-flavored default with no edition → edition-less ref is not linkable.
-    "panini-sutra": { editions: [], default_school: "vyakarana" },
   },
   granthaIdToTitle: { "svetasvatara-upanishad": "श्वेताश्वतरोपनिषत्" },
 };
-
-const HOVER_DELAY_MS = 400;
-const CLOSE_DELAY_MS = 350;
 
 let root: Root;
 let el: HTMLDivElement;
 
 beforeEach(() => {
   globalThis.fetch = readJsonAsset as unknown as typeof fetch;
-  // jsdom defines window.ontouchstart, which makes the component treat the
-  // test as a touch device and suppress hover. Remove it so hover works.
-  delete (window as unknown as Record<string, unknown>).ontouchstart;
-  vi.useFakeTimers();
   el = document.createElement("div");
   document.body.appendChild(el);
   root = createRoot(el);
@@ -83,127 +62,87 @@ afterEach(async () => {
   });
   el.remove();
   globalThis.fetch = fetch;
-  vi.useRealTimers();
   vi.clearAllMocks();
 });
 
-const renderLink = (reference: Reference) =>
+const renderLink = (reference: Reference, sourceLookback?: string) =>
   act(async () => {
     root.render(
-      <ReferenceLink reference={reference} sourceLookback="" {...BASE_PROPS} />,
+      <CitationPanelHost className="h-full" surfaceKey="k">
+        <ReferenceLink reference={reference} sourceLookback={sourceLookback} {...BASE_PROPS} />
+      </CitationPanelHost>,
     );
   });
 
-/** Open the tooltip via hover, waiting for the fetch + layout to settle. */
-const openTooltip = async () => {
-  await renderLink(LINKABLE_REF);
-  const link = el.querySelector(".reference-link") as HTMLElement;
-  act(() => {
-    link.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-  });
-  await act(async () => {
-    await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS + 50);
-  });
-  return document.querySelector(".reference-tooltip");
-};
-
-describe("ReferenceLink tooltip — go affordance", () => {
-  it("renders the bottom open link when the ref is linkable", async () => {
-    await openTooltip();
-    expect(document.querySelector(".tooltip-open")).not.toBeNull();
-    expect(document.querySelector(".tooltip-open-link")).not.toBeNull();
-    expect(document.querySelector(".tooltip-open-link")!.textContent).toContain("उद्घाटय");
+describe("ReferenceLink — docked citation panel trigger", () => {
+  it("opens the citation panel on click", async () => {
+    await renderLink(LINKABLE_REF);
+    const link = el.querySelector(".reference-link") as HTMLElement;
+    act(() => {
+      link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
+    expect(document.querySelector(".citation-source-title")!.textContent).toContain("श्वेताश्वतरोपनिषत्");
   });
 
-  it("renders no open footer when the ref is not linkable", async () => {
-    await renderLink(NOT_LINKABLE_REF);
+  it("does NOT open on hover", async () => {
+    await renderLink(LINKABLE_REF);
     const link = el.querySelector(".reference-link") as HTMLElement;
     act(() => {
       link.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS + 50);
+    act(() => {
+      link.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
     });
-    expect(document.querySelector(".tooltip-open")).toBeNull();
-    expect(document.querySelector(".tooltip-meta")).not.toBeNull();
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(document.querySelector(".citation-panel.is-open")).toBeNull();
   });
 
-  it("navigates to the cited passage when the open link is clicked", async () => {
-    await openTooltip();
-    const go = document.querySelector(".tooltip-open-link") as HTMLAnchorElement;
+  it("opens a panel for a not-in-library reference (linkable=false)", async () => {
+    const ref: Reference = { ...LINKABLE_REF, grantha_id: "panini-sutra", display_text: "पा. सू." };
+    await renderLink(ref);
+    const link = el.querySelector(".reference-link") as HTMLElement;
     act(() => {
-      go.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
     });
-    // navigate() is async: loadGrantha → resolveReferenceTarget → updateHash.
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(0);
+      await Promise.resolve();
+    });
+    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
+  });
+
+  it("renders unresolved references as plain text (never a link)", async () => {
+    const ref: Reference = { ...LINKABLE_REF, grantha_id: null, unresolved: true };
+    await renderLink(ref);
+    expect(el.querySelector(".reference-link")).toBeNull();
+    expect(el.querySelector(".reference-unresolved")).not.toBeNull();
+  });
+
+  it("navigates when the panel's source label is clicked", async () => {
+    await renderLink(LINKABLE_REF);
+    const link = el.querySelector(".reference-link") as HTMLElement;
+    act(() => {
+      link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    await act(async () => {
+      await Promise.resolve();
+    });
+    const source = document.querySelector(".citation-source") as HTMLButtonElement;
+    act(() => {
+      source.click();
+    });
+    await act(async () => {
+      await Promise.resolve();
     });
     expect(BASE_PROPS.updateHash).toHaveBeenCalledWith(
       "svetasvatara-upanishad",
       "1.9",
       undefined,
     );
-  });
-});
-
-describe("ReferenceLink tooltip — hover bridge", () => {
-  it("does not close immediately on link mouseleave (grace window)", async () => {
-    await openTooltip();
-    const link = el.querySelector(".reference-link") as HTMLElement;
-    act(() => {
-      link.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
-    });
-    // Within the 350ms grace the tooltip stays.
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(CLOSE_DELAY_MS - 50);
-    });
-    expect(document.querySelector(".reference-tooltip")).not.toBeNull();
-    // After the grace expires it closes.
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(100);
-    });
-    expect(document.querySelector(".reference-tooltip")).toBeNull();
-  });
-
-  it("stays open when the cursor re-enters the tooltip during the grace", async () => {
-    await openTooltip();
-    const link = el.querySelector(".reference-link") as HTMLElement;
-    const tip = document.querySelector(".reference-tooltip") as HTMLElement;
-    act(() => {
-      link.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
-    });
-    act(() => {
-      tip.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-    });
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(CLOSE_DELAY_MS + 100);
-    });
-    expect(document.querySelector(".reference-tooltip")).not.toBeNull();
-  });
-
-  it("does not close mid-copy when a text selection is active in the tooltip", async () => {
-    await openTooltip();
-    const link = el.querySelector(".reference-link") as HTMLElement;
-    const tip = document.querySelector(".reference-tooltip") as HTMLElement;
-    // An active selection anchored inside the tooltip's text.
-    const textNode = tip.querySelector(".tooltip-passage")!.firstChild as Node;
-    const fakeSelection = { isCollapsed: false, anchorNode: textNode } as unknown as Selection;
-    const realGetSelection = window.getSelection;
-    vi.spyOn(window, "getSelection").mockReturnValue(fakeSelection);
-    try {
-      act(() => {
-        link.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
-      });
-      act(() => {
-        document.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-      });
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(CLOSE_DELAY_MS + 100);
-      });
-      expect(document.querySelector(".reference-tooltip")).not.toBeNull();
-    } finally {
-      vi.restoreAllMocks();
-      void realGetSelection;
-    }
   });
 });

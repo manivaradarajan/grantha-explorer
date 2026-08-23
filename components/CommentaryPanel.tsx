@@ -12,6 +12,7 @@ import { useCallback, useMemo } from "react";
 
 import { renderCommentaryWithReferences as renderCommentaryWithReferencesFn } from './renderCommentary';
 import CommentarySelector from './CommentarySelector';
+import { CitationPanelHost } from './CitationPanel';
 
 interface CommentaryPanelProps {
   grantha: Grantha;
@@ -31,6 +32,14 @@ interface CommentaryPanelProps {
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   hideHeader?: boolean;
+  /** Open-height cap for the citation panel (default 45vh). */
+  citationHeightCapVh?: number;
+  /** Open-height floor for the citation panel (default 30vh in columns). */
+  citationMinHeightVh?: number;
+  /** Fired when the citation panel opens/closes (e.g. to grow a parent sheet). */
+  onCitationExpandedChange?: (open: boolean) => void;
+  /** Extra surface identity appended to the host's close-on-change key. */
+  surfaceKeyExtra?: string;
 }
 
 const PANEL_HEADER_CLASS =
@@ -48,6 +57,10 @@ export default function CommentaryPanel({
   granthaById,
   granthaIdToDevanagariTitle,
   hideHeader = false,
+  citationHeightCapVh,
+  citationMinHeightVh,
+  onCitationExpandedChange,
+  surfaceKeyExtra,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
   const hasMultipleEditions =
@@ -208,7 +221,13 @@ export default function CommentaryPanel({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <CitationPanelHost
+      className="h-full flex flex-col"
+      surfaceKey={`${grantha.grantha_id ?? grantha.id}:${selectedRef}:${surfaceKeyExtra ?? ""}`}
+      heightCapVh={citationHeightCapVh ?? 45}
+      minHeightVh={citationMinHeightVh ?? 30}
+      onExpandedChange={onCitationExpandedChange}
+    >
       {!hideHeader && (
         <div className={PANEL_HEADER_CLASS}>
           <div className="flex items-center justify-center gap-2">
@@ -231,6 +250,6 @@ export default function CommentaryPanel({
         {renderCommentary(commentary)}
         {subcommentaries.map(renderSubcommentary)}
       </div>
-    </div>
+    </CitationPanelHost>
   );
 }
