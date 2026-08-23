@@ -390,14 +390,17 @@ const CitationPopover: React.FC = () => {
     };
   }, [citation, anchorEl, passage, status]);
 
-  // Escape closes pinned popovers and restores focus to the originating
-  // reference. Cleanup timers on unmount.
+  // Escape closes the popover. Restore focus to the originating reference only
+  // for a PINNED popover (the keyboard path) — restoring focus on a hover-peek
+  // would re-fire the anchor's onFocus and immediately re-pin it.
   useEffect(() => {
     if (!citation) return;
     const onKey = (e: KeyboardEvent): void => {
       if (e.key === "Escape") {
         closeCitation();
-        anchorEl?.focus();
+        if (mode === "pinned") {
+          anchorEl?.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKey);
@@ -407,7 +410,7 @@ const CitationPopover: React.FC = () => {
         window.clearTimeout(copyTimer.current);
       }
     };
-  }, [citation, closeCitation, anchorEl]);
+  }, [citation, closeCitation, anchorEl, mode]);
 
   if (!citation) {
     return null;

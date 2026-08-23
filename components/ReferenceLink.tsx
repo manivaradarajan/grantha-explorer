@@ -16,6 +16,7 @@ import {
 } from '../lib/referenceDiagnostics';
 import { extractEnclosedQuote } from '../lib/quotedMatch';
 import { useCitationPanel } from './CitationPanel';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import type { Reference } from '../lib/data';
 
 interface ReferenceLinkProps {
@@ -214,12 +215,32 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
     scheduleClose();
   };
 
+  // Desktop has a hover pointer: hover peeks, and the FIRST click follows the
+  // link (navigates). Touch/coarse pointers have no hover, so the first tap
+  // pins and a second tap navigates.
+  const isFinePointer = useMediaQuery("(hover: hover) and (pointer: fine)");
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const request = buildRequest();
     const el = anchorRef.current;
     if (!request || !el) return;
+    if (!linkable) {
+      // Not-in-library: no destination — clicking opens the info popover.
+      recordDiagnostic("REF-NOT-IN-LIBRARY");
+      clearHoverOpen();
+      openCitation(request, el, "pinned");
+      return;
+    }
+    if (isFinePointer) {
+      // Desktop: hover already peeked the preview, so a click navigates to the
+      // cited passage (close any open popover first).
+      clearHoverOpen();
+      closeCitation();
+      void navigate();
+      return;
+    }
     const sameOpen =
       citation &&
       citation.reference.grantha_id === reference.grantha_id &&
@@ -227,22 +248,15 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
       citation.reference.start === reference.start;
     if (sameOpen && mode === "pinned") {
       if (focusedPinRef.current) {
-        // This is the first click after a focus-pin (mouse mousedown or Tab):
-        // consume the pin so the click pins instead of navigating.
+        // This is the first tap after a focus-pin (mouse mousedown or Tab):
+        // consume the pin so the tap pins instead of navigating.
         focusedPinRef.current = false;
         return;
       }
-      // A genuine second click while pinned → navigate to the cited passage.
-      if (!linkable) {
-        recordDiagnostic("REF-NOT-IN-LIBRARY");
-      }
+      // A genuine second tap while pinned → navigate to the cited passage.
       closeCitation();
       void navigate();
       return;
-    }
-    if (!linkable) {
-      // Not-in-library: clicking is the triage-worthy act — log it once.
-      recordDiagnostic("REF-NOT-IN-LIBRARY");
     }
     clearHoverOpen();
     focusedPinRef.current = false;
