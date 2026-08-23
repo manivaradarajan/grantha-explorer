@@ -205,9 +205,10 @@ export const CitationPanelHost: React.FC<CitationPanelHostProps> = ({
   // Memoized on the citation + fuzzy span so its identity is stable while the
   // popover is open — consumers (render-prop children) use it in memoized
   // callbacks. The exact-quote span travels with the request; the fuzzy span
-  // arrives when the preview loads.
+  // arrives when the preview loads. Non-linkable references (not in the
+  // library) get NO source mark — there is nothing to tie the text to.
   const sourceHighlight: SourceHighlight | null = useMemo(() => {
-    if (!citation) {
+    if (!citation || !citation.linkable) {
       return null;
     }
     const span = citation.sourceSpan ?? fuzzySpan;
@@ -523,8 +524,8 @@ const CitationPopover: React.FC = () => {
         ) : (
           // Not available in the library: the title is informational, not a
           // destination — no button, no hover highlight, no open arrow.
-          <span className="citation-title citation-title-static">
-            {targetTitle}
+          <span className="citation-title-static">
+            <span className="citation-title">{targetTitle}</span>
             {locatorLabel && <span className="citation-locator">{locatorLabel}</span>}
           </span>
         )}
@@ -551,7 +552,9 @@ const CitationPopover: React.FC = () => {
           </button>
         )}
       </div>
-      <div className="citation-body">{renderPassage()}</div>
+      {citation.linkable && (
+        <div className="citation-body">{renderPassage()}</div>
+      )}
       {citation.linkable && (
         <div className="citation-footer">
           <button type="button" className="citation-action" onClick={() => void doCopy()}>

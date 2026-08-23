@@ -198,8 +198,14 @@
 }
 
 /* Not-in-library title: informational, no destination — neutral ink, no
-   link color, no hover highlight. */
+   link color, no hover highlight. Title and locator are separated by the same
+   gap the interactive title button uses, so "<title> <locator>" reads with a
+   space between them. */
 .citation-title-static {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  min-width: 0;
   color: #374151;
 }
 

@@ -133,8 +133,15 @@ describe("ReferenceLink — floating citation popover trigger", () => {
     expect(pop!.querySelector(".citation-action")).toBeNull();
     expect(pop!.querySelector(".citation-title-action")).toBeNull();
     expect(pop!.querySelector(".citation-title-static")).not.toBeNull();
-    // No "not available in library" status line.
+    // No "not available in library" status line, and no body/preview at all.
     expect(pop!.textContent).not.toContain("not available");
+    expect(pop!.querySelector(".citation-body")).toBeNull();
+    expect(pop!.textContent).not.toContain("loading");
+    // No source-text mark for a non-resolvable reference.
+    expect(document.querySelector("mark.citation-source-mark")).toBeNull();
+    // Title and locator are separated (flex gap renders a space between them).
+    const staticEl = pop!.querySelector(".citation-title-static")!;
+    expect(staticEl.querySelector(".citation-locator")).not.toBeNull();
   });
 
   it("renders unresolved references as plain text (never a link)", async () => {
