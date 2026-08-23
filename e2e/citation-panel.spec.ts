@@ -79,7 +79,10 @@ test("places below when there is room and flips above near the viewport bottom",
   await expect(page.locator(".citation-tail")).toBeVisible();
   await page.keyboard.press("Escape");
 
-  // Scroll the link toward the viewport bottom → should flip above.
+  // Scroll the link toward the viewport bottom → should flip above. This uses
+  // scrollIntoView (which focuses the link), but that's safe here: the Escape
+  // above already closed the popover, so the focus-open is exactly the pinned
+  // state the test then clicks once to re-open and assert placement on.
   await page.locator(".reference-link").first().evaluate((el) => {
     el.scrollIntoView({ block: "end" });
   });
@@ -109,13 +112,14 @@ test("stays within the viewport horizontally (centered on the reference)", async
   await page.locator(".reference-link").first().click();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
-  const box = (await pop.boundingBox())!;
+  const box = await pop.boundingBox();
+  expect(box, "popover must have a bounding box").not.toBeNull();
   const vp = page.viewportSize()!;
-  expect(box.x).toBeGreaterThanOrEqual(10);
-  expect(box.x + box.width).toBeLessThanOrEqual(vp.width - 10);
+  expect(box!.x).toBeGreaterThanOrEqual(10);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(vp.width - 10);
   // Roughly the 320px design width.
-  expect(box.width).toBeGreaterThan(250);
-  expect(box.width).toBeLessThan(360);
+  expect(box!.width).toBeGreaterThan(250);
+  expect(box!.width).toBeLessThan(360);
 });
 
 test("the quoted span in the source bhashya is marked while the popover is open", async ({ page }) => {

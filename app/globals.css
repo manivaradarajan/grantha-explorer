@@ -13,12 +13,6 @@
   hyphens: auto;
 }
 
-.reference-container {
-  position: relative;
-  /*display: inline-block;*/
-  display: inline;
-}
-
 /* Passage blocks are selectable/copyable text; hover shows the I-beam, not the
    link hand. Clicking still selects the verse. Unlayered so it overrides
    Tailwind's cursor-pointer utility on these elements. */
@@ -30,9 +24,10 @@
   color: #6b7280;
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-thickness: 1px; /* optional: underline thickness */
-  text-underline-offset: 0.27em; /* ← add this; gap between text and underline */
-  word-spacing: -0.15em; /* tightens EVERY space inside the link */
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.27em;
+  /* Tighten the spaces inside a citation so the marker reads as one unit. */
+  word-spacing: -0.15em;
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
@@ -82,7 +77,9 @@
    --citation-tail-bg       pointer fill (matches the card bg)
    --citation-clamp-lines   excerpt line cap (3–5)
    --citation-title-size    header title size
-   --citation-excerpt-size  passage preview size (follows --reading-scale)
+   --citation-excerpt-size  passage preview size. NOTE: the popover is portaled
+                           to <body> outside .flow-reader, so --reading-scale
+                           does not cascade here — the fallback applies.
    --citation-footer-margin-bottom  footer pull-up vs the card's bottom edge
                                    (0 = flush; positive = gap; negative = overhang)
    --citation-gap          vertical spacing between title / excerpt / footer
@@ -354,9 +351,10 @@ mark.citation-source-mark {
 .flow-reader {
   --reading-scale: 1;
   /* Use the dynamic viewport height on mobile: `h-screen` (100vh) is taller
-     than the visible viewport once the browser chrome is accounted for, so a
-     bottom-docked citation panel would sit below the fold. 100dvh tracks the
-     actual on-screen area (100vh fallback for older browsers). */
+     than the visible viewport once the browser chrome is accounted for, so
+     content near the bottom (including a citation popover anchored below a
+     low verse) would sit below the fold. 100dvh tracks the actual on-screen
+     area (100vh fallback for older browsers). */
   height: 100vh;
   height: 100dvh;
   /* Tiro Devanagari Sanskrit for the reading-mode body/serif text (spec §6.3);

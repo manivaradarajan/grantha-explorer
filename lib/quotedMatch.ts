@@ -18,7 +18,7 @@
  *
  * When the window shows the citation enclosed in a quote pair (`**…**` or
  * `‘…’`), the quote IS the citation — `extractEnclosedQuote` returns the
-  * exact span and it is matched first (a tighter needle than the window's
+ * exact span and it is matched first (a tighter needle than the window's
  * prose); the whole window is the fuzzy fallback.
  */
 
@@ -258,8 +258,8 @@ export const buildMatchString = (text: string): MatchString => {
  *
  * Args:
  *     sourceWindow: The text before the citation (the needle's containing
- *         prose). Should be `sourceText.slice(max(0, ref.start - MAX_LOOKBACK),
- *         ref.start)`.
+ *         prose), as produced by `buildSourceWindow` (whitespace-extended and
+ *         enclosing-quote-aware).
  *     passage: The full cited passage (the haystack).
  *
  * Returns:

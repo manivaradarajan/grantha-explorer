@@ -216,7 +216,16 @@ export const CitationPanelHost: React.FC<CitationPanelHostProps> = ({
 
   return (
     <CitationContext.Provider
-      value={{ openCitation, closeCitation, scheduleClose, cancelClose, citation, mode, anchorEl, setSourceSpan }}
+      value={{
+        openCitation,
+        closeCitation,
+        scheduleClose,
+        cancelClose,
+        citation,
+        mode,
+        anchorEl,
+        setSourceSpan,
+      }}
     >
       <div className={className}>
         {typeof children === "function" ? children(sourceHighlight) : children}
@@ -542,59 +551,59 @@ const CitationPopover: React.FC = () => {
       <div className="citation-body">{renderPassage()}</div>
       {citation.linkable && (
         <div className="citation-footer">
-        <button type="button" className="citation-action" onClick={() => void doCopy()}>
-          {copied ? (
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="citation-action-icon"
-              aria-hidden="true"
-            >
-              <path d="M20 6 9 17l-5-5" />
-            </svg>
-          ) : (
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="citation-action-icon"
-              aria-hidden="true"
-            >
-              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-            </svg>
-          )}
-          <span>प्रतिलिपि</span>
-        </button>
-        <button
-          type="button"
-          className="citation-action citation-action-open"
-          onClick={() => {
-            void citation.navigate();
-          }}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="citation-action-icon"
-            aria-hidden="true"
+          <button type="button" className="citation-action" onClick={() => void doCopy()}>
+            {copied ? (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="citation-action-icon"
+                aria-hidden="true"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="citation-action-icon"
+                aria-hidden="true"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+              </svg>
+            )}
+            <span>प्रतिलिपि</span>
+          </button>
+          <button
+            type="button"
+            className="citation-action citation-action-open"
+            onClick={() => {
+              void citation.navigate();
+            }}
           >
-            <path d="M7 7h10v10" />
-            <path d="M7 17 17 7" />
-          </svg>
-          <span>अनुसर</span>
-        </button>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="citation-action-icon"
+              aria-hidden="true"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" />
+            </svg>
+            <span>अनुसर</span>
+          </button>
         </div>
       )}
     </div>,

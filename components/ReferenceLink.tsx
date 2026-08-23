@@ -49,7 +49,18 @@ const HOVER_OPEN_DELAY_MS = 150;
  * References to works in the library open a floating citation popover: hover
  * peeks after a short delay; click/tap/Enter/Space pins it.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, sourceLookback, sourceWindowStart, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({
+  reference,
+  currentGranthaId,
+  editionId,
+  sourcePassageRef,
+  sourceLookback,
+  sourceWindowStart,
+  updateHash,
+  availableGranthaIds,
+  granthaById,
+  granthaIdToTitle,
+}) => {
   const { openCitation, closeCitation, citation, mode, scheduleClose, cancelClose } = useCitationPanel();
   const anchorRef = useRef<HTMLAnchorElement>(null);
   const hoverOpenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

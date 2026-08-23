@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Fragment } from "react";
-import { Reference } from "@/lib/data";
+import type { Reference } from "@/lib/data";
 import {
   assertCodePointOffsetAligned,
   sanitizeCommentaryHtml,
