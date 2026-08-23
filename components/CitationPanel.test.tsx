@@ -135,14 +135,19 @@ describe("CitationPanel", () => {
     expect(text).toContain("ज्ञाज्ञौ");
   });
 
-  it("closes via the ✕ button", async () => {
+  it("dismisses when clicking outside the panel", async () => {
     await render();
     clickLink();
     await act(async () => {
       await new Promise((r) => setTimeout(r, 50));
     });
-    const close = document.querySelector(".citation-close") as HTMLButtonElement;
-    act(() => close.click());
+    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
+    // Click the host wrapper (the pane around the docked card), not a link
+    // and not the panel itself.
+    const host = el.querySelector(".h-full") as HTMLElement;
+    act(() => {
+      host.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
     expect(document.querySelector(".citation-panel.is-open")).toBeNull();
   });
 

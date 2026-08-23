@@ -110,7 +110,7 @@ export default function BottomSheet({
       {/* Bottom Sheet */}
       <div
         ref={sheetRef}
-        className={`relative w-full bg-white rounded-t-2xl shadow-2xl ${heightClass} flex flex-col transform transition-transform duration-200 ease-out ${
+        className={`relative w-full bg-white rounded-t-2xl shadow-2xl bottom-sheet ${heightClass} flex flex-col transform transition-transform duration-200 ease-out ${
           isDragging ? "" : isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         style={

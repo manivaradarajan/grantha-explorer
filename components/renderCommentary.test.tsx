@@ -185,6 +185,47 @@ describe("renderCommentaryWithReferences", () => {
     expect(el.querySelector(".reference-link")?.textContent).toBe("शत. ब्रा.");
     cleanUp(root, el);
   });
+
+  it("marks the quoted span in the source passage while its citation is open", async () => {
+    // The bhashya quotes the cited verse in markdown bold, then the locator —
+    // exactly the corpus shape. Opening the citation must steel-blue-mark the
+    // quote in the source text (via the host's render-prop highlight).
+    const text = "स च **ज्ञाज्ञौ द्वावजावीशनीशौ** (श्वे. उ. १.९) इत्यादि";
+    const refs: Reference[] = [
+      {
+        start: text.indexOf("श्वे"),
+        end: text.indexOf("श्वे") + "श्वे. उ. १.९".length,
+        display_text: "श्वे. उ. १.९",
+        grantha_id: "svetasvatara-upanishad",
+        locator: "1.9",
+        unresolved: false,
+      },
+    ];
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+      root.render(
+        <CitationPanelHost className="h-full" surfaceKey="k">
+          {(sourceHighlight) =>
+            renderCommentaryWithReferences(text, refs, { ...context, sourceHighlight })
+          }
+        </CitationPanelHost>,
+      );
+    });
+    const link = el.querySelector(".reference-link") as HTMLElement;
+    act(() => {
+      link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    await act(async () => {
+      const { promise, resolve } = Promise.withResolvers<void>();
+      setTimeout(resolve, 80);
+      await promise;
+    });
+    const mark = el.querySelector("mark.citation-source-mark");
+    expect(mark).not.toBeNull();
+    expect(mark?.textContent).toContain("ज्ञाज्ञौ द्वावजावीशनीशौ");
+    cleanUp(root, el);
+  });
 });
 
 describe("renderMulaWithReferences", () => {

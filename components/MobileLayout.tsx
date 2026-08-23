@@ -203,8 +203,6 @@ export default function MobileLayout({
             granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
             granthaIdToLatinTitle={granthaIdToLatinTitle}
             hideHeader={true}
-            citationHeightCapVh={35}
-            citationMinHeightVh={20}
             onCitationExpandedChange={setCitationOpen}
             surfaceKeyExtra={String(commentaryOpen)}
           />

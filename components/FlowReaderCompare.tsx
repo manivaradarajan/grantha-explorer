@@ -23,6 +23,7 @@ import {
 } from "@/lib/stringUtils";
 import FlowReaderCitation from "./FlowReaderCitation";
 import { renderCommentaryWithReferences } from "./renderCommentary";
+import type { SourceHighlight } from "./CitationPanel";
 
 interface FlowReaderCompareProps {
   /** Active editions, ordered (always >= 2 here). */
@@ -44,6 +45,8 @@ interface FlowReaderCompareProps {
   /** Per-grantha target metadata for the edition-aware link gate. */
   granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
+  /** The open citation's quoted span, marked in the source text. */
+  sourceHighlight?: SourceHighlight | null;
 }
 
 const TWO_UP_MIN_COL = 380;
@@ -79,6 +82,7 @@ export default function FlowReaderCompare({
   availableGranthaIds,
   granthaById,
   granthaIdToDevanagariTitle,
+  sourceHighlight,
 }: FlowReaderCompareProps) {
   const count = editions.length;
   const roman = script === "roman";
@@ -179,6 +183,7 @@ export default function FlowReaderCompare({
                 availableGranthaIds,
                 granthaById,
                 granthaIdToTitle: granthaIdToDevanagariTitle,
+                sourceHighlight,
               },
             )}
           </p>
@@ -241,6 +246,7 @@ export default function FlowReaderCompare({
                             availableGranthaIds,
                             granthaById,
                             granthaIdToTitle: granthaIdToDevanagariTitle,
+                            sourceHighlight,
                           },
                         )}
                       </p>
@@ -252,7 +258,7 @@ export default function FlowReaderCompare({
         </div>
       );
     },
-    [activeSubIds, onSubcommentaryToggle, tikaLabel, updateHash, availableGranthaIds, granthaById, granthaIdToDevanagariTitle]
+    [activeSubIds, onSubcommentaryToggle, tikaLabel, updateHash, availableGranthaIds, granthaById, granthaIdToDevanagariTitle, sourceHighlight]
   );
 
   // --- Shared centered verse row (used by the columns view) -----------------

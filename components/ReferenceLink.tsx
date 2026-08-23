@@ -14,6 +14,7 @@ import {
   isDiagnosticsEnabled,
   type ReferenceDiagCode,
 } from '../lib/referenceDiagnostics';
+import { extractEnclosedQuote } from '../lib/quotedMatch';
 import { useCitationPanel } from './CitationPanel';
 import type { Reference } from '../lib/data';
 
@@ -27,6 +28,9 @@ interface ReferenceLinkProps {
   /** Source text immediately before the citation; fuzzy-matched against the
    *  preview so the panel can highlight the quoted span. */
   sourceLookback?: string;
+  /** Absolute offset of `sourceLookback` within the source passage — lets the
+   *  open citation highlight the quoted span in the source text itself. */
+  sourceWindowStart?: number;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   /** Per-grantha target metadata (editions + default_school) for the edition-aware gate. */
@@ -43,7 +47,7 @@ interface ReferenceLinkProps {
  * References to works in the library open a docked citation panel on click
  * (or tap), which previews the cited passage and offers navigation.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, sourceLookback, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, sourceLookback, sourceWindowStart, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
   const { openCitation } = useCitationPanel();
 
   const targetTitle = reference.grantha_id
@@ -130,6 +134,20 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     e.stopPropagation();
     if (!reference.grantha_id) return;
 
+    // The fully-formed quote visible in the lookback window, mapped to
+    // absolute offsets in the source passage — the steel-blue source
+    // highlight shown while the card is open.
+    let sourceSpan: { start: number; end: number } | null = null;
+    if (sourceLookback && sourceWindowStart !== undefined) {
+      const quoted = extractEnclosedQuote(sourceLookback);
+      if (quoted !== null) {
+        sourceSpan = {
+          start: sourceWindowStart + quoted.start,
+          end: sourceWindowStart + quoted.end,
+        };
+      }
+    }
+
     if (linkable) {
       openCitation({
         reference,
@@ -139,6 +157,9 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
         availableGranthaIds,
         navigate,
         sourceLookback,
+        sourceWindowStart,
+        sourcePassageRef,
+        sourceSpan,
       });
     } else {
       // Not-in-library: clicking is the triage-worthy act — log it once.
@@ -151,6 +172,9 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
         availableGranthaIds,
         navigate,
         sourceLookback,
+        sourceWindowStart,
+        sourcePassageRef,
+        sourceSpan,
       });
     }
   };

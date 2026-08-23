@@ -56,49 +56,92 @@
 
 .reference-link.external-reference:hover,
 .reference-link.external-reference:focus-visible {
-  background-color: rgba(61, 90, 128, 0.1); /* tint, no navigation affordance */
+  /* Unresolvable-in-library: fully inert on hover — no tint, no padding
+     shift (the generic link hover adds padding + radius). */
+  background-color: transparent;
   color: #6b7280;
+  padding: 0;
+  border-radius: 0;
 }
 
-/* Docked citation preview panel — a non-modal bottom-anchored panel that
-   expands from the bottom edge of its scroll container. Non-modal (no
-   backdrop/overlay/pointer blocking), independently scrolling content, and a
-   genuine height collapse when closed: `max-height: 0` shrinks the box's real
-   layout size to zero (never a transform, which would still reserve height). */
+/* Citation preview card — a non-modal, bottom-anchored overlay that FLOATS
+   over the bottom edge of its scroll container: absolutely positioned against
+   the host (which must be `position: relative`), so opening it never shrinks
+   the reading column — the text keeps its full height and scrolls beneath.
+   Non-modal (no backdrop/overlay/pointer blocking) with independently
+   scrolling content. */
 
 .citation-panel {
-  /* Closed: the box occupies zero layout height. */
+  /* ── Card size knobs — tune the docked card here ────────────────────────
+     --citation-width        open-card measure in flow mode (42rem ≈ the mūla
+                             verse width; the reading column is 48rem)
+     --citation-max-height   cap: longer passages scroll inside the card
+     --citation-min-height   floor: short passages still pop up to a
+                             usable height
+     Panes/tablet and the mobile sheet override the height vars below. */
+  --citation-width: 30rem;
+  --citation-max-height: 45vh;
+  --citation-min-height: 35vh;
+  /* Float over the surface: `left/right + margin-inline: auto` fills the
+     host width, then caps to the width knob and centers — never shrinking
+     the reading column. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-inline: auto;
+  z-index: 10;
+  /* Closed: zero height; open height comes from the knobs via .is-open. */
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.2s ease;
-  background-color: white;
-  border-top: 1px solid #e5e7eb;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
-  flex-shrink: 0;
+  /* Card surface: a soft warm-paper sheet, clearly distinct from the white
+     reading surface it docks under. Warm tint + visible top border + real
+     elevation + rounded top corners (clipped by overflow:hidden) make it read
+     as a floating card, not a continuation of the text column. */
+  background-color: #f7f5f0;
+  border-top: 1px solid #d8d2c4;
+  box-shadow:
+    0 -8px 24px rgba(0, 0, 0, 0.1),
+    0 -2px 6px rgba(0, 0, 0, 0.06);
+  border-radius: 12px 12px 0 0;
   display: flex;
   flex-direction: column;
-  /* Fill the container, then cap to the reading-column max-width (when a
-     width class is applied) and center — instead of shrink-wrapping to the
-     content, which would make a short passage produce a stubby card. */
-  width: 100%;
-  margin: 0 auto;
+}
+
+/* The width knob applies under the flow reader only — panes/tablet/mobile
+   cards span their own column/sheet. */
+.flow-reader .citation-panel {
+  max-width: var(--citation-width);
 }
 
 .citation-panel.is-open {
-  /* A floor so short passages still pop up to a usable size, and a cap for
-     long ones (content scrolls). In flow mode the host passes a
-     panelWidthClass so the card matches the reading column, not the window. */
-  max-height: var(--citation-cap, 45vh);
-  min-height: var(--citation-min, 22vh);
+  /* Open: the floor/cap from the knobs above; scoped surfaces below override
+     the variables. */
+  max-height: var(--citation-max-height);
+  min-height: var(--citation-min-height);
+}
+
+/* Narrow columns: a taller floor so short passages fill the pane. */
+.commentary-pane .citation-panel {
+  --citation-min-height: 45vh;
+}
+
+/* Inside the mobile bottom sheet: a smaller card. */
+.bottom-sheet .citation-panel {
+  --citation-max-height: 35vh;
+  --citation-min-height: 20vh;
 }
 
 .citation-header {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  padding: 6px 10px;
+  /* Padding lives on the source button (below) so its hover highlight fills
+     the whole titlebar — full bleed, not a pill around the text. */
+  padding: 0;
   border-bottom: 1px solid #e5e7eb;
-  background: rgba(61, 90, 128, 0.06); /* faint steel, echoing the link tint */
+  background: rgba(61, 90, 128, 0.1); /* steel echo of the link tint */
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
 }
 
@@ -110,7 +153,7 @@
   min-width: 0;
   background: none;
   border: none;
-  padding: 0;
+  padding: 6px 10px; /* full titlebar; hover highlight covers this box */
   margin: 0;
   color: #3d5a80; /* app link ink (matches .reference-link hover) */
   text-align: left;
@@ -120,7 +163,7 @@
 .citation-source:hover {
   color: #2c4460;
   background-color: rgba(61, 90, 128, 0.12);
-  border-radius: 3px;
+  border-radius: 0; /* full-bleed across the titlebar */
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
@@ -129,12 +172,15 @@
 .citation-source:focus-visible {
   outline: 2px solid rgba(61, 90, 128, 0.5);
   outline-offset: 1px;
-  border-radius: 3px;
+  border-radius: 0; /* full-bleed, matching the hover highlight */
 }
 
 .citation-source-title {
   font-weight: 600;
-  font-size: 0.9375rem;
+  /* Titlebar text at the same size as the card's body text (which is
+     `calc(1em * var(--reading-scale, 1))`), so the scale control scales
+     both together. */
+  font-size: calc(1em * var(--reading-scale, 1));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -142,16 +188,17 @@
 
 .citation-source-locator {
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: calc(1em * var(--reading-scale, 1));
   color: #374151;
   white-space: nowrap;
 }
 
 .citation-source-icon {
-  width: 0.85em;
-  height: 0.85em;
+  width: 1.1em;
+  height: 1.1em;
   flex-shrink: 0;
-  color: #374151;
+  margin-left: 0.3em; /* extra air before the open arrow */
+  color: #3d5a80; /* link ink — the arrow is the open affordance */
 }
 
 .citation-close {
@@ -161,7 +208,7 @@
   color: #6b7280;
   font-size: 0.9375rem;
   line-height: 1;
-  padding: 6px 8px;
+  padding: 6px 10px; /* full titlebar height, matching the source button */
   border-radius: 4px;
   cursor: pointer;
 }
@@ -216,6 +263,19 @@
   box-decoration-break: clone;
   background-color: #fff176;
   color: inherit;
+}
+
+/* Steel-blue highlight of the quoted span in the SOURCE passage while its
+   citation card is open — ties the card to the exact bhashya text it cites.
+   Same Devanagari-safe padding treatment as .citation-mark (ascender and
+   descender paint room via box-decoration-break: clone). */
+mark.citation-source-mark {
+  background-color: rgba(61, 90, 128, 0.16);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0.3em 0 0.15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set

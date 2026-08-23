@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Fragment } from "react";
 import { Reference } from "@/lib/data";
 import {
   assertCodePointOffsetAligned,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
 import { buildSourceWindow } from "@/lib/quotedMatch";
+import type { SourceHighlight } from "./CitationPanel";
 
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
 export interface ReferenceLinkContext {
@@ -22,7 +23,31 @@ export interface ReferenceLinkContext {
   /** Per-grantha target metadata for the edition-aware link gate. */
   granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToTitle: Record<string, string>;
+  /** The open citation's quoted span in THIS passage's raw text — marked
+   *  steel-blue while the card is up (null when no card is open or the span
+   *  lives in another passage). */
+  sourceHighlight?: SourceHighlight | null;
 }
+
+/** Local `[s, e)` bounds of `highlight.span` within a segment that starts at
+ *  `segStart` in the raw text, or null when the segment doesn't intersect the
+ *  highlighted span or belongs to another passage. */
+const highlightBounds = (
+  highlight: SourceHighlight | null | undefined,
+  passageRef: string,
+  segStart: number,
+  segLength: number,
+): { s: number; e: number } | null => {
+  if (!highlight || highlight.passageRef !== passageRef) {
+    return null;
+  }
+  const s = Math.max(0, highlight.span.start - segStart);
+  const e = Math.min(segLength, highlight.span.end - segStart);
+  if (s >= e) {
+    return null;
+  }
+  return { s, e };
+};
 
 /**
  * Render commentary Devanagari with its structured cross-text citations.
@@ -70,12 +95,24 @@ export function renderCommentaryWithReferences(
       continue;
     }
     const segStart = Math.max(cursor, ref.start);
+    const window = buildSourceWindow(rawText, ref.start);
     if (segStart > cursor) {
+      const seg = rawText.slice(cursor, segStart);
+      const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
+      let html = seg;
+      if (bounds) {
+        html =
+          seg.slice(0, bounds.s) +
+          '<mark class="citation-source-mark">' +
+          seg.slice(bounds.s, bounds.e) +
+          "</mark>" +
+          seg.slice(bounds.e);
+      }
       parts.push(
         <span
           key={`seg-${cursor}`}
           dangerouslySetInnerHTML={{
-            __html: sanitizeCommentaryHtml(rawText.slice(cursor, segStart)),
+            __html: sanitizeCommentaryHtml(html),
           }}
         />
       );
@@ -87,7 +124,8 @@ export function renderCommentaryWithReferences(
       <ReferenceLink
         key={`ref-${segStart}`}
         reference={{ ...ref, display_text: displayText }}
-        sourceLookback={buildSourceWindow(rawText, ref.start)}
+        sourceLookback={window.text}
+        sourceWindowStart={window.start}
         {...linkContext}
       />
     );
@@ -145,17 +183,33 @@ export function renderMulaWithReferences(
       continue;
     }
     const segStart = Math.max(cursor, ref.start);
+    const window = buildSourceWindow(rawText, ref.start);
     if (segStart > cursor) {
-      parts.push(
-        <span key={`seg-${cursor}`}>{stripMarkdown(rawText.slice(cursor, segStart))}</span>,
-      );
+      const seg = rawText.slice(cursor, segStart);
+      const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
+      if (bounds) {
+        parts.push(
+          <Fragment key={`seg-${cursor}`}>
+            {stripMarkdown(seg.slice(0, bounds.s))}
+            <mark className="citation-source-mark">
+              {stripMarkdown(seg.slice(bounds.s, bounds.e))}
+            </mark>
+            {stripMarkdown(seg.slice(bounds.e))}
+          </Fragment>
+        );
+      } else {
+        parts.push(
+          <span key={`seg-${cursor}`}>{stripMarkdown(seg)}</span>,
+        );
+      }
     }
     const displayText = rawText.slice(segStart, ref.end) || ref.display_text;
     parts.push(
       <ReferenceLink
         key={`ref-${segStart}`}
         reference={{ ...ref, display_text: displayText }}
-        sourceLookback={buildSourceWindow(rawText, ref.start)}
+        sourceLookback={window.text}
+        sourceWindowStart={window.start}
         {...linkContext}
       />
     );

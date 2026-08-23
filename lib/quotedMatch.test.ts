@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   buildMatchString,
   findQuotedSpan,
+  extractEnclosedQuote,
   buildSourceWindow,
   MAX_LOOKBACK,
   MIN_MATCH_CHARS,
@@ -261,6 +262,35 @@ describe("findQuotedSpan — no punctuation at the highlight edges", () => {
   });
 });
 
+describe("extractEnclosedQuote", () => {
+  it("returns the last markdown-bold span near the window end", () => {
+    const q = extractEnclosedQuote("वयं च **ओमित्येकाक्षरं ब्रह्म व्याहरन्मामनुस्मरन्** (");
+    expect(q?.text).toBe("**ओमित्येकाक्षरं ब्रह्म व्याहरन्मामनुस्मरन्**");
+    expect(q?.start).toBe(6);
+    expect(q?.end).toBe(6 + "**ओमित्येकाक्षरं ब्रह्म व्याहरन्मामनुस्मरन्**".length);
+  });
+
+  it("returns the last of several quoted spans in one window", () => {
+    expect(
+      extractEnclosedQuote("‘**एको ह वै**’ (मु. उ. १.१) ‘**अनपहतपाप्मा**’ (शत. ब्रा.)")?.text,
+    ).toBe("‘**अनपहतपाप्मा**’");
+  });
+
+  it("returns the outer pair when bold is nested inside curly quotes", () => {
+    expect(extractEnclosedQuote("स च ‘अविद्या मृत्युं तीर्त्वा’ (ई. उ. ११)")?.text).toBe(
+      "‘अविद्या मृत्युं तीर्त्वा’",
+    );
+  });
+
+  it("returns null when no complete quote pair is visible", () => {
+    expect(extractEnclosedQuote("इत्यादि प्रसिद्धानन्याधीनैश्वर्यं विवृणोति")).toBeNull();
+  });
+
+  it("returns null when the quote sits far from the window end", () => {
+    expect(extractEnclosedQuote("**प्राचीनम्** अत्र किञ्चिदपि न विद्यते इत्यादि")).toBeNull();
+  });
+});
+
 describe("buildSourceWindow", () => {
   it("takes the MAX_LOOKBACK chars before the ref and extends to whitespace", () => {
     const text = "अब" + "सी".repeat(40) + " शब्द";
@@ -268,8 +298,9 @@ describe("buildSourceWindow", () => {
     const window = buildSourceWindow(text, refStart);
     // Extends backward past the 60-char cut to the whitespace before the
     // final word, so the window starts on a word boundary.
-    expect(window.endsWith(" शब्द")).toBe(true);
-    expect(window.length).toBeGreaterThan(MAX_LOOKBACK);
+    expect(window.text.endsWith(" शब्द")).toBe(true);
+    expect(window.text.length).toBeGreaterThan(MAX_LOOKBACK);
+    expect(window.start).toBe(text.length - window.text.length);
   });
 
   it("does not extend past the citation start", () => {
@@ -277,14 +308,31 @@ describe("buildSourceWindow", () => {
     // ref at index 4: raw cut would be [max(0,4-60)=0, 4)="abc "; no earlier
     // whitespace to walk to, so it clamps at the text start.
     const window = buildSourceWindow(text, 4);
-    expect(window).toBe("abc ");
+    expect(window.text).toBe("abc ");
+    expect(window.start).toBe(0);
   });
 
-  it("clamps to the text start when there is no earlier whitespace", () => {
-    const text = "सी".repeat(40) + "अन्त्य";
-    const window = buildSourceWindow(text, text.length);
-    expect(window.startsWith("सी")).toBe(true);
-    expect(window).toBe(text);
+  it("extends backward past the hard cut to the citation's enclosing quote", () => {
+    // A quoted verse longer than MAX_LOOKBACK: the 60-char cut lands inside
+    // the quote, so the window must walk back to its opener.
+    const quoted = "**" + "अविद्या मृत्युं तीर्त्वा विद्ययाऽमृतमश्नुते पूषन्नेकर्षे यम सूर्य प्राजापत्य व्यूह रश्मीन् समूह तेजः ।" + "**";
+    expect(quoted.length).toBeGreaterThan(MAX_LOOKBACK);
+    const text = "इति ह स्माह " + quoted + " (ई. उ. ११) इत्यादि";
+    const refStart = text.indexOf("ई. उ. ११");
+    const window = buildSourceWindow(text, refStart);
+    expect(window.text).toContain(quoted);
+    expect(window.start).toBeLessThanOrEqual(text.indexOf(quoted));
+    // The extracted quote is the fully-formed span, now that both delimiters
+    // are in the window.
+    expect(extractEnclosedQuote(window.text)?.text).toBe(quoted);
+  });
+
+  it("does not extend when no complete quote pair precedes the cut", () => {
+    const text = "अत्र किञ्चिदपि न विद्यते इत्यादि प्रोक्तम् (अष्टा. २.२.६५)";
+    const refStart = text.indexOf("अष्टा");
+    const window = buildSourceWindow(text, refStart);
+    expect(window.start).toBe(0);
+    expect(window.text).toBe(text.slice(0, refStart));
   });
 });
 

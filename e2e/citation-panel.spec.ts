@@ -4,9 +4,10 @@ import { test, expect } from "@playwright/test";
  * Smoke tests for the docked citation panel (spec §8 verification).
  *
  * The panel must (a) genuinely collapse to zero height when closed (not a
- * transform that still reserves height), and (b) track its container's width.
- * Runs against the built static site in flow mode on the Īśāvāsya grantha
- * (Vedāntadeśika bhashya carries many cross-references).
+ * transform that still reserves height), (b) sit inset — strictly narrower
+ * than the flow reading column — as a distinct card, and (c) dismiss on an
+ * outside click. Runs against the built static site in flow mode on the
+ * Īśāvāsya grantha (Vedāntadeśika bhashya carries many cross-references).
  */
 
 const FLOW_URL = "/#isavasya-upanishad:1?e=isavasya-upanishad-vedantadesika&m=flow";
@@ -45,21 +46,37 @@ test("the panel opens to a real height and collapses to zero on close", async ({
   await expect(page.locator(".citation-panel")).toHaveCount(0);
 });
 
-test("the panel width matches the reading column, not the window", async ({ page }) => {
+test("the panel is narrower than the flow reading column, not flush with it", async ({ page }) => {
   await page.locator(".reference-link").first().click();
   const panel = page.locator(".citation-panel.is-open");
   await expect(panel).toBeVisible();
 
-  // In flow mode the panel is capped to the reading column's measure and
-  // centered, so it must be narrower than the scroll container and match the
-  // content column's width.
+  // In flow mode the card is inset to the mūla verse measure (max-w-2xl),
+  // strictly narrower than the reading column (max-w-3xl) it docks under —
+  // never a second column flush with the text.
   const width = await panel.evaluate((el) => (el as HTMLElement).offsetWidth);
-  const containerWidth = await panel.evaluate((el) => {
-    const scroll = (el as HTMLElement).parentElement!.querySelector(".overflow-y-auto");
-    return scroll ? (scroll as HTMLElement).offsetWidth : 0;
+  const columnWidth = await panel.evaluate((el) => {
+    const col = (el as HTMLElement).parentElement!.querySelector(
+      ".overflow-y-auto .mx-auto",
+    );
+    return col ? (col as HTMLElement).offsetWidth : 0;
   });
   expect(width).toBeGreaterThan(0);
-  expect(width).toBeLessThan(containerWidth);
+  expect(width).toBeLessThan(columnWidth);
+});
+
+test("clicking the reading pane dismisses the panel", async ({ page }) => {
+  await page.locator(".reference-link").first().click();
+  const panel = page.locator(".citation-panel.is-open");
+  await expect(panel).toBeVisible();
+
+  // Click in the main reading pane's left gutter — outside the card and away
+  // from any reference link or verse. (The flow reader has several scroll
+  // containers; `.overflow-x-hidden` singles out the reading pane.)
+  const pane = page.locator(".flow-reader .overflow-y-auto.overflow-x-hidden");
+  const box = await pane.boundingBox();
+  await page.mouse.click(box!.x + 30, box!.y + 260);
+  await expect(page.locator(".citation-panel")).toHaveCount(0);
 });
 
 test("the panel content shows the cited passage and a close button", async ({ page }) => {
@@ -68,4 +85,16 @@ test("the panel content shows the cited passage and a close button", async ({ pa
   await expect(panel).toBeVisible();
   await expect(panel.locator(".citation-source-title")).toBeVisible();
   await expect(panel.locator(".citation-content-text")).toBeVisible();
+});
+
+test("the quoted span in the source bhashya is marked while the card is open", async ({ page }) => {
+  // Desika quotes the cited verse in markdown bold before the locator — the
+  // exact-quote path steel-blue-marks it in the source text (not just in the
+  // card's preview).
+  await page.locator(".reference-link").first().click();
+  const panel = page.locator(".citation-panel.is-open");
+  await expect(panel).toBeVisible();
+  const mark = page.locator("mark.citation-source-mark").first();
+  await expect(mark).toBeVisible();
+  expect(await mark.textContent()).toContain("ज्ञाज्ञौ");
 });

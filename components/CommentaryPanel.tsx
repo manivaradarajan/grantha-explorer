@@ -12,7 +12,7 @@ import { useCallback, useMemo } from "react";
 
 import { renderCommentaryWithReferences as renderCommentaryWithReferencesFn } from './renderCommentary';
 import CommentarySelector from './CommentarySelector';
-import { CitationPanelHost } from './CitationPanel';
+import { CitationPanelHost, type SourceHighlight } from './CitationPanel';
 
 interface CommentaryPanelProps {
   grantha: Grantha;
@@ -32,10 +32,6 @@ interface CommentaryPanelProps {
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   hideHeader?: boolean;
-  /** Open-height cap for the citation panel (default 45vh). */
-  citationHeightCapVh?: number;
-  /** Open-height floor for the citation panel (default 30vh in columns). */
-  citationMinHeightVh?: number;
   /** Fired when the citation panel opens/closes (e.g. to grow a parent sheet). */
   onCitationExpandedChange?: (open: boolean) => void;
   /** Extra surface identity appended to the host's close-on-change key. */
@@ -57,8 +53,6 @@ export default function CommentaryPanel({
   granthaById,
   granthaIdToDevanagariTitle,
   hideHeader = false,
-  citationHeightCapVh,
-  citationMinHeightVh,
   onCitationExpandedChange,
   surfaceKeyExtra,
 }: CommentaryPanelProps) {
@@ -91,11 +85,12 @@ export default function CommentaryPanel({
   const referenceEditionId = hasMultipleEditions ? grantha.edition_id : undefined;
 
   const renderCommentaryWithReferences = useCallback(
-    (text: string, references?: Reference[], sourcePassageRef?: string): React.ReactNode =>
+    (text: string, references?: Reference[], sourcePassageRef?: string, sourceHighlight?: SourceHighlight | null): React.ReactNode =>
       renderCommentaryWithReferencesFn(text, references, {
         currentGranthaId: grantha.grantha_id,
         editionId: referenceEditionId,
         sourcePassageRef: sourcePassageRef ?? "",
+        sourceHighlight,
         updateHash,
         availableGranthaIds,
         granthaById,
@@ -104,7 +99,10 @@ export default function CommentaryPanel({
     [grantha.grantha_id, granthaIdToTitle, referenceEditionId, updateHash, availableGranthaIds, granthaById]
   );
 
-  const renderCommentary = (commentary: Commentary) => {
+  const renderCommentary = (
+    commentary: Commentary,
+    sourceHighlight: SourceHighlight | null,
+  ) => {
     const passage = commentaryPassageForRef(commentary.passages || [], selectedRef);
 
     if (!passage) {
@@ -121,7 +119,7 @@ export default function CommentaryPanel({
               {prefaceAnchor.label.devanagari}
             </div>
             <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-              {renderCommentaryWithReferences(introDev, undefined, selectedRef)}
+              {renderCommentaryWithReferences(introDev, undefined, selectedRef, sourceHighlight)}
             </div>
           </div>
         );
@@ -152,7 +150,7 @@ export default function CommentaryPanel({
         )}
 
         <div className="text-lg md:text-base leading-relaxed whitespace-pre-line">
-          {renderCommentaryWithReferences(mainContent, passage.references, passage.ref)}
+          {renderCommentaryWithReferences(mainContent, passage.references, passage.ref, sourceHighlight)}
         </div>
       </div>
     );
@@ -176,7 +174,10 @@ export default function CommentaryPanel({
   const commentary = commentaries[0];
   const subcommentaries = commentary?.subcommentaries || [];
 
-  const renderSubcommentary = (sub: Commentary) => {
+  const renderSubcommentary = (
+    sub: Commentary,
+    sourceHighlight: SourceHighlight | null,
+  ) => {
     const isOpen = activeSubIds.has(sub.commentary_id);
     const passage = commentaryPassageForRef(sub.passages || [], selectedRef);
     const hasContent = Boolean(passage && passage.content?.sanskrit?.devanagari);
@@ -208,7 +209,7 @@ export default function CommentaryPanel({
         {isOpen && (
           <div id={`sub-${sub.commentary_id}`} className="mt-2 pl-5">
             {hasContent ? (
-              renderCommentary(sub)
+              renderCommentary(sub, sourceHighlight)
             ) : (
               <div className="text-gray-500 italic">
                 {uiStrings.noCommentaryForVerse}
@@ -222,34 +223,36 @@ export default function CommentaryPanel({
 
   return (
     <CitationPanelHost
-      className="h-full flex flex-col"
+      className="relative h-full flex flex-col"
       surfaceKey={`${grantha.grantha_id ?? grantha.id}:${selectedRef}:${surfaceKeyExtra ?? ""}`}
-      heightCapVh={citationHeightCapVh ?? 45}
-      minHeightVh={citationMinHeightVh ?? 30}
       onExpandedChange={onCitationExpandedChange}
     >
-      {!hideHeader && (
-        <div className={PANEL_HEADER_CLASS}>
-          <div className="flex items-center justify-center gap-2">
-            <h2 className="text-lg font-semibold font-serif">
-              {[commentary.commentary_title, commentary.commentator?.devanagari]
-                .filter(Boolean)
-                .join(" - ")}
-            </h2>
-            {hasMultipleEditions && grantha.editions && (
-              <CommentarySelector
-                editions={grantha.editions}
-                selectedEditionId={selectedEditionId}
-                onSelect={onEditionChange}
-              />
-            )}
+      {(sourceHighlight) => (
+        <>
+          {!hideHeader && (
+            <div className={PANEL_HEADER_CLASS}>
+              <div className="flex items-center justify-center gap-2">
+                <h2 className="text-lg font-semibold font-serif">
+                  {[commentary.commentary_title, commentary.commentator?.devanagari]
+                    .filter(Boolean)
+                    .join(" - ")}
+                </h2>
+                {hasMultipleEditions && grantha.editions && (
+                  <CommentarySelector
+                    editions={grantha.editions}
+                    selectedEditionId={selectedEditionId}
+                    onSelect={onEditionChange}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+          <div className="flex-1 overflow-y-auto px-6 pb-6">
+            {renderCommentary(commentary, sourceHighlight)}
+            {subcommentaries.map((sub) => renderSubcommentary(sub, sourceHighlight))}
           </div>
-        </div>
+        </>
       )}
-      <div className="flex-1 overflow-y-auto px-6 pb-6">
-        {renderCommentary(commentary)}
-        {subcommentaries.map(renderSubcommentary)}
-      </div>
     </CitationPanelHost>
   );
 }

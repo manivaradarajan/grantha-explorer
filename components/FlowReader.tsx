@@ -37,7 +37,7 @@ import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
 import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
-import { CitationPanelHost } from "./CitationPanel";
+import { CitationPanelHost, type SourceHighlight } from "./CitationPanel";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -726,6 +726,7 @@ export default function FlowReader({
   const renderSubcommentary = (
     sub: Commentary,
     verseRef: string,
+    sourceHighlight: SourceHighlight | null,
   ): ReactNode => {
     const subPassage = commentaryPassageForRef(sub.passages, verseRef);
     if (!subPassage) {
@@ -773,6 +774,7 @@ export default function FlowReader({
                 {
                   currentGranthaId: grantha.grantha_id,
                   sourcePassageRef: verseRef,
+                  sourceHighlight,
                   updateHash,
                   availableGranthaIds,
                   granthaById,
@@ -786,12 +788,15 @@ export default function FlowReader({
     );
   };
 
-  const renderSubcommentaries = (verseRef: string): ReactNode => {
+  const renderSubcommentaries = (
+    verseRef: string,
+    sourceHighlight: SourceHighlight | null,
+  ): ReactNode => {
     if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
       return null;
     }
     return activeCommentary.subcommentaries.map((sub) =>
-      renderSubcommentary(sub, verseRef),
+      renderSubcommentary(sub, verseRef, sourceHighlight),
     );
   };
 
@@ -922,12 +927,10 @@ export default function FlowReader({
         </header>
 
         <CitationPanelHost
-          className="flex flex-1 min-h-0 flex-col"
+          className="relative flex flex-1 min-h-0 flex-col"
           surfaceKey={`${grantha.grantha_id}:${selectedRef}`}
-          heightCapVh={45}
-          minHeightVh={22}
-          panelWidthClass={contentWidthClass}
         >
+        {(sourceHighlight) => (
         <div
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto overflow-x-hidden"
@@ -950,6 +953,7 @@ export default function FlowReader({
                   availableGranthaIds={availableGranthaIds}
                   granthaById={granthaById}
                   granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+                  sourceHighlight={sourceHighlight}
                 />
               ) : (
                 passages.map((passage, index) => {
@@ -1012,7 +1016,7 @@ export default function FlowReader({
                               {stripMarkdown(content)}
                             </p>
                           ) : null}
-                          {renderSubcommentaries(passage.ref)}
+                          {renderSubcommentaries(passage.ref, sourceHighlight)}
                         </div>
                       </Fragment>
                     );
@@ -1074,8 +1078,9 @@ export default function FlowReader({
                                         mulaRefs,
                                         {
                                           currentGranthaId: grantha.grantha_id,
-                                          sourcePassageRef: passage.ref,
-                                          updateHash,
+                                                            sourcePassageRef: passage.ref,
+                  sourceHighlight,
+                  updateHash,
                                           availableGranthaIds,
                                           granthaById,
                                           granthaIdToTitle: granthaIdToDevanagariTitle,
@@ -1122,15 +1127,16 @@ export default function FlowReader({
                                 cp.references,
                                 {
                                   currentGranthaId: grantha.grantha_id,
-                                  sourcePassageRef: passage.ref,
-                                  updateHash,
+                                                    sourcePassageRef: passage.ref,
+                  sourceHighlight,
+                  updateHash,
                                   availableGranthaIds,
                                   granthaById,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,
                                 },
                               )}
                             </p>
-                            {renderSubcommentaries(passage.ref)}
+                            {renderSubcommentaries(passage.ref, sourceHighlight)}
                           </div>
                         )}
                       </div>
@@ -1147,6 +1153,7 @@ export default function FlowReader({
               )}
             </div>
           </div>
+        )}
         </CitationPanelHost>
       </div>
 

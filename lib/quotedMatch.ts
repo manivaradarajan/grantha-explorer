@@ -1,23 +1,127 @@
 /**
- * Fuzzy "needle-in-haystack" matching for the reference hover tooltip.
+ * Fuzzy "needle-in-haystack" matching for the citation panel's quote
+ * highlight.
  *
- * When a cross-text citation is hovered, the tooltip shows the full cited
+ * When a cross-text citation is clicked, the panel shows the full cited
  * passage (the haystack). The source text immediately before the citation
  * often embeds a quote of part of that passage (the needle), but the quote is
  * surrounded by commentary prose and usually diverges from the canonical text:
  * typos, pāda-break newlines, danda/whitespace drift, or sandhi-level
  * truncation. `findQuotedSpan` locates the best-matching region of the passage
  * against the source window using Smith–Waterman local alignment, so the
- * popup can highlight exactly the quoted span.
+ * panel can highlight exactly the quoted span.
  *
  * The needle's boundaries are not known in advance (it sits inside prose), so
  * a plain substring search is insufficient; local alignment finds the
  * highest-scoring match of any window-against-passage region and reports it
  * in the passage's original coordinates.
+ *
+ * When the window shows the citation enclosed in a quote pair (`**…**` or
+ * `‘…’`), the quote IS the citation — `extractEnclosedQuote` returns the
+  * exact span and it is matched first (a tighter needle than the window's
+ * prose); the whole window is the fuzzy fallback.
  */
 
 /** Characters of source text examined immediately before the citation. */
 export const MAX_LOOKBACK = 60;
+
+/** Opening/closing delimiter pairs that mark a fully-formed quoted span in a
+ *  source window: markdown bold (the corpus quotes Sanskrit in `**…**`) and
+ *  curly/straight quote pairs. */
+const QUOTE_PAIRS: ReadonlyArray<readonly [string, string]> = [
+  ["**", "**"],
+  ["‘", "’"],
+  ["“", "”"],
+  ['"', '"'],
+  ["'", "'"],
+];
+
+/** Chars of window tail allowed after the closing delimiter: the citation
+ *  locator in parens (e.g. " (श्वे. उ. १.९)") sits between the quote and the
+ *  citation offset. */
+const QUOTE_TAIL_TOLERANCE = 20;
+
+/** Hard cap on backward extension to an enclosing quote opener (chars): a
+ *  quoted verse can run well past MAX_LOOKBACK, so the extraction walks back
+ *  up to this far to find the citation's own quote pair. */
+const QUOTE_EXTEND_CAP = 600;
+
+/** The nearest opener of a complete quote pair at or before `from` (within
+ *  `QUOTE_EXTEND_CAP` chars) whose closer lies before `refStart` — i.e. the
+ *  citation's own enclosing quote when the hard lookback cut lands inside it.
+ *  Returns null when no such pair is visible. */
+const enclosingQuoteStart = (
+  sourceText: string,
+  from: number,
+  refStart: number,
+): number | null => {
+  const limit = Math.max(0, from - QUOTE_EXTEND_CAP);
+  for (let p = from - 1; p >= limit; p--) {
+    for (const [open, close] of QUOTE_PAIRS) {
+      if (!sourceText.startsWith(open, p)) {
+        continue;
+      }
+      const closeAt = sourceText.indexOf(close, p + open.length);
+      if (closeAt !== -1 && closeAt < refStart) {
+        return p;
+      }
+      break;
+    }
+  }
+  return null;
+};
+
+/** A fully-formed quoted span: the exact quoted text plus its window-relative
+ *  offsets (delimiters included, so `start`/`end` map to the source text). */
+export interface EnclosedQuote {
+  text: string;
+  /** Offset of the opening delimiter within the window. */
+  start: number;
+  /** Offset one past the closing delimiter within the window. */
+  end: number;
+}
+
+/**
+ * If the source window ends with a fully-formed quoted span (markdown bold or
+ * a quote pair), return just that span — the exact quoted text, delimiters
+ * included. A quote visible in the window is the citation itself, so matching
+ * it alone beats fuzzy-matching the window's surrounding prose. Returns null
+ * when no complete quote pair is visible near the window's end.
+ *
+ * Args:
+ *     sourceWindow: The text before the citation (see `buildSourceWindow`).
+ *
+ * Returns:
+ *     The last complete quoted span and its window-relative offsets, or null.
+ */
+export const extractEnclosedQuote = (sourceWindow: string): EnclosedQuote | null => {
+  let lastStart = -1;
+  let lastEnd = -1;
+  for (let i = 0; i < sourceWindow.length; i++) {
+    for (const [open, close] of QUOTE_PAIRS) {
+      if (!sourceWindow.startsWith(open, i)) {
+        continue;
+      }
+      const closeAt = sourceWindow.indexOf(close, i + open.length);
+      if (closeAt === -1) {
+        break; // no closer for this opener — keep scanning
+      }
+      const end = closeAt + close.length;
+      if (end > lastEnd) {
+        lastStart = i;
+        lastEnd = end;
+      }
+      break; // one opener matched at i
+    }
+  }
+  if (lastStart === -1) {
+    return null;
+  }
+  if (sourceWindow.length - lastEnd > QUOTE_TAIL_TOLERANCE) {
+    return null;
+  }
+  return { text: sourceWindow.slice(lastStart, lastEnd), start: lastStart, end: lastEnd };
+};
 
 /** Build the source window for a citation: the `MAX_LOOKBACK` chars before the
  *  reference offset, extended backward to the nearest whitespace boundary.
@@ -33,14 +137,30 @@ export const MAX_LOOKBACK = 60;
  *     refStart: The reference's `start` offset (code-point, safe to slice).
  *
  * Returns:
- *     The source window to pass to `findQuotedSpan`.
+ *     The source window and its absolute start offset in `sourceText` — the
+ *     window text feeds `findQuotedSpan`; the start maps an
+ *     `extractEnclosedQuote` offset back to the source text.
  */
-export const buildSourceWindow = (sourceText: string, refStart: number): string => {
+export interface SourceWindow {
+  text: string;
+  /** Absolute offset of `text` within `sourceText`. */
+  start: number;
+}
+
+export const buildSourceWindow = (sourceText: string, refStart: number): SourceWindow => {
   let start = Math.max(0, refStart - MAX_LOOKBACK);
   while (start > 0 && !/\s/.test(sourceText[start - 1])) {
     start--;
   }
-  return sourceText.slice(start, refStart);
+  // When the hard cut lands inside the citation's own quoted span (its
+  // closing delimiter visible but the opener cut off), extend backward to the
+  // opener — `extractEnclosedQuote` needs both delimiters to return the
+  // fully-formed quote.
+  const quoteStart = enclosingQuoteStart(sourceText, start, refStart);
+  if (quoteStart !== null) {
+    start = quoteStart;
+  }
+  return { text: sourceText.slice(start, refStart), start };
 };
 
 /** Minimum matched run length (in kept chars) before a match is accepted. */
@@ -149,51 +269,92 @@ export const buildMatchString = (text: string): MatchString => {
 export const findQuotedSpan = (
   sourceWindow: string,
   passage: string,
-): { start: number; end: number } | null => {
+): { start: number; end: number; sourceStart: number; sourceEnd: number } | null => {
   const windowStr = buildMatchString(sourceWindow);
   const passageStr = buildMatchString(passage);
-  const query = windowStr.match;
   const subject = passageStr.match;
-  if (query.length === 0 || subject.length === 0) {
+  if (subject.length === 0) {
     return null;
   }
-  const span = align(query, subject);
-  if (span === null) {
-    return null;
+  // Candidate needles, tightest first: a fully-formed quoted span (when the
+  // window shows the citation enclosed in quotes) matches exactly; the whole
+  // window is the fuzzy fallback. Each candidate runs the same validation.
+  const needles: string[] = [];
+  const enclosed = extractEnclosedQuote(sourceWindow);
+  if (enclosed !== null) {
+    needles.push(enclosed.text);
   }
-  const { score, queryStart, queryEnd, subjectStart, subjectEnd } = span;
-  const alignedLength = Math.max(queryEnd - queryStart, subjectEnd - subjectStart);
-  if (score < 2 * MIN_MATCH_CHARS) {
-    return null;
+  needles.push(sourceWindow);
+
+  for (const needle of needles) {
+    const query = buildMatchString(needle).match;
+    if (query.length === 0) {
+      continue;
+    }
+    const span = align(query, subject);
+    if (span === null) {
+      continue;
+    }
+    const { score, queryStart, queryEnd, subjectStart, subjectEnd } = span;
+    const alignedLength = Math.max(queryEnd - queryStart, subjectEnd - subjectStart);
+    if (score < 2 * MIN_MATCH_CHARS) {
+      continue;
+    }
+    if (alignedLength === 0 || score / (2 * alignedLength) < MIN_SIMILARITY) {
+      continue;
+    }
+    // Preview-side span (the highlight in the card).
+    const start = passageStr.map[subjectStart];
+    const end = passageStr.map[subjectEnd - 1] + 1;
+    if (start >= end || end > passage.length) {
+      continue;
+    }
+    const clamped = clampToGraphemeBoundaries(passage, start, end);
+    if (clamped === null) {
+      continue;
+    }
+    // Source-side span (where the quote sits in the window → the source
+    // passage). The exact quoted span carries its delimiters (the mark wraps
+    // them; the commentary sanitizer pairs the bold); the fuzzy whole-window
+    // match needs grapheme clamping + edge trimming like the preview side.
+    let sourceStart: number;
+    let sourceEnd: number;
+    if (enclosed !== null && needle === enclosed.text) {
+      sourceStart = enclosed.start;
+      sourceEnd = enclosed.end;
+    } else {
+      const rawStart = windowStr.map[queryStart];
+      const rawEnd = windowStr.map[queryEnd - 1] + 1;
+      if (rawStart >= rawEnd || rawEnd > sourceWindow.length) {
+        continue;
+      }
+      const sourceClamped = clampToGraphemeBoundaries(sourceWindow, rawStart, rawEnd);
+      if (sourceClamped === null) {
+        continue;
+      }
+      sourceStart = sourceClamped.start;
+      sourceEnd = sourceClamped.end;
+    }
+    // Whole-passage quote → highlighting is noise; suppress it. Measure
+    // coverage against the passage CONTENT only (a trailing " ॥ N ॥" verse
+    // number is chrome, not text — a quote of the whole sutra would otherwise
+    // look like <100% coverage).
+    const contentLength = passage
+      .replace(VERSE_NUMBER_SUFFIX, "")
+      .trimEnd()
+      .length;
+    const matchedLength = Math.min(clamped.end - clamped.start, contentLength);
+    if (contentLength > 0 && matchedLength / contentLength > MAX_COVERAGE) {
+      continue;
+    }
+    return {
+      start: clamped.start,
+      end: clamped.end,
+      sourceStart,
+      sourceEnd,
+    };
   }
-  if (alignedLength === 0 || score / (2 * alignedLength) < MIN_SIMILARITY) {
-    return null;
-  }
-  const start = passageStr.map[subjectStart];
-  const end = passageStr.map[subjectEnd - 1] + 1;
-  if (start >= end || end > passage.length) {
-    return null;
-  }
-  // Clamp to grapheme boundaries so the highlight never splits a syllable
-  // (e.g. a base char from its matra/virama) — splitting would render a
-  // Devanagari dotted circle at the clamp edge.
-  const clamped = clampToGraphemeBoundaries(passage, start, end);
-  if (clamped === null) {
-    return null;
-  }
-  // Whole-passage quote → highlighting is noise; suppress it. Measure
-  // coverage against the passage CONTENT only (a trailing " ॥ N ॥" verse
-  // number is chrome, not text — a quote of the whole sutra would otherwise
-  // look like <100% coverage).
-  const contentLength = passage
-    .replace(VERSE_NUMBER_SUFFIX, "")
-    .trimEnd()
-    .length;
-  const matchedLength = Math.min(clamped.end - clamped.start, contentLength);
-  if (contentLength > 0 && matchedLength / contentLength > MAX_COVERAGE) {
-    return null;
-  }
-  return clamped;
+  return null;
 };
 
 /**

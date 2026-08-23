@@ -198,7 +198,7 @@ describe("findQuotedSpan against the real corpus", () => {
 
     const resolved: ResolvedSample[] = [];
     for (const c of samples) {
-      const window = buildSourceWindow(c.sourceText, c.reference.start);
+      const window = buildSourceWindow(c.sourceText, c.reference.start).text;
       const passage = await previewFor(c, availableIds);
       const isStatus =
         passage === null ||
@@ -245,7 +245,7 @@ describe("findQuotedSpan against the real corpus", () => {
       ];
       const out: string[] = [];
       for (const c of samples) {
-        const window = buildSourceWindow(c.sourceText, c.reference.start);
+        const window = buildSourceWindow(c.sourceText, c.reference.start).text;
         const passage = await previewFor(c, availableIds);
         const isStatus =
           passage === null ||
@@ -274,7 +274,7 @@ describe("findQuotedSpan against the real corpus", () => {
     let matches = 0;
     let resolvable = 0;
     for (const c of desikaRefs) {
-      const window = buildSourceWindow(c.sourceText, c.reference.start);
+      const window = buildSourceWindow(c.sourceText, c.reference.start).text;
       const passage = await previewFor(c, availableIds);
       const isStatus =
         passage === null ||
