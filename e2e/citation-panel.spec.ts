@@ -3,13 +3,13 @@ import { test, expect } from "@playwright/test";
 /**
  * Smoke tests for the floating citation popover (spec §8 verification).
  *
- * The popover must (a) be a compact floating bubble anchored to the
- * reference (not a docked card), (b) place below when there's room and flip
- * above at the viewport's bottom edge, (c) show its pointer tail only in a
- * clean placement, (d) stay within viewport margins on narrow screens,
- * (e) dismiss on scroll, and (f) mark the quoted span in the source text.
- * Runs against the built static site in flow mode on the Īśāvāsya grantha
- * (Vedāntadeśika bhashya carries many cross-references).
+ * On desktop (Playwright's default fine-pointer viewport), hover peeks the
+ * popover and the FIRST click follows the link (navigates); focus pins it
+ * (✕ available). These tests cover: peek opens on hover and closes via ✕
+ * when pinned; a click navigates; below/above placement with the pointer
+ * tail; scroll dismissal; horizontal viewport clamping; and the steel-blue
+ * source-text mark. Runs in flow mode on the Īśāvāsya grantha (Vedāntadeśika
+ * bhashya carries many cross-references).
  */
 
 const FLOW_URL = "/#isavasya-upanishad:1?e=isavasya-upanishad-vedantadesika&m=flow";
@@ -29,10 +29,9 @@ test.beforeEach(async ({ page }) => {
       await page.waitForLoadState("domcontentloaded");
     }
   }
-  // The first reference link may sit below the fold; bring it on-screen so a
-  // click is actionable (the popover anchors to the reference's rect). Use a
-  // plain scroll — NOT scrollIntoView (which focuses the link, and focus opens
-  // the pinned popover, turning the test's first click into a navigation).
+  // Bring the first reference link near the top of the viewport so a hover is
+  // actionable and placement is "below". Plain scroll (not scrollIntoView) to
+  // avoid focusing the link.
   await page.evaluate(() => {
     const el = document.querySelector(".reference-link");
     if (el) {
@@ -42,35 +41,38 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test("opens a compact floating popover on click and closes via ✕", async ({ page }) => {
-  await page.locator(".reference-link").first().click();
+const firstRef = (page: import("@playwright/test").Page) =>
+  page.locator(".reference-link").first();
+
+test("hover peeks a compact popover; pinning via focus reveals ✕, which closes it", async ({ page }) => {
+  await firstRef(page).hover();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
   // Compact width, roughly the 320px design measure.
   const width = await pop.evaluate((el) => (el as HTMLElement).offsetWidth);
   expect(width).toBeGreaterThan(250);
   expect(width).toBeLessThan(360);
-
+  // Peek has no ✕ (it's pinned-only); focus pins it, revealing ✕.
+  await expect(page.locator(".citation-close")).toHaveCount(0);
+  await firstRef(page).focus();
+  await expect(page.locator(".citation-close")).toBeVisible();
   await page.locator(".citation-close").click();
   await expect(pop).toHaveCount(0);
 });
 
-test("a second click on the pinned reference navigates to the cited passage", async ({ page }) => {
-  await page.locator(".reference-link").first().click();
-  const pop = page.locator(".citation-popover");
-  await expect(pop).toBeVisible();
+test("on desktop the first click on the reference follows the link", async ({ page }) => {
   const hashBefore = await page.evaluate(() => location.hash);
-  // Second click (already pinned) navigates away from the citing verse.
-  await page.locator(".reference-link").first().click();
+  await firstRef(page).click();
   await expect
     .poll(async () => page.evaluate(() => location.hash), { timeout: 5000 })
     .not.toBe(hashBefore);
-  await expect(pop).toHaveCount(0);
+  // No popover left behind (navigation superseded it).
+  await expect(page.locator(".citation-popover")).toHaveCount(0);
 });
 
 test("places below when there is room and flips above near the viewport bottom", async ({ page }) => {
-  // A link near the top → below.
-  await page.locator(".reference-link").first().click();
+  // A link near the top → below (peek via hover).
+  await firstRef(page).hover();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
   const belowClass = await pop.evaluate((el) => el.className);
@@ -78,26 +80,29 @@ test("places below when there is room and flips above near the viewport bottom",
   // Tail present in a clean below placement.
   await expect(page.locator(".citation-tail")).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(pop).toHaveCount(0);
 
-  // Scroll the link toward the viewport bottom → should flip above. This uses
-  // scrollIntoView (which focuses the link), but that's safe here: the Escape
-  // above already closed the popover, so the focus-open is exactly the pinned
-  // state the test then clicks once to re-open and assert placement on.
-  await page.locator(".reference-link").first().evaluate((el) => {
-    el.scrollIntoView({ block: "end" });
+  // Move the link to the bottom of the reading pane. The popover only
+  // repositions on open, so close-then-reopen is required to test the flip.
+  await page.locator(".flow-reader .overflow-y-auto").first().evaluate((el) => {
+    const container = el as HTMLElement;
+    const link = container.querySelector(".reference-link") as HTMLElement;
+    container.scrollTop = link.offsetTop + link.offsetHeight - container.clientHeight + 40;
+    container.dispatchEvent(new Event("scroll"));
   });
-  await page.locator(".reference-link").first().click();
-  await expect(page.locator(".citation-popover")).toBeVisible();
-  const placement = await page
-    .locator(".citation-popover")
-    .evaluate((el) => el.className);
+  await firstRef(page).hover();
+  await expect(pop).toBeVisible();
+  const placement = await pop.evaluate((el) => el.className);
   expect(placement).toMatch(/above|forced/);
 });
 
 test("dismisses on scroll of the reading surface", async ({ page }) => {
-  await page.locator(".reference-link").first().click();
+  await firstRef(page).hover();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
+  // Wait past the open "settle" window (focus-induced scrolls right after open
+  // are suppressed) so this is treated as a genuine later scroll.
+  await page.waitForTimeout(400);
   await page.locator(".flow-reader .overflow-y-auto").first().evaluate((el) => {
     el.scrollTop += 200;
     el.dispatchEvent(new Event("scroll"));
@@ -107,9 +112,8 @@ test("dismisses on scroll of the reading surface", async ({ page }) => {
 
 test("stays within the viewport horizontally (centered on the reference)", async ({ page }) => {
   // The popover centers on the reference and clamps against the viewport with
-  // the 12px margin from --citation-viewport-margin. Open it and assert the
-  // box sits fully on-screen with margins on both sides.
-  await page.locator(".reference-link").first().click();
+  // the 12px margin from --citation-viewport-margin.
+  await firstRef(page).hover();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
   const box = await pop.boundingBox();
@@ -123,7 +127,7 @@ test("stays within the viewport horizontally (centered on the reference)", async
 });
 
 test("the quoted span in the source bhashya is marked while the popover is open", async ({ page }) => {
-  await page.locator(".reference-link").first().click();
+  await firstRef(page).hover();
   const pop = page.locator(".citation-popover");
   await expect(pop).toBeVisible();
   const mark = page.locator("mark.citation-source-mark").first();

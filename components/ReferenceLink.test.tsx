@@ -182,4 +182,35 @@ describe("ReferenceLink — floating citation popover trigger", () => {
     });
     expect(BASE_PROPS.updateHash).toHaveBeenCalledWith("svetasvatara-upanishad", "1.9", undefined);
   });
+
+  it("on desktop the first click follows the link (navigates)", async () => {
+    // Desktop = fine pointer + hover. Override matchMedia so the link takes
+    // the desktop path: hover peeks, and a click navigates instead of pinning.
+    const real = window.matchMedia;
+    window.matchMedia = ((query: string): MediaQueryList =>
+      ({
+        matches: query.includes("hover: hover"),
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }) as unknown as MediaQueryList);
+    try {
+      await renderLink(LINKABLE_REF);
+      act(() => {
+        linkEl().dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      });
+      await act(async () => {
+        await Promise.resolve();
+      });
+      // Navigated, no popover pinned.
+      expect(BASE_PROPS.updateHash).toHaveBeenCalledWith("svetasvatara-upanishad", "1.9", undefined);
+      expect(popoverEl()).toBeNull();
+    } finally {
+      window.matchMedia = real;
+    }
+  });
 });
