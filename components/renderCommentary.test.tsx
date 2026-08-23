@@ -228,9 +228,7 @@ describe("renderCommentaryWithReferences", () => {
       link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
     });
     await act(async () => {
-      const { promise, resolve } = Promise.withResolvers<void>();
-      setTimeout(resolve, 80);
-      await promise;
+      await new Promise<void>((resolve) => setTimeout(resolve, 80));
     });
     const mark = el.querySelector("mark.citation-source-mark");
     expect(mark).not.toBeNull();
