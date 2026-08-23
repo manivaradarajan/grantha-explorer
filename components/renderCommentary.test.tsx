@@ -10,11 +10,32 @@
  * would straddle a citation boundary (no crash; markers render literally).
  */
 
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, beforeAll } from "vitest";
 import { act } from "react-dom/test-utils";
 import { createRoot, Root } from "react-dom/client";
+import React from "react";
 import { Reference } from "@/lib/data";
 import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
+import { CitationPanelHost } from "./CitationPanel";
+
+// jsdom has no ResizeObserver (the citation popover repositions on resize).
+beforeAll(() => {
+  const RO = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  (globalThis as Record<string, unknown>).ResizeObserver =
+    (globalThis as Record<string, unknown>).ResizeObserver ?? RO;
+});
+
+/** Wrap the rendered output in a CitationPanelHost so ReferenceLinks can open
+ *  the citation panel (matches the real surfaces' mounting). */
+const wrap = (node: React.ReactNode) => (
+  <CitationPanelHost className="h-full" surfaceKey="k">
+    {node}
+  </CitationPanelHost>
+);
 
 const container = (): HTMLDivElement => {
   const el = document.createElement("div");
@@ -55,12 +76,12 @@ describe("renderCommentaryWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderCommentaryWithReferences(text, refs, {
+      wrap(renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
         // Empty target metadata → not linkable → renders as external.
         granthaById: {},
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")).not.toBeNull();
@@ -84,7 +105,7 @@ describe("renderCommentaryWithReferences", () => {
     const el = container();
     const root = createRoot(el);
     act(() => {
-      root.render(renderCommentaryWithReferences(text, refs, context));
+      root.render(wrap(renderCommentaryWithReferences(text, refs, context)));
     });
     expect(el.querySelector(".reference-link")).toBeNull();
     expect(el.querySelector(".reference-unresolved")?.textContent).toBe("बघ. च. १.२.३");
@@ -107,12 +128,12 @@ describe("renderCommentaryWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderCommentaryWithReferences(text, refs, {
+      wrap(renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
         // Empty target metadata → not linkable → renders as external.
         granthaById: {},
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")).not.toBeNull();
@@ -139,10 +160,10 @@ describe("renderCommentaryWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderCommentaryWithReferences(text, refs, {
+      wrap(renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")?.textContent).toBe("श्वे. उ. १.९");
@@ -165,14 +186,53 @@ describe("renderCommentaryWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderCommentaryWithReferences(text, refs, {
+      wrap(renderCommentaryWithReferences(text, refs, {
         ...context,
         availableGranthaIds: [],
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")).not.toBeNull();
     expect(el.querySelector(".reference-link")?.textContent).toBe("शत. ब्रा.");
+    cleanUp(root, el);
+  });
+
+  it("marks the quoted span in the source passage while its citation is open", async () => {
+    // The bhashya quotes the cited verse in markdown bold, then the locator —
+    // exactly the corpus shape. Opening the citation must steel-blue-mark the
+    // quote in the source text (via the host's render-prop highlight).
+    const text = "स च **ज्ञाज्ञौ द्वावजावीशनीशौ** (श्वे. उ. १.९) इत्यादि";
+    const refs: Reference[] = [
+      {
+        start: text.indexOf("श्वे"),
+        end: text.indexOf("श्वे") + "श्वे. उ. १.९".length,
+        display_text: "श्वे. उ. १.९",
+        grantha_id: "svetasvatara-upanishad",
+        locator: "1.9",
+        unresolved: false,
+      },
+    ];
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+      root.render(
+        <CitationPanelHost className="h-full" surfaceKey="k">
+          {(sourceHighlight) =>
+            renderCommentaryWithReferences(text, refs, { ...context, sourceHighlight })
+          }
+        </CitationPanelHost>,
+      );
+    });
+    const link = el.querySelector(".reference-link") as HTMLElement;
+    act(() => {
+      link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    await act(async () => {
+      await new Promise<void>((resolve) => setTimeout(resolve, 80));
+    });
+    const mark = el.querySelector("mark.citation-source-mark");
+    expect(mark).not.toBeNull();
+    expect(mark?.textContent).toContain("ज्ञाज्ञौ द्वावजावीशनीशौ");
     cleanUp(root, el);
   });
 });
@@ -194,10 +254,10 @@ describe("renderMulaWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderMulaWithReferences(text, refs, {
+      wrap(renderMulaWithReferences(text, refs, {
         ...context,
         availableGranthaIds: ["brihadaranyaka-upanishad"],
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
@@ -224,10 +284,10 @@ describe("renderMulaWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderMulaWithReferences(text, refs, {
+      wrap(renderMulaWithReferences(text, refs, {
         ...context,
         availableGranthaIds: ["brihadaranyaka-upanishad"],
-      })
+      }))
       );
     });
     expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
@@ -240,7 +300,7 @@ describe("renderMulaWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context)
+      wrap(renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context))
       );
     });
     expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा ।");

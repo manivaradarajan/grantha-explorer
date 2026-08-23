@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useCallback, useRef } from 'react';
 import { loadGrantha } from '../lib/data';
 import {
-  getPassagePreview,
   isReferenceLinkable,
   resolveReferenceTarget,
   type ReferenceTargetMeta,
@@ -16,6 +14,8 @@ import {
   isDiagnosticsEnabled,
   type ReferenceDiagCode,
 } from '../lib/referenceDiagnostics';
+import { extractEnclosedQuote } from '../lib/quotedMatch';
+import { useCitationPanel } from './CitationPanel';
 import type { Reference } from '../lib/data';
 
 interface ReferenceLinkProps {
@@ -25,6 +25,12 @@ interface ReferenceLinkProps {
   editionId?: string;
   /** The commentary passage ref containing this citation (for diagnostics). */
   sourcePassageRef: string;
+  /** Source text immediately before the citation; fuzzy-matched against the
+   *  preview so the panel can highlight the quoted span. */
+  sourceLookback?: string;
+  /** Absolute offset of `sourceLookback` within the source passage — lets the
+   *  open citation highlight the quoted span in the source text itself. */
+  sourceWindowStart?: number;
   updateHash: (granthaId: string, verseRef: string, editionId?: string) => void;
   availableGranthaIds: string[];
   /** Per-grantha target metadata (editions + default_school) for the edition-aware gate. */
@@ -32,186 +38,50 @@ interface ReferenceLinkProps {
   granthaIdToTitle: Record<string, string>;
 }
 
-const HOVER_DELAY_MS = 400;
-const TOOLTIP_VIEWPORT_PADDING = 10;
-const TOOLTIP_GAP = 8;
+const HOVER_OPEN_DELAY_MS = 150;
 
 /**
  * Renders a structured cross-text citation (producer-emitted `references[]`).
  *
  * Unresolved references (undefined abbreviation: `grantha_id` null /
  * `unresolved` true) render as plain unlinked text. References to works not in
- * the library render as a link whose hover/click explains "not yet available".
- * References to works in the library resolve on hover/click against the loaded
- * target (plan §5): exact leaf, section, whole-work root, or a runtime
- * diagnostic. Same-grantha references preserve the active edition.
+ * the library render as a link whose activation explains "not yet available".
+ * References to works in the library open a floating citation popover: hover
+ * peeks after a short delay; click/tap/Enter/Space pins it.
  */
-const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipReady, setTooltipReady] = useState(false);
-  const [tooltipContent, setTooltipContent] = useState<React.ReactNode>(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
-  const [tooltipScale, setTooltipScale] = useState("1");
-  const linkRef = useRef<HTMLAnchorElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const isTouchDevice = useRef(false);
-  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // First tap on touch previews; a second tap navigates (or dismisses for
-  // not-in-library refs). Reset on blur/leave/outside-click.
-  const previewedRef = useRef(false);
+const ReferenceLink: React.FC<ReferenceLinkProps> = ({
+  reference,
+  currentGranthaId,
+  editionId,
+  sourcePassageRef,
+  sourceLookback,
+  sourceWindowStart,
+  updateHash,
+  availableGranthaIds,
+  granthaById,
+  granthaIdToTitle,
+}) => {
+  const { openCitation, closeCitation, citation, mode, scheduleClose, cancelClose } = useCitationPanel();
+  const anchorRef = useRef<HTMLAnchorElement>(null);
+  const hoverOpenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // True when the popover's current pin came from a FOCUS event (mouse
+  // mousedown or keyboard Tab). A real mouse click that immediately follows
+  // focus must "consume" the pin (stay pinned, don't navigate) — otherwise
+  // the very first click after hovering would navigate.
+  const focusedPinRef = useRef(false);
 
   const targetTitle = reference.grantha_id
     ? granthaIdToTitle[reference.grantha_id] || reference.grantha_id
     : reference.display_text;   // unresolved (no id): fall back to the citation text
   const locatorLabel = reference.locator
     ? toDevanagariNumerals(reference.locator)
-    : "whole work";
+    : "";   // whole-work reference: the title alone identifies it
   const renderPlain = !reference.grantha_id || reference.unresolved;
   // The edition-aware gate: linkable iff the concrete (grantha, edition) is on
   // disk, or the edition-less target's default is attribution-safe.
   const linkable =
     reference.grantha_id != null &&
     isReferenceLinkable(reference, granthaById);
-
-  // Detect if device supports touch
-  useEffect(() => {
-    isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  }, []);
-
-  // Clear pending hover timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (hoverTimeout.current !== null) {
-        clearTimeout(hoverTimeout.current);
-      }
-    };
-  }, []);
-
-  // Shared tooltip surface: chrome (meta/status) split from the passage so the
-  // passage renders in the reading face (Tiro) and the chrome in the UI sans.
-  const renderTooltip = useCallback(
-    (body: React.ReactNode, status?: React.ReactNode): React.ReactNode => (
-      <>
-        <div className="tooltip-meta">
-          <span className="tooltip-title">{targetTitle}</span>
-          {locatorLabel && <span className="tooltip-locator">{locatorLabel}</span>}
-        </div>
-        {status ?? body}
-      </>
-    ),
-    [targetTitle, locatorLabel],
-  );
-
-  const hideTooltip = useCallback(() => {
-    if (hoverTimeout.current !== null) {
-      clearTimeout(hoverTimeout.current);
-      hoverTimeout.current = null;
-    }
-    previewedRef.current = false;
-    setTooltipReady(false);
-    setShowTooltip(false);
-    setTooltipContent(null);
-  }, []);
-
-  // Close tooltip when clicking outside (touch devices). Resets the
-  // first-tap-preview state so the next tap previews again.
-  useEffect(() => {
-    if (!isTouchDevice.current || !showTooltip) return;
-
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
-      if (linkRef.current && !linkRef.current.contains(e.target as Node)) {
-        hideTooltip();
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [showTooltip, hideTooltip]);
-
-  const loadTooltipContent = useCallback(async () => {
-    if (renderPlain) {
-      // Unresolved reference: just show who/what it points at — the work name
-      // and location in the tooltip header. No status line.
-      setTooltipContent(renderTooltip(null));
-      return;
-    }
-    if (!reference.grantha_id) return;
-    if (!linkable) {
-      // Not linkable (not in library, or absent edition / school-flavored
-      // default without an edition): show the work + location, no "not yet
-      // available" line.
-      setTooltipContent(renderTooltip(null));
-      return;
-    }
-    const passageText = await getPassagePreview(
-      reference.grantha_id,
-      reference,
-      availableGranthaIds,
-    );
-    setTooltipContent(
-      renderTooltip(
-        passageText && passageText !== "Reference not available in this library."
-          ? <p className="tooltip-passage">{passageText}</p>
-          : <p className="tooltip-passage text-gray-400">no preview</p>,
-      ),
-    );
-  }, [reference, renderPlain, linkable, availableGranthaIds, renderTooltip]);
-
-  // Load content FIRST, then show: the card only ever appears fully measured
-  // (opacity 0 until the layout effect positions it), eliminating the flicker.
-  const openTooltip = useCallback(async () => {
-    if (hoverTimeout.current !== null) {
-      clearTimeout(hoverTimeout.current);
-      hoverTimeout.current = null;
-    }
-    setTooltipReady(false);
-    // Propagate the flow reader's अ+/अ− scale to the portal so the preview
-    // passage matches the reader's chosen reading size.
-    const scaleEl = document.querySelector('.flow-reader');
-    if (scaleEl) {
-      const scale = getComputedStyle(scaleEl).getPropertyValue('--reading-scale').trim();
-      if (scale) setTooltipScale(scale);
-    }
-    try {
-      await loadTooltipContent();
-    } catch {
-      setTooltipContent(
-        renderTooltip(null, <p className="tooltip-status text-red-500">Failed to load</p>),
-      );
-    }
-    setShowTooltip(true);
-  }, [loadTooltipContent, renderTooltip]);
-
-  // Measure the real tooltip size once content + visibility are in place, then
-  // position edge-anchored to the citation and fade in. Runs after the DOM
-  // commit, so offsets are accurate on the first paint.
-  useLayoutEffect(() => {
-    if (!showTooltip || !tooltipContent) return;
-    const tip = tooltipRef.current;
-    const link = linkRef.current;
-    if (!tip || !link) return;
-
-    const rect = link.getBoundingClientRect();
-    const width = tip.offsetWidth;
-    const height = tip.offsetHeight;
-
-    let top = rect.top - height - TOOLTIP_GAP;
-    if (top < TOOLTIP_VIEWPORT_PADDING) {
-      top = rect.bottom + TOOLTIP_GAP;   // flip below near the viewport top
-    }
-    const left = Math.max(
-      TOOLTIP_VIEWPORT_PADDING,
-      Math.min(rect.left, window.innerWidth - width - TOOLTIP_VIEWPORT_PADDING),
-    );
-
-    setTooltipPosition({ top, left });
-    setTooltipReady(true);
-  }, [showTooltip, tooltipContent]);
 
   // Emit a runtime diagnostic (dev-gated) when a click fails to resolve —
   // the triage channel for refs that render unlinked (plan §6).
@@ -254,8 +124,10 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     [reference, currentGranthaId, sourcePassageRef, editionId, availableGranthaIds, granthaIdToTitle],
   );
 
-  const navigate = useCallback(async () => {
-    if (!reference.grantha_id) return;
+  // Load the target and resolve the locator to a concrete ref. Shared by
+  // navigation (then updateHash) and by copy (to build the citation).
+  const resolveRef = useCallback(async (): Promise<string | null> => {
+    if (!reference.grantha_id) return null;
     try {
       const target = await loadGrantha(
         reference.grantha_id,
@@ -263,84 +135,133 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       );
       const resolution = resolveReferenceTarget(target, reference.locator);
       if (resolution.kind === "passage" || resolution.kind === "root") {
-        updateHash(
-          reference.grantha_id,
-          resolution.ref,
-          reference.grantha_id === currentGranthaId
-            ? editionId
-            : reference.edition_id ?? undefined,
-        );
-      } else {
-        recordDiagnostic(resolution.code);
-        const message =
-          resolution.code === "REF-RUNTIME-DEPTH-OVERFLOW"
-            ? "reference has too many segments"
-            : "could not resolve";
-        setTooltipContent(
-          renderTooltip(null, <p className="tooltip-status text-amber-600">{message}</p>),
-        );
-        setShowTooltip(true);
+        return resolution.ref;
       }
+      recordDiagnostic(resolution.code);
+      return null;
     } catch {
-      setTooltipContent(
-        renderTooltip(null, <p className="tooltip-status text-red-500">Failed to load</p>),
-      );
-      setShowTooltip(true);
+      return null;
     }
-  }, [reference, currentGranthaId, editionId, updateHash, renderTooltip, recordDiagnostic]);
+  }, [reference, recordDiagnostic]);
+
+  const navigate = useCallback(async (): Promise<boolean> => {
+    const ref = await resolveRef();
+    if (!ref || !reference.grantha_id) return false;
+    updateHash(
+      reference.grantha_id,
+      ref,
+      reference.grantha_id === currentGranthaId
+        ? editionId
+        : reference.edition_id ?? undefined,
+    );
+    return true;
+  }, [reference, currentGranthaId, editionId, updateHash, resolveRef]);
+
+  const buildRequest = useCallback(
+    (): Parameters<typeof openCitation>[0] | null => {
+      if (!reference.grantha_id) return null;
+      // The fully-formed quote visible in the lookback window, mapped to
+      // absolute offsets in the source passage — the steel-blue source
+      // highlight shown while the popover is open.
+      let sourceSpan: { start: number; end: number } | null = null;
+      if (sourceLookback && sourceWindowStart !== undefined) {
+        const quoted = extractEnclosedQuote(sourceLookback);
+        if (quoted !== null) {
+          sourceSpan = {
+            start: sourceWindowStart + quoted.start,
+            end: sourceWindowStart + quoted.end,
+          };
+        }
+      }
+      return {
+        reference,
+        targetTitle,
+        locatorLabel,
+        linkable,
+        availableGranthaIds,
+        navigate,
+        resolveRef,
+        sourceLookback,
+        sourceWindowStart,
+        sourcePassageRef,
+        sourceSpan,
+      };
+    },
+    [reference, targetTitle, locatorLabel, linkable, availableGranthaIds, navigate, resolveRef, sourceLookback, sourceWindowStart, sourcePassageRef],
+  );
+
+  const clearHoverOpen = useCallback(() => {
+    if (hoverOpenTimer.current !== null) {
+      clearTimeout(hoverOpenTimer.current);
+      hoverOpenTimer.current = null;
+    }
+  }, []);
 
   const handleMouseEnter = () => {
-    if (isTouchDevice.current) return;
-    hoverTimeout.current = setTimeout(() => {
-      openTooltip();
-    }, HOVER_DELAY_MS);
+    cancelClose();
+    clearHoverOpen();
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    hoverOpenTimer.current = setTimeout(() => {
+      hoverOpenTimer.current = null;
+      openCitation(request, el, "peek");
+    }, HOVER_OPEN_DELAY_MS);
   };
 
   const handleMouseLeave = () => {
-    if (isTouchDevice.current) return;
-    hideTooltip();
+    clearHoverOpen();
+    scheduleClose();
   };
 
-  // Keyboard users get the preview immediately (no hover delay).
-  const handleFocus = () => {
-    if (isTouchDevice.current) return;
-    openTooltip();
-  };
-
-  const handleBlur = () => {
-    hideTooltip();
-  };
-
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!reference.grantha_id) return;
-
-    if (linkable) {
-      if (isTouchDevice.current) {
-        // First tap previews; second tap navigates.
-        if (previewedRef.current) {
-          previewedRef.current = false;
-          navigate();
-        } else {
-          previewedRef.current = true;
-          openTooltip();
-        }
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    const sameOpen =
+      citation &&
+      citation.reference.grantha_id === reference.grantha_id &&
+      citation.reference.locator === reference.locator &&
+      citation.reference.start === reference.start;
+    if (sameOpen && mode === "pinned") {
+      if (focusedPinRef.current) {
+        // This is the first click after a focus-pin (mouse mousedown or Tab):
+        // consume the pin so the click pins instead of navigating.
+        focusedPinRef.current = false;
         return;
       }
-      // Mouse: hover already previewed, so a click navigates directly.
-      navigate();
-    } else {
+      // A genuine second click while pinned → navigate to the cited passage.
+      if (!linkable) {
+        recordDiagnostic("REF-NOT-IN-LIBRARY");
+      }
+      closeCitation();
+      void navigate();
+      return;
+    }
+    if (!linkable) {
       // Not-in-library: clicking is the triage-worthy act — log it once.
       recordDiagnostic("REF-NOT-IN-LIBRARY");
-      if (showTooltip) {
-        hideTooltip();
-      } else {
-        previewedRef.current = true;
-        openTooltip();
-      }
     }
+    clearHoverOpen();
+    focusedPinRef.current = false;
+    openCitation(request, el, "pinned");
   };
+
+  const handleFocus = () => {
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    clearHoverOpen();
+    focusedPinRef.current = true;
+    openCitation(request, el, "pinned");
+  };
+
+  // Clean up the hover-open timer on unmount.
+  React.useEffect(() => {
+    return () => clearHoverOpen();
+  }, [clearHoverOpen]);
 
   // Unresolved references (undefined abbreviation / build error) render as
   // plain text — never a link.
@@ -349,37 +270,19 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
   }
 
   const linkClassName = `reference-link ${!linkable ? 'external-reference' : ''}`;
-  const targetHash = `${reference.grantha_id}:${reference.locator ?? "1"}`;
 
   return (
-    <span className="reference-container">
-      <a
-        ref={linkRef}
-        href={`#${targetHash}`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onClick={handleClick}
-        className={linkClassName}
-      >
-        {reference.display_text}
-      </a>
-      {showTooltip && ReactDOM.createPortal(
-        <div
-          ref={tooltipRef}
-          className={`reference-tooltip ${tooltipReady ? 'is-ready' : ''}`}
-          style={{
-            top: tooltipPosition.top,
-            left: tooltipPosition.left,
-            ['--reading-scale' as string]: tooltipScale,
-          }}
-        >
-          {tooltipContent}
-        </div>,
-        document.body
-      )}
-    </span>
+    <a
+      ref={anchorRef}
+      href={`#${reference.grantha_id}:${reference.locator ?? "1"}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onClick={handleClick}
+      className={linkClassName}
+    >
+      {reference.display_text}
+    </a>
   );
 };
 

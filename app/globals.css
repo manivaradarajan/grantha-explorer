@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme inline {
   --font-wordmark: var(--font-wordmark);
@@ -13,12 +13,6 @@
   hyphens: auto;
 }
 
-.reference-container {
-  position: relative;
-  /*display: inline-block;*/
-  display: inline;
-}
-
 /* Passage blocks are selectable/copyable text; hover shows the I-beam, not the
    link hand. Clicking still selects the verse. Unlayered so it overrides
    Tailwind's cursor-pointer utility on these elements. */
@@ -30,21 +24,21 @@
   color: #6b7280;
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-thickness: 1px;  /* optional: underline thickness */
-  text-underline-offset: 0.27em;   /* ← add this; gap between text and underline */
-  word-spacing: -0.15em;   /* tightens EVERY space inside the link */
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.27em;
+  /* Tighten the spaces inside a citation so the marker reads as one unit. */
+  word-spacing: -0.15em;
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
-   steel tint + ink darken. Focus-visible makes the preview reachable by
-   keyboard; the tint is gated to hover/focus so it never flashes at rest. */
+   steel tint. The ink must NOT darken and padding must NOT shift on hover —
+   a darker/denser color reads as faux-bold on the thin Tiro face, and the
+   padding shift changes the perceived spacing. Affordance = tint only. */
 .reference-link:hover,
 .reference-link:focus-visible {
-  color: #3d5a80;
+  color: #6b7280;
   background-color: rgba(61, 90, 128, 0.12);
   border-radius: 3px;
-  padding: 0 1px;
-  box-decoration-break: clone;   /* pill follows glyphs when the cite wraps */
   outline: none;
 }
 
@@ -56,77 +50,296 @@
 
 .reference-link.external-reference:hover,
 .reference-link.external-reference:focus-visible {
-  background-color: rgba(61, 90, 128, 0.10);   /* tint, no navigation affordance */
+  /* Unresolvable-in-library: fully inert on hover — no tint, no padding
+     shift (the generic link hover adds padding + radius). */
+  background-color: transparent;
   color: #6b7280;
+  padding: 0;
+  border-radius: 0;
 }
 
-.reference-tooltip {
+/* ────────────────────────────────────────────────────────────────────────
+   Citation preview popover — a floating, non-modal "Look Up" bubble.
+   Portaled to <body> and position: fixed, anchored to the reference's
+   on-screen rectangle. NO border, soft drop shadow, generous radius,
+   small pointer tail for clean above/below placements.
+
+   ── SIZING & STYLE KNOBS — edit these to re-skin (no code changes) ──────
+   --citation-width         preferred width (normal viewports)
+   --citation-max-width     narrow-viewport cap
+   --citation-viewport-margin  min horizontal margin vs the viewport
+   --citation-radius        corner rounding
+   --citation-shadow        drop shadow
+   --citation-bg            card background
+   --citation-border        card border (none by default)
+   --citation-padding       internal padding
+   --citation-tail-size     pointer (rotated square) edge length
+   --citation-tail-bg       pointer fill (matches the card bg)
+   --citation-clamp-lines   excerpt line cap (3–5)
+   --citation-title-size    header title size
+   --citation-excerpt-size  passage preview size. NOTE: the popover is portaled
+                           to <body> outside .flow-reader, so --reading-scale
+                           does not cascade here — the fallback applies.
+   --citation-footer-margin-bottom  footer pull-up vs the card's bottom edge
+                                   (0 = flush; positive = gap; negative = overhang)
+   --citation-gap          vertical spacing between title / excerpt / footer
+   --citation-header-padding-bottom  space directly under the title text
+   ─────────────────────────────────────────────────────────────────────── */
+
+.citation-popover {
+  --citation-width: 320px;
+  --citation-max-width: calc(100vw - 24px);
+  --citation-viewport-margin: 12px;
+  --citation-radius: 16px;
+  --citation-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
+  --citation-bg: #ffffff;
+  --citation-border: none;
+  --citation-padding: 12px;
+  --citation-tail-size: 10px;
+  --citation-tail-bg: var(--citation-bg);
+  --citation-clamp-lines: 5;
+  --citation-title-size: 0.9rem;
+  --citation-excerpt-size: calc(1em * var(--reading-scale, 1.1));
+  /* Bottom pull-up for the footer actions: how much of the card's bottom
+     padding the buttons consume. 0 = flush with the card's bottom edge;
+     positive = extra gap; negative = overhang past the edge. */
+  --citation-footer-margin-bottom: 2px;
+  /* Vertical spacing between the popover's sections (title / excerpt /
+     footer). Lower it to pull the excerpt text up under the title. */
+  --citation-gap: 2px;
+  /* The header's own bottom padding — this is the space directly under the
+     title text (the header bleeds to the card edges and re-applies padding).
+     Lower it to close the title→excerpt gap even further. */
+  --citation-header-padding-bottom: 8px;
+
   position: fixed;
-  /* The cited passage must render in the reading face (Tiro), matching the
-     body text it previews; chrome lines override with .tooltip-meta. */
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
-  background-color: white;
-  color: black;
-  padding: 0;                          /* sections own their padding */
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #d1d5db;
-  max-width: min(320px, 80vw);
+  width: min(var(--citation-width), var(--citation-max-width));
+  background: var(--citation-bg);
+  border: var(--citation-border);
+  border-radius: var(--citation-radius);
+  box-shadow: var(--citation-shadow);
+  padding: var(--citation-padding);
   z-index: 9999;
-  white-space: normal;
-  overflow: hidden;                    /* clip the header band to the radius */
-  opacity: 0;                          /* gated until measured + positioned */
-  transition: opacity 0.15s;
-  pointer-events: none;                /* never intercept hover of the link */
-}
-
-.reference-tooltip.is-ready {
-  opacity: 1;
-}
-
-/* Header band: the work name + locator as the card's label — a full-width
-   tinted strip (not a floating pill) so the title gets structural presence
-   that scales with the card, while staying editorial rather than badge-y. */
-.tooltip-meta {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.3em;
-  padding: 8px 10px;
-  background: rgba(61, 90, 128, 0.06);  /* faint steel, echoing the link tint */
-  border-bottom: 1px solid #e5e7eb;
+  flex-direction: column;
+  gap: var(--citation-gap);
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
 }
 
-.tooltip-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #1f2937;
+/* The pointer tail: a rotated square, drop-shadowed (never box-shadow), aimed
+   at the reference's center by an inline `left` from the positioning code.
+   The tail sits on the edge nearest the reference: when the popover is placed
+   BELOW the reference the tail is at the TOP (pointing up); when placed ABOVE
+   the reference it hangs from the BOTTOM (pointing down). */
+.citation-tail {
+  position: absolute;
+  top: 0; /* below placement → top edge, pointing up toward the reference */
+  width: var(--citation-tail-size);
+  height: var(--citation-tail-size);
+  background: var(--citation-tail-bg);
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
 }
 
-.tooltip-locator {
-  font-size: 0.875rem;
+.citation-popover.above .citation-tail {
+  top: 100%; /* above placement → bottom edge, pointing down at the reference */
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+}
+
+.citation-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  /* Full-bleed padding: the header is the clickable title band. Negative
+     margins pull it out to the popover's edges (the popover has padding), so
+     the title-action's hover highlight spans the whole row horizontally too. */
+  margin: calc(-1 * var(--citation-padding)) calc(-1 * var(--citation-padding))
+    0;
+  padding: var(--citation-padding) var(--citation-padding)
+    var(--citation-header-padding-bottom);
+  border-radius: var(--citation-radius) var(--citation-radius) 0 0;
+}
+
+.citation-title-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #3d5a80; /* app link ink (matches .reference-link hover) */
+  text-align: left;
+  cursor: pointer;
+}
+
+.citation-title-action:hover {
+  color: #2c4460;
+  background-color: rgba(61, 90, 128, 0.12);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.citation-title-action:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: -1px;
+}
+
+.citation-title {
   font-weight: 600;
+  font-size: var(--citation-title-size);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Not-in-library title: informational, no destination — neutral ink, no
+   link color, no hover highlight. */
+.citation-title-static {
   color: #374151;
 }
 
-.tooltip-passage {
-  padding: 8px 10px 10px;
-  /* Verses are stored with the pāda break as a literal newline after the
-     daṇḍā (e.g. svetasvatara 1.9). Honor it so verses render verse-shaped;
-     single-line sutras/prose have no newline and are unaffected. */
-  white-space: pre-line;
-  font-size: calc(1em * var(--reading-scale, 1));   /* follows अ+/अ− */
-  overflow-wrap: anywhere;
-  word-break: break-word;             /* long samāsa never bleeds the card */
-  line-height: 1.6;
+.citation-locator {
+  font-weight: 600;
+  font-size: var(--citation-title-size);
+  color: #374151;
+  white-space: nowrap;
 }
 
-.tooltip-status {
-  padding: 8px 10px 10px;
+.citation-title-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  color: #3d5a80;
+}
+
+.citation-close {
+  appearance: none;
+  background: none;
+  border: none;
+  color: #6b7280;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.citation-close:hover {
+  color: #374151;
+  background-color: rgba(61, 90, 128, 0.12);
+}
+
+.citation-close:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: 1px;
+}
+
+.citation-close-icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* Passage excerpt: NOT a scrollable reading pane. Clamped to ~5 lines; when a
+   highlight is present the clamp is dropped (§10.1 — preserve the phrase). */
+.citation-body {
+  min-height: 0;
+}
+
+.citation-excerpt {
+  margin: 0;
+  white-space: pre-line; /* honor pāda-break newlines in the stored text */
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
+  font-size: var(--citation-excerpt-size);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.citation-excerpt-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--citation-clamp-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.citation-excerpt.text-gray-400 {
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
   font-size: 0.8125rem;
   font-style: italic;
+}
+
+/* Highlight of the quoted span in the preview — soft yellow marker (classic
+   highlight). Generous padding + box-decoration-break: clone give Devanagari
+   ascenders (शिरोरेखा, candrabindu, repha) and descenders full paint room. */
+.citation-excerpt mark.citation-mark {
+  padding: 0.3em 0 0.15em;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-color: #fff176;
+  color: inherit;
+}
+
+.citation-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 8px;
+  margin-bottom: calc(-1 * var(--citation-footer-margin-bottom));
+}
+
+.citation-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff;
+  color: #374151;
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+/* Both footer actions are borderless white buttons; only hover shows a
+   slight gray tint to indicate clickability. No borders, no fill difference
+   at rest. */
+.citation-action:hover {
+  background: rgba(107, 114, 128, 0.12);
+  color: #1f2937;
+}
+
+.citation-action:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: 1px;
+}
+
+.citation-action-open {
+  color: #1f2937;
+}
+
+.citation-action-icon {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+/* Steel-blue highlight of the quoted span in the SOURCE passage while its
+   citation popover is open — ties the popover to the exact bhashya text it
+   cites. Same Devanagari-safe padding treatment as .citation-mark. */
+mark.citation-source-mark {
+  background-color: rgba(61, 90, 128, 0.16);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0.3em 0 0.15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set
@@ -137,14 +350,23 @@
    override the layered Tailwind utilities (e.g. text-xl) for these elements. */
 .flow-reader {
   --reading-scale: 1;
+  /* Use the dynamic viewport height on mobile: `h-screen` (100vh) is taller
+     than the visible viewport once the browser chrome is accounted for, so
+     content near the bottom (including a citation popover anchored below a
+     low verse) would sit below the fold. 100dvh tracks the actual on-screen
+     area (100vh fallback for older browsers). */
+  height: 100vh;
+  height: 100dvh;
   /* Tiro Devanagari Sanskrit for the reading-mode body/serif text (spec §6.3);
      UI chrome keeps Noto Sans. Unlayered so it overrides Tailwind's font-serif
      utility inside the flow reader. */
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
 }
 
 .flow-reader .font-serif {
-  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
 }
 
 .flow-reader .flow-verse {

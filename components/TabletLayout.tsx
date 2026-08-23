@@ -191,7 +191,7 @@ export default function TabletLayout({
             />
 
             {/* Right Commentary Panel */}
-            <Panel defaultSize={panelSizes[1]} minSize={30} maxSize={60}>
+            <Panel defaultSize={panelSizes[1]} minSize={30} maxSize={60} className="commentary-pane">
               <CommentaryPanel
                 grantha={grantha}
                 selectedRef={selectedRef}

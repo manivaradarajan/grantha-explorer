@@ -606,7 +606,7 @@ export default function Home() {
           />
 
           {/* Right Commentary Panel */}
-          <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40}>
+          <Panel defaultSize={panelSizes[2]} minSize={20} maxSize={40} className="commentary-pane">
             <CommentaryPanel
               grantha={currentGrantha}
               selectedRef={verseRef}
