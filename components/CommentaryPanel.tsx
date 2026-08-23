@@ -32,10 +32,6 @@ interface CommentaryPanelProps {
   granthaIdToDevanagariTitle: Record<string, string>;
   granthaIdToLatinTitle: Record<string, string>;
   hideHeader?: boolean;
-  /** Fired when the citation panel opens/closes (e.g. to grow a parent sheet). */
-  onCitationExpandedChange?: (open: boolean) => void;
-  /** Extra surface identity appended to the host's close-on-change key. */
-  surfaceKeyExtra?: string;
 }
 
 const PANEL_HEADER_CLASS =
@@ -53,8 +49,6 @@ export default function CommentaryPanel({
   granthaById,
   granthaIdToDevanagariTitle,
   hideHeader = false,
-  onCitationExpandedChange,
-  surfaceKeyExtra,
 }: CommentaryPanelProps) {
   const commentaries = grantha.commentaries || [];
   const hasMultipleEditions =
@@ -224,8 +218,7 @@ export default function CommentaryPanel({
   return (
     <CitationPanelHost
       className="relative h-full flex flex-col"
-      surfaceKey={`${grantha.grantha_id ?? grantha.id}:${selectedRef}:${surfaceKeyExtra ?? ""}`}
-      onExpandedChange={onCitationExpandedChange}
+      surfaceKey={`${grantha.grantha_id ?? grantha.id}:${selectedRef}`}
     >
       {(sourceHighlight) => (
         <>

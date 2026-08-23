@@ -1,12 +1,14 @@
 // @vitest-environment jsdom
 /**
- * Behavior of the docked citation panel.
+ * Behavior of the floating citation popover.
  *
  * Exercises the real content path (getPassagePreview against the committed
- * corpus via a fetch shim): open loads the cited passage, the header renders
- * title + locator + close, ✕ closes, the source label navigates, a second
- * citation switches content, the panel closes on a surface-key change, and
- * the quote highlight renders when a matching sourceLookback is supplied.
+ * corpus via a fetch shim): click pins and loads the cited passage; the header
+ * renders title + locator; Escape/✕/outside-click/scroll dismiss; the footer
+ * copies the citation (mock clipboard) and opens the passage; a second
+ * reference updates the single popover in place; the surface-key change
+ * closes it; and the quote highlight renders when a matching sourceLookback
+ * is supplied. Hover peek + grace are covered by fake timers.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -60,18 +62,28 @@ const BASE_PROPS = {
   },
 };
 
-/** The Desika source window before the Śvet 1.9 citation (from the corpus). */
 const SVET_LOOKBACK = "ि क्तं चिदचिदात्मकम्, **ईशा** — **ज्ञाज्ञौ द्वावजावीशनीशौ** (";
 const UNRELATED_LOOKBACK = "इत्यादि प्रसिद्धानन्याधीनैश्वर्यं विवृणोति योsसौ";
+
+const HOVER_OPEN_MS = 150;
 
 let root: Root;
 let el: HTMLDivElement;
 
 beforeEach(() => {
   globalThis.fetch = readJsonAsset as unknown as typeof fetch;
+  // jsdom has no ResizeObserver (the popover repositions on size changes).
+  const RO = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  (globalThis as Record<string, unknown>).ResizeObserver =
+    (globalThis as Record<string, unknown>).ResizeObserver ?? RO;
   el = document.createElement("div");
   document.body.appendChild(el);
   root = createRoot(el);
+  vi.useFakeTimers();
 });
 
 afterEach(async () => {
@@ -80,133 +92,183 @@ afterEach(async () => {
   });
   el.remove();
   globalThis.fetch = fetch;
+  vi.useRealTimers();
+  vi.restoreAllMocks();
   vi.clearAllMocks();
+  document.body.innerHTML = "";
 });
 
 interface RenderArgs {
   ref?: Reference;
   sourceLookback?: string;
   surfaceKey?: string;
-  onExpandedChange?: (open: boolean) => void;
 }
 
 const render = (args: RenderArgs = {}) => {
-  const {
-    ref = SVET_REF,
-    sourceLookback,
-    surfaceKey = "k",
-    onExpandedChange,
-  } = args;
+  const { ref = SVET_REF, sourceLookback, surfaceKey = "k" } = args;
   return act(async () => {
     root.render(
-      <CitationPanelHost
-        className="h-full"
-        surfaceKey={surfaceKey}
-        onExpandedChange={onExpandedChange}
-      >
+      <CitationPanelHost className="h-full" surfaceKey={surfaceKey}>
         <ReferenceLink reference={ref} sourceLookback={sourceLookback} {...BASE_PROPS} />
       </CitationPanelHost>,
     );
   });
 };
 
+const linkEl = () => el.querySelector(".reference-link") as HTMLElement;
+const popoverEl = () => document.querySelector(".citation-popover") as HTMLElement | null;
+
 const clickLink = () => {
-  const link = el.querySelector(".reference-link") as HTMLElement;
   act(() => {
-    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    linkEl().dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
   });
 };
 
-describe("CitationPanel", () => {
+const hoverLink = () => {
+  act(() => {
+    linkEl().dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+  });
+};
+
+const settle = async (ms = 80) => {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(ms);
+  });
+};
+
+describe("CitationPopover", () => {
   it("renders nothing until a citation is opened", async () => {
     await render();
-    expect(document.querySelector(".citation-panel")).toBeNull();
+    expect(popoverEl()).toBeNull();
   });
 
-  it("opens and loads the cited passage", async () => {
+  it("opens and loads the cited passage on click", async () => {
     await render();
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
-    });
-    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
-    expect(document.querySelector(".citation-source-title")!.textContent).toContain("श्वेताश्वतरोपनिषत्");
-    const text = document.querySelector(".citation-content-text")!.textContent ?? "";
-    expect(text).toContain("ज्ञाज्ञौ");
+    await settle(100);
+    const pop = popoverEl();
+    expect(pop).not.toBeNull();
+    expect(pop!.querySelector(".citation-title")!.textContent).toContain("श्वेताश्वतरोपनिषत्");
+    expect(pop!.querySelector(".citation-excerpt")!.textContent).toContain("ज्ञाज्ञौ");
   });
 
-  it("dismisses when clicking outside the panel", async () => {
+  it("hover peeks after the delay, then closes after the grace unless the popover is entered", async () => {
     await render();
-    clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 50));
-    });
-    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
-    // Click the host wrapper (the pane around the docked card), not a link
-    // and not the panel itself.
-    const host = el.querySelector(".h-full") as HTMLElement;
+    hoverLink();
+    await settle(HOVER_OPEN_MS - 30);
+    expect(popoverEl()).toBeNull(); // not instant
+    await settle(60);
+    expect(popoverEl()).not.toBeNull(); // peek opened
+    // Leave the link → close grace begins; entering the popover cancels it.
     act(() => {
-      host.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      linkEl().dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
     });
-    expect(document.querySelector(".citation-panel.is-open")).toBeNull();
+    act(() => {
+      popoverEl()!.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    await settle(300);
+    expect(popoverEl()).not.toBeNull(); // stayed open (grace cancelled)
   });
 
-  it("navigates via the source label and closes", async () => {
+  it("closes on ✕ (pinned)", async () => {
     await render();
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 50));
-    });
-    const source = document.querySelector(".citation-source") as HTMLButtonElement;
-    act(() => source.click());
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 50));
-    });
-    expect(BASE_PROPS.updateHash).toHaveBeenCalledWith(
-      "svetasvatara-upanishad",
-      "1.9",
-      undefined,
-    );
+    await settle(50);
+    const close = popoverEl()!.querySelector(".citation-close") as HTMLButtonElement;
+    act(() => close.click());
+    expect(popoverEl()).toBeNull();
   });
 
-  it("switches content when a second citation is clicked", async () => {
+  it("closes on Escape and restores focus to the reference", async () => {
     await render();
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 80));
+    await settle(50);
+    act(() => {
+      linkEl().focus();
     });
-    // Re-render with a different ref (Gita) and click its link.
+    act(() => {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    });
+    expect(popoverEl()).toBeNull();
+    expect(document.activeElement).toBe(linkEl());
+  });
+
+  it("navigates via the title action", async () => {
+    await render();
+    clickLink();
+    await settle(50);
+    const title = popoverEl()!.querySelector(".citation-title-action") as HTMLButtonElement;
+    act(() => title.click());
+    await settle(50);
+    expect(BASE_PROPS.updateHash).toHaveBeenCalledWith("svetasvatara-upanishad", "1.9", undefined);
+  });
+
+  it("copies the citation without closing or navigating", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+    await render();
+    clickLink();
+    await settle(50);
+    const copy = popoverEl()!.querySelector(".citation-action") as HTMLButtonElement;
+    act(() => copy.click());
+    await settle(10);
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText.mock.calls[0][0]).toContain("श्वेताश्वतरोपनिषत्");
+    expect(popoverEl()).not.toBeNull(); // not dismissed
+    // The button keeps its प्रतिलिपि label; the icon flips to a checkmark.
+    expect(popoverEl()!.querySelector(".citation-action")!.textContent).toContain("प्रतिलिपि");
+  });
+
+  it("switches content in place when a second citation is clicked", async () => {
+    await render();
+    clickLink();
+    await settle(80);
     await render({ ref: GITA_REF, surfaceKey: "k" });
-    const gitaLink = el.querySelector(".reference-link") as HTMLElement;
     act(() => {
-      gitaLink.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      linkEl().dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
     });
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 80));
+    await settle(80);
+    const pop = popoverEl();
+    expect(pop).not.toBeNull();
+    expect(pop!.querySelector(".citation-title")!.textContent).toContain("भगवद्गीता");
+    expect(pop!.querySelector(".citation-excerpt")!.textContent).toContain("ओमित्येकाक्षरं ब्रह्म");
+    // Still exactly one popover.
+    expect(document.querySelectorAll(".citation-popover").length).toBe(1);
+  });
+
+  it("dismisses on scroll of the reading surface (after the focus-settle window)", async () => {
+    await render();
+    clickLink();
+    await settle(50);
+    expect(popoverEl()).not.toBeNull();
+    // A scroll within the opening settle window is suppressed (it's the
+    // focus-induced scroll that fires when the anchor is focused).
+    act(() => {
+      document.dispatchEvent(new Event("scroll"));
     });
-    const text = document.querySelector(".citation-content-text")!.textContent ?? "";
-    expect(document.querySelector(".citation-source-title")!.textContent).toContain("भगवद्गीता");
-    expect(text).toContain("ओमित्येकाक्षरं ब्रह्म");
+    expect(popoverEl()).not.toBeNull();
+    // A genuine later scroll (past the settle window) dismisses.
+    await settle(400);
+    act(() => {
+      document.dispatchEvent(new Event("scroll"));
+    });
+    expect(popoverEl()).toBeNull();
   });
 
   it("closes when the surfaceKey changes", async () => {
     await render();
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 50));
-    });
-    expect(document.querySelector(".citation-panel.is-open")).not.toBeNull();
+    await settle(50);
+    expect(popoverEl()).not.toBeNull();
     await render({ surfaceKey: "k-other" });
-    expect(document.querySelector(".citation-panel.is-open")).toBeNull();
+    expect(popoverEl()).toBeNull();
   });
 
   it("renders the quote highlight when sourceLookback matches", async () => {
     await render({ sourceLookback: SVET_LOOKBACK });
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
-    });
-    const mark = document.querySelector(".citation-mark");
+    await settle(100);
+    const mark = popoverEl()!.querySelector(".citation-mark");
     expect(mark).not.toBeNull();
     expect(mark!.textContent).toContain("ज्ञाज्ञौ");
   });
@@ -214,22 +276,7 @@ describe("CitationPanel", () => {
   it("renders no highlight when sourceLookback does not match", async () => {
     await render({ sourceLookback: UNRELATED_LOOKBACK });
     clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 100));
-    });
-    expect(document.querySelector(".citation-mark")).toBeNull();
-  });
-
-  it("fires onExpandedChange on open and close", async () => {
-    const onExpandedChange = vi.fn();
-    await render({ onExpandedChange });
-    clickLink();
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 50));
-    });
-    expect(onExpandedChange).toHaveBeenCalledWith(true);
-    const close = document.querySelector(".citation-close") as HTMLButtonElement;
-    act(() => close.click());
-    expect(onExpandedChange).toHaveBeenCalledWith(false);
+    await settle(100);
+    expect(popoverEl()!.querySelector(".citation-mark")).toBeNull();
   });
 });

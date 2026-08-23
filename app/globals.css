@@ -36,15 +36,14 @@
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
-   steel tint + ink darken. Focus-visible makes the preview reachable by
-   keyboard; the tint is gated to hover/focus so it never flashes at rest. */
+   steel tint. The ink must NOT darken and padding must NOT shift on hover —
+   a darker/denser color reads as faux-bold on the thin Tiro face, and the
+   padding shift changes the perceived spacing. Affordance = tint only. */
 .reference-link:hover,
 .reference-link:focus-visible {
-  color: #3d5a80;
+  color: #6b7280;
   background-color: rgba(61, 90, 128, 0.12);
   border-radius: 3px;
-  padding: 0 1px;
-  box-decoration-break: clone; /* pill follows glyphs when the cite wraps */
   outline: none;
 }
 
@@ -64,88 +63,108 @@
   border-radius: 0;
 }
 
-/* Citation preview card — a non-modal, bottom-anchored overlay that FLOATS
-   over the bottom edge of its scroll container: absolutely positioned against
-   the host (which must be `position: relative`), so opening it never shrinks
-   the reading column — the text keeps its full height and scrolls beneath.
-   Non-modal (no backdrop/overlay/pointer blocking) with independently
-   scrolling content. */
+/* ────────────────────────────────────────────────────────────────────────
+   Citation preview popover — a floating, non-modal "Look Up" bubble.
+   Portaled to <body> and position: fixed, anchored to the reference's
+   on-screen rectangle. NO border, soft drop shadow, generous radius,
+   small pointer tail for clean above/below placements.
 
-.citation-panel {
-  /* ── Card size knobs — tune the docked card here ────────────────────────
-     --citation-width        open-card measure in flow mode (42rem ≈ the mūla
-                             verse width; the reading column is 48rem)
-     --citation-max-height   cap: longer passages scroll inside the card
-     --citation-min-height   floor: short passages still pop up to a
-                             usable height
-     Panes/tablet and the mobile sheet override the height vars below. */
-  --citation-width: 30rem;
-  --citation-max-height: 45vh;
-  --citation-min-height: 35vh;
-  /* Float over the surface: `left/right + margin-inline: auto` fills the
-     host width, then caps to the width knob and centers — never shrinking
-     the reading column. */
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin-inline: auto;
-  z-index: 10;
-  /* Closed: zero height; open height comes from the knobs via .is-open. */
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.2s ease;
-  /* Card surface: a soft warm-paper sheet, clearly distinct from the white
-     reading surface it docks under. Warm tint + visible top border + real
-     elevation + rounded top corners (clipped by overflow:hidden) make it read
-     as a floating card, not a continuation of the text column. */
-  background-color: #f7f5f0;
-  border-top: 1px solid #d8d2c4;
-  box-shadow:
-    0 -8px 24px rgba(0, 0, 0, 0.1),
-    0 -2px 6px rgba(0, 0, 0, 0.06);
-  border-radius: 12px 12px 0 0;
+   ── SIZING & STYLE KNOBS — edit these to re-skin (no code changes) ──────
+   --citation-width         preferred width (normal viewports)
+   --citation-max-width     narrow-viewport cap
+   --citation-viewport-margin  min horizontal margin vs the viewport
+   --citation-radius        corner rounding
+   --citation-shadow        drop shadow
+   --citation-bg            card background
+   --citation-border        card border (none by default)
+   --citation-padding       internal padding
+   --citation-tail-size     pointer (rotated square) edge length
+   --citation-tail-bg       pointer fill (matches the card bg)
+   --citation-clamp-lines   excerpt line cap (3–5)
+   --citation-title-size    header title size
+   --citation-excerpt-size  passage preview size (follows --reading-scale)
+   --citation-footer-margin-bottom  footer pull-up vs the card's bottom edge
+                                   (0 = flush; positive = gap; negative = overhang)
+   --citation-gap          vertical spacing between title / excerpt / footer
+   --citation-header-padding-bottom  space directly under the title text
+   ─────────────────────────────────────────────────────────────────────── */
+
+.citation-popover {
+  --citation-width: 320px;
+  --citation-max-width: calc(100vw - 24px);
+  --citation-viewport-margin: 12px;
+  --citation-radius: 16px;
+  --citation-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
+  --citation-bg: #ffffff;
+  --citation-border: none;
+  --citation-padding: 12px;
+  --citation-tail-size: 10px;
+  --citation-tail-bg: var(--citation-bg);
+  --citation-clamp-lines: 5;
+  --citation-title-size: 0.9rem;
+  --citation-excerpt-size: calc(1em * var(--reading-scale, 1.1));
+  /* Bottom pull-up for the footer actions: how much of the card's bottom
+     padding the buttons consume. 0 = flush with the card's bottom edge;
+     positive = extra gap; negative = overhang past the edge. */
+  --citation-footer-margin-bottom: 2px;
+  /* Vertical spacing between the popover's sections (title / excerpt /
+     footer). Lower it to pull the excerpt text up under the title. */
+  --citation-gap: 2px;
+  /* The header's own bottom padding — this is the space directly under the
+     title text (the header bleeds to the card edges and re-applies padding).
+     Lower it to close the title→excerpt gap even further. */
+  --citation-header-padding-bottom: 8px;
+
+  position: fixed;
+  width: min(var(--citation-width), var(--citation-max-width));
+  background: var(--citation-bg);
+  border: var(--citation-border);
+  border-radius: var(--citation-radius);
+  box-shadow: var(--citation-shadow);
+  padding: var(--citation-padding);
+  z-index: 9999;
   display: flex;
   flex-direction: column;
+  gap: var(--citation-gap);
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
 }
 
-/* The width knob applies under the flow reader only — panes/tablet/mobile
-   cards span their own column/sheet. */
-.flow-reader .citation-panel {
-  max-width: var(--citation-width);
+/* The pointer tail: a rotated square, drop-shadowed (never box-shadow), aimed
+   at the reference's center by an inline `left` from the positioning code.
+   The tail sits on the edge nearest the reference: when the popover is placed
+   BELOW the reference the tail is at the TOP (pointing up); when placed ABOVE
+   the reference it hangs from the BOTTOM (pointing down). */
+.citation-tail {
+  position: absolute;
+  top: 0; /* below placement → top edge, pointing up toward the reference */
+  width: var(--citation-tail-size);
+  height: var(--citation-tail-size);
+  background: var(--citation-tail-bg);
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
 }
 
-.citation-panel.is-open {
-  /* Open: the floor/cap from the knobs above; scoped surfaces below override
-     the variables. */
-  max-height: var(--citation-max-height);
-  min-height: var(--citation-min-height);
-}
-
-/* Narrow columns: a taller floor so short passages fill the pane. */
-.commentary-pane .citation-panel {
-  --citation-min-height: 45vh;
-}
-
-/* Inside the mobile bottom sheet: a smaller card. */
-.bottom-sheet .citation-panel {
-  --citation-max-height: 35vh;
-  --citation-min-height: 20vh;
+.citation-popover.above .citation-tail {
+  top: 100%; /* above placement → bottom edge, pointing down at the reference */
+  transform: translateX(-50%) translateY(-50%) rotate(45deg);
 }
 
 .citation-header {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  /* Padding lives on the source button (below) so its hover highlight fills
-     the whole titlebar — full bleed, not a pill around the text. */
-  padding: 0;
-  border-bottom: 1px solid #e5e7eb;
-  background: rgba(61, 90, 128, 0.1); /* steel echo of the link tint */
-  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+  /* Full-bleed padding: the header is the clickable title band. Negative
+     margins pull it out to the popover's edges (the popover has padding), so
+     the title-action's hover highlight spans the whole row horizontally too. */
+  margin: calc(-1 * var(--citation-padding)) calc(-1 * var(--citation-padding))
+    0;
+  padding: var(--citation-padding) var(--citation-padding)
+    var(--citation-header-padding-bottom);
+  border-radius: var(--citation-radius) var(--citation-radius) 0 0;
 }
 
-.citation-source {
+.citation-title-action {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
@@ -153,52 +172,52 @@
   min-width: 0;
   background: none;
   border: none;
-  padding: 6px 10px; /* full titlebar; hover highlight covers this box */
+  padding: 0;
   margin: 0;
   color: #3d5a80; /* app link ink (matches .reference-link hover) */
   text-align: left;
   cursor: pointer;
 }
 
-.citation-source:hover {
+.citation-title-action:hover {
   color: #2c4460;
   background-color: rgba(61, 90, 128, 0.12);
-  border-radius: 0; /* full-bleed across the titlebar */
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
 }
 
-.citation-source:focus-visible {
+.citation-title-action:focus-visible {
   outline: 2px solid rgba(61, 90, 128, 0.5);
-  outline-offset: 1px;
-  border-radius: 0; /* full-bleed, matching the hover highlight */
+  outline-offset: -1px;
 }
 
-.citation-source-title {
+.citation-title {
   font-weight: 600;
-  /* Titlebar text at the same size as the card's body text (which is
-     `calc(1em * var(--reading-scale, 1))`), so the scale control scales
-     both together. */
-  font-size: calc(1em * var(--reading-scale, 1));
+  font-size: var(--citation-title-size);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.citation-source-locator {
+/* Not-in-library title: informational, no destination — neutral ink, no
+   link color, no hover highlight. */
+.citation-title-static {
+  color: #374151;
+}
+
+.citation-locator {
   font-weight: 600;
-  font-size: calc(1em * var(--reading-scale, 1));
+  font-size: var(--citation-title-size);
   color: #374151;
   white-space: nowrap;
 }
 
-.citation-source-icon {
-  width: 1.1em;
-  height: 1.1em;
+.citation-title-icon {
+  width: 1em;
+  height: 1em;
   flex-shrink: 0;
-  margin-left: 0.3em; /* extra air before the open arrow */
-  color: #3d5a80; /* link ink — the arrow is the open affordance */
+  color: #3d5a80;
 }
 
 .citation-close {
@@ -206,11 +225,11 @@
   background: none;
   border: none;
   color: #6b7280;
-  font-size: 0.9375rem;
-  line-height: 1;
-  padding: 6px 10px; /* full titlebar height, matching the source button */
-  border-radius: 4px;
+  padding: 4px 6px;
+  border-radius: 6px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
 
 .citation-close:hover {
@@ -223,40 +242,44 @@
   outline-offset: 1px;
 }
 
-/* Content area: scrolls independently of the container around it, and flexes
-   to fill the panel's min-height so short passages get whitespace below. */
-.citation-content {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-contain: none;
+.citation-close-icon {
+  width: 1em;
+  height: 1em;
 }
 
-.citation-content-text {
-  /* Bind the measure to the reading column, not the panel's full width, so
-     long unbroken Sanskrit compounds wrap like the surrounding text. */
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 10px 12px 12px;
+/* Passage excerpt: NOT a scrollable reading pane. Clamped to ~5 lines; when a
+   highlight is present the clamp is dropped (§10.1 — preserve the phrase). */
+.citation-body {
+  min-height: 0;
+}
+
+.citation-excerpt {
+  margin: 0;
   white-space: pre-line; /* honor pāda-break newlines in the stored text */
   font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
-  font-size: calc(1em * var(--reading-scale, 1));
+  font-size: var(--citation-excerpt-size);
   line-height: 1.6;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-.citation-content-text.text-gray-400 {
+.citation-excerpt-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--citation-clamp-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.citation-excerpt.text-gray-400 {
   font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
   font-size: 0.8125rem;
   font-style: italic;
 }
 
-/* Highlight of the quoted span inside the panel — a soft yellow marker
-   (classic highlight). The generous padding + box-decoration-break: clone
-   give Devanagari ascenders (शिरोरेखा, candrabindu, repha) and descenders
-   (lower conjunct forms) full paint room on each wrapped line fragment. */
-.citation-content-text mark.citation-mark {
+/* Highlight of the quoted span in the preview — soft yellow marker (classic
+   highlight). Generous padding + box-decoration-break: clone give Devanagari
+   ascenders (शिरोरेखा, candrabindu, repha) and descenders full paint room. */
+.citation-excerpt mark.citation-mark {
   padding: 0.3em 0 0.15em;
   border-radius: 3px;
   -webkit-box-decoration-break: clone;
@@ -265,10 +288,54 @@
   color: inherit;
 }
 
+.citation-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 8px;
+  margin-bottom: calc(-1 * var(--citation-footer-margin-bottom));
+}
+
+.citation-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff;
+  color: #374151;
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+/* Both footer actions are borderless white buttons; only hover shows a
+   slight gray tint to indicate clickability. No borders, no fill difference
+   at rest. */
+.citation-action:hover {
+  background: rgba(107, 114, 128, 0.12);
+  color: #1f2937;
+}
+
+.citation-action:focus-visible {
+  outline: 2px solid rgba(61, 90, 128, 0.5);
+  outline-offset: 1px;
+}
+
+.citation-action-open {
+  color: #1f2937;
+}
+
+.citation-action-icon {
+  width: 0.9em;
+  height: 0.9em;
+}
+
 /* Steel-blue highlight of the quoted span in the SOURCE passage while its
-   citation card is open — ties the card to the exact bhashya text it cites.
-   Same Devanagari-safe padding treatment as .citation-mark (ascender and
-   descender paint room via box-decoration-break: clone). */
+   citation popover is open — ties the popover to the exact bhashya text it
+   cites. Same Devanagari-safe padding treatment as .citation-mark. */
 mark.citation-source-mark {
   background-color: rgba(61, 90, 128, 0.16);
   color: inherit;

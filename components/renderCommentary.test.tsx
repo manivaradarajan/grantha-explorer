@@ -10,13 +10,24 @@
  * would straddle a citation boundary (no crash; markers render literally).
  */
 
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, beforeAll } from "vitest";
 import { act } from "react-dom/test-utils";
 import { createRoot, Root } from "react-dom/client";
 import React from "react";
 import { Reference } from "@/lib/data";
 import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
 import { CitationPanelHost } from "./CitationPanel";
+
+// jsdom has no ResizeObserver (the citation popover repositions on resize).
+beforeAll(() => {
+  const RO = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  (globalThis as Record<string, unknown>).ResizeObserver =
+    (globalThis as Record<string, unknown>).ResizeObserver ?? RO;
+});
 
 /** Wrap the rendered output in a CitationPanelHost so ReferenceLinks can open
  *  the citation panel (matches the real surfaces' mounting). */

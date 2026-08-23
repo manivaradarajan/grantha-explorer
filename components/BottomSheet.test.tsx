@@ -40,17 +40,11 @@ afterEach(async () => {
   el.remove();
 });
 
-describe("BottomSheet heightClass", () => {
+describe("BottomSheet", () => {
   it("defaults to h-[80vh]", async () => {
     await renderSheet();
     const sheet = document.querySelector('[class*="h-[80vh]"]');
     expect(sheet).not.toBeNull();
-  });
-
-  it("honors the heightClass override", async () => {
-    await renderSheet({ heightClass: "h-[85vh]" });
-    expect(document.querySelector('[class*="h-[85vh]"]')).not.toBeNull();
-    expect(document.querySelector('[class*="h-[80vh]"]')).toBeNull();
   });
 
   it("still renders children and a backdrop", async () => {

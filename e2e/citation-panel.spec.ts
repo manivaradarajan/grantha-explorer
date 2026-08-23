@@ -1,22 +1,21 @@
 import { test, expect } from "@playwright/test";
 
 /**
- * Smoke tests for the docked citation panel (spec §8 verification).
+ * Smoke tests for the floating citation popover (spec §8 verification).
  *
- * The panel must (a) genuinely collapse to zero height when closed (not a
- * transform that still reserves height), (b) sit inset — strictly narrower
- * than the flow reading column — as a distinct card, and (c) dismiss on an
- * outside click. Runs against the built static site in flow mode on the
- * Īśāvāsya grantha (Vedāntadeśika bhashya carries many cross-references).
+ * The popover must (a) be a compact floating bubble anchored to the
+ * reference (not a docked card), (b) place below when there's room and flip
+ * above at the viewport's bottom edge, (c) show its pointer tail only in a
+ * clean placement, (d) stay within viewport margins on narrow screens,
+ * (e) dismiss on scroll, and (f) mark the quoted span in the source text.
+ * Runs against the built static site in flow mode on the Īśāvāsya grantha
+ * (Vedāntadeśika bhashya carries many cross-references).
  */
 
 const FLOW_URL = "/#isavasya-upanishad:1?e=isavasya-upanishad-vedantadesika&m=flow";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(FLOW_URL);
-  // The static app can briefly stall on "Loading granthas…" under load; wait
-  // for the reader's commentary (which carries the reference links) with a
-  // single reload retry before giving up.
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       await page.waitForSelector(".flow-commentary, .reference-link", {
@@ -30,70 +29,99 @@ test.beforeEach(async ({ page }) => {
       await page.waitForLoadState("domcontentloaded");
     }
   }
-});
-
-test("the panel opens to a real height and collapses to zero on close", async ({ page }) => {
-  // Click the first reference link.
-  await page.locator(".reference-link").first().click();
-  const panel = page.locator(".citation-panel.is-open");
-  await expect(panel).toBeVisible();
-  const openHeight = await panel.evaluate((el) => (el as HTMLElement).offsetHeight);
-  expect(openHeight).toBeGreaterThan(0);
-
-  // Close via the ✕. The panel unmounts entirely — the strongest possible
-  // "collapses to zero height" (no element reserves any layout space).
-  await page.locator(".citation-close").click();
-  await expect(page.locator(".citation-panel")).toHaveCount(0);
-});
-
-test("the panel is narrower than the flow reading column, not flush with it", async ({ page }) => {
-  await page.locator(".reference-link").first().click();
-  const panel = page.locator(".citation-panel.is-open");
-  await expect(panel).toBeVisible();
-
-  // In flow mode the card is inset to the mūla verse measure (max-w-2xl),
-  // strictly narrower than the reading column (max-w-3xl) it docks under —
-  // never a second column flush with the text.
-  const width = await panel.evaluate((el) => (el as HTMLElement).offsetWidth);
-  const columnWidth = await panel.evaluate((el) => {
-    const col = (el as HTMLElement).parentElement!.querySelector(
-      ".overflow-y-auto .mx-auto",
-    );
-    return col ? (col as HTMLElement).offsetWidth : 0;
+  // The first reference link may sit below the fold; bring it on-screen so a
+  // click is actionable (the popover anchors to the reference's rect). Use a
+  // plain scroll — NOT scrollIntoView (which focuses the link, and focus opens
+  // the pinned popover, turning the test's first click into a navigation).
+  await page.evaluate(() => {
+    const el = document.querySelector(".reference-link");
+    if (el) {
+      const r = el.getBoundingClientRect();
+      window.scrollBy(0, r.top - 200);
+    }
   });
-  expect(width).toBeGreaterThan(0);
-  expect(width).toBeLessThan(columnWidth);
 });
 
-test("clicking the reading pane dismisses the panel", async ({ page }) => {
+test("opens a compact floating popover on click and closes via ✕", async ({ page }) => {
   await page.locator(".reference-link").first().click();
-  const panel = page.locator(".citation-panel.is-open");
-  await expect(panel).toBeVisible();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
+  // Compact width, roughly the 320px design measure.
+  const width = await pop.evaluate((el) => (el as HTMLElement).offsetWidth);
+  expect(width).toBeGreaterThan(250);
+  expect(width).toBeLessThan(360);
 
-  // Click in the main reading pane's left gutter — outside the card and away
-  // from any reference link or verse. (The flow reader has several scroll
-  // containers; `.overflow-x-hidden` singles out the reading pane.)
-  const pane = page.locator(".flow-reader .overflow-y-auto.overflow-x-hidden");
-  const box = await pane.boundingBox();
-  await page.mouse.click(box!.x + 30, box!.y + 260);
-  await expect(page.locator(".citation-panel")).toHaveCount(0);
+  await page.locator(".citation-close").click();
+  await expect(pop).toHaveCount(0);
 });
 
-test("the panel content shows the cited passage and a close button", async ({ page }) => {
+test("a second click on the pinned reference navigates to the cited passage", async ({ page }) => {
   await page.locator(".reference-link").first().click();
-  const panel = page.locator(".citation-panel.is-open");
-  await expect(panel).toBeVisible();
-  await expect(panel.locator(".citation-source-title")).toBeVisible();
-  await expect(panel.locator(".citation-content-text")).toBeVisible();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
+  const hashBefore = await page.evaluate(() => location.hash);
+  // Second click (already pinned) navigates away from the citing verse.
+  await page.locator(".reference-link").first().click();
+  await expect
+    .poll(async () => page.evaluate(() => location.hash), { timeout: 5000 })
+    .not.toBe(hashBefore);
+  await expect(pop).toHaveCount(0);
 });
 
-test("the quoted span in the source bhashya is marked while the card is open", async ({ page }) => {
-  // Desika quotes the cited verse in markdown bold before the locator — the
-  // exact-quote path steel-blue-marks it in the source text (not just in the
-  // card's preview).
+test("places below when there is room and flips above near the viewport bottom", async ({ page }) => {
+  // A link near the top → below.
   await page.locator(".reference-link").first().click();
-  const panel = page.locator(".citation-panel.is-open");
-  await expect(panel).toBeVisible();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
+  const belowClass = await pop.evaluate((el) => el.className);
+  expect(belowClass).toContain("below");
+  // Tail present in a clean below placement.
+  await expect(page.locator(".citation-tail")).toBeVisible();
+  await page.keyboard.press("Escape");
+
+  // Scroll the link toward the viewport bottom → should flip above.
+  await page.locator(".reference-link").first().evaluate((el) => {
+    el.scrollIntoView({ block: "end" });
+  });
+  await page.locator(".reference-link").first().click();
+  await expect(page.locator(".citation-popover")).toBeVisible();
+  const placement = await page
+    .locator(".citation-popover")
+    .evaluate((el) => el.className);
+  expect(placement).toMatch(/above|forced/);
+});
+
+test("dismisses on scroll of the reading surface", async ({ page }) => {
+  await page.locator(".reference-link").first().click();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
+  await page.locator(".flow-reader .overflow-y-auto").first().evaluate((el) => {
+    el.scrollTop += 200;
+    el.dispatchEvent(new Event("scroll"));
+  });
+  await expect(pop).toHaveCount(0);
+});
+
+test("stays within the viewport horizontally (centered on the reference)", async ({ page }) => {
+  // The popover centers on the reference and clamps against the viewport with
+  // the 12px margin from --citation-viewport-margin. Open it and assert the
+  // box sits fully on-screen with margins on both sides.
+  await page.locator(".reference-link").first().click();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
+  const box = (await pop.boundingBox())!;
+  const vp = page.viewportSize()!;
+  expect(box.x).toBeGreaterThanOrEqual(10);
+  expect(box.x + box.width).toBeLessThanOrEqual(vp.width - 10);
+  // Roughly the 320px design width.
+  expect(box.width).toBeGreaterThan(250);
+  expect(box.width).toBeLessThan(360);
+});
+
+test("the quoted span in the source bhashya is marked while the popover is open", async ({ page }) => {
+  await page.locator(".reference-link").first().click();
+  const pop = page.locator(".citation-popover");
+  await expect(pop).toBeVisible();
   const mark = page.locator("mark.citation-source-mark").first();
   await expect(mark).toBeVisible();
   expect(await mark.textContent()).toContain("ज्ञाज्ञौ");

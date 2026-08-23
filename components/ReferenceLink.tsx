@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { loadGrantha } from '../lib/data';
 import {
   isReferenceLinkable,
@@ -38,24 +38,33 @@ interface ReferenceLinkProps {
   granthaIdToTitle: Record<string, string>;
 }
 
+const HOVER_OPEN_DELAY_MS = 150;
+
 /**
  * Renders a structured cross-text citation (producer-emitted `references[]`).
  *
  * Unresolved references (undefined abbreviation: `grantha_id` null /
  * `unresolved` true) render as plain unlinked text. References to works not in
- * the library render as a link whose click explains "not yet available".
- * References to works in the library open a docked citation panel on click
- * (or tap), which previews the cited passage and offers navigation.
+ * the library render as a link whose activation explains "not yet available".
+ * References to works in the library open a floating citation popover: hover
+ * peeks after a short delay; click/tap/Enter/Space pins it.
  */
 const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGranthaId, editionId, sourcePassageRef, sourceLookback, sourceWindowStart, updateHash, availableGranthaIds, granthaById, granthaIdToTitle }) => {
-  const { openCitation } = useCitationPanel();
+  const { openCitation, closeCitation, citation, mode, scheduleClose, cancelClose } = useCitationPanel();
+  const anchorRef = useRef<HTMLAnchorElement>(null);
+  const hoverOpenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // True when the popover's current pin came from a FOCUS event (mouse
+  // mousedown or keyboard Tab). A real mouse click that immediately follows
+  // focus must "consume" the pin (stay pinned, don't navigate) — otherwise
+  // the very first click after hovering would navigate.
+  const focusedPinRef = useRef(false);
 
   const targetTitle = reference.grantha_id
     ? granthaIdToTitle[reference.grantha_id] || reference.grantha_id
     : reference.display_text;   // unresolved (no id): fall back to the citation text
   const locatorLabel = reference.locator
     ? toDevanagariNumerals(reference.locator)
-    : "whole work";
+    : "";   // whole-work reference: the title alone identifies it
   const renderPlain = !reference.grantha_id || reference.unresolved;
   // The edition-aware gate: linkable iff the concrete (grantha, edition) is on
   // disk, or the edition-less target's default is attribution-safe.
@@ -104,8 +113,10 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
     [reference, currentGranthaId, sourcePassageRef, editionId, availableGranthaIds, granthaIdToTitle],
   );
 
-  const navigate = useCallback(async (): Promise<boolean> => {
-    if (!reference.grantha_id) return false;
+  // Load the target and resolve the locator to a concrete ref. Shared by
+  // navigation (then updateHash) and by copy (to build the citation).
+  const resolveRef = useCallback(async (): Promise<string | null> => {
+    if (!reference.grantha_id) return null;
     try {
       const target = await loadGrantha(
         reference.grantha_id,
@@ -113,71 +124,133 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
       );
       const resolution = resolveReferenceTarget(target, reference.locator);
       if (resolution.kind === "passage" || resolution.kind === "root") {
-        updateHash(
-          reference.grantha_id,
-          resolution.ref,
-          reference.grantha_id === currentGranthaId
-            ? editionId
-            : reference.edition_id ?? undefined,
-        );
-        return true;
+        return resolution.ref;
       }
       recordDiagnostic(resolution.code);
-      return false;
+      return null;
     } catch {
-      return false;
+      return null;
     }
-  }, [reference, currentGranthaId, editionId, updateHash, recordDiagnostic]);
+  }, [reference, recordDiagnostic]);
+
+  const navigate = useCallback(async (): Promise<boolean> => {
+    const ref = await resolveRef();
+    if (!ref || !reference.grantha_id) return false;
+    updateHash(
+      reference.grantha_id,
+      ref,
+      reference.grantha_id === currentGranthaId
+        ? editionId
+        : reference.edition_id ?? undefined,
+    );
+    return true;
+  }, [reference, currentGranthaId, editionId, updateHash, resolveRef]);
+
+  const buildRequest = useCallback(
+    (): Parameters<typeof openCitation>[0] | null => {
+      if (!reference.grantha_id) return null;
+      // The fully-formed quote visible in the lookback window, mapped to
+      // absolute offsets in the source passage — the steel-blue source
+      // highlight shown while the popover is open.
+      let sourceSpan: { start: number; end: number } | null = null;
+      if (sourceLookback && sourceWindowStart !== undefined) {
+        const quoted = extractEnclosedQuote(sourceLookback);
+        if (quoted !== null) {
+          sourceSpan = {
+            start: sourceWindowStart + quoted.start,
+            end: sourceWindowStart + quoted.end,
+          };
+        }
+      }
+      return {
+        reference,
+        targetTitle,
+        locatorLabel,
+        linkable,
+        availableGranthaIds,
+        navigate,
+        resolveRef,
+        sourceLookback,
+        sourceWindowStart,
+        sourcePassageRef,
+        sourceSpan,
+      };
+    },
+    [reference, targetTitle, locatorLabel, linkable, availableGranthaIds, navigate, resolveRef, sourceLookback, sourceWindowStart, sourcePassageRef],
+  );
+
+  const clearHoverOpen = useCallback(() => {
+    if (hoverOpenTimer.current !== null) {
+      clearTimeout(hoverOpenTimer.current);
+      hoverOpenTimer.current = null;
+    }
+  }, []);
+
+  const handleMouseEnter = () => {
+    cancelClose();
+    clearHoverOpen();
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    hoverOpenTimer.current = setTimeout(() => {
+      hoverOpenTimer.current = null;
+      openCitation(request, el, "peek");
+    }, HOVER_OPEN_DELAY_MS);
+  };
+
+  const handleMouseLeave = () => {
+    clearHoverOpen();
+    scheduleClose();
+  };
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!reference.grantha_id) return;
-
-    // The fully-formed quote visible in the lookback window, mapped to
-    // absolute offsets in the source passage — the steel-blue source
-    // highlight shown while the card is open.
-    let sourceSpan: { start: number; end: number } | null = null;
-    if (sourceLookback && sourceWindowStart !== undefined) {
-      const quoted = extractEnclosedQuote(sourceLookback);
-      if (quoted !== null) {
-        sourceSpan = {
-          start: sourceWindowStart + quoted.start,
-          end: sourceWindowStart + quoted.end,
-        };
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    const sameOpen =
+      citation &&
+      citation.reference.grantha_id === reference.grantha_id &&
+      citation.reference.locator === reference.locator &&
+      citation.reference.start === reference.start;
+    if (sameOpen && mode === "pinned") {
+      if (focusedPinRef.current) {
+        // This is the first click after a focus-pin (mouse mousedown or Tab):
+        // consume the pin so the click pins instead of navigating.
+        focusedPinRef.current = false;
+        return;
       }
+      // A genuine second click while pinned → navigate to the cited passage.
+      if (!linkable) {
+        recordDiagnostic("REF-NOT-IN-LIBRARY");
+      }
+      closeCitation();
+      void navigate();
+      return;
     }
-
-    if (linkable) {
-      openCitation({
-        reference,
-        targetTitle,
-        locatorLabel,
-        linkable: true,
-        availableGranthaIds,
-        navigate,
-        sourceLookback,
-        sourceWindowStart,
-        sourcePassageRef,
-        sourceSpan,
-      });
-    } else {
+    if (!linkable) {
       // Not-in-library: clicking is the triage-worthy act — log it once.
       recordDiagnostic("REF-NOT-IN-LIBRARY");
-      openCitation({
-        reference,
-        targetTitle,
-        locatorLabel,
-        linkable: false,
-        availableGranthaIds,
-        navigate,
-        sourceLookback,
-        sourceWindowStart,
-        sourcePassageRef,
-        sourceSpan,
-      });
     }
+    clearHoverOpen();
+    focusedPinRef.current = false;
+    openCitation(request, el, "pinned");
   };
+
+  const handleFocus = () => {
+    const request = buildRequest();
+    const el = anchorRef.current;
+    if (!request || !el) return;
+    clearHoverOpen();
+    focusedPinRef.current = true;
+    openCitation(request, el, "pinned");
+  };
+
+  // Clean up the hover-open timer on unmount.
+  React.useEffect(() => {
+    return () => clearHoverOpen();
+  }, [clearHoverOpen]);
 
   // Unresolved references (undefined abbreviation / build error) render as
   // plain text — never a link.
@@ -189,7 +262,11 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({ reference, currentGrantha
 
   return (
     <a
+      ref={anchorRef}
       href={`#${reference.grantha_id}:${reference.locator ?? "1"}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
       onClick={handleClick}
       className={linkClassName}
     >

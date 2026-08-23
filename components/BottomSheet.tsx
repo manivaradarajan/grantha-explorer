@@ -18,8 +18,6 @@ interface BottomSheetProps {
   onNext?: () => void;
   hasPrevious?: boolean;
   hasNext?: boolean;
-  /** Override the sheet's default height class (default "h-[80vh]"). */
-  heightClass?: string;
 }
 
 export default function BottomSheet({
@@ -35,7 +33,6 @@ export default function BottomSheet({
   onNext,
   hasPrevious = false,
   hasNext = false,
-  heightClass = "h-[80vh]",
 }: BottomSheetProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -110,7 +107,7 @@ export default function BottomSheet({
       {/* Bottom Sheet */}
       <div
         ref={sheetRef}
-        className={`relative w-full bg-white rounded-t-2xl shadow-2xl bottom-sheet ${heightClass} flex flex-col transform transition-transform duration-200 ease-out ${
+        className={`relative w-full bg-white rounded-t-2xl shadow-2xl bottom-sheet h-[80vh] flex flex-col transform transition-transform duration-200 ease-out ${
           isDragging ? "" : isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         style={
