@@ -15,6 +15,14 @@ describe("buildMatchString", () => {
     expect(match).toBe("स च अविद्या मृत्युं तीत्वां");
   });
 
+  it("treats anusvara and syllable-final म् as the same nasal (विज्ञानम् == विज्ञानं)", () => {
+    expect(buildMatchString("विज्ञानम्").match).toBe("विज्ञानं");
+    expect(buildMatchString("आनन्दम्").match).toBe("आनन्दं");
+    expect(buildMatchString("विज्ञानम्").match).toBe(
+      buildMatchString("विज्ञानं").match,
+    );
+  });
+
   it("collapses whitespace runs (pāda newlines) to single spaces", () => {
     const { match } = buildMatchString("अविद्यया मृत्युं तीर्त्वा\nविद्ययाऽमृतमश्नुते ।।");
     expect(match).toBe("अविद्यया मृत्युं तीर्त्वा विद्ययाऽमृतमश्नुते");
@@ -344,5 +352,97 @@ describe("constants sanity", () => {
 
   it("MAX_COVERAGE is 0.8", () => {
     expect(MAX_COVERAGE).toBe(0.8);
+  });
+});
+
+describe("findQuotedSpan — tight quote needle (prose window, danda-delimited quote)", () => {
+  it("matches the phrase after the last danda, not the surrounding prose", () => {
+    // The window is prose + a danda + the quote (para 14, chhandogya 6.3.2).
+    const window = "त्वदन्तर्यामिणमेवाचष्ट इति ।\nअनेन जीवेनात्मनानुप्रविश्य नामरूपे व्याकरवाणि (";
+    const passage = "स एवं विद्वान् अनेन जीवेनात्मनानुप्रविश्य नामरूपे व्याकरवाणि ।";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    // The match hugs the quote (अनेन जीवेन…व्याकरवाणि), never the prose before the danda.
+    const matched = passage.slice(span!.start, span!.end);
+    expect(matched).toContain("नामरूपे व्याकरवाणि");
+    expect(matched).not.toContain("त्वदन्तर्यामि");
+  });
+
+  it("matches the whole multi-pāda shloka, not a prose fragment", () => {
+    // The window holds the full quoted shloka (both pādas, pāda-broken by a
+    // danda+newline). The highlight must span the WHOLE verse (including the
+    // first pāda), not just its last pāda, and not swallow unrelated prose.
+    const window = "कृत्यानां प्रपञ्चनम् ।\nवेदशब्देभ्य एवादौ दैवादीनां चकार सः ॥\n(";
+    const passage = "कृत्यानां च प्रपंचनम् ।\nवेदशब्देभ्य एवादौ देवादीनां चकार सः";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    const matched = passage.slice(span!.start, span!.end);
+    expect(matched).toContain("प्रपंचनम्");
+    expect(matched).toContain("वेदशब्देभ्य");
+    expect(matched).toContain("चकार सः");
+  });
+
+  it("matches a long single-sentence quote (para 9, chhandogya 6.1.4)", () => {
+    const window = "विज्ञातं स्याद्वाचारम्भणं विकारो नामधेयं मृत्तिकेत्येव सत्यम् (";
+    const passage = "यथा सोम्यैकेन मृत्पिण्डेन सर्वं मृन्मयं विज्ञातँ स्यात् । वाचारम्भणं विकारोनामधेयं मृत्तिकेत्येव सत्यम्";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    const matched = passage.slice(span!.start, span!.end);
+    expect(matched).toContain("सत्यम्");
+  });
+
+  it("matches a short precise phrase ('अयमात्मा ब्रह्म') against prose", () => {
+    // The quote is only 9 chars — below the old MIN_MATCH_CHARS prose floor —
+    // but precise, so it must still match.
+    const window = "…तत्त्वमसि (छा.उ.६.८.४) ।\nअयमात्मा ब्रह्म ।\n(";
+    const passage = "वैष्णवमनुस्मृत्य अयमात्मा ब्रह्म सर्वमेतत् ।";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    expect(passage.slice(span!.start, span!.end)).toContain("अयमात्मा ब्रह्म");
+  });
+
+  it("matches a single word whose only drift is anusvara vs final म् (विज्ञानम्/विज्ञानं)", () => {
+    // Para 7: the window quotes "विज्ञानम्" (final म्) and "आनन्दम्"; the
+    // Taittiriya passages store "विज्ञानं"/"आनन्दं" (anusvara). The anusvara
+    // normalization makes these exact matches.
+    const window = "…(श्वे.उ.६.१), विज्ञानम् (";
+    const passage = "विज्ञानं ब्रह्मेति व्यजानात् । विज्ञानाद्ध्येव खल्विमानि भूतानि";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    expect(passage.slice(span!.start, span!.end)).toContain("विज्ञानं");
+
+    const window2 = "…(तै.उ.भृ.५.१) आनन्दम् (";
+    const passage2 = "यतो वाचो निवर्तन्ते । अप्राप्य मनसा सह । आनन्दं ब्रह्मणो विद्वान्";
+    const span2 = findQuotedSpan(window2, passage2);
+    expect(span2).not.toBeNull();
+    expect(passage2.slice(span2!.start, span2!.end)).toContain("आनन्दं");
+  });
+});
+
+describe("findQuotedSpan — whole-verse highlight (para 17, Vishnu Purāṇa 1.5.63)", () => {
+  it("highlights the full two-pāda shloka from the real source window", () => {
+    // Para 17's source window: prose lead, then the quoted shloka (both pādas,
+    // pāda-broken by danda+newline). The window extension must sweep the full
+    // verse; the match must cover both pādas (not just the second), and the
+    // leading prose ("संस्थाः…यावत् ।\nआह च भगवान् पराशरः\n") must not be
+    // swallowed.
+    const window =
+      "संस्थाः संस्थानानि रूपाणीति यावत् ।\nआह च भगवान् पराशरः\n" +
+      "नाम रूपं भूतानां कृत्यानां प्रपञ्चनम् ।\n" +
+      "वेदशब्देभ्य एवादौ दैवादीनां चकार सः ॥\n(";
+    const passage =
+      "नाम रूपं च भूतानां कृत्यानां च प्रपंचनम् ।\n" +
+      "वेदशब्देभ्य एवादौ देवादीनां चकार सः";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    const matched = passage.slice(span!.start, span!.end);
+    expect(matched).toContain("नाम रूपं");
+    expect(matched).toContain("चकार सः");
+    // The matched passage span starts at the verse's beginning.
+    expect(span!.start).toBe(0);
+    // The source highlight excludes the leading prose.
+    expect(window.slice(span!.sourceStart, span!.sourceEnd)).not.toContain(
+      "यावत्",
+    );
   });
 });
