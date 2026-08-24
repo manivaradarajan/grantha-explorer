@@ -375,6 +375,7 @@ def _write_edition(
     first_frontmatter: dict[str, Any] | None = None
     structure_levels_raw: list[dict[str, Any]] | None = None
     diagnostics: list[dict[str, Any]] = []
+    part_has_commentary: list[bool] = []
 
     for idx, src_path in enumerate(files, start=1):
         frontmatter, body_text = parse_frontmatter(src_path)
@@ -400,13 +401,18 @@ def _write_edition(
             encoding="utf-8",
         )
         parts_info.append({"file": f"part{idx}.json", "first_ref": _first_main_ref(body)})
+        part_has_commentary.append(
+            bool(part_json.get("commentary") or part_json.get("commentaries"))
+        )
         print(f"    {src_path.name} -> {part_path.name}")
 
     if first_frontmatter is None or structure_levels_raw is None:
         raise RuntimeError(f"Edition {edition_id} produced no source files")
     normalized_levels = normalize_structure_levels(structure_levels_raw)
+    edition_kind = "commentarial" if any(part_has_commentary) else "mula-only"
     envelope = build_envelope_json(
-        parts_info, normalized_levels, first_frontmatter, edition_id=edition_id
+        parts_info, normalized_levels, first_frontmatter, edition_id=edition_id,
+        edition_kind=edition_kind,
     )
     (out_dir / "envelope.json").write_text(
         json.dumps(envelope, ensure_ascii=False, indent=2),

@@ -41,14 +41,17 @@ def ensure_grantha_data_importable() -> None:
         ValueError: If ``GRANTHA_DATA_TOOLS_LIB`` is set but the directory
             does not contain ``grantha_data``.
     """
-    if "grantha_data" in sys.modules:
-        return
     configured = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
     if not configured:
         return
+    # A configured path is always honored (validated, then prepended) — even if
+    # `grantha_data` was already imported via `pip install -e`. This makes the
+    # bootstrap robust to test ordering: an explicitly configured but invalid
+    # path must still raise, regardless of what earlier tests imported.
     tools_lib = Path(configured).expanduser()
     if not (tools_lib / "grantha_data").is_dir():
         raise ValueError(
             f"GRANTHA_DATA_TOOLS_LIB={configured} does not contain grantha_data/"
         )
-    sys.path.insert(0, str(tools_lib))
+    if tools_lib not in sys.path:
+        sys.path.insert(0, str(tools_lib))

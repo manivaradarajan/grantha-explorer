@@ -10,6 +10,72 @@ export interface Content {
   english_translation: string;
 }
 
+/** The declared presentation kind of a main passage — the markdown heading
+ *  word, stamped by both converters. Presentation is a total, pinned function
+ *  of this value (IDEA.md per-block presentation model). Framing passages
+ *  (prefatory/concluding) never carry a kind. */
+export type PassageKind =
+  | "Para"
+  | "Gadya"
+  | "Shloka"
+  | "Mantra"
+  | "Verse"
+  | "Sutra"
+  | (string & {});
+
+/** Every kind the pinned presentation map classifies. The validator and the
+ *  on-disk tests require any `passage.kind` found in the corpus to be a member
+ *  (a future prose leaf like "Gadya" must be added here explicitly, never
+ *  silently "verse"). */
+export const KNOWN_PASSAGE_KINDS: readonly string[] = [
+  "Para",
+  "Gadya",
+  "Shloka",
+  "Mantra",
+  "Verse",
+  "Sutra",
+];
+
+/** The total, pinned mapping from a main passage's declared kind to its mula
+ *  presentation. Throws on any unclassified kind — never a silent "verse"
+ *  default (the failure this model exists to prevent). */
+export function presentationFor(kind: string): "prose" | "verse" {
+  switch (kind) {
+    case "Para":
+    case "Gadya":
+      return "prose";
+    case "Shloka":
+    case "Mantra":
+    case "Verse":
+    case "Sutra":
+      return "verse";
+    default: {
+      const exhaustive: never = kind;
+      throw new Error(`Unknown passage kind: ${exhaustive}`);
+    }
+  }
+}
+
+/** The concrete mula-presentation styling for each classification. Consumers
+ *  look up by `presentationFor(passage.kind)` — one table, no scattered ifs. */
+export const MULA_PRESENTATION: Record<
+  "prose" | "verse",
+  { wrapper: string; text: string }
+> = {
+  // Verse kinds: the classic verse column — narrower, centered, left-ruled,
+  // larger type (flow-verse). Keeps commentary running wider than the mula.
+  verse: {
+    wrapper: "mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2",
+    text: "verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line",
+  },
+  // Prose kinds (Para/Gadya): undecorated, commentary-like reading — no bar,
+  // no centering, standard font (flow-commentary). No appended verse number.
+  prose: {
+    wrapper: "mb-5",
+    text: "verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line",
+  },
+};
+
 export interface Passage {
   ref: string;
   passage_type: "main" | "prefatory" | "concluding";
@@ -17,6 +83,9 @@ export interface Passage {
   content: Content;
   /** Standalone mūla speaker attribution (e.g. "सञ्जय उवाच"). Verse-level only. */
   speaker?: string;
+  /** The markdown heading word (e.g. "Para", "Shloka"). Main passages only;
+   *  absent on prefatory/concluding. Per-block presentation model (IDEA.md). */
+  kind?: string;
   part_id?: string; // Changed from part_num
 }
 
@@ -183,6 +252,10 @@ export interface Grantha extends GranthaMetadata {
   parts?: { file: string; id: string; first_ref: string }[];
   /** The edition this grantha object was loaded as. Undefined for single-edition granthas. */
   edition_id?: string;
+  /** The edition's declared kind ("mula-only" | "commentarial"), stamped into
+   *  committed data at build time. Absent for legacy files (the loader falls
+   *  back to deriveEditionKind). Gates the commentary pane. */
+  edition_kind?: EditionKind;
 }
 
 export interface GranthaMetadata {
@@ -503,14 +576,20 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         });
       }
 
-      // Nest subcommentaries under their parent commentary.
-      partialGrantha.commentaries = nestSubcommentaries(
-        partialGrantha.commentaries,
-      );
+        // Nest subcommentaries under their parent commentary.
+        partialGrantha.commentaries = nestSubcommentaries(
+          partialGrantha.commentaries,
+        );
 
-      // Cache and return the partially assembled grantha.
-      granthaCache.set(cacheKey, partialGrantha);
-      return partialGrantha;
+        // Edition kind: prefer the declared stamp (build-time derivation,
+        // per-block presentation model IDEA.md); legacy files without it fall
+        // back to deriving from the assembled commentaries.
+        partialGrantha.edition_kind =
+          multiPartMetadata.edition_kind ?? deriveEditionKind(partialGrantha.commentaries);
+
+        // Cache and return the partially assembled grantha.
+        granthaCache.set(cacheKey, partialGrantha);
+        return partialGrantha;
 
       } else if (envelopeResponse.status === 404) {
         throw new Error(`Multi-part grantha ${granthaId} directory found but envelope.json is missing`);
@@ -561,6 +640,11 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
       data.title = data.canonical_title ?? granthaMetadata.title;
       data.title_deva = granthaMetadata.title_deva ?? data.canonical_title;
       data.title_iast = granthaMetadata.title_iast ?? data.canonical_title;
+
+      // Edition kind (per-block presentation model IDEA.md): prefer the
+      // declared stamp on the flat grantha file; fall back to derivation for
+      // legacy files.
+      data.edition_kind = data.edition_kind ?? deriveEditionKind(data.commentaries);
 
       granthaCache.set(cacheKey, data);
       return data;
@@ -684,9 +768,26 @@ export function getAllPassagesForNavigation(
 /**
  * Whether a grantha exposes any commentary. Granthas with no commentary (e.g.
  * Vedārthasaṅgraha) hide the commentary pane entirely.
+ *
+ * Unifies every pane probe onto the typed `edition_kind` (per-block
+ * presentation model, IDEA.md): prefer the declared stamp, fall back to
+ * derivation for legacy files without one.
  */
 export function hasCommentary(grantha: Grantha | null | undefined): boolean {
-  return (grantha?.commentaries?.length ?? 0) > 0;
+  if (!grantha) return false;
+  return (grantha.edition_kind ?? deriveEditionKind(grantha.commentaries)) === "commentarial";
+}
+
+/** The edition's kind, declared in committed data (per-block presentation
+ *  model, IDEA.md): derived at build time from commentary presence. Gates the
+ *  commentary pane/chrome; does not drive per-block mula presentation. */
+export type EditionKind = "mula-only" | "commentarial";
+
+/** Load-boundary fallback for legacy files lacking a stamped `edition_kind`:
+ *  derive it from the assembled commentaries. Bounded to legacy-only;
+ *  behaviourally identical to the old `hasCommentary` gating. */
+export function deriveEditionKind(commentaries: unknown[] | undefined): EditionKind {
+  return (commentaries?.length ?? 0) > 0 ? "commentarial" : "mula-only";
 }
 
 export function getPassageByRef(

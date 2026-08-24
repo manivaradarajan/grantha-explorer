@@ -197,6 +197,124 @@ function checkEditionPathsResolve(
 }
 
 // ---------------------------------------------------------------------------
+// Per-block presentation checks (IDEA.md per-block presentation model)
+// ---------------------------------------------------------------------------
+
+/** Pinned classification (mirrors lib/data.ts KNOWN_PASSAGE_KINDS). Any kind
+ *  found in the corpus without an entry here is a build error — a future prose
+ *  leaf (e.g. "Gadya") must be classified explicitly, never silently "verse". */
+const KNOWN_PASSAGE_KINDS = new Set([
+  'Para',
+  'Gadya',
+  'Shloka',
+  'Mantra',
+  'Verse',
+  'Sutra',
+]);
+
+interface PassageShape {
+  ref?: unknown;
+  passage_type?: unknown;
+  kind?: unknown;
+}
+
+/**
+ * Verify the per-block kind invariants for a content file (flat grantha or
+ * part): every `passage_type: "main"` passage carries a classified `kind`; no
+ * prefatory/concluding passage carries one.
+ *
+ * @param data - Parsed grantha or grantha-part content.
+ * @returns List of error messages (empty when the invariants hold).
+ */
+function checkPassageKinds(data: Record<string, unknown>): string[] {
+  const errs: string[] = [];
+  for (const key of ['passages', 'prefatory_material', 'concluding_material']) {
+    const arr = data[key];
+    if (!Array.isArray(arr)) continue;
+    for (const passage of arr as PassageShape[]) {
+      const ref = typeof passage.ref === 'string' ? passage.ref : '?';
+      if (passage.passage_type === 'main') {
+        const kind = passage.kind;
+        if (typeof kind !== 'string' || !KNOWN_PASSAGE_KINDS.has(kind)) {
+          errs.push(`[kind] main passage ${ref} has unclassified kind ${JSON.stringify(kind)}`);
+        }
+      } else if (passage.kind !== undefined) {
+        errs.push(`[kind] framing passage ${ref} must not carry kind (got ${JSON.stringify(passage.kind)})`);
+      }
+    }
+  }
+  return errs;
+}
+
+/**
+ * Verify edition-kind coherence across the whole library (IDEA.md): every
+ * edition carries a stamped `edition_kind` ("mula-only" | "commentarial"), a
+ * mula-only edition carries a commentary in no part, and a commentarial
+ * edition carries a commentary in at least one part (a uniform commentary drop
+ * now fails against the committed expectation). A commentarial edition may
+ * have an individual commentary-free part (e.g. a sarga whose whole text is
+ * one un-glossed passage).
+ *
+ * @param libraryRoot - Absolute path to the library directory.
+ * @returns List of error messages (empty when all editions are coherent).
+ */
+function checkEditionKindCoherence(libraryRoot: string): string[] {
+  const errs: string[] = [];
+  const hasCommentary = (obj: Record<string, unknown>): boolean => {
+    const commentary = obj['commentary'];
+    const commentaries = obj['commentaries'];
+    if (commentary && typeof commentary === 'object' && Object.keys(commentary).length > 0) {
+      return true;
+    }
+    return Array.isArray(commentaries) && commentaries.length > 0;
+  };
+
+  for (const filePath of collectJsonFiles(libraryRoot).sort()) {
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as Record<string, unknown>;
+    const kind = classifyFile(data);
+    if (kind === 'edition-sub-envelope') {
+      const editionId = data['edition_id'];
+      const label = typeof editionId === 'string' ? editionId : path.basename(path.dirname(filePath));
+      const stamp = data['edition_kind'];
+      if (stamp !== 'mula-only' && stamp !== 'commentarial') {
+        errs.push(`[edition_kind] edition ${label} missing/invalid edition_kind ${JSON.stringify(stamp)}`);
+        continue;
+      }
+      const parts = data['parts'];
+      if (!Array.isArray(parts)) continue;
+      const dir = path.dirname(filePath);
+      let anyPartHasCommentary = false;
+      for (const part of parts as { file?: unknown }[]) {
+        if (typeof part.file !== 'string') continue;
+        const partPath = path.join(dir, part.file);
+        if (!fs.existsSync(partPath)) continue;
+        const partData = JSON.parse(fs.readFileSync(partPath, 'utf-8')) as Record<string, unknown>;
+        const has = hasCommentary(partData);
+        if (stamp === 'mula-only' && has) {
+          errs.push(`[edition_kind] mula-only edition ${label} part ${part.file} has a commentary`);
+        }
+        anyPartHasCommentary = anyPartHasCommentary || has;
+      }
+      if (stamp === 'commentarial' && !anyPartHasCommentary) {
+        errs.push(`[edition_kind] commentarial edition ${label} has commentary in no part`);
+      }
+    } else if (kind === 'grantha') {
+      const label = (data['edition_id'] as string) ?? (data['grantha_id'] as string) ?? '?';
+      const stamp = data['edition_kind'];
+      if (stamp !== 'mula-only' && stamp !== 'commentarial') {
+        errs.push(`[edition_kind] edition ${label} missing/invalid edition_kind ${JSON.stringify(stamp)}`);
+        continue;
+      }
+      const expected = hasCommentary(data) ? 'commentarial' : 'mula-only';
+      if (stamp !== expected) {
+        errs.push(`[edition_kind] edition ${label} edition_kind ${stamp} mismatches commentary presence (${expected})`);
+      }
+    }
+  }
+  return errs;
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -233,7 +351,18 @@ for (const filePath of allFiles) {
       ? checkEditionPathsResolve(data, dataDir)
       : [];
 
-  const allErrors = [...schemaErrors, ...structureErrors, ...editionPathErrors];
+  // Per-block presentation: kind presence + classification (content files).
+  const passageKindErrors =
+    kind === 'grantha' || kind === 'grantha-part'
+      ? checkPassageKinds(data)
+      : [];
+
+  const allErrors = [
+    ...schemaErrors,
+    ...structureErrors,
+    ...editionPathErrors,
+    ...passageKindErrors,
+  ];
 
   if (allErrors.length > 0) {
     failCount++;
@@ -248,6 +377,17 @@ for (const filePath of allFiles) {
 
 const total = passCount + failCount;
 console.log(`\n=== ${passCount} PASS  ${failCount} FAIL  (${total} files scanned) ===`);
+
+// Edition-kind coherence is a cross-file check (envelope vs its parts), run
+// once over the whole library.
+const editionKindErrors = checkEditionKindCoherence(dataDir);
+for (const msg of editionKindErrors) {
+  failCount++;
+  console.error(`FAIL  ${msg}`);
+}
+
 if (failCount === 0) {
   console.log('All data files are valid.');
+} else {
+  process.exitCode = 1;
 }

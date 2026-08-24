@@ -306,6 +306,56 @@ describe("renderMulaWithReferences", () => {
     expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा ।");
     cleanUp(root, el);
   });
+
+  it("toggling the source highlight does NOT change the rendered text", () => {
+    // The real para-1 shape: a segment with a line break and spaces between two
+    // citations. Opening the citation popover sets `sourceHighlight`, which
+    // re-slices the segment around the quoted phrase and wraps it in a
+    // `<mark>`. The TEXT must stay byte-identical — trimming the re-sliced
+    // parts would eat the `\n`/space at the boundaries, reflow the paragraph,
+    // and (by moving the hovered link out from under the cursor) close the
+    // hover. This is a regression pin for that bug.
+    // raw: "') ।\nअयमात्मा ब्रह्म ।\n(" then the citation "(बृ.उ.६.४.५)".
+    const text = "') ।\nअयमात्मा ब्रह्म ।\n(बृ.उ.६.४.५)'";
+    const refs: Reference[] = [
+      {
+        start: 22,
+        end: 34,
+        display_text: "बृ.उ.६.४.५",
+        grantha_id: "brihadaranyaka-upanishad",
+        locator: "6.4.5",
+        unresolved: false,
+      },
+    ];
+    // The quoted phrase "अयमात्मा ब्रह्म" spans raw offsets 5..19.
+    const highlight = {
+      passageRef: "1",
+      span: { start: 5, end: 19 },
+    };
+
+    const renderWith = (sourceHighlight: typeof highlight | null): string => {
+      const el = container();
+      const root = createRoot(el);
+      act(() => {
+        root.render(
+          wrap(renderMulaWithReferences(text, refs, {
+            ...context,
+            sourcePassageRef: "1",
+            sourceHighlight,
+            availableGranthaIds: ["brihadaranyaka-upanishad"],
+          })),
+        );
+      });
+      const out = el.textContent ?? "";
+      cleanUp(root, el);
+      return out;
+    };
+
+    const closed = renderWith(null);
+    const open = renderWith(highlight);
+    expect(open).toBe(closed);
+    expect(closed).toContain("अयमात्मा ब्रह्म");
+  });
 });
 
 afterEach(() => {

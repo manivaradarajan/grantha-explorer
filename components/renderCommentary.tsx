@@ -6,6 +6,7 @@ import {
   assertCodePointOffsetAligned,
   sanitizeCommentaryHtml,
   stripMarkdown,
+  stripMarkdownInline,
 } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
 import { buildSourceWindow } from "@/lib/quotedMatch";
@@ -188,18 +189,24 @@ export function renderMulaWithReferences(
       const seg = rawText.slice(cursor, segStart);
       const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
       if (bounds) {
+        // Interior slices are stripped WITHOUT trimming (stripMarkdownInline):
+        // trimming per-slice eats line-breaks/spaces at the slice boundaries,
+        // which reflows the reading text when the popover toggles the source
+        // highlight (closed→open re-slices each segment into three parts). The
+        // rendered text must stay byte-identical, or the hovered reference
+        // link shifts out from under the cursor and the hover closes.
         parts.push(
           <Fragment key={`seg-${cursor}`}>
-            {stripMarkdown(seg.slice(0, bounds.s))}
+            {stripMarkdownInline(seg.slice(0, bounds.s))}
             <mark className="citation-source-mark">
-              {stripMarkdown(seg.slice(bounds.s, bounds.e))}
+              {stripMarkdownInline(seg.slice(bounds.s, bounds.e))}
             </mark>
-            {stripMarkdown(seg.slice(bounds.e))}
+            {stripMarkdownInline(seg.slice(bounds.e))}
           </Fragment>
         );
       } else {
         parts.push(
-          <span key={`seg-${cursor}`}>{stripMarkdown(seg)}</span>,
+          <span key={`seg-${cursor}`}>{stripMarkdownInline(seg)}</span>,
         );
       }
     }
@@ -217,7 +224,7 @@ export function renderMulaWithReferences(
   }
   if (cursor < rawText.length) {
     parts.push(
-      <span key="seg-last">{stripMarkdown(rawText.slice(cursor))}</span>,
+      <span key="seg-last">{stripMarkdownInline(rawText.slice(cursor))}</span>,
     );
   }
   return <>{parts}</>;

@@ -27,7 +27,7 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.27em;
   /* Tighten the spaces inside a citation so the marker reads as one unit. */
-  word-spacing: -0.15em;
+  /*word-spacing: -0.15em;*/
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
@@ -338,12 +338,15 @@
 
 /* Steel-blue highlight of the quoted span in the SOURCE passage while its
    citation popover is open — ties the popover to the exact bhashya text it
-   cites. Same Devanagari-safe padding treatment as .citation-mark. */
+   cites. MUST be layout-neutral (no padding/margin/border affecting the box):
+   the mark is inserted into the passage being read, and any layout change
+   reflows the reading text, shifting the hovered reference link out from under
+   the cursor and closing the hover. Background/radius/box-decoration-break are
+   paint-only. */
 mark.citation-source-mark {
   background-color: rgba(61, 90, 128, 0.16);
   color: inherit;
   border-radius: 3px;
-  padding: 0.3em 0 0.15em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
