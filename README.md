@@ -212,19 +212,17 @@ Prereqs:
    `../grantha-data/structured_md/ramayana/valmiki-ramayana` →
    `public/data/library/ramayana/valmiki-ramayana` (626 parts),
    `../grantha-data/structured_md/purana/vishnu-purana` →
-   `public/data/library/purana/vishnu-purana` (126 parts).
+   `public/data/library/purana/vishnu-purana` (126 parts),
+   `../grantha-data/structured_md/vedarthasangraha` →
+   `public/data/library/vedarthasangraha`.
 
-3. **Flat single-file grantha** (vedarthasangraha) — the producer CLI
-   `grantha-converter md2json` (installed from grantha-data), then copy:
+   **vedarthasangraha must use this converter, not the producer CLI.** This
+   path extracts the mula's `references[]` (the producer `md2json` emits none)
+   and stamps `kind`/`edition_kind`; the parity test
+   `scripts/tests/test_committed_reference_parity.py` fails if the committed
+   artifact is regenerated with the wrong tool.
 
-   ```
-   cd ../grantha-data
-   grantha-converter md2json -i structured_md/vedarthasangraha/vedarthasangraha-01.md \
-     -o /tmp/vedarthasangraha.json
-   cp /tmp/vedarthasangraha.json ../grantha-explorer/public/data/library/vedarthasangraha/vedarthasangraha.json
-   ```
-
-4. **Validate** — `npm run build` (prebuild regenerates `granthas.json` +
+3. **Validate** — `npm run build` (prebuild regenerates `granthas.json` +
    `validate:data` + `validate:integrity`), or just
    `npm run validate:data`. The `schema_version` in the output comes from the
    producer `VERSION`; the mirrors stay byte-identical unless
