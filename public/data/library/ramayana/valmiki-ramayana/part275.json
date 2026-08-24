@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 275,
@@ -8,6 +8,7 @@
     {
       "ref": "4.16.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तामेवं ब्रुवतीं तारां ताराधिपनिभाननाम् ।\nवाली निर्भर्त्सयामास वचनं चेदमब्रवीत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "4.16.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गर्जतो ऽस्य च संरम्भं भ्रातुः शत्रोर्विशेषतः ।\nमर्षयिष्याम्यहं केन कारणेन वरानने ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "4.16.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अधर्षितानां शूराणां समरेष्वनिवर्तिनाम् ।\nधर्षणामर्षणं भीरु मरणादतिरिच्यते ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "4.16.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सोढुं न च समर्थो ऽहं युद्धकामस्य संयुगे ।\nसुग्रीवस्य च संरम्भं हीनग्रीवस्य गर्जतः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "4.16.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च कार्यो विषादस्ते राघवं प्रति मत्कृते ।\nध्रमज्ञश्च कृतज्ञश्च कथं पापं करिष्यति ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "4.16.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निवर्तस्व सह स्त्रीभिः कथं भूयो ऽनुच्छसि ।\nसौहृदं दर्शितं तारे मयि भक्तिः कृता त्वया ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "4.16.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रति योत्साम्यहं गत्वा सुग्रीवं जहि सम्भ्रमम् ।\nदर्पमात्रं विनेष्यामि न च प्राणैर्विमोक्ष्यते ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "4.16.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं ह्याजिस्थितस्यास्य करिष्यामि यथेप्सितम् ।\nवृक्षैर्मुष्टिप्रहारैश्च पीडितः प्रतियास्यति ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "4.16.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न मे गर्वितमायस्तं सहिष्यति दुरात्मवान् ।\nकृतं तारे सहायत्वं सौहृदं दर्शितं मयि ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "4.16.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शापितासि मम प्राणैर्निवर्तस्व जयेन च ।\nअहं जित्वा निवर्तिष्ये तमहं भ्रातरं रणे ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "4.16.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं तु तारा परिष्वज्य वालिनं प्रियवादिनी ।\nचकार रुदती मन्दं दक्षिणा सा प्रदक्षिणम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "4.16.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः स्वस्त्ययनं कृत्वा मन्त्रवद्विजयैषिणी ।\nअन्तःपुरं सह स्त्रीभिः प्रविष्टा शोकमोहिता ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "4.16.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रविष्टायां तु तारायां सह स्त्रीभिः स्वमालयम् ।\nनगरान्निर्ययौ क्रुद्धो महासर्प इव श्वसन् ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "4.16.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स निःश्वस्य महातेजा वाली परमरोषणः ।\nसर्वतश्चारयन् दृष्टिं शत्रुदर्शनकाङ्क्षया ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "4.16.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स ददर्श ततः श्रीमान् सुग्रीवं हेमपिङ्गलम् ।\nसुसंवीतमवष्टब्धं दीप्यमानमिवानलम् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "4.16.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तं दृष्ट्वा महावीर्यं सुग्रीवं पर्यवस्थितम् ।\nगाढं परिदधे वासो वाली परमरोषणः ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "4.16.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स वाली गाढसंवीतो मुष्टिमुद्यम्य वीर्यवान् ।\nसुग्रीवमेवाभिमुखो ययौ योद्धुं कृतक्षणः ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "4.16.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्लिष्टमुष्टिं समुद्यम्य संरब्धतरमागतः ।\nसुग्रीवो ऽपि तमुद्दिश्य वालिनं हेममालिनम् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "4.16.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं वाली क्रोधताम्राक्षः सुग्रीवं रणपण्डितम् ।\nआपतन्तं महावेगमिदं वचनमब्रवीत् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "4.16.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एष मुष्टिर्मया बद्धो गाढः सन्निहिताङ्गुलिः ।\nमया वेगविमुक्तस्ते प्राणानादाय यास्यति ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "4.16.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तु सुग्रीवः क्रुद्धो वालिनमब्रवीत् ।\nतवैव चाहरन् प्राणान् मुष्टिः पततु मूर्धनि ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "4.16.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ताडितस्तेन सङ्क्रुद्धः समभिक्रम्य वेगितः ।\nअभवच्छोणितोद्गारी सोत्पीड इव पर्वतः ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "4.16.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुग्रीवेण तु निस्सङ्गं सालमुत्पाट्य तेजसा ।\nगात्रेष्वभिहतो वाली वज्रेणेव महागिरिः ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "4.16.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तु वाली प्रचलितः सालताडनविह्वलः ।\nगुरुभारसमाक्रान्तो नौसार्थ इव सागरे ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "4.16.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रवृद्धौ घोरवपुषौ चन्द्रसूर्याविवाम्बरे ।\nपरस्परममित्रघ्नौ छिद्रान्वेषणतत्परौ ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "4.16.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो ऽवर्धत वाली तु बलवीर्यसमन्वितः ।\nसूर्यपुत्रो महावीर्यः सुग्रीवः परिहीयते ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "4.16.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वालिना भग्नदर्पस्तु सुग्रीवो मन्दविक्रमः ।\nवालिनं प्रति सामर्षो दर्शयामास लाघवम् ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "4.16.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मुष्टिभिर्जानुभिः पद्भिर्बाहुभिश्च पुनःपुनः ।\nतयोर्युद्धमभूद्घोरं वृत्रवासवयोरिव ॥"
@@ -260,15 +288,30 @@
     {
       "ref": "4.16.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ शोणिताक्तौ युद्ध्येतां वानरौ वनचारिणौ ।\nमेघाविव महाशब्दैस्तर्जमा(या)नौ परस्परम् ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 68,
+          "end": 70,
+          "display_text": "या",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "4.16.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हीयमानमथो ऽपश्यत्सुग्रीवं वानरेश्वरम् ।\nवीक्षमाणं दिशश्चैव राघवः स मुहुर्मुहुः ॥"
@@ -278,6 +321,7 @@
     {
       "ref": "4.16.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो रामो महातेजा आर्तं दृष्ट्वा हरीश्वरम् ।\nशरं च वीक्षते वीरो वालिनो वधकारणात् ॥"
@@ -287,6 +331,7 @@
     {
       "ref": "4.16.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो धनुषि सन्धाय शरमाशीविषोपमम् ।\nपूरयामास तच्चापं कालचक्रमिवान्तकः ॥"
@@ -296,6 +341,7 @@
     {
       "ref": "4.16.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य ज्यातलघोषेण त्रस्ताः पत्त्ररथेश्वराः ।\nप्रदुद्रुवुर्मृगाश्चैव युगान्त इवमोहिताः ॥"
@@ -305,6 +351,7 @@
     {
       "ref": "4.16.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मुक्तस्तु वज्रनिर्घोषः प्रदीप्ताशनिसन्निभः ।\nराघवेण महाबाणो वालिवक्षसि पातितः ॥"
@@ -314,6 +361,7 @@
     {
       "ref": "4.16.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तेन महातेजा वीर्योत्सिक्तः कपीश्वरः ।\nवेगेनाभिहतो वाली निपपात महीतले ॥"
@@ -323,6 +371,7 @@
     {
       "ref": "4.16.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रध्वज इवोद्धूतः पौर्णमास्यां महीतेले ।\nआश्वयुक्समये मासि गत श्रीको विचेतनः ॥"
@@ -332,6 +381,7 @@
     {
       "ref": "4.16.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नरोत्तमः कालयुगान्तकोपमं शरोत्तमं काञ्चनरूप्यभूषितम् ।\nससर्ज दीप्तं तममित्रमर्द्दनं सधूममग्निं मुखतो यथा हरः ॥"
@@ -341,6 +391,7 @@
     {
       "ref": "4.16.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथोक्षितः शोणिततोयविस्रवैः सुपुष्पिताशोक इवानलोद्धतः ।\nविचेतनो वासवसूनुराहवे विभ्रंशितेन्द्रध्वजवत्क्षितिं गतः ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमत्किष्किन्धाकाण्डे षोडशः सर्गः ॥ १६ ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मुक्ताहाराख्याने किष्किन्धाकाण्डव्याख्याने षोडशः सर्गः ॥ १६ ॥"
@@ -536,6 +587,7 @@
             "end": 42,
             "display_text": "या",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

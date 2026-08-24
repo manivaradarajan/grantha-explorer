@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 63,
@@ -22,6 +22,7 @@
     {
       "ref": "1.65.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ हैमवतीं राम दिशं त्यक्त्वा महामुनिः ।\nपूर्वां दिशमनुप्राप्य तपस्तेपे सुदारुणम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.65.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मौनं वर्षसहस्रस्य कृत्वा व्रतमनुत्तमम् ।\nचकाराप्रतिमं राम तपः परमदुष्करम् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.65.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्णे वर्षसहस्रे तु काष्ठभूतं महामुनिम् ।\nविघ्नैर्बहुभि राधूतं क्रोधो नान्तरमाविशत् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.65.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स कृत्वा निश्चयं राम तप आतिष्ठदव्ययम् ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.65.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भोक्तुमारब्धवानन्नं तस्मिन् काले रघूत्तम ।\nइन्द्रो द्विजातिर्भूत्वा तं सिद्धमन्नमयाचत ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.65.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निःशेषिते ऽन्ने भगवानभुक्त्वैव महातपाः ।\nन किञ्चिदवदद्विप्रं मौनव्रतमुपस्थितः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.65.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ वर्षसहस्रं वै नोच्छ्वसन् मुनिपुङ्गवः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.65.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यानुच्छ्वसमानस्य मूर्ध्नि धूमो व्यजायत ।\nत्रैलोक्यं येन सम्भ्रान्तमादीपितमिवाभवत् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.65.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मोहितास्तेजसा तस्य तपसा मन्दरश्मयः ।\nकश्मलोपहताः सर्वे पितामहमथाब्रुवन् ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.65.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लोभितः क्रोधितश्चैव तपसा चाभिवर्द्धते ।\nन ह्यस्य वृजिनं किञ्चिद्दृश्यते सूक्ष्ममप्यथ ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.65.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न दीयते यदि त्वस्य मनसा यदभीप्सितम् ।\nविनाशयति त्रैलोक्यं तपसा सचराचरम् ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.65.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "व्याकुलाश्च दिशः सर्वा न च किञ्चित्प्रकाशते ।\nसागराः क्षुभिताः सर्वे विशीर्यन्ते च पर्वताः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.65.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रकम्पते च पृथिवी वायुर्वाति भृशाकुलः ।\nब्रह्मन्न प्रतिजानीमो नास्तिको जायते जनः ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.65.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सम्मूढमिव त्रैलोक्यं सम्प्रक्षुभितमानसम् ।\nभास्करो निष्प्रभश्चैव महर्षेस्तस्य तेजसा ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.65.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बुद्धिं न कुरुते यावन्नाशे देव महामुनिः ।\nतावत्प्रसाद्यो भगवानग्निरूपो महाद्युतिः ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.65.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कालाग्निना यथा पूर्वं त्रैलाक्यं दह्यते ऽखिलम् ।\nदेवराज्यं चिकीर्षेत दीयतामस्य यन्मतम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.65.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रं महात्मानं वाक्यं मधुरमब्रुवन् ।\nब्रह्मर्षे स्वागतं ते ऽस्तु तपसा स्म सुतोषिताः ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.65.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दीर्घमायुश्च ते ब्रह्मन् ददामि समरुद्गणः ।\nस्वस्ति प्राप्नुहि भद्रं ते गच्छ सौम्य यथासुखम् ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.65.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पितामहवचः श्रुत्वा सर्वेषां च दिवौकसाम् ।\nकृत्वा प्रणामं मुदितो व्याजहार महामुनिः ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.65.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्राह्मण्यं यदि मे प्राप्तं दीर्घमायुस्तथैव च ।\nओङ्कारश्च वषट्कारो वेदाश्च वरयन्तु माम् ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.65.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मपुत्रो वसिष्ठो मामेवं वदतु देवताः ।\nयद्ययं परमः कामः कृतो यान्तु सुरर्षभाः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.65.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रसादितो देवैर्वसिष्ठो जपतां वरः ।\nसख्यं चकार ब्रह्मर्षिरेवमस्त्विति चाब्रवीत् ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.65.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मर्षिस्त्वं न सन्देहः सर्वं सम्पत्स्यते तव ।\nइत्युक्त्वा देवताश्चापि सर्वा जग्मुर्यथागतम् ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.65.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एष राम मुनिश्रेष्ठ एष विग्रहवांस्तपः ।\nएष धर्मपरो नित्यं वीर्यस्यैष परायणम् ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.65.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा महातेजा विरराम द्विजोत्तमः ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.65.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शतानन्दवचः श्रुत्वा रामलक्ष्मणसन्निधौ ।\nजनकः प्राञ्जलिर्वाक्यमुवाच कुशिकात्मजम् ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.65.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धन्यो ऽस्म्यनुगृहीतो ऽस्मि यस्य मे मुनिपुङ्गव ।\nयज्ञं काकुत्स्थसहितः प्राप्तवानसि धार्मिक ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "1.65.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पावितो ऽहं त्वया ब्रह्मन् दर्शनेन महामुने ।\nगुणा बहुविधाः प्राप्तास्तव सन्दर्शनान्मया ॥"
@@ -274,6 +302,7 @@
     {
       "ref": "1.65.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विस्तरेण च ते ब्रह्मन् कीर्त्यमानं महत्तपः ।\nश्रुतं मया महातेजो रामेण च महात्मना ॥"
@@ -283,6 +312,7 @@
     {
       "ref": "1.65.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सदस्यैः प्राप्य च सदः श्रुतास्ते बहवो गुणाः ॥"
@@ -292,6 +322,7 @@
     {
       "ref": "1.65.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अप्रमेयं तपस्तुभ्यमप्रमेयं च ते बलम् ।\nअप्रमेया गुणाश्चैव नित्यं ते कुशिकात्मज ॥"
@@ -301,6 +332,7 @@
     {
       "ref": "1.65.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तृप्तिराश्चर्यभूतानां कथानां नास्ति मे विभो ।\nकर्मकालो मुनिश्रेष्ठ लम्बते रविमण्डलम् ॥"
@@ -310,6 +342,7 @@
     {
       "ref": "1.65.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्वःप्रभाते महातेजो द्रष्टुमर्हसि मां पुनः ।\nस्वागतं तपतां श्रेष्ठ मामनुज्ञातुमर्हसि ॥"
@@ -319,6 +352,7 @@
     {
       "ref": "1.65.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तो मुनिवरः प्रशस्य पुरुषर्षभम् ।\nविससर्जाशु जनकं प्रीतं प्रीतमनास्तदा ॥"
@@ -328,6 +362,7 @@
     {
       "ref": "1.65.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा मुनिश्रेष्ठं वैदेहो मिथिलाधिपः ।\nप्रदक्षिणं चकाराशु सोपाध्यायः सबान्धवः ॥"
@@ -337,6 +372,7 @@
     {
       "ref": "1.65.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रो ऽपि धर्मात्मा सरामः सहलक्ष्मणः ।\nस्ववाटमभिचक्राम पूज्यमानो महर्षिभिः ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने पञ्चषष्टितमः सर्गः ॥ ६५ ॥"

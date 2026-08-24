@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 309,
@@ -22,6 +22,7 @@
     {
       "ref": "4.51.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अब्रवीत्तां महाभागां तापसीं धर्मचारिणीम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "4.51.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इदं प्रविष्टाः सहसा बिलं तिमिरसंवृतम् ।\nक्षुत्पिपासापरिश्रान्ताः परिखिन्नाश्च सर्वशः ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "4.51.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महद्धरण्या विवरं प्रविष्टाः स्म पिपासिताः ।\nइमास्त्वेवंविधान् भावान् विविधानद्भुतोपमान् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "4.51.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्ट्वा वयं प्रव्यथिताः सन्भ्रान्ता नष्टचेतसः ।\nकस्यैते काञ्चना वृक्षास्तरुणादित्यसन्निभाः ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "4.51.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शुचीन्यभ्यवहार्याणि मूलानि च फलानि च ।\nकाञ्चनानि विमानानि राजतानि गृहाणि च ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "4.51.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तपनीयगवाक्षणि मणिजालावृतानि च ।\nपुष्पिताः फलवन्तश्च पुण्याः सुरभिगन्धिनः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "4.51.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमे जाम्बूनदमयाः पादपाः कस्य तेजसा ।\nकाञ्चनानि च पद्मानि जातानि विमले जले ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "4.51.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथं मत्स्याश्च सौवर्णाश्चरन्ति सह कच्छपैः ।\nआत्मानमनुभावं च कस्य चैतत्तपोबलम् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "4.51.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्ता हनुमता तापसी धर्मचारिणी ।\nप्रत्युवाच हनूमन्तं सर्वभूतहिते रता ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "4.51.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मयो नाम महातेजा मायावी दानवर्षभः ।\nतेनेदं निर्मितं सर्वं मायया काञ्चनं वनम् ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "4.51.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुरा दानवमुख्यानां विश्वकर्मा बभूव ह ।\nयेनेदं काञ्चनं दिव्यं निर्मितं भवनोत्तमम् ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "4.51.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तु वर्षसहस्राणि तपस्तप्त्वा महावने ।\nपितामहाद्वरं लेभे सर्वमौशनसं धनम् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "4.51.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वनं विधाय बलवान् सर्वकामेश्वरस्तदा ।\nउवास सुखितः कालं कञ्चिदस्मिन् महावने ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "4.51.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमप्सरसि हेमायां सक्तं दानवपुङ्गवम् ।\nविक्रम्यैवाशनिं गृह्य जघानेशः पुरन्दरः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "4.51.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इदं च ब्रह्माणा दत्तं हेमायै वनमुत्तमम् ।\nशाश्वताः कामभोगाश्च गृहं चेदं हिरण्मयम् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "4.51.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दुहिता मेरुसावर्णेरहं तस्याः स्वयम्प्रभा ।\nइदं रक्षामि भवनं हेमाया वानरोत्तम ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "4.51.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मम प्रियसखी हेमा नृत्तगीतविशारदा ।\nतया दत्तवरा चास्मि रक्षामि भवनोत्तमम् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "4.51.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किं कार्यं कस्य वा हेतोः कान्ताराणि प्रपश्यथ ।\nकथं चेदं वनं दुर्गं युष्माभिरुपलक्षितम् ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "4.51.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमान्यभ्यवहार्याणि मूलानि च फलानि च ।\nभुक्त्वा पीत्वा च पानीयं सर्वं मे वक्तुमर्हथ ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमत्किष्किन्धाकाण्डे एकपञ्चाशः सर्गः ॥ ५१ ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मुक्ताहाराख्याने किष्किन्धाकाण्डव्याख्याने एकपञ्चाशः सर्गः ॥ ५१ ॥"

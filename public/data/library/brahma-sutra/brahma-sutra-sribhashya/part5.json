@@ -8,6 +8,7 @@
     {
       "ref": "2.1.1",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्मृत्यनवकाशदोषप्रसङ्ग इति चेन्नान्यस्मृत्यनवकाशदोषप्रसङ्गात् ॥ २-१-१ ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.1.2",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "इतरेषां चानुपलब्धे : ॥ २-१-२ ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.1.3",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "एतेन योग : प्रत्युक्त : ॥ २-१-३ ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.1.4",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "न विलक्षणत्वादस्य तथात्वं च शब्दात् ॥ २-१-४ ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "2.1.5",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अभिमानिव्यपदेशस्तु विशेषानुगतिभ्याम् ॥ २-१-५ ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "2.1.6",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "दृश्यते तु ॥ २-१-६ ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "2.1.7",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "असदिति चेन्न प्रतिषेधमात्रत्वात् ॥ २-१-७ ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "2.1.8",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अपीतौ तद्वत्प्रसङ्गादसमञ्जसम् ॥ २-१-८ ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "2.1.9",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "न तु दृष्टान्तभावात् ॥ २-१-९ ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "2.1.10",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्वपक्षदोषाच्च ॥ २-१-१० ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "2.1.11",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "तर्काप्रतिष्ठानादपि ॥ २-१-११ ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "2.1.12",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अन्यथानुमेयमिति चेदेवमप्यनिर्मोक्षप्रसङ्ग: ॥ २-१-१२ ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "2.1.13",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "एतेन शिष्टापरिग्रहा अपि व्याख्याता : ॥ २-१-१३ ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "2.1.14",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "भोक्त्रापत्तेरविभागश्चेत्स्याल्लोकवत् ॥ २-१-१४ ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "2.1.15",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "तदनन्यत्वमारम्भणशब्दादिभ्य : ॥ २-१-१५ ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "2.1.16",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "भावे चोपलब्धे : ॥ २-१-१६ ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "2.1.17",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सत्वाच्चापरस्य ॥ २-१-१७ ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "2.1.18",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "असद्व्यपदेशान्नेति चेन्न धर्मान्तरेण वाक्यशेषाद्युक्तेश्शब्दान्तराच्च ॥ २-१-१८ ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "2.1.19",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "पटवच्च ॥ २-१-१९ ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "2.1.20",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "यथा च प्राणादि : ॥ २-१-२० ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "2.1.21",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "इतरव्यपदेशाद्धिताकारणादिदोषप्रसक्ति : ॥ २-१-२१ ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "2.1.22",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अधिकन्तु भेदनिर्देशात् ॥ २-१-२२ ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "2.1.23",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अश्मादिवच्च तदनुपपत्ति : ॥ २-१-२३ ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "2.1.24",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "उपसंहारदर्शनान्नेति चेन्नक्षीरवद्धि ॥ २-१-२४ ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "2.1.25",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "देवादिवदपि लोके ॥ २-१-२५ ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "2.1.26",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "कृत्स्नप्रसिक्तिर्निरवयवत्वशब्दकोपो वा ॥ २-१-२६ ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "2.1.27",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुतेस्तु शब्दमूलत्वात् ॥ २-१-२७ ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "2.1.28",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "आत्मनि चैवं विचित्राश्च हि ॥ २-१-२८ ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "2.1.29",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्वपक्षदोषाच्च ॥ २-१-२९ ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "2.1.30",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वोपेता च तद्दर्शनात् ॥ २-१-३० ॥"
@@ -278,6 +308,7 @@
     {
       "ref": "2.1.31",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "विकरणत्वान्नेति चेत्तदुक्तम् ॥ २-१-३१ ॥"
@@ -287,6 +318,7 @@
     {
       "ref": "2.1.32",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "न प्रयोजनवत्त्वात् ॥ २-१-३२ ॥"
@@ -296,6 +328,7 @@
     {
       "ref": "2.1.33",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "लोकवत्तु लीलाकैवल्यम् ॥ २-१-३३ ॥"
@@ -305,6 +338,7 @@
     {
       "ref": "2.1.34",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "वैषम्यनैर्घ्रृण्ये न सापेक्षत्वात्तथा हि दर्शयति ॥ २-१-३४ ॥"
@@ -314,6 +348,7 @@
     {
       "ref": "2.1.35",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "न कर्माविभागादिति चेन्नानादित्वादुपपद्यते चाप्युलभ्यते च ॥ २-१-३५ ॥"
@@ -323,6 +358,7 @@
     {
       "ref": "2.1.36",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वधर्मोपपत्तेश्च ॥ २-१-३६ ॥"
@@ -616,7 +652,7 @@
             "display_text": "तै.उ.आ.६.३",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "6.3",
+            "locator": "2.6.3",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1422,7 +1458,7 @@
             "display_text": "तै.उ.आन.१.१",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1.1",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1455,7 +1491,7 @@
             "display_text": "तै.उ.आन.१.१",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1.1",
+            "locator": "2.1.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false

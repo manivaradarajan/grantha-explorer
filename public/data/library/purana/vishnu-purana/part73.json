@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 73,
@@ -8,6 +8,7 @@
     {
       "ref": "4.17.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "द्रुह्योस्तु तनयो बभ्रुः"
@@ -18,6 +19,7 @@
     {
       "ref": "4.17.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बभ्रोःसेतुः"
@@ -27,6 +29,7 @@
     {
       "ref": "4.17.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सेतुपुत्र आरब्धनामा"
@@ -36,6 +39,7 @@
     {
       "ref": "4.17.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आरब्धस्यात्मजो गान्धारः गान्धारस्य धर्मः धर्मात्घृतः घृतात्दुर्दमः ततः प्रचेताः"
@@ -45,6 +49,7 @@
     {
       "ref": "4.17.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रचेतसः पुत्रः शतधर्मः बहुलानां म्लेछानामुदीच्यानामाधिपत्यमकरोत्"

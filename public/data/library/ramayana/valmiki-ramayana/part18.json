@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 18,
@@ -8,6 +8,7 @@
     {
       "ref": "1.20.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छ्रुत्वा राजशार्दूलो विश्वामित्रस्य भाषितम् ।\nमुहूर्तमिव निःसञ्ज्ञः सञ्ज्ञावानिदमब्रवीत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.20.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऊनषोडशवर्षो मे रामो राजीवलोचनः ।\nन युद्धयोग्यतामस्य पश्यामि सह राक्षसैः ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.20.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इयमक्षौहिणी पूर्णा यस्याहं पतिरीश्वरः ।\nअनया संवृतो गत्वा योद्धा ऽहं तैर्निशाचरैः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.20.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमे शूराश्च विक्रान्ता भृत्या मे ऽस्त्रविशारदाः ।\nयोग्या रक्षोगणैर्योद्धुं न रामं नेतुमर्हसि ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.20.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहमेव धनुष्पाणिर्गोप्ता समरमूर्द्धनि ।\nयावत्प्राणान् धरिष्यामि तावद्योत्स्ये निशाचरैः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.20.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निर्विघ्ना व्रतचर्या सा भविष्यति सुरक्षिता ।\nअहं तत्र गमिष्यामि न रामं नेतुमर्हसि ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.20.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बालो ह्यकृतविद्यश्च न च वेत्ति बलाबलम् ।\nन चास्त्रबलसंयुक्तो न च युद्धविशारदः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.20.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न चासौ रक्षसां योग्यः कूटयुद्धा हि ते भृशम् ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.20.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विप्रयुक्तो हि रामेण मुहूर्तमपि नोत्सहे ।\nजीवितुं मुनिशार्दूल न रामं नेतुमर्हसि ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.20.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि वा राघवं ब्रह्मन् नेतुमिच्छसि सुव्रत ।\nचतुरङ्गसमायुक्तं मया च सहितं नय ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.20.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "षष्टिर्वर्षसहस्राणि जातस्य मम कौशिक ।\nदुःखेनोत्पादितश्चायं न रामं नेतुमर्हसि ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.20.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चतुर्णामात्मजानां हि प्रीतिः परमिका मम ।\nज्येष्ठं धर्मप्रधानं च न रामं नेतुमर्हसि ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.20.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किंवीर्या राक्षसास्ते च कस्य पुत्राश्च के च ते ।\nकथम्प्रमाणाः के चैतान् रक्षन्ति मुनिपुङ्गव ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.20.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथं च प्रतिकर्तव्यं तेषां रामेण रक्षसाम् ।\nमामकैर्वा बलैर्ब्रह्मन् मया वा कूटयोधिनाम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.20.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वं मे शंस भगवन् कथं तेषां मया रणे ।\nस्थातव्यं दुष्टभावानां वीर्योत्सिक्ता हि राक्षसाः ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.20.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य तद्वचनं श्रुत्वा विश्वामित्रो ऽभ्यभाषत ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.20.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वमिति ।\n तेषां रणे कथं मया स्थातव्यमिति व्यूहप्रकारप्रश्नः ॥ १.२०.१५,१६ ॥\nपौलस्त्यवंशप्रभवो रावणो नाम राक्षसः ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.20.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स ब्रह्मणा दत्तवरस्त्रैलोक्यं बाधते भृशम् ।\nमहाबलो महावीर्यो राक्षसैर्बहुभिर्वृतः ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.20.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रूयते हि महावीर्यो रावणो राक्षसाधिपः ।\nसाक्षाद्वैश्रवणभ्राता पुत्रो विश्रवसो मुनेः ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.20.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेन सञ्चोदितौ द्वौ तु राक्षसौ वै महाबलौ ।\nमारीचश्च सुबाहुश्च यज्ञविघ्नं करिष्यतः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.20.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तो मुनिना तेन राजोवाच मुनिं तदा ।\nन हि शक्तो ऽस्मि सङ्ग्रामे स्थातुं तस्य दुरात्मनः ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.20.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स त्वं प्रसादं धर्मज्ञ कुरुष्व मम पुत्रके ।\nमम चैवाल्पभाग्यस्य दैवतं हि भवान् गुरुः ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.20.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवदानवगन्धर्वा यक्षाः पतगपन्नगाः ।\nन शक्ता रावणं सोढुं किं पुनर्मानवा युधि ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.20.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेन चाहं न शक्नोमि संयोद्धुं तस्य वा बलैः ।\nसबलो वा मुनिश्रेष्ठ सहितो वा ममात्मजैः ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.20.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथमप्यमरप्रख्यं सङ्ग्रामाणामकोविदम् ।\nबालं मे तनयं ब्रह्मन् नैव दास्यामि पुत्रकम् ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.20.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ कालोपमौ युद्धे सुतौ सुन्दोपसुन्दयोः ।\nयज्ञविघ्नकरौ तौ ते नैव दास्यामि पुत्रकम् ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.20.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मारीचश्च सुबाहुश्च वीर्यवन्तौ सुशिक्षितौ ।\nतयोरन्यतरेणाहं योद्धा स्यां ससुहृद्गणः ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.20.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति नरपतिजल्पनाद्द्विजेन्द्रं कुशिकसुतं सुमहान् विवेश मन्युः ।\nसुहुत इव समिद्भिराज्यसिक्तः समभवदुज्ज्वलितो महर्षिवह्निः ॥"

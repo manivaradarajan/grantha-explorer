@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 30,
@@ -22,6 +22,7 @@
     {
       "ref": "1.32.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मयोनिर्महानासीत् कुशो नाम महातपाः ।\nअक्लिष्टव्रतधर्मज्ञः सज्जनप्रतिपूजकः ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.32.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वैदर्भ्यां जनयामास सदृशांश्चतुरः सुतान् ।\nकुशाम्बं कुशनाभं च आधूर्तरजसं वसुम् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.32.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दीप्तियुक्तान् महोत्साहान् क्षत्रधर्मचिकीर्षया ।\nतानुवाच कुशः पुत्रान् धर्मिष्ठान् सत्यवादिनः ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.32.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऋषेस्तु वचनं श्रुत्वा चत्वारो लोकसम्मताः ।\nनिवेशं चक्रिरे सर्वे पुराणां नृवरास्तदा ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.32.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुशाम्बस्तु महातेजाः कौशाम्बीमकरोत्पुरीम् ।\nकुशनाभस्तु धर्मात्मा पुरं चक्रे महोदयम् ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.32.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आधूर्तरजसो राम धर्मारण्यं महीपतिः ।\nचक्रे पुरवरं राजा वसुश्चक्रे गिरिव्रजम् ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.32.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एषा वसुमती राम वसोस्तस्य महात्मनः ।\nएते शैलवराः पञ्च प्रकाशन्ते समन्ततः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.32.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुमागधी नदी रम्या मगधान् विश्रुता ययौ ।\nपञ्चानां शैलमुख्यानां मध्ये मालेव शोभते ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.32.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सैषा हि मागधी राम वसोस्तस्य महात्मनः ।\nपूर्वाभिचरिता राम सुक्षेत्रा सस्यमालिनी ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.32.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुशनाभस्तु राजर्षिः कन्याशतमनुत्तमम् ।\nजनयामास धर्मात्मा घृताच्यां रघुनन्दन ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.32.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तास्तु यौवनशालिन्यो रूपवत्यः स्वलङ्कृताः ।\nउद्यानभूमिमागम्य प्रावृषीव शतह्रदाः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.32.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गायन्त्यो नृत्यमानाश्च वादयन्त्यश्च सर्वशः ।\nआमोदं परमं जग्मुर्वराभरणभूषिताः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.32.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ ताश्चारुसर्वाङ्ग्यो रूपेणाप्रतिमा भुवि ।\nउद्यानभूमिमागम्य तारा इव घनान्तरे ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.32.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ताः सर्वगुणसम्पन्ना रूपयौवनसंयुताः ।\nदृष्ट्वा सर्वात्मको वायुरिदं वचनमब्रवीत् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.32.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं वः कामये सर्वा भार्या मम भविष्यथ ।\nमानुषस्त्यज्यतां भावो दीर्घमायुरवाप्स्यथ ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.32.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चलं हि यौवनं नित्यं मानुषेषु विशेषतः ।\nअक्षयं यौवनं प्राप्ता अमर्यश्च भविष्यथ ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.32.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य तद्वचनं श्रुत्वा वायोरक्लिष्टकर्मणः ।\nअपहास्य ततो वाक्यं कन्याशतमथाब्रवीत् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.32.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तश्चरसि भूतानां सर्वेषां त्वं सुरोत्तम ।\nप्रभावज्ञाः स्म ते सर्वाः किमस्मानवमन्यसे ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.32.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुशनाभसुताः सर्वाः समर्थास्त्वां सुरोत्तम ।\nस्थानाच्च्यावयितुं देवं रक्षामस्तु तपो वयम् ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.32.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "माभूत्स कालो दुर्मेधः पितरं सत्यवादिनम् ।\nनावमन्यस्व धर्मेण स्वयं वरमुपास्महे ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.32.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पिता हि प्रभुरस्माकं दैवतं परमं हि नः ।\nयस्य नो दास्यति पिता स नो भर्ता भविष्यति ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.32.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तासां तद्वचनं श्रुत्वा वायुः परमकोपनः ।\nप्रविश्य सर्वगात्राणि बभञ्ज भगवान् प्रभुः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.32.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ताः कन्याः वायुना भग्ना विविशुर्नृपतेर्गृहम् ।\nप्रापतन् भुवि सम्भ्रान्ताः सलज्जाः साश्रुलोचनाः ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.32.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स च ता दयिता दीनाः कन्याः परमशोभनाः ।\nदृष्ट्वा भग्नास्तदा राजा सम्भ्रान्त इदमब्रवीत् ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.32.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किमिदं कथ्यतां पुत्र्यः को धर्ममवमन्यते ।\nकुब्जाः केन कृताः सर्वा वेष्टन्त्यो नाभिभाषथ ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.32.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं राजा विनिश्वस्य समाधिं सन्दधे ततः ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने द्वात्रिंशः सर्गः ॥ ३२ ॥"

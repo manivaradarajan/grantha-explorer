@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 47,
@@ -22,6 +22,7 @@
     {
       "ref": "1.49.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अफलस्तु ततः शक्रो देवानग्निपुरोधसः ।\nअब्रवीत् त्रस्तवदनः सर्षिसङ्घान् सचारणान् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.49.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुर्वता तपसो विघ्नं गौतमस्य महात्मनः ।\nक्रोधमुत्पाद्य हि मया सुरकार्यमिदं कृतम् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.49.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अफलो ऽस्मि कृतस्तेन क्रोधात् सा च निराकृता ।\nशापमोक्षेण महता तपो ऽस्यापहृतं मया ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.49.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मात्सुरवराः सर्वे सर्षिसङ्घाः सचारणाः ।\nसुरसाह्यकरं सर्वे सफलं कर्तुमर्हथ ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.49.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शतक्रतोर्वचः श्रुत्वा देवाः साग्निपुरोगमाः ।\nपितृदेवानुपेत्याहुः सर्वे सह मरुद्गणैः ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.49.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयं मेषः सवृषणः शक्रो ह्यवृषणः कृतः ।\nमेषस्य वृषणौ गृह्य शक्रायाशु प्रयच्छथ ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.49.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अफलस्तु कृतो मेषः परां तुष्टिं प्रदास्यति ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.49.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भवतां हर्षणार्थे च ये च दास्यन्ति मानवाः ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.49.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अग्नेस्तु वचनं श्रुत्वा पितृदेवाः समागताः ।\nउत्पाट्य मेषवृषणौ सहस्राक्षे न्यवेशयन् ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.49.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदाप्रभृति काकुत्स्थ पितृदेवाः समागताः ।\nअफलान् भुञ्जते मेषान् फलैस्तेषामयोजयन् ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.49.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रस्तु मेषवृषणस्तदाप्रभृति राघव ।\nगौतमस्य प्रभावेन तपसश्च महात्मनः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.49.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदागच्छ महातेज आश्रमं पुण्यकर्मणः ।\nतारयैनां महाभागामहल्यां देवरूपिणीम् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.49.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रवचः श्रुत्वा राघवः सहलक्ष्मणः ।\nविश्वामित्रं पुरस्कृत्य तमाश्रममथाविशत् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.49.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ददर्श च महाभागां तपसा द्योतितप्रभाम् ।\nलोकैरपि समागम्य दुर्निरीक्ष्यां सुरासुरैः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.49.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सतुषारावृतां साभ्रां पूर्णचन्द्रप्रभामिव ।\nमध्ये ऽम्भसो दुराधर्षां दीप्तां सूर्यप्रभामिव ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.49.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्रयाणामपि लोकानां यावद्रामस्य दर्शनम् ।\nशापस्यान्तमुपागम्य तेषां दर्शनमागता ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.49.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राघवौ त्वतिथी तस्याः पादौ जगृहतुस्तदा ।\nस्मरन्ती गौतमवचः प्रतिजग्राह सा च तौ ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.49.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पाद्यमर्घ्यं तथा ऽऽतिथ्यं चकार सुसमाहिता ।\nप्रतिजग्राह काकुत्स्थो विधिदृष्टेन कर्मणा ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.49.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुष्पवृष्टिर्महत्यासीद्देवदुन्दुभिः निःस्वनैः ।\nगन्धर्वाप्सरसां चापि महानासीत्समागमः ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.49.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "साधु साध्विति देवास्तामहल्यां समपूजयन् ।\nतपोबलविशुद्धाङ्गीं गौतमस्य वशानुगाम् ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.49.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गौतमो हि महातेजा अहल्यासहितः सुखी ।\nरामं सम्पूज्य विधिवत् तपस्तेपे महातपाः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.49.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामो ऽपि परमां पूजां गौतमस्य महामुनेः ।\nसकाशाद्विधिवत् प्राप्य जगाम मिथिलां ततः ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने एकोनपञ्चाशः सर्गः ॥ ४९ ॥"

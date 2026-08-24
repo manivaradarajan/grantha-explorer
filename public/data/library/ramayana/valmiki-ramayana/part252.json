@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 252,
@@ -8,6 +8,7 @@
     {
       "ref": "3.67.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्वजो ऽप्युक्तमात्रस्तु लक्ष्मणेन सुभाषितम् ।\nसारग्राही महासारं प्रतिजग्राह राघवः ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "3.67.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सन्निगृह्य महाबाहुः प्रवृत्तं कोपमात्मनः ।\nअवष्टभ्य धनुश्चित्रं रामो लक्ष्मणमब्रवीत् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "3.67.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किं करिष्यावहे वत्स क्व वा गच्छाव लक्ष्मण ।\nकेनोपायेन पश्येयं सीतामिति विचन्तय ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "3.67.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इदमेव जनस्थानं त्वमन्वेषितुमर्हसि ।\nराक्षसैर्बहुभिः कीर्णं नानाद्रुमलतायुतम् ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "3.67.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सन्तीह गिरिदुर्गाणि निर्दराः कन्दराणि व ।\nगुहाश्च विविधा घोरा नानामृगगणाकुलाः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "3.67.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आवासाः किन्नराणां च गन्धर्वभवनानि च ।\nतानि युक्तो मया सार्धं त्वमन्वेषितुर्महसि ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "3.67.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वद्विधा बुद्धिसम्पन्ना महात्मानो नरर्षभ ।\nआपत्सु न प्रकम्पन्ते वायुवेगैरिवाचलाः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "3.67.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तस्तद्वनं सर्वं विचचार सलक्ष्मणः ।\nक्रुद्धो रामः शरं घोरं सन्धाय धनुषि क्षुरम् ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "3.67.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः पर्वतकूटाभं महाभागं द्विजोत्तमम् ।\nददर्श पतितं भूमौ क्षतजार्द्रं जटायुषम् ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "3.67.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं दृष्ट्वा गिरिशृङ्गाभं रामो लक्ष्मणमब्रवीत् ।\nअनेन सीता वैदेही भक्षिता नात्र संशसः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "3.67.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गृध्ररूपमिदं रक्षो व्यक्तं भवति कानने ।\nभक्षयित्वा विशालाक्षीमास्ते सीतां यथासुखम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "3.67.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एनं वधिष्ये दीप्तास्यैर्घोरैर्बाणैरजिह्मगैः ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "3.67.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्त्वा ऽभ्यपतद् गृध्रं सन्धाय धनुषि क्षुरम् ।\nक्रुद्धो रामः समुद्रान्तां कम्पयन्निव मेदिनीम् ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "3.67.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं दीनं दीनया वाचा सफेनं रुधिरं वमन् ।\nअभ्यभाषत पक्षी तु रामं दशरथात्मजम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "3.67.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यामोषधिमिवायुष्मन्नन्वेषसि महावने ।\nसा देवी मम च प्राणा रावणेनोभयं हृतम् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "3.67.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वया विरहिता देवी लक्ष्मणेन च राघव ।\nह्रियमाणा मया दृष्टा रावणेन बलीयसा ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "3.67.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सीतामभ्यवपन्नोहं रावणश्च रणे मया ।\nविध्वंसितरथश्चात्र पातितो धरणीतले ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "3.67.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतदस्य धनुर्भग्नमेतदस्य शरावरम् ।\nअयमस्य रथो राम भग्नः साङ्ग्रामिको मया ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "3.67.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयं तु सारथिस्तस्य मत्पक्षनिहतो युधि ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "3.67.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "परिश्रान्तस्य मे पक्षौ छित्त्वा खङ्गेन रावणः ।\nसीतामादाय वैदेहीमुत्पपात विहायसम् ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "3.67.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रक्षसा निहतं पूर्वं न मां हन्तुं त्वमर्हसि ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "3.67.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामस्तस्य तु विज्ञाय बाष्पपूर्णमुखस्तदा ।\nद्विगुणीकृततापार्तः सीतासक्तां प्रियां कथाम् ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "3.67.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गृध्रराजं परिष्वज्य परित्यज्य महद्धनुः ।\nनिपपातावशो भूमौ रुरोद सहलक्ष्मणः ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "3.67.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एकमेकायने दुर्गे निःश्वसन्तं कथञ्चन ।\nसमीक्ष्य दुःखिततरो रामः सौमित्रिमब्रवीत् ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "3.67.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राज्याद्भ्रंशो वने वासः सीता नष्टा द्विजो हतः ।\nईदृशीयं ममालक्ष्मीर्निर्दहेदपि पावकम् ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "3.67.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सम्पूर्णमपि चेदद्य प्रतरेयं महोदधिम् ।\nसो ऽपि नूनं ममालक्ष्म्या विशुष्येत्सरितां पतिः ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "3.67.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नास्त्यभाग्यतरो लोके मत्तो ऽस्मिन् सचराचरे ।\nयेनेयं महती प्राप्ता मया व्यसनवागुरा ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "3.67.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयं पितृवयस्यो मे गृध्रराजो जरान्वितः ।\nशेते विनिहतो भूमौ मम भाग्यविपर्ययात् ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "3.67.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येवमुक्त्वा बहुशो राघवः सहलक्ष्मणः ।\nजाटयुषं च पस्पर्श पितृस्नेहं विदर्शयन् ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "3.67.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निकृत्तपक्षं रुधिरावसिक्तं स गृध्रराजं परिरभ्य रामः ।\nक्व मैथिली प्राणसमा ममेति विमुच्य वाचं निपपात भूमौ ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमदारण्यकाण्डे सप्तषष्टितमः सर्गः ॥ ६७ ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे रत्नमेखलाख्याने आरण्यकाण्डव्याख्याने सप्तषष्टितमः सर्गः ॥ ६७ ॥"

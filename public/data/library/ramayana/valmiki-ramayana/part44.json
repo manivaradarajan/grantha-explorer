@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 44,
@@ -22,6 +22,7 @@
     {
       "ref": "1.46.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हतेषु तेषु पुत्रेषु दितिः परमदुःखिता ।\nमारीचं काश्यपं राम भर्त्तारमिदमब्रवीत् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.46.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हतपुत्रास्मि भगवंस्तव पुत्रैर्महाबलैः ।\nशक्रहन्तारमिच्छामि पुत्रं दीर्घतपोर्जितम् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.46.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "साहं तपश्चरिष्यामि गर्भं मे दातुमर्हसि ।\nईश्वरं शक्रहन्तारं त्वमनुज्ञातुमर्हसि ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.46.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यास्तद्वचनं श्रुत्वा मारीचः काश्यपस्तदा ।\nप्रत्युवाच महातेजा दितिं परमदुःखिताम् ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.46.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं भवतु भद्रं ते शुचिर्भव तपोधने ।\nजनयिष्यसि पुत्रं त्वं शक्रहन्तारमाहवे ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.46.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्णे वर्षसहस्रे तु शुचिर्यदि भविष्यसि ।\nपुत्रं त्रैलोक्यभर्तारं मत्तस्त्वं जनयिष्यसि ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.46.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा महातेजाः पाणिना स ममार्ज ताम् ।\nसमालभ्य ततः स्वस्तीत्युक्त्वा स तपसे ययौ ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.46.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गते तस्मिन्नरश्रेष्ठ दितिः परमहर्षिता ।\nकुशप्लवनमासाद्य तपस्तेपे सुदारुणम् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.46.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तपस्तस्यां हि कुर्वन्त्यां परिचर्यां चकार ह ।\nसहस्राक्षो नरश्रेष्ठ परया गुणसम्पदा ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.46.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अग्निं कुशान् काष्ठमपः फलं मूलं तथैव च ।\nन्यवेदयत् सहस्राक्षो यच्चान्यदपि काङ्क्षितम् ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.46.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गात्रसंवहनैश्चैव श्रमापनयनैस्तथा ।\nशक्रः सर्वेषु कालेषु दितिं परिचचार ह ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.46.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ वर्षसहस्रे तु दशोने रघुनन्दन ।\nदितिः परमसम्प्रीता सहस्राक्षमथाब्रवीत् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.46.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "याचितेन सुरश्रेष्ठ पित्रा तव महात्मना ।\nवरो वर्षसहस्रान्ते मम दत्तः सुतं प्रति ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.46.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तपश्चरन्त्या वर्षाणि दश वीर्यवतां वर ।\nअवशिष्टानि भद्रं ते भ्रातरं द्रक्ष्यसे ततः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.46.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमहं त्वत्कृते पुत्रं समाधास्ये जयोत्सुकम् ।\nत्रैलोक्यविजयं पुत्रं सह भोक्ष्यसि विज्वरः ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.46.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा दितिः शक्रं प्राप्ते मध्यं दिवाकरे ।\nनिद्रयापहृता देवी पादौ कृत्वाथ शीर्षतः ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.46.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्ट्वा तामशुचिं शक्रः पादतः कृतमूर्द्धजाम् ।\nशिरःस्थाने कृतौ पादौ जहास च मुमोद च ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.46.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्याः शरीरविवरं विवेश च पुरन्दरः ।\nगर्भं च सप्तधा राम बिभेद परमात्मवान् ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.46.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भिद्यमानस्ततो गर्भो वज्रेण शतपर्वणा ।\nरुरोद सुस्वरं राम ततो दितिरबुध्यत ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.46.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मा रुदो मा रुदश्चेति गर्भं शक्रो ऽभ्यभाषत ।\nबिभेद च महातेजा रुदन्तमपि वासवः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.46.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हन्तव्यो न हन्तव्य इत्येवं दितिरब्रवीत् ।\nनिष्पपात ततः शक्रो मातुर्वचनगौरवात् ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.46.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्राञ्जलिर्वज्रसहितो दितिं शक्रो ऽभ्यभाषत ।\nअशुचिर्देवि सुप्तासि पादयोः कृतमूर्द्धजा ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.46.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदन्तरमहं लब्ध्वा शक्रहन्तारमाहवे ।\nअभिदं सप्तधा देवि तन्मे त्वं क्षन्तुमर्हसि ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने षट्चत्वारिंशः सर्गः ॥ ४६ ॥"

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "svetasvatara-upanishad",
   "edition_id": "svetasvatara-upanishad",
   "part_num": 2,
@@ -8,6 +8,7 @@
     {
       "ref": "2.1",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "युञ्जानः प्रथमं मनस्तत्त्वाय सविता धियः ।\nअग्निं ज्योतिर्निचाय्य पृथिव्या अध्याभवत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.2",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "युक्तेन मनसा वयं देवस्य सवितुः सवे ।\nसुवर्गेयाय शक्त्या ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.3",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "युक्त्वाय मनसा देवान् सुवर्यतो धिया दिवम् ।\nबृहज्ज्योतिः करिष्यतः सविता प्रसुवाति तान् ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.4",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "युञ्जते मन उत युञ्जते धियो विप्रा विप्रस्य बृहतो विपश्चितः ।\nविहोत्रा दधे वायुनाविदेक इन्महीदेवस्य सवितुः परिष्टुतिः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "2.5",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "युजे वां ब्रह्म पूर्व्यं नमोभिर्विश्लोक एतु पथ्येव सूरेः ।\nशृण्वन्तु विश्वे अमृतस्य पुत्रा आ ये धामानि दिव्यानि तस्थुः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "2.6",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "अग्निर्यत्राभिमथ्यते वायुर्यत्राधिरुध्यते ।\nसोमो यत्रातिरिच्यते तत्र सञ्जायते मनः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "2.7",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सवित्रा प्रसवेन जुषेत ब्रह्म पूर्व्यम् ।\nतत्र योनिं कृण्वसे न हि ते पूर्तिमक्षिपत् ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "2.8",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "त्रिरुन्नतं स्थाप्य समं शरीरं हृदीन्द्रियाणि मनसा संनिवेश्य ।\nब्रह्मोडुपेन प्रतरेतविद्वान् स्त्रोतांसि सर्वाणि भयावहानि ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "2.9",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "प्राणान् प्रपीड्येह स युक्तचेष्टः क्षीणे प्राणे नासिकयोच्छ्वसीत ।\nदुष्टाश्वयुक्तमिव वाहमेनं विद्वान् मनो धारयेताप्रमत्तः ॥"
@@ -89,15 +98,30 @@
     {
       "ref": "2.10",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "समे शुचौ शर्करावह्निवालुकाविवर्जिते शब्दजलाश(श्र)यादिभिः ।\nमनोऽनुकूले न तु चक्षुपीडने गुहानिवाताश्रयणेन योजयेत् ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 45,
+          "end": 48,
+          "display_text": "श्र",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "2.11",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "नीहारधूमार्कानिलानलानां खद्योतविद्युत्स्फटिकशशिनाम् ।\nएतानि रूपाणि पुरस्सराणि ब्रह्मण्यभिव्यक्तिकराणि योगे ॥"
@@ -107,6 +131,7 @@
     {
       "ref": "2.12",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "पृथ्व्यप्तेजोऽनिलखे समुत्थिते पञ्चात्मके योगगुणे प्रवृत्ते ।\nन तस्य रोगो न जरा न मृत्युः प्राप्तस्य योगाग्निमयं शरीरम् ॥"
@@ -116,6 +141,7 @@
     {
       "ref": "2.13",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "लघुत्वमारोग्यमलोलुपत्वं वर्णप्रसादं स्वरसौष्ठवञ्च ।\nगन्धः शुभो मूत्रपुरीषमल्पं योगप्रवृत्तिं प्रथमां बदन्ति ॥"
@@ -125,15 +151,30 @@
     {
       "ref": "2.14",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यथैव बिम्बं मृदयोपलिप्तं तेजोमयं भ्राजते तत्सुधान्त(क्त)म् ।\nतद्वाऽऽत्मतत्त्वं प्रसमीक्ष्य देही एकः कृतार्थो भवते बीतशोकः ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 52,
+          "end": 55,
+          "display_text": "क्त",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "2.15",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यदात्मतत्त्वेन तु ब्रह्मतत्त्वं दीपोपमेनेह युक्तः प्रपश्येत् ।\nअजं ध्रुवं सर्वतत्वैर्विशुद्धं ज्ञात्वा देवं मुच्यते सर्वपाशैः ॥"
@@ -143,6 +184,7 @@
     {
       "ref": "2.16",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "एष हि देवः प्रदिशोऽनु सर्वाः पूर्वो हि जातः स उ गर्भ अन्तः ।\nस एव जातः स जनिष्यमाणः प्रत्यङ् जनास्तिष्ठति विश्वतोमुखः ॥"
@@ -152,6 +194,7 @@
     {
       "ref": "2.17",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यो देवो अग्रौ यो अप्सु यो विश्वं भुवनमाविवेश ।\nय ओषधीषु यो वनस्पतिषु तस्मै देवाय नमो नमः ॥"
@@ -180,6 +223,7 @@
             "end": 254,
             "display_text": "दिकं",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -190,6 +234,7 @@
             "end": 476,
             "display_text": "तत्त्वसाक्षात्काराय परमात्मनि मनो नियञ्जानो भवतु इत्यर्थः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -217,17 +262,19 @@
             "start": 281,
             "end": 293,
             "display_text": "पा.सू.७-१-४७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "panini-sutra",
+            "edition_id": null,
+            "locator": "7.1.47",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 570,
             "end": 595,
             "display_text": "इति वयं मन्यामहे इति शेषः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -247,17 +294,19 @@
             "start": 256,
             "end": 266,
             "display_text": "धा.पा.१०६१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "dhatu-patha",
+            "edition_id": null,
+            "locator": "1061",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 601,
             "end": 612,
             "display_text": "परिचर्येति?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -278,6 +327,7 @@
             "end": 225,
             "display_text": "सः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -306,6 +356,7 @@
             "end": 154,
             "display_text": "श्रेष्टं",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -326,6 +377,7 @@
             "end": 190,
             "display_text": "ब्रह्मस्वरूप",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -345,11 +397,12 @@
             "start": 78,
             "end": 87,
             "display_text": "भ.गी.६-१७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "6.17",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },
@@ -366,6 +419,7 @@
             "end": 196,
             "display_text": "ल्कादि",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -375,17 +429,19 @@
             "start": 304,
             "end": 317,
             "display_text": "ब्र.सू.४-१-११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 390,
             "end": 396,
             "display_text": "श्रिते",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -395,67 +451,74 @@
             "start": 425,
             "end": 437,
             "display_text": "ब्र.सू.४-१-७",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.7",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 677,
             "end": 689,
             "display_text": "ब्र.सू.४-१-९",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.9",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 729,
             "end": 740,
             "display_text": "छां.उ.७-६-१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "chhandogya-upanishad",
+            "edition_id": "chhandogya-upanishad",
+            "locator": "7.6.1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 900,
             "end": 913,
             "display_text": "ब्र.सू.४-१-१०",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.10",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 959,
             "end": 968,
             "display_text": "भ.गी.६-१२",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "bhagavad-gita",
+            "edition_id": null,
+            "locator": "6.12",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1006,
             "end": 1019,
             "display_text": "ब्र.सू.४-१-११",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "brahma-sutra",
+            "edition_id": "brahma-sutra-sribhashya",
+            "locator": "4.1.11",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 1122,
             "end": 1123,
             "display_text": "च",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -466,6 +529,7 @@
             "end": 1156,
             "display_text": "साध",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -486,6 +550,7 @@
             "end": 115,
             "display_text": "न",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -506,6 +571,7 @@
             "end": 251,
             "display_text": "सं",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -534,6 +600,7 @@
             "end": 129,
             "display_text": "विशेषाख्य?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -544,6 +611,7 @@
             "end": 455,
             "display_text": "सुधातरित्यर्थे",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -564,6 +632,7 @@
             "end": 277,
             "display_text": "यदा",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -574,6 +643,7 @@
             "end": 304,
             "display_text": "बन्धक",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -593,17 +663,19 @@
             "start": 116,
             "end": 128,
             "display_text": "अध्यात्म.उ.१",
-            "grantha_id": null,
-            "locator": null,
+            "grantha_id": "adhyatma-upanishad",
+            "edition_id": null,
+            "locator": "1",
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           },
           {
             "start": 327,
             "end": 331,
             "display_text": "जातः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

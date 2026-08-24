@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 39,
@@ -8,6 +8,7 @@
     {
       "ref": "3.1.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथिता गुरुणा सम्यग्भूसमुद्रादिसंस्थितिः ।\nसूर्यादिनां च संस्थानं ज्योतिषां चातिविस्तरात्"
@@ -18,6 +19,7 @@
     {
       "ref": "3.1.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवादीनां तथा सृष्टिर्ऋषीणां चापि वर्णिता ।\nचातुर्वर्ण्यस्य चोत्पत्तिस्तिर्यग्योनिगतस्य च"
@@ -27,6 +29,7 @@
     {
       "ref": "3.1.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ध्रुवप्रह्लादचरितं विस्तराच्च त्वयोदितम् ।\nमन्वन्तराण्यशेषाणि श्रोतुमिच्छाम्यनुक्रमात्"
@@ -36,6 +39,7 @@
     {
       "ref": "3.1.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्वन्तराधिपांश्चैव शक३ एवपुरोगमान् ।\nभवता कथितानेताञ्छ्रोतुमिच्छाम्यहं गुरो"
@@ -45,6 +49,7 @@
     {
       "ref": "3.1.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अतीतानागतानीह यानि मन्वन्तराणि वै ।\nतान्यहं भवतः सम्यक्लथयामि यथा क्रमम्"
@@ -55,6 +60,7 @@
     {
       "ref": "3.1.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वायंभुवो मनुः पूर्वं परः स्वारोचिषस्तथा ।\nउत्तमस्तामसश्चैव रैवतश्चाक्षुषस्तथा"
@@ -64,6 +70,7 @@
     {
       "ref": "3.1.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "षडेते मनवोतीताः सांप्रतं तु रवेः सुतः ।\nवैवस्वतेयं यस्त्वेतत्मप्तमं वर्ततेन्तरम्"
@@ -73,6 +80,7 @@
     {
       "ref": "3.1.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वायंभुवं तु कथितं कल्पादावन्तरं मया ।\nदेवाः सप्तर्षयश्चैव यथावत्कथिता मया"
@@ -82,6 +90,7 @@
     {
       "ref": "3.1.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अत ऊर्ध्वं प्रवक्ष्यामि मनोः स्वारोचिषस्य तु ।\nमन्वन्तराधिपान्सम्यग्देवर्षिंस्तत्सुतांस्तथा"
@@ -91,6 +100,7 @@
     {
       "ref": "3.1.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पारावताः सतुषिता देवाः स्वारोचिषेऽन्तरे ।\nविपश्चित्तत्र देवेन्द्रो मैत्रेयासीन्महाबलः"
@@ -100,15 +110,30 @@
     {
       "ref": "3.1.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऊर्जस्तंभस्तथा प्राणो वातोथ* पृषभस्तथा । (*पाठ. दत्तोग्नी ऋषभस्तथा)\nनिरयश्च परीवांश्च तत्र सप्तर्षयोऽभवन्"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 42,
+          "end": 66,
+          "display_text": "*पाठ. दत्तोग्नी ऋषभस्तथा",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "3.1.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चैत्रकिंपुरुषाद्याश्च सुताः स्वारोचिषस्य तु ।\nद्वितीयमेतद्व्याख्यातमन्तरं शृणु चोत्तमम्"
@@ -118,6 +143,7 @@
     {
       "ref": "3.1.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तृतीयेप्यन्तरे ब्रह्मन्नुत्तमो नाम यो मनुः ।\nसुशान्तिर्नाम देवेन्द्रो मैत्रेयासीत्सुताञ्छृणु"
@@ -127,6 +153,7 @@
     {
       "ref": "3.1.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुधामानस्तथा सत्या जपाश्चाथ प्रतर्दनाः ।\nवशवर्तिश्च पञ्चैते गणा द्वादशकाः स्मृताः"
@@ -136,6 +163,7 @@
     {
       "ref": "3.1.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वसिष्ठतनया ह्येते सप्त सप्तर्षयोभवन् ।\nअजः परशुदीप्ताद्यास्तथोत्तममनोः सुताः"
@@ -145,6 +173,7 @@
     {
       "ref": "3.1.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तामसस्यान्तरे देवाः सुपारा हरयस्तथा ।\nसत्याश्च सुधियश्चैव सप्तविंशतिका गणाः"
@@ -154,6 +183,7 @@
     {
       "ref": "3.1.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शिविरिन्द्रस्तथा चासीच्छतयज्ञोपलक्षमः ।\nसप्तर्षयश्च ये तेषां तेषां नामानि मे शृणु"
@@ -163,6 +193,7 @@
     {
       "ref": "3.1.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ज्योतिर्धामा पुथुः कात्यश्चैत्रोग्निर्धनकस्तथा ।\nपीवरश्चर्षयो ह्येते सप्त तत्रापि चान्तरे"
@@ -172,6 +203,7 @@
     {
       "ref": "3.1.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नरः ख्यातिः केतुरूपो जानुजङ्घादयस्तथा ।\nपुत्रास्तु तामसस्यासन्नाजानः सुमहाबलाः"
@@ -181,6 +213,7 @@
     {
       "ref": "3.1.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पञ्चमे वापि मैत्रेय रैवतो नाम नामतः ।\nमनुर्विभुश्च तत्रेन्द्रो देवांश्चात्रान्तरे शृणु"
@@ -190,6 +223,7 @@
     {
       "ref": "3.1.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अमिताभा भूतरया वैकुण्ठाः सुसमेधसः ।\nएते देवगणास्तत्र चतुर्दश चतुर्दश"
@@ -199,6 +233,7 @@
     {
       "ref": "3.1.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हिरण्यरोमा वेदाश्रिरूर्ध्वबाहुस्तथावरः ।\nवेदबाहुः सुधामा च पर्जन्यश्च महामुनिः ।\nएते सप्तर्षयो विप्र तत्रासन्रैवतेन्तरे"
@@ -208,6 +243,7 @@
     {
       "ref": "3.1.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बलबन्धुश्च संभाव्यः सत्यकाद्याश्च तत्सुताः ।\nनरेन्द्राश्च महावीर्या बभूवुर्मुनिसत्तम"
@@ -217,6 +253,7 @@
     {
       "ref": "3.1.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वारोचिषश्चौत्तमश्च तामसो रैवतस्तथा ।\nप्रियव्रतान्वया ह्येते चत्वारो मनवः स्मृताः"
@@ -226,6 +263,7 @@
     {
       "ref": "3.1.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विष्णुमाराध्य तपसा स राजर्षिः प्रियव्रतः ।\nमन्वन्तराधिपानेताल्लंब्धवानात्मवंशजान्"
@@ -235,6 +273,7 @@
     {
       "ref": "3.1.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "षष्ठे मन्वंरते चासीच्चाक्षुषाख्यस्तथा मनुः ।\nमनोजवस्तथैवेन्द्रो देवानपि निबोध मे"
@@ -244,6 +283,7 @@
     {
       "ref": "3.1.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आप्याः प्रसूता भव्याश्च पृथुकाश्चा दिवौकसः ।\nमहानुभावा लेखाश्च पञ्चैते ह्यष्टका गणाः"
@@ -253,6 +293,7 @@
     {
       "ref": "3.1.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुमेधा विरजाश्चैव हविष्मानुत्तमो मधुः ।\nअतिनामा सहिष्णुश्च सप्तासन्निति चर्षयः"
@@ -262,6 +303,7 @@
     {
       "ref": "3.1.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऊरुः पूरुः शतद्युम्नप्रमुखाः सुमहाबलाः ।\nचाक्षुषस्य मनोः पुत्राः पृथिवीपतयोऽभवन्"
@@ -271,6 +313,7 @@
     {
       "ref": "3.1.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विवस्वतः सुतो विप्र श्राद्धदेवो महाद्युतिः ।\nमनुः संवर्तते धीमान् सांप्रतं सप्तमेन्तरे"
@@ -280,6 +323,7 @@
     {
       "ref": "3.1.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आदित्यवसुरुद्राद्या देवाश्चात्र महामुने ।\nपुरन्दरस्तथैवात्र मैत्रेय त्रिदशेश्वरः"
@@ -289,6 +333,7 @@
     {
       "ref": "3.1.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वशिष्ठः काश्यपोथात्रिर्जमदग्निः सगौतमः ।\nविश्वामित्रभरद्वाजौ सप्त सप्तर्षयोऽभवन्"
@@ -298,6 +343,7 @@
     {
       "ref": "3.1.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इक्ष्वाकुश्च नृगश्चैव धृष्टः शर्यातिरेव च ।\nनरिष्यन्तश्च विख्यातो नाभागोरिष्ट एव च"
@@ -307,6 +353,7 @@
     {
       "ref": "3.1.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "करूषश्च पृषध्रश्च सुमहांल्लोकविश्रुतः ।\nमनोर्वैवस्वतस्यैते नव पुत्राः सुधार्मिकाः"
@@ -316,6 +363,7 @@
     {
       "ref": "3.1.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विष्णुशक्तिरनौपम्या सत्त्वोद्रिक्ता स्थितौ स्थिता ।\nमन्वन्तरेष्वशेषेषु देवत्वेनाधितिष्ठति"
@@ -325,6 +373,7 @@
     {
       "ref": "3.1.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अंशेन तस्या जज्ञेऽसौ यज्ञःस्वायंभुवेन्तरे ।\nआकूत्यां मानसो देव उत्पन्नः प्रथमेन्तरे"
@@ -334,6 +383,7 @@
     {
       "ref": "3.1.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः पुनः स वै देवः प्राप्ते स्वारोचिषेन्तरे ।\nतुषितायां समुत्पन्नो ह्याजिषस्तुषितैः सह"
@@ -343,6 +393,7 @@
     {
       "ref": "3.1.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "औत्तमप्यन्तरे देवस्तुषितस्तु पुनः स वै ।\nसत्यायामभवत्सत्यः सत्यैः सह सुरोत्तमैः"
@@ -352,6 +403,7 @@
     {
       "ref": "3.1.39",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तामसस्यान्तरे चैव संप्राप्तो पुनरेव हि ।\nहर्यायां हरिभिः सार्ध हरिरेव बभूव ह"
@@ -361,6 +413,7 @@
     {
       "ref": "3.1.40",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रैवतेप्यन्तरे देवःसंभूत्यां मानसो हरिः ।\nसंभूतो रैवतैः सार्ध देवैर्देववरो हरिः"
@@ -370,6 +423,7 @@
     {
       "ref": "3.1.41",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चाक्षुषे चान्तरे देवो वैकुण्ठः पुरुषोत्तमः ।\nविकुण्ठायामसौ जज्ञे वैकुण्ठैर्दैवतैः सह"
@@ -379,6 +433,7 @@
     {
       "ref": "3.1.42",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्वन्तरेत्र संप्राप्ते तथा वैवस्वते द्विज ।\nवामनः काश्यपाद्विष्णुरदित्यां संबभूव ह"
@@ -388,6 +443,7 @@
     {
       "ref": "3.1.43",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्रिभिः क्रमैरिमांल्लोकाञ्जित्वा येन महात्मना ।\nपुरन्दराय त्रैलोक्यं दत्तं निहतकण्टकम्"
@@ -397,6 +453,7 @@
     {
       "ref": "3.1.44",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येतास्तनवस्तस्य सप्तमन्वन्तरेषु वै ।\nसप्तस्वेवाभवन्विप्र याभिः संवर्धिताः प्रजाः"
@@ -406,6 +463,7 @@
     {
       "ref": "3.1.45",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्माद्विष्टमिदं विश्वं यस्य शक्त्या महात्मनः ।\nतस्मात्स प्रोच्यते विष्णुर्विशोर्धातोः प्रवेशनात्"
@@ -415,6 +473,7 @@
     {
       "ref": "3.1.46",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वे च देवा मनवः समस्ताः सप्तर्षयो ये मनुसूनवश्च ।\nइन्द्रश्चयोऽयं त्रिदशेशभूतो विष्णोरशोषास्तु विभूतयस्ताः"

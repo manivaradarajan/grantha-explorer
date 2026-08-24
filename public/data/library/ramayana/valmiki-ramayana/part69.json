@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 69,
@@ -22,6 +22,7 @@
     {
       "ref": "1.71.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं ब्रुवाणं जनकः प्रत्युवाच कृताञ्जलिः ।\nश्रोतुमर्हसि भद्रं ते कुलं नः परिकीर्तितम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.71.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रदाने हि मुनिश्रेष्ठ कुलं निरवशेषतः ।\nवक्तव्यं कुलजातेन तन्निबोध महामुने ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.71.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राजाभूत् त्रिषु लोकेषु विश्रुतः स्वेन कर्मणा ।\nनिमिः परमधर्मात्मा सर्वसत्त्ववतां वरः ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.71.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य पुत्रो मिथिर्नाम मिथिला येन निर्मिता ।\nप्रथमो जनको नाम जनकादप्युदावसुः ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.71.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उदावसोस्तु धर्मात्मा जातो वै नन्दिवर्द्धनः ।\nनन्दिवर्द्धनपुत्रस्तु सुकेतुर्नाम नामतः ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.71.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुकेतोरपि धर्मात्मा देवरातो महाबलः ।\nदेवरातस्य राजर्षेर्बृहद्रथ इति स्मृतः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.71.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बृहद्रथस्य शूरो ऽभून्महावीरः प्रतापवान् ।\nमहावीरस्य धृतिमान् सुधृतिः सत्यविक्रमः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.71.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुधृतेरपि धर्मात्मा दृष्टकेतुः सुधार्मिकः ।\nदृष्टकेतोस्तु राजर्षेर्हर्यश्व इति विश्रुतः ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.71.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हर्यश्वस्य मरुः पुत्रो मरोः पुत्रः प्रतिन्धकः ।\nप्रतिन्धकस्य धर्मात्मा राजा कीर्तिरथः सुतः ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.71.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्रः कीर्तिरथस्यापि देवमीढ इति स्मृतः ।\nदेवमीढस्य विबुधो विबुधस्य महीध्रकः ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.71.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महीध्रकसुतो राजा कीर्तिरातो महाबलः ।\nकीर्तिरातस्य राजर्षेर्महारोमा व्यजायत ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.71.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महारोम्णस्तु धर्मात्मा स्वर्णरोमा व्यजायत ।\nस्वर्णरोम्णस्तु राजर्षेर्ह्रस्वरोमा व्यजायत ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.71.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य पुत्रद्वयं जज्ञे धर्मज्ञस्य महात्मनः ।\nज्येष्ठो ऽहमनुजो भ्राता मम वीरः कुशध्वजः ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.71.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मां तु ज्येष्ठं पिता राज्ये सो ऽभिषिच्य नराधिपः ।\nकुशध्वजं समावेश्य भारं मयि वनं गतः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.71.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वृद्धे पितरि स्वर्याते धर्मेण धुरमावहम् ।\nभ्रातरं देवसङ्काशं स्नेहात्पश्यन् कुशध्वजम् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.71.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कस्य चित्त्वथ कालस्य साङ्काश्यादगमत् पुरात् ।\nसुधन्वा वीर्यवान् राजा मिथिलामवरोधकः ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.71.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स च मे प्रेषयामास शैवं धनुरनुत्तमम् ।\nसीता कन्या च पद्माक्षी मह्यं वै दीयतामिति ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.71.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्या ऽप्रदानाद्ब्रह्मर्षे युद्धमासीन्मया सह ।\nस हतो ऽभिमुखो राजा सुधन्वा तु मया रणे ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.71.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निहत्य तं मुनिश्रेष्ठ सुधन्वानं नराधिपम् ।\nसाङ्काश्ये भ्रातरं वीरमभ्यषिञ्चं कुशध्वजम् ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.71.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कनीयानेष मे भ्राता अहं ज्येष्ठो महामुने ।\nददामि परमप्रीतो वध्वौ ते मुनिपुङ्गव ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.71.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सीतां रामाय भद्रं ते ऊर्मिलां लक्ष्मणाय च ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.71.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वीर्यशुल्कां मम सुतां सीतां सुरसुतोपमाम् ।\nद्वितीयामूर्मिलां चैव त्रिर्ददामि न संशयः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.71.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामलक्ष्मणयो राजन् गोदानं कारयस्व ह ।\nपितृकार्यं च भद्रं ते ततो वैवाहिकं कुरु ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.71.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "फल्गुन्यामुत्तरे राजंस्तस्मिन् वैवाहिकं कुरु ।\nरामलक्ष्मणयो राजन् दानं कार्यं सुखोदयम् ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने एकसप्ततितमः सर्गः ॥ ७१ ॥"

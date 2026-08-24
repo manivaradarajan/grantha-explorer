@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 64,
@@ -22,6 +22,7 @@
     {
       "ref": "1.66.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रभाते विमले कृतकर्मा नराधिपः ।\nविश्वामित्रं महात्मानमाजुहाव सराघवम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.66.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमर्चयित्वा धर्मात्मा शास्त्रदृष्टेन कर्मणा ।\nराघवौ च महात्मानौ तदा वाक्यमुवाच ह ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.66.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगवन् स्वागतं ते ऽस्तु किं करोमि तवानघ ।\nभवानाज्ञापयतु मामाज्ञाप्यो भवता ह्यहम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.66.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तु धर्मात्मा जनकेन महात्मना ।\nप्रत्युवाच मुनिर्वीरं वाक्यं वाक्यविशारदः ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.66.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्रौ दशरथस्येमौ क्षत्रियौ लोकविश्रुतौ ।\nद्रष्टुकामौ धनुःश्रेष्ठं यदेतत्त्वयि तिष्ठति ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.66.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतद्दर्शय भद्रं ते कृतकामौ नृपात्मजौ ।\nदर्शनादस्य धनुषो यथेष्टं प्रतियास्यतः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.66.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तु जनकः प्रत्युवाच महामुनिम् ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.66.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अस्य दर्शनादेव कृतकामौ भूत्वा प्रतियास्यत इत्यन्वयः ॥ १.६६.६,७ ॥\nश्रूयतामस्य धनुषो यदर्थमिह तिष्ठति ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.66.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवरात इति ख्यातो निमेष्षष्ठो महीपतिः ।\nन्यासो ऽयं तस्य भगवन् हस्ते दत्तो महात्मना ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.66.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दक्षयज्ञवधे पूर्वं धनुरायम्य वीर्यवान् ।\nरुद्रस्तु त्रिदशान् रोषात् सलीलमिदमब्रवीत् ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.66.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्माद्भागार्थिनो भागान्नाकल्पयत मे सुराः ।\nवराङ्गाणि महार्हाणि धनुषा शातयामि वः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.66.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो विमनसः सर्वे देवा वै मुनिपुङ्गव ।\nप्रसादयन्ति देवेशं तेषां प्रीतो ऽभवद्भवः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.66.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदेतद्देवदेवस्य धनूरत्नं महात्मनः ।\nन्यासभूतं तदा न्यस्तमस्माकं पूर्वके विभो ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.66.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ मे कृषतः क्षेत्रं लाङ्गलादुत्थिता मया ।\nक्षेत्रं शोधयता लब्धा नाम्ना सीतेति विश्रुता ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.66.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूतलादुत्थिता सा तु व्यवर्द्धत ममात्मजा ।\nवीर्यशुल्केति मे कन्या स्थापितेयमयोनिजा ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.66.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूतला दुत्थितां तां तु वर्द्धमानां ममात्मजाम् ।\nवरयामासुरागम्य राजानो मुनिपुङ्गव ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.66.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां वरयतां कन्यां सर्वेषां पृथिवीक्षिताम् ।\nवीर्यशुल्केति भगवन् न ददामि सुतामहम् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.66.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः सर्वे नृपतयः समेत्य मुनिपुङ्गव ।\nमिथिलामभ्युपागम्य वीर्यजिज्ञासवस्तदा ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.66.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां जिज्ञासमानानां वीर्यं धनुरुपाहृतम् ।\nन शेकुर्ग्रहणे तस्य धनुषस्तोलने ऽपि वा ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.66.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां वीर्यवतां वीर्यमल्पं ज्ञात्वा महामुने ।\nप्रत्याख्याता नृपतयस्तन्निबोध तपोधन ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.66.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः परमकोपेन राजानो नृपपुङ्गव ।\nन्यरुन्धन् मिथिलां सर्वे वीर्यसन्देहमागताः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.66.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आत्मानमवधूतं ते विज्ञाय नृपपुङ्गवाः ।\nरोषेण महताविष्टाः पीडयन् मिथिलां पुरीम् ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.66.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः संवत्सरे पूर्णे क्षयं यातानि सर्वशः ।\nसाधनानि मुनिश्रेष्ठ ततो ऽहं भृशदुःखितः ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.66.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो देवगणान् सर्वान् तपसा ऽहं प्रसादयम् ।\nददुश्च परमप्रीताश्चतुरङ्गबलं सुराः ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.66.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो भग्ना नृपतयो हन्यमाना दिशो ययुः ।\nअवीर्या वीर्यसन्दिग्धाः सामात्याः पापकर्मणः ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.66.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदेतन्मुनिशार्दूल धनुः परमभास्वरम् ।\nरामलक्ष्मणयोश्चापि दर्शयिष्यामि सुव्रत ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.66.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यद्यस्य धनुषो रामः कुर्यादारोपणं मुने ।\nसुतामयोनिजां सीतां दद्यां दाशरथेरहम् ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने\nषट्षष्टितमः सर्गः ॥ ६६ ॥"

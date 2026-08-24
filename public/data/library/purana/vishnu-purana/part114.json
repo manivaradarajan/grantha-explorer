@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 114,
@@ -8,6 +8,7 @@
     {
       "ref": "5.34.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "<font size=\"4.9\">\nचक्र कर्म्म महच्छौरिर्बिब्राणो मानुषीं तनुम् ।\nजिगाय शक्र सर्व्वञ्च सर्व्वदेवांश्व लीलया"
@@ -17,6 +18,7 @@
     {
       "ref": "5.34.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यज्वान्यदकरोत् कर्म्म दिव्यचेष्टाविघातकृत् ।\nतत् कथ्यतां महाभाग!परं कातूहलं हि मे"
@@ -26,6 +28,7 @@
     {
       "ref": "5.34.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गदतो मम विप्रर्षे!श्रूयतामिदमादरात् ।\nनरावतारे कृष्णेन दग्धा वाराणसी यथा"
@@ -36,6 +39,7 @@
     {
       "ref": "5.34.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पौण्डुको वासुदेवस्तु वासुदेवीऽभवद् भिवि ।\nअवतीर्णस्त्वमित्युक्तो जनैरज्ञानमोहितैः"
@@ -45,6 +49,7 @@
     {
       "ref": "5.34.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स-मेने वासुदेवोऽहमवतीर्णो महीतले ।\nनष्टस्मृतिस्ततः सर्व्व विष्णचिह्निमचीकरत्"
@@ -54,6 +59,7 @@
     {
       "ref": "5.34.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दूतञ्च प्रेरयामास कृष्णाय सुमहात्मने ।\nत्यत्तवा चक्रादिकं चिह्न मदीयं नाम चात्मनः"
@@ -63,6 +69,7 @@
     {
       "ref": "5.34.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वासुदेवात्मकं मूढ़!मुत्तवा सर्व्वं विशेषतः ।\nआत्मनो जीवितार्थाय ततो मे प्रणति व्रज"
@@ -72,6 +79,7 @@
     {
       "ref": "5.34.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तः सम्प्रहस्यैन दूतं प्राह जनार्द्दनः ।\nनिजचिह्नमहं चक्र समुत्स्मरक्ष्य त्वयीति वै"
@@ -81,6 +89,7 @@
     {
       "ref": "5.34.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वाच्यः स पौण्ड्रको गत्वा त्वया दूत!वचो मम ।\nज्ञातस्त्वद्राक्यसद्भावो यत् कार्य्यं तद्रिधीयताभ्"
@@ -90,6 +99,7 @@
     {
       "ref": "5.34.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गृहीतचिह्न एवाहमागमिष्यामि ते पुरम् ।\nसमुत्स्त्रक्ष्यामि ते चक्र निजनिह्नमसंशयम्"
@@ -99,6 +109,7 @@
     {
       "ref": "5.34.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आज्ञापूर्व्वञ्च यदिदमागच्छेति त्वयोदितम् ।\nसम्पादयिष्ये श्वस्तुभ्यं तदप्येषोऽविलम्बितम्"
@@ -108,6 +119,7 @@
     {
       "ref": "5.34.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शरणां ते समब्येत्य कर्त्तास्मि नृपते!तदा ।\nयथा त्वत्त्वो भयं बूयो न मे किञ्चिद्भविष्यति"
@@ -117,6 +129,7 @@
     {
       "ref": "5.34.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तेऽपगते दूते संस्मृत्याभ्यागतं हरिः ।\nगरुत्मन्तमथारुह्य त्वरितं तत्पुरं ययौ"
@@ -126,6 +139,7 @@
     {
       "ref": "5.34.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स चापि केशवोद्योगं श्रुत्वा काशिपतिस्तदा ।\nसर्व्वसैन्यपरीवारः पार्ष्णिग्राह उपाययौ"
@@ -135,6 +149,7 @@
     {
       "ref": "5.34.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो बलेन महता काशिराजबलेन च ।\nपौण्ड्रको वासुदेवोऽसौ केशवाभिमुखं ययौ"
@@ -144,6 +159,7 @@
     {
       "ref": "5.34.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं ददर्श हरिर्द्दूरादुदारस्यन्दने स्थितम् ।\nचक्रहस्तं गदाखड़ गबाहु पाणिगताम्बुजम्"
@@ -153,6 +169,7 @@
     {
       "ref": "5.34.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्त्रग्धरं धृतशाङ्गञ्च सुपर्णारचितध्वजम् ।\nवक्षःस्थले कृतञ्चास्य श्रीवत्सं ददृशे हिरः"
@@ -162,6 +179,7 @@
     {
       "ref": "5.34.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किरीटकूणडलधरं पीतवासःसमन्वितम् ।\nदृष्ट्वा तं भावगम्भरं जहास गरुडध्वजः"
@@ -171,6 +189,7 @@
     {
       "ref": "5.34.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "युयुध च बलेनास्य हस्त्यश्वबहलिना द्रिज !\nनिस्त्रिंशर्ष्टिगदाशूलशक्तिकार्म्मुकशालिना"
@@ -180,6 +199,7 @@
     {
       "ref": "5.34.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "क्षणेन शार्ह्गनिर्म्मुक्तैः शरैरिषुविदारणैः ।\nगदाचक्रनिपातैश्व सूदयामास तदूबलम्"
@@ -189,6 +209,7 @@
     {
       "ref": "5.34.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "काशिराजबलञ्चैव क्षर्यं नित्वा जनार्द्दनः ।\nउवाच पौण्ड्रकं मूद़मात्मचिह्नोपलक्ष्णम्"
@@ -198,6 +219,7 @@
     {
       "ref": "5.34.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पौण्ड्रकोक्तं त्वया यत्तु दूतवक्तूणे मां प्रति ।\nसमुतूसृजेति चिह्नानि तत्ते सम्पादयाम्यहम"
@@ -207,6 +229,7 @@
     {
       "ref": "5.34.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चक्रमेतत् समुत्सृष्टं गदेयं ते विसर्जिता ।\nगरुत्मानेष निर्द्दिष्टः समारोहतु ते ध्वजम्"
@@ -216,6 +239,7 @@
     {
       "ref": "5.34.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युज्वार्य्य विमुक्तेन चक्रणोसौ विदारितः ।\nपोथितो गदया भग्रो गरुत्माश्व गरुत्मता"
@@ -225,6 +249,7 @@
     {
       "ref": "5.34.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो हाहाकृते लोके काशिपुर्य्यधिपो बली ।\nयुयुधे वासुदेवेन मित्रस्यापचितौ स्थितः"
@@ -234,6 +259,7 @@
     {
       "ref": "5.34.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः शार्ङ्गधनुर्मुक्तैश्छित्त्वा तस्य शरैः शिरः ।\nकाशिपुर्य्याञ्च चिक्षेप कुर्व्वन् सोकस्य विस्मयम्"
@@ -243,6 +269,7 @@
     {
       "ref": "5.34.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हत्वा च पौणड्रकं शौरिः काखिराजञ्च सानुगम् ।\nपुनर्द्रारवतीं प्राप्तो रेमे स्वर्गगतो यथा"
@@ -252,6 +279,7 @@
     {
       "ref": "5.34.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छिरः पतितं दृष्ट्वा तत्र काशिपतेः पुरे ।\nजनः किमेतदित्याह केनत्यत्यन्तविस्मितः"
@@ -261,6 +289,7 @@
     {
       "ref": "5.34.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ज्ञात्वा तं वासुदेवेन हतं तस्य सुतस्ततः ।\nपुरोहितेन सहितस्तो।यामास शङ्करम्"
@@ -270,6 +299,7 @@
     {
       "ref": "5.34.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अविमुक्ते महाक्षेत्रे तोषितस्तन शङ्करः ।\nवरं वृणीष्वेति तदा तं प्रोवाच नृपात्मजम्"
@@ -279,6 +309,7 @@
     {
       "ref": "5.34.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स वब्र भगवान् कृत्या पितृहन्तुर्वधाय मे ।\nसमुत्तिष्ठतु कृष्णस्य त्वत्प्रसादान्महेश्वर"
@@ -288,6 +319,7 @@
     {
       "ref": "5.34.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं भविष्यतीत्युक्ते दक्षिणाग्नेरनन्तरम् ।\nमहाकृत्या समुत्तस्थौ तस्यैवाग्नेर्विन्मशिनी"
@@ -297,6 +329,7 @@
     {
       "ref": "5.34.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो ज्वालाकरालास्या ज्वलत्केशकलापिका ।\nकृष्ण कृष्णेति कुपिता कृत्या द्रारवतीं ययौ"
@@ -306,6 +339,7 @@
     {
       "ref": "5.34.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तामवेक्ष्य जनस्त्रासविचल्लोचनो मुने!\nययौ शरण्यं जगतां शरणं मधुसूदनम्"
@@ -315,6 +349,7 @@
     {
       "ref": "5.34.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "काशिराजसुतेनेयमाराध्य वृषभध्वजम् ।\nउत्पादिता महाकृत्येत्यवगम्याथ चक्रिणा"
@@ -324,6 +359,7 @@
     {
       "ref": "5.34.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "जहि कृत्यामिमामुग्रां वह्निज्वालाजटालकाम् ।\nचक्रमुत्सृष्टमक्षेषु क्रीड़ासक्तेन लीलया"
@@ -333,6 +369,7 @@
     {
       "ref": "5.34.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदग्रिमालाजटिलज्वालोदूगारातिभीषणाम् ।\nकृत्यामनुजगामाशु विष्णुचक्र सुदर्शनम्"
@@ -342,6 +379,7 @@
     {
       "ref": "5.34.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चक्रगतापविध्वस्ता कृत्या माहेश्वरी तदा ।\nननाश वेगिनी वेगात् तदप्यनुजगाम ताम्"
@@ -351,6 +389,7 @@
     {
       "ref": "5.34.39",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृत्.या वाराणसीमेव प्रविवेश त्वरान्विता ।\nविष्णचक्रप्रतिहतप्रभावा मुनिसत्तम"
@@ -360,6 +399,7 @@
     {
       "ref": "5.34.40",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः काशिबलं भूरि प्मथानां तथा बलम् ।\nसमस्तशस्त्रस्त्रयुतं चक्रस्याभिमुखं ययौ"
@@ -369,6 +409,7 @@
     {
       "ref": "5.34.41",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शस्त्रस्त्रमोक्षचतुरं दग्ध्वा तदूबलमोजसा ।\nकृत्यागर्भामशेषां तां दग्ध्वा वाराणसीं पुरीम्"
@@ -378,6 +419,7 @@
     {
       "ref": "5.34.42",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सभूभृदूभृत्यपौरान्तु साश्वमातङ्गमानवाम् ।\nअशेषकोषकोष्ठां तां दुनिंरीक्ष्यां सुरैरपि"
@@ -387,6 +429,7 @@
     {
       "ref": "5.34.43",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ज्वालापरिप्लुताशेष-गृहृ-प्राकारचत्वराम् ।\nददाह तद्धरेश्वक्रं सकलामेव तां पुरीम्"
@@ -396,6 +439,7 @@
     {
       "ref": "5.34.44",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अक्षीणामर्षमत्युग्रसाध्यसाधनसस्पृहम् ।\nतज्वक्र प्रस्फुरद्दीप्ति विष्णोरभ्याययौ करम्"
@@ -405,6 +449,7 @@
     {
       "ref": "5.34.45",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "</font>"

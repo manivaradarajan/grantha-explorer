@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 21,
@@ -8,6 +8,7 @@
     {
       "ref": "1.23.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रभातायां तु शर्वर्यां विश्वामित्रो महामुनिः ।\nअभ्यभाषत काकुत्स्थौ शयानौ पर्णसंस्तरे ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.23.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कौसल्या सुप्रजा राम पूर्वा सन्ध्या प्रवर्तते ।\nउत्तिष्ठ नरशार्दूल कर्त्तव्यं दैवमाह्निकम् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.23.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यर्षेः परमोदारं वचः श्रुत्वा नरोत्तमौ ।\nस्नात्वा कृतोदकौ वीरौ जेपतुः परमं जपम् ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.23.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृताह्निकौ महावीर्यौ विश्वामित्रं तपोधनम् ।\nअभिवाद्याभिसंहृष्टौ गमनायाभितस्थतुः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.23.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ प्रयातौ महावीर्यौ दिव्यां त्रिपथगां नदीम् ।\nददृशाते ततस्तत्र सरय्वाः सङ्गमे शुभे ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.23.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्राश्रमपदं पुण्यमृषीणामुग्रतेजसाम् ।\nबहुवर्षसहस्राणि तप्यतां परमं तपः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.23.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं दृष्ट्वा परमप्रीतौ राघवौ पुण्यमाश्रमम् ।\nऊचतुस्तं महात्मानं विश्वामित्रमिदं वचः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.23.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कस्यायमाश्रमः पुण्यः को न्वस्मिन् वसते पुमान् ।\nभगवन् श्रोतुमिच्छावः परं कौतूहलं हि नौ ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.23.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तयोस्तद्वचनं श्रुत्वा प्रहस्य मुनिपुङ्गवः ।\nअब्रवीच्छ्रूयतां राम यस्यायं पूर्व आश्रमः ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.23.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कन्दर्पो मूर्तिमानासीत् काम इत्युच्यते बुधैः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.23.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृतोद्वाहं तु देवेशं गच्छन्तं समरुद्गणम् ।\nधर्षयामास दुर्मेधा हुङ्कृतश्च महात्मना ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.23.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अवदग्धस्य रौद्रेण चक्षुषा रघुनन्दन ।\nव्यशीर्य्यन्त शरीरात् स्वात् सर्वगात्राणि दुर्मतेः ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.23.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य गात्रं हतं तत्र निर्दग्धस्य महात्मना ।\nअशरीरः कृतः कामः क्रोधाद्देवेश्वरेण हि ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.23.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनङ्ग इति विख्यातस्तदाप्रभृति राघव ।\nस चाङ्गविषयः श्रीमान् यत्राङ्गं प्रमुमोच ह ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.23.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यायमाश्रमः पुण्यस्तस्येमे मुनयः पुरा ।\nशिष्या धर्मपरा नित्यं तेषां पापं न विद्यते ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.23.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इहाद्य रजनीं राम वसेम शुभदर्शन ।\nपुण्ययोः सरितोर्मध्ये श्वस्तरिष्यामहे वयम् ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.23.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभिगच्छामहे सर्वे शुचयः पुण्यमाश्रमम् ।\nस्नाताश्च कृतजप्याश्च हुतहव्या नरोत्तम ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.23.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां संवदतां तत्र तपोदीर्घेण चक्षुषा ।\nविज्ञाय परमप्रीता मुनयो हर्षमागमन् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.23.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अर्घ्यं पाद्यं तथातिथ्यं निवेद्य कुशिकात्मजे ।\nरामलक्ष्मणयोः पश्चादकुर्वन्नतिथिक्रियाम् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.23.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सत्कारं समनुप्राप्य कथाभिरभिरञ्जयन् ।\nयथार्हमजपन् सन्ध्यामृषयस्ते समाहिताः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.23.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्र वासिभिरानीता मुनिभिः सुव्रतैः सह ।\nन्यवसन् सुसुखं तत्र कामाश्रमपदे तदा ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.23.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथाभिरभिरामाभिरभिरामौ नृपात्मजौ ।\nरमयामास धर्मात्मा कौशिको मुनिपुङ्गवः ॥"

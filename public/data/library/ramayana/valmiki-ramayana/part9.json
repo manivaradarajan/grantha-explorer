@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 9,
@@ -8,6 +8,7 @@
     {
       "ref": "1.11.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूय एव च राजेन्द्र शृणु मे वचनं हितम् ।\nयथा स देवप्रवरः कथायामेवमब्रवीत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.11.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इक्ष्वाकूणां कुले जातो भविष्यति सुधार्मिकः ।\nराजा दशरथो नाम श्रीमान् सत्यप्रतिश्रवः ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.11.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अङ्गराजेन सख्यं च तस्य राज्ञो भविष्यति ।\nकन्या चास्य महाभागा शान्ता नाम भविष्यति ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.11.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्रस्त्वङ्गस्य राज्ञस्तु रोमपाद इति श्रुतः ।\nअङ्गराजं दशरथो गमिष्यति महायशाः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.11.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनपत्यो ऽस्मि धर्मात्मन् शान्ताभर्ता मम क्रतुम् ।\nआहरेत त्वयाज्ञप्तः सन्तानार्थं कुलस्य च ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.11.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुत्वा राज्ञो ऽथ तद्वाक्यं मनसा स विचिन्त्य च ।\nप्रदास्यते पुत्रवन्तं शान्ताभर्तारमात्मवान् ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.11.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रतिगृह्य च त विप्रं स राजा विगतज्वरः ।\nआहरिष्यति तं यज्ञं प्रहृष्टेनान्तरात्मना ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.11.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं च राजा दशरथो यष्टुकामः कृताञ्जलिः ।\nऋश्यशृङ्गं द्विजश्रेष्ठं वरयिष्यति धर्मवित् ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.11.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यज्ञार्थं प्रसवार्थं च स्वर्गार्थं च जनेश्वरः ।\nलभते च स तं कामं विप्रमुख्याद्विशाम्पतिः ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.11.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्राश्चास्य भविष्यन्ति चत्वारो ऽमितविक्रमाः ।\nवंशप्रतिष्ठानकराः सर्वलोकेषु विश्रुताः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.11.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं स देवप्रवरः पूर्वं कथितवान् कथाम् ।\nसनत्कुमारो भगवान् पुरा देवयुगे प्रभुः ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.11.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स त्वं पुरुषशार्दूल तमानय सुसत्कृतम् ।\nस्वयमेव च राजेन्द्र गत्वा सबलवाहनः ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.11.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सान्तःपुरः सहामात्यः प्रययौ यत्र स द्विजः ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.11.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वनानि सरितश्चैव व्यतिक्रम्य शनैः शनैः ।\nअभिचक्राम तं देशं यत्र वै मुनिपुङ्गवः ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.11.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आसाद्य तं द्विजश्रेष्ठं रोमपादसमीपगम् ।\nऋषिपुत्रं ददर्शादौ दीप्यमानमिवानलम् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.11.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो राजा यथान्यायं पूजां चक्रे विशेषतः ।\nसखित्वात्तस्य वै राज्ञः प्रहृष्टेनान्तरात्मना ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.11.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रोमपादेन चाख्यातमृषिपुत्राय धीमते ।\nसख्यं सम्बन्धकं चैव तदा तं प्रत्यपूजयत् ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.11.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं सुसत्कृतस्तेन सहोषित्वा नरर्षभः ।\nसप्ताष्टदिवसान् राजा राजानमिदमब्रवीत् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.11.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शान्ता तव सुता राजन् सह भर्त्रा विशाम्पते ।\nमदीयं नगरं यातु कार्यं हि महदुद्यतम् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.11.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथेति राजा संश्रुत्य गमनं तस्य धीमतः ।\nउवाच वचनं विप्रं गच्छ त्वं सह भार्यया ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.11.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऋषिपुत्रः प्रतिश्रुत्य तथेत्याह नृपं तदा ।\nस नृपेणाभ्यनुज्ञातः प्रययौ सह भार्यया ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.11.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तावन्योन्याञ्जलिं कृत्वा स्नेहात्संश्लिष्य चोरसा ।\nननन्दतुर्दशरथो रोमपादश्च वीर्यवान् ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.11.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः सुहृदमापृच्छ्य प्रस्थितो रघुनन्दनः ।\nपौरेभ्यः प्रेषयामास दूतान् वै शीघ्रगामिनः ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.11.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "क्रियतां नगरं सर्वं क्षिप्रमेव स्वलङ्कृतम् ।\nधूपितं सिक्तसम्मृष्टं पताकाभिरलङ्कृतम् ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.11.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रहृष्टाः पौरास्ते श्रुत्वा राजानमागतम् ।\nतथा प्रचक्रुस्तत्सर्वं राज्ञा यत्प्रेषितं तदा ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.11.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः स्वलङ्कृतं राजा नगरं प्रविवेश ह ।\nशङ्खदुन्दुभिर्निर्घोषैः पुरस्कृत्य द्विजर्षभम् ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.11.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रमुदिताः सर्वे दृष्ट्वा तं नागरा द्विजम् ।\nप्रवेश्यमानं सत्कृत्य नरेन्द्रेणेन्द्रकर्मणा ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.11.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तःपुरं प्रवेश्यैनं पूजां कृत्वा विधानतः ।\nकृतकृत्यं तदात्मानं मेने तस्योपवाहनात् ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "1.11.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तःपुरस्त्रियः सर्वाः शान्तां दृष्ट्वा तथागताम् ।\nसह भर्त्रा विशालाक्षीं प्रीत्यानन्दमुपागमन् ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "1.11.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूज्यमाना च ताभिः सा राज्ञा चैव विशेषतः ।\nउवास तत्र सुखिता कञ्चित्कालं सहर्त्विजा ॥"

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 129,
@@ -8,6 +8,7 @@
     {
       "ref": "2.60.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो भूतोपसृष्टेव वेपमाना पुनःपुनः ।\nधरण्यां गतसत्त्वेव कौसल्या सूतमब्रवीत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.60.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नय मां यत्र काकुत्स्थः सीता यत्र च लक्ष्मणः ।\nतान् विना क्षणमप्यत्र जीवितुं नोत्सहे ह्यहम् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.60.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निवर्तय रथं शीघ्रं दण्डकान्नय मामपि ।\nअथ तान्नानुगच्छामि गमिष्यामि यमक्षयम् ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.60.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बाष्पवेगोपहतया स वाचा सज्जमानया ।\nइदमाश्वासयन् देवीं सूतः प्राञ्जलिरब्रवीत् ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "2.60.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्यज शोकञ्च मोहञ्च सम्भ्रमं दुःखजं तथा ।\nव्यवधूय च सन्तापं वने वत्स्यति राघवः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "2.60.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लक्ष्मणश्चापि रामस्य पादौ परिचरन् वने ।\nआराधयति धर्मज्ञः परलोकं जितेन्द्रियः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "2.60.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विजने ऽपि वने सीता वासं प्राप्य गृहेष्विव ।\nविस्रम्भं लभते ऽभीता रामे संन्यस्तमानसा ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "2.60.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नास्या दैन्यं कृतं किञ्चित् सुसूक्ष्ममपि लक्ष्यते ।\nउचितेव प्रवासानां वैदेही प्रतिभाति मा ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "2.60.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नगरोपवनं गत्वा यथा स्म रमते पुरा ।\nतथैव रमते सीता निर्जनेषु वनेष्वपि ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "2.60.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बालेव रमते सीता ऽबालचन्द्रनिभानना ।\nरामारामे ह्यधीनात्मा विजने ऽपि वेन सती ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "2.60.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तद्गतं हृदयं ह्यस्यास्तदधीनं च जीवितम् ।\nअयोध्यापि भवेत्तस्या रामहीना तथा वनम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "2.60.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पथि पृच्छति वैदेही ग्रामांश्च नगराणि च ।\nगतिं दृष्ट्वा नदीनाञ्च पादपान् विविधानपि ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "2.60.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामं वा लक्ष्मणं वापि पृष्ट्वा जानाति जानकी ।\nअयोध्याक्रोशमात्रे तु विहारमिव संश्रिता ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "2.60.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इदमेव स्मराम्यस्याः सहसैवोपजल्पितम् ।\nकैकेयीसंश्रितं वाक्यं नेदानीं प्रतिभाति मा ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "2.60.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ध्वंसयित्वा तु तद्वाक्यं प्रमादात् पर्युपस्थितम् ।\nह्लादनं वचनं सूतो देव्या मधुरमब्रवीत् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "2.60.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अध्वना वातवेगेन सम्भ्रमेणातपेन च ।\nन विगच्छति वैदेह्याश्चन्द्रांशुसदृशी प्रभा ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "2.60.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सदृशं शतपत्रस्य पूर्णचन्द्रोपमप्रभम् ।\nवदनं तद्वदान्याया वैदेह्या न विकम्पते ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "2.60.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अलक्तरसरक्ताभावलक्तरसवर्जितौ ।\nअद्यापि चरणौ तस्याः पद्मकोशसमप्रमौ ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "2.60.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नूपुरोद्घुष्टहेलेव खेलं गच्छति भामिनी ।\nइदानीमपि वैदेही तद्रागान्न्यस्तभूषणा ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "2.60.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गजं वा वीक्ष्य सिंहं वा व्याघ्रं वा वनमाश्रिता ।\nनाहारयति सन्त्रासं बाहू रामस्य संश्रिता ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "2.60.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न शोच्यास्ते न चात्मानः शोच्यो नापि जनाधिपः ।\nइदं हि चरितं लोके प्रतिष्ठास्यति शाश्वतम् ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "2.60.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विधूय शोकं परिहृष्टमानसा महर्षियाते पथि सुव्यवस्थिताः ।\nवनेरता वन्यफलाशनाः पितुः शुभां प्रतिज्ञां परिपालयन्ति ते ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "2.60.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथापि सूतेन सुयुक्तवादिना निवार्यमाणा सुतशोककर्शिता ।\nन चैव देवी विरराम कूजितात् प्रियेति पुत्रेति च राघवेति च ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदि० श्रीमदयोध्याकायण्डे षष्टितमः सर्गः ॥ ६० ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूणे पीताम्बराख्याने अयोध्याकाण्डव्याख्याने षष्टितमः सर्गः ॥ ६० ॥"
@@ -353,6 +376,7 @@
             "end": 394,
             "display_text": "नूपुरोत्कृष्टहेलेवेति पाठः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

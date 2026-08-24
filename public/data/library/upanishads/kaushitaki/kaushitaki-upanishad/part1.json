@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "kaushitaki-upanishad",
   "edition_id": "kaushitaki-upanishad",
   "part_num": 1,
@@ -22,6 +22,7 @@
     {
       "ref": "1.1",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "चित्रो ह वै गार्ग्यायणिर्यक्ष्यमाण आरुणिं वव्रे ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.2",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स ह पुत्रं श्वेतकेतुं प्रजिघाय । याजयेति ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.3",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तं हासीनं पप्रच्छ । गौतमस्य पुत्र अस्ति संवृतं लोके यस्मिन् मा धास्यस्यन्यमहो वाऽध्वा तस्य यस्मिन् लोके धास्यसीति ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.4",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स होवाच । नाहमेतत् वेद । हन्ताचार्यं पृच्छानीति । स ह पितरमासाद्य पप्रच्छ ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.5",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "इति ह माऽप्राक्षीत् । कथं प्रतिब्रवाणीति ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.6",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स होवाच । अहमप्येतन्न वेद । सदस्येव वयं स्वाध्यायमधीत्य हवामहे यन्नः परे ददति । एह्युभौ गमिष्याव इति ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.7",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स ह समित्पाणिश्चित्रं गार्ग्यायणिप्रतिचक्रम । उपायानीति ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.8",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तं होवाच ब्रह्मार्ध्योऽसि गौतम यो न मानमुपागाः । एहि व्येव त्वा ज्ञापयिष्यामीति ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.9",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स होवाच ये वै के चास्माल्लोकात् प्रयन्ति । चन्द्रमसमेव ते सर्वे गच्छन्ति ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.10",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां प्राणैः पूर्वपक्ष आप्यायते । तानपरपक्षेण प्रजनयति ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.11",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "एतद्वै स्वर्गस्य लोकस्य द्वारं यश्चन्द्रमाः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.12",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तं यः प्रत्याह । तमतिसृजते । य एनं न प्रत्याह । तमिह वृष्टिभूत्वा वर्षति । स इह कीटो वा पतङ्गो वा शकुनिर्वा शार्दूलो वा सिंहो वा मत्स्यो वा परस्वान् वा पुरुषो वाऽन्यो वैतेषु स्थानेषु प्रत्याजायते ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.13",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यथाकर्म यथाविद्यं तमागतं पृच्छति । कोऽसीति । तं प्रतिब्रूयात् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.14",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "विचक्षणादृतवो रेत आभृतं पञ्चदशात् प्रसूतात् पित्र्यावतस्तस्मात् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.15",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "पुंसि कर्तरि मेरयध्वम् । पुंसा कर्त्रा मातरि मा निषिक्तम् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.16",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स जायमुपजायमानो द्वादशत्रयोदशोपमासः ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.17",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "द्वादशत्रयोदशेन पित्राऽऽसं तद्विदेऽहं प्रति तद्विदेऽहम् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.18",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तन्मा ऋतवो मर्त्यव आभरध्वम् ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.19",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तेन सत्येन तपसर्तुरस्म्यार्तवोऽस्मि कोऽस्मि त्वमस्मीति ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.20",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तमतिसृजते ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.21",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स एतं देवयानं पन्थानमापद्याग्निलोकमागच्छति स वायुलोकं स वरुणलोकं स आदित्यलोकं स इन्द्रलोकं स प्रजापतिलोकं स ब्रह्मलोकम् ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.22",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य हवा एतस्य ब्रह्मलोकस्यारो ह्रदः मुहूर्ता यष्टिहाः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.23",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "विरजा नदी ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.24",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तिल्यो वृक्षः ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.25",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सालज्यं संस्थानं ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.26",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "अपराजितमायतनम् ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.27",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रप्रजापती द्वारगोपौ ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "1.28",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "विभुप्रमितम् ॥"
@@ -274,6 +302,7 @@
     {
       "ref": "1.29",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "विचक्षणा आसन्दी ॥"
@@ -283,6 +312,7 @@
     {
       "ref": "1.30",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "अमितौजाः पर्यङ्कः ॥"
@@ -292,6 +322,7 @@
     {
       "ref": "1.31",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "प्रिया च मानसी प्रतिरूपा च चाक्षुषी पुष्पाण्यपचयतः ॥"
@@ -301,6 +332,7 @@
     {
       "ref": "1.32",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यतो वै च जगत्यम्बाश्चाम्बावयवाश्चाप्सरसोऽम्बया नद्यः । तमित्थंवित् आगच्छति ॥"
@@ -310,15 +342,30 @@
     {
       "ref": "1.33",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तं ब्रह्माह अभिधावत मम यशसा विरजां (विजरां) वाऽयं नदीं प्रापत् । न वाऽयं जिगीष्यतीति ॥"
         }
-      }
+      },
+      "references": [
+        {
+          "start": 36,
+          "end": 42,
+          "display_text": "विजरां",
+          "grantha_id": null,
+          "edition_id": null,
+          "locator": null,
+          "locator_end": null,
+          "group_id": null,
+          "unresolved": true
+        }
+      ]
     },
     {
       "ref": "1.34",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तं पञ्च शतान्यप्सरसां प्रतिधावन्ति । शतं मालाहस्ताः । शतमञ्जनहस्ताः । शतं चूर्णहस्ताः । शतं वासोहस्ताः । शतं फणहस्ताः । तं ब्रह्मालङ्कारेणालंकुर्वन्ति । सब्रह्मालङ्कारेणालंकृतो ब्रह्म विद्वान् ब्रह्मैवाभिप्रैति ॥"
@@ -328,6 +375,7 @@
     {
       "ref": "1.35",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छत्यरं ह्रदम् । तन्मनसाऽत्येति । तमृत्वा संप्रतिविदो मज्जन्ति ॥"
@@ -337,6 +385,7 @@
     {
       "ref": "1.36",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छति मुहूर्तान् यष्टिहान् । तेऽस्मादपद्रवन्ति ॥"
@@ -346,6 +395,7 @@
     {
       "ref": "1.37",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छति विरजा नदीम् । तां मनसैवात्येति । तत् सुकृतदुष्कृते धूनुते । तस्य प्रिया ज्ञातयः सुकृतमुपयन्ति । अप्रिया दुष्कृतम् ॥"
@@ -355,6 +405,7 @@
     {
       "ref": "1.38",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यथा रथेन धावन् रथचक्रे पर्यवेक्षते । एवमहोरात्रे पर्यवेक्षते । एवं सुकृतदुष्कृते । सर्वाणि च द्वन्द्वानि ॥"
@@ -364,6 +415,7 @@
     {
       "ref": "1.39",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स एष विसुकृतो विदुष्कृतो ब्रह्म विद्वान् ब्रह्मैवाभिप्रैति ॥"
@@ -373,6 +425,7 @@
     {
       "ref": "1.40",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छति तिल्यं वृक्षम् । तं ब्रह्मगन्धः प्रविशति । स आगच्छति सालज्यं संस्थानम् । तं ब्रह्मरसः प्रविशति । स आगच्छति अपराजितमायतनम् । तं ब्रह्मतेजः प्रविशति । स आगच्छति इन्द्रप्रजापती द्वारगोपौ । तावस्मादपद्रवतः । स आगच्छति विभुप्रमितम् । तं ब्रह्मयशः प्रविशति ॥"
@@ -382,6 +435,7 @@
     {
       "ref": "1.41",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छति विचक्षणामासन्दीम् । वृहद्रथन्तरे सामनी पूर्वौ पादौ श्यैतनौधसे चापरौ पादौ । वैरूपवैराजे शाक्वररैवते तिरश्ची । सा प्रज्ञा । प्रज्ञया हि विपश्यति ॥"
@@ -391,6 +445,7 @@
     {
       "ref": "1.42",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स आगच्छत्यमितौजसं पर्यङ्कम् । स प्राणः ॥"
@@ -400,6 +455,7 @@
     {
       "ref": "1.43",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य भूतं च भविष्यञ्च पूर्वौ पादौ । श्रीश्च इरा चापरौ ॥"
@@ -409,6 +465,7 @@
     {
       "ref": "1.44",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "वृहद्रथन्तरे अनूच्ये ॥"
@@ -418,6 +475,7 @@
     {
       "ref": "1.45",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "भद्रयज्ञायज्ञीये शीर्षण्ये ॥"
@@ -427,6 +485,7 @@
     {
       "ref": "1.46",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "ऋचश्च सामानि च प्राचीनाततम् ॥"
@@ -436,6 +495,7 @@
     {
       "ref": "1.47",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यजूंषि तिरश्चीनानि ॥"
@@ -445,6 +505,7 @@
     {
       "ref": "1.48",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सोमांशव उपस्तरणम् ॥"
@@ -454,6 +515,7 @@
     {
       "ref": "1.49",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "उद्गीथ उपश्रीः ॥"
@@ -463,6 +525,7 @@
     {
       "ref": "1.50",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "श्रीरुपबर्हणम् ॥"
@@ -472,6 +535,7 @@
     {
       "ref": "1.51",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मिन् ब्रह्मास्ते । तमित्थंवित् पादेनैवाग्र आरोहति । तं ब्रह्माह । कोऽसीति । तं प्रतिब्रूयात् ॥"
@@ -481,6 +545,7 @@
     {
       "ref": "1.52",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "ऋतुरस्म्यार्तवोऽस्मि ॥"
@@ -490,6 +555,7 @@
     {
       "ref": "1.53",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "आकाशाद्योनेः संभूतो भयायैतत् संवत्सरस्य तेजोभूतस्य भूतस्य भूतस्यात्मा त्वमात्माऽसि । यस्त्वमसि सोऽहमस्मीति ॥"
@@ -499,6 +565,7 @@
     {
       "ref": "1.54",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "आत्मासीति ॥"
@@ -508,6 +575,7 @@
     {
       "ref": "1.55",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तमाह कोऽहमस्पीति ॥"
@@ -517,6 +585,7 @@
     {
       "ref": "1.56",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सत्यपिति ब्रूयात् ॥"
@@ -526,6 +595,7 @@
     {
       "ref": "1.57",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "किं तत् । यत् सत्यमिति ॥"
@@ -535,6 +605,7 @@
     {
       "ref": "1.58",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यदन्यत् देवेभ्यश्च प्राणेभ्यश्च । तत् सत् । अथ यत् देवाश्च प्राणाश्च । तत् सत्यम् । तदेतया वाचाऽभिव्याह्रियते सत्यमिति । एतावदिदम् । सर्वमिदम् । सर्वपस्मीत्येवैनं तदाह ॥"
@@ -544,6 +615,7 @@
     {
       "ref": "1.59",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तमाह केन मे पौस्नानि नामान्याप्नोषीति । प्राणेनेति ब्रूयात् । केन स्त्रीनामानीति । वाचेति । केन नपुंसकनामानीति । मनसेति ॥"
@@ -553,6 +625,7 @@
     {
       "ref": "1.60",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "केन गन्धानिति घ्राणेनेति ॥"
@@ -562,6 +635,7 @@
     {
       "ref": "1.61",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "केन रूपाणीति । चक्षुषेति । केन शब्दानिति । श्रोत्रेणेति । केन रसानिति । जिह्वयेति । केन कर्माणीति हस्ताभ्यामिति । केन सुखदुःखे इति । शरीरेणेति ॥"
@@ -571,6 +645,7 @@
     {
       "ref": "1.62",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "केनाऽऽनन्दं रतिं प्रजातिमिति । उपस्थेनेति ॥"
@@ -580,6 +655,7 @@
     {
       "ref": "1.63",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "केनेत्या इति । पादाभ्यामिति ॥"
@@ -589,6 +665,7 @@
     {
       "ref": "1.64",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "केन धियो विज्ञातव्यं कामानिति ॥"
@@ -598,6 +675,7 @@
     {
       "ref": "1.65",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "प्रज्ञयेति ब्रूयात् ॥"
@@ -607,6 +685,7 @@
     {
       "ref": "1.66",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तमाह आपो वै खलु मे ह्यसावयं ते लोक इति ॥"
@@ -616,6 +695,7 @@
     {
       "ref": "1.67",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सा या ब्रह्मणो जितिः या व्यष्टिः । तां जितिं जयति तां व्यष्टिं व्यश्नुते । य एवं वेद य एवं वेद ॥"
@@ -643,15 +723,16 @@
         "ref": "1.1",
         "content": {
           "sanskrit": {
-            "devanagari": "अतसीगुच्छसच्छायमञ्चितोरस्स्थलं श्रिया।\nअञ्जनाचलशृङ्गारमञ्जलिर्मम गाहताम् ।।\n\n\n\nव्यासं लक्ष्मणयोगीन्द्रं प्रणम्यान्यान् गुरूनपि ।\nकौषीतकि(की)श्रुतिव्याख्यां करवाणि यथामति ।।\n\nअर्चिरादिगति तत्प्राप्यदेशविशेष – तद्विशिष्टब्रह्मानुभवप्रकारोपदेशाय आख्यायिकेयमारभ्यते – **चित्रो ह……वव्रे। **नाम्ना चित्रः गार्ग्यस्यापत्यं गार्ग्यायणिः क्षत्रियः आरुणिं गौतमं** याजनाय प्रार्थितवान् इत्यर्थः ।।"
+            "devanagari": "अतसीगुच्छसच्छायमञ्चितोरस्स्थलं श्रिया।\nअञ्जनाचलशृङ्गारमञ्जलिर्मम गाहताम् ।।\n\nव्यासं लक्ष्मणयोगीन्द्रं प्रणम्यान्यान् गुरूनपि ।\nकौषीतकि(की)श्रुतिव्याख्यां करवाणि यथामति ।।\n\nअर्चिरादिगति तत्प्राप्यदेशविशेष – तद्विशिष्टब्रह्मानुभवप्रकारोपदेशाय आख्यायिकेयमारभ्यते – **चित्रो ह……वव्रे। **नाम्ना चित्रः गार्ग्यस्यापत्यं गार्ग्यायणिः क्षत्रियः आरुणिं गौतमं** याजनाय प्रार्थितवान् इत्यर्थः ।।"
           }
         },
         "references": [
           {
-            "start": 137,
-            "end": 139,
+            "start": 135,
+            "end": 137,
             "display_text": "की",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -728,6 +809,7 @@
             "end": 398,
             "display_text": "**ब.सू. ३-१-१२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -738,6 +820,7 @@
             "end": 699,
             "display_text": "**ब.सू. ३-१-१३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -748,6 +831,7 @@
             "end": 881,
             "display_text": "**कठ.उ. २-६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -758,6 +842,7 @@
             "end": 959,
             "display_text": "**ब्र.सू. ३-१-१४**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -768,6 +853,7 @@
             "end": 1020,
             "display_text": "**वि.पु. ३-५-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -778,6 +864,7 @@
             "end": 1077,
             "display_text": "**ब.सू. ३-१-१५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -788,6 +875,7 @@
             "end": 1241,
             "display_text": "**ब.सू. ३-१-१६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -798,6 +886,7 @@
             "end": 1463,
             "display_text": "**ब्र.सू. ३-१-१७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -808,6 +897,7 @@
             "end": 1707,
             "display_text": "**छां.उ. ५-१०-१-३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -818,6 +908,7 @@
             "end": 2060,
             "display_text": "**ब्र.सू. ३-१-१८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -828,6 +919,7 @@
             "end": 2171,
             "display_text": "**छां.उ. ५-१०-८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -838,6 +930,7 @@
             "end": 2314,
             "display_text": "**छां.उ. ५-१०-८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -848,6 +941,7 @@
             "end": 2424,
             "display_text": "**ब्र.सू. ३-१-१९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -858,6 +952,7 @@
             "end": 2565,
             "display_text": "**ब.सू. ३-१-२०**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -868,6 +963,7 @@
             "end": 2662,
             "display_text": "**छां.उ. ६-३-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -878,6 +974,7 @@
             "end": 2936,
             "display_text": "**ब.सू. ३-१-२१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -898,6 +995,7 @@
             "end": 165,
             "display_text": "**धा.पा. ४८८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -926,6 +1024,7 @@
             "end": 401,
             "display_text": "**छां.उ. ५-१०-५,६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -936,6 +1035,7 @@
             "end": 621,
             "display_text": "**छा.उ, ५-१०-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -964,6 +1064,7 @@
             "end": 458,
             "display_text": "**पा.सू. ७-१-३९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -984,6 +1085,7 @@
             "end": 227,
             "display_text": "**मातरि मा निषिक्तम्**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1028,6 +1130,7 @@
             "end": 405,
             "display_text": "**ऋग्वेद.सं. ४-२६-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1056,6 +1159,7 @@
             "end": 233,
             "display_text": "**छां.उ. ५-१०-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1066,6 +1170,7 @@
             "end": 523,
             "display_text": "**छा.उ. ४-१५-५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1076,6 +1181,7 @@
             "end": 1288,
             "display_text": "**बृ.उ. ७-१०-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1086,6 +1192,7 @@
             "end": 2282,
             "display_text": "**ब्र.सू. ४-३-३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1096,6 +1203,7 @@
             "end": 2708,
             "display_text": "**छां.उ. ४-१५-५,६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1116,6 +1224,7 @@
             "end": 122,
             "display_text": "**छां.उ. ८-५-३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1144,6 +1253,7 @@
             "end": 85,
             "display_text": "**छां.उ. ८-५-३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1164,6 +1274,7 @@
             "end": 95,
             "display_text": "**अ.को. २-२-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1184,6 +1295,7 @@
             "end": 43,
             "display_text": "**छां.उ. ८-५-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1212,6 +1324,7 @@
             "end": 123,
             "display_text": "**छां.उ. ८-५-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1296,6 +1409,7 @@
             "end": 458,
             "display_text": "**छां.उ. ८-१३-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1306,6 +1420,7 @@
             "end": 552,
             "display_text": "**शाट्यायनीयम्**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1316,6 +1431,7 @@
             "end": 770,
             "display_text": "**ब्र.सू. ३-३-२७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1326,6 +1442,7 @@
             "end": 1070,
             "display_text": "**छा.उ.६-१४-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1336,6 +1453,7 @@
             "end": 1122,
             "display_text": "**ब्र.सू. ३-३-२८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1346,6 +1464,7 @@
             "end": 1369,
             "display_text": "**ब्र.सू. ३-३-२९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1356,6 +1475,7 @@
             "end": 1679,
             "display_text": "**ब्र.सू.३-३-३०**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1366,6 +1486,7 @@
             "end": 2202,
             "display_text": "**ब.सू. ३-३-३१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1376,6 +1497,7 @@
             "end": 2775,
             "display_text": "**ब्र.सू. ४-१-१३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1516,6 +1638,7 @@
             "end": 124,
             "display_text": "**छां.उ. ५-१०-५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1526,6 +1649,7 @@
             "end": 209,
             "display_text": "**ब.सू. ३-१-२७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1536,6 +1660,7 @@
             "end": 668,
             "display_text": "**वि.पु.६-७-१९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1612,6 +1737,7 @@
             "end": 61,
             "display_text": "**छा.उ. ८-१२-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1672,6 +1798,7 @@
             "end": 191,
             "display_text": "**मुं.उ. ३-१-३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1682,6 +1809,7 @@
             "end": 673,
             "display_text": "**ब्र.सू. ३-३-२९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1692,6 +1820,7 @@
             "end": 732,
             "display_text": "**ब्र.सू. ३-३-३०**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1702,6 +1831,7 @@
             "end": 871,
             "display_text": "**प्रश्न.उ. ६-५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1712,6 +1842,7 @@
             "end": 1155,
             "display_text": "**प्रश्न.उ. ६-५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1722,6 +1853,7 @@
             "end": 1200,
             "display_text": "**ब्र.सू. ४-२-१५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1732,6 +1864,7 @@
             "end": 1335,
             "display_text": "**ब्र.सू. ३-३-३२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1742,6 +1875,7 @@
             "end": 1552,
             "display_text": "**छां.उ. ५-१०-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1752,6 +1886,7 @@
             "end": 1728,
             "display_text": "**भ.गी. ८-२६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1762,6 +1897,7 @@
             "end": 2261,
             "display_text": "**बृ.उ. ६-४-२२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1772,6 +1908,7 @@
             "end": 2466,
             "display_text": "**ब.सू. ३-३-३८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1782,6 +1919,7 @@
             "end": 2799,
             "display_text": "**ब्र.सू. ३-३-३७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1792,6 +1930,7 @@
             "end": 2916,
             "display_text": "**ऐ.आर. २-२-४**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1802,6 +1941,7 @@
             "end": 2987,
             "display_text": "**ब.सू. ४-१-५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1812,6 +1952,7 @@
             "end": 4315,
             "display_text": "**कठ.उ. ६-१६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1822,6 +1963,7 @@
             "end": 4447,
             "display_text": "**छां.उ. ७-२६-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1832,6 +1974,7 @@
             "end": 4639,
             "display_text": "**छां.उ. ७-२६-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1842,6 +1985,7 @@
             "end": 4892,
             "display_text": "**छां.उ. ८-१२-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1852,6 +1996,7 @@
             "end": 5136,
             "display_text": "**छा.उ.८-१२-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1862,6 +2007,7 @@
             "end": 5371,
             "display_text": "**छो.3.६-१४-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1872,6 +2018,7 @@
             "end": 5522,
             "display_text": "**छा.उ. ६-१५-२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1882,6 +2029,7 @@
             "end": 5760,
             "display_text": "**बृ.उ.६-४-८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1892,6 +2040,7 @@
             "end": 5843,
             "display_text": "**ब.सू.४-२-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1902,6 +2051,7 @@
             "end": 6033,
             "display_text": "**ब.सू. ४-३-६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1912,6 +2062,7 @@
             "end": 6131,
             "display_text": "**अ.सू. ४-३-११**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1922,6 +2073,7 @@
             "end": 6301,
             "display_text": "**ब्र.सू. ३-१-९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1932,6 +2084,7 @@
             "end": 6354,
             "display_text": "**अ.सू.३-१-११**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1942,6 +2095,7 @@
             "end": 6415,
             "display_text": "**ब्र.सू. १-४-२१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1952,6 +2106,7 @@
             "end": 6466,
             "display_text": "**ब्र.सू. १-४-२२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1962,6 +2117,7 @@
             "end": 6520,
             "display_text": "**अ.सू. ३-४-४४**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1972,6 +2128,7 @@
             "end": 6585,
             "display_text": "**अ.सू. ३-४-४५**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1982,6 +2139,7 @@
             "end": 6695,
             "display_text": "**ब्र.सू.४-३-६**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -1992,6 +2150,7 @@
             "end": 6837,
             "display_text": "**ब्र.सू. ४-४-८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2002,6 +2161,7 @@
             "end": 6887,
             "display_text": "**ब्र.सू. ४-४-१०**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2012,6 +2172,7 @@
             "end": 6940,
             "display_text": "**ब्र.सू. ४-४-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2022,6 +2183,7 @@
             "end": 6994,
             "display_text": "**ब्र.सू. ४-४-१२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2032,6 +2194,7 @@
             "end": 7051,
             "display_text": "**ब्र.सू. ४-४-२२**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2042,6 +2205,7 @@
             "end": 7134,
             "display_text": "**ब्र.सू. ४-४-८**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2052,6 +2216,7 @@
             "end": 7351,
             "display_text": "**छां.उ. ८-७-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2062,6 +2227,7 @@
             "end": 7491,
             "display_text": "**बृ.उ. ६-५-१३**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2072,6 +2238,7 @@
             "end": 7736,
             "display_text": "**ब्र.सू. ४-४-७**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2082,6 +2249,7 @@
             "end": 7836,
             "display_text": "**छां.उ. ३-१२-१**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -2092,6 +2260,7 @@
             "end": 8178,
             "display_text": "**ब्र.सू. ४-४-९**",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

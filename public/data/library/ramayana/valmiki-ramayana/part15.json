@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 15,
@@ -8,6 +8,7 @@
     {
       "ref": "1.17.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्रत्वं तु गते विष्णौ राज्ञस्तस्य महात्मनः ।\nउवाच देवताः सर्वाः स्वयम्भूर्भगवानिदम् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.17.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सत्यसन्धस्य वीरस्य सवेषां नो हितैषिणः ।\nविष्णोः सहायान् बलिनः सृजध्वं कामरूपिणः ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.17.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मायाविदश्च शूरांश्च वायुवेगसमान् जवे ।\nनयज्ञान् बुद्धिसम्पन्नान् विष्णुतुल्यपराक्रमान् ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.17.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "असंहार्यानुपायज्ञान् सिंहसंहननान्वितान् ।\nसर्वास्त्रगुणसम्पन्नानमृतप्राशनानिव ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.17.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अप्सरस्सु च मुख्यासु गन्धर्वीणां तनूषु च ।\nसृजध्वं हरिरूपेण पुत्रांस्तुल्यपराक्रमान् ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.17.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्वमेव मया सृष्टो जाम्बवानृक्षपुङ्गवः ।\nजृम्भमाणस्य सहसा मम वक्त्रादजायत ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.17.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते तथोक्ता भगवता तत् प्रतिश्रुत्य शासनम् ।\nजनयामासुरेवं ते पुत्रान् वानररूपिणः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.17.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऋषयश्च महात्मानः सिद्धविद्याधरोरगाः ।\nचारणाश्च सुतान्वीरान् ससृजुर्वनचारिणः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.17.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वानरन्द्र महेन्द्राभमिन्द्रो वालिनमूर्जितम् ।\nसुग्रीवं जनयामास तपनस्तपतां वरः ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.17.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बृहस्पतिस्त्वजनयत्तारं नाम महाहरिम् ।\nसर्ववानरमुख्यानां बुद्धिमन्तमनुत्तमम् ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.17.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धनदस्य सुतः श्रीमान् वानरो गन्धमादनः ।\nविश्वकर्मा त्वजनयन्नल नाम महाहरिम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.17.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पावकस्य सुतः श्रीमान्नीलो ऽग्निसदृशप्रभः ।\nतेजसा यशसा वीर्यादत्यरिच्यत वानरान् ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.17.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रूपद्रविणसम्पन्ना वश्विनौ रूपसम्मतौ ।\nमैन्दं च द्विविदं चैव जनयामासतुः स्वयम् ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.17.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वरुणोप जनयामास सुषेणं नाम वानरम् ।\nशरमं जनयामास पर्जन्यस्तु महाबलम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.17.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मारुतस्यात्मजः श्रीमान् हनुमान्नाम वानरः ।\nवज्रसंहननोपेतो वैनतेयसमो जवे ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.17.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते सृष्टा बहुसाहस्रा दशग्रीववधे गताः ।\nअप्रमेयबला वीरा विक्रान्ताः कामरूपिणः ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.17.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मेरुमन्दरसङ्काशा वपुष्मन्तो महाबलाः ।\nऋक्षवानरगोपुच्छाः क्षिप्रमेवाभिजज्ञिरे ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.17.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्य देवस्य यद्रूपं वेषो यश्च पराक्रमः ।\nअजायत समस्तेन तस्य तस्य सुतः पृथक् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.17.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गोलांगुलीषु चोत्पन्नाः केचित्सम्मतविक्रमाः ।\nऋक्षीषु च तथा जाता वानराः किन्नरीषु च ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.17.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवा महर्षिगन्धर्वाः तार्क्ष्या यक्षा यशस्विनः ।\nनागाः किम्पुरुषाश्चैव सिद्धविद्याधरोरगाः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.17.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बहवो जनयामासुर्हृष्टास्तत्र सहस्रशः ।\nवानरान् सुमहाकायान् सर्वान् वै वनचारिणः ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.17.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अप्सरस्सु च मुख्यासु तथा विद्याधरीषु च ।\nनागकन्यासु च तथा गन्धर्वीणां तनूषु च ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.17.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कामरूपबलोपेता यथाकामं विचारिणः ।\nसिंहशार्दूलसदृशा दर्षेण च बलेन च ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.17.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शिलाप्रहरणाः सर्वे सर्वे पादपयोधिनः ।\nनखदंष्ट्रायुधाः सर्वे सर्वे सर्वास्त्रकोविदाः ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.17.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विचालयेयुः शैलेन्द्रान् भेदयेयुः स्थिरान् द्रुमान् ।\nक्षोभयेयुश्च वेगेन समुद्रं सरितांपतिम् ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.17.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दारयेयुः क्षितिं पद्भ्यामाप्लवेयुर्महार्णवम् ।\nनभःस्थलं विशेयुश्च गृह्णीयुरपि तोयदान् ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.17.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गृह्णीयुपरि मातङ्गान् मत्तान् प्रव्रजतो वने ।\nनर्दमानाश्च नादेन पातयेयुर्विहङ्गमान् ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.17.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ईदृशानां प्रसूतानि हरीणां कामरूपिणाम् ।\nशतं शतसहस्राणि यूथपानां महात्मनाम् ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "1.17.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते प्रधानेषु यूथेषु हरीणां हरियूथपाः ।\nबभूवुर्यूथप श्रेष्ठा वीरांश्चाजनयन् हरीन् ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "1.17.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अन्ये ऋक्षवतः प्रस्थानुपतस्थुः सहस्रशः ।\nअन्ये नानाविधान् शैलान् काननानि च भेजिरे ॥"
@@ -278,6 +308,7 @@
     {
       "ref": "1.17.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भ्रातरावुपतस्थुस्ते सर्व एव हरीश्वराः ।\nनलं नीलं हनूमन्तमन्यांश्च हरियूथपान् ॥"
@@ -287,6 +318,7 @@
     {
       "ref": "1.17.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते तार्क्ष्यबलसम्पन्नाः सर्वे युद्धविशारदाः ।\nविचरन्तो ऽर्दयन् दर्पात्सिंहव्याघ्रमहोरगान् ॥"
@@ -296,6 +328,7 @@
     {
       "ref": "1.17.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तांश्च सर्वान् महाबाहुर्वाली विपुलविक्रमः ।\nजुगोप भुजवीर्येण ऋक्षगोपुच्छवानरान् ॥"
@@ -305,6 +338,7 @@
     {
       "ref": "1.17.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तैरियं पृथिवी शूरैः सपर्वतवनार्णवा ।\nकीर्णा विविधसंस्थानैर्नानाव्यञ्जनलक्षणैः ॥"
@@ -314,6 +348,7 @@
     {
       "ref": "1.17.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तैर्मेघवृन्दाचलकूटकल्पैर्महाबलैर्वानरयूथपालैः ।\nबभूव भूर्भीमशरीररूपैः समावृता रामसहायहेतोः ॥"

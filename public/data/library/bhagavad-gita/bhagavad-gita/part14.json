@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "bhagavad-gita",
   "edition_id": "bhagavad-gita",
   "part_num": 14,
@@ -8,6 +8,7 @@
     {
       "ref": "13.1",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "इदं शरीरं कौन्तेय क्षेत्रमित्यभिधीयते ।\nएतद्यो वेत्ति तं प्राहुः क्षेत्रज्ञ इति तद्विदः"
@@ -18,6 +19,7 @@
     {
       "ref": "13.2",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "क्षेत्रक्षेत्रज्ञयोर्ज्ञानं यत्तज्ज्ञानं मतं मम\nक्षेत्रज्ञं चापि मां विद्धि सर्वक्षेत्रेषु भारत ।"
@@ -27,6 +29,7 @@
     {
       "ref": "13.3",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "स च यो यत्प्रभावश्च तत्समासेन मे शृणु\nतत्क्षेत्रं यच्च यादृक्च यद्विकारि यतश्च यत् ।"
@@ -36,6 +39,7 @@
     {
       "ref": "13.4",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मसूत्रपदैश्चैव हेतुमद्भिर्विनिश्चितैः\nऋषिभिर्बहुधा गीतं छन्दोभिर्विविधैः पृथक् ।"
@@ -45,6 +49,7 @@
     {
       "ref": "13.5",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रियाणि दशैकं च पञ्च चेन्द्रियगोचराः\nमहाभूतान्यहङ्कारो बुद्धिरव्यक्तमेव च ।"
@@ -54,6 +59,7 @@
     {
       "ref": "13.6",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एतत्क्षेत्रं समासेन सविकारमुदाहृतम्\nइच्छा द्वेषः सुखं दुःखं संघातश्चेतनाधृतिः ।"
@@ -63,6 +69,7 @@
     {
       "ref": "13.7",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आचार्योपासनं शौचं स्थैर्यमात्मविनिग्रहः\nअथ क्षेत्रकार्येष्वात्मज्ञानसाधनतयोपादेया गुणाः प्रोच्यन्ते –\nअमानित्वमदम्भित्वमहिंसा क्षान्तिरार्जवम्।"
@@ -72,6 +79,7 @@
     {
       "ref": "13.8",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "जन्ममृत्युजराव्याधिदुःखदोषानुदर्शनम्\nइन्द्रियार्थेषु वैराग्यमनहङ्कार एव च ।"
@@ -81,6 +89,7 @@
     {
       "ref": "13.9",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नित्यं च समचित्तत्वमिष्टानिष्टोपपत्तिषु\nअसक्तिरनभिष्वङ्गः पुत्रदारगृहादिषु ।"
@@ -90,6 +99,7 @@
     {
       "ref": "13.10",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "विविक्तदेशसेवित्वमरतिर्जनसंसदि\nमयि चानन्ययोगेन भक्तिरव्यभिचारिणी ।"
@@ -99,6 +109,7 @@
     {
       "ref": "13.11",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एतज्ज्ञानमिति प्रोक्तमज्ञानं यदतोऽन्यथा\nअध्यात्मज्ञाननित्यत्वं तत्त्वज्ञानार्थचिन्तनम् ।"
@@ -108,6 +119,7 @@
     {
       "ref": "13.12",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अनादि मत्परं ब्रह्म न सत्तन्नासदुच्यते\nअथ एतद्यो वेत्तीति वेदितृत्वलक्षणेनोक्तस्य क्षेत्रज्ञस्य स्वरूपं विशोध्यते –\nज्ञेयं यत्तत्प्रवक्ष्यामि यज्ज्ञात्वामृतमश्नुते ।"
@@ -117,6 +129,7 @@
     {
       "ref": "13.13",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वतश्श्रुतिमल्लोके सर्वमावृत्य तिष्ठति\nसर्वतः पाणिपादं तत्सर्वतोऽक्षिशिरोमुखम् ।"
@@ -126,6 +139,7 @@
     {
       "ref": "13.14",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "असक्तं सर्वभृच्चैव निर्गुणं गुणभोक्तृ च\nसर्वेन्द्रियगुणाभासं सर्वेन्द्रियविवर्जितम् ।"
@@ -135,6 +149,7 @@
     {
       "ref": "13.15",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सूक्ष्मत्वात्तदविज्ञेयं दूरस्थं चान्तिके च तत्\nबहिरन्तश्च भूतानामचरं चरमेव च ।"
@@ -144,6 +159,7 @@
     {
       "ref": "13.16",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "भूतभर्तृ च तज्ज्ञेयं ग्रसिष्णु प्रभविष्णु च\nअविभक्तं च भूतेषु विभक्तमिव च स्थितम् ।"
@@ -153,6 +169,7 @@
     {
       "ref": "13.17",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "ज्ञानं ज्ञेयं ज्ञानगम्यं हृदि सर्वस्य विष्ठितम्\nज्योतिषामपि तज्ज्योतिस्तमसः परमुच्यते ।"
@@ -162,6 +179,7 @@
     {
       "ref": "13.18",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मद्भक्त एतद्विज्ञाय मद्भावायोपपद्यते\nइति क्षेत्रं तथा ज्ञानं ज्ञेयं चोक्तं समासतः ।"
@@ -171,6 +189,7 @@
     {
       "ref": "13.19",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "विकारांश्च गुणांश्चैव विद्धि प्रकृतिसंभवान्\nप्रकृतिं पुरुषं चैव विद्ध्यनादी उभावपि ।"
@@ -180,6 +199,7 @@
     {
       "ref": "13.20",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "पुरुषः सुखदुःखानां भोक्तृत्वे हेतुरुच्यते\nकार्यकारणकर्तृत्वे हेतुः प्रकृतिरुच्यते ।"
@@ -189,6 +209,7 @@
     {
       "ref": "13.21",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कारणं गुणसङ्गोऽस्य सदसद्योनिजन्मसु\nपुरुषः प्रकृतिस्थो हि भुङ्क्ते प्रकृतिजान् गुणान् ।"
@@ -198,6 +219,7 @@
     {
       "ref": "13.22",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "परमात्मेति चाप्युक्तो देहेऽस्मिन् पुरुषः परः\nउपद्रष्टानुमन्ता च भर्ता भोक्ता महेश्वरः ।"
@@ -207,6 +229,7 @@
     {
       "ref": "13.23",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वथा वर्तमानोऽपि न स भूयोऽभिजायते\nय एनं वेत्ति पुरुषं प्रकृतिं च गुणैस्सह ।"
@@ -216,6 +239,7 @@
     {
       "ref": "13.24",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अन्ये साङ्ख्येन योगेन कर्मयोगेन चापरे\nध्यानेनात्मनि पश्यन्ति केचिदात्मानमात्मना ।"
@@ -225,6 +249,7 @@
     {
       "ref": "13.25",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तेऽपि चातितरन्त्येव मृत्युं श्रुतिपरायणाः\nअन्ये त्वेवमजानन्तः श्रुत्वान्येभ्यश्च उपासते ।"
@@ -234,6 +259,7 @@
     {
       "ref": "13.26",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "क्षेत्रक्षेत्रज्ञसंयोगात्तद्विद्धि भरतर्षभ\nयावत्संजायते किञ्चित्सत्त्वं स्थावरजङ्गमम् ।"
@@ -243,6 +269,7 @@
     {
       "ref": "13.27",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "विनश्यत्स्वविनश्यन्तं यः पश्यति स पश्यति\nसमं सर्वेषु भूतेषु तिष्ठन्तं परमेश्वरम् ।"
@@ -252,6 +279,7 @@
     {
       "ref": "13.28",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "न हिनस्त्यात्मनात्मानं ततो याति परां गतिम्\nसमं पश्यन् हि सर्वत्र समवस्थितमीश्वरम् ।"
@@ -261,6 +289,7 @@
     {
       "ref": "13.29",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यः पश्यति तथात्मानमकर्तारं स पश्यति\nप्रकृत्यैव च कर्माणि क्रियमाणानि सर्वशः ।"
@@ -270,6 +299,7 @@
     {
       "ref": "13.30",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तत एव च विस्तारं ब्रह्म संपद्यते तदा\nयदा भूतपृथग्भावमेकस्थमनुपश्यति ।"
@@ -279,6 +309,7 @@
     {
       "ref": "13.31",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "शरीरस्थोऽपि कौन्तेय न करोति न लिप्यते\nअनादित्वान्निर्गुणत्वात्परमात्मायमव्ययः ।"
@@ -288,6 +319,7 @@
     {
       "ref": "13.32",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वत्रावस्थितो देहे तथात्मा नोपलिप्यते\nयद्यपि निर्गुणत्वान्न करोति, नित्यसंयुक्तो देहस्वभावैः कथं न लिप्यत इत्यत्राह\nयथा सर्वगतं सौक्ष्म्यादाकाशं नोपलिप्यते ।"
@@ -297,6 +329,7 @@
     {
       "ref": "13.33",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "क्षेत्रं क्षेत्री तथा कृत्स्नं प्रकाशयति भारत\nयथा प्रकाशयत्येकः कृत्स्नं लोकमिमं रविः ।"
@@ -306,6 +339,7 @@
     {
       "ref": "13.34",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "भूतप्रकृतिमोक्षं च ये विदुर्यान्ति ते परम्\nक्षेत्रक्षेत्रज्ञयोरेवमन्तरं ज्ञानचक्षुषा ।"
@@ -335,6 +369,7 @@
               "end": 1731,
               "display_text": "१५.१०",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -354,27 +389,30 @@
               "start": 570,
               "end": 578,
               "display_text": "बृ.५.७.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "5.7.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 695,
               "end": 704,
               "display_text": "बृ.५.७.२२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "5.7.22",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 849,
               "end": 854,
               "display_text": "१०.२०",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -385,6 +423,7 @@
               "end": 903,
               "display_text": "१०.३९",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -395,6 +434,7 @@
               "end": 956,
               "display_text": "१०.४२",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -405,6 +445,7 @@
               "end": 1049,
               "display_text": "१०.२१",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -415,6 +456,7 @@
               "end": 1848,
               "display_text": "४.३४",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -424,127 +466,151 @@
               "start": 2171,
               "end": 2177,
               "display_text": "श्वे.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2228,
               "end": 2237,
               "display_text": "श्वे.४.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "4.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2293,
               "end": 2302,
               "display_text": "श्वे.१.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "1.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2432,
               "end": 2440,
               "display_text": "श्वे.६.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2472,
               "end": 2481,
               "display_text": "श्वे.६.१३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.13",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2529,
               "end": 2531,
               "display_text": "ना",
-              "grantha_id": null,
+              "grantha_id": "mahanarayana-upanishad",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2559,
               "end": 2567,
               "display_text": "श्वे.१.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "1.9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2631,
               "end": 2640,
               "display_text": "श्वे.४.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "4.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2677,
               "end": 2685,
               "display_text": "श्वे.१.५",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "1.5",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2746,
               "end": 2754,
               "display_text": "श्वे.१.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "1.6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2809,
               "end": 2817,
               "display_text": "मु.३.१.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "mundaka-upanishad",
+              "edition_id": "mundaka-upanishad",
+              "locator": "3.1.1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
-              "start": 2936,
-              "end": 2956,
-              "display_text": "श्वे.४.५, तै.ना.२२.५",
-              "grantha_id": null,
-              "locator": null,
+              "start": 2941,
+              "end": 2944,
+              "display_text": "४.५",
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "4.5",
               "locator_end": null,
-              "group_id": null,
-              "unresolved": true
+              "group_id": "ref-1",
+              "unresolved": false
+            },
+            {
+              "start": 2946,
+              "end": 2956,
+              "display_text": "तै.ना.२२.५",
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "22.5",
+              "locator_end": null,
+              "group_id": "ref-1",
+              "unresolved": false
             },
             {
               "start": 2995,
               "end": 2998,
               "display_text": "म.उ",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -554,311 +620,375 @@
               "start": 3103,
               "end": 3111,
               "display_text": "श्वे.४.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "4.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
-              "start": 3229,
+              "start": 3234,
+              "end": 3235,
+              "display_text": "७",
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "7",
+              "locator_end": null,
+              "group_id": "ref-2",
+              "unresolved": false
+            },
+            {
+              "start": 3236,
               "end": 3237,
-              "display_text": "भ.गी.७,४",
-              "grantha_id": null,
-              "locator": null,
+              "display_text": "४",
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "4",
               "locator_end": null,
-              "group_id": null,
-              "unresolved": true
+              "group_id": "ref-2",
+              "unresolved": false
             },
             {
-              "start": 3495,
-              "end": 3508,
-              "display_text": "भ.गी.९.७,८,१०",
-              "grantha_id": null,
-              "locator": null,
+              "start": 3500,
+              "end": 3503,
+              "display_text": "९.७",
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "9.7",
               "locator_end": null,
-              "group_id": null,
-              "unresolved": true
+              "group_id": "ref-3",
+              "unresolved": false
+            },
+            {
+              "start": 3504,
+              "end": 3505,
+              "display_text": "८",
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "9.8",
+              "locator_end": null,
+              "group_id": "ref-3",
+              "unresolved": false
+            },
+            {
+              "start": 3506,
+              "end": 3508,
+              "display_text": "१०",
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "9.10",
+              "locator_end": null,
+              "group_id": "ref-3",
+              "unresolved": false
             },
             {
               "start": 3630,
               "end": 3639,
               "display_text": "भ.गी.१४.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "14.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4098,
               "end": 4108,
               "display_text": "बृ.आ.५.७.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "5.7.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4225,
               "end": 4234,
               "display_text": "बृ.५.७.२२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "5.7.22",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4482,
               "end": 4488,
               "display_text": "सुबा.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "subala-upanishad",
+              "edition_id": null,
+              "locator": "7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4612,
               "end": 4618,
               "display_text": "सुबा.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "subala-upanishad",
+              "edition_id": null,
+              "locator": "2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4671,
               "end": 4681,
               "display_text": "य.आ.३.११.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "yajnavalkya-smriti",
+              "edition_id": null,
+              "locator": "3.11.2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4907,
               "end": 4915,
               "display_text": "छा.६.२.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.2.1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 4964,
               "end": 4972,
               "display_text": "छा.६.२.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.2.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5041,
               "end": 5049,
               "display_text": "छा.६.८.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.8.6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5110,
               "end": 5118,
               "display_text": "छा.६.८.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.8.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5245,
               "end": 5248,
               "display_text": "आ.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "aitareya-aranyaka",
+              "edition_id": null,
+              "locator": "6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5401,
               "end": 5409,
               "display_text": "छा.६.३.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.3.2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5524,
               "end": 5527,
               "display_text": "आ.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "aitareya-aranyaka",
+              "edition_id": null,
+              "locator": "6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5622,
               "end": 5630,
               "display_text": "बृ.३.४.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "3.4.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 5901,
               "end": 5909,
               "display_text": "छा.६.३.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.3.2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7187,
               "end": 7195,
               "display_text": "छा.८.१.५",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "8.1.5",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7535,
               "end": 7544,
               "display_text": "मु.१.१.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "mundaka-upanishad",
+              "edition_id": "mundaka-upanishad",
+              "locator": "1.1.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7605,
               "end": 7613,
               "display_text": "श्वे.६.८",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.8",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7645,
               "end": 7654,
               "display_text": "बृ.४.४.१४",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "4.4.14",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7704,
               "end": 7707,
               "display_text": "आ.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "aitareya-aranyaka",
+              "edition_id": null,
+              "locator": "1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7794,
               "end": 7795,
               "display_text": "आ",
-              "grantha_id": null,
+              "grantha_id": "aitareya-aranyaka",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7818,
               "end": 7826,
               "display_text": "छा.६.२.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "6.2.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 7859,
               "end": 7867,
               "display_text": "बृ.३.४.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "3.4.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 8072,
               "end": 8080,
               "display_text": "कठो.४.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "katha-upanishad",
+              "edition_id": "katha-upanishad",
+              "locator": "4.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 8173,
               "end": 8182,
               "display_text": "बृ.४.४.१४",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "4.4.14",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 8346,
               "end": 8355,
               "display_text": "बृ.६.४.१५",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "6.4.15",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 8436,
               "end": 8444,
               "display_text": "बृ.४.४.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "4.4.6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 8496,
               "end": 8502,
               "display_text": "सुबा.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "subala-upanishad",
+              "edition_id": null,
+              "locator": "2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -882,37 +1012,41 @@
               "start": 296,
               "end": 309,
               "display_text": "वि.पु.२.१३.७१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.13.71",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 403,
               "end": 416,
               "display_text": "वि.पु.२.१३.८९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.13.89",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 592,
               "end": 606,
               "display_text": "वि.पु.२.१३.१०३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.13.103",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 758,
               "end": 762,
               "display_text": "वि.स",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -922,37 +1056,41 @@
               "start": 1042,
               "end": 1045,
               "display_text": "आ.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "aitareya-aranyaka",
+              "edition_id": null,
+              "locator": "1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1543,
               "end": 1555,
               "display_text": "ब्र.सू.२.३.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brahma-sutra",
+              "edition_id": "brahma-sutra-sribhashya",
+              "locator": "2.3.1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1631,
               "end": 1644,
               "display_text": "ब्र.सू.२.३.१९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brahma-sutra",
+              "edition_id": "brahma-sutra-sribhashya",
+              "locator": "2.3.19",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1709,
               "end": 1715,
               "display_text": "२–३–४०",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -973,6 +1111,7 @@
               "end": 642,
               "display_text": "२०",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1033,6 +1172,7 @@
               "end": 149,
               "display_text": "अनादि",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1042,91 +1182,100 @@
               "start": 285,
               "end": 291,
               "display_text": "क.२.१८",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "katha-upanishad",
+              "edition_id": "katha-upanishad",
+              "locator": "2.18",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 384,
               "end": 392,
               "display_text": "भ.गी.७.५",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "7.5",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 548,
               "end": 562,
               "display_text": "बृ.आ.७.२.२२.मा",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "7.2.22",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 626,
               "end": 634,
               "display_text": "श्वे.६.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 666,
               "end": 675,
               "display_text": "श्वे.६.१६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.16",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 814,
               "end": 822,
               "display_text": "श्वे.५.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "5.9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1031,
               "end": 1044,
               "display_text": "भ.गी.१४.२६-२७",
-              "grantha_id": null,
-              "locator": null,
-              "locator_end": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "14.26",
+              "locator_end": "14.27",
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1136,
               "end": 1149,
               "display_text": "भ.गी.१८.२६-५४",
-              "grantha_id": null,
-              "locator": null,
-              "locator_end": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "18.26",
+              "locator_end": "18.54",
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1444,
               "end": 1453,
               "display_text": "बृ.३.४.७.",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brihadaranyaka-upanishad",
+              "edition_id": "brihadaranyaka-upanishad",
+              "locator": "3.4.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ],
           "intro": {
@@ -1147,31 +1296,34 @@
               "start": 186,
               "end": 195,
               "display_text": "श्वे.३.१९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "3.19",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 421,
               "end": 429,
               "display_text": "मु.३.१.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "mundaka-upanishad",
+              "edition_id": "mundaka-upanishad",
+              "locator": "3.1.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 488,
               "end": 497,
               "display_text": "भ.गी.१४.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "14.2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1187,11 +1339,12 @@
               "start": 339,
               "end": 348,
               "display_text": "छा.७.२६.२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "7.26.2",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1207,11 +1360,12 @@
               "start": 112,
               "end": 121,
               "display_text": "छा.८.१२.३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "chhandogya-upanishad",
+              "edition_id": "chhandogya-upanishad",
+              "locator": "8.12.3",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1221,19 +1375,7 @@
             "sanskrit": {
               "devanagari": "देवमनुष्यादिभूतेषु सर्वत्र स्थितमात्मवस्तु वेदितृत्वैकाकारतया अविभक्तम् । अविदुषां देवाद्याकारेण ‘अयं देवो मनुष्यः‘ इति विभक्तमिव च स्थितम् । देवोऽहम्, मनुष्योऽहमिति देहसामानाधिकरण्येन अनुसन्धीयमानमपि वेदितृत्वेन देहादर्थान्तरभूतं ज्ञातुं शक्यमिति आदावुक्तमेव, एतद्यो वेत्ति (?) इति, इदानीं प्रकारान्तरैश्च ज्ञातुं शक्यमित्याज भूतभर्तृ चेति। भूतानां पृथिव्यादीनां देहरूपेण संहतानां यद्भर्तृ, तद्भर्तव्येभ्यो भूतेभ्योऽर्थान्तरं ज्ञेयम् अर्थान्तरमिति ज्ञातुं शक्यमित्यर्थः । तथा ग्रसिष्णु अन्नादीनां भौतिकानां ग्रसिष्णु, ग्रस्यमानेभ्यो भूतेभ्यो ग्रसितृत्वेनार्थान्त्रभूतमिति ज्ञातुं शक्यम्। प्रभविष्णु च प्रभवहेतुश्च, ग्रस्तानामन्नादीनामाकारान्तरेण परिणतानां प्रभहेतुः, तेभ्योऽर्थान्तरमिति ज्ञातुं शक्यमित्यर्थः मृतशरीरे ग्रसनप्रभवादीनामदर्शनान्न भूतसंघातरूपं क्षेत्रं ग्रसनप्रभवभरणहेतुरिति निश्चीयते ॥१६॥"
             }
-          },
-          "references": [
-            {
-              "start": 276,
-              "end": 277,
-              "display_text": "?",
-              "grantha_id": null,
-              "locator": null,
-              "locator_end": null,
-              "group_id": null,
-              "unresolved": true
-            }
-          ]
+          }
         },
         {
           "ref": "13.17",
@@ -1256,6 +1398,7 @@
               "end": 104,
               "display_text": "७",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1266,6 +1409,7 @@
               "end": 210,
               "display_text": "१२",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1298,11 +1442,12 @@
               "start": 254,
               "end": 267,
               "display_text": "ब्र.सू.२.३.३३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "brahma-sutra",
+              "edition_id": "brahma-sutra-sribhashya",
+              "locator": "2.3.33",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1332,6 +1477,7 @@
               "end": 357,
               "display_text": "१५.८",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1405,6 +1551,7 @@
               "end": 60,
               "display_text": "२०",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1484,6 +1631,7 @@
               "end": 8027,
               "display_text": "एव",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1512,6 +1660,7 @@
               "end": 1460,
               "display_text": "स भूता",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1531,11 +1680,12 @@
               "start": 502,
               "end": 504,
               "display_text": "वि",
-              "grantha_id": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1559,11 +1709,12 @@
               "start": 1494,
               "end": 1497,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1596,6 +1747,7 @@
               "end": 499,
               "display_text": "शीले स्थिति",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1624,6 +1776,7 @@
               "end": 3555,
               "display_text": "न्वि",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1699,17 +1852,19 @@
               "start": 496,
               "end": 499,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 3389,
               "end": 3394,
               "display_text": "च्चैव",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1729,11 +1884,12 @@
               "start": 2878,
               "end": 2881,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1837,11 +1993,12 @@
               "start": 402,
               "end": 405,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },

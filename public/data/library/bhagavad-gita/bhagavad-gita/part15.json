@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "bhagavad-gita",
   "edition_id": "bhagavad-gita",
   "part_num": 15,
@@ -8,6 +8,7 @@
     {
       "ref": "14.1",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "परं भूयः प्रवक्ष्यामि ज्ञानानां ज्ञानमुत्तमम् ।\nयज्ज्ञात्वा मुनयः सर्वे परां सिद्धिमितो गताः"
@@ -18,6 +19,7 @@
     {
       "ref": "14.2",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "इदं ज्ञानमुपाश्रित्य मम साधर्म्यमागताः ।\nसर्गेऽपि नोपजायन्ते प्रलये न व्यथन्ति च"
@@ -27,6 +29,7 @@
     {
       "ref": "14.3",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मम योनिर्महद्ब्रह्म तस्मिन् गर्भं दधाम्यहम् ।\nसंभवस्सर्वभूतानां ततो भवति भारत"
@@ -36,6 +39,7 @@
     {
       "ref": "14.4",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वयोनिषु कौन्तेय मूर्तयः संभवन्ति याः ।\nतासां ब्रह्म महद्योनिरहं बीजप्रदः पिता"
@@ -45,6 +49,7 @@
     {
       "ref": "14.5",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सत्त्वं रजस्तम इति गुणाः प्रकृतिसंभवाः ।\nनिबध्नन्ति महाबाहो देहे देहिनमव्ययम्"
@@ -54,6 +59,7 @@
     {
       "ref": "14.6",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तत्र सत्त्वं निर्मलत्वात्प्रकाशकमनामयम् ।\nसुखसङ्गेन बध्नाति ज्ञानसङ्गेन चानघ"
@@ -63,6 +69,7 @@
     {
       "ref": "14.7",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "रजो रागात्मकं विद्धि तृष्णासङ्गसमुद्भवम् ।\nतन्निबध्नाति कौन्तेय कर्मसङ्गेन देहिनम्"
@@ -72,6 +79,7 @@
     {
       "ref": "14.8",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तमस्त्वज्ञानजं विद्धि मोहनं सर्वदेहिनाम् ।\nप्रमादालस्यनिद्राभिस्तन्निबध्नाति भारत"
@@ -81,6 +89,7 @@
     {
       "ref": "14.9",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सत्त्वं सुखे सञ्जयति रजः कर्मणि भारत ।\nज्ञानमावृत्य तु तमः प्रमादे सञ्जयत्युत"
@@ -90,6 +99,7 @@
     {
       "ref": "14.10",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "रजस्तमश्चाभिभूय सत्त्वं भवति भारत ।\nरजः सत्त्वं तमश्चैव तमः सत्त्वं रजस्तथा"
@@ -99,6 +109,7 @@
     {
       "ref": "14.11",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वद्वारेषु देहेऽस्मिन् प्रकाश उपजायते ।\nज्ञानं यदा तदा विद्याद्विवृद्धं सत्त्वमित्युत"
@@ -108,6 +119,7 @@
     {
       "ref": "14.12",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "लोभः प्रवृत्तिरारम्भः कर्मणामशमः स्पृहा ।\nरजस्येतानि जायन्ते विवृद्धे भरतर्षभ"
@@ -117,6 +129,7 @@
     {
       "ref": "14.13",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अप्रकाशोऽप्रवृत्तिश्च प्रमादो मोह एव च ।\nतमस्येतानि जायन्ते विवृद्धे कुरुनन्दन"
@@ -126,6 +139,7 @@
     {
       "ref": "14.14",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यदा सत्त्वे प्रवृद्धे तु प्रलयं याति देहभृत् ।\nतदोत्तमविदां लोकानमलान् प्रतिपद्यते"
@@ -135,6 +149,7 @@
     {
       "ref": "14.15",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "रजसि प्रलयं गत्वा कर्मसङ्गिषु जायते ।\nतथा प्रलीनस्तमसि मूढयोनिषु जायते"
@@ -144,6 +159,7 @@
     {
       "ref": "14.16",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कर्मणः सुकृतस्याहुः सात्त्विकं निर्मलं फलम् ।\nरजसस्तु फलं दुःखमज्ञानं तमसः फलम्"
@@ -153,6 +169,7 @@
     {
       "ref": "14.17",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सत्त्वात्संजायते ज्ञानं रजसो लोभ एव च ।\nप्रमादमोहौ तमसो भवतोऽज्ञानमेव च"
@@ -162,6 +179,7 @@
     {
       "ref": "14.18",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "ऊर्ध्वं गच्छन्ति सत्त्वस्था मध्ये तिष्ठन्ति राजसाः ।\nजघन्यगुणवृत्तिस्था अधो गच्छन्ति तामसाः"
@@ -171,6 +189,7 @@
     {
       "ref": "14.19",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नान्यं गुणेभ्यः कर्तारं यदा द्रष्टानुपश्यति ।\nगुणेभ्यश्च परं वेत्ति मद्भावं सोऽधिगच्छति"
@@ -180,6 +199,7 @@
     {
       "ref": "14.20",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "गुणानेतानतीत्य त्रीन् देही देहसमुद्भवान् ।\nजन्ममृत्युजरादुःखैर्विमुक्तोऽमृतमश्नुते"
@@ -189,6 +209,7 @@
     {
       "ref": "14.21",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कैर्लिङ्गैस्त्रिगुणानेतानतीतो भवति प्रभो ।\nकिमाचारः कथं चैतांस्त्रीन् गुणानतिवर्तते"
@@ -199,6 +220,7 @@
     {
       "ref": "14.22",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "प्रकाशं च प्रवृत्तिं च मोहमेव च पाण्डव ।\nन द्वेष्टि संप्रवृत्तानि न निवृत्तानि कांक्षति"
@@ -209,6 +231,7 @@
     {
       "ref": "14.23",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "उदासीनवदासीनो गुणैर्यो न विचाल्यते ।\nगुणा वर्तन्त इत्येव योऽवतिष्ठति नेङ्गते"
@@ -218,6 +241,7 @@
     {
       "ref": "14.24",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "समदुःखसुखः स्वस्थः समलोष्टाश्मकाञ्चनः ।\nतुल्यप्रियाप्रियो धीरस्तुल्यनिन्दात्मसंस्तुतिः"
@@ -227,6 +251,7 @@
     {
       "ref": "14.25",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मानावमानयोस्तुल्यस्तुल्यो मित्रारिपक्षयोः ।\nसर्वारम्भपरित्यागी गुणातीतः स उच्यते"
@@ -236,6 +261,7 @@
     {
       "ref": "14.26",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मां च योऽव्यभिचारेण भक्तियोगेन सेवते ।\nस गुणान् समतीत्यैतान् ब्रह्मभूयाय कल्पते"
@@ -245,6 +271,7 @@
     {
       "ref": "14.27",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मणो हि प्रतिष्ठाहममृतस्याव्ययस्य च ।\nशाश्वतस्य च धर्मस्य सुखस्यैकान्तिकस्य च"
@@ -274,6 +301,7 @@
               "end": 236,
               "display_text": "२१",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -294,6 +322,7 @@
               "end": 157,
               "display_text": "भजन्ते",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -319,6 +348,7 @@
               "end": 161,
               "display_text": "७.४",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -328,17 +358,19 @@
               "start": 376,
               "end": 385,
               "display_text": "मु.१.१.१०",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "mundaka-upanishad",
+              "edition_id": "mundaka-upanishad",
+              "locator": "1.1.10",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 442,
               "end": 445,
               "display_text": "७.५",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -676,6 +708,7 @@
               "end": 520,
               "display_text": "श्रुति",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -695,11 +728,12 @@
               "start": 373,
               "end": 376,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -739,17 +773,19 @@
               "start": 1767,
               "end": 1769,
               "display_text": "के",
-              "grantha_id": null,
+              "grantha_id": "kena-upanishad",
+              "edition_id": "kena-upanishad",
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 2087,
               "end": 2096,
               "display_text": "पुरुषर्षभ",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -760,6 +796,7 @@
               "end": 2134,
               "display_text": "थ",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -770,6 +807,7 @@
               "end": 2178,
               "display_text": "तथा",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -780,6 +818,7 @@
               "end": 2207,
               "display_text": "शुद्धधर्मा",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -790,6 +829,7 @@
               "end": 2264,
               "display_text": "च भवति",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -800,6 +840,7 @@
               "end": 2371,
               "display_text": "वाप्नुते",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -852,6 +893,7 @@
               "end": 909,
               "display_text": "लोकः पूजितपूजकः",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,

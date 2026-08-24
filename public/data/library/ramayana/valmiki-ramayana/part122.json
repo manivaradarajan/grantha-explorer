@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 122,
@@ -8,6 +8,7 @@
     {
       "ref": "2.53.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तं वृक्षं समासाद्य सन्ध्यामन्वास्य पश्चिमाम् ।\nरामो रमयतां श्रेष्ठ इति होवाच लक्ष्मणम् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.53.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अद्येयं प्रथमा रात्रिर्याता जनपदाद्बहिः ।\nया सुमन्त्रेण रहिता तां नोत्कण्ठितुमर्हसि ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.53.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "जागर्त्तव्यमतन्द्रिभ्यामद्यप्रभृति रात्रिषु ।\nयोगक्षेमं हि सीताया वर्तते लक्ष्मणावयोः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.53.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रात्रिं कथञ्चिदेवेमां सौमित्रे वर्तयामहे ।\nउपावर्तामहे भूमावास्तीर्य स्वयमार्जितैः ॥"

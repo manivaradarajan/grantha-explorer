@@ -63,5 +63,6 @@
       "file": "part8.json",
       "first_ref": "8.1.1"
     }
-  ]
+  ],
+  "edition_kind": "commentarial"
 }

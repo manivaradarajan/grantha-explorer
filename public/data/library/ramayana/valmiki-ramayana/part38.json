@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 38,
@@ -22,6 +22,7 @@
     {
       "ref": "1.40.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवतानां वचः श्रुत्वा भगवान् वै पितामहः ।\nप्रत्युवाच सुसन्त्रस्तान् कृतान्तबलमोहितान् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.40.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कापिलं रूपमास्थाय धारयत्यनिशं धराम् ।\nतस्य कोपाग्निना दग्धा भविष्यन्ति नृपात्मजाः ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.40.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पृथिव्याश्चापि निर्भेदो दृष्ट एव सनातनः ।\nसगरस्य च पुत्राणां विनाशो ऽदीर्घजीविनाम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.40.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पितामहवचः श्रुत्वा त्रयस्त्रिंशदरिन्दम ।\nदेवाः परमसंहृष्टाः पुनर्जग्मुर्यथागतम् ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.40.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सगरस्य च पुत्राणां प्रादुरासीन्महात्मनाम् ।\nपृथिव्यां भिद्यमानायां निर्घातसमनिःस्वनः ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.40.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो भित्त्वा महीं सर्वे कृत्वा चापि प्रदक्षिणम् ।\nसहिताः सागराः सर्वे पितरं वाक्यमब्रुवन् ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.40.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "परिक्रान्ता मही सर्वा सत्त्ववन्तश्च सूदिताः ।\nदेवदानवरक्षांसि पिशाचोरगकिन्नराः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.40.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च पश्यामहे ऽश्वं तमश्वहर्तारमेव च ।\nकिं करिष्याम भद्रं ते बुद्धिरत्र विचार्यताम् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.40.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां तद्वचनं श्रुत्वा पुत्राणां राजसत्तमः ।\nसमन्युरब्रवीद्वाक्यं सगरो रघुनन्दन ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.40.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूयः खनत भद्रं वो निर्भिद्य वसुधातलम् ।\nअश्वहर्तारमासाद्य कृतार्थाश्च निवर्तथ ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.40.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पितुर्वचनमासाद्य सगरस्य महात्मनः ।\nषष्टिः पुत्रसहस्राणि रसातलमभिद्रवन् ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.40.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "खन्यमाने ततस्तस्मिन् ददृशुः पर्वतोपमम् ।\nदिशागजं विरूपाक्षं धारयन्तं महीतलम् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.40.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सपर्वतवनां कृत्स्नां पृथिवीं रघुनन्दन ।\nशिरसा धारयामास विरूपाक्षो महागजः ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.40.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदा पर्वणि काकुत्स्थ विश्रमार्थं महागजः ।\nखेदाच्चालयते शीर्षं भूमिकम्पस्तदा भवेत् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.40.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं ते प्रदक्षिणं कृत्वा दिशापालं महागजम् ।\nमानयन्तो हि ते राम जग्मुर्भित्त्वा रसातलम् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.40.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः पूर्वां दिशं भित्त्वा दक्षिणां बिभिदुः पुनः ।\nदक्षिणस्यामपि दिशि ददृशुस्ते महागजम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.40.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महापद्मं महात्मानं सुमहत्पर्वतोपमम् ।\nशिरसा धारयन्तं ते विस्मयं जग्मुरुत्तमम् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.40.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रदक्षिणं कृत्वा सगरस्य महात्मनः ।\nषष्टिः पुत्रसहस्राणि पश्चिमां बिभिदुर्दिशम् ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.40.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पश्चिमायामपि दिशि महान्तमचलोपमम् ।\nदिशागजं सौमनसं ददृशुस्ते महाबलाः ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.40.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तं ते प्रदक्षिणं कृत्वा पृष्ट्वाचापि निरामयम् ।\nखनन्तः समुपक्रान्ता दिशं हैमवतीं ततः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.40.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्तरस्यां रघुश्रेष्ठ ददृशुर्हिमपाण्डरम् ।\nभद्रं भद्रेण वपुषा धारयन्तं महीमिमाम् ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.40.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "समालभ्य ततः सर्वे कृत्वा चैनं प्रदक्षिणम् ।\nषष्टिः पुत्रसहस्राणि बिभिदुर्वसुधातलम् ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.40.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रागुत्तरां गत्वा सागराः प्रथितां दिशम् ।\nरोषादभ्यखनन् सर्वे पृथिवीं सगरात्मजाः ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.40.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते तु सर्वे महात्मानो भीमवेगा महाबलाः ।\nददृशुः कपिलं तत्र वासुदेवं सनातनम् ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.40.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हयं च तस्य देवस्य चरन्तमविदूरतः ।\nप्रहर्षमतुलं प्राप्ताः सर्वे ते रघुनन्दन ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.40.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "खनित्रलाङ्गलधरा नानावृक्षशिलाधराः ।\nअभ्यधावन्त सङ्क्रुद्धास्तिष्ठ तिष्ठेति चाब्रुवन् ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.40.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अस्माकं त्वं हि तुरगं यज्ञीयं हृतवानसि ।\nदुर्मेधस्त्वं हि सम्प्राप्तान् विद्धि नः सगरात्मजान् ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "1.40.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुत्वा तु वचनं तेषां कपिलो रघुनन्दन ।\nरोषेण महता ऽ ऽविष्टो हुङ्कारमकरोत्तदा ॥"
@@ -274,6 +302,7 @@
     {
       "ref": "1.40.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तेनाप्रमेयेन कपिलेन महात्मना ।\nभस्मराशीकृताः सर्वे काकुत्स्थ सगरात्मजाः ॥"

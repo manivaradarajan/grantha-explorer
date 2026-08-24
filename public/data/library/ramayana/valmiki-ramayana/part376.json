@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 376,
@@ -8,6 +8,7 @@
     {
       "ref": "5.60.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य तद्वचनं श्रुत्वा वालिसूनुरभाषत ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "5.60.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयुक्तं तु विना देवीं दृष्टवद्भिश्च वानराः ।\nसमीपं गन्तुमस्माभी राघवस्य महात्मनः ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "5.60.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्टा देवी न चानीता इति तत्र निवेदनम् ।\nअयुक्तमिव पश्यामि भवद्भिः ख्यातविक्रमैः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "5.60.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि नः प्लवने कश्चिन्नापि कश्चित्पराक्रमे ।\nतुल्यः सामरदैत्येषु लोकेषु हरिसत्तमाः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "5.60.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेष्वेवं हतवीरेषु राक्षसेषु हनूमता ।\nकिमन्यदत्र कर्तव्यं गृहीत्वा याम जानकीम् ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "5.60.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमेवं कृतसङ्कल्पं जाम्बवान् हरिसत्तमः ।\nउवाच परमप्रीतो वाक्यमर्थवदर्थवित् ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "5.60.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न तावदेषा मतिरक्षमा नो यथा भवान् पश्यति राजपुत्र ।\nयथा तु रामस्य मतिर्निविष्टा तथा भवान् पश्यतु कार्यसिद्धम् ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमत्सुन्दरकाण्डे षष्टितमः सर्गः ॥ ५.६० ॥\nइति श्रीगोविन्दराविरचिते श्रीरामायणभूषणे श्रृङ्गारतिलकाख्याने सुन्दरकाण्डव्याख्याने षष्टितमः सर्गः ॥ ५.६० ॥"
