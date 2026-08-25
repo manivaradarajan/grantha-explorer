@@ -691,8 +691,19 @@ const RIGHT_MATRAS = new Set([0x093e, 0x0940, 0x094b, 0x094c]);
 const isRightMatra = (codePoint: number): boolean =>
   RIGHT_MATRAS.has(codePoint);
 
-/** Cached grapheme segmenter (node + modern browsers). */
+/** Cached grapheme segmenter (node + modern browsers).
+ *
+ *  `GRANTHA_MATCHER_NO_ICU=1` forces the manual combining-mark scan. This is
+ *  used by the citation-matcher conformance test (citation-repair parity): the
+ *  Python port implements ONLY the manual scan, so the parity contract is
+ *  pinned to that deterministic algorithm on both sides (see
+ *  CITATION_MATCHER_PARITY.md). The ICU path stays the production default — it
+ *  is a strict superset for rendering — but accept/reject parity is defined
+ *  against the manual scan. */
 const graphemeSegmenter = (): Intl.Segmenter | null => {
+  if (process.env.GRANTHA_MATCHER_NO_ICU === "1") {
+    return null;
+  }
   if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
     return new Intl.Segmenter("hi", { granularity: "grapheme" });
   }

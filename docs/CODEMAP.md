@@ -110,3 +110,21 @@ the commentary pane/chrome; does not drive per-block presentation.
   over the committed `public/data/library` tree.
 - `components/FlowReader.test.tsx` — prose vs verse rendering regression.
 - `lib/data.test.ts` — `presentationFor` / `deriveEditionKind` units.
+
+## Citation-repair analysis + matcher parity
+
+- `../grantha-data/tools/lib/grantha_data/citation_repair.py` — the Python
+  citation-repair classifier (verbatim port of `lib/quotedMatch.ts`'s
+  `findQuotedSpan`) + `classify`/`analyze`/`build_overlay`/`apply_overlay`;
+  CLI `citation-repair`.
+- `scripts/citation-matcher-conformance.mjs` — live-TS matcher bridge for the
+  parity conformance test (`GRANTHA_MATCHER_NO_ICU=1` forces the manual
+  grapheme scan).
+- `scripts/convert_structured_md.py` — `_apply_citation_overlay` /
+  `_load_citation_overlay` apply the corrections overlay (grantha-data
+  `data/citation_corrections.yaml`) to emitted references; unmatched keys are
+  loud diagnostics.
+- Parity contract: `docs/CITATION_MATCHER_PARITY.md` (mirror of
+  `../grantha-data/docs/CITATION_MATCHER_PARITY.md`) — any
+  `lib/quotedMatch.ts` constant/rule change must ship the matching Python
+  change + mirrored test.

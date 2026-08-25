@@ -1095,6 +1095,7 @@ def _build_main_passage_entry(
     p: PassageData,
     context: str = "",
     diagnostics: list[dict[str, Any]] | None = None,
+    grantha_id: str = "",
 ) -> dict[str, Any]:
     """Build a main passages entry dict.
 
@@ -1106,6 +1107,7 @@ def _build_main_passage_entry(
         p: The main PassageData.
         context: The citing edition's school namespace ("" = school-neutral).
         diagnostics: Optional collector for reference diagnostics.
+        grantha_id: The citing grantha's id (for the citation overlay key).
 
     Returns:
         Dict matching the v1.0.0 passages entry shape.
@@ -1117,8 +1119,19 @@ def _build_main_passage_entry(
         "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
     refs, passage_diags = _extract_references(p.mula_text, context)
+    refs, unmatched = _apply_citation_overlay(refs, grantha_id, p.ref, "main")
     if refs:
         entry["references"] = refs
+    for uk in unmatched:
+        if diagnostics is not None:
+            diagnostics.append(
+                {
+                    "code": "REF-OVERLAY-UNMATCHED",
+                    "severity": "error",
+                    "passage_ref": p.ref,
+                    "hint": f"overlay key matched no emitted reference: {uk}",
+                }
+            )
     if diagnostics is not None:
         for diag in passage_diags:
             diag["passage_ref"] = p.ref
@@ -1126,6 +1139,75 @@ def _build_main_passage_entry(
     if p.speaker:
         entry["speaker"] = p.speaker
     return entry
+
+
+# Loaded once per process (the overlay file is small and stable).
+_CITATION_OVERLAY_CACHE: tuple[dict[str, dict[str, Any]], list[str]] | None = None
+
+
+def _load_citation_overlay() -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """Load the citation-corrections overlay (empty when absent/empty).
+
+    Returns ``(overlay, unmatched_keys)`` where ``unmatched_keys`` starts empty
+    and is filled only when a converter key fails to match an emitted reference
+    (the apply hook reports it loudly). The overlay lives in grantha-data
+    (``data/citation_corrections.yaml``) and is reached via the grantha_data
+    bootstrap — the type belongs with the data model.
+
+    Returns:
+        A ``(overlay, unmatched)`` pair.
+    """
+    global _CITATION_OVERLAY_CACHE
+    if _CITATION_OVERLAY_CACHE is not None:
+        return _CITATION_OVERLAY_CACHE
+    import grantha_data.citation_repair as citation_repair
+
+    # The overlay lives in the same grantha-data checkout as the bimap: derive
+    # from _tools_lib_dir() (tools/lib → <grantha-data>/data/citation_corrections.yaml).
+    data_dir = _tools_lib_dir().resolve().parent.parent / "data"
+    path = data_dir / "citation_corrections.yaml"
+    overlay: dict[str, dict[str, Any]] = (
+        citation_repair.load_overlay(path) if path.exists() else {}
+    )
+    _CITATION_OVERLAY_CACHE = (overlay, [])
+    return _CITATION_OVERLAY_CACHE
+
+
+def _apply_citation_overlay(
+    refs: list[dict[str, Any]],
+    citing_grantha_id: str,
+    passage_ref: str,
+    passage_type: str,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Apply the citation-corrections overlay to emitted references.
+
+    Overrides only ``locator``/``grantha_id``/``edition_id`` (never
+    ``display_text``, offsets, or the citing prose). Unmatched overlay keys are
+    returned so a dropped/renamed correction is loud, never silent.
+
+    Args:
+        refs: Emitted reference objects.
+        citing_grantha_id: The citing grantha's id (part of the overlay key).
+        passage_ref: The citing passage's ref.
+        passage_type: ``"main"`` or ``"commentary"``.
+
+    Returns:
+        A ``(refs, unmatched_keys)`` pair.
+    """
+    try:
+        import grantha_data.citation_repair as citation_repair
+    except ImportError:
+        return refs, []
+    overlay, _ = _load_citation_overlay()
+    if not overlay:
+        return refs, []
+    return citation_repair.apply_overlay(
+        refs,
+        citing_grantha_id=citing_grantha_id,
+        passage_ref=passage_ref,
+        passage_type=passage_type,
+        overlay=overlay,
+    )
 
 
 def _extract_references(
@@ -1367,7 +1449,7 @@ def build_part_json(
         _build_framing_entry(p, "prefatory") for p in body.prefatory
     ]
     passages = [
-        _build_main_passage_entry(p, context, diagnostics)
+        _build_main_passage_entry(p, context, diagnostics, grantha_id)
         for p in body.passages
         if p.mula_text
     ]
