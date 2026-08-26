@@ -51,12 +51,12 @@ time; activating another reference updates it in place.
   `sourceLookback` (`buildSourceWindow`, `lib/quotedMatch.ts`) into each
   `ReferenceLink`
 - `lib/quotedMatch.ts` — needle→haystack fuzzy quote match (Smith–Waterman local
-  alignment); `buildMatchString` (NFC + strip + whitespace collapse, with
-  original-index map), `extractEnclosedQuote` (delimited **…**/quote-pair span),
-  `findQuotedSpan` returns the haystack span + source-side coordinates;
-  `clampToGraphemeBoundaries` (via `Intl.Segmenter`) prevents splitting a
-  syllable (no dotted circle); `MAX_COVERAGE=0.8` suppresses whole-passage
-  highlights; `MAX_LOOKBACK=60`, `MIN_MATCH_CHARS=10`, `MIN_SIMILARITY=0.7`
+  alignment); `buildMatchString` (NFC + strip + whitespace collapse + virama
+  elision, with original-index map), `extractEnclosedQuote` (delimited **…**/
+  quote-pair span), `findQuotedSpan` returns the haystack span + source-side
+  coordinates; `clampToGraphemeBoundaries` (via `Intl.Segmenter`) prevents
+  splitting a syllable (no dotted circle); `MAX_LOOKBACK=60`,
+  `MIN_MATCH_CHARS=10`, `MIN_SIMILARITY=0.7`
 
 ## Per-block mula presentation (`passage.kind`)
 
