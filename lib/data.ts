@@ -587,20 +587,20 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
         });
       }
 
-        // Nest subcommentaries under their parent commentary.
-        partialGrantha.commentaries = nestSubcommentaries(
-          partialGrantha.commentaries,
-        );
+      // Nest subcommentaries under their parent commentary.
+      partialGrantha.commentaries = nestSubcommentaries(
+        partialGrantha.commentaries,
+      );
 
-        // Edition kind: prefer the declared stamp (build-time derivation,
-        // per-block presentation model IDEA.md); legacy files without it fall
-        // back to deriving from the assembled commentaries.
-        partialGrantha.edition_kind =
-          multiPartMetadata.edition_kind ?? deriveEditionKind(partialGrantha.commentaries);
+      // Edition kind: prefer the declared stamp (build-time derivation,
+      // per-block presentation model IDEA.md); legacy files without it fall
+      // back to deriving from the assembled commentaries.
+      partialGrantha.edition_kind =
+        multiPartMetadata.edition_kind ?? deriveEditionKind(partialGrantha.commentaries);
 
-        // Cache and return the partially assembled grantha.
-        granthaCache.set(cacheKey, partialGrantha);
-        return partialGrantha;
+      // Cache and return the partially assembled grantha.
+      granthaCache.set(cacheKey, partialGrantha);
+      return partialGrantha;
 
       } else if (envelopeResponse.status === 404) {
         throw new Error(`Multi-part grantha ${granthaId} directory found but envelope.json is missing`);
