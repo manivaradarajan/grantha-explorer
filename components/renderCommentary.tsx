@@ -190,8 +190,12 @@ export function renderMulaWithReferences(
   // blank line (a single "\n" separator div) so the raw newline runs in the
   // data (lead/gap/trailing) never compound into visible double/quadruple
   // spacing — the visual rhythm between prose and quoted verse is uniform.
-  // The work's OWN verses (ownVerses, <!-- verse -->) render the same but with
-  // the ``verse-own`` class (semantically distinct from embedded citations).
+  // The work's OWN verses (ownVerses, <!-- verse -->) render with the same
+  // verse-quote treatment (indent, pāda layout, even-line sub-indent) at the
+  // same size as the surrounding prose mūla — identical whether an opening
+  // maṅgala, a closing dedicatory verse, or a chapter's own verse. The
+  // ``verse-own`` class keeps them semantically distinct from embedded
+  // citations.
   // Glue em-dashes and sentence-dandas to their neighbours (length-preserving,
   // so all offsets below stay valid).
   const text = protectLineBreaks(rawText);

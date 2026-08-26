@@ -148,3 +148,29 @@ the commentary pane/chrome; does not drive per-block presentation.
   `../grantha-data/docs/CITATION_MATCHER_PARITY.md`) — any
   `lib/quotedMatch.ts` constant/rule change must ship the matching Python
   change + mirrored test.
+
+## Front matter + category dividers (flow reader)
+
+How prefatory/concluding items decide their treatment, and the divider that
+separates the three content categories. Purely per-item structural — no
+grantha-level "prose text" flag.
+
+- `components/FlowReader.tsx` — the `!isMain` (framing) branch checks
+  `passage.verses` (the `<!-- verse -->` markers): non-empty → the verse-quote
+  treatment via `renderMulaWithReferences`; empty → a centered
+  `.frontmatter-plain` div (each source line its own block). A
+  `categoryDivider` (`.section-divider`) is inserted before any passage whose
+  `passage_type` differs from the immediately preceding sorted passage
+  (prefatory → main → concluding).
+- `components/renderCommentary.tsx` — `renderMulaWithReferences` renders the
+  work's own verses (`<!-- verse -->`, `ownVerses`) as `.verse-quote.verse-own`
+  blocks (indented, prose-mūla-sized, even-pāda sub-indent — the same
+  treatment as embedded citations, semantically distinct), and the interleave
+  blank-line separator counts them as verse boundaries.
+- `app/globals.css` — `.frontmatter-plain` (centered, em-relative 0.9375em,
+  each line its own block), `.verse-own` (semantic; styling from
+  `.verse-quote`), and `.section-divider` (+ `::before`/`::after` hairlines,
+  `.section-divider-dot`), mirroring the chapter-divider idiom.
+- Tests: `components/FlowReader.test.tsx` (plain vs verse-tagged front matter,
+  divider count/placement) and `tests/verse-quote-render.test.tsx` (own-verse
+  verse-quote treatment + even-pāda sub-indent).

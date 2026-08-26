@@ -474,23 +474,56 @@ mark.citation-source-mark {
   display: block;
 }
 /* The work's OWN verses (maṅgala/colophon/authored, <!-- verse -->): rendered
-   with the same .verse-quote treatment (indent, gap, pāda layout) and inherit
-   the surrounding prose typography (.flow-commentary) — both in main paras and
-   framing passages. The class is for semantic distinction, not styling.
-
-   FRAMING passages (prefatory maṅgala/ācāryavandana, concluding colophon):
-   the whole framing block — its prose and its own-verses — sits in the
-   subordinate tier (0.875em, like ṭīkā), since framing material is bookend
-   invocation quieter than the body. Authored own-verses in main paras stay at
-   prose size. --reading-scale still multiplies. To style only the own-verse
-   (not the surrounding framing prose), target .flow-para-row.framing .verse-own
-   instead. */
+   with the same .verse-quote treatment as embedded citations — modest left
+   indent, each pāda on its own line, even pādas (2 & 4) of ≥4-pāda verses
+   sub-indented — at the same size as the surrounding prose mūla (they inherit
+   the enclosing prose typography). Identical wherever they appear (opening
+   maṅgala, closing dedicatory verse, a chapter's own verse). ``.verse-own``
+   is the semantic marker; styling comes from ``.verse-quote`` above. */
 .flow-reader .verse-own {}
-.flow-reader .flow-para-row.framing {
-  font-size: 0.875em;
+/* Plain prefatory/concluding front matter (invocations, title lines,
+   colophons): centered, medium-small serif type — short devotional/
+   declarative formulae that are framing, not the work's running text. Each
+   source line renders as its OWN block (the renderer splits on newlines), so
+   the double-danda lines (e.g. 0.1's two invocations, 253's two-line colophon)
+   always sit on separate lines regardless of CSS white-space handling; the
+   tight line-height holds them together as ONE connected unit. The scale is
+   em-relative (0.9375em ≈ 15px at a 16px base — below the verse tier, closer
+   to body-text scale) so the अ−/अ+ drawer's --reading-scale still multiplies.
+   Ink matches the reading prose's gray-700. Verse-tagged front matter
+   (<!-- verse -->) is NOT affected — it renders via the .verse-quote.verse-own
+   treatment. */
+.flow-reader .frontmatter-plain {
+  text-align: center;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-size: calc(0.9375em * var(--reading-scale, 1));
+  color: #374151; /* text-gray-700 — the reading prose's ink */
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
 }
-.flow-reader .flow-para-row.framing .verse-own {
-  font-size: 0.875em;
+/* Category transition divider: a subtle hairline-dot-hairline rule inserted
+   when the category changes (prefatory → main → concluding). Mirrors the
+   existing chapter-divider idiom (gray-200 1px rules, generous my rhythm)
+   with a centered dot standing in for the chapter label. */
+.flow-reader .section-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 3rem 0;
+}
+.flow-reader .section-divider::before,
+.flow-reader .section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb; /* border-gray-200 */
+}
+.flow-reader .section-divider-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #9ca3af; /* bg-gray-400 */
 }
 /* Even pādas (2 & 4) of a ≥4-pāda verse: a further indent so the metrical
    structure reads at a glance (printed convention). --pada-cont is the extra

@@ -967,6 +967,25 @@ export default function FlowReader({
                   const isMain = passage.passage_type === "main";
                   const section = passage.ref.split(".")[0];
 
+                  // Category transition divider: when this item's category
+                  // differs from the immediately preceding rendered item's,
+                  // insert a subtle hairline+dot divider before it (e.g.
+                  // prefatory_material → main passages → concluding_material).
+                  // Index-based: the sorted passage list is the render order,
+                  // and for vedarthasangraha every item renders.
+                  const prevType =
+                    index > 0 ? passages[index - 1].passage_type : null;
+                  const typeChanged =
+                    prevType !== null && prevType !== passage.passage_type;
+                  const categoryDivider = typeChanged ? (
+                    <div
+                      key={`section-divider-${index}`}
+                      className="section-divider"
+                    >
+                      <span className="section-divider-dot" />
+                    </div>
+                  ) : null;
+
                   // Chapter divider — label from the grantha's own structure_levels,
                   // never hardcoded to "अध्याय" (spec §3.3). Only main passages open
                   // a section, so dividers never precede prefatory/concluding items.
@@ -1001,6 +1020,16 @@ export default function FlowReader({
                     const content = passage.content?.sanskrit?.devanagari;
                     const pRefs = (passage as { references?: Reference[] }).references;
                     const pVerses = (passage as { verses?: { start: number; end: number }[] }).verses;
+                    // Verse-tagged front matter (maṅgala/ācāryavandana, the
+                    // colophon's closing verse) renders with the verse-quote
+                    // treatment (.verse-quote.verse-own) — indented, even pādas
+                    // sub-indented — wrapped in the prose-mūla row classes
+                    // (flow-para-row + flow-commentary) so it carries the same
+                    // left rail and font size as the main prose body. Plain
+                    // front matter (invocations, the title line) renders
+                    // centered via .frontmatter-plain — one boolean, two
+                    // outcomes, no grantha-level flag.
+                    const hasOwnVerse = (pVerses?.length ?? 0) > 0;
                     // The whole-work opening (e.g. the Gita's maṅgalācaraṇa)
                     // lives in commentary.intro, keyed to its label-only
                     // prefatory anchor — the same prefaceAnchor mechanism
@@ -1013,6 +1042,7 @@ export default function FlowReader({
                         : null;
                     return (
                       <Fragment key={`${passage.passage_type}-${passage.ref}`}>
+                        {categoryDivider}
                         <div data-verse-ref={passage.ref} className="px-4 py-8">
                           {prefaceAnchor ? (
                             <p
@@ -1024,25 +1054,43 @@ export default function FlowReader({
                               }}
                             />
                           ) : content ? (
-                            <div className={`flow-para-row framing ${MULA_PRESENTATION.prose.text}`}>
-                              <div className="min-w-0 flex-1">
-                                {renderMulaWithReferences(
-                                  content,
-                                  pRefs,
-                                  {
-                                    currentGranthaId: grantha.grantha_id,
-                                    sourcePassageRef: passage.ref,
-                                    sourceHighlight,
-                                    updateHash,
-                                    availableGranthaIds,
-                                    granthaById,
-                                    granthaIdToTitle: granthaIdToDevanagariTitle,
-                                  },
-                                  undefined,
-                                  pVerses,
-                                )}
+                            hasOwnVerse ? (
+                              <div className={`flow-para-row ${MULA_PRESENTATION.prose.text}`}>
+                                {/* Empty gutter spacer: framing rows carry no
+                                    paragraph number, but reserving the number
+                                    gutter's width makes the verse column land at
+                                    the SAME x as a body paragraph's own-verse
+                                    (e.g. para 252's closing सारासार verse). */}
+                                <span className="flow-para-number" aria-hidden="true" />
+                                <div className="min-w-0 flex-1">
+                                  {renderMulaWithReferences(
+                                    content,
+                                    pRefs,
+                                    {
+                                      currentGranthaId: grantha.grantha_id,
+                                      sourcePassageRef: passage.ref,
+                                      sourceHighlight,
+                                      updateHash,
+                                      availableGranthaIds,
+                                      granthaById,
+                                      granthaIdToTitle: granthaIdToDevanagariTitle,
+                                    },
+                                    undefined,
+                                    pVerses,
+                                  )}
+                                </div>
                               </div>
-                            </div>
+                            ) : (
+                              <div className="frontmatter-plain">
+                                {content
+                                  .split("\n")
+                                  .map((line) => line.trim())
+                                  .filter((line) => line.length > 0)
+                                  .map((line, lineIndex) => (
+                                    <div key={lineIndex}>{stripMarkdown(line)}</div>
+                                  ))}
+                              </div>
+                            )
                           ) : null}
                           {renderSubcommentaries(passage.ref, sourceHighlight)}
                         </div>
@@ -1100,6 +1148,7 @@ export default function FlowReader({
 
                   return (
                     <Fragment key={`${passage.passage_type}-${passage.ref}`}>
+                      {categoryDivider}
                       {divider}
                       <div
                         ref={(el) => setVerseRef(passage.ref, el)}

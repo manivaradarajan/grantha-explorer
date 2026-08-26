@@ -204,19 +204,19 @@ describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
 });
 
 describe("own-verses (<!-- verse -->) rendering", () => {
-  it("renders the work's own verses with the verse-own class (para 134)", () => {
+  it("renders the work's own verses with the verse-quote treatment (para 134)", () => {
     const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
     const p = d.passages.find((x: { ref: string }) => x.ref === "134");
     const html = render(
       <div>{renderMulaWithReferences(p.content.sanskrit.devanagari, p.references, context, undefined, p.verses)}</div>
     );
-    // the authored verse renders as a verse-own block
+    // the authored verse renders as a verse-own block (indented, prose-sized)
     expect(html).toContain('class="verse-quote verse-own"');
     expect(html).toContain("वेदवित्प्रवरप्रोक्तवाक्यन्यायोपबृंहिताः");
     expect(html).toContain("वेदाः साङ्गा हरिं प्राहुर्जगज्जन्मादिकारणम्");
   });
 
-  it("renders prefatory maṅgala with the verse-own class (passage 0.2)", () => {
+  it("renders prefatory maṅgala with the verse-quote treatment (passage 0.2)", () => {
     const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
     const item = d.prefatory_material.find((x: { ref: string }) => x.ref === "0.2");
     const html = render(
@@ -224,5 +224,19 @@ describe("own-verses (<!-- verse -->) rendering", () => {
     );
     expect(html).toContain('class="verse-quote verse-own"');
     expect(html).toContain("अशेषचिदचिद्वस्तुशेषिणे शेषशायिने");
+  });
+
+  it("sub-indents the even pādas of a 4-line own-verse (prefatory 0.3)", () => {
+    const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
+    const item = d.prefatory_material.find((x: { ref: string }) => x.ref === "0.3");
+    const html = render(
+      <div>{renderMulaWithReferences(item.content.sanskrit.devanagari, undefined, context, undefined, item.verses)}</div>
+    );
+    expect(html).toContain('class="verse-quote verse-own"');
+    // 4 pādas, lines 2 & 4 carry the continuation indent (like verse-quotes)
+    expect(html).toContain("परं ब्रह्मैवाज्ञं भ्रमपरिगतं संसरति तत्");
+    expect(html).toContain("परोपाध्यालीढं विवशमशुभस्यास्पदमिति");
+    const cont = html.split("verse-pada-cont").length - 1;
+    expect(cont).toBe(2);
   });
 });

@@ -15,12 +15,28 @@ import { describe, it, expect, afterEach, beforeAll } from "vitest";
 import { act } from "react-dom/test-utils";
 import { createRoot, Root } from "react-dom/client";
 import React from "react";
-import { Grantha, GranthaMetadata } from "@/lib/data";
+import { Grantha, GranthaMetadata, PrefatoryMaterial } from "@/lib/data";
 import FlowReader from "./FlowReader";
 
 const emptyGranthasMeta: GranthaMetadata[] = [];
 
-const makeGrantha = (kind: "Para" | "Shloka"): Grantha => ({
+// Loose framing-item fixture type: FlowReader only reads ref / passage_type /
+// label / content.sanskrit.devanagari / verses from framing passages.
+interface FramingFixture {
+  ref: string;
+  passage_type: "prefatory" | "concluding";
+  label: { devanagari: string };
+  content: { sanskrit: { devanagari: string } };
+  verses?: { start: number; end: number }[];
+}
+
+const makeGrantha = (
+  kind: "Para" | "Shloka",
+  frontMatter: {
+    prefatory?: FramingFixture[];
+    concluding?: FramingFixture[];
+  } = {},
+): Grantha => ({
   grantha_id: "test-grantha",
   edition_id: "test-grantha",
   canonical_title: "टेस्ट",
@@ -38,7 +54,7 @@ const makeGrantha = (kind: "Para" | "Shloka"): Grantha => ({
   structure_levels: [
     { key: kind, scriptNames: { devanagari: kind === "Para" ? "पाठः" : "श्लोकः" } },
   ],
-  prefatory_material: [],
+  prefatory_material: (frontMatter.prefatory ?? []) as PrefatoryMaterial[],
   passages: [
     {
       ref: "1",
@@ -50,7 +66,7 @@ const makeGrantha = (kind: "Para" | "Shloka"): Grantha => ({
       },
     },
   ],
-  concluding_material: [],
+  concluding_material: (frontMatter.concluding ?? []) as PrefatoryMaterial[],
   commentaries: [],
   id: "test-grantha",
   path: "test-grantha",
@@ -156,6 +172,106 @@ describe("FlowReader per-block mula presentation", () => {
     expect(block!.querySelector(".border-l-2")).not.toBeNull();
     // verse kinds keep the print-convention trailing danda number
     expect(text!.textContent).toContain("॥ १॥");
+    cleanUp(root, el);
+  });
+});
+
+describe("FlowReader prefatory/concluding front matter + category dividers", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("renders plain front matter centered (.frontmatter-plain) and verse-tagged front matter as a verse block", async () => {
+    const grantha = makeGrantha("Para", {
+      prefatory: [
+        {
+          ref: "0.1",
+          passage_type: "prefatory",
+          label: { devanagari: "ग्रन्थशीर्षिका" },
+          content: {
+            sanskrit: { devanagari: "॥ श्रीरस्तु ॥\nश्रीभगवद्रामानुजविरचितः वेदार्थसङ्ग्रहः" },
+          },
+        },
+        {
+          ref: "0.2",
+          passage_type: "prefatory",
+          label: { devanagari: "मङ्गलाचरणम्" },
+          content: {
+            sanskrit: { devanagari: "अशेषचिदचिद्वस्तुशेषिणे शेषशायिने ।\nनिर्मलानन्तकल्याणनिधये विष्णवे नमः ॥\n" },
+          },
+          verses: [{ start: 0, end: 73 }],
+        },
+      ],
+      concluding: [
+        {
+          ref: "253",
+          passage_type: "concluding",
+          label: { devanagari: "समापनम्" },
+          content: {
+            sanskrit: { devanagari: "॥ इति श्रीवेदार्थसङ्ग्रहः समाप्तः ॥" },
+          },
+        },
+      ],
+    });
+    const { root, el } = renderInto(<FlowReader {...propsFor(grantha)} />);
+    await act(async () => {});
+    // plain prefatory 0.1 → frontmatter-plain
+    const p01 = el.querySelector<HTMLElement>('[data-verse-ref="0.1"]');
+    expect(p01!.querySelector(".frontmatter-plain")).not.toBeNull();
+    expect(p01!.querySelector(".flow-para-row")).toBeNull();
+    // verse-tagged prefatory 0.2 → the verse-quote treatment, NOT plain
+    const p02 = el.querySelector<HTMLElement>('[data-verse-ref="0.2"]');
+    expect(p02!.querySelector(".frontmatter-plain")).toBeNull();
+    expect(p02!.querySelector(".verse-quote.verse-own")).not.toBeNull();
+    // ...and it sits inside the prose-mūla row so it carries the left rail
+    expect(p02!.querySelector(".flow-para-row .verse-quote.verse-own")).not.toBeNull();
+    // the row reserves the number-gutter width (empty spacer) so the verse
+    // column aligns with a body paragraph's own-verse x-position
+    const gutter = p02!.querySelector(".flow-para-row .flow-para-number");
+    expect(gutter).not.toBeNull();
+    expect(gutter!.textContent).toBe("");
+    // plain concluding 253 → frontmatter-plain
+    const p253 = el.querySelector<HTMLElement>('[data-verse-ref="253"]');
+    expect(p253!.querySelector(".frontmatter-plain")).not.toBeNull();
+    cleanUp(root, el);
+  });
+
+  it("inserts a section-divider only when the category changes", async () => {
+    const grantha = makeGrantha("Para", {
+      prefatory: [
+        {
+          ref: "0.1",
+          passage_type: "prefatory",
+          label: { devanagari: "ग्रन्थशीर्षिका" },
+          content: { sanskrit: { devanagari: "॥ श्रीरस्तु ॥" } },
+        },
+        {
+          ref: "0.2",
+          passage_type: "prefatory",
+          label: { devanagari: "मङ्गलाचरणम्" },
+          content: { sanskrit: { devanagari: "अशेषचिदचिद्वस्तुशेषिणे शेषशायिने ।\nनिर्मलानन्तकल्याणनिधये विष्णवे नमः ॥\n" } },
+          verses: [{ start: 0, end: 73 }],
+        },
+      ],
+      concluding: [
+        {
+          ref: "253",
+          passage_type: "concluding",
+          label: { devanagari: "समापनम्" },
+          content: { sanskrit: { devanagari: "॥ इति श्रीवेदार्थसङ्ग्रहः समाप्तः ॥" } },
+        },
+      ],
+    });
+    const { root, el } = renderInto(<FlowReader {...propsFor(grantha)} />);
+    await act(async () => {});
+    // exactly 2 dividers: before the first main passage (1) and before the
+    // concluding item (253) — never between adjacent prefatory items.
+    const dividers = el.querySelectorAll(".section-divider");
+    expect(dividers.length).toBe(2);
+    // divider precedes [data-verse-ref="1"] (category prefatory → main)
+    expect(dividers[0].nextElementSibling?.getAttribute("data-verse-ref")).toBe("1");
+    // divider precedes [data-verse-ref="253"] (category main → concluding)
+    expect(dividers[1].nextElementSibling?.getAttribute("data-verse-ref")).toBe("253");
     cleanUp(root, el);
   });
 });
