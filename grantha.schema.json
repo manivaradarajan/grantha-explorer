@@ -314,6 +314,19 @@
             "required": ["start", "end"],
             "additionalProperties": false
           }
+        },
+        "verses": {
+          "type": "array",
+          "description": "The work's OWN verses (maṅgala/colophon/authored) within a passage, marked by <!-- verse --> blocks. Half-open offsets into content.sanskrit.devanagari; rendered like verse-quotes but semantically distinct (not embedded citations). Present only when the passage contains own verses.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "integer", "minimum": 0 },
+              "end": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["start", "end"],
+            "additionalProperties": false
+          }
         }
       },
       "required": ["ref", "passage_type"],

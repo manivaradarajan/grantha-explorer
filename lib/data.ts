@@ -50,8 +50,8 @@ export function presentationFor(kind: string): "prose" | "verse" {
     case "Sutra":
       return "verse";
     default: {
-      const exhaustive: never = kind;
-      throw new Error(`Unknown passage kind: ${exhaustive}`);
+      // Any unclassified kind is a data error — never silently "verse".
+      throw new Error(`Unknown passage kind: ${kind}`);
     }
   }
 }
@@ -90,6 +90,10 @@ export interface Passage {
    *  offsets into content.sanskrit.devanagari. The presentation layer
    *  hang-indents each run and pāda-splits long metres. */
   verse_quotes?: { start: number; end: number }[];
+  /** The text's OWN verses (maṅgala/colophon/authored), marked ``<!-- verse -->``.
+   *  Parallel to verse_quotes; rendered the same but semantically distinct
+   *  (not embedded citations). */
+  verses?: { start: number; end: number }[];
   part_id?: string; // Changed from part_num
 }
 
@@ -340,6 +344,9 @@ export interface GranthaMetadataOnly {
   structure_levels: StructureLevel[];
   commentaries?: Commentary[];
   parts: { file: string; id: string; first_ref: string }[];
+  /** Declared edition kind ("mula-only" | "commentarial"), when the envelope
+   *  stamps it (per-block presentation model IDEA.md). Legacy files omit it. */
+  edition_kind?: EditionKind;
 }
 
 // In-memory cache for grantha data, keyed by granthaId::editionId so multiple
