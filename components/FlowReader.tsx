@@ -1016,7 +1016,7 @@ export default function FlowReader({
                         <div data-verse-ref={passage.ref} className="px-4 py-8">
                           {prefaceAnchor ? (
                             <p
-                              className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line"
+                              className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-700 whitespace-pre-line"
                               dangerouslySetInnerHTML={{
                                 __html: sanitizeCommentaryHtml(
                                   prefaceAnchor.sanskrit?.devanagari || "",
@@ -1024,7 +1024,7 @@ export default function FlowReader({
                               }}
                             />
                           ) : content ? (
-                            <div className="flow-para-row">
+                            <div className={`flow-para-row framing ${MULA_PRESENTATION.prose.text}`}>
                               <div className="min-w-0 flex-1">
                                 {renderMulaWithReferences(
                                   content,

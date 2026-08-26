@@ -11,6 +11,10 @@
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
+  /* Reduce orphaned words / widows at line ends (progressive enhancement —
+     older browsers ignore it). The NBSP pass in renderCommentary glues
+     em-dashes and sentence-dandas; this handles residual lone-word orphans. */
+  text-wrap: pretty;
 }
 
 /* Passage blocks are selectable/copyable text; hover shows the I-beam, not the
@@ -469,10 +473,25 @@ mark.citation-source-mark {
 .flow-reader .verse-pada {
   display: block;
 }
-/* The work's OWN verses (maṅgala/colophon/authored, <!-- verse -->): identical
-   visual treatment to verse-quotes (indent, gap, pāda layout) — the class
-   exists for semantic distinction (not an embedded citation), not styling. */
+/* The work's OWN verses (maṅgala/colophon/authored, <!-- verse -->): rendered
+   with the same .verse-quote treatment (indent, gap, pāda layout) and inherit
+   the surrounding prose typography (.flow-commentary) — both in main paras and
+   framing passages. The class is for semantic distinction, not styling.
+
+   FRAMING passages (prefatory maṅgala/ācāryavandana, concluding colophon):
+   the whole framing block — its prose and its own-verses — sits in the
+   subordinate tier (0.875em, like ṭīkā), since framing material is bookend
+   invocation quieter than the body. Authored own-verses in main paras stay at
+   prose size. --reading-scale still multiplies. To style only the own-verse
+   (not the surrounding framing prose), target .flow-para-row.framing .verse-own
+   instead. */
 .flow-reader .verse-own {}
+.flow-reader .flow-para-row.framing {
+  font-size: 0.875em;
+}
+.flow-reader .flow-para-row.framing .verse-own {
+  font-size: 0.875em;
+}
 /* Even pādas (2 & 4) of a ≥4-pāda verse: a further indent so the metrical
    structure reads at a glance (printed convention). --pada-cont is the extra
    left indent of the 2nd/4th line relative to the 1st; 1em is the sane
