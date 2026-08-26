@@ -257,7 +257,7 @@ describe("renderMulaWithReferences", () => {
       wrap(renderMulaWithReferences(text, refs, {
         ...context,
         availableGranthaIds: ["brihadaranyaka-upanishad"],
-      }))
+      }, undefined))
       );
     });
     expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
@@ -266,8 +266,7 @@ describe("renderMulaWithReferences", () => {
     cleanUp(root, el);
   });
 
-  it("strips markdown per segment without shifting offsets", () => {
-    // A citation preceded by a `**…**` pair; offsets are into the RAW string.
+  it("strips markdown per segment without shifting offsets", () => {    // A citation preceded by a `**…**` pair; offsets are into the RAW string.
     // "**अथ** " = 0..7, then `(` at 7, `बृ` at 8; "बृ. उ. १.४.१७" = 13 chars → 8..21.
     const text = "**अथ** (बृ. उ. १.४.१७) इति ।";
     const refs: Reference[] = [
@@ -287,7 +286,7 @@ describe("renderMulaWithReferences", () => {
       wrap(renderMulaWithReferences(text, refs, {
         ...context,
         availableGranthaIds: ["brihadaranyaka-upanishad"],
-      }))
+      }, undefined))
       );
     });
     expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
@@ -300,7 +299,7 @@ describe("renderMulaWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      wrap(renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context))
+      wrap(renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context, undefined))
       );
     });
     expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा ।");
@@ -343,7 +342,7 @@ describe("renderMulaWithReferences", () => {
             sourcePassageRef: "1",
             sourceHighlight,
             availableGranthaIds: ["brihadaranyaka-upanishad"],
-          })),
+          }, undefined)),
         );
       });
       const out = el.textContent ?? "";

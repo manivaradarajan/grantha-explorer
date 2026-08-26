@@ -26,8 +26,10 @@
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.27em;
-  /* Tighten the spaces inside a citation so the marker reads as one unit. */
-  /*word-spacing: -0.15em;*/
+  /* A citation must never split across a line break: "तै. उ. आ. १.१" is one
+     scholarly unit — the internal spaces (abbreviation parts) must not wrap.
+     nowrap makes the whole marker unbreakable. */
+  white-space: nowrap;
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
@@ -383,20 +385,108 @@ mark.citation-source-mark {
   margin: 0;
 }
 
-/* Verse-quote blocks: a run of quoted verses, hang-indented. Each pāda is on
-   its own line (the source marks pāda breaks with newlines). For pāda-split
-   long metres (4+ pādas), the even pādas (2 & 4) get a further indent so the
-   reader can see the metrical structure at a glance (printed convention). */
+/* Prose paragraph number (Para/Gadya): the canonical passage number sits in a
+   right-aligned gutter next to a quiet left rail that echoes the verse
+   column's border-l idiom. The gutter is em-based and right-aligned so the
+   text column starts at the same x for every paragraph — measured in Tiro
+   Devanagari the widest current ref (१७७.) is ~1.84em and the worst 3-digit
+   (७७७.) ~2.0em, so 2.25em fits with headroom and scales with
+   --reading-scale. The number is a real selectable text node (no select-none,
+   no aria-hidden): it stays in the tab/AT order and is found by search. */
+.flow-reader .flow-para-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  border-left: 2px solid #d1d5db; /* border-gray-300 */
+  padding-left: 0.875rem;
+}
+.flow-reader .flow-para-number {
+  flex: 0 0 auto;
+  min-width: 2.25em;
+  text-align: right;
+  color: #6b7280; /* text-gray-500 */
+}
+
+/* ---------------------------------------------------------------------------
+   Verse-quote blocks: an embedded verse (or prose quotation) inside a mula
+   prose paragraph. Design (PLAN_VERSE_CITATIONS.md): the quotation is
+   unmistakably quoted but typographically quiet — distinguished by modest
+   INDENTATION and SPACING, never by UI decoration. No nested vertical rule
+   (the paragraph's outer left rail is the primary structural frame), no icon,
+   no card, no background. Same Devanagari typeface/size as the surrounding
+   prose; the source citation stays a muted inline link on the last pāda.
+
+   Each pāda is on its own line (the source marks pāda breaks with newlines);
+   for pāda-split long metres (4+ pādas) the even pādas (2 & 4) get a further
+   indent so the metrical structure reads at a glance (printed convention).
+
+   --- Visual parameters ---
+   --quote-indent : left indent of the quoted block relative to the prose
+                    column. 1.5em sits at the low end of the 1.5–2em range
+                    (design §1): noticeable but modest; the quote stays inside
+                    the reading column. Scale with --reading-scale.
+   --quote-gap    : vertical gap BETWEEN ADJACENT quoted verses in a run.
+                    Adjacent verse-quotes are ONE continuous quotation; the
+                    renderer emits no blank line between them, so this margin
+                    IS the entire inter-verse space. 0.8em groups them closely;
+                    raise it (e.g. 1.2em) for more separation.
+   --quote-gap-start : EXTRA space between the surrounding prose and the FIRST
+                     verse-quote of a run, ON TOP of the single blank-line
+                     separator the renderer emits at prose→verse boundaries.
+                     Default -0.8em pulls the quote up to remove most of the
+                     blank line; set 0 to keep the full blank line; raise it
+                     positive to open up the quote's opening. Symmetric with
+                     --quote-gap-end.
+   --quote-gap-end : EXTRA space between the LAST verse-quote of a run and the
+                     following prose, ON TOP of the blank-line separator at
+                     verse→prose boundaries. Default -0.8em, symmetric with
+                     --quote-gap-start.
+   --pada-cont    : extra left indent of the even pādas (2 & 4) of a ≥4-pāda
+                    verse, i.e. the step of the 2nd/4th line relative to the
+                    1st (metre aid). Default 1em; raise it (e.g. 1.5em) for a
+                    deeper step, 0 for none.
+   ------------------------------------------------------------------------- */
 .flow-reader .verse-quote {
-  text-indent: -1em;
-  padding-left: 1.5em;
   display: block;
+  padding-left: 2.5em; /* --quote-indent */
+}
+/* Adjacent quoted verses are a continuous quotation run: keep them close with
+   --quote-gap. (The renderer emits no blank-line separator between adjacent
+   verses; prose↔verse boundaries keep the single blank line.) */
+.flow-reader .verse-quote + .verse-quote {
+  margin-top: 0.8em; /* --quote-gap */
+}
+/* Start / end of a quotation run: the first verse-quote after prose and the
+   last before prose. The renderer's blank-line separator already provides the
+   baseline gap; these margins add --quote-gap-start/end on top so the quote's
+   opening and closing can be tuned independently (and symmetrically). */
+.flow-reader .flow-mula-prose + .verse-quote {
+  margin-top: var(--quote-gap-start, -0.8em);
+}
+.flow-reader .verse-quote + .flow-mula-prose {
+  margin-bottom: var(--quote-gap-end, -0.8em);
 }
 .flow-reader .verse-pada {
   display: block;
 }
+/* The work's OWN verses (maṅgala/colophon/authored, <!-- verse -->): identical
+   visual treatment to verse-quotes (indent, gap, pāda layout) — the class
+   exists for semantic distinction (not an embedded citation), not styling. */
+.flow-reader .verse-own {}
+/* Even pādas (2 & 4) of a ≥4-pāda verse: a further indent so the metrical
+   structure reads at a glance (printed convention). --pada-cont is the extra
+   left indent of the 2nd/4th line relative to the 1st; 1em is the sane
+   default — raise it (e.g. 1.5em) for a deeper step, 0 for none. */
 .flow-reader .verse-pada-cont {
-  padding-left: 1em;
+  padding-left: var(--pada-cont, 1.6em);
+}
+
+/* Narrow viewports (mobile): trim the quote indent so it does not eat the
+   reading width (design §9). The gutter and prose column keep the layout. */
+@media (max-width: 480px) {
+  .flow-reader .verse-quote {
+    padding-left: 1em; /* --quote-indent (mobile) */
+  }
 }
 
 .flow-reader .flow-verse {
