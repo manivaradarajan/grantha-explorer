@@ -170,31 +170,74 @@ export function renderMulaWithReferences(
   rawText: string,
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
+  verseQuotes: { start: number; end: number }[] | undefined,
+): React.ReactNode {
+  // Split the mula at verse-quote boundaries: each verse-quote block renders
+  // as a hang-indented verse (pādas on separate lines), prose between them uses
+  // the reference-split path.
+  if (verseQuotes && verseQuotes.length > 0) {
+    const sortedVQ = [...verseQuotes].sort((a, b) => a.start - b.start);
+    const parts: React.ReactNode[] = [];
+    let cursor = 0;
+    for (const vq of sortedVQ) {
+      if (vq.start > cursor) {
+        parts.push(
+          <div key={`prose-${cursor}`} className="flow-mula-prose">
+            {renderMulaProse(rawText.slice(cursor, vq.start), references, linkContext, cursor)}
+          </div>,
+        );
+      }
+      parts.push(
+        <div key={`vq-${vq.start}`} className="verse-quote">
+          {renderVerseQuote(rawText.slice(vq.start, vq.end), references, linkContext, vq.start)}
+        </div>,
+      );
+      cursor = vq.end;
+    }
+    if (cursor < rawText.length) {
+      parts.push(
+        <div key={`prose-last`} className="flow-mula-prose">
+          {renderMulaProse(rawText.slice(cursor), references, linkContext, cursor)}
+        </div>,
+      );
+    }
+    return <>{parts}</>;
+  }
+  return <>{renderMulaProse(rawText, references, linkContext, 0)}</>;
+}
+
+/** Render a non-verse prose span with its references (existing split logic),
+ *  including the steel-blue source-quote highlight (citation-source-mark). */
+function renderMulaProse(
+  text: string,
+  references: Reference[] | undefined,
+  linkContext: ReferenceLinkContext,
+  offset: number,
 ): React.ReactNode {
   if (!references || references.length === 0) {
-    return <>{stripMarkdown(rawText)}</>;
+    return <>{stripMarkdown(text)}</>;
   }
-  const sorted = [...references].sort((a, b) => a.start - b.start);
+  const sorted = [...references]
+    .filter((r) => r.start >= offset && r.end <= offset + text.length)
+    .map((r) => ({ ...r, start: r.start - offset, end: r.end - offset }))
+    .sort((a, b) => a.start - b.start);
   const parts: React.ReactNode[] = [];
   let cursor = 0;
   for (const ref of sorted) {
-    assertCodePointOffsetAligned(rawText, ref.start);
-    assertCodePointOffsetAligned(rawText, ref.end);
-    if (ref.end <= cursor) {
-      continue;
-    }
+    assertCodePointOffsetAligned(text, ref.start);
+    assertCodePointOffsetAligned(text, ref.end);
+    if (ref.end <= cursor) continue;
     const segStart = Math.max(cursor, ref.start);
-    const window = buildSourceWindow(rawText, ref.start);
+    const window = buildSourceWindow(text, ref.start);
     if (segStart > cursor) {
-      const seg = rawText.slice(cursor, segStart);
-      const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
+      const seg = text.slice(cursor, segStart);
+      const bounds = highlightBounds(
+        linkContext.sourceHighlight,
+        linkContext.sourcePassageRef,
+        offset + cursor,
+        seg.length,
+      );
       if (bounds) {
-        // Interior slices are stripped WITHOUT trimming (stripMarkdownInline):
-        // trimming per-slice eats line-breaks/spaces at the slice boundaries,
-        // which reflows the reading text when the popover toggles the source
-        // highlight (closed→open re-slices each segment into three parts). The
-        // rendered text must stay byte-identical, or the hovered reference
-        // link shifts out from under the cursor and the hover closes.
         parts.push(
           <Fragment key={`seg-${cursor}`}>
             {stripMarkdownInline(seg.slice(0, bounds.s))}
@@ -202,30 +245,49 @@ export function renderMulaWithReferences(
               {stripMarkdownInline(seg.slice(bounds.s, bounds.e))}
             </mark>
             {stripMarkdownInline(seg.slice(bounds.e))}
-          </Fragment>
+          </Fragment>,
         );
       } else {
-        parts.push(
-          <span key={`seg-${cursor}`}>{stripMarkdownInline(seg)}</span>,
-        );
+        parts.push(<span key={`seg-${cursor}`}>{stripMarkdownInline(seg)}</span>);
       }
     }
-    const displayText = rawText.slice(segStart, ref.end) || ref.display_text;
+    const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
       <ReferenceLink
         key={`ref-${segStart}`}
         reference={{ ...ref, display_text: displayText }}
         sourceLookback={window.text}
-        sourceWindowStart={window.start}
+        sourceWindowStart={window.start + offset}
         {...linkContext}
-      />
+      />,
     );
     cursor = ref.end;
   }
-  if (cursor < rawText.length) {
-    parts.push(
-      <span key="seg-last">{stripMarkdownInline(rawText.slice(cursor))}</span>,
-    );
+  if (cursor < text.length) {
+    parts.push(<span key="seg-last">{stripMarkdownInline(text.slice(cursor))}</span>);
   }
   return <>{parts}</>;
+}
+
+/** Render a verse-quote block: each pāda on its own line, hang-indented;
+ *  refs inside are linked. */
+function renderVerseQuote(
+  block: string,
+  references: Reference[] | undefined,
+  linkContext: ReferenceLinkContext,
+  offset: number,
+): React.ReactNode {
+  const padas = block.trim().split("\n");
+  const inBlock = (references ?? []).filter(
+    (r) => r.start >= offset && r.end <= offset + block.length,
+  );
+  return (
+    <span className="verse-quote-inner">
+      {padas.map((pada, i) => (
+        <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
+          {renderMulaProse(pada, inBlock.map((r) => ({ ...r, start: r.start - offset, end: r.end - offset })), linkContext, offset)}
+        </span>
+      ))}
+    </span>
+  );
 }

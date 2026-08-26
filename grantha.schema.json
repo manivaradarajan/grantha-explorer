@@ -301,6 +301,19 @@
           "type": "array",
           "description": "Structured cross-text citations in the main (mula) passage text (school-namespace design §4.3). Present only when the mula prose carries citations (e.g. vedarthasangraha).",
           "items": { "$ref": "#/definitions/reference" }
+        },
+        "verse_quotes": {
+          "type": "array",
+          "description": "Runs of quoted verses within a main (mula) passage, marked by <!-- verse-quote --> blocks. Half-open offsets into content.sanskrit.devanagari; the presentation layer hang-indents each run and pāda-splits long metres. Present only when the passage quotes verses.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "integer", "minimum": 0 },
+              "end": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["start", "end"],
+            "additionalProperties": false
+          }
         }
       },
       "required": ["ref", "passage_type"],

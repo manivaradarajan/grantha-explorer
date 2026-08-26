@@ -86,6 +86,10 @@ export interface Passage {
   /** The markdown heading word (e.g. "Para", "Shloka"). Main passages only;
    *  absent on prefatory/concluding. Per-block presentation model (IDEA.md). */
   kind?: string;
+  /** Runs of quoted verses (verse-quote blocks): {start, end} half-open
+   *  offsets into content.sanskrit.devanagari. The presentation layer
+   *  hang-indents each run and pāda-splits long metres. */
+  verse_quotes?: { start: number; end: number }[];
   part_id?: string; // Changed from part_num
 }
 

@@ -118,6 +118,9 @@ class PassageData:
     # The markdown heading word (e.g. "Para", "Shloka") for main passages only
     # (per-block presentation model, IDEA.md). Empty for framing passages.
     kind: str = ""
+    # Runs of quoted verses (verse-quote blocks) as {start, end} half-open
+    # offsets into mula_text. Empty for non-verse prose.
+    verse_quotes: list[dict[str, int]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -554,7 +557,53 @@ def _extract_mula_and_speaker(segment: str) -> tuple[str, str]:
     if speaker_match is not None:
         speaker = speaker_match.group(1).strip()
         segment = segment[speaker_match.end():]
-    return _extract_mula_text(segment), speaker
+    # Protect the verse-quote delimiters through _extract_mula_text (whose
+    # residual-comment strip would otherwise remove them), then extract and
+    # strip them, recording the inner offsets in the final mula text.
+    protected = segment.replace("<!-- verse-quote -->", "\x00VQO\x00").replace(
+        "<!-- /verse-quote -->", "\x00VQC\x00"
+    )
+    mula_text = _extract_mula_text(protected)
+    mula_text = mula_text.replace("\x00VQO\x00", "<!-- verse-quote -->").replace(
+        "\x00VQC\x00", "<!-- /verse-quote -->"
+    )
+    mula_text, verse_quotes = _extract_verse_quotes(mula_text)
+    return mula_text, speaker, verse_quotes
+
+
+_VERSE_QUOTE_OPEN = "<!-- verse-quote -->"
+_VERSE_QUOTE_CLOSE = "<!-- /verse-quote -->"
+_VERSE_QUOTE_BLOCK_RE = re.compile(
+    r"<!--\s*verse-quote\s*-->(.*?)<!--\s*/verse-quote\s*-->",
+    re.DOTALL,
+)
+
+
+def _extract_verse_quotes(text: str) -> tuple[str, list[dict[str, int]]]:
+    """Strip ``<!-- verse-quote -->`` delimiters, returning the clean text and
+    half-open offsets of each block's inner text in the cleaned string.
+
+    Args:
+        text: Text possibly containing verse-quote blocks.
+
+    Returns:
+        ``(cleaned, verse_quotes)``.
+    """
+    out: list[str] = []
+    vq: list[dict[str, int]] = []
+    cursor = 0
+    for m in _VERSE_QUOTE_BLOCK_RE.finditer(text):
+        if m.start() > cursor:
+            out.append(text[cursor : m.start()])
+        inner = m.group(1)
+        start = len("".join(out))
+        out.append(inner)
+        end = len("".join(out))
+        vq.append({"start": start, "end": end})
+        cursor = m.end()
+    if cursor < len(text):
+        out.append(text[cursor:])
+    return "".join(out), vq
 
 
 def _extract_mula_text(segment: str) -> str:
@@ -916,7 +965,7 @@ def parse_body(
         mula_segment = (
             segment[: min(cut_positions)] if cut_positions else segment
         )
-        mula_text, speaker = _extract_mula_and_speaker(mula_segment)
+        mula_text, speaker, verse_quotes = _extract_mula_and_speaker(mula_segment)
         commentary_by_cid = _extract_commentary_blocks(segment)
 
         passage = PassageData(
@@ -928,6 +977,7 @@ def parse_body(
             # "Para"/"Shloka"); framing passages carry none (per-block
             # presentation model, IDEA.md).
             kind=kind if kind in leaves else "",
+            verse_quotes=verse_quotes,
         )
 
         # Adhikarana-level upodghata prose: capture <!-- adhikarana-intro -->
@@ -1118,6 +1168,8 @@ def _build_main_passage_entry(
         "kind": p.kind,
         "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
+    if p.verse_quotes:
+        entry["verse_quotes"] = p.verse_quotes
     refs, passage_diags = _extract_references(p.mula_text, context)
     refs, unmatched = _apply_citation_overlay(refs, grantha_id, p.ref, "main")
     if refs:

@@ -378,6 +378,27 @@ mark.citation-source-mark {
     var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
 }
 
+/* Mula prose interleaved around verse-quote blocks: plain flowing text. */
+.flow-reader .flow-mula-prose {
+  margin: 0;
+}
+
+/* Verse-quote blocks: a run of quoted verses, hang-indented. Each pāda is on
+   its own line (the source marks pāda breaks with newlines). For pāda-split
+   long metres (4+ pādas), the even pādas (2 & 4) get a further indent so the
+   reader can see the metrical structure at a glance (printed convention). */
+.flow-reader .verse-quote {
+  text-indent: -1em;
+  padding-left: 1.5em;
+  display: block;
+}
+.flow-reader .verse-pada {
+  display: block;
+}
+.flow-reader .verse-pada-cont {
+  padding-left: 1em;
+}
+
 .flow-reader .flow-verse {
   font-size: calc(1.25em * var(--reading-scale, 1));
 }

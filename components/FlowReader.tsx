@@ -1083,8 +1083,8 @@ export default function FlowReader({
                                 </div>
                               )}
                               {mula && (
-                                <p className={`verse-text font-serif ${mulaPresentation.text}`}>
-                                  {mulaRefs && mulaRefs.length > 0 ? (
+                                <div className={`verse-text font-serif ${mulaPresentation.text}`}>
+                                  {(mulaRefs && mulaRefs.length > 0) || (passage.verse_quotes && passage.verse_quotes.length > 0) ? (
                                     <>
                                       {renderMulaWithReferences(
                                         rawMula ?? "",
@@ -1098,13 +1098,14 @@ export default function FlowReader({
                                           granthaById,
                                           granthaIdToTitle: granthaIdToDevanagariTitle,
                                         },
+                                        passage.verse_quotes,
                                       )}
                                       {" "}॥ {toDevanagariNumerals(passage.ref)} ॥
                                     </>
                                   ) : (
                                     withVerseNumber(mula, passage.ref)
                                   )}
-                                </p>
+                                </div>
                               )}
                             </div>
                           </div>
