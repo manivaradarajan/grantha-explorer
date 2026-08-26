@@ -540,6 +540,17 @@ export const findQuotedSpan = (
       continue;
     }
     if (alignedLength === 0 || score / (2 * alignedLength) < MIN_SIMILARITY) {
+      // Comma-elision fallback: a needle may join two canonical phrases with a
+      // comma that compresses the passage's intervening words (e.g. para 236's
+      // "ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो" omits "तत्सत्यम् । स आत्मा ।").
+      // The joined needle fails whole-passage similarity, but each
+      // comma-separated segment matches its own region cleanly — union them
+      // into one highlight. Fires ONLY for comma-containing needles; the
+      // general इत्यादि elision handling is intentionally untouched.
+      const commaUnion = tryCommaSegmentUnion(needle, sourceWindow, subject, passageStr, passage);
+      if (commaUnion !== null) {
+        return commaUnion;
+      }
       continue;
     }
     // Preview-side span (the highlight in the card).
@@ -598,7 +609,76 @@ export const findQuotedSpan = (
       sourceEnd,
     };
   }
+
   return null;
+};
+
+/** Comma-elision fallback for a needle whose comma-separated segments each
+ *  match their own region of the passage but whose joined form fails
+ *  whole-passage similarity (the comma compresses intervening passage words,
+ *  e.g. para 236's "ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो" omits
+ *  "तत्सत्यम् । स आत्मा ।"). Unions the segment spans into one highlight.
+ *  Returns the combined span, or `null` when any segment fails to match. */
+const tryCommaSegmentUnion = (
+  needle: string,
+  sourceWindow: string,
+  subject: string,
+  passageStr: MatchString,
+  passage: string,
+): { start: number; end: number; sourceStart: number; sourceEnd: number } | null => {
+  const segments = needle.split(",");
+  if (segments.length < 2) {
+    return null;
+  }
+  const segSpans: { s: number; e: number }[] = [];
+  for (const seg of segments) {
+    const q = buildMatchString(seg.trim()).match;
+    if (q.length === 0) {
+      return null;
+    }
+    const sp = align(q, subject);
+    if (!sp || sp.queryStart !== 0) {
+      return null;
+    }
+    const al = Math.max(sp.queryEnd - sp.queryStart, sp.subjectEnd - sp.subjectStart);
+    const minScore = 2 * Math.max(MIN_QUOTE_NEEDLE_LEN, Math.min(MIN_MATCH_CHARS, q.length));
+    if (sp.score < minScore || al === 0 || sp.score / (2 * al) < MIN_SIMILARITY) {
+      return null;
+    }
+    segSpans.push({ s: sp.subjectStart, e: sp.subjectEnd });
+  }
+  const start = Math.min(...segSpans.map((s) => s.s));
+  const end = Math.max(...segSpans.map((s) => s.e));
+  if (start >= end || end > subject.length) {
+    return null;
+  }
+  const pStart = passageStr.map[start];
+  const pEnd = passageStr.map[end - 1] + 1;
+  if (pStart >= pEnd || pEnd > passage.length) {
+    return null;
+  }
+  const clamped = clampToGraphemeBoundaries(passage, pStart, pEnd);
+  if (clamped === null) {
+    return null;
+  }
+  // Source-side span: the whole needle sits at its offset in the window.
+  const tightOffset = sourceWindow.lastIndexOf(needle);
+  if (tightOffset === -1) {
+    return null;
+  }
+  const needleMap = buildMatchString(needle).map;
+  const rawStart = tightOffset + needleMap[0];
+  const rawEnd = tightOffset + needleMap[needleMap.length - 1] + 1;
+  const sourceClamped = clampToGraphemeBoundaries(sourceWindow, rawStart, rawEnd);
+  if (sourceClamped === null) {
+    return null;
+  }
+  return {
+    start: clamped.start,
+    end: clamped.end,
+    sourceStart: sourceClamped.start,
+    sourceEnd: sourceClamped.end,
+  };
 };
 
 /**

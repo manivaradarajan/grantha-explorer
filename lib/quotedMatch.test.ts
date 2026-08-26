@@ -515,3 +515,24 @@ describe("findQuotedSpan — whole-verse highlight (para 17, Vishnu Purāṇa 1.
     );
   });
 });
+
+describe("findQuotedSpan — comma-elision union (para 236)", () => {
+  it("unions comma-separated segments that each match their own passage region", () => {
+    // The quote joins two canonical phrases with a comma, compressing the
+    // passage's intervening words ("तत्सत्यम् । स आत्मा ।"). The joined
+    // needle fails whole-passage similarity, so the matcher unions the
+    // per-segment matches into one highlight spanning both phrases.
+    const window = ", ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो (";
+    const passage =
+      "ऐतदात्म्यमिदँ सर्वम् । तत्सत्यम् । स आत्मा । तत् त्वमसि श्वेतकेतो " +
+      "इति । भूयएव मा भगवान् विज्ञापयत्विति । तथा सोम्येति होवाच";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    const matched = passage.slice(span!.start, span!.end);
+    expect(matched).toContain("ऐतदात्म्यमिदँ सर्वम्");
+    expect(matched).toContain("तत् त्वमसि श्वेतकेतो");
+    // The union spans BOTH phrases (with the compressed middle), not just the
+    // second half.
+    expect(matched).toContain("स आत्मा");
+  });
+});
