@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 79,
@@ -22,6 +22,7 @@
     {
       "ref": "2.10.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विदर्शिता यदा देवी कुब्जया पापया भृशम् ।\nतदा शेते स्म सा भूमौ दिग्धविद्धेव किन्नरी ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "2.10.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निश्चित्य मनसा कृत्यं सा सम्यगिति भामिनी ।\nमन्थरायै शनैः सर्वमाचचक्षे विचक्षणा ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "2.10.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नागकन्येव निश्वस्य दीर्घमुष्णं च भामिनी ।\nमुहूर्त्तं चिन्तयामास मार्गमात्ममुखावहम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "2.10.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा सुहृच्चार्थकामा च तन्निशम्य सुनिश्चयम् ।\nबभूव परमप्रीता सिद्धिं प्राप्येव मन्थरा ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "2.10.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ सा मर्षिता देवी सम्यक् कृत्वा विनिश्चयम् ।\nसंविवेशाबला भूमौ निवेश्य भ्रुकुटीं मुखे ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "2.10.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चित्राणि माल्यानि दिव्यान्याभरणानि च ।\nअपविद्धानि कैकेय्या तानि भूमिं प्रपेदिरे ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "2.10.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तया तान्यपविद्धानि माल्यान्याभरणानि च ।\nअशोभयन्त वसुधां नक्षत्राणि यथा नभः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "2.10.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "क्रोधागारे निपतिता सा बभौ मलिनाम्बरा ।\nएकवेणीं दृढं बध्वा गतसत्त्वेव किन्नरी ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "2.10.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आज्ञाप्य तु महाराजो राघवस्याभिषेचनम् ।\nउपस्थानमनुज्ञाप्य प्रविवेश निवेशनम् ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "2.10.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अद्य रामाभिषेको वै प्रसिद्ध इति जज्ञिवान् ।\nप्रियार्हां प्रियमाख्यातुं विवेशान्तःपुरं वशी ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "2.10.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स कैकेय्या गृहं श्रेष्ठं प्रविवेश महायशाः ।\nपाण्डराभ्रमिवाकाशं राहुयुक्तं निशाकरः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "2.10.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शुकबर्हिणसंघुष्टं क्रौञ्चहंसरुतायुतम् ।\nवादित्ररवसंघुष्टं कुब्जावामनिकायुतम् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "2.10.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लतागृहैश्चित्रगृहैश्चम्पकाशोकशोभितैः ।\nदान्तराजतसौवर्णवेदिकाभिः समायुतम् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "2.10.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नित्यपुष्पफलैर्वृक्षैर्वापीभिश्चोपशोभितम् ।\nदान्तराजतसौवर्णैः संवृतं परमासनैः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "2.10.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विविधैरन्नपानैश्च भक्ष्यैश्च विविधैरपि ।\nउपपन्नं महार्हैश्च भूषितैस्त्रिदिवोपमम् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "2.10.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत् प्रविश्य महाराजः स्वमन्तःपुरमृद्धिमत् ।\nन ददर्श प्रियां राजा कैकेयीं शयनोत्तमे ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "2.10.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स कामबलसंयुक्तो रत्यर्थं मनुजाधिपः ।\nअपश्यन् दयितां भार्यां पप्रच्छ विषसाद च ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "2.10.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि तस्य पुरा देवी तां वेलामत्यवर्त्तत ।\nन च राजा गृहं शून्यं प्रविवेश कदाचन ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "2.10.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो गृहगतो राजा कैकेयीं पर्यपृच्छत ।\nयथापुरमविज्ञाय स्वार्थलिप्सुमपण्डिताम् ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "2.10.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रतिहारी त्वथोवाच सन्त्रस्ता सुकृताञ्जलिः ।\nदेव देवी भृशं क्रुद्धा क्रोधागारमभिद्रुता ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "2.10.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रतिहार्या वचः श्रुत्वा राजा परमदुर्मनाः ।\nविषसाद पुनर्भूयो लुलितव्याकुलेन्द्रियः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "2.10.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्र तां पतितां भूमौ शयानामतथोचिताम् ।\nप्रतप्त इव दुःखेन सोपश्यज्जगतीपतिः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "2.10.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स वृद्धस्तरुणीं भार्यां प्राणेभ्यो ऽपि गरीयसीम् ।\nअपापः पापसङ्कल्पं ददर्श धरणीतले ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "2.10.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लतामिव विनिष्कृत्तां पतितां देवतामिव ।\nकिन्नरीमिव निर्धूतां च्युतामप्सरसं यथा ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "2.10.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मायामिव परिभ्रष्टां हरिणीमिव संयुताम् ।\nकरेणुमिव दिग्धेन विद्धां मृगयुना वने ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "2.10.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महागज इवारण्ये स्नेहात्परिममर्श ताम् ।\nपरिमृश्य च पाणिभ्यामभिसन्त्रस्तचेतनः ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "2.10.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कामी कमलपत्राक्षीमुवाच वनितामिदम् ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "2.10.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न ते ऽहमभिजानामि क्रोधमात्मनि संश्रितम् ।\nदेवि केनाभिशप्तासि केन वासि विमानिता ॥"
@@ -274,6 +302,7 @@
     {
       "ref": "2.10.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदिदं मम दुःखाय शेषे कल्याणि पांसुषु ।\nभूमौ शेषे किमर्थं त्वं मयि कल्याणचेतसि ॥"
@@ -283,6 +312,7 @@
     {
       "ref": "2.10.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूतोपहतचित्तेव मम चित्तप्रमाथिनी ॥"
@@ -292,6 +322,7 @@
     {
       "ref": "2.10.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सन्ति मे कुशला वैद्यास्त्वभितुष्टाश्च सर्वशः ।\nसुखितां त्वां करिष्यन्ति व्याधिमाचक्ष्व भामिनि ॥"
@@ -301,6 +332,7 @@
     {
       "ref": "2.10.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कस्य वा ते प्रियं कार्यं केन वा विप्रियं कृतम् ।\nकः प्रियं लभतामद्य को वा सुमहदप्रियम् ॥"
@@ -310,6 +342,7 @@
     {
       "ref": "2.10.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मा रोदीर्मा च कार्षीस्त्वं देवि सम्परिशोषणम् ।\nअवध्यो वध्यतां को वा को वा वध्यो विमुच्यताम् ॥"
@@ -319,6 +352,7 @@
     {
       "ref": "2.10.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दरिद्रः को भवत्वाढ्यो द्रव्यवान् वाप्यकिञ्चनः ॥"
@@ -328,6 +362,7 @@
     {
       "ref": "2.10.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं चैव मदीयाश्च सर्वे तव वशानुगाः ।\nन ते किञ्चिदभिप्रायं व्याहन्तुमहमुत्सहे ॥"
@@ -337,6 +372,7 @@
     {
       "ref": "2.10.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आत्मनो जीवितेनापि ब्रूहि यन्मनसेच्छसि ।\nबलमात्मनि जानन्ती न मां शङ्कितुमर्हसि ॥"
@@ -346,6 +382,7 @@
     {
       "ref": "2.10.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "करिष्यामि तव प्रीतिं सुकृतेनापि ते शपे ॥"
@@ -355,6 +392,7 @@
     {
       "ref": "2.10.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यावदावर्त्तते चक्रं तावती मे वसुन्धरा ।\nप्राचीनाः सिन्धुसौवीराः सौराष्ट्रा दक्षिणापथाः ॥"
@@ -364,6 +402,7 @@
     {
       "ref": "2.10.39",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वङ्गाङ्गमगध मत्स्याः समृद्धाः काशिकोसलाः ।\nतत्र जातं बहुद्रव्यं धनधान्यमजाविकम् ॥"
@@ -373,6 +412,7 @@
     {
       "ref": "2.10.40",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो वृणीष्व कैकेयि यद्यत्त्वं मनसेच्छसि ॥"
@@ -382,6 +422,7 @@
     {
       "ref": "2.10.41",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किमायासेन ते भीरु उत्तिष्ठोत्तिष्ठ शोभने ।\nतत्त्वं मे ब्रूहि कैकेयि यतस्ते भयमागतम् ॥"
@@ -391,6 +432,7 @@
     {
       "ref": "2.10.42",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्ते व्यपनयिष्यामि नीहारमिव रश्मिवान् ॥"
@@ -400,6 +442,7 @@
     {
       "ref": "2.10.43",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथोक्ता सा समाश्वस्ता वक्तुकामा तदप्रियम् ।\nपरिपीडयितुं भूयो भर्त्तारमुपचक्रमे ॥\nइत्यार्षे श्रीरामायणे श्रीमदयोध्याकाण्डे दशमः सर्गः ॥ १० ॥\nइति श्रीगोविन्दराज श्रीरामायणभूषणे पीताम्बराख्याने अयोण्याकाण्डव्याख्याने दशमः सर्गः ॥ १० ॥"

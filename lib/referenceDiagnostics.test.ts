@@ -15,7 +15,7 @@ const diag = (over: Partial<ReferenceDiagnostic> = {}): ReferenceDiagnostic => (
   sourceGranthaId: "isavasya-upanishad",
   sourcePassageRef: "1",
   editionId: undefined,
-  rawCitation: "वि. पु. १.२.२२",
+  rawCitation: "वि.पु. १.२.२२",
   targetGranthaId: "vishnu-purana",
   locator: "1.2.22",
   offset: 5,

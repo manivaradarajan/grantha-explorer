@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 4,
@@ -8,6 +8,7 @@
     {
       "ref": "1.5.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वापूर्वमियं येषामासीत्कृत्स्ना वसुन्धरा ।\nप्रजापतिमुपादाय नृपाणां जयशालिनाम् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.5.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "येषां स सगरो नाम सागरो येन खानितः ।\nषष्टिः पुत्रसहस्राणि यं यान्तं पर्यवारयन् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.5.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इक्ष्वाकूणामिदं तेषां राज्ञां वंशे महात्मनाम् ।\nमहदुत्पन्नमाख्यानं रामायणमिति श्रुतम् ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.5.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदिदं वर्तयिष्यामि सर्वं निखिलमादितः ।\nधर्मकामार्थसहितं श्रोतव्यमनसूयया ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.5.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कोसलो नाम मुदितः स्फीतो जनपदो महान् ।\nनिविष्टः सरयूतीरे प्रभूतधनधान्यवान् ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.5.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयोध्या नाम नगरी तत्रासील्लोकविश्रुता ।\nमनुना मानवेन्द्रेण या पुरी निर्मिता स्वयम् ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.5.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आयता दश च द्वे च योजनानि महापुरी ।\nश्रीमती त्रीणि विस्तीर्णा सुविभक्तमहापथा ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.5.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राजमार्गेण महता सुविभक्तेन शोभिता ।\nमुक्तपुष्पावकीर्णेन जलसिक्तेन नित्यशः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.5.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तां तु राजा दशरथो महाराष्ट्रविवर्द्धनः ।\nपुरीमावासयामास दिवं देवपतिर्यथा ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.5.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कवाटतोरणवतीं सुविभक्तान्तरापणाम् ।\nसर्वयन्त्रायुधवतीमुपेतां सर्वशिल्पिभिः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.5.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सूतमागधसम्बाधां श्रीमतीमतुलप्रभाम् ।\nउच्चाट्टालध्वजवतीं शतघ्नीशतसङ्कुलाम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.5.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वधूनाटकसङ्घैश्च संयुक्तां सर्वतः पुरीम् ।\nउद्यानाम्रवणोपेतां महतीं सालमेखलाम् ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.5.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दुर्गगम्भीरपरिघां दुर्गामन्यैर्दुरासदाम् ।\nवाजिवारणसम्पूर्णां गोभिरुष्ट्रैः खरैस्तथा ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.5.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सामन्तराजसङ्घैश्च बलिकर्मभिरावृताम् ।\nनानादेशनिवासैश्च वणिग्भिरुपशोभिताम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.5.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रासादै रत्नविकृतैः पर्वतैरुपशोभिताम् ।\nकूटागारैश्च सम्पूर्णामिन्द्रस्येवामरावतीम् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.5.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चित्रामष्टापदाकारां वरनारीगणैर्युताम् ।\nसर्वरत्नसमाकीर्णां विमानगृहशोभिताम् ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.5.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गृहगाढामविच्छिद्रां समभूमौ निवेशिताम् ।\nशालितण्डुलसम्पूर्णामिक्षुकाण्डरसोदकाम् ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.5.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दुन्दुभीभिर्मृदङ्गैश्च वीणाभिः पणवैस्तथा ।\nनादितां भृशमत्यर्थं पृथिव्यां तामनुत्तमाम् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.5.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विमानमिव सिद्धानां तपसाधिगतं दिवि ।\nसुनिवेशितवेश्मान्तां नरोत्तमसमावृताम् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.5.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ये च बाणैर्न विध्यन्ति विविक्तमपरापरम् ।\nशब्दवेध्यं च विततं लघुहस्ता विशारदाः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.5.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सिंहव्याघ्रवराहाणां मत्तानां नर्दतां वने ।\nहन्तारो निशितैः शस्त्रैर्बलाद्बाहुबलैरपि ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.5.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तादृशानां सहस्रैस्तामभिपूर्णां महारथैः ।\nपुरीमावासयामास राजा दशरथस्तदा ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.5.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तामग्निमद्भिर्गुणवद्भिरावृतां द्विजोत्तमैर्वेदषडङ्गपारगैः ।\nसहस्रदैः सत्यरतैर्महात्मभिर्महर्षिकल्पैर्ऋषिभिश्च केवलैः ॥"

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 38,
@@ -8,6 +8,7 @@
     {
       "ref": "2.16.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ऋबुर्वर्षसहस्त्र तु समतीते नरेश्वर!\nनिदाघज्ञानदानाय तदेव नगरं ययौ"
@@ -17,6 +18,7 @@
     {
       "ref": "2.16.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नगरस्य वहिः सोऽथ निदाघं ददृशे मुनिः ।\nमहाबलपरीवारे पुरं विशति पार्थिवे"
@@ -26,6 +28,7 @@
     {
       "ref": "2.16.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दूरे स्थितं महाभागं जंनसम्मर्द्द वर्ज्जकम् ।\nक्षु त्क्षामकण्ठमायान्तमराण्यात् ससमितुकुशम्"
@@ -35,6 +38,7 @@
     {
       "ref": "2.16.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्वा निदाघं स ऋभुरुपगम्याभिवाद्य च ।\nउवाच कस्मादेकान्ते स्थीयते भवता द्रिज"
@@ -44,6 +48,7 @@
     {
       "ref": "2.16.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बो विप्र ! जनसम्मर्द्दो महानेष महनिष जनिश्वरे ।\nप्रविविक्षौ पुरं रम्यं तेनात्र स्थीयते मया"
@@ -53,6 +58,7 @@
     {
       "ref": "2.16.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नराधिपोऽत्र कतमः कतमश्चेतरो जनः ।\nकथ्यतां मे द्रिजश्वेष्ठ! त्वमभिज्ञो मतो मम"
@@ -62,6 +68,7 @@
     {
       "ref": "2.16.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "योऽयं गजेन्द्रमुन्मत्तमद्रिश्वृङ्गसमुच्छिर्तम् ।\nअधिरूढो नरेन्द्रोऽयं परलोकस्तथेतरः"
@@ -71,6 +78,7 @@
     {
       "ref": "2.16.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतौ हि गज-राजानौ युगपदू दशितौ मम ।\nबवता न विशेषेण पृथकूचिह्नपिलक्षणौ"
@@ -80,6 +88,7 @@
     {
       "ref": "2.16.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत् कथ्यतां महाभाग ! विशेषो भवतानयोः ।\nज्ञातु मिच्छाम्यहं कोऽत्र गजः को वा नराधिपः"
@@ -89,6 +98,7 @@
     {
       "ref": "2.16.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गजो योऽयमधो ब्रह्मन् ! उपर्य्यस्यैष भूपतिः ।।\nवाह्म-वाहकसाबन्धं को न जानाति वै द्रिज"
@@ -98,6 +108,7 @@
     {
       "ref": "2.16.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "जानाम्यहं यथा ब्रह्म स्तथा मामवबोधम ।\nअवःशह्दनिगद्य किं किञ्चोद्ध्व मभिधीयते"
@@ -107,6 +118,7 @@
     {
       "ref": "2.16.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तः सहसारुह्म निदाघः प्राह त ऋबुम् ।\nश्रूयतां कथयाम्येष यन्मां त्वं परिपृच्छसि"
@@ -116,6 +128,7 @@
     {
       "ref": "2.16.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उपर्य्यहं यथा राजा त्वमधः कूञ्जरो यथा ।\nअवबोधाय ते ब्रह्मन् ! दृष्टान्तो दसितो मया"
@@ -125,6 +138,7 @@
     {
       "ref": "2.16.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वं राजेव द्रिजश्वेष्ठ! स्थितोऽहं गजवद् यदि ।\nतदेतत् त्वं समाचक्ष्व कतमस्त्वमहं तता"
@@ -134,6 +148,7 @@
     {
       "ref": "2.16.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तः सत्वरं तस्य प्रगृह्म चरणावुभौ ।\nनिदाघः प्राह भगवानाचार्य्यस्त्वमृबुध्रुर्वम्"
@@ -143,6 +158,7 @@
     {
       "ref": "2.16.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नान्यस्यादू तसंस्कारस्कृतं मानसं तथा ।\nयथाचार्य्यस्य तन त्वां मन्ये प्राप्तमह गुरुम्"
@@ -152,6 +168,7 @@
     {
       "ref": "2.16.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तवोपदेशदानाय पूर्व्वशुश्रूषणादृतः ।\nगुरुस्तेऽहमृभुर्नाम्रा निदाघ! समुपागतः"
@@ -161,6 +178,7 @@
     {
       "ref": "2.16.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदेतदुपदिष्टं सङ्क्ष पेण महामते ।\nपरमार्थसारभूतं यददूतैमशेषतः"
@@ -170,6 +188,7 @@
     {
       "ref": "2.16.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा ययौ विद्रान् निदाघं स ऋबुर्गुरुः ।\nनदाघोऽप्युपदेशीन तेनादूतैपरोऽभवत्"
@@ -179,6 +198,7 @@
     {
       "ref": "2.16.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्व्भूतान्यभेदेन ददृशे स तदान्मनः ।\nयथा ब्रह्मपरो मुक्तिपवाप परमां द्रिज"
@@ -188,6 +208,7 @@
     {
       "ref": "2.16.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथा त्वमपि धर्म्मज्ञ ! तुल्यात्मरिपुबान्धवः ।\nभव सर्व्वगतं जानन्नात्मानमवनीपते"
@@ -197,6 +218,7 @@
     {
       "ref": "2.16.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सितनीलादिभेदेन यथैकः दृश्यते नभः ।\nभ्रान्तिदृष्टिभिरात्मापि तथैकं सन् पृथक् पृथक्"
@@ -206,6 +228,7 @@
     {
       "ref": "2.16.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एकः समस्तं यदिहास्ति किञ्चित्\nतदच्युतो नास्ति परं ततोऽन्यत् ।\nसोऽहं स च त्वं स च सर्व्वमेत- दात्मखरूपं त्यज भेदमोहम्"
@@ -215,6 +238,7 @@
     {
       "ref": "2.16.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इतीरितस्तेन स राजवर्य्य\nस्तत्याज भेदं परमार्थदृष्टिः ।\nस चापि जातिस्मरणाप्तबोध-\nस्तत्रैव जन्मन्यपवर्गमाप"
@@ -225,6 +249,7 @@
     {
       "ref": "2.16.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति भरतःनरेन्द्रसारवृत्तं\nकथयति यश्व श्वृणोति भक्तियुक्तः ।\nस विमलमतिरेति नात्ममोहं\nभवति च संसरणेषु मुक्तियोग्यः"

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "svetasvatara-upanishad",
   "edition_id": "svetasvatara-upanishad",
   "part_num": 5,
@@ -8,6 +8,7 @@
     {
       "ref": "5.1",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "द्वे अक्षरे ब्रह्मपरे त्वनन्ते विद्याविद्ये निहिते यत्र गूढे ।\nक्षरं त्वविद्या ह्यमृतं तु विद्या विद्याविद्ये ईशते यस्तु सोऽन्यः ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "5.2",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यो योनिं योनिमधितिष्ठत्येको विश्वानि रूपाणि योनीश्च सर्वाः ।\nऋषिं प्रसूतं कपिलं यस्तमग्रे ज्ञानैर्बिभर्ति जायमानं च पश्येत् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "5.3",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "एकैकं जालं बहुधा विकुर्वन्न स्मिन् क्षेत्रे संहरत्येष देवः ।\nभूयस्सृष्ट्वा पतयस्तथेशः सर्वाधिपत्यं कुरुते महात्मा ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "5.4",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वा दिश ऊर्ध्वमधश्चतिर्यक् प्रकाशयन् भ्राजते यद्वनड्वान् ।\nएवं स देवो भगवान् वरेण्यो योनिस्वभावानधितिष्ठत्येकः ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "5.5",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "यच्च स्वभावं पचति विश्वयोनिः पाच्यांश्च सर्वान् परिणामयेत् यः ।\nसर्वमेतद्विश्वमधितिष्ठत्येको गुणाँश्च सर्वान् विनियोजयेद्यः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "5.6",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "तद्वेदगुह्योपनिषत्सु गूढं तद्ब्रह्मा वेदते ब्रह्मयोनिम् ।\nये पूर्वं देवा ऋषयश्च तद्विदुस्ते तन्मया अमृता वै बभूवुः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "5.7",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "गुणान्वयो यः फलकर्मकर्ता कृतस्य तस्यैव स चोपभोक्ता ।\nस विश्वरूपस्त्रिगुणस्त्रिवर्त्मा प्राणाधिपः संचरति स्वकर्मभिः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "5.8",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "अङ्गुष्ठमात्रो रवितुल्यरूपः सङ्कल्पाहङ्कारसमन्वितो यः ।\nबुद्धेर्गुणेनात्मगुणेन चैव आराग्रमात्रो ह्यवरोऽपि दृष्टः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "5.9",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "वालाग्रशतभागस्य शतधा कल्पितस्य च ।\nभागो जीवः स विज्ञेयः स चानन्त्याय कल्पते ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "5.10",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "नैव स्त्री न पुमानेष न चैवायं नपुंसकः ।\nयद्यच्छरीरमादत्ते तेन तेन संयुज्यते ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "5.11",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "सङ्कल्पनस्पर्शनदृष्टिहोमैर्गासाम्बुवृष्ट्याऽऽत्मविवृद्धिजन्म ।\nकर्मानुगान्यनुक्रमेण देही स्थानेषु रूपाण्यभिसम्प्रपद्यते ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "5.12",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "स्थूलानि सूक्ष्माणि बहूनि चैव रूपाणि देही स्वगुणैर्वृणाति ।\nक्रियागुणैरात्मगुणैश्च तेषां संयोगहेतुरपरोऽपि दृष्टः ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "5.13",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "अनाद्यनन्तं कलिलस्य मध्ये विश्वस्य स्रष्टारमनेकरूपम् ।\nविश्वस्यैकं परिवेष्टितारं ज्ञात्वा देवं मुच्यते सर्वपाशैः ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "5.14",
       "passage_type": "main",
+      "kind": "Mantra",
       "content": {
         "sanskrit": {
           "devanagari": "भावग्राह्यमनीडाख्यं भावाभावकरं शिवम् ।\nकलासर्गकरं देवं ये विदुस्ते जहुस्तनुम् ॥"
@@ -153,6 +167,7 @@
             "end": 35,
             "display_text": "तादात्म्यं",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -163,6 +178,7 @@
             "end": 182,
             "display_text": "क्षरामृतशब्दिते",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -173,6 +189,7 @@
             "end": 208,
             "display_text": "ते?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -183,6 +200,7 @@
             "end": 233,
             "display_text": "द्वे?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -211,6 +229,7 @@
             "end": 247,
             "display_text": "ततो?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -239,6 +258,7 @@
             "end": 188,
             "display_text": "सत्या",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -249,6 +269,7 @@
             "end": 325,
             "display_text": "च",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -259,6 +280,7 @@
             "end": 548,
             "display_text": "तत्स?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -287,6 +309,7 @@
             "end": 181,
             "display_text": "च?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -319,20 +342,11 @@
         },
         "references": [
           {
-            "start": 183,
-            "end": 184,
-            "display_text": "?",
-            "grantha_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 239,
             "end": 248,
             "display_text": "अनुक्रमेण",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -369,6 +383,7 @@
             "end": 180,
             "display_text": "कारिणं?",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -379,6 +394,7 @@
             "end": 287,
             "display_text": "द्विरुक्तिरध्यायसमाप्त्यर्था",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 155,
@@ -8,6 +8,7 @@
     {
       "ref": "2.88.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छ्रुत्वा निपुणं सर्वं भरतः सह मन्त्रिभिः ।\nइङ्गुदीमूलमागम्य रामशय्यामवेक्ष्य ताम् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.88.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अब्रवीज्जननीः सर्वा इह तेन महात्मना ।\nशर्वरी शयिता भूमाविदमस्य विमर्दितम् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.88.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महाभागकुलीनेन महाभागेन धीमता ।\nजातो दशरथे नोर्व्यां न रामः स्वप्तुमर्हति ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.88.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अजिनोत्तरसंस्तीर्णे वरास्तरणसञ्चये ।\nशयित्वा पुरुषव्याघ्रः कथं शेते महीतले ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "2.88.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रासादाग्रविमानेषु वलभीषु च सर्वदा ।\nहैमराजतभौमेषु वरास्तरणशालिषु ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "2.88.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुष्पसञ्चयचित्रेषु चन्दनागरुगन्धिषु ।\nपाण्डराभ्रप्रकाशेषु शुकसङ्घरुतेषु च ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "2.88.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रासादवरवर्य्येषु शीतवत्सु सुगन्धिषु ।\nउषित्वा मेरुकल्पेषु कृतकाञ्चनभित्तिषु ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "2.88.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गीतवादित्रनिर्घोषैर्वराभरणनिस्वनैः ।\nमृदङ्गवरशब्दैश्च सततं प्रतिबोधितः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "2.88.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वन्दिभिर्वन्दितः काले बहुभिः सूतमागधैः ।\nगाथाभिरनुरूपाभिस्तुतिभिश्च परन्तपः ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "2.88.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अश्रद्धेयमिदं लोके न सत्यं प्रतिभाति मा ।\nमुह्यते खलु मे भावः स्वप्नो ऽयमिति मे मतिः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "2.88.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न नूनं दैवतं किञ्चित् कालेन बलवत्तरम् ।\nयत्र दाशरथी रामो भूमावेव शयीत सः ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "2.88.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विदेहराजस्य सुता सीता च प्रियदर्शना ।\nदयिता शयिता भूमौ स्नुषा दशरथस्य च ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "2.88.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इयं शय्या मम भ्रातुरिदं हि परिवर्त्तितम् ।\nस्थण्डिले कठिने सर्वं गात्रैर्विमृदितं तृणम् ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "2.88.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्ये साभरणा सुप्ता सीतास्मिन् शयनोत्तमे ।\nतत्रतत्र हि दृश्यन्ते सक्ताः कनकबिन्दवः ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "2.88.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्तरीयमिहासक्तं सुव्यक्तं सीतया तदा ।\nतथा ह्येते प्रकाशन्ते सक्ताः कौशेयतन्तवः ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "2.88.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्ये भर्त्तुः सुखा शय्या येन बाला तपस्विनी ।\nसुकुमारी सती दुःखं न विजानाति मैथिली ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "2.88.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हा हन्तास्मि नृशंसो ऽहं यत् सभार्यः कृते मम ।\nईदृशीं राघवः शय्यामधिशेते ह्यनाथवत् ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "2.88.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सार्वभौमकुले जातः सर्वलोकस्य सम्मतः ।\nसर्वलोकप्रियस्त्यक्त्वा राज्यं सुखमनुत्तमम् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "2.88.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथमिन्दीवरश्यामो रक्ताक्षः प्रियदर्शनः ।\nसुखभागी न दुःखार्हः शयितो भुवि राघवः ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "2.88.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धन्यः खलु महाभागो लक्ष्मणः शुभलक्षणः ।\nभ्रातरं विषमे काले यो राममनुवर्त्तते ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "2.88.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सिद्धार्था खलु वैदेही पतिं यानुगता वनम् ।\nवयं संशयिताः सर्वे हीनास्तेन महात्मना ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "2.88.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अकर्णधारा पृथिवी शून्येव प्रतिभाति मा ।\nगते दशरथे स्वर्गं रामे चारण्यमाश्रिते ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "2.88.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च प्रार्थयते कश्चिन्मनसापि वसुन्धराम् ।\nवने ऽपि वसतस्तस्य बाहुवीर्याभिरक्षिताम् ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "2.88.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शून्यसंवरणारक्षामयन्त्रितहयद्विपाम् ।\nअपावृतपुरद्वारां राजधानीमरक्षिताम् ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "2.88.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अप्रहृष्टबलां न्यूनां विषमस्थामनावृताम् ।\nशत्रवो नाभिमन्यन्ते भक्षान् विषकृतानिव ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "2.88.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अद्यप्रभृति भूमौ तु शयिष्ये ऽहं तृणेषु वा ।\nफलमूलाशनो नित्यं जटाचीराणि धारयन् ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "2.88.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यार्थमुत्तरं कालं निवत्स्यामि सुखं वने ।\nतं प्रतिश्रवमामुच्य नास्य मिथ्या भविष्यति ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "2.88.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वसन्तं भ्रातुरर्थाय शत्रुध्नो मा ऽनुवत्स्यति ।\nलक्ष्मणेन सह त्वार्यो ह्ययोध्यां पालयिष्यति ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "2.88.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभिषेक्ष्यन्ति काकुत्स्थमयोध्यायां द्विजातयः ।\nअपि मे देवताः कुर्युरिमं सत्यं मनोरथम् ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "2.88.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रसाद्यमानः शिरसा मया स्वयं बहुप्रकारं यदि नाभिपत्स्यते ।\nततो ऽनुवत्स्यामि चिराय राघवं वने वसन्नार्हति मामुपेक्षितुम् ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमदयोध्याकाण्डे अष्टाशीतितमः सर्गः ॥ ८८ ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूणे पीताम्बराख्याने अयोध्याकाण्डव्याख्याने अष्टाशीतितमः सर्गः ॥ ८८ ॥"
@@ -344,6 +374,7 @@
             "end": 267,
             "display_text": "पद्यविशेषैः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -354,6 +385,7 @@
             "end": 405,
             "display_text": "अथ राज्यशिक्षणपरो रामः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

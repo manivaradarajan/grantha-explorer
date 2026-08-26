@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 110,
@@ -8,6 +8,7 @@
     {
       "ref": "2.41.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मिंस्तु पुरुषव्याघ्रे विनिर्याते कृताञ्जलौ ।\nआर्तशब्दो ऽथ संजज्ञे स्त्रीणामन्तःपुरे महान् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "2.41.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनाथस्य जनस्यास्य दुर्बलस्य तपस्विनः ।\nयो गतिः शरणं चासीत् स नाथः क्वनु गच्छति ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "2.41.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न क्रुद्ध्यत्यभिशप्तोपि क्रोधनीयानि वर्जयन् ।\nक्रुद्धान् प्रसादयन् सर्वान् समदुःखः क्वचिद्गतः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "2.41.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कौसल्यायां महातेजा यथा मातरि वर्तते ।\nतथा यो वर्त्तते ऽस्मासु महात्मा क्वनु गच्छति ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "2.41.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कैकेय्या क्लिश्यमानेन राज्ञा सञ्चोदितो वनम् ।\nपरित्राता जनस्यास्य जगतः क्वनु गच्छति ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "2.41.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहो निश्चेतनो राजा जीवलोकस्य सम्प्रियम् ।\nधर्म्यं सत्यव्रतं रामं वनवासे प्रवत्स्यति ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "2.41.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति सर्वा महिष्यस्ता विवत्सा इव धेनवः ।\nरुरुदुश्चैव दुःखार्त्ताः सस्वरं च विचुक्रुशुः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "2.41.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तमन्तःपुरे घोरमार्तशब्दं महीपतिः ।\nपुत्रशोकाभिसन्तप्तः श्रुत्वा चासीत् सुदुःखितः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "2.41.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नाग्निहोत्राण्यहूयन्त नापचन् गृहमेधिनः ।\nअकुर्वन्नप्रजाः कार्यं सूर्यश्चान्तरधीयत ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "2.41.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "व्यसृजन् कवलान्नागा गावो वत्सान्न पाययन् ।\nपुत्रं प्रथमजं लब्ध्वा जननीनाभ्यनन्दत ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "2.41.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्रिशङ्कुर्लोहिताङ्गश्च बृहस्पतिबुधावपि ।\nदारुणाः सोममभ्येत्य ग्रहाः सर्वे व्यवस्थिताः ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "2.41.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नक्षत्राणि गतार्चीषि ग्रहाश्च गततेजसः ।\nविशाखास्तु सधूमाश्च नभसि प्रचकाशिरे ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "2.41.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कालिकानिलवेगेन महोदधिरिवोत्थितः ।\nरामे वनं प्रव्रजिते नगरं प्रचचाल तत् ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "2.41.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिशः पर्याकुलाः सर्वास्तिमिरेणेव संवृताः ।\nन ग्रहो नापि नक्षत्रं प्रचकाशे न किञ्चन ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "2.41.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अकस्मान्नागरः सर्वो जनो दैन्यमुपागमत् ।\nआहारे वा विहारे वा न कश्चिदकरोन्मनः ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "2.41.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शोकपर्यायसन्तप्तः सततं दीर्घमुच्छ्वसन् ।\nअयोध्यायां जनः सर्वः शुशोच जगतीपतिम् ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "2.41.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बाष्पपर्याकुलमुखो राजमार्गगतो जनः ।\nन हृष्टो लक्ष्यते कश्चित्सर्वः शोकपरायणः ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "2.41.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न वाति पवनः शीतो न शशी सौम्यदर्शनः ।\nन सूर्यस्तपते लोकं सर्वं पर्याकुलं जगत् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "2.41.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनर्थिनः सुताः स्त्रीणां भर्त्तारो भ्रातरस्तथा ।\nसर्वे सर्वं परित्यज्य राममेवान्वचिन्तयन् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "2.41.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ये तु रामस्य सुहृदः सर्वे ते मूढचेतसः ।\nशोकभारेण चाक्रान्ताः शयनं न जहुस्तदा ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "2.41.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्त्वयोध्या रहिता महात्मना पुरन्दरेणेव मही सपर्वता ।\nचचाल घोरं भयशोकपीडिता सनागयोधाश्वगणा ननाद च ॥"

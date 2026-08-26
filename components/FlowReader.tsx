@@ -15,10 +15,12 @@ import {
   EditionStub,
   Grantha,
   GranthaMetadata,
+  MULA_PRESENTATION,
   Reference,
   commentaryPassageForRef,
   getAllPassagesForNavigation,
   nextUnloadedPartFirstRef,
+  presentationFor,
   previousUnloadedPartFirstRef,
   sortPassagesByRef,
 } from "@/lib/data";
@@ -504,6 +506,11 @@ export default function FlowReader({
       // The selection came from scrolling: the verse is already in the view
       // band. Record the current scrollTop as the target (so a later lazy load
       // only re-aligns if it shifts content above) but do NOT re-align.
+      // Re-pin the selection: the render-time reset below it set
+      // `selectionPinned` to false on the hash change, and without re-pinning
+      // here the scroll→hash gate would stay closed forever (the URL would
+      // freeze after the first scrollspy-driven hash write).
+      selectionPinned.current = true;
       lastAutoScroll.current = {
         ref: selectedRef,
         found: true,
@@ -960,6 +967,25 @@ export default function FlowReader({
                   const isMain = passage.passage_type === "main";
                   const section = passage.ref.split(".")[0];
 
+                  // Category transition divider: when this item's category
+                  // differs from the immediately preceding rendered item's,
+                  // insert a subtle hairline+dot divider before it (e.g.
+                  // prefatory_material → main passages → concluding_material).
+                  // Index-based: the sorted passage list is the render order,
+                  // and for vedarthasangraha every item renders.
+                  const prevType =
+                    index > 0 ? passages[index - 1].passage_type : null;
+                  const typeChanged =
+                    prevType !== null && prevType !== passage.passage_type;
+                  const categoryDivider = typeChanged ? (
+                    <div
+                      key={`section-divider-${index}`}
+                      className="section-divider"
+                    >
+                      <span className="section-divider-dot" />
+                    </div>
+                  ) : null;
+
                   // Chapter divider — label from the grantha's own structure_levels,
                   // never hardcoded to "अध्याय" (spec §3.3). Only main passages open
                   // a section, so dividers never precede prefatory/concluding items.
@@ -987,8 +1013,23 @@ export default function FlowReader({
                     // Prefatory/concluding passages render their own prose
                     // (e.g. a sarga praveśa or the whole-work mangalācaraṇa).
                     // The passage label is navigation metadata, not display
-                    // text — it is deliberately not rendered here.
+                    // text — it is deliberately not rendered here. The mula is
+                    // part of the main text, so it gets the left rail (like a
+                    // main para); its own verses (maṅgala/colophon, <!-- verse -->)
+                    // render as verse blocks via renderMulaWithReferences.
                     const content = passage.content?.sanskrit?.devanagari;
+                    const pRefs = (passage as { references?: Reference[] }).references;
+                    const pVerses = (passage as { verses?: { start: number; end: number }[] }).verses;
+                    // Verse-tagged front matter (maṅgala/ācāryavandana, the
+                    // colophon's closing verse) renders with the verse-quote
+                    // treatment (.verse-quote.verse-own) — indented, even pādas
+                    // sub-indented — wrapped in the prose-mūla row classes
+                    // (flow-para-row + flow-commentary) so it carries the same
+                    // left rail and font size as the main prose body. Plain
+                    // front matter (invocations, the title line) renders
+                    // centered via .frontmatter-plain — one boolean, two
+                    // outcomes, no grantha-level flag.
+                    const hasOwnVerse = (pVerses?.length ?? 0) > 0;
                     // The whole-work opening (e.g. the Gita's maṅgalācaraṇa)
                     // lives in commentary.intro, keyed to its label-only
                     // prefatory anchor — the same prefaceAnchor mechanism
@@ -1001,10 +1042,11 @@ export default function FlowReader({
                         : null;
                     return (
                       <Fragment key={`${passage.passage_type}-${passage.ref}`}>
+                        {categoryDivider}
                         <div data-verse-ref={passage.ref} className="px-4 py-8">
                           {prefaceAnchor ? (
                             <p
-                              className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line"
+                              className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-700 whitespace-pre-line"
                               dangerouslySetInnerHTML={{
                                 __html: sanitizeCommentaryHtml(
                                   prefaceAnchor.sanskrit?.devanagari || "",
@@ -1012,9 +1054,43 @@ export default function FlowReader({
                               }}
                             />
                           ) : content ? (
-                            <p className="verse-text font-serif flow-intro leading-relaxed text-gray-700 whitespace-pre-line">
-                              {stripMarkdown(content)}
-                            </p>
+                            hasOwnVerse ? (
+                              <div className={`flow-para-row ${MULA_PRESENTATION.prose.text}`}>
+                                {/* Empty gutter spacer: framing rows carry no
+                                    paragraph number, but reserving the number
+                                    gutter's width makes the verse column land at
+                                    the SAME x as a body paragraph's own-verse
+                                    (e.g. para 252's closing सारासार verse). */}
+                                <span className="flow-para-number" aria-hidden="true" />
+                                <div className="min-w-0 flex-1">
+                                  {renderMulaWithReferences(
+                                    content,
+                                    pRefs,
+                                    {
+                                      currentGranthaId: grantha.grantha_id,
+                                      sourcePassageRef: passage.ref,
+                                      sourceHighlight,
+                                      updateHash,
+                                      availableGranthaIds,
+                                      granthaById,
+                                      granthaIdToTitle: granthaIdToDevanagariTitle,
+                                    },
+                                    undefined,
+                                    pVerses,
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="frontmatter-plain">
+                                {content
+                                  .split("\n")
+                                  .map((line) => line.trim())
+                                  .filter((line) => line.length > 0)
+                                  .map((line, lineIndex) => (
+                                    <div key={lineIndex}>{stripMarkdown(line)}</div>
+                                  ))}
+                              </div>
+                            )
                           ) : null}
                           {renderSubcommentaries(passage.ref, sourceHighlight)}
                         </div>
@@ -1034,9 +1110,45 @@ export default function FlowReader({
                   const mula = stripMarkdown(rawMula);
                   const mulaRefs = (passage as { references?: Reference[] }).references;
                   const introText = cp?.intro?.sanskrit?.devanagari;
+                  // Presentation is a total function of the passage's declared
+                  // kind (per-block presentation model).
+                  const isProseMula = presentationFor(passage.kind ?? "") === "prose";
+                  const mulaPresentation = MULA_PRESENTATION[presentationFor(passage.kind ?? "")];
+                  // Mula content: reference-linked text (prose paras and verse
+                  // quotes interleave via renderMulaWithReferences); verse kinds
+                  // close with the print-convention double-danda number.
+                  const mulaContent =
+                    (mulaRefs && mulaRefs.length > 0) ||
+                    (passage.verse_quotes && passage.verse_quotes.length > 0)
+                      ? (
+                          <>
+                            {renderMulaWithReferences(
+                              rawMula ?? "",
+                              mulaRefs,
+                              {
+                                currentGranthaId: grantha.grantha_id,
+                                sourcePassageRef: passage.ref,
+                                sourceHighlight,
+                                updateHash,
+                                availableGranthaIds,
+                                granthaById,
+                                granthaIdToTitle: granthaIdToDevanagariTitle,
+                              },
+                              passage.verse_quotes,
+                              (passage as { verses?: { start: number; end: number }[] }).verses,
+                            )}
+                            {!isProseMula && (
+                              <>{" "}॥ {toDevanagariNumerals(passage.ref)} ॥</>
+                            )}
+                          </>
+                        )
+                      : isProseMula
+                        ? mula.replace(/॥\s*$/, "").trimEnd()
+                        : withVerseNumber(mula, passage.ref);
 
                   return (
                     <Fragment key={`${passage.passage_type}-${passage.ref}`}>
+                      {categoryDivider}
                       {divider}
                       <div
                         ref={(el) => setVerseRef(passage.ref, el)}
@@ -1056,42 +1168,38 @@ export default function FlowReader({
                                 }}
                               />
                             )}
-                            {/* Mūla verse: the verse number closes it in double
-                            dandas (॥ N ॥, print convention, spec §6.1); the
-                            shloka keeps its source line break (which falls at
-                            the single-daṇḍā pāda boundary). The verse sits
-                            narrower and centered so the commentary runs wider
-                            than it, keeping the reading column centered like
-                            the mockup. */}
-                            <div className="mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2">
+                            {/* Mūla verse: presentation is a total function of
+                            the passage's declared kind (per-block presentation
+                            model). Verse kinds (Shloka/Mantra/Verse/
+                            Sutra) sit in a narrower, centered, left-ruled column
+                            so commentary runs wider; prose kinds (Para/Gadya)
+                            render undecorated like commentary — no border, no
+                            centering. Prose paras show the canonical passage
+                            number in a right-aligned gutter next to a quiet
+                            left rail (echoing the verse column's border-l), and
+                            drop the trailing dandas; verse kinds close with the
+                            print convention ``॥ N ॥`` (spec §6.1).
+                            `withVerseNumber`/the danda append no-op on
+                            non-numeric refs. */}
+                            <div className={mulaPresentation.wrapper}>
                               {passage.speaker && (
                                 <div className="font-serif text-sm text-gray-600 mb-2">
                                   {stripMarkdown(passage.speaker)}
                                 </div>
                               )}
                               {mula && (
-                                <p className="verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line">
-                                  {mulaRefs && mulaRefs.length > 0 ? (
-                                    <>
-                                      {renderMulaWithReferences(
-                                        rawMula ?? "",
-                                        mulaRefs,
-                                        {
-                                          currentGranthaId: grantha.grantha_id,
-                                                            sourcePassageRef: passage.ref,
-                  sourceHighlight,
-                  updateHash,
-                                          availableGranthaIds,
-                                          granthaById,
-                                          granthaIdToTitle: granthaIdToDevanagariTitle,
-                                        },
-                                      )}
-                                      {" "}॥ {toDevanagariNumerals(passage.ref)} ॥
-                                    </>
-                                  ) : (
-                                    withVerseNumber(mula, passage.ref)
-                                  )}
-                                </p>
+                                isProseMula ? (
+                                  <div className={`flow-para-row ${mulaPresentation.text}`}>
+                                    <span className="flow-para-number">
+                                      {toDevanagariNumerals(passage.ref)}.
+                                    </span>
+                                    <div className="min-w-0 flex-1">{mulaContent}</div>
+                                  </div>
+                                ) : (
+                                  <div className={`verse-text font-serif ${mulaPresentation.text}`}>
+                                    {mulaContent}
+                                  </div>
+                                )
                               )}
                             </div>
                           </div>

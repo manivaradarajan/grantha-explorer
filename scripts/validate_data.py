@@ -43,6 +43,111 @@ _VALID_KINDS: frozenset[str] = frozenset({
     'grantha',
 })
 
+# Pinned classification (mirrors lib/data.ts KNOWN_PASSAGE_KINDS). Any kind
+# found in the corpus without an entry here is a build error (per-block
+# presentation model).
+_KNOWN_PASSAGE_KINDS: frozenset[str] = frozenset({
+    'Para', 'Gadya', 'Shloka', 'Mantra', 'Verse', 'Sutra',
+})
+
+_VALID_EDITION_KINDS: frozenset[str] = frozenset({'mula-only', 'commentarial'})
+
+
+def _has_commentary(obj: dict[str, Any]) -> bool:
+    """True when a part/edition carries a commentary (singular or plural)."""
+    commentary = obj.get('commentary')
+    commentaries = obj.get('commentaries')
+    if isinstance(commentary, dict) and commentary:
+        return True
+    return isinstance(commentaries, list) and len(commentaries) > 0
+
+
+def _check_passage_kinds(data: dict[str, Any]) -> list[str]:
+    """Per-block kind invariants: main passages carry a classified `kind`;
+    framing passages carry none. (Per-block presentation model.)"""
+    errs: list[str] = []
+    for key in ('passages', 'prefatory_material', 'concluding_material'):
+        arr = data.get(key)
+        if not isinstance(arr, list):
+            continue
+        for passage in arr:
+            if not isinstance(passage, dict):
+                continue
+            ref = passage.get('ref', '?')
+            if passage.get('passage_type') == 'main':
+                kind = passage.get('kind')
+                if kind not in _KNOWN_PASSAGE_KINDS:
+                    errs.append(
+                        f'[kind] main passage {ref} has unclassified kind {kind!r}'
+                    )
+            elif passage.get('kind') is not None:
+                errs.append(
+                    f'[kind] framing passage {ref} must not carry kind '
+                    f'(got {passage.get("kind")!r})'
+                )
+    return errs
+
+
+def _check_edition_kind_coherence(lib: pathlib.Path) -> list[str]:
+    """Cross-file edition-kind coherence: every edition carries a stamped
+    `edition_kind`, a mula-only edition has a commentary in no part, and a
+    commentarial edition has a commentary in at least one part (a uniform drop
+    now fails against the committed stamp). A commentarial edition may have an
+    individual commentary-free part (e.g. a sarga whose whole text is one
+    un-glossed passage). (Per-block presentation model.)"""
+    errs: list[str] = []
+    for path in sorted(lib.rglob('*.json')):
+        data = json.loads(path.read_text())
+        kind = _classify(data, path)
+        if kind == 'edition-sub-envelope':
+            label = data.get('edition_id') or path.parent.name
+            stamp = data.get('edition_kind')
+            if stamp not in _VALID_EDITION_KINDS:
+                errs.append(
+                    f'[edition_kind] edition {label} missing/invalid '
+                    f'edition_kind {stamp!r}'
+                )
+                continue
+            parts = data.get('parts')
+            if not isinstance(parts, list):
+                continue
+            any_part_has_commentary = False
+            for part in parts:
+                if not isinstance(part, dict) or not part.get('file'):
+                    continue
+                part_path = path.parent / part['file']
+                if not part_path.exists():
+                    continue
+                part_data = json.loads(part_path.read_text())
+                has = _has_commentary(part_data)
+                if stamp == 'mula-only' and has:
+                    errs.append(
+                        f'[edition_kind] mula-only edition {label} part '
+                        f'{part["file"]} has a commentary'
+                    )
+                any_part_has_commentary = any_part_has_commentary or has
+            if stamp == 'commentarial' and not any_part_has_commentary:
+                errs.append(
+                    f'[edition_kind] commentarial edition {label} has '
+                    f'commentary in no part'
+                )
+        elif kind == 'grantha':
+            label = data.get('edition_id') or data.get('grantha_id') or '?'
+            stamp = data.get('edition_kind')
+            if stamp not in _VALID_EDITION_KINDS:
+                errs.append(
+                    f'[edition_kind] edition {label} missing/invalid '
+                    f'edition_kind {stamp!r}'
+                )
+                continue
+            expected = 'commentarial' if _has_commentary(data) else 'mula-only'
+            if stamp != expected:
+                errs.append(
+                    f'[edition_kind] edition {label} edition_kind {stamp} '
+                    f'mismatches commentary presence ({expected})'
+                )
+    return errs
+
 
 def _classify(data: dict[str, Any], path: pathlib.Path | None = None) -> str | None:
     """Return the file's explicit kind marker, or None to skip the file.
@@ -90,10 +195,16 @@ def _validate_file(
 
     validator = Draft7Validator(schema, resolver=resolver)
     errors = sorted(validator.iter_errors(data), key=lambda e: list(e.absolute_path))
-    return [
+    schema_msgs = [
         f'[{" > ".join(str(p) for p in e.absolute_path) or "(root)"}] {e.message[:150]}'
         for e in errors
     ]
+
+    # Per-block presentation checks (content files only).
+    if kind in ('grantha', 'grantha-part'):
+        schema_msgs.extend(_check_passage_kinds(data))
+
+    return schema_msgs
 
 
 def main() -> None:
@@ -120,8 +231,16 @@ def main() -> None:
     total = pass_count + fail_count
     print()
     print(f'=== {pass_count} PASS  {fail_count} FAIL  ({total} files scanned) ===')
+
+    # Edition-kind coherence is a cross-file check, run once over the library.
+    for msg in _check_edition_kind_coherence(lib):
+        fail_count += 1
+        print(f'FAIL  {msg}')
+
     if fail_count == 0:
         print('All data files are valid.')
+    else:
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':

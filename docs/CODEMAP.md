@@ -51,9 +51,126 @@ time; activating another reference updates it in place.
   `sourceLookback` (`buildSourceWindow`, `lib/quotedMatch.ts`) into each
   `ReferenceLink`
 - `lib/quotedMatch.ts` — needle→haystack fuzzy quote match (Smith–Waterman local
-  alignment); `buildMatchString` (NFC + strip + whitespace collapse, with
-  original-index map), `extractEnclosedQuote` (delimited **…**/quote-pair span),
-  `findQuotedSpan` returns the haystack span + source-side coordinates;
-  `clampToGraphemeBoundaries` (via `Intl.Segmenter`) prevents splitting a
-  syllable (no dotted circle); `MAX_COVERAGE=0.8` suppresses whole-passage
-  highlights; `MAX_LOOKBACK=60`, `MIN_MATCH_CHARS=10`, `MIN_SIMILARITY=0.7`
+  alignment); `buildMatchString` (NFC + strip + whitespace collapse + virama
+  elision, with original-index map), `extractEnclosedQuote` (delimited **…**/
+  quote-pair span), `findQuotedSpan` returns the haystack span + source-side
+  coordinates; `clampToGraphemeBoundaries` (via `Intl.Segmenter`) prevents
+  splitting a syllable (no dotted circle); `MAX_LOOKBACK=60`,
+  `MIN_MATCH_CHARS=10`, `MIN_SIMILARITY=0.7`
+
+## Per-block mula presentation (`passage.kind`)
+
+How a main passage decides whether to render as decorated verse or
+undecorated prose. Presentation is a **total, pinned function** of the
+passage's declared `kind` (the markdown heading word, stamped into the data by
+both converters) — never inferred, never a silent default. See
+`../grantha-data/docs/DESIGN_SCHOOL_NAMESPACES.md` for the type framing.
+
+- `lib/data.ts` — the runtime type + mapping:
+  - `Passage.kind` (declared kind, main passages only)
+  - `presentationFor(kind)` — exhaustive switch, **throws** on an unknown kind
+  - `KNOWN_PASSAGE_KINDS` — the pinned classification
+  - `MULA_PRESENTATION` — wrapper/text classes per `"prose" | "verse"`
+- `components/FlowReader.tsx` — the mūla block derives
+  `mulaPresentation = MULA_PRESENTATION[presentationFor(passage.kind)]` and
+  `mulaIsVerse`; applies them to the wrapper, font classes, and the `॥ N ॥`
+  gating. `FlowReaderCompare` mūla rows are unreachable for mula-only texts.
+- Consumer converter: `scripts/convert_structured_md.py` — `PassageData.kind`
+  (leaf headings only), `_build_main_passage_entry` emits it on main passages.
+
+## Verse-quote blocks (`verse_quotes`) — mula-prose embedded citations
+
+Prose-mula texts (vedarthasangraha) embed quoted verses. The producer
+(grantha-data normalizer `wrap_verse_quotes`) wraps each quote in
+`<!-- verse-quote -->` markers and stamps `passage.verse_quotes` as
+`{start,end}` half-open offsets into `content.sanskrit.devanagari`; adjacent
+blocks are separated by a blank line (each block = one distinct quote). The
+renderer hang-indents each block and sub-indents even pādas of ≥4-pāda verses.
+
+- `components/renderCommentary.tsx` — `renderMulaWithReferences` interleaves
+  `.verse-quote` divs with `.flow-mula-prose` divs; `renderVerseQuote` splits
+  pādas (per-pāda absolute offsets keep refs/highlights aligned);
+  `renderMulaProse` renders prose + refs with the steel-blue source highlight.
+- `components/FlowReader.tsx` — the mūla block is a `<div>` (not `<p>`) and
+  passes `passage.verse_quotes` through.
+- `lib/data.ts` — `Passage.verse_quotes?: {start,end}[]`.
+- Producer rules: `grantha-data/tools/scripts/devanagari_normalize/normalize.py`
+  (`wrap_verse_quotes` — ॥-anchor, standalone single-danda pāda, ref-change
+  merge-split) and both converters' `verse_quotes` extraction.
+
+## Edition kind (`edition_kind`) — the pane gate
+
+Declared classification of an edition ("mula-only" | "commentarial") derived
+at build time from commentary presence and stamped into committed data. Gates
+the commentary pane/chrome; does not drive per-block presentation.
+
+- `lib/data.ts` — `EditionKind`, `deriveEditionKind` (legacy fallback),
+  `hasCommentary` unified onto the typed field; `loadGrantha` stamps
+  `edition_kind` in both return paths (multipart `partialGrantha`, single-file
+  `data`).
+- Pane consumers: `app/page.tsx`, `components/TabletLayout.tsx`,
+  `components/MobileLayout.tsx` (all via `hasCommentary`).
+- Consumer producers: `scripts/convert_structured_md.py`
+  (`build_envelope_json` gained `edition_kind`; `convert_grantha` computes it
+  from per-part commentary), `scripts/import_editions.py` (same, multi-edition).
+
+## Validators = type checker
+
+- `scripts/validate-data.ts` — `checkPassageKinds` (kind presence +
+  classification on main, none on framing), `checkEditionKindCoherence`
+  (stamp vs per-part commentary; cross-file, run once over the library).
+- `scripts/validate_data.py` — parallel Python: `_check_passage_kinds`,
+  `_check_edition_kind_coherence`.
+- Cross-converter equivalence: `../grantha-data/tools/lib/grantha_converter/test_v2_cross_converter.py`.
+
+## On-disk presentation invariants (tests)
+
+- `tests/integration/mula-presentation.test.ts` and
+  `scripts/tests/test_presentation_facts.py` — pin `kind` + `edition_kind`
+  over the committed `public/data/library` tree.
+- `components/FlowReader.test.tsx` — prose vs verse rendering regression.
+- `lib/data.test.ts` — `presentationFor` / `deriveEditionKind` units.
+
+## Citation-repair analysis + matcher parity
+
+- `../grantha-data/tools/lib/grantha_data/citation_repair.py` — the Python
+  citation-repair classifier (verbatim port of `lib/quotedMatch.ts`'s
+  `findQuotedSpan`) + `classify`/`analyze`/`build_overlay`/`apply_overlay`;
+  CLI `citation-repair`.
+- `scripts/citation-matcher-conformance.mjs` — live-TS matcher bridge for the
+  parity conformance test (`GRANTHA_MATCHER_NO_ICU=1` forces the manual
+  grapheme scan).
+- `scripts/convert_structured_md.py` — `_apply_citation_overlay` /
+  `_load_citation_overlay` apply the corrections overlay (grantha-data
+  `data/citation_corrections.yaml`) to emitted references; unmatched keys are
+  loud diagnostics.
+- Parity contract: `docs/CITATION_MATCHER_PARITY.md` (mirror of
+  `../grantha-data/docs/CITATION_MATCHER_PARITY.md`) — any
+  `lib/quotedMatch.ts` constant/rule change must ship the matching Python
+  change + mirrored test.
+
+## Front matter + category dividers (flow reader)
+
+How prefatory/concluding items decide their treatment, and the divider that
+separates the three content categories. Purely per-item structural — no
+grantha-level "prose text" flag.
+
+- `components/FlowReader.tsx` — the `!isMain` (framing) branch checks
+  `passage.verses` (the `<!-- verse -->` markers): non-empty → the verse-quote
+  treatment via `renderMulaWithReferences`; empty → a centered
+  `.frontmatter-plain` div (each source line its own block). A
+  `categoryDivider` (`.section-divider`) is inserted before any passage whose
+  `passage_type` differs from the immediately preceding sorted passage
+  (prefatory → main → concluding).
+- `components/renderCommentary.tsx` — `renderMulaWithReferences` renders the
+  work's own verses (`<!-- verse -->`, `ownVerses`) as `.verse-quote.verse-own`
+  blocks (indented, prose-mūla-sized, even-pāda sub-indent — the same
+  treatment as embedded citations, semantically distinct), and the interleave
+  blank-line separator counts them as verse boundaries.
+- `app/globals.css` — `.frontmatter-plain` (centered, em-relative 0.9375em,
+  each line its own block), `.verse-own` (semantic; styling from
+  `.verse-quote`), and `.section-divider` (+ `::before`/`::after` hairlines,
+  `.section-divider-dot`), mirroring the chapter-divider idiom.
+- Tests: `components/FlowReader.test.tsx` (plain vs verse-tagged front matter,
+  divider count/placement) and `tests/verse-quote-render.test.tsx` (own-verse
+  verse-quote treatment + even-pāda sub-indent).

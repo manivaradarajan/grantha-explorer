@@ -25,6 +25,10 @@
 /** Characters of source text examined immediately before the citation. */
 export const MAX_LOOKBACK = 60;
 
+/** Hard cap on backward extension across verse-line (danda+newline) boundaries
+ *  when collecting a multi-pāda shloka quote into the source window. */
+export const QUOTE_LINE_EXTEND_CAP = 400;
+
 /** Opening/closing delimiter pairs that mark a fully-formed quoted span in a
  *  source window: markdown bold (the corpus quotes Sanskrit in `**…**`) and
  *  curly/straight quote pairs. */
@@ -160,18 +164,208 @@ export const buildSourceWindow = (sourceText: string, refStart: number): SourceW
   if (quoteStart !== null) {
     start = quoteStart;
   }
+  // Collect a multi-pāda shloka quote into the window: walk backward across
+  // completed verse lines (a line ending in a danda, `।\n` / `॥\n`) up to a
+  // cap, so the whole verse (not just its last pāda) is available as a needle.
+  // A long prose run is never fully swept — the walk stops at the first line
+  // that does not end in a danda, and the candidate needles reject any prose
+  // prefix that sneaks in.
+  //
+  // `start` may sit MID-line (the MAX_LOOKBACK cut + whitespace extension
+  // never snaps to a line start), so first snap to the start of the current
+  // line, then walk back line by line while each preceding line ends in a
+  // danda+newline.
+  const lineStartOf = (pos: number): number => {
+    const nl = sourceText.lastIndexOf("\n", pos - 1);
+    return nl === -1 ? 0 : nl + 1;
+  };
+  start = lineStartOf(start);
+  let guard = 0;
+  while (start > 0 && refStart - start < QUOTE_LINE_EXTEND_CAP && guard++ < 40) {
+    const prevLineEnd = sourceText.lastIndexOf("\n", start - 2);
+    if (prevLineEnd === -1) {
+      start = 0;
+      break;
+    }
+    // The line BEFORE the current start must itself end in a danda+newline
+    // (i.e. the char before prevLineEnd is । or ॥) for it to be a verse pāda
+    // that belongs to the same quote.
+    if (!(sourceText[prevLineEnd - 1] === "।" || sourceText[prevLineEnd - 1] === "॥")) {
+      break;
+    }
+    const prevLineStart = sourceText.lastIndexOf("\n", prevLineEnd - 1) + 1;
+    start = prevLineStart;
+  }
+  // Never extend the lookback across an EARLIER cross-reference: a window that
+  // includes a previous "(ref) । …" lets the quote needle pollute across
+  // citations (para 123 has two कौ. उ. ३.६४ refs on one line; the second
+  // window must stop right after the first). Clamp `start` to just past the
+  // previous citation's closing paren.
+  const prevRef = crossRefEnd(sourceText, refStart);
+  if (prevRef !== null && prevRef > start) {
+    start = prevRef;
+  }
   return { text: sourceText.slice(start, refStart), start };
+};
+
+/** The position just after the last complete ``(ref)`` citation group that ends
+ *  strictly before `before` (the citation's own ``( … )`` is at `before` and
+ *  must not be matched). Returns `null` when no earlier citation exists. */
+const crossRefEnd = (text: string, before: number): number | null => {
+  let end = -1;
+  const re = /\([^()\n]*\)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index >= before) {
+      break;
+    }
+    if (m.index + m[0].length <= before) {
+      end = m.index + m[0].length;
+    }
+  }
+  return end === -1 ? null : end;
 };
 
 /** Minimum matched run length (in kept chars) before a match is accepted. */
 export const MIN_MATCH_CHARS = 10;
 
+/** Minimum length of a tight quote needle before it is tried on its own. A
+ *  shorter but *precise* phrase (e.g. "तत्त्वमसि", "अयमात्मा ब्रह्म") is a
+ *  better needle than the surrounding prose window. */
+export const MIN_QUOTE_NEEDLE_LEN = 4;
+
+/** Cap on the number of word-boundary needle candidates, so an extended
+ *  multi-line window never explodes the candidate count. */
+const MAX_QUOTE_NEEDLES = 80;
+
+/** True when a char is a real word separator (whitespace or danda). A virama
+ *  mid-word is NOT a separator — conjuncts stay one word. */
+const isSeparatorChar = (ch: string): boolean =>
+  /\s/.test(ch) || ch === "।" || ch === "॥";
+
+/** True when a char cannot start a word: a Devanagari virama/matra/combining
+ *  mark (a candidate starting on those renders a dotted circle or splits a
+ *  syllable). */
+const isNonWordStart = (ch: string): boolean =>
+  isClusterCodePoint(ch.codePointAt(0) ?? 0);
+
+/** A quote is usually a pāda (danda/newline-delimited unit) or a prose run.
+ *  Candidates are generated in two tiers, longest first:
+ *    1. pāda-aligned suffixes (a full shloka, its last pāda, …) — these
+ *       delimit quoted verses precisely, so a mixed prose+quote window is never
+ *       a single needle that swallows both;
+ *    2. word-aligned suffixes (for prose-run quotes with no danda), starting
+ *       after a whitespace/danda/newline boundary.
+ *  The window's leading edge is trimmed to a word boundary first so a
+ *  mid-word cut (a hard MAX_LOOKBACK cut or a preceding punctuation run) never
+ *  starts a candidate on a fragment.
+ */
+export const buildQuoteNeedles = (sourceWindow: string): string[] => {
+  // Drop the citation's own open paren (the window ends right at it) and any
+  // trailing whitespace/danda left around it.
+  const s = sourceWindow.replace(/\s*\(\s*$/, "").replace(/[।॥]+\s*$/, "");
+
+  // Trim the leading edge to the first real word start (whitespace/danda
+  // boundaries; never a virama/matra, which would start a candidate on a
+  // dotted circle; virama mid-word is not a boundary).
+  let lead = 0;
+  let prevIsBreak = true;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (isSeparatorChar(ch)) {
+      prevIsBreak = true;
+    } else if (prevIsBreak && !isNonWordStart(ch)) {
+      lead = i;
+      break;
+    } else {
+      prevIsBreak = false;
+    }
+  }
+  const t = s.slice(lead);
+
+  // Pāda boundaries: after each danda and after each newline (the window may
+  // span several lines). The window end is always a boundary.
+  const padas = [0];
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (ch === "।" || ch === "॥" || ch === "\n") {
+      padas.push(i + 1);
+    }
+  }
+  padas.push(t.length);
+
+  // Word-start positions (tier 2).
+  const words = [0];
+  prevIsBreak = true;
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (isSeparatorChar(ch)) {
+      prevIsBreak = true;
+    } else if (prevIsBreak && !isNonWordStart(ch)) {
+      words.push(i);
+      prevIsBreak = false;
+    } else {
+      prevIsBreak = false;
+    }
+  }
+
+  const seen = new Set<string>();
+  const needles: string[] = [];
+  const add = (start: number): void => {
+    const phrase = t
+      .slice(start)
+      .replace(/^[।॥\s(]+|[।॥\s)]+$/g, "")
+      .trim();
+    if (phrase.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(phrase)) {
+      seen.add(phrase);
+      needles.push(phrase);
+      // Word-initial a-vowel sandhi: the quote "अपहतपाप्मा" appears in the
+      // cited passage as "आत्मापहतपाप्मा" — the leading अ fuses into the
+      // preceding word's final आ. Emit the variant without the absorbed
+      // initial अ/आ so it can align against the fused form (chhandogya 8.7.1).
+      const first = phrase[0];
+      if (first === "अ" || first === "आ") {
+        const rest = phrase.slice(first.length);
+        if (rest.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(rest)) {
+          seen.add(rest);
+          needles.push(rest);
+        }
+      }
+    }
+  };
+
+  // Tier 1: pāda-aligned suffixes (dedup consecutive boundaries), longest first.
+  const uniqPadas: number[] = [];
+  for (const b of padas) {
+    if (uniqPadas[uniqPadas.length - 1] !== b) {
+      uniqPadas.push(b);
+    }
+  }
+  for (const b of uniqPadas) {
+    add(b);
+    if (needles.length >= MAX_QUOTE_NEEDLES) {
+      return needles;
+    }
+  }
+
+  // Tier 2: word-aligned suffixes (for prose-run quotes), longest first.
+  const uniqWords: number[] = [];
+  for (const b of words) {
+    if (uniqWords[uniqWords.length - 1] !== b) {
+      uniqWords.push(b);
+    }
+  }
+  for (const b of uniqWords) {
+    add(b);
+    if (needles.length >= MAX_QUOTE_NEEDLES) {
+      break;
+    }
+  }
+  return needles;
+};
+
 /** Minimum local-alignment similarity of the aligned region. */
 export const MIN_SIMILARITY = 0.7;
-
-/** Above this fraction of the passage covered by the match, highlighting is
- *  noise (the quote is essentially the whole verse) and is suppressed. */
-export const MAX_COVERAGE = 0.8;
 
 const MATCH_SCORE = 2;
 const MISMATCH_SCORE = -1;
@@ -180,11 +374,6 @@ const GAP_SCORE = -1;
 /** Characters stripped from both sides before alignment (dandas, markdown,
  *  quote marks, punctuation). */
 const STRIP_CHARS = new Set(["।", "॥", "*", "_", ".", "'", "‘", "’", '"']);
-
-/** Trailing verse-number chrome inside a passage's stored text — e.g.
- *  brahma-sutra stores "चमसवदविशेषात् ॥ १-४-८ ॥". It is not content, so a
- *  quote of the whole sutra must measure coverage against the content only. */
-const VERSE_NUMBER_SUFFIX = /॥\s*[०-९0-9.\-]+\s*॥\s*$/;
 
 /** Characters that must never appear at a highlight edge: whitespace and
  *  anything `buildMatchString` strips (dandas, punctuation). A danda can leak
@@ -225,11 +414,36 @@ export const buildMatchString = (text: string): MatchString => {
       continue;
     }
     if (/\s/.test(ch)) {
-      if (!prevWasSpace && match.length > 0) {
-        match.push(" ");
-        map.push(i);
+      // Virama-elision at a word join: "तत् त्वमसि" is the sandhi-unfused form
+      // of "तत्त्वमसि". A space after a syllable-final virama (्, U+094D)
+      // carries no sound and must not break an otherwise-exact quote, so skip
+      // it (the following consonant then glues to the pre-virama consonant).
+      const prevKept = match[match.length - 1];
+      if (prevKept !== "्") {
+        if (!prevWasSpace && match.length > 0) {
+          match.push(" ");
+          map.push(i);
+        }
       }
       prevWasSpace = true;
+      continue;
+    }
+    // Anusvara (ं, U+0902) and a syllable-final म् (म + virama) are the same
+    // nasal in Sanskrit sandhi: विज्ञानम् == विज्ञानं, आनन्दम् == आनन्दं.
+    // Collapse both to a single sentinel so anusvara drift between the quoted
+    // text and the canonical passage never breaks an otherwise-exact short
+    // quote (the reported "विज्ञानम्" vs "विज्ञानं" highlight miss).
+    if (ch === "ं") {
+      match.push("ं");
+      map.push(i);
+      prevWasSpace = false;
+      continue;
+    }
+    if (ch === "म" && nfc[i + 1] === "्") {
+      match.push("ं"); // same sentinel as anusvara
+      map.push(i);
+      i++; // consume the virama — it is not a separate kept char
+      prevWasSpace = false;
       continue;
     }
     match.push(ch);
@@ -276,15 +490,29 @@ export const findQuotedSpan = (
   if (subject.length === 0) {
     return null;
   }
-  // Candidate needles, tightest first: a fully-formed quoted span (when the
-  // window shows the citation enclosed in quotes) matches exactly; the whole
-  // window is the fuzzy fallback. Each candidate runs the same validation.
+  // Candidate needles, tightest-to-loosest but with the FULL quote preferred:
+  // a fully-formed quoted span (when the window shows the citation enclosed in
+  // quotes) matches exactly; then every word-boundary-aligned suffix of the
+  // window, longest first (so a full multi-pāda shloka beats its last pāda,
+  // and a prose-prefixed window falls through to the quote without the
+  // prefix). Each candidate must be START-ANCHORED (the needle's first kept
+  // char aligns — a prose/mid-word prefix like "इत्यारभ्य" or "स च" fails
+  // this) and HIGH-COVERAGE (most of the needle aligns), so a
+  // prose-prefixed candidate falls through to the next, tighter one.
   const needles: string[] = [];
   const enclosed = extractEnclosedQuote(sourceWindow);
   if (enclosed !== null) {
     needles.push(enclosed.text);
   }
-  needles.push(sourceWindow);
+  const quoteNeedles = buildQuoteNeedles(sourceWindow);
+  for (const tight of quoteNeedles) {
+    if (tight !== enclosed?.text && !needles.includes(tight)) {
+      needles.push(tight);
+    }
+  }
+  if (needles.length === 0) {
+    needles.push(sourceWindow);
+  }
 
   for (const needle of needles) {
     const query = buildMatchString(needle).match;
@@ -297,10 +525,32 @@ export const findQuotedSpan = (
     }
     const { score, queryStart, queryEnd, subjectStart, subjectEnd } = span;
     const alignedLength = Math.max(queryEnd - queryStart, subjectEnd - subjectStart);
-    if (score < 2 * MIN_MATCH_CHARS) {
+    // Start-anchored: the needle's first kept char must be part of the match.
+    // A needle that begins with prose (the aligner skipped a leading gap) is a
+    // prose-prefixed window, not a clean quote — fall through to a tighter
+    // candidate.
+    if (queryStart !== 0) {
+      continue;
+    }
+    // A short but precise needle (the tight quote) needs a lower absolute
+    // floor than the 10-char prose window — a 9-char exact phrase like
+    // "तत्त्वमसि" must not be rejected by a score gate sized for prose.
+    const minScore = 2 * Math.max(MIN_QUOTE_NEEDLE_LEN, Math.min(MIN_MATCH_CHARS, query.length));
+    if (score < minScore) {
       continue;
     }
     if (alignedLength === 0 || score / (2 * alignedLength) < MIN_SIMILARITY) {
+      // Comma-elision fallback: a needle may join two canonical phrases with a
+      // comma that compresses the passage's intervening words (e.g. para 236's
+      // "ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो" omits "तत्सत्यम् । स आत्मा ।").
+      // The joined needle fails whole-passage similarity, but each
+      // comma-separated segment matches its own region cleanly — union them
+      // into one highlight. Fires ONLY for comma-containing needles; the
+      // general इत्यादि elision handling is intentionally untouched.
+      const commaUnion = tryCommaSegmentUnion(needle, sourceWindow, subject, passageStr, passage);
+      if (commaUnion !== null) {
+        return commaUnion;
+      }
       continue;
     }
     // Preview-side span (the highlight in the card).
@@ -315,16 +565,33 @@ export const findQuotedSpan = (
     }
     // Source-side span (where the quote sits in the window → the source
     // passage). The exact quoted span carries its delimiters (the mark wraps
-    // them; the commentary sanitizer pairs the bold); the fuzzy whole-window
-    // match needs grapheme clamping + edge trimming like the preview side.
+    // them; the commentary sanitizer pairs the bold); the tight-quote and
+    // whole-window matches need grapheme clamping + edge trimming like the
+    // preview side. Each needle type maps its own query offsets:
+    //   - enclosed: window-relative delimiters, already exact;
+    //   - tight needle: offsets are relative to the needle, offset into the
+    //     window by the needle's position;
+    //   - whole window: offsets are already window-relative.
     let sourceStart: number;
     let sourceEnd: number;
     if (enclosed !== null && needle === enclosed.text) {
       sourceStart = enclosed.start;
       sourceEnd = enclosed.end;
     } else {
-      const rawStart = windowStr.map[queryStart];
-      const rawEnd = windowStr.map[queryEnd - 1] + 1;
+      let rawStart: number;
+      let rawEnd: number;
+      if (needle !== sourceWindow) {
+        const tightOffset = sourceWindow.lastIndexOf(needle);
+        if (tightOffset === -1) {
+          continue;
+        }
+        const needleMap = buildMatchString(needle).map;
+        rawStart = tightOffset + needleMap[queryStart];
+        rawEnd = tightOffset + needleMap[queryEnd - 1] + 1;
+      } else {
+        rawStart = windowStr.map[queryStart];
+        rawEnd = windowStr.map[queryEnd - 1] + 1;
+      }
       if (rawStart >= rawEnd || rawEnd > sourceWindow.length) {
         continue;
       }
@@ -335,18 +602,6 @@ export const findQuotedSpan = (
       sourceStart = sourceClamped.start;
       sourceEnd = sourceClamped.end;
     }
-    // Whole-passage quote → highlighting is noise; suppress it. Measure
-    // coverage against the passage CONTENT only (a trailing " ॥ N ॥" verse
-    // number is chrome, not text — a quote of the whole sutra would otherwise
-    // look like <100% coverage).
-    const contentLength = passage
-      .replace(VERSE_NUMBER_SUFFIX, "")
-      .trimEnd()
-      .length;
-    const matchedLength = Math.min(clamped.end - clamped.start, contentLength);
-    if (contentLength > 0 && matchedLength / contentLength > MAX_COVERAGE) {
-      continue;
-    }
     return {
       start: clamped.start,
       end: clamped.end,
@@ -354,7 +609,76 @@ export const findQuotedSpan = (
       sourceEnd,
     };
   }
+
   return null;
+};
+
+/** Comma-elision fallback for a needle whose comma-separated segments each
+ *  match their own region of the passage but whose joined form fails
+ *  whole-passage similarity (the comma compresses intervening passage words,
+ *  e.g. para 236's "ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो" omits
+ *  "तत्सत्यम् । स आत्मा ।"). Unions the segment spans into one highlight.
+ *  Returns the combined span, or `null` when any segment fails to match. */
+const tryCommaSegmentUnion = (
+  needle: string,
+  sourceWindow: string,
+  subject: string,
+  passageStr: MatchString,
+  passage: string,
+): { start: number; end: number; sourceStart: number; sourceEnd: number } | null => {
+  const segments = needle.split(",");
+  if (segments.length < 2) {
+    return null;
+  }
+  const segSpans: { s: number; e: number }[] = [];
+  for (const seg of segments) {
+    const q = buildMatchString(seg.trim()).match;
+    if (q.length === 0) {
+      return null;
+    }
+    const sp = align(q, subject);
+    if (!sp || sp.queryStart !== 0) {
+      return null;
+    }
+    const al = Math.max(sp.queryEnd - sp.queryStart, sp.subjectEnd - sp.subjectStart);
+    const minScore = 2 * Math.max(MIN_QUOTE_NEEDLE_LEN, Math.min(MIN_MATCH_CHARS, q.length));
+    if (sp.score < minScore || al === 0 || sp.score / (2 * al) < MIN_SIMILARITY) {
+      return null;
+    }
+    segSpans.push({ s: sp.subjectStart, e: sp.subjectEnd });
+  }
+  const start = Math.min(...segSpans.map((s) => s.s));
+  const end = Math.max(...segSpans.map((s) => s.e));
+  if (start >= end || end > subject.length) {
+    return null;
+  }
+  const pStart = passageStr.map[start];
+  const pEnd = passageStr.map[end - 1] + 1;
+  if (pStart >= pEnd || pEnd > passage.length) {
+    return null;
+  }
+  const clamped = clampToGraphemeBoundaries(passage, pStart, pEnd);
+  if (clamped === null) {
+    return null;
+  }
+  // Source-side span: the whole needle sits at its offset in the window.
+  const tightOffset = sourceWindow.lastIndexOf(needle);
+  if (tightOffset === -1) {
+    return null;
+  }
+  const needleMap = buildMatchString(needle).map;
+  const rawStart = tightOffset + needleMap[0];
+  const rawEnd = tightOffset + needleMap[needleMap.length - 1] + 1;
+  const sourceClamped = clampToGraphemeBoundaries(sourceWindow, rawStart, rawEnd);
+  if (sourceClamped === null) {
+    return null;
+  }
+  return {
+    start: clamped.start,
+    end: clamped.end,
+    sourceStart: sourceClamped.start,
+    sourceEnd: sourceClamped.end,
+  };
 };
 
 /**
@@ -446,8 +770,19 @@ const RIGHT_MATRAS = new Set([0x093e, 0x0940, 0x094b, 0x094c]);
 const isRightMatra = (codePoint: number): boolean =>
   RIGHT_MATRAS.has(codePoint);
 
-/** Cached grapheme segmenter (node + modern browsers). */
+/** Cached grapheme segmenter (node + modern browsers).
+ *
+ *  `GRANTHA_MATCHER_NO_ICU=1` forces the manual combining-mark scan. This is
+ *  used by the citation-matcher conformance test (citation-repair parity): the
+ *  Python port implements ONLY the manual scan, so the parity contract is
+ *  pinned to that deterministic algorithm on both sides (see
+ *  CITATION_MATCHER_PARITY.md). The ICU path stays the production default — it
+ *  is a strict superset for rendering — but accept/reject parity is defined
+ *  against the manual scan. */
 const graphemeSegmenter = (): Intl.Segmenter | null => {
+  if (process.env.GRANTHA_MATCHER_NO_ICU === "1") {
+    return null;
+  }
   if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
     return new Intl.Segmenter("hi", { granularity: "grapheme" });
   }

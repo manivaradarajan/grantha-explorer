@@ -92,5 +92,6 @@
       "file": "part16.json",
       "first_ref": "4.4.1"
     }
-  ]
+  ],
+  "edition_kind": "commentarial"
 }

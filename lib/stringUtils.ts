@@ -21,6 +21,21 @@ export const stripMarkdown = (text: string | undefined): string => {
 };
 
 /**
+ * Strip `**` markdown markers WITHOUT trimming. For interior slices of a
+ * passage (reference-rendering segments): trimming per-slice eats meaningful
+ * line-breaks/spaces at slice boundaries, which reflows the reading text when
+ * the slice boundaries move — e.g. when a citation popover toggles the source
+ * highlight and a segment is re-sliced into three parts. A pure function of
+ * the text, so open/closed rendering stays byte-identical.
+ */
+export const stripMarkdownInline = (text: string | undefined): string => {
+  if (!text) {
+    return "";
+  }
+  return text.replace(/\*\*/g, "");
+};
+
+/**
  * Convert ASCII numerals to Devanagari digits for display only.
  *
  * The underlying refs, hash, and parsers stay on ASCII numerals; this is a

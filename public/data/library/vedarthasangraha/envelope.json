@@ -16,5 +16,576 @@
       "file": "part1.json",
       "first_ref": "1"
     }
+  ],
+  "edition_kind": "mula-only",
+  "sections": [
+    {
+      "id": "preamble",
+      "label": {
+        "devanagari": "मङ्गलाचरणम्",
+        "english": "Mangalacaranam"
+      },
+      "start_ref": "0.1",
+      "end_ref": "0.3"
+    },
+    {
+      "id": "s1",
+      "label": {
+        "devanagari": "उपनिषत्सिद्धान्तसारः",
+        "english": "Preliminary statement of the philosophy of the Upanishads"
+      },
+      "start_ref": "1",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "जीवात्मनः स्वरूपम्",
+            "english": "Nature of the individual self"
+          },
+          "start_ref": "2",
+          "end_ref": "2"
+        },
+        {
+          "label": {
+            "devanagari": "परमात्मनः स्वरूपम्",
+            "english": "Nature of the Supreme Self"
+          },
+          "start_ref": "3",
+          "end_ref": "3"
+        }
+      ],
+      "end_ref": "3"
+    },
+    {
+      "id": "s2",
+      "label": {
+        "devanagari": "निर्विशेषवादसङ्ग्रहः",
+        "english": "Summary of the Advaita position"
+      },
+      "start_ref": "4",
+      "end_ref": "4"
+    },
+    {
+      "id": "s3",
+      "label": {
+        "devanagari": "औपाधिकभेदाभेदवादः (भास्करमतम्)",
+        "english": "The Bhaskara Bhedabheda position"
+      },
+      "start_ref": "5",
+      "end_ref": "5"
+    },
+    {
+      "id": "s3",
+      "label": {
+        "devanagari": "स्वाभाविकभेदाभेदवादः (यादवप्रकाशमतम्)",
+        "english": "The Yadavaprakasa Bhedabheda position"
+      },
+      "start_ref": "6",
+      "end_ref": "6"
+    },
+    {
+      "id": "s5a",
+      "label": {
+        "devanagari": "निर्विशेषवादपरीक्षा — श्रुत्या",
+        "english": "Examination of the first view — in the light of scriptures"
+      },
+      "start_ref": "7",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "तत्त्वमस्यर्थविमर्शः",
+            "english": "The Tat Tvam Asi exegesis"
+          },
+          "start_ref": "7",
+          "end_ref": "19"
+        },
+        {
+          "label": {
+            "devanagari": "शोधकवाक्यानां निर्विशेषपरत्वनिरासः",
+            "english": "Refutation of featureless-Brahman readings"
+          },
+          "start_ref": "20",
+          "end_ref": "35"
+        },
+        {
+          "label": {
+            "devanagari": "ब्रह्मणो जगदुपादाननिमित्तत्वसिद्धिः",
+            "english": "Clay example and closing scriptural proofs"
+          },
+          "start_ref": "36",
+          "end_ref": "48"
+        }
+      ],
+      "end_ref": "48"
+    },
+    {
+      "id": "s5b",
+      "label": {
+        "devanagari": "निर्विशेषवादपरीक्षा — युक्त्या",
+        "english": "Examination of the first view — by reasoning"
+      },
+      "start_ref": "49",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "स्वपरमतविमर्शः",
+            "english": "Internal contradictions of Advaita"
+          },
+          "start_ref": "49",
+          "end_ref": "52"
+        },
+        {
+          "label": {
+            "devanagari": "अविद्यायाः स्वरूपानुपपत्तिः",
+            "english": "The impossibility of avidyā"
+          },
+          "start_ref": "53",
+          "end_ref": "67"
+        },
+        {
+          "label": {
+            "devanagari": "शास्त्रप्रत्यक्षयोर्विषयभेदः",
+            "english": "Scripture's authority over perception"
+          },
+          "start_ref": "68",
+          "end_ref": "71"
+        }
+      ],
+      "end_ref": "71"
+    },
+    {
+      "id": "s6",
+      "label": {
+        "devanagari": "औपाधिकभेदाभेदनिरासः",
+        "english": "Refutation of the Bhedabheda via limiting adjuncts"
+      },
+      "start_ref": "72",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "इन्द्रियाणामाहङ्कारिकत्वम्",
+            "english": "The limiting adjunct and sense-organs"
+          },
+          "start_ref": "72",
+          "end_ref": "74"
+        },
+        {
+          "label": {
+            "devanagari": "अंशभेदेन परिहारेऽपि असामञ्जस्यम्",
+            "english": "The bhedābheda position is untenable"
+          },
+          "start_ref": "75",
+          "end_ref": "77"
+        }
+      ],
+      "end_ref": "77"
+    },
+    {
+      "id": "s7",
+      "label": {
+        "devanagari": "स्वाभाविकभेदाभेदनिरासः",
+        "english": "Refutation of the natural Bhedabheda"
+      },
+      "start_ref": "78",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "तादात्म्यस्य शरीरात्मभावनिबन्धनता",
+            "english": "Yādava's identity-in-difference refuted"
+          },
+          "start_ref": "78",
+          "end_ref": "80"
+        },
+        {
+          "label": {
+            "devanagari": "प्रत्यक्षस्य सन्मात्रग्राहित्वादिनिरासः",
+            "english": "Co-reference as the primary relation"
+          },
+          "start_ref": "81",
+          "end_ref": "82"
+        }
+      ],
+      "end_ref": "82"
+    },
+    {
+      "id": "s8a",
+      "label": {
+        "devanagari": "तत्त्वमस्यर्थः",
+        "english": "The meaning of Tat Tvam Asi"
+      },
+      "start_ref": "83",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "चिदचितोः ब्रह्मप्रकारत्वसमर्थनम्",
+            "english": "Cit and acit as modes of Brahman"
+          },
+          "start_ref": "83",
+          "end_ref": "86"
+        },
+        {
+          "label": {
+            "devanagari": "सर्वेषां शब्दानां ईश्वरपर्यन्तता",
+            "english": "All words extend to Īśvara"
+          },
+          "start_ref": "87",
+          "end_ref": "88"
+        }
+      ],
+      "end_ref": "88"
+    },
+    {
+      "id": "s8b",
+      "label": {
+        "devanagari": "ब्रह्मणः सर्वात्मकत्वम्",
+        "english": "Brahman as the self of all"
+      },
+      "start_ref": "89",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "ब्रह्मणः उपादानतायाः निर्विकारत्वाविघटकत्वम्",
+            "english": "Brahman as immutable material cause"
+          },
+          "start_ref": "89",
+          "end_ref": "92"
+        },
+        {
+          "label": {
+            "devanagari": "ब्रह्मण एव कारणत्व-कार्यत्वसमर्थनम्",
+            "english": "Brahman alone is cause and effect"
+          },
+          "start_ref": "93",
+          "end_ref": "94"
+        }
+      ],
+      "end_ref": "94"
+    },
+    {
+      "id": "s8c",
+      "label": {
+        "devanagari": "ब्रह्मणः सर्वशब्दवाच्यता",
+        "english": "Brahman as the referent of all words"
+      },
+      "start_ref": "95",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "शरीरात्मनोः लक्षणनिर्वचनम्",
+            "english": "The body–soul definition"
+          },
+          "start_ref": "95",
+          "end_ref": "97"
+        },
+        {
+          "label": {
+            "devanagari": "परमात्मनः सर्वशब्दवाच्यतायाः हेतुः",
+            "english": "The Supreme Self as referent of all words"
+          },
+          "start_ref": "98",
+          "end_ref": "100"
+        }
+      ],
+      "end_ref": "100"
+    },
+    {
+      "id": "s8d",
+      "label": {
+        "devanagari": "शास्त्रतात्पर्यम्",
+        "english": "The purport of scripture"
+      },
+      "start_ref": "101",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "आत्मसु ज्ञानैकाकारतादर्शनम्",
+            "english": "Individual selves as śeṣas of Bhagavān"
+          },
+          "start_ref": "101",
+          "end_ref": "105"
+        },
+        {
+          "label": {
+            "devanagari": "भगवतो विचित्रैश्वर्यम्",
+            "english": "Brahman's unfathomable lordship"
+          },
+          "start_ref": "106",
+          "end_ref": "109"
+        }
+      ],
+      "end_ref": "109"
+    },
+    {
+      "id": "s8e",
+      "label": {
+        "devanagari": "विविधश्रुतिसमन्वयः",
+        "english": "Harmonizing diverse scriptures"
+      },
+      "start_ref": "110",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "विविधश्रुतिसमन्वयः",
+            "english": "Harmonizing diverse scriptures"
+          },
+          "start_ref": "110",
+          "end_ref": "116"
+        },
+        {
+          "label": {
+            "devanagari": "सगुणब्रह्मणः अपरमार्थत्वाभावः",
+            "english": "Only the saguṇa Brahman is ultimate"
+          },
+          "start_ref": "117",
+          "end_ref": "122"
+        },
+        {
+          "label": {
+            "devanagari": "सर्वस्य परमात्मनियाम्यत्वे विधिनिषेधयोः आनर्थक्यशङ्का",
+            "english": "Divine governance and purposeful injunctions"
+          },
+          "start_ref": "123",
+          "end_ref": "124"
+        }
+      ],
+      "end_ref": "124"
+    },
+    {
+      "id": "s8f",
+      "label": {
+        "devanagari": "जीवकर्तृत्वविचारः",
+        "english": "Examination of the individual self's agency"
+      },
+      "start_ref": "125",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "ईश्वरस्य साध्वसाधुकर्मकारयितृत्वे विषयविवेकः",
+            "english": "Bhakti as meditation; prescriptive texts reconciled"
+          },
+          "start_ref": "125",
+          "end_ref": "129"
+        },
+        {
+          "label": {
+            "devanagari": "ब्रह्मकल्पेषु सात्त्विकराजसतामसविभागः",
+            "english": "Sāttvika and Tāmasa Purāṇas distinguished"
+          },
+          "start_ref": "130",
+          "end_ref": "133"
+        }
+      ],
+      "end_ref": "133"
+    },
+    {
+      "id": "s9",
+      "label": {
+        "devanagari": "नारायणः परब्रह्म",
+        "english": "Nārāyaṇa is the Supreme Brahman"
+      },
+      "start_ref": "134",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "गीताचार्यवचनतः सात्त्विकादिगुणत्रयकार्यविवेकः",
+            "english": "Hari alone is the cause; Śiva-supremacy refuted"
+          },
+          "start_ref": "134",
+          "end_ref": "134"
+        },
+        {
+          "label": {
+            "devanagari": "सृष्टेः प्राक्काले नारायणः",
+            "english": "Nārāyaṇa from the Nārāyaṇa Anuvāka and Brahmasūtra"
+          },
+          "start_ref": "135",
+          "end_ref": "143"
+        },
+        {
+          "label": {
+            "devanagari": "ब्रह्मशिवादेरपि परमात्मविभूतिता",
+            "english": "Brahmā and Śiva as vibhūtis; the dahara-ākāśa"
+          },
+          "start_ref": "144",
+          "end_ref": "158"
+        },
+        {
+          "label": {
+            "devanagari": "सर्वश्रुतीनामनन्यपरत्वनिरूपणम्",
+            "english": "All scriptures point to Nārāyaṇa alone"
+          },
+          "start_ref": "159",
+          "end_ref": "167"
+        }
+      ],
+      "end_ref": "167"
+    },
+    {
+      "id": "s10",
+      "label": {
+        "devanagari": "अपूर्ववादनिरासः",
+        "english": "Refutation of the Apūrva theory"
+      },
+      "start_ref": "168",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "प्राभाकरमतप्रस्तावः",
+            "english": "The Prābhākara theory of word-meaning"
+          },
+          "start_ref": "168",
+          "end_ref": "180"
+        },
+        {
+          "label": {
+            "devanagari": "सिद्धेऽर्थे शब्दव्युत्पत्तेरभावः इति प्राभाकरसमता पूर्वपक्षः",
+            "english": "The formal objection stated and refuted"
+          },
+          "start_ref": "181",
+          "end_ref": "182"
+        },
+        {
+          "label": {
+            "devanagari": "सर्वस्यापि ईश्वरशेषता",
+            "english": "Everything is subsidiary to Īśvara; apūrva unnecessary"
+          },
+          "start_ref": "183",
+          "end_ref": "191"
+        },
+        {
+          "label": {
+            "devanagari": "भगवत एव सर्वकर्मभोक्तृत्वं फलप्रदत्वं च",
+            "english": "Bhagavān as giver of all karma's fruits"
+          },
+          "start_ref": "192",
+          "end_ref": "199"
+        }
+      ],
+      "end_ref": "199"
+    },
+    {
+      "id": "s11",
+      "label": {
+        "devanagari": "नित्यविभूति-दिव्यविग्रहादिसद्भावः",
+        "english": "The reality of the eternal divine realm and form"
+      },
+      "start_ref": "200",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "परमात्मनः नित्यविभूतिमत्त्वम्",
+            "english": "The transcendent divine form and paramapada"
+          },
+          "start_ref": "200",
+          "end_ref": "212"
+        },
+        {
+          "label": {
+            "devanagari": "उक्तार्थानां वेदोपबृंहणतो लाभः",
+            "english": "Confirmed by Itihāsa, Brahmasūtra, and Āgama"
+          },
+          "start_ref": "213",
+          "end_ref": "226"
+        },
+        {
+          "label": {
+            "devanagari": "भगवतः पत्नीपरिजनादेः श्रौतत्वम्",
+            "english": "Śrī, retinue, eternal seers; Veda validity"
+          },
+          "start_ref": "227",
+          "end_ref": "228"
+        }
+      ],
+      "end_ref": "228"
+    },
+    {
+      "id": "s12",
+      "label": {
+        "devanagari": "वेदनित्यत्वम्",
+        "english": "The eternality of the Vedas"
+      },
+      "start_ref": "229",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "बोधकत्वशक्तेः शब्दस्याभाव्यायत्तत्वम्",
+            "english": "Semantics of śabda; testimony vs. inference"
+          },
+          "start_ref": "229",
+          "end_ref": "231"
+        },
+        {
+          "label": {
+            "devanagari": "वेदनित्यत्वोपपादनम्",
+            "english": "Eternality of the Vedas"
+          },
+          "start_ref": "232",
+          "end_ref": "236"
+        }
+      ],
+      "end_ref": "236"
+    },
+    {
+      "id": "s13",
+      "label": {
+        "devanagari": "तत्त्वसङ्ग्रहः",
+        "english": "Summary of metaphysical truths"
+      },
+      "start_ref": "237",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "सामानाधिकरण्यस्य स्वरूपैक्यनिबन्धनत्वनिरासः",
+            "english": "Nature of co-reference; Prakṛti and Puruṣa as modes"
+          },
+          "start_ref": "237",
+          "end_ref": "238"
+        },
+        {
+          "label": {
+            "devanagari": "उपसंहारतत्त्वविवेकः",
+            "english": "Closing metaphysical summary"
+          },
+          "start_ref": "239",
+          "end_ref": "245"
+        }
+      ],
+      "end_ref": "245"
+    },
+    {
+      "id": "s14",
+      "label": {
+        "devanagari": "भक्तिस्वरूपम्",
+        "english": "The nature of Bhakti"
+      },
+      "start_ref": "246",
+      "subsections": [
+        {
+          "label": {
+            "devanagari": "भगवत्प्राप्त्युपायविषये वक्तव्यार्थस्फुटीकरणम्",
+            "english": "Bhagavān as both goal and means"
+          },
+          "start_ref": "246",
+          "end_ref": "249"
+        },
+        {
+          "label": {
+            "devanagari": "पारतन्त्र्यस्य दुःखात्मकत्वशङ्कापरिहारौ",
+            "english": "Service as the highest puruṣārtha"
+          },
+          "start_ref": "250",
+          "end_ref": "252"
+        }
+      ],
+      "end_ref": "252"
+    },
+    {
+      "id": "s16",
+      "label": {
+        "devanagari": "भक्त्युपसंहारः",
+        "english": "Conclusion of devotion"
+      },
+      "start_ref": "253",
+      "end_ref": "253"
+    }
   ]
 }

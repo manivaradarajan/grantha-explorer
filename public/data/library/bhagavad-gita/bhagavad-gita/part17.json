@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "bhagavad-gita",
   "edition_id": "bhagavad-gita",
   "part_num": 17,
@@ -8,6 +8,7 @@
     {
       "ref": "16.1",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अभयं सत्त्वसंशुद्धिर्ज्ञानयोगव्यवस्थितिः ।\nदानं दमश्च यज्ञश्च स्वाध्यायस्तप आर्जवम्"
@@ -18,6 +19,7 @@
     {
       "ref": "16.2",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अहिंसा सत्यमक्रोधस्त्यागः शान्तिरपैशुनम् ।\nदया भूतेष्वलोलुप्त्वं मार्दवं ह्रीरचापलम्"
@@ -27,6 +29,7 @@
     {
       "ref": "16.3",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता ।\nभवन्ति संपदं दैवीमभि जातस्य भारत"
@@ -36,6 +39,7 @@
     {
       "ref": "16.4",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "दम्भो दर्पोऽतिमानश्च क्रोधः पारुष्यमेव च ।\nअज्ञानं चाभिजातस्य पार्थ सम्पदमसुरीम्"
@@ -45,6 +49,7 @@
     {
       "ref": "16.5",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "दैवी संपद्विमोक्षाय निबन्धायासुरी मता ।\nमा शुचस्संपदं दैवीमभिजातोऽसि पाण्डव"
@@ -54,6 +59,7 @@
     {
       "ref": "16.6",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "द्वौ भूतसर्गौ लोकेऽस्मिन् दैव आसुर एव च ।\nदैवो विस्तरशः प्रोक्त आसुरं पार्थ मे शृणु"
@@ -63,6 +69,7 @@
     {
       "ref": "16.7",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "प्रवृत्तिं च निवृत्तिं च जना न विदुरासुराः ।\nन शौचं नापि चाचारो न सत्यं तेषु विद्यते"
@@ -72,6 +79,7 @@
     {
       "ref": "16.8",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "असत्यमप्रतिष्ठं ते जगदाहुरनीश्वरम् ।\nअपरस्परसंभूतं किमन्यत्कामहेतुकम्"
@@ -81,6 +89,7 @@
     {
       "ref": "16.9",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एतां दृष्टिमवष्टभ्य नष्टात्मानोऽल्पबुद्धयः ।\nप्रभवन्त्युग्रकर्माणः क्षयाय जगतोऽशुभाः"
@@ -90,6 +99,7 @@
     {
       "ref": "16.10",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "काममाश्रित्य दुष्पूरं दम्भमानमदान्विताः ।\nमोहाद्गृहीत्वासद्ग्राहान् प्रवर्तन्तेऽशुचिव्रताः"
@@ -99,6 +109,7 @@
     {
       "ref": "16.11",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "चिन्तामपरिमेयां च प्रलयान्तामुपाश्रिताः ।\nकामोपभोगपरमा एतावदिति निश्चिताः"
@@ -108,6 +119,7 @@
     {
       "ref": "16.12",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आशापाशशतैर्बद्धाः कामक्रोधपरायणाः ।\nईहन्ते कामभोगार्थमन्यायेनार्थसञ्चयान्"
@@ -117,6 +129,7 @@
     {
       "ref": "16.13",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "इदमद्य मया लब्धमिमं प्राप्स्ये मनोरथम् ।\nइदमस्तीदमपि मे भविष्यति पुनर्धनम्"
@@ -126,6 +139,7 @@
     {
       "ref": "16.14",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "असौ मया हतः शत्रुर्हानिष्ये चापरानपि ।\nईश्वरोऽहमहं भोगी सिद्धोऽहं बलवान् सुखी"
@@ -135,6 +149,7 @@
     {
       "ref": "16.15",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आढ्योऽभिजनवानस्मि कोऽन्योऽस्ति सदृशो मया ।\nयक्ष्ये दास्यामि मोदिष्य इत्यज्ञानविमोहिताः"
@@ -144,6 +159,7 @@
     {
       "ref": "16.16",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अनेकचित्तविभ्रान्ता मोहजालसमावृताः ।\nप्रसक्ताः कामभोगेषु पतन्ति नरकेऽशुचौ"
@@ -153,6 +169,7 @@
     {
       "ref": "16.17",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आत्मसंभाविताः स्तब्धाः धनमानमदान्विताः ।\nयजन्ते नामयज्ञैस्ते दम्भेनाविधिपूर्वकम्"
@@ -162,6 +179,7 @@
     {
       "ref": "16.18",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अहंकारं बलं दर्पं कामं क्रोधं च संश्रिताः ।\nमामात्मपरदेहेषु प्रद्विषन्तोऽभ्यसूयकाः"
@@ -171,6 +189,7 @@
     {
       "ref": "16.19",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तानहं द्विषतः क्रूरान् संसारेषु नराधमान् ।\nक्षिपाम्यजस्रमशुभानासुरीष्वेव योनिषु"
@@ -180,6 +199,7 @@
     {
       "ref": "16.20",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आसुरीं योनिमापन्ना मूढा जन्मनि जन्मनि ।\nमामप्राप्यैव कौन्तेय ततो यान्त्यधमां गतिम्"
@@ -189,6 +209,7 @@
     {
       "ref": "16.21",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "त्रिविधं नरकस्यैतद्द्वारं नाशनमात्मनः ।\nकामः क्रोधस्तथा लोभस्तस्मादेतत्त्रयं त्यजेत्"
@@ -198,6 +219,7 @@
     {
       "ref": "16.22",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एतैर्विमुक्तः कौन्तेय तमोद्वारैस्त्रिभिर्नरः ।\nआचरत्यात्मनः श्रेयस्ततो याति परां गतिम्"
@@ -207,6 +229,7 @@
     {
       "ref": "16.23",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यः शास्त्रविधिमुत्सृज्य वर्तते कामकारतः ।\nन स सिद्धिमवाप्नोति न सुखं न परां गतिम्"
@@ -216,6 +239,7 @@
     {
       "ref": "16.24",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तस्माच्छास्त्रं प्रमाणं ते कार्याकार्यव्यवस्थितौ ।\nज्ञात्वा शास्त्रविधानोक्तं कर्म कर्तुमिहार्हासि"
@@ -284,11 +308,12 @@
               "start": 314,
               "end": 325,
               "display_text": "द.स्मृ.२.२२",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "daksha-smriti",
+              "edition_id": null,
+              "locator": "2.22",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -304,11 +329,12 @@
               "start": 261,
               "end": 273,
               "display_text": "वि.पु.२.५.२७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.5.27",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -474,6 +500,7 @@
               "end": 1511,
               "display_text": "सुप्तं",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -484,6 +511,7 @@
               "end": 3265,
               "display_text": "वं ध्यायथामात्मानं",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -494,6 +522,7 @@
               "end": 3601,
               "display_text": "भ",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -504,6 +533,7 @@
               "end": 3670,
               "display_text": "चैवायं पादकृच्छ्रः प्रकीर्तितः",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -524,6 +554,7 @@
               "end": 937,
               "display_text": "द्वेषं प्राप्तः करोति कः",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -552,6 +583,7 @@
               "end": 457,
               "display_text": "ग्बुद्धि",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -562,6 +594,7 @@
               "end": 1080,
               "display_text": "लोकपितामहः",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -605,11 +638,12 @@
               "start": 346,
               "end": 349,
               "display_text": "शं.",
-              "grantha_id": null,
+              "grantha_id": "mahabharata-shanti-parva",
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -634,6 +668,7 @@
               "end": 705,
               "display_text": "शां.",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -710,6 +745,7 @@
               "end": 1466,
               "display_text": "चान्यान्गुणा",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -720,6 +756,7 @@
               "end": 1511,
               "display_text": "न हसेच्चान्यदोषांश्च",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -730,6 +767,7 @@
               "end": 1864,
               "display_text": "जनार्दनम",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,

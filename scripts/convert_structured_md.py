@@ -115,6 +115,15 @@ class PassageData:
     mula_text: str = ""
     label_devanagari: str = ""
     speaker: str = ""
+    # The markdown heading word (e.g. "Para", "Shloka") for main passages only
+    # (per-block presentation model). Empty for framing passages.
+    kind: str = ""
+    # Runs of quoted verses (verse-quote blocks) as {start, end} half-open
+    # offsets into mula_text. Empty for non-verse prose.
+    verse_quotes: list[dict[str, int]] = field(default_factory=list)
+    # The work's OWN verses (<!-- verse --> blocks) as {start, end} half-open
+    # offsets into mula_text. Empty when the passage has no own verses.
+    verses: list[dict[str, int]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -381,6 +390,134 @@ def _section_break_re(kinds: frozenset[str]) -> re.Pattern[str]:
     )
 
 
+# Curated navigation sections: ``<!-- section id=... sa=... en=... -->`` and
+# ``<!-- subsection sa=... en=... -->`` comment tags in the source body
+# (vedarthasangraha's Raghavachar sections). Parsed into the envelope's
+# ``sections`` list (mirrors the producer's ``extract_sections``).
+_SECTION_TAG_RE = re.compile(
+    r'^<!--\s*section\s+id="([^"]+)"\s+sa="([^"]+)"\s+en="([^"]+)"\s*-->$'
+)
+_SUBSECTION_TAG_RE = re.compile(
+    r'^<!--\s*subsection\s+sa="([^"]+)"\s+en="([^"]+)"\s*-->$'
+)
+
+
+def _parse_section_tag(line: str) -> dict[str, Any] | None:
+    """Parse a section or subsection navigation comment tag.
+
+    Args:
+        line: A single stripped markdown line.
+
+    Returns:
+        Dict with a ``type`` key ("section"/"subsection") plus the parsed
+        attributes, or None when the line is not such a tag.
+    """
+    m = _SECTION_TAG_RE.match(line)
+    if m:
+        return {
+            "type": "section",
+            "id": m.group(1),
+            "sa": m.group(2),
+            "en": m.group(3),
+        }
+    m = _SUBSECTION_TAG_RE.match(line)
+    if m:
+        return {"type": "subsection", "sa": m.group(1), "en": m.group(2)}
+    return None
+
+
+def extract_sections(
+    body_text: str,
+    heading_kinds: frozenset[str],
+) -> list[dict[str, Any]]:
+    """Extract curated navigation sections from a source body.
+
+    Scans for ``<!-- section ... -->`` and ``<!-- subsection ... -->`` comment
+    tags, pairs them with the passage refs that follow, and builds the
+    ``sections`` list matching the JSON schema (grantha.schema.json
+    ``sections``). ``start_ref`` is the ref of the first passage heading after
+    the tag; ``end_ref`` closes at the next section tag or end of body.
+    Subsection ``end_ref`` values close when the next subsection or section tag
+    is encountered.
+
+    Args:
+        body_text: The source body (after frontmatter).
+        heading_kinds: The accepted passage-heading kinds for the file, used to
+            recognize a passage heading line.
+
+    Returns:
+        A list of section dicts matching the JSON schema, or ``[]`` when no
+        ``<!-- section ... -->`` tags are present.
+    """
+    heading_re = _passage_heading_re(heading_kinds)
+    sections: list[dict[str, Any]] = []
+    pending_section: dict[str, Any] | None = None
+    pending_subsection: dict[str, Any] | None = None
+    last_ref: str | None = None
+
+    def _close_subsection(end_ref: str) -> None:
+        nonlocal pending_subsection
+        if pending_subsection is not None:
+            pending_subsection["end_ref"] = end_ref
+            if pending_section is not None:
+                pending_section.setdefault("subsections", []).append(
+                    pending_subsection
+                )
+            pending_subsection = None
+
+    def _close_section(end_ref: str) -> None:
+        nonlocal pending_section
+        _close_subsection(end_ref)
+        if pending_section is not None:
+            pending_section["end_ref"] = end_ref
+            sections.append(pending_section)
+            pending_section = None
+
+    for raw_line in body_text.splitlines():
+        line = raw_line.strip()
+
+        heading_match = heading_re.match(line)
+        if heading_match:
+            ref = heading_match.group(2)
+            if pending_section is not None and "start_ref" not in pending_section:
+                pending_section["start_ref"] = ref
+            if (
+                pending_subsection is not None
+                and "start_ref" not in pending_subsection
+            ):
+                pending_subsection["start_ref"] = ref
+            last_ref = ref
+            continue
+
+        attrs = _parse_section_tag(line)
+        if attrs is None:
+            continue
+
+        if attrs["type"] == "section":
+            if last_ref is not None:
+                _close_section(last_ref)
+            elif pending_section is not None:
+                _close_section("")
+            pending_section = {
+                "id": attrs["id"],
+                "label": {"devanagari": attrs["sa"], "english": attrs["en"]},
+            }
+            pending_subsection = None
+        elif attrs["type"] == "subsection":
+            if last_ref is not None:
+                _close_subsection(last_ref)
+            pending_subsection = {
+                "label": {"devanagari": attrs["sa"], "english": attrs["en"]},
+            }
+
+    if last_ref is not None:
+        _close_section(last_ref)
+    elif pending_section is not None:
+        _close_section("")
+
+    return sections
+
+
 # ---------------------------------------------------------------------------
 # Parsing helpers
 # ---------------------------------------------------------------------------
@@ -405,7 +542,9 @@ def _strip_hide_blocks(text: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", text)
 
 
-def _extract_mula_and_speaker(segment: str) -> tuple[str, str]:
+def _extract_mula_and_speaker(
+    segment: str,
+) -> tuple[str, str, list[dict[str, int]], list[dict[str, int]]]:
     """Extract a leading v2 ``<!-- speaker -->`` and the remaining mula text.
 
     Args:
@@ -423,7 +562,75 @@ def _extract_mula_and_speaker(segment: str) -> tuple[str, str]:
     if speaker_match is not None:
         speaker = speaker_match.group(1).strip()
         segment = segment[speaker_match.end():]
-    return _extract_mula_text(segment), speaker
+    # Protect the verse-quote and verse delimiters through _extract_mula_text
+    # (whose residual-comment strip would otherwise remove them), then extract
+    # and strip them, recording the inner offsets in the final mula text.
+    protected = (
+        segment.replace("<!-- verse-quote -->", "\x00VQO\x00")
+        .replace("<!-- /verse-quote -->", "\x00VQC\x00")
+        .replace("<!-- verse -->", "\x00VSO\x00")
+        .replace("<!-- /verse -->", "\x00VSC\x00")
+    )
+    mula_text = _extract_mula_text(protected)
+    mula_text = (
+        mula_text.replace("\x00VQO\x00", "<!-- verse-quote -->")
+        .replace("\x00VQC\x00", "<!-- /verse-quote -->")
+        .replace("\x00VSO\x00", "<!-- verse -->")
+        .replace("\x00VSC\x00", "<!-- /verse -->")
+    )
+    mula_text, verse_quotes, verses = _extract_verse_quotes(mula_text)
+    return mula_text, speaker, verse_quotes, verses
+
+
+_VERSE_QUOTE_OPEN = "<!-- verse-quote -->"
+_VERSE_QUOTE_CLOSE = "<!-- /verse-quote -->"
+_VERSE_QUOTE_BLOCK_RE = re.compile(
+    r"<!--\s*verse-quote\s*-->(.*?)<!--\s*/verse-quote\s*-->",
+    re.DOTALL,
+)
+_VERSE_OPEN = "<!-- verse -->"
+_VERSE_CLOSE = "<!-- /verse -->"
+_VERSE_BLOCK_RE = re.compile(
+    r"<!--\s*verse\s*-->(.*?)<!--\s*/verse\s*-->",
+    re.DOTALL,
+)
+
+
+def _extract_verse_quotes(
+    text: str,
+) -> tuple[str, list[dict[str, int]], list[dict[str, int]]]:
+    """Strip ``<!-- verse-quote -->`` and ``<!-- verse -->`` delimiters,
+    returning the clean text and half-open offsets of each block's inner text.
+
+    Args:
+        text: Text possibly containing verse-quote / verse blocks.
+
+    Returns:
+        ``(cleaned, verse_quotes, verses)``.
+    """
+    out: list[str] = []
+    vq: list[dict[str, int]] = []
+    vs: list[dict[str, int]] = []
+    cursor = 0
+    for m in sorted(
+        list(_VERSE_QUOTE_BLOCK_RE.finditer(text))
+        + list(_VERSE_BLOCK_RE.finditer(text)),
+        key=lambda m: m.start(),
+    ):
+        if m.start() > cursor:
+            out.append(text[cursor : m.start()])
+        inner = m.group(1)
+        start = len("".join(out))
+        out.append(inner)
+        end = len("".join(out))
+        if m.re is _VERSE_QUOTE_BLOCK_RE:
+            vq.append({"start": start, "end": end})
+        else:
+            vs.append({"start": start, "end": end})
+        cursor = m.end()
+    if cursor < len(text):
+        out.append(text[cursor:])
+    return "".join(out), vq, vs
 
 
 def _extract_mula_text(segment: str) -> str:
@@ -785,11 +992,22 @@ def parse_body(
         mula_segment = (
             segment[: min(cut_positions)] if cut_positions else segment
         )
-        mula_text, speaker = _extract_mula_and_speaker(mula_segment)
+        mula_text, speaker, verse_quotes, verses = _extract_mula_and_speaker(
+            mula_segment
+        )
         commentary_by_cid = _extract_commentary_blocks(segment)
 
         passage = PassageData(
-            ref=ref, mula_text=mula_text, label_devanagari=label, speaker=speaker
+            ref=ref,
+            mula_text=mula_text,
+            label_devanagari=label,
+            speaker=speaker,
+            # Main passages declare their heading kind (the leaf key, e.g.
+            # "Para"/"Shloka"); framing passages carry none (per-block
+            # presentation model).
+            kind=kind if kind in leaves else "",
+            verse_quotes=verse_quotes,
+            verses=verses,
         )
 
         # Adhikarana-level upodghata prose: capture <!-- adhikarana-intro -->
@@ -950,6 +1168,8 @@ def _build_framing_entry(p: PassageData, passage_type: str) -> dict[str, Any]:
         entry["speaker"] = p.speaker
     if p.mula_text:
         entry["content"] = {"sanskrit": {"devanagari": p.mula_text}}
+    if p.verses:
+        entry["verses"] = p.verses
     return entry
 
 
@@ -957,6 +1177,7 @@ def _build_main_passage_entry(
     p: PassageData,
     context: str = "",
     diagnostics: list[dict[str, Any]] | None = None,
+    grantha_id: str = "",
 ) -> dict[str, Any]:
     """Build a main passages entry dict.
 
@@ -968,6 +1189,7 @@ def _build_main_passage_entry(
         p: The main PassageData.
         context: The citing edition's school namespace ("" = school-neutral).
         diagnostics: Optional collector for reference diagnostics.
+        grantha_id: The citing grantha's id (for the citation overlay key).
 
     Returns:
         Dict matching the v1.0.0 passages entry shape.
@@ -975,11 +1197,27 @@ def _build_main_passage_entry(
     entry: dict[str, Any] = {
         "ref": p.ref,
         "passage_type": "main",
+        "kind": p.kind,
         "content": {"sanskrit": {"devanagari": p.mula_text}},
     }
+    if p.verse_quotes:
+        entry["verse_quotes"] = p.verse_quotes
+    if p.verses:
+        entry["verses"] = p.verses
     refs, passage_diags = _extract_references(p.mula_text, context)
+    refs, unmatched = _apply_citation_overlay(refs, grantha_id, p.ref, "main")
     if refs:
         entry["references"] = refs
+    for uk in unmatched:
+        if diagnostics is not None:
+            diagnostics.append(
+                {
+                    "code": "REF-OVERLAY-UNMATCHED",
+                    "severity": "error",
+                    "passage_ref": p.ref,
+                    "hint": f"overlay key matched no emitted reference: {uk}",
+                }
+            )
     if diagnostics is not None:
         for diag in passage_diags:
             diag["passage_ref"] = p.ref
@@ -987,6 +1225,75 @@ def _build_main_passage_entry(
     if p.speaker:
         entry["speaker"] = p.speaker
     return entry
+
+
+# Loaded once per process (the overlay file is small and stable).
+_CITATION_OVERLAY_CACHE: tuple[dict[str, dict[str, Any]], list[str]] | None = None
+
+
+def _load_citation_overlay() -> tuple[dict[str, dict[str, Any]], list[str]]:
+    """Load the citation-corrections overlay (empty when absent/empty).
+
+    Returns ``(overlay, unmatched_keys)`` where ``unmatched_keys`` starts empty
+    and is filled only when a converter key fails to match an emitted reference
+    (the apply hook reports it loudly). The overlay lives in grantha-data
+    (``data/citation_corrections.yaml``) and is reached via the grantha_data
+    bootstrap — the type belongs with the data model.
+
+    Returns:
+        A ``(overlay, unmatched)`` pair.
+    """
+    global _CITATION_OVERLAY_CACHE
+    if _CITATION_OVERLAY_CACHE is not None:
+        return _CITATION_OVERLAY_CACHE
+    import grantha_data.citation_repair as citation_repair
+
+    # The overlay lives in the same grantha-data checkout as the bimap: derive
+    # from _tools_lib_dir() (tools/lib → <grantha-data>/data/citation_corrections.yaml).
+    data_dir = _tools_lib_dir().resolve().parent.parent / "data"
+    path = data_dir / "citation_corrections.yaml"
+    overlay: dict[str, dict[str, Any]] = (
+        citation_repair.load_overlay(path) if path.exists() else {}
+    )
+    _CITATION_OVERLAY_CACHE = (overlay, [])
+    return _CITATION_OVERLAY_CACHE
+
+
+def _apply_citation_overlay(
+    refs: list[dict[str, Any]],
+    citing_grantha_id: str,
+    passage_ref: str,
+    passage_type: str,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """Apply the citation-corrections overlay to emitted references.
+
+    Overrides only ``locator``/``grantha_id``/``edition_id`` (never
+    ``display_text``, offsets, or the citing prose). Unmatched overlay keys are
+    returned so a dropped/renamed correction is loud, never silent.
+
+    Args:
+        refs: Emitted reference objects.
+        citing_grantha_id: The citing grantha's id (part of the overlay key).
+        passage_ref: The citing passage's ref.
+        passage_type: ``"main"`` or ``"commentary"``.
+
+    Returns:
+        A ``(refs, unmatched_keys)`` pair.
+    """
+    try:
+        import grantha_data.citation_repair as citation_repair
+    except ImportError:
+        return refs, []
+    overlay, _ = _load_citation_overlay()
+    if not overlay:
+        return refs, []
+    return citation_repair.apply_overlay(
+        refs,
+        citing_grantha_id=citing_grantha_id,
+        passage_ref=passage_ref,
+        passage_type=passage_type,
+        overlay=overlay,
+    )
 
 
 def _extract_references(
@@ -1228,7 +1535,7 @@ def build_part_json(
         _build_framing_entry(p, "prefatory") for p in body.prefatory
     ]
     passages = [
-        _build_main_passage_entry(p, context, diagnostics)
+        _build_main_passage_entry(p, context, diagnostics, grantha_id)
         for p in body.passages
         if p.mula_text
     ]
@@ -1278,6 +1585,8 @@ def build_envelope_json(
     structure_levels: list[dict[str, Any]],
     frontmatter: dict[str, Any],
     edition_id: str,
+    edition_kind: str | None = None,
+    sections: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Assemble the envelope JSON for the grantha.
 
@@ -1288,12 +1597,17 @@ def build_envelope_json(
         edition_id: The edition_id for this sub-envelope. For single-edition
             granthas this equals the grantha_id; multi-edition texts pass the
             real edition_id.
+        edition_kind: The edition's declared kind ("mula-only" | "commentarial")
+            derived from commentary presence across the full part set
+            (per-block presentation model). Omitted when unknown.
+        sections: Curated navigation sections (from ``<!-- section -->``
+            comments), parsed by ``extract_sections``. Omitted when none.
 
     Returns:
         Dict conforming to the v1.0.0 envelope schema.
     """
     grantha_id: str = frontmatter["grantha_id"]
-    return {
+    envelope: dict[str, Any] = {
         "kind": "edition-sub-envelope",
         "schema_version": SCHEMA_VERSION,
         "edition_id": edition_id,
@@ -1301,6 +1615,11 @@ def build_envelope_json(
         "structure_levels": structure_levels,
         "parts": parts_info,
     }
+    if edition_kind:
+        envelope["edition_kind"] = edition_kind
+    if sections:
+        envelope["sections"] = sections
+    return envelope
 
 
 # ---------------------------------------------------------------------------
@@ -1532,6 +1851,10 @@ def convert_grantha(
     first_frontmatter: dict[str, Any] | None = None
     structure_levels_raw: list[dict[str, Any]] | None = None
     diagnostics: list[dict[str, Any]] = []
+    # Whether each part carried a commentary, for the envelope's edition_kind.
+    part_has_commentary: list[bool] = []
+    first_body_text: str = ""
+    first_heading_kinds: frozenset[str] = frozenset()
 
     for idx, src_path in enumerate(source_files, start=1):
         part_filename = f"part{idx}.json"
@@ -1551,6 +1874,8 @@ def convert_grantha(
         if first_frontmatter is None:
             first_frontmatter = frontmatter
             structure_levels_raw = frontmatter.get("structure_levels", [])
+            first_body_text = body_text
+            first_heading_kinds = heading_kinds
 
         target_cids = _resolve_target_commentary_ids(frontmatter)
 
@@ -1573,8 +1898,11 @@ def convert_grantha(
 
         first_ref = _first_main_ref(body)
         parts_info.append({"file": part_filename, "first_ref": first_ref})
+        part_has_commentary.append(
+            bool(part_json.get("commentary") or part_json.get("commentaries"))
+        )
         print(f"      first_ref={first_ref}, passages={len(body.passages)}, "
-              f"commentary={bool(part_json.get('commentary') or part_json.get('commentaries'))}")
+              f"commentary={part_has_commentary[-1]}")
 
     if first_frontmatter is None:
         raise RuntimeError("No source files were processed")
@@ -1582,9 +1910,21 @@ def convert_grantha(
         raise RuntimeError("structure_levels missing from first source file frontmatter")
 
     normalized_levels = normalize_structure_levels(structure_levels_raw)
+    # The edition's declared kind (per-block presentation model):
+    # derived at build time from commentary presence across the FULL part set.
+    edition_kind = "commentarial" if any(part_has_commentary) else "mula-only"
+    # Curated navigation sections (Raghavachar etc.) parsed from the first
+    # source file's <!-- section --> comments.
+    sections = (
+        extract_sections(first_body_text, first_heading_kinds)
+        if first_body_text
+        else []
+    )
     # Single-edition flow: edition_id == grantha_id by convention.
     envelope = build_envelope_json(
-        parts_info, normalized_levels, first_frontmatter, edition_id=first_frontmatter["grantha_id"]
+        parts_info, normalized_levels, first_frontmatter, edition_id=first_frontmatter["grantha_id"],
+        edition_kind=edition_kind,
+        sections=sections or None,
     )
 
     envelope_path = out_dir / "envelope.json"

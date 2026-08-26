@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 3,
@@ -8,6 +8,7 @@
     {
       "ref": "1.4.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्राप्तराज्यस्य रामस्य वाल्मीकिर्भगवानृषिः ।\nचकार चरितं कृत्स्नं विचित्रपदमात्मवान् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.4.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चतुर्विंशत्सहस्राणि श्लोकानामुक्तवानृषिः ।\nतथा सर्गशतान् पञ्च षट्काण्डानि तथोत्तरम् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.4.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृत्वापि तन्महाप्राज्ञः सभविष्यं सहोत्तरम् ।\nचिन्तयामास को न्वेतत्प्रयुञ्जीयादिति प्रभुः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.4.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य चिन्तयमानस्य महर्षेर्भावितात्मनः ।\nअगृह्णीतां ततः पादौ मुनिवेषौ कुशीलवौ ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.4.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुशीलवौ तु धर्मज्ञौ राजपुत्रौ यशस्विनौ ।\nभ्रातरौ स्वरसम्पन्नौ ददर्शाश्रमवासिनौ ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.4.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तु मेधाविनौ दृष्ट्वा वेदेषु परिनिष्ठितौ ।\nवेदोपबृंहणार्थाय तावग्राहयत प्रभुः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.4.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "काव्यं रामायणं कृत्स्नं सीतायाश्चरितं महत् ।\nपौलस्त्यवधमित्येव चकार चरितव्रतः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.4.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पाठ्ये गेये च मधुरं प्रमाणैस्त्रिभिरन्वितम् ।\nजातिभिः सप्तभिर्बद्धं तन्त्रीलयसमन्वितम् ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.4.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रसैः शृङ्गारकारुण्यहास्यवीरभयानकैः ।\nरौद्रादिभिश्च संयुक्तं काव्यमेतदगायताम् ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.4.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ तु गान्धर्वतत्त्वज्ञौ मूर्च्छनास्थानकोविदौ ।\nभ्रातरौ स्वरसम्पन्नौ गन्धर्वाविव रूपिणौ ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.4.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रूपलक्षणसम्पन्नौ मधुरस्वरभाषिणौ ।\nबिम्बादिवोत्थितौ बिम्बौ रामदेहात्तथापरौ ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.4.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ राजपुत्रौ कार्त्स्न्येन धर्म्यमाख्यानमुत्तमम् ।\nवाचोविधेयं तत्सर्वं कृत्वा काव्यमनिन्दितौ ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.4.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यथोपदेशं तत्त्वज्ञौ जगतुस्तौ समाहितौ ।\nमहात्मानौ महाभागौ सर्वलक्षणलक्षितौ ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.4.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ कदाचित्समेतानामृषीणां भावितात्मनाम् ।\nआसीनानां समीपस्थाविदं काव्यमगायताम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.4.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छ्रुत्वा मुनयः सर्वे बाष्पपर्याकुलेक्षणाः ।\nसाधु साध्विति तावूचुः परं विस्मयमागताः ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.4.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते प्रीतमनसः सर्वे मुनयो धर्मवत्सलाः ।\nप्रशशंसुः प्रशस्तव्यौ गायमानौ कुशीलवौ ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.4.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहो गीतस्य माधुर्यं श्लोकानां च विशेषतः ।\nचिरनिर्वृत्तमप्येतत्प्रत्यक्षमिव दर्शितम् ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.4.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रविश्य तावुभौ सुष्ठु तदा भावमगायताम् ।\nसहितौ मधुरं रक्तं सम्पन्नं स्वरसम्पदा ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.4.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं प्रशस्यमानौ तौ तपःश्लाघ्यैर्महात्मभिः ।\nसंरक्ततरमत्यर्थं मधुरं तावगायताम् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.4.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रीतः कश्चिन्मुनिस्ताभ्यां संस्थितः कलशं ददौ ।\nप्रसन्नो वल्कले कश्चिद्ददौ ताभ्यां महायशाः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.4.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आश्चर्यमिदमाख्यानं मुनिना सम्प्रकीर्तितम् ।\nपरं कवीनामाधारं समाप्तं च यथाक्रमम् ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.4.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभिगीतमिदं गीतं सर्वगीतेषु कोविदौ ।\nआयुष्यं पुष्टिजनकं सर्वश्रुतिमनोहरम् ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.4.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रशस्यमानौ सर्वत्र कदाचित्तत्र गायकौ ।\nरथ्यासु राजमार्गेषु ददर्श भरताग्रजः ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.4.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्ववेश्म चानीय ततो भ्रातरौ च कुशीलवौ ।\nपूजयामास पूजार्हौ रामः शत्रुनिबर्हणः ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.4.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आसीनः काञ्चने दिव्ये स च सिंहासने प्रभुः ।\nउपोपविष्टः सचिवैर्भ्रातृभिश्च परन्तपः ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.4.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्ट्वा तु रूपसम्पन्नौ तावुभौ नियतस्तदा ।\nउवाच लक्ष्मणं रामः शत्रुघ्नं भरतं तथा ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.4.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रूयतामिदमाख्यानमनयोर्देववर्चसोः ।\nविचित्रार्थपदं सम्यग्गायिनौ तावचोदयत् ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.4.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ चापि मधुरं रक्तं स्वञ्चितायतनिःस्वनम् ।\nतन्त्रीलयवदत्यर्थं विश्रुतार्थमगायताम् ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "1.4.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ह्लादयत् सर्वगात्राणि मनांसि हृदयानि च ।\nश्रोत्राश्रयसुखं गेयं तद्बभौ जनसंसदि ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "1.4.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमौ मुनी पार्थिवलक्षणान्वितौ कुशीलवौ चैव महातपस्विनौ ।\nममापि तद् भूतिकरं प्रवक्ष्यते महानुभावं चरितं निबोधत ॥"
@@ -278,6 +308,7 @@
     {
       "ref": "1.4.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तु तौ रामवचः प्रचोदितावगायतां मार्गविधानसम्पदा ।\nस चापि रामः परिषद्गतः शनैर्बुभूषयासक्तमना बभूव ह ॥"
@@ -313,6 +344,7 @@
             "end": 1985,
             "display_text": "२२५६",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -323,6 +355,7 @@
             "end": 2038,
             "display_text": "४४१५",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -333,6 +366,7 @@
             "end": 2089,
             "display_text": "२७३२",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -343,6 +377,7 @@
             "end": 2146,
             "display_text": "२६२०",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -353,6 +388,7 @@
             "end": 2201,
             "display_text": "३००६",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -363,6 +399,7 @@
             "end": 2253,
             "display_text": "५९९०",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -373,6 +410,7 @@
             "end": 2308,
             "display_text": "३२३४",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -425,6 +463,7 @@
             "end": 2265,
             "display_text": "चरित",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
@@ -445,6 +484,7 @@
             "end": 473,
             "display_text": "सञ्ज्ञिकैः",
             "grantha_id": null,
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,

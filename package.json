@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "sh scripts/hooks/install.sh",
-    "dev": "tsx scripts/generate-granthas-json.ts && next dev",
+    "dev": "tsx scripts/generate-granthas-json.ts && next dev -p $(node scripts/next-dev-port.mjs)",
     "prebuild": "tsx scripts/generate-granthas-json.ts && npm run validate:data && npm run validate:integrity",
     "build": "next build",
     "lint": "eslint",

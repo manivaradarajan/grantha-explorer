@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 41,
@@ -22,6 +22,7 @@
     {
       "ref": "1.43.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवदेवे गते तस्मिन् सो ऽङ्गुष्ठाग्रनिपीडिताम् ।\nकृत्वा वसुमतीं राम संवत्सरमुपासत ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.43.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ संवत्सरे पूर्णे सर्वलोकनमस्कृतः ।\nउमापतिः पशुपती राजानमिदमब्रवीत् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.43.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रीतस्ते ऽहं नरश्रेष्ठ करिष्यामि तव प्रियम् ।\nशिरसा धारयिष्यामि शैलराजसुतामहम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.43.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदा सा ऽतिमहद्रूपं कृत्वा वेगं च दुस्सहम् ।\nआकाशादपतद्राम शिवे शिवशिरस्युत ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.43.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अचिन्तयच्च सा देवी गङ्गा परमदुर्द्धरा ।\nविशाम्यहं हि पातालं स्रोतसा गृह्य शङ्करम् ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.43.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्या वलेपनं ज्ञात्वा क्रुद्धस्तु भगवान् हरः ।\nतिरोभावयितुं बुद्धिं चक्रे त्रिणयनस्तदा ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.43.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा तस्मिन् पतिता पुण्या पुण्ये रुद्रस्य मूर्द्धनि ।\nहिमवत्प्रतिमे राम जटामण्डलगह्वरे ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.43.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा कथञ्चिन्महीं गन्तुं नाशक्नोद्यत्नमास्थिता ।\nनैव निर्गमनं लेभे जटामण्डलमोहिता ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.43.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्रैवाबम्भ्रमद्देवी संवत्सरगणान् बहून् ।\nतामपश्यन् पुनस्तत्र तपः परममास्थितः ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.43.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनेन तोषितश्चाभूदत्यर्थं रघुनन्दन ।\nविससर्ज ततो गङ्गां हरो बिन्दुसरः प्रति ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.43.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यां विसृज्यमानायां सप्त स्रोतांसि जज्ञिरे ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.43.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ह्लादिनी पावनी चैव नलिनी च तथा ऽपरा ।\nतिस्रः प्राचीं दिशं जग्मुर्गङ्गाश्शिवजलाश्शुभाः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.43.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुचक्षुश्चैव सीता च सिन्धुश्चैव महानदी ।\nतिस्रस्त्वेता दिशं जग्मुः प्रतीचीं तु शुभोदकाः ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.43.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सप्तमी चान्वगात्तासां भगीरथमथो नृपम् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.43.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथो ऽपि राजर्षिर्दिव्यं स्यन्दनमास्थितः ।\nप्रायादग्रे महातेजा गङ्गा तं चाप्यनुव्रजत् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.43.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गगनाच्छङ्करशिरस्ततो धरणिमाश्रिता ।\nव्यसर्पत जलं तत्र तीव्रशब्दपुरस्कृतम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.43.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मत्स्यकच्छपसङ्घैश्च शिंशुमारगणैस्तदा ।\nपतद्भिः पतितैश्चान्यैर्व्यरोचत वसुन्धरा ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.43.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो देवर्षिगन्धर्वा यक्षाः सिद्धगणास्तदा ।\nव्यलोकयन्त ते तत्र गगनाद्गां गतां तथा ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.43.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विमानैर्नगराकारैर्हयैर्गजवरैस्तदा ।\nपारिप्लवगतैश्चापि देवतास्तत्र विष्ठिताः ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.43.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदद्भुततमं लोके गङ्गापतनमुत्तमम् ।\nदिदृक्षवो देवगणाः समीयुरमितौजसः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.43.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सम्पतद्भिः सुरगणैस्तेषां चाभरणौजसा ।\nशतादित्यमिवाभाति गगनं गततोयदम् ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.43.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शिंशुमारोरगगणैर्मीनैरपि च चञ्चलैः ।\nविद्युद्भिरिव विक्षिप्तमाकाशमभवत्तदा ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.43.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पाण्डरैः सलिलोत्पीडैः कीर्यमाणैः सहस्रधा ।\nशारदाभ्रैरिवाकीर्णं गगनं हंससम्प्लवैः ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.43.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "क्वचिद्द्रुततरं याति कुटिलं क्वचिदायतम् ।\nविनतं क्वचिदुद्भूतं क्वचिद्याति शनैः शनैः ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.43.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सलिलेनैव सलिलं क्वचिदभ्याहतं पुनः ।\nमुहुरूर्द्ध्वमुखं गत्वा पपात वसुधातलम् ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.43.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छङ्करशिरोभ्रष्टं भ्रष्टं भूमितले पुनः ।\nव्यरोचत तदा तोयं निर्मलं गतकल्मषम् ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.43.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्र देवर्षिगन्धर्वा वसुधातलवासिनः ।\nभवाङ्गपतितं तोयं पवित्रमिति पस्पृशुः ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "1.43.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शापात्प्रपतिता ये च गगनाद्वसुधातलम् ।\nकृत्वा तत्राभिषेकं ते बभूवुर्गतकल्मषाः ॥"
@@ -274,6 +302,7 @@
     {
       "ref": "1.43.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धूतपापाः पुनस्तेन तोयेनाथ सुभास्वता ।\nपुनराकाशमाविश्य स्वान् लोकान् प्रतिपेदिरे ॥"
@@ -283,6 +312,7 @@
     {
       "ref": "1.43.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मुमुदे मुदितो लोकस्तेन तोयेन भास्वता ।\nकृताभिषेको गङ्गायां बभूव विगतक्लमः ॥"
@@ -292,6 +322,7 @@
     {
       "ref": "1.43.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथो ऽपि राजर्षिर्दिव्यं स्यन्दनमास्थितः ।\nप्रायादग्रे महातेजास्तं गङ्गा पृष्टतो ऽन्वगात् ॥"
@@ -301,6 +332,7 @@
     {
       "ref": "1.43.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवाः सर्षिगणाः सर्वे दैत्यदानवराक्षसाः ।\nगन्धर्वयक्षप्रवराः सकिन्नरमहोरगाः ॥"
@@ -310,6 +342,7 @@
     {
       "ref": "1.43.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वाश्चाप्सरसो राम भगीरथरथानुगाम् ।\nगङ्गामन्वगमन् प्रीताः सर्वे जलचराश्च ये ॥"
@@ -319,6 +352,7 @@
     {
       "ref": "1.43.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यतो भगीरथो राजा ततो गङ्गा यशस्विनी ।\nजगाम सरितां श्रेष्ठा सर्वपापविनाशिनी ॥"
@@ -328,6 +362,7 @@
     {
       "ref": "1.43.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो हि यजमानस्य जह्नोरद्भुतकर्मणः ।\nगङ्गा सम्प्लावयामास यज्ञवाटं महात्मनः ॥"
@@ -337,6 +372,7 @@
     {
       "ref": "1.43.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्या वलेपनं ज्ञात्वा क्रुद्धो जह्नुश्च राघव ।\nअपिबच्च जलं सर्वं गङ्गायाः परमाद्भुतम् ॥"
@@ -346,6 +382,7 @@
     {
       "ref": "1.43.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूजयन्ति महात्मानं जह्नुं पुरुषसत्तमम् ।\nगङ्गां चापि नयन्ति स्म दुहितृत्वे महात्मनः ॥"
@@ -355,6 +392,7 @@
     {
       "ref": "1.43.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तुष्टो महातेजाः श्रोत्राभ्यामसृजत् पुनः ।\nतस्माज्जह्नुसुता गङ्गा प्रोच्यते जाह्नवीति च ॥"
@@ -364,6 +402,7 @@
     {
       "ref": "1.43.39",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सागरं चापि सम्प्राप्ता सा सरित्प्रवरा तदा ।\nरसातलमुपागच्छत् सिद्ध्यर्थं तस्य कर्मणः ॥"
@@ -373,6 +412,7 @@
     {
       "ref": "1.43.40",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथो ऽपि राजर्षिर्गङ्गामादाय यत्नतः ।\nपितामहान् भस्मकृतानपश्यद्दीनचेतनः ॥"
@@ -382,6 +422,7 @@
     {
       "ref": "1.43.41",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ तद्भस्मनां राशिं गङ्गासलिलमुत्तमम् ।\nप्लावयद्धूतपाप्मानः स्वर्गं प्राप्ता रघूत्तम ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने त्रिचत्वारिंशः सर्गः ॥ ४३ ॥"

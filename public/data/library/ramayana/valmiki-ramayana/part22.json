@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 22,
@@ -8,6 +8,7 @@
     {
       "ref": "1.24.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रभाते विमले कृत्वाह्निकमरिन्दमौ ।\nविश्वामित्रं पुरस्कृत्य नद्यास्तीरमुपागतौ ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.24.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते च सर्वे महात्मानो मुनयः संशितव्रताः ।\nउपस्थाप्य शुभां नावं विश्वामित्रमथाब्रुवन् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.24.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आरोहतु भवान्नावं राजपुत्रपुरस्कृतः ।\nअरिष्टं गच्छ पन्थानं माभूत्कालविपर्ययः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.24.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रस्तथेत्युक्त्वा तानृषीनभिपूज्य च ।\nततार सहितस्ताभ्यां सरितं सागरङ्गमाम् ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.24.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः शुश्राव वै शब्दमतिसंरम्भवर्द्धितम् ।\nमध्यमागम्य तोयस्य सह रामः कनीयसा ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.24.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ रामः सरिन्मध्ये पप्रच्छ मुनिपुङ्गवम् ।\nवारिणो भिद्यमानस्य किमयं तुमुलो ध्वनिः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.24.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राघवस्य वचः श्रुत्वा कौतूहलसमन्वितः ।\nकथयामास धर्मात्मा तस्य शब्दस्य निश्चयम् ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.24.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कैलासपर्वते राम मनसा निर्मितं सरः ।\nब्रह्मणा नरशार्दूल तेनेदं मानसं सरः ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.24.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मात्सुस्राव सरसः सा ऽयोध्यामुपगूहते ।\nसरःप्रवृत्ता सरयूः पुण्या ब्रह्मसरश्च्युता ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.24.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यायमतुलः शब्दो जाह्नवीमभिवर्तते ।\nवारिसङ्क्षोभजो राम प्रणामं नियतः कुरु ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.24.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ताभ्यां तु तावुभौ कृत्वा प्रणाममतिधार्मिकौ ।\nतीरं दक्षिणमासाद्य जग्मतुर्लघुविक्रमौ ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.24.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स वनं घोरसङ्काशं दृष्ट्वा नृपवरात्मजः ।\nअविप्रहतमैक्ष्वाकः पप्रच्छ मुनिपुङ्गवम् ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.24.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहो वनमिदं दुर्गं झिल्लिकागणनादितम् ।\nभैरवैः श्वापदैः पूर्णं शकुन्तैर्दारुणारुतैः ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.24.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नानाप्रकारैः शकुनैर्वाश्यद्भिर्भैरवैः स्वनैः ।\nसिंहव्याघ्रवराहैश्च वारणैश्चोपशोभितम् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.24.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धवाश्वकर्णककुभैर्मरुतिन्दुकपाटलैः ।\nसङ्कीर्णं बदरीभिश्च किं न्वेतद्दारुणं वनम् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.24.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमुवाच महातेजा विश्वामित्रो महामुनिः ।\nश्रूयतां वत्स काकुत्स्थ यस्यैतद्दारुणं वनम् ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.24.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतौ जनपदौ स्फीतौ पूर्वमास्तां नरोत्तम ।\nमलदाश्च करूशाश्च देवनिर्माणनिर्मितौ ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.24.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुरा वृत्रवधे राम मलेन समभिप्लुतम् ।\nक्षुधा चैव सहस्राक्षं ब्रह्महत्या समाविशत् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.24.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमिन्द्रं स्नापयन् देवा ऋषयश्च तपोधनाः ।\nकलशैः स्नापयामासुर्मलं चास्य प्रमोचयन् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.24.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इह भूम्यां मलं दत्त्वा दत्त्वा कारूशमेव च ।\nशरीरजं महेन्द्रस्य ततो हर्षं प्रपेदिरे ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.24.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निर्मलो निष्करूशश्च शुचिरिन्द्रो यदा ऽभवत् ।\nददौ देशस्य सुप्रीतो वरं प्रभुरनुत्तमम् ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.24.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमौ जनपदौ स्फीतौ ख्यातिं लोके गमिष्यतः ।\nमलदाश्च करूशाश्च ममाङ्गमलधारिणौ ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.24.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "साधु साध्विति त देवाः पाकशासनमब्रुवन् ।\nदेशस्य पूजां तां दृष्ट्वा कृतां शक्रेण धीमता ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.24.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतौ जनपदौ स्फीतौ दीर्घकालमरिन्दम ।\nमलदाश्च करूशाश्च मुदितौ धनधान्यतः ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.24.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बलं नागसहस्रस्य धारयन्ती तदा ह्यभूत् ।\nताटका नाम भद्रं ते भार्या सुन्दस्य धीमतः ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.24.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मारीचो राक्षसः पुत्रो यस्याः शक्रपराक्रमः ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.24.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वृत्तबाहुर्महावीर्यो विपुलास्यतनुर्महान् ।\nराक्षसो भैरवाकारो नित्यं त्रासयते प्रजाः ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.24.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमौ जनपदौ नित्यं विनाशयति राघव ।\nमलदांश्च करूशांश्च ताटका दुष्टचारिणी ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "1.24.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सेयं पन्थानमावार्य वसत्यध्यर्द्धयोजने ।\nअत एव च गन्तव्यं ताटकाया वनं यतः ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "1.24.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वबाहुबलमाश्रित्य जहीमां दुष्टचारिणीम् ।\nमन्नियोगादिमं देशं कुरु निष्कण्टकं पुनः ॥"
@@ -278,6 +308,7 @@
     {
       "ref": "1.24.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि कश्चिदिमं देशं शक्नोत्यागन्तुमीदृशम् ।\nयक्षिण्या घोरया राम उत्सादितमसह्यया ॥"
@@ -287,6 +318,7 @@
     {
       "ref": "1.24.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतत्ते सर्वमाख्यातं यथैतद्दारुणं वनम् ।\nयक्ष्या चोत्सादितं सर्वमद्यापि न निवर्तते ॥"

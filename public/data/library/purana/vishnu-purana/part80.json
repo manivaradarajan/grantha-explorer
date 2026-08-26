@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 80,
@@ -8,6 +8,7 @@
     {
       "ref": "4.24.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "योऽयं रिपुंजयो नाम बार्हद्रथोंत्यः तस्यामात्यो मुनिको नाम भविष्यति"
@@ -18,6 +19,7 @@
     {
       "ref": "4.24.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स चैनं स्वामिनं हत्वा स्वुपुत्रं प्रद्योतनामानमभिषेक्ष्यति"
@@ -27,6 +29,7 @@
     {
       "ref": "4.24.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि बलाकनामा पुत्रो भविता"
@@ -36,6 +39,7 @@
     {
       "ref": "4.24.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च विशाखयूपः"
@@ -45,6 +49,7 @@
     {
       "ref": "4.24.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्पुत्रो जनकः"
@@ -54,6 +59,7 @@
     {
       "ref": "4.24.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य च नंदिवर्द्धनः"
@@ -63,6 +69,7 @@
     {
       "ref": "4.24.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो नंदी"
@@ -72,6 +79,7 @@
     {
       "ref": "4.24.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येतेष्टत्रिंशदुत्तरमष्टशतं पंच प्रद्योताः पृथिवीं भोक्ष्यन्ति"
@@ -81,6 +89,7 @@
     {
       "ref": "4.24.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च शिशुनाभः"
@@ -90,6 +99,7 @@
     {
       "ref": "4.24.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्पुत्रः काकवर्णो भविता"
@@ -99,6 +109,7 @@
     {
       "ref": "4.24.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य च पुत्रः क्षेमधर्मा"
@@ -108,6 +119,7 @@
     {
       "ref": "4.24.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि क्षतौजाः"
@@ -117,6 +129,7 @@
     {
       "ref": "4.24.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तत्पुत्रो विधिसारः"
@@ -126,6 +139,7 @@
     {
       "ref": "4.24.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चाजातशत्रुः"
@@ -135,6 +149,7 @@
     {
       "ref": "4.24.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मादर्भकः"
@@ -144,6 +159,7 @@
     {
       "ref": "4.24.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्माच्चोदयनः"
@@ -153,6 +169,7 @@
     {
       "ref": "4.24.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मादपि नंदिवर्द्धनः"
@@ -162,6 +179,7 @@
     {
       "ref": "4.24.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो महानंदी"
@@ -171,6 +189,7 @@
     {
       "ref": "4.24.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येते शैशनाभा भूपालास्त्रीणि वर्षशतानि द्विषष्ट्यधिकानि भविष्यंति"
@@ -180,6 +199,7 @@
     {
       "ref": "4.24.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महानंदिनस्ततश्शूद्रा गर्भोद्भवोतिलुब्धोतिबलो महापद्मनामा नंदः परशुराम इवापरोऽखिलक्षत्रांतकारी भविष्यति"
@@ -189,6 +209,7 @@
     {
       "ref": "4.24.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रभृति शूद्रा भूपाला भविष्यंति"
@@ -198,6 +219,7 @@
     {
       "ref": "4.24.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स चैकच्छत्रामनुल्लंघितशासनो महापद्मः पृथिवीं भोक्ष्यते"
@@ -207,6 +229,7 @@
     {
       "ref": "4.24.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्याप्यष्टौ सुतास्सुमाल्याद्य भवितारः"
@@ -216,6 +239,7 @@
     {
       "ref": "4.24.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य महापद्मस्यानुपृथिवीं भोक्ष्यंति"
@@ -225,6 +249,7 @@
     {
       "ref": "4.24.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महापद्मपुत्राश्चैकं वर्षशतमवनीपतयो भविष्यंति"
@@ -234,6 +259,7 @@
     {
       "ref": "4.24.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च नवचैतान्नंदान् कौटिल्यो ब्राह्मणस्समुद्धरिष्यति"
@@ -243,6 +269,7 @@
     {
       "ref": "4.24.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषामभावे मौर्व्याः पृथिवीं भोक्ष्यंति"
@@ -252,6 +279,7 @@
     {
       "ref": "4.24.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कौटिल्य एव चंद्र गुप्तसुत्पन्नं राज्येऽभिषेक्ष्यति"
@@ -261,6 +289,7 @@
     {
       "ref": "4.24.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि पुत्रो बिंदुसारो भविष्यति"
@@ -270,6 +299,7 @@
     {
       "ref": "4.24.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्याप्यशोकवर्द्धनस्ततस्सुयशास्ततश्च दशरथस्ततश्च संयुतस्ततश्शालिशूकस्तस्मात्सोमशर्मा तस्यापि सोमशर्मणश्शतधन्वा"
@@ -279,6 +309,7 @@
     {
       "ref": "4.24.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यानुबृहद्र थनामा भविता"
@@ -288,6 +319,7 @@
     {
       "ref": "4.24.32",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमेते मौर्य्या दश भूपतयो भविष्यंति अब्दशतं सप्तत्रिंशदुत्तरम्"
@@ -297,6 +329,7 @@
     {
       "ref": "4.24.33",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषामंते पृथिवीं दश शुंगा भोक्ष्यंति"
@@ -306,6 +339,7 @@
     {
       "ref": "4.24.34",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुष्यमित्रस्सेनापतिस्स्वामिनं हत्वा राज्यं करिष्यति तस्यात्मजोऽग्निमित्रः"
@@ -315,6 +349,7 @@
     {
       "ref": "4.24.35",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मात्सुज्येष्ठस्ततो वसुमित्रस्तस्मादप्युदंकस्ततः पुलिंदकस्ततो घोषवसुस्तस्मादपि वज्रमित्रस्ततो भागवतः"
@@ -324,6 +359,7 @@
     {
       "ref": "4.24.36",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्माद्देवभूतिः"
@@ -333,6 +369,7 @@
     {
       "ref": "4.24.37",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येते शुंगा द्वादशोत्तरं वर्षशतं पृथिवीं भोक्ष्यंति"
@@ -342,6 +379,7 @@
     {
       "ref": "4.24.38",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः कण्वानेषाभूर्यास्यति"
@@ -351,6 +389,7 @@
     {
       "ref": "4.24.39",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवभूतिं तु शुंगराजानं व्यसनिनं तस्यैवामात्यः कण्वो वसुदेवनामा तं निहत्य स्वयमवनीं भोक्ष्यति"
@@ -360,6 +399,7 @@
     {
       "ref": "4.24.40",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य पुत्रो भूमित्रस्तस्यापि नारायणः"
@@ -369,6 +409,7 @@
     {
       "ref": "4.24.41",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नारायणात्मजस्सुशर्मा"
@@ -378,6 +419,7 @@
     {
       "ref": "4.24.42",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एते काण्वायनाश्चत्वारः पंचचत्वारिंशद्वर्षाणि भूपतयो भविष्यंति"
@@ -387,6 +429,7 @@
     {
       "ref": "4.24.43",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुशर्माणं तु काण्वं तद्भूत्यो बलिपुच्छकनामा हत्वांध्रजातीयो वसुधां भोक्ष्यति"
@@ -396,6 +439,7 @@
     {
       "ref": "4.24.44",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च कृष्णनामा तद्भ्राता पृथिवीपतिर्भविष्यति"
@@ -405,6 +449,7 @@
     {
       "ref": "4.24.45",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि पुत्रः शांतकर्णिस्तस्यापि पूर्णोत्संगस्तत्पुत्रश्शातकर्णिस्तस्माच्च लम्बोदरस्तस्माच्च पिलकस्ततो मेघस्वातिस्ततः पटुमान्"
@@ -414,6 +459,7 @@
     {
       "ref": "4.24.46",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चारिष्टकर्मा ततो हालाहलः"
@@ -423,6 +469,7 @@
     {
       "ref": "4.24.47",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हालाहलात्पललकस्ततः पुलिंदसेनस्ततः सुंदरस्ततश्शातकर्णिस्तश्शिवस्वातिस्ततश्च गोमतिपुत्रस्तत्पुत्रोऽलिमान्"
@@ -432,6 +479,7 @@
     {
       "ref": "4.24.48",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि शांतकर्णिस्ततः शिविश्रितस्तश्च शिवस्कंधस्तस्मादपि यज्ञश्रीस्ततो द्वियज्ञस्तस्माच्चंद्र श्रीः"
@@ -441,6 +489,7 @@
     {
       "ref": "4.24.49",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मात्पुलोमापिहि"
@@ -450,6 +499,7 @@
     {
       "ref": "4.24.50",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमेवे त्रिंशच्चत्वार्यब्दशतानि षट्पंचाशदधिकानि पृथिवीं भोक्ष्यंति"
@@ -459,6 +509,7 @@
     {
       "ref": "4.24.51",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आंध्रभृत्यास्सप्ताभीरप्रभृतयो दशगर्दभिनश्च भूभुजो भविष्यंति"
@@ -468,6 +519,7 @@
     {
       "ref": "4.24.52",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततष्षोडश भूपतयो भवितारः"
@@ -477,6 +529,7 @@
     {
       "ref": "4.24.53",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चाष्टौ यवनाश्चतुर्दश तुरुष्कारा मुंडाश्च त्रयोदश एकादश मौना एते वै पृथुवीपतयः पृथिवीं दशवर्षशतानि नवत्यधिकानि भोक्ष्यंति"
@@ -486,6 +539,7 @@
     {
       "ref": "4.24.54",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च मौना एकादश भूपतयोऽब्दशतानि त्रीणि पृथिवीं भोक्ष्यंति"
@@ -495,6 +549,7 @@
     {
       "ref": "4.24.55",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषूत्सन्नेषु कैंकिला यवना भूपतयो भविष्यंत्यमूर्द्धाभिषिक्ताः"
@@ -504,6 +559,7 @@
     {
       "ref": "4.24.56",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषामपत्यं विंध्यशक्तिस्ततः पुंरजयस्तस्माद्रा मचंद्र स्तस्माद्धर्मवर्मा ततो वंगस्ततोभून्नंदनस्ततस्सुनंदी तद्भ्राता नंदियशाश्शुक्रः प्रवीर एते वर्षशतं षड्वर्षाणि भूपतयो भविष्यंति"
@@ -513,6 +569,7 @@
     {
       "ref": "4.24.57",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तत्पुत्रास्त्रयोदशैते बाह्लिकाश्च त्रयः"
@@ -522,6 +579,7 @@
     {
       "ref": "4.24.58",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः पुष्पमित्राः पटुमियत्रास्त्रयोदशैकलाश्च सप्तांध्राः"
@@ -531,6 +589,7 @@
     {
       "ref": "4.24.59",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च कोसलायां तु नव चैव भूपतयो भविष्यंति"
@@ -540,6 +599,7 @@
     {
       "ref": "4.24.60",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नैषधास्तु त एव"
@@ -549,6 +609,7 @@
     {
       "ref": "4.24.61",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मगधायां तु विश्वस्फटिकसंज्ञोऽन्यान्वर्णान्करिष्यति"
@@ -558,6 +619,7 @@
     {
       "ref": "4.24.62",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कैवर्त्तबटुपुलिंदब्राह्मणान्राज्ये स्थपयिष्यति"
@@ -567,6 +629,7 @@
     {
       "ref": "4.24.63",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्साद्याखिलक्षत्रजातिं नव नागाः पद्मवत्यां नाम पुर्यामनुगंगाप्रयागं गयाद्गुप्तांश्च मागधा भोक्ष्यंति"
@@ -576,6 +639,7 @@
     {
       "ref": "4.24.64",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कोशलांध्रपुंड्रताम्रलिप्तसमतटपुरीं च देवरक्षितो रक्षिता"
@@ -585,6 +649,7 @@
     {
       "ref": "4.24.65",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कलिंगमाहिषमहेंद्र भौमान् गुहा भोक्ष्यंति"
@@ -594,6 +659,7 @@
     {
       "ref": "4.24.66",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नैषधनैमिषककालकोशकाञ्जनपदान्मणिधान्यकवंशा भोक्ष्यंति"
@@ -603,6 +669,7 @@
     {
       "ref": "4.24.67",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्रैराज्यमुषिकजनपदान्कनकाह्वयचो भोक्ष्यति"
@@ -612,6 +679,7 @@
     {
       "ref": "4.24.68",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सौराष्ट्रावंत्यशूद्रा भीरान्नर्मदामरुभूविषयांश्च व्रात्यद्विजाभीरशूद्रा द्या भोक्ष्यंति"
@@ -621,6 +689,7 @@
     {
       "ref": "4.24.69",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सिंधुतटदाविकोर्वीचंद्र भागाकाश्मीरविषयांश्च व्रात्यम्लेच्छशूद्रा दयो भोक्ष्यंति"
@@ -630,6 +699,7 @@
     {
       "ref": "4.24.70",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एते च तुल्यकालास्सर्वे पृथिव्यां भूभुजो भविष्यंति"
@@ -639,6 +709,7 @@
     {
       "ref": "4.24.71",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अल्पप्रसादा बृहत्कोपास्सार्वकालमनृताधर्मरुचयः स्त्रीबालगोवधकर्त्तारः परस्वादानरुचयोल्पसारास्तमिस्रप्राया उदितास्तमितप्राया अल्पायुषो महेच्छा ह्यल्पधर्मा लुब्धाश्च भविष्यन्ति"
@@ -648,6 +719,7 @@
     {
       "ref": "4.24.72",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तैश्च विमिश्रा जनपदास्तच्छीलानुवर्त्तिनो राजाश्रयशुष्मिणो म्लेच्छाचाराश्च विपर्ययेण वर्त्तमानाः प्रजाः क्षपयिष्यंति"
@@ -657,6 +729,7 @@
     {
       "ref": "4.24.73",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चानुदिनमल्पाल्पह्रासव्यवच्छेदाद्धर्मार्थयोर्जगतस्संक्षयो भविष्यति"
@@ -666,6 +739,7 @@
     {
       "ref": "4.24.74",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चार्थ एवाभिजनहेतुः"
@@ -675,6 +749,7 @@
     {
       "ref": "4.24.75",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बलमेवाश्षोधर्महेतुः"
@@ -684,6 +759,7 @@
     {
       "ref": "4.24.76",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभिरुचिरेव दांपत्यसंबंधहेतुः"
@@ -693,6 +769,7 @@
     {
       "ref": "4.24.77",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्त्रीत्वमेवोपभोगहेतुः"
@@ -702,6 +779,7 @@
     {
       "ref": "4.24.78",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनृतमेव व्यवहारजयहेतुः"
@@ -711,6 +789,7 @@
     {
       "ref": "4.24.79",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उन्नतांबुतैव पृथिवीहेतु"
@@ -720,6 +799,7 @@
     {
       "ref": "4.24.80",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मसूत्रमेव विप्रत्वहेतुः"
@@ -729,6 +809,7 @@
     {
       "ref": "4.24.81",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रत्नधातुतैव श्लाघ्यताहेतुः"
@@ -738,6 +819,7 @@
     {
       "ref": "4.24.82",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लिंगधाराणमेवाश्रमहेतुः"
@@ -747,6 +829,7 @@
     {
       "ref": "4.24.83",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अन्यायमेव वृत्तिहेतुः"
@@ -756,6 +839,7 @@
     {
       "ref": "4.24.84",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दौर्बल्यमेवावृत्तिहेतुः"
@@ -765,6 +849,7 @@
     {
       "ref": "4.24.85",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभयप्रगल्भोच्चारणमेव पांडित्यहेतुः"
@@ -774,6 +859,7 @@
     {
       "ref": "4.24.86",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनाढ्यतैव साधुत्वहेतुः"
@@ -783,6 +869,7 @@
     {
       "ref": "4.24.87",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्नानमेव प्रसाधनहेतुः"
@@ -792,6 +879,7 @@
     {
       "ref": "4.24.88",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दानमेव धर्महेतुः"
@@ -801,6 +889,7 @@
     {
       "ref": "4.24.89",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वीकरणमेव विवाहहेतुः"
@@ -810,6 +899,7 @@
     {
       "ref": "4.24.90",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सद्वेषधार्येव पात्रम्"
@@ -819,6 +909,7 @@
     {
       "ref": "4.24.91",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दूरायतननोदकमेव तीर्थहेतुः"
@@ -828,6 +919,7 @@
     {
       "ref": "4.24.92",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कपटवेषधारणमेव महत्त्वहेतुः"
@@ -837,6 +929,7 @@
     {
       "ref": "4.24.93",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येवमनेकदोषोत्तरे तु भूमंडले सर्ववर्णेष्वेव योयो बलवान्सस भूपतिर्भविष्यति"
@@ -846,6 +939,7 @@
     {
       "ref": "4.24.94",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं चातिलुब्धकराजासहाश्शैलानामंतरद्रो णीः प्रजास्संश्रयिष्यंति"
@@ -855,6 +949,7 @@
     {
       "ref": "4.24.95",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मधुशाकमूलफलपत्रपुष्पाद्याहाराश्च भविष्यंति"
@@ -864,6 +959,7 @@
     {
       "ref": "4.24.96",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तरुवल्कलपर्णचीरप्रावरणाश्चातिबहुप्रजाश्शीतवातातपवर्षसहाश्च भविष्यंति"
@@ -873,6 +969,7 @@
     {
       "ref": "4.24.97",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च कश्चित्त्रयोविंशतिवर्षाणि जीविष्यति अनवरतं चात्र कलियुगे क्षयमायात्यखिल एवैष जनः"
@@ -882,6 +979,7 @@
     {
       "ref": "4.24.98",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रौतस्मार्त्ते च धर्मे विप्लवमत्यंतमुपगते क्षीणप्राये च कलावश्षोजगत्स्रष्टुश्चराचरगुरोरादिमध्यांतरहितस्य ब्रह्ममयस्यात्मरूपिणो भगवतो वासुदेवस्यांशश्शंबलग्रामप्रधानब्राह्मणस्य विष्णुयशसो गृहेष्टगुणर्द्धिसमन्वितः कल्किरूपीजगत्यत्रावतीर्य सकलम्लेच्छदस्युदुष्टाचरणचेतसामश्षोआ!णामपरिच्छिन्नशक्तिमाहा-त्म्यः क्षयं करिष्यति स्वधर्मेषु चाखिलमेव संस्थापयिष्यति"
@@ -891,6 +989,7 @@
     {
       "ref": "4.24.99",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अनंतरं चाश्षोकलेरवसाने निशावसाने विबुद्धानामिव तेषामेव जनपदानाममलस्फटिकदलशुद्धा मतयो भविष्यंति"
@@ -900,6 +999,7 @@
     {
       "ref": "4.24.100",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषां च बीजभूतानामश्षोमनुष्याणां परिणतानामपि तत्कालकृतापत्यप्रसूतिर्भविष्यति"
@@ -909,6 +1009,7 @@
     {
       "ref": "4.24.101",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तानि च तदपत्यानि कृतयुगानुसारीण्येव भविष्यंति"
@@ -918,6 +1019,7 @@
     {
       "ref": "4.24.102",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अत्रोच्यते ।\nयथा चंद्र श्च सूर्यश्च तथा तिष्यो बृहस्पतिः ।\nएकराशौ समेष्यंति तदा भवति वै कृतम्"
@@ -927,6 +1029,7 @@
     {
       "ref": "4.24.103",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अतीता वर्त्तमानाश्च तथैवानागताश्च ये ।\nएते वंश्षोउ! भूपालाः कथिता मुनिसत्तम"
@@ -936,6 +1039,7 @@
     {
       "ref": "4.24.104",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यावत्परीक्षितो जन्म यावन्नंदाभिषेचनम् ।\nएतद्वर्षसहस्रं तु ज्ञेयं पंचाशदुत्तरम्"
@@ -945,6 +1049,7 @@
     {
       "ref": "4.24.105",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सप्तर्षीणां तु यौ पूर्वौ दृश्येते ह्युदितौ दिवि ।\nतयोस्तु मध्ये नक्षत्रं दृश्यते यत्समं निशि"
@@ -954,6 +1059,7 @@
     {
       "ref": "4.24.106",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेन सप्तर्षयो युक्तास्तिष्ठंत्यब्दशतं नृणाम् ।\nते तु पारीक्षिते काले मघास्वासन्द्विजोत्तम"
@@ -963,6 +1069,7 @@
     {
       "ref": "4.24.107",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदा प्रवृत्तश्च कलिर्द्वादशाब्दशतात्मकः"
@@ -972,6 +1079,7 @@
     {
       "ref": "4.24.108",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदैव भगवान्विष्णोरंशो यातो दिवं द्विज ।\nवसुदेवकुलोद्भूतस्तदैवात्रागतः कलिः"
@@ -981,6 +1089,7 @@
     {
       "ref": "4.24.109",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यावत्सपादपद्माभ्यां पस्पर्शेमां वसुंधराम् ।\nतावत्पृथ्वीपरिष्वंगे समर्थो नाभवत्कलिः"
@@ -990,6 +1099,7 @@
     {
       "ref": "4.24.110",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गते सनातनस्यांशो! विष्णोस्तत्र भुवो दिवम् ।\nतत्याज सानुजो राज्यं धर्म पुत्रो युधिष्ठिरः"
@@ -999,6 +1109,7 @@
     {
       "ref": "4.24.111",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विपरीतानि दृष्ट्वा च निमित्तानि हि पांडवः ।\nयाते कृष्णे चकाराऽथ सोऽभिषेकं परीक्षितः"
@@ -1008,6 +1119,7 @@
     {
       "ref": "4.24.112",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रयास्यंति यदा चैते पूर्वाषाढां महर्षयः ।\nतदा नंदात्प्रभृत्येष गतिवृद्धिं गमिष्यति"
@@ -1017,6 +1129,7 @@
     {
       "ref": "4.24.113",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्मिन् कृष्णो दिवं यातस्तस्मिन्नेव तदा हनि ।\nप्रतिपन्नं कलियुगं तस्य संख्यां निबोध मे"
@@ -1026,6 +1139,7 @@
     {
       "ref": "4.24.114",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्रीणि लक्षाणि वर्षाणां द्विज मानुष्यसंख्यया ।\nषष्टिश्चैव सहस्राणि भविष्यत्येष वै कलिः"
@@ -1035,6 +1149,7 @@
     {
       "ref": "4.24.115",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शतानि तानि दिव्यानां सप्त पंच च संख्यया ।\nनिश्श्षोए!ण गते तस्मिन्भविष्यति पुनः कृतम्"
@@ -1044,6 +1159,7 @@
     {
       "ref": "4.24.116",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्राह्मणाः क्षत्त्रिया वैश्याश्शूद्रा श्च द्विजसत्तम ।\nयुगेयुगे महात्मानः समतीतास्सहस्रशः"
@@ -1053,6 +1169,7 @@
     {
       "ref": "4.24.117",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बहुत्वान्नामधेयानां परिसंख्या कुलेकुले ।\nपौनरुक्त्याद्धि साम्याच्च न मया परिकीर्त्तिता"
@@ -1062,6 +1179,7 @@
     {
       "ref": "4.24.118",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवापिः पौरवो राजा पुरुश्चेक्षाकुवंशजः ।\nमहायोगबलोपेतौ कलापग्रामसंश्रितौ"
@@ -1071,6 +1189,7 @@
     {
       "ref": "4.24.119",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृते युगे त्विहागम्य क्षत्रप्रावर्त्तकौ हि तौ ।\nभविष्यतो मनोर्वंशबीजभूतौ व्यवस्थितौ"
@@ -1080,6 +1199,7 @@
     {
       "ref": "4.24.120",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतेन क्रमयोगेन मनुपुत्रैर्वसुंधरा ।\nकृतत्रेताद्वापराणि युगानि त्रीणि भुज्यते"
@@ -1089,6 +1209,7 @@
     {
       "ref": "4.24.121",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कलौ ते बीजभूता वै केचित्तिष्ठंति वै मुने ।\nयथैव देवापिपुरू सांप्रतं समधिष्ठितौ"
@@ -1098,6 +1219,7 @@
     {
       "ref": "4.24.122",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एष तूद्देशतो वंशस्तवोक्तो भूभुजां मया ।\nनिखिलो गदितुं शक्यो नैष वर्षशतैरपि"
@@ -1107,6 +1229,7 @@
     {
       "ref": "4.24.123",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एते चान्ये च भूपाला यैरत्र क्षितिमंडले ।\nकृतं ममत्वं मोहांधैर्नित्यं हेयकलेवरे"
@@ -1116,6 +1239,7 @@
     {
       "ref": "4.24.124",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथं ममेयमचला मत्पुत्रस्य कथं मही ।\nमद्वंशस्येतिचिंतार्त्ता जग्मुरंतमिमे नृपाः"
@@ -1125,6 +1249,7 @@
     {
       "ref": "4.24.125",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेभ्यः पूर्वतराश्चान्ये तेभ्यस्तेभ्यस्तथा परे ।\nभविष्याश्चैव यास्यंति तेषामन्ये च येऽप्यनु"
@@ -1134,6 +1259,7 @@
     {
       "ref": "4.24.126",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विलोक्यात्मजयोद्योगं यात्राव्यग्रान्नराधिपान् ।\nपुष्पप्रहासैश्शरदि हसंतीव वसुंधरा"
@@ -1143,6 +1269,7 @@
     {
       "ref": "4.24.127",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मैत्रेय पृथिवीगीताञ्छ्लोकांश्चात्र निबोध मे ।\nयानाह धर्मध्वजिने नजकायासितो मुनिः"
@@ -1152,6 +1279,7 @@
     {
       "ref": "4.24.128",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथमेष नरेंद्रा णां मोहो बुद्धिमतामपि ।\nयेन केन सधर्माणोप्यतिविश्वस्तचेतसः"
@@ -1162,6 +1290,7 @@
     {
       "ref": "4.24.129",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्वमात्मजयं कृत्वा जेतुमिच्छंति मंत्रिणः ।\nततो भृत्यांश्च पौरांश्च जिगीषंते तथा रिपून्"
@@ -1171,6 +1300,7 @@
     {
       "ref": "4.24.130",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "क्रमेणानेन जेष्यामो वयं पृथ्वीं ससागराम् ।\nइत्यासक्तधियो मृत्युं न पश्यंत्यविदूरगम्"
@@ -1180,6 +1310,7 @@
     {
       "ref": "4.24.131",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "समुद्रा वरणं याति भूमंडलमथो वशम् ।\nकियदात्मजयस्यैतन्मुक्तिरात्मजये फलम्"
@@ -1189,6 +1320,7 @@
     {
       "ref": "4.24.132",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्सृज्य पूर्वजा याता यां नादाय गतः पिता ।\nतां मामतीव मूढत्वाज्जेतुमिच्छंति पार्थिवाः"
@@ -1198,6 +1330,7 @@
     {
       "ref": "4.24.133",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मत्कृते पितृपुत्राणां भ्रातॄणां चापि विग्रहः ।\nजायतेत्यंतमोहेन ममत्वादृतचेतसाम्"
@@ -1207,6 +1340,7 @@
     {
       "ref": "4.24.134",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पृथ्वी ममेयं सकला ममैषा मदन्वयस्यापि च शाश्वतीयम् ।\nयोयो मृतेऽन्यत्र बभूव राजा कुबुद्धिरासीदिति तस्यतस्य"
@@ -1216,6 +1350,7 @@
     {
       "ref": "4.24.135",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्ट्वा ममत्वादृतचित्तमेकं विहाय मां मृत्युवशं व्रजंतम् ।\nतस्यानुयस्तस्य कथं ममत्वं हृद्यास्पदं मत्प्रभवं करोति"
@@ -1225,6 +1360,7 @@
     {
       "ref": "4.24.136",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पृथ्वी ममैषाऽऽशु परित्यजैनां वदंति ये दूतमुखैस्स्वशत्रून् ।\nनराधिपास्तेषु ममातिहासः पुनश्च मूढेषु दयाऽभ्युपैति"
@@ -1234,6 +1370,7 @@
     {
       "ref": "4.24.137",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येते धरणीगीताश्श्लोका मैत्रेय यैश्श्रुताः ।\nममत्वं विलयं याति तपत्यर्के यथा हिमम्"
@@ -1244,6 +1381,7 @@
     {
       "ref": "4.24.138",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येष कथितः सम्यङ्मनोर्वंशो मया तव ।\nयत्र स्थितिप्रवृत्तस्य विष्णोरंशांशका नृपाः"
@@ -1253,6 +1391,7 @@
     {
       "ref": "4.24.139",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शृणोति य इमं भक्त्या मनोर्वंशमनुक्रमात् ।\nतस्य पापमश्षॐ वै प्रणश्यत्यमलात्मनः"
@@ -1262,6 +1401,7 @@
     {
       "ref": "4.24.140",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धनधान्यर्द्धिमतुलां प्राप्नोत्यव्याहतेंद्रि यः ।\nश्रुत्वैवमखिलं वंशं प्रशस्तं शशिसूर्ययोः"
@@ -1271,6 +1411,7 @@
     {
       "ref": "4.24.141",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इक्ष्वाकुजह्नुमांधातृसगराविक्षितान्रघून् ।\nययातिनहुषाद्यांश्च ज्ञात्वा निष्ठामुपागतान्"
@@ -1280,6 +1421,7 @@
     {
       "ref": "4.24.142",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "महाबलान्महावीर्याननन्तधनसंचयान् ।\nकृतान्कालेन बलिना कथाश्षोआ!न्नराधिपान्"
@@ -1289,6 +1431,7 @@
     {
       "ref": "4.24.143",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुत्वा न पुत्रदारादौ गृहक्षेत्रादिके तथा ।\nद्र व्यादौ वा कृतप्रज्ञो ममत्वं कुरुते नरः"
@@ -1298,6 +1441,7 @@
     {
       "ref": "4.24.144",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तप्तं तपो यैः पुरुषप्रवीरैरुद्वाहुभिर्वर्षगणाननेकान् ।\nइष्ट्वा सुयज्ञैर्बलिनोतिवीर्याः कृतानुकालेन कथावशेषाः"
@@ -1307,6 +1451,7 @@
     {
       "ref": "4.24.145",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पृथुस्समस्तान्विचचार लोकानव्याहतो यो विजितारिचक्रः ।\nस कालवाताभिहतः प्रणष्टः क्षिप्तं यथा शाल्मलितूलमग्नौ"
@@ -1316,6 +1461,7 @@
     {
       "ref": "4.24.146",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यः कार्त्तवीर्यो बुभुजे समस्तान्द्वीपान्समाक्रम्य हतारिचक्रः ।\nकथाप्रसंगेष्वभिधीयमानस्स एव संकल्पविकल्पहेतुः"
@@ -1325,6 +1471,7 @@
     {
       "ref": "4.24.147",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दशाननाविक्षतराघवाणामैश्वर्यमुद्भासितदिङ्मुखानाम् ।\nभस्मापि शिष्टं न कथं क्षणेन भ्रूभंगपातेन धिगंतकस्य"
@@ -1334,6 +1481,7 @@
     {
       "ref": "4.24.148",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथाशरीरत्वमवाप यद्वै मांधातृनामा भुवि चक्रवर्त्ती ।\nश्रुत्वापि तत्को हि करोति साधुर्ममत्वमान्मन्यपि मंदचेताः"
@@ -1343,6 +1491,7 @@
     {
       "ref": "4.24.149",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथाद्यास्सगरं ककुत्स्थो दशननो राघवलक्ष्मणौ च ।\nयुधिष्ठिराद्याश्च बभूवुरेते सत्यं न मिथ्या क्व नु ते न विद्मः"
@@ -1352,6 +1501,7 @@
     {
       "ref": "4.24.150",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ये सांप्रतं ये च नृपा भविष्याः प्रोक्ता मया विप्रवरोग्रवीयाः ।\nएते तथाऽन्ये च तथाभिधेयाः सर्वे भविष्यंति यथैव पूर्वे"
@@ -1361,6 +1511,7 @@
     {
       "ref": "4.24.151",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एत द्विदित्वा न नरेण कार्यं ममत्वमात्मन्यपि पंडितेन ।\nतिष्ठंतु तावत्तनयात्मजायाः क्षेत्रादयो ये च शरीरिणोऽन्ये"
@@ -1370,6 +1521,7 @@
     {
       "ref": "4.24.152",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुमाहपुराणे चतुर्थांशो! चतुर्विंशोध्यायः"

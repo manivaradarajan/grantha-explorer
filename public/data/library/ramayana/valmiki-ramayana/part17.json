@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 17,
@@ -8,6 +8,7 @@
     {
       "ref": "1.19.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तच्छ्रुत्वा राजसिंहस्य वाक्यमद्भुतविस्तरम् ।\nहृष्टरोमा महातेजा विश्वामित्रो ऽभ्यभाषत ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.19.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सदृशं राजशार्दूल तवैतद्भुवि नान्यथा ।\nमहाकुलप्रसूतस्य वसिष्ठव्यपदेशिनः ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.19.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यत्तु मे हृद्गतं वाक्यं तस्य कार्यस्य निश्चयम् ।\nकुरुष्व राजशार्दूल भव सत्यप्रतिश्रवः ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.19.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं नियममातिष्ठे सिद्ध्यर्थं पुरुषर्षभ ।\nतस्य विघ्नकरौ द्वौ तु राक्षसौ कामरूपिणौ ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.19.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मारीचश्च सुबाहुश्च वीर्यवन्तौ सुशिक्षितौ ।\nसमांसरुधिरौघेण वेदिं तामभ्यवर्षताम् ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.19.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अवधूते तथाभूते तस्मिन्नियमनिश्चये ।\nकृतश्रमो निरुत्साहस्तस्माद्देशादपाक्रमे ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.19.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च मे क्रोधमुत्स्रष्टुं बुद्धिर्भवति पार्थिव ।\nतथाभूता हि सा चर्या न शापस्तत्र मुच्यते ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.19.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वपुत्रं राजशार्दूल रामं सत्यपराक्रमम् ।\nकाकपक्षधरं शूरं ज्येष्ठं मे दातुमर्हसि ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.19.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शक्तो ह्येष मया गुप्तो दिव्येन स्वेन तेजसा ।\nराक्षसा ये विकर्तारस्तेषामपि विनाशने ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.19.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "श्रेयश्चास्मै प्रदास्यामि बहुरूपं न संशयः ।\nत्रयाणामपि लोकानां येन ख्यातिं गमिष्यति ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.19.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च तौ राममासाद्य शक्तौ स्थातुं कथञ्चन ।\nन च तौ राघवादन्यो हन्तुमुत्सहते पुमान् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.19.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वीर्योत्सिक्तौ हि तौ पापौ कालपाशवशं गतौ ।\nरामस्य राजशार्दूल न पर्याप्तौ महात्मनः ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.19.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न च पुत्रकृतस्नेहं कर्तुमर्हति पार्थिव ।\nअहं ते प्रतिजानामि हतौ तौ विद्धि राक्षसौ ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.19.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं वेद्मि महात्मानं रामं सत्यपराक्रमम् ।\nवसिष्ठो ऽपि महातेजा ये चेमे तपसि स्थिताः ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.19.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि ते धर्मलाभं च यशश्च परमं भुवि ।\nस्थितमिच्छसि राजेन्द्र रामं मे दातुमर्हसि ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.19.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि ह्यनुज्ञां काकुत्स्थ ददते तव मन्त्रिणः ।\nवसिष्ठप्रमुखाः सर्वे राघवं मे विसर्जय ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.19.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अभिप्रेतमसंसक्तमात्मजं दातुमर्हसि ।\nदशरात्रं हि यज्ञस्य रामं राजीवलोचनम् ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.19.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नात्येति कालो यज्ञस्य यथा ऽयं मम राघव ।\nतथा कुरुष्व भद्रं ते मा च शोके मनः कृथाः ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.19.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्येवमुक्त्वा धर्मात्मा धर्मार्थसहितं वचः ।\nविरराम महातेजा विश्वामित्रो महामुनिः ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.19.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तन्निशम्य राजेन्द्रो विश्वामित्रवचः शुभम् ।\nशोकमभ्यगमत्तीव्रं व्यषीदत भयान्वितः ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.19.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति हृदयमनोविदारणं मुनिवचनं तदतीव शुश्रुवान् ।\nनरपतिरभवन्महांस्तदा व्यथितमनाः प्रचचाल चासनात् ॥"

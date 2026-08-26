@@ -9,18 +9,24 @@ import {
 } from "@/lib/data";
 
 const ROOT = path.resolve(__dirname, "..", "..");
-const FILE = path.join(
+const ENVELOPE = path.join(
   ROOT,
-  "public/data/library/vedarthasangraha/vedarthasangraha.json",
+  "public/data/library/vedarthasangraha/envelope.json",
+);
+const PART1 = path.join(
+  ROOT,
+  "public/data/library/vedarthasangraha/part1.json",
 );
 
 function loadVedarthasangraha(): Grantha {
-  const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
+  const envelope = JSON.parse(fs.readFileSync(ENVELOPE, "utf-8"));
+  const part = JSON.parse(fs.readFileSync(PART1, "utf-8"));
   return {
-    ...data,
+    ...envelope,
+    ...part,
     grantha_id: "vedarthasangraha",
     commentaries: [],
-    parts: [],
+    parts: envelope.parts,
   } as Grantha;
 }
 

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 28,
@@ -8,6 +8,7 @@
     {
       "ref": "1.30.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ तौ देशकालज्ञौ राजपुत्रावरिन्दमौ ।\nदेशे काले च वाक्यज्ञावब्रूतां कौशिकं वचः ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.30.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगवन् श्रोतुमिच्छावो यस्मिन् काले निशाचरौ ।\nसंरक्षणीयौ तौ ब्रह्मन्नातिवर्तेत तत्क्षणम् ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.30.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं ब्रुवाणौ काकुत्स्थौ त्वरमाणौ युयुत्सया ।\nसर्वे ते मुनयः प्रीताः प्रशशंसुर्नृपात्मजौ ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.30.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अद्यप्रभृति षड्रात्रं रक्षतं राघवौ युवाम् ।\nदीक्षां गतो ह्येष मुनिर्मौनित्वं च गमिष्यति ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.30.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तौ च तद्वचनं श्रुत्वा राजपुत्रौ यशस्विनौ ।\nअनिद्रौ षडहोरात्रं तपोवनमरक्षताम् ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.30.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उपासाञ्चक्रतुर्वीरौ यत्तौ परमधन्विनौ ।\nररक्षतुर्मुनिवरं विश्वामित्रमरिन्दमौ ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.30.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ काले गते तस्मिन् षष्ठे ऽहनि समागते ।\nसौमित्रिमब्रवीद्रामो यत्तो भव समाहितः ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.30.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामस्यैवं ब्रुवाणस्य त्वरितस्य युयुत्सया ।\nप्रजज्वाल ततो वेदिस्सोपाध्यायपुरोहिता ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.30.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सदर्भचमसस्रुक्का ससमित्कुसुमोच्चया ।\nविश्वामित्रेण सहिता वेदिर्जज्वाल सर्त्विजा ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.30.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्त्रवच्च यथान्यायं यज्ञो ऽसौ सम्प्रवर्तते ।\nआकाशे च महान् शब्दः प्रादुरासीद्भयानकः ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.30.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आवार्य गगनं मेघो यथा प्रावृषि निर्गतः ।\nतथा मायां विकुर्वाणौ राक्षसावभ्यधावताम् ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.30.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मारीचश्च सुबाहुश्च तयोरनुचराश्च ये ।\nआगम्य भीमसङ्काशा रुधिरौघमवासृजन् ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.30.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा तेन रुधिरौघेण वेदिर्जज्वाल मण्डिता ।\nसहसा ऽभिद्रुतो रामस्तानपश्यत्ततो दिवि ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.30.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तावापतन्तौ सहसा दृष्ट्वा राजीवलोचनः ।\nलक्ष्मणं त्वभिसम्प्रेक्ष्य रामो वचनमब्रवीत् ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.30.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पश्य लक्ष्मण दुर्वृत्तान् राक्षसान् पिशिताशनान् ।\nमानवास्त्रसमाधूताननिलेन यथा घनान् ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.30.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मानवं परमोदारमस्त्रं परमभास्वरम् ।\nचिक्षेप परमक्रुद्धो मारीचोरसि राघवः ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.30.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तेन परमास्त्रेण मानवेन समाहतः ।\nसम्पूर्णं योजनशतं क्षिप्तः सागरसम्प्लवे ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.30.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विचेतनं विघूर्णन्तं शीतेषु बलताडितम् ।\nनिरस्तं दृश्य मारीचं रामो लक्ष्मणमब्रवीत् ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.30.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इमानपि वधिष्यामि निर्घृणान् दुष्टचारिणः ।\nराक्षसान् पापकर्मस्थान् यज्ञघ्नान् रुधिराशनान् ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.30.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सङ्गृह्यास्त्रं ततो रामो दिव्यमाग्नेयमद्भुतम् ।\nसुबाहूरसि चिक्षेप स विद्धः प्रापतद्भुवि ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.30.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शेषान् वायव्यमादाय निजघान महायशाः ।\nराघवः परमोदारो मुनीनां मुदमावहन् ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.30.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स हत्वा राक्षसान् सर्वान् यज्ञघ्नान् रघुनन्दनः ।\nऋषिभिः पूजितस्तत्र यथेन्द्रो विजये पुरा ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.30.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ यज्ञे समाप्ते तु विश्वामित्रो महामुनिः ।\nनिरीतिका दिशो दृष्ट्वा काकुत्स्थमिदमब्रवीत् ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.30.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृतार्थो ऽस्मि महाबाहो कृतं गुरुवचस्त्वया ।\nसिद्धाश्रममिदं सत्यं कृतं राम महायशः ॥"

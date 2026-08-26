@@ -11,6 +11,10 @@
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
+  /* Reduce orphaned words / widows at line ends (progressive enhancement —
+     older browsers ignore it). The NBSP pass in renderCommentary glues
+     em-dashes and sentence-dandas; this handles residual lone-word orphans. */
+  text-wrap: pretty;
 }
 
 /* Passage blocks are selectable/copyable text; hover shows the I-beam, not the
@@ -26,8 +30,10 @@
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.27em;
-  /* Tighten the spaces inside a citation so the marker reads as one unit. */
-  word-spacing: -0.15em;
+  /* A citation must never split across a line break: "तै. उ. आ. १.१" is one
+     scholarly unit — the internal spaces (abbreviation parts) must not wrap.
+     nowrap makes the whole marker unbreakable. */
+  white-space: nowrap;
 }
 
 /* Discriminating signal: hover/focus "picks up" the citation span with a
@@ -338,12 +344,15 @@
 
 /* Steel-blue highlight of the quoted span in the SOURCE passage while its
    citation popover is open — ties the popover to the exact bhashya text it
-   cites. Same Devanagari-safe padding treatment as .citation-mark. */
+   cites. MUST be layout-neutral (no padding/margin/border affecting the box):
+   the mark is inserted into the passage being read, and any layout change
+   reflows the reading text, shifting the hovered reference link out from under
+   the cursor and closing the hover. Background/radius/box-decoration-break are
+   paint-only. */
 mark.citation-source-mark {
   background-color: rgba(61, 90, 128, 0.16);
   color: inherit;
   border-radius: 3px;
-  padding: 0.3em 0 0.15em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -373,6 +382,163 @@ mark.citation-source-mark {
 .flow-reader .font-serif {
   font-family:
     var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+}
+
+/* Mula prose interleaved around verse-quote blocks: plain flowing text. */
+.flow-reader .flow-mula-prose {
+  margin: 0;
+}
+
+/* Prose paragraph number (Para/Gadya): the canonical passage number sits in a
+   right-aligned gutter next to a quiet left rail that echoes the verse
+   column's border-l idiom. The gutter is em-based and right-aligned so the
+   text column starts at the same x for every paragraph — measured in Tiro
+   Devanagari the widest current ref (१७७.) is ~1.84em and the worst 3-digit
+   (७७७.) ~2.0em, so 2.25em fits with headroom and scales with
+   --reading-scale. The number is a real selectable text node (no select-none,
+   no aria-hidden): it stays in the tab/AT order and is found by search. */
+.flow-reader .flow-para-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  border-left: 2px solid #d1d5db; /* border-gray-300 */
+  padding-left: 0.875rem;
+}
+.flow-reader .flow-para-number {
+  flex: 0 0 auto;
+  min-width: 2.25em;
+  text-align: right;
+  color: #6b7280; /* text-gray-500 */
+}
+
+/* ---------------------------------------------------------------------------
+   Verse-quote blocks: an embedded verse (or prose quotation) inside a mula
+   prose paragraph. Design (PLAN_VERSE_CITATIONS.md): the quotation is
+   unmistakably quoted but typographically quiet — distinguished by modest
+   INDENTATION and SPACING, never by UI decoration. No nested vertical rule
+   (the paragraph's outer left rail is the primary structural frame), no icon,
+   no card, no background. Same Devanagari typeface/size as the surrounding
+   prose; the source citation stays a muted inline link on the last pāda.
+
+   Each pāda is on its own line (the source marks pāda breaks with newlines);
+   for pāda-split long metres (4+ pādas) the even pādas (2 & 4) get a further
+   indent so the metrical structure reads at a glance (printed convention).
+
+   --- Visual parameters ---
+   --quote-indent : left indent of the quoted block relative to the prose
+                    column. 1.5em sits at the low end of the 1.5–2em range
+                    (design §1): noticeable but modest; the quote stays inside
+                    the reading column. Scale with --reading-scale.
+   --quote-gap    : vertical gap BETWEEN ADJACENT quoted verses in a run.
+                    Adjacent verse-quotes are ONE continuous quotation; the
+                    renderer emits no blank line between them, so this margin
+                    IS the entire inter-verse space. 0.8em groups them closely;
+                    raise it (e.g. 1.2em) for more separation.
+   --quote-gap-start : EXTRA space between the surrounding prose and the FIRST
+                     verse-quote of a run, ON TOP of the single blank-line
+                     separator the renderer emits at prose→verse boundaries.
+                     Default -0.8em pulls the quote up to remove most of the
+                     blank line; set 0 to keep the full blank line; raise it
+                     positive to open up the quote's opening. Symmetric with
+                     --quote-gap-end.
+   --quote-gap-end : EXTRA space between the LAST verse-quote of a run and the
+                     following prose, ON TOP of the blank-line separator at
+                     verse→prose boundaries. Default -0.8em, symmetric with
+                     --quote-gap-start.
+   --pada-cont    : extra left indent of the even pādas (2 & 4) of a ≥4-pāda
+                    verse, i.e. the step of the 2nd/4th line relative to the
+                    1st (metre aid). Default 1em; raise it (e.g. 1.5em) for a
+                    deeper step, 0 for none.
+   ------------------------------------------------------------------------- */
+.flow-reader .verse-quote {
+  display: block;
+  padding-left: 2.5em; /* --quote-indent */
+}
+/* Adjacent quoted verses are a continuous quotation run: keep them close with
+   --quote-gap. (The renderer emits no blank-line separator between adjacent
+   verses; prose↔verse boundaries keep the single blank line.) */
+.flow-reader .verse-quote + .verse-quote {
+  margin-top: 0.8em; /* --quote-gap */
+}
+/* Start / end of a quotation run: the first verse-quote after prose and the
+   last before prose. The renderer's blank-line separator already provides the
+   baseline gap; these margins add --quote-gap-start/end on top so the quote's
+   opening and closing can be tuned independently (and symmetrically). */
+.flow-reader .flow-mula-prose + .verse-quote {
+  margin-top: var(--quote-gap-start, -0.8em);
+}
+.flow-reader .verse-quote + .flow-mula-prose {
+  margin-bottom: var(--quote-gap-end, -0.8em);
+}
+.flow-reader .verse-pada {
+  display: block;
+}
+/* The work's OWN verses (maṅgala/colophon/authored, <!-- verse -->): rendered
+   with the same .verse-quote treatment as embedded citations — modest left
+   indent, each pāda on its own line, even pādas (2 & 4) of ≥4-pāda verses
+   sub-indented — at the same size as the surrounding prose mūla (they inherit
+   the enclosing prose typography). Identical wherever they appear (opening
+   maṅgala, closing dedicatory verse, a chapter's own verse). ``.verse-own``
+   is the semantic marker; styling comes from ``.verse-quote`` above. */
+.flow-reader .verse-own {}
+/* Plain prefatory/concluding front matter (invocations, title lines,
+   colophons): centered, medium-small serif type — short devotional/
+   declarative formulae that are framing, not the work's running text. Each
+   source line renders as its OWN block (the renderer splits on newlines), so
+   the double-danda lines (e.g. 0.1's two invocations, 253's two-line colophon)
+   always sit on separate lines regardless of CSS white-space handling; the
+   tight line-height holds them together as ONE connected unit. The scale is
+   em-relative (0.9375em ≈ 15px at a 16px base — below the verse tier, closer
+   to body-text scale) so the अ−/अ+ drawer's --reading-scale still multiplies.
+   Ink matches the reading prose's gray-700. Verse-tagged front matter
+   (<!-- verse -->) is NOT affected — it renders via the .verse-quote.verse-own
+   treatment. */
+.flow-reader .frontmatter-plain {
+  text-align: center;
+  font-family:
+    var(--font-reading, "Tiro Devanagari Sanskrit"), var(--font-serif), serif;
+  font-size: calc(0.9375em * var(--reading-scale, 1));
+  color: #374151; /* text-gray-700 — the reading prose's ink */
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
+}
+/* Category transition divider: a subtle hairline-dot-hairline rule inserted
+   when the category changes (prefatory → main → concluding). Mirrors the
+   existing chapter-divider idiom (gray-200 1px rules, generous my rhythm)
+   with a centered dot standing in for the chapter label. */
+.flow-reader .section-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 3rem 0;
+}
+.flow-reader .section-divider::before,
+.flow-reader .section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb; /* border-gray-200 */
+}
+.flow-reader .section-divider-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #9ca3af; /* bg-gray-400 */
+}
+/* Even pādas (2 & 4) of a ≥4-pāda verse: a further indent so the metrical
+   structure reads at a glance (printed convention). --pada-cont is the extra
+   left indent of the 2nd/4th line relative to the 1st; 1em is the sane
+   default — raise it (e.g. 1.5em) for a deeper step, 0 for none. */
+.flow-reader .verse-pada-cont {
+  padding-left: var(--pada-cont, 1.6em);
+}
+
+/* Narrow viewports (mobile): trim the quote indent so it does not eat the
+   reading width (design §9). The gutter and prose column keep the layout. */
+@media (max-width: 480px) {
+  .flow-reader .verse-quote {
+    padding-left: 1em; /* --quote-indent (mobile) */
+  }
 }
 
 .flow-reader .flow-verse {

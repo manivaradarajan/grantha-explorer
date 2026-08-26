@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 62,
@@ -22,6 +22,7 @@
     {
       "ref": "1.64.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुरकार्यमिदं रम्भे कर्तव्यं सुमहत्त्वया ।\nलोभनं कौशिकस्येह काममोहसमन्वितम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.64.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथोक्ता साप्सरा राम सहस्राक्षेण धीमता ।\nव्रीडिता प्राञ्जलिर्भूत्वा प्रत्युवाच सुरेश्वरम् ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.64.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयं सुरपते घोरो विश्वामित्रो महामुनिः ।\nक्रोधमुत्सृजते घोरं मयि देव न संशयः ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.64.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तया राम रम्भया भीतया तदा ।\nतामुवाच सहस्राक्षो वेपमानां कृताञ्जलिम् ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.64.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्सृजते उत्स्रक्ष्यति ।\n ततः तस्मात् क्रोधोत्सर्जनात् ।\n मे मम ।\n भयं भीतिः ।\n प्रसादं नियोगनिवृत्तिरूपम् ॥ १.६४.३,४ ॥\nमा भैषि रम्भे भद्रं ते कुरुष्व मम शासनम् ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.64.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कोकिलो हृदयग्राही माधवे रुचिरद्रुमे ।\nअहं कन्दर्पसहितः स्थास्यामि तव पार्श्वतः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.64.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वं हि रूपं बहुगुणं कृत्वा परमभास्वरम् ।\nतमृषिं कौशिकं रम्भे भेदयस्व तपस्विनम् ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.64.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा श्रुत्वा वचनं तस्य कृत्वा रूपमनुत्तमम् ।\nलोभयामास ललिता विश्वामित्रं शुचिस्मिता ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.64.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कोकिलस्य तु शुश्राव वल्गु व्याहरतः स्वनम् ।\nसम्प्रहृष्टेन मनसा तत एनामुदैक्षत ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.64.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ तस्य च शब्देन गीतेनाप्रतिमेन च ।\nदर्शनेन च रम्भाया मुनिः सन्देहमागतः ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.64.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सहस्राक्षस्य तत्कर्म विज्ञाय मुनिपुङ्गवः ।\nरम्भां क्रोधसमाविष्टः शशाप कुशिकात्मजः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.64.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यन्मां लोभयसे रम्भे कामक्रोधजयैषिणम् ।\nदशवर्षसहस्राणि शैली स्थास्यसि दुर्भगे ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.64.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्राह्मणः सुमहातेजास्तपोबलसमन्वितः ।\nउद्धरिष्यति रम्भे त्वां मत्क्रोधकलुषीकृताम् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.64.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा महातेजा विश्वामित्रो महामुनिः ।\nअशक्नुवन् धारयितुं क्रोधं सन्तापमागतः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.64.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य शापेन महता रम्भा शैली तदाभवत् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.64.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सन्तापं शापनिमित्तपश्चात्तापम् ॥ १.६४.१४,१५ ॥\nवचः श्रुत्वा च कन्दर्पो महर्षेः स च निर्गतः ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.64.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कोपेन सुमहातेजास्तपोपहरणे कृते ।\nइन्द्रियैरजितै राम न लेभे शान्तिमात्मनः ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.64.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बभूवास्य मनश्चिन्ता तपोपहरणे कृते ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.64.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नैव क्रोधं गमिष्यामि न च वक्ष्ये कथञ्चन ।\nअथवा नोच्छ्वसिष्यामि संवत्सरशतान्यपि ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.64.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तावद्यावद्धि मे प्राप्तं ब्राह्मण्यं तपसार्जितम् ।\nअनुच्छ्वसन्नभुञ्जानस्तिष्ठेयं शाश्वतीः समाः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.64.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि मे तप्यमानस्य क्षयं यास्यन्ति मूर्तयः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.64.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं वर्षसहस्रस्य दीक्षां स मुनिपुङ्गवः ।\nचकाराप्रतिमां लोके प्रतिज्ञां रघुनन्दन ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने चतुःषष्टितमः सर्गः ॥ ६४ ॥"

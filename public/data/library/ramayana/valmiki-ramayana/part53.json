@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 53,
@@ -22,6 +22,7 @@
     {
       "ref": "1.55.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततस्तानाकुलान् दृष्ट्वा विश्वामित्रास्त्रमोहितान् ।\nवसिष्ठश्चोदयामास कामधुक्सृज योगतः ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.55.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्या हुम्भारवाज्जाताः काम्भोजा रविसन्निभाः ।\nऊधसस्त्वथ सञ्जाताः पप्लवाः शस्त्रपाणयः ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.55.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "योनिदेशाच्च यवनाःशकृद्देशाच्छकास्तथा ।\nरोमकूपेषु च म्लेच्छा हारीतास्सकिरातकाः ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.55.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तैस्तैर्निषूदितं सर्वं विश्वामित्रस्य तत्क्षणात् ।\nसपदातिगजं साश्वं सरथं रघुनन्दन ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.55.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रसुतानां तु शतं नानाविधायुधम् ।\nअभ्यधावत्सुसंक्रुद्धं वसिष्ठं जपतां वरम् ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.55.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हुङ्कारेणैव तान् सर्वान् ददाह भगवानृषिः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.55.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ते साश्वरथपादाता वसिष्ठेन महात्मना ।\nभस्मीकृता मुहूर्तेन विश्वामित्रसुतास्तदा ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.55.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दृष्ट्वा विनाशितान् पुत्रान् बलं च सुमहायशाः ।\nसव्रीडश्चिन्तयाविष्टो विश्वामित्रो ऽभ्ावत्तदा ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.55.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "समुद्र इव निर्वेगो भग्नदंष्ट्र इवोरगः ।\nउपरक्त इवादित्यः सद्यो निष्प्रभतां गतः ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.55.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हतपुत्रबलो दीनो लूनपक्ष इव द्विजः ।\nहतदर्प्पो हतोत्साहो निर्वेदं समपद्यत ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.55.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स पुत्रमेकं राज्याय पालयेति नियुज्य च ।\nपृथिवीं क्षत्रधर्म्मेण वनमेवान्वपद्यत ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.55.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स गत्वा हिमवत्पार्श्वं किन्नरोरगसेवितम् ।\nमहादेवप्रसादार्थं तपस्तेपे महातपाः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.55.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "केनचित्त्वथ कालेन देवेशो वृषभध्वजः ।\nदर्शयामास वरदो विश्वामित्रं महाबलम् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.55.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किमर्थं तप्यसे राजन् ब्रूहि यत्ते विवक्षितम् ।\nवरदो ऽस्मि वरो यस्ते काङ्क्षितः सो ऽभिधीयताम् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.55.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तु देवेन विश्वामित्रो महातपाः ।\nप्रणिपत्य महादेवमिदं वचनमब्रवीत् ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.55.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि तुष्टो महादेव धनुर्वेदो ममानघ ।\nसाङ्गोपाङ्गोपनिषदः सरहस्यः प्रदीयताम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.55.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गन्धर्वयक्षरक्षस्सु प्रतिभान्तु ममानघ ।\nतव प्रसादाद्भवतु देवदेव ममेप्सितम् ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.55.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमस्त्विति देवेशो वाक्यमुक्त्वा गतस्तदा ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.55.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्राप्य चास्त्राणि राजर्षिर्विश्वामित्रो महाबलः ।\nदर्पेण महतायुक्तो दर्पपूर्णो ऽभवत्तदा ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.55.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विवर्द्धमानो वीर्येण समुद्र इव पर्वणि ।\nहतमेव तदा मेने वसिष्ठमृषिसत्तमम् ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.55.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो गत्वाश्रमपदं मुमोचास्त्राणि पार्थिवः ।\nयैस्तत्तपोवनं सर्वं निर्दग्धं चास्त्रतेजसा ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.55.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उदीर्यमाणमस्त्रं तद्विश्वामित्रस्यधीमतः ।\nदृष्ट्वा विप्रद्रुता भीता मुनयः शतशो दिशः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.55.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वसिष्ठस्य च ये शिष्यास्तथैव मृगपक्षिणः ।\nविद्रवन्ति भयाद्भीता नानादिग्भ्यः सहस्रशः ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.55.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वसिष्ठस्याश्रमपदं शून्यमासीन्महात्मनः ।\nमुहूर्तमिव निःशब्दमासीदिरिणसन्निभम् ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.55.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वदतो वै वसिष्ठस्य माभैरिति मुहुर्मुहुः ।\nनाशयाम्यद्य गाधेयं नीहारमिव भास्करः ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.55.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा महातेजा वसिष्ठो जपतां वरः ।\nविश्वामित्रं तदा वाक्यं सरोषमिदमब्रवीत् ॥"
@@ -256,6 +282,7 @@
     {
       "ref": "1.55.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आश्रमं चिरसंवृद्धं यद्विनाशितवानसि ।\nदुराचारो ऽसि तन्मूढ तस्मात्त्वं न भविष्यसि ॥"
@@ -265,6 +292,7 @@
     {
       "ref": "1.55.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्त्वा परमक्रुद्धो दण्डमुद्यम्यसत्वरः ।\nविधूममिव कालाग्निं यमदण्डमिवापरम् ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने पञ्चपञ्चाशः सर्गः ॥ ५५ ॥"

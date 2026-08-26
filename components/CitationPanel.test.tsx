@@ -32,7 +32,7 @@ function readJsonAsset(url: string): Promise<Response> {
 const SVET_REF: Reference = {
   start: 0,
   end: 1,
-  display_text: "श्वे. उ. १.९",
+  display_text: "श्वे.उ. १.९",
   grantha_id: "svetasvatara-upanishad",
   locator: "1.9",
   unresolved: false,
@@ -41,7 +41,7 @@ const SVET_REF: Reference = {
 const GITA_REF: Reference = {
   start: 0,
   end: 1,
-  display_text: "भ. गी. ८.१३",
+  display_text: "भ.गी. ८.१३",
   grantha_id: "bhagavad-gita",
   locator: "8.13",
   unresolved: false,

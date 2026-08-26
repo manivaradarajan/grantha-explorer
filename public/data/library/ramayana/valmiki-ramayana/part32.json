@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 32,
@@ -22,6 +22,7 @@
     {
       "ref": "1.34.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृतोद्वाहे गते तस्मिन् ब्रह्मदत्ते च राघव ।\nअपुत्रः पुत्रलाभाय पौत्रीमिष्टिमकल्पयत् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.34.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इष्ट्यां च वर्तमानायां कुशनाभं महीपतिम् ।\nउवाच परमोदारः कुशो ब्रह्मसुतस्तदा ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.34.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुत्र ते सदृशः पुत्रो भविष्यति सुधार्मिकः ।\nगाधिं प्राप्स्यसि तेन त्वं कीर्तिं लोके च शाश्वतीम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.34.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा कुशो राम कुशनाभं महीपतिम् ।\nजगामाकाशमाविश्य ब्रह्मलोकं सनातनम् ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.34.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कस्यचित्त्वथ कालस्य कुशनाभस्य धीमतः ।\nयज्ञे परमधर्मिष्ठो गाधिरित्येव नामतः ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.34.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स पिता मम काकुत्स्थ गाधिः परमधार्मिकः ।\nकुशवंशप्रसूतो ऽस्मि कौशिको रघुनन्दन ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.34.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पूर्वजा भगिनी चापि मम राघव सुव्रता ।\nनाम्ना सत्यवती नाम ऋचीके प्रतिपादिता ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.34.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सशरीरा गता स्वर्गं भर्तारमनुवर्तिनी ।\nकौशिकी परमोदारा प्रवृत्ता च महानदी ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.34.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिव्या पुण्योदका रम्या हिमवन्तमुपाश्रिता ।\nलोकस्य हितकामार्थं प्रवृत्ता भ्ागिनी मम ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.34.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो ऽहं हिमवत्पार्श्वे वसामि निरतः सुखम् ।\nभगिन्यां स्नेहसंयुक्तः कौशिक्यां रघुनन्दन ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.34.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा तु सत्यवती पुण्या सत्ये धर्मे प्रतिष्ठिता ।\nपतिव्रता महाभागा कौशिकी सरितां वरा ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.34.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अहं हि नियमाद्राम हित्वा तां समुपागतः ।\nसिद्धाश्रममनुप्राप्य सिद्धो ऽस्मि तव तेजसा ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.34.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एषा राम ममोत्पत्तिः स्वस्य वंशस्य कीर्तिता ।\nदेशस्य च महाबाहो यन्मां त्वं परिपृच्छसि ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.34.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गतो ऽर्द्धरात्रः काकुत्स्थ कथाः कथयतो मम ।\nनिद्रामभ्येहि भद्रं ते मा भूद्विघ्नो ऽध्वनीह नः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.34.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निष्पन्दास्तरवः सर्वे निलीना मृगपक्षिणः ।\nनैशेन तमसा व्याप्ता दिशश्च रघुनन्दन ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.34.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शनैर्वियुज्यते सन्ध्या नभो नेत्रैरिवावृतम् ।\nनक्षत्रतारागहनं ज्योतिर्भिरवभासते ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.34.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उत्तिष्ठति च शीतांशुः शशी लोकतमोनुदः ।\nह्लादयन् प्राणिनां लोके मनांसि प्रभया विभो ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.34.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नैशानि सर्वभूतानि प्रचरन्ति ततस्ततः ।\nयक्षराक्षससङ्घाश्च रौद्राश्च पिशिताशनाः ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.34.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा महातेजा विरराम महामुनिः ।\nसाधु साध्विति तं सर्वे ऋषयो ह्यभ्यपूजयन् ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.34.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कुशिकानामयं वंशो महान् धर्मपरः सदा ।\nब्रह्मोपमा महात्मानः कुशवंश्या नरोत्तमाः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.34.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विशेषेण भवानेव विश्वामित्रो महायशाः ।\nकौशिकी च सरिच्छ्रेष्ठा कुलोद्योतकरी तव ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.34.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति तैर्मुनिशार्दूलैः प्रशस्तः कुशिकात्मजः ।\nनिद्रामुपागमच्छ्रीमानस्तङ्गत इवांशुमान् ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.34.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रामो ऽपि सहसौमित्रिः किञ्चिदागतविस्मयः ।\nप्रशस्य मुनिशार्दूलं निद्रां समुपसेवते ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने चतुस्त्रिंशः सर्गः ॥ ३४ ॥"

@@ -86,6 +86,11 @@
       "type": "array",
       "description": "Two or more commentaries for one edition (e.g. a bhāṣya plus a subcommentary carrying parent_commentary_id). Mutually exclusive with the singular `commentary`. TODO (schema): make this the single canonical shape and drop `commentary` (breaking → MAJOR).",
       "items": { "$ref": "#/definitions/commentary" }
+    },
+    "edition_kind": {
+      "type": "string",
+      "enum": ["mula-only", "commentarial"],
+      "description": "The edition's declared kind (per-block presentation model): derived at build time from commentary presence. Gates the commentary pane; does not drive per-block mula presentation. Present on flat single-file granthas and on edition-sub-envelopes."
     }
   },
   "required": [
@@ -260,6 +265,10 @@
           "type": "string",
           "enum": ["prefatory", "main", "concluding"]
         },
+        "kind": {
+          "type": "string",
+          "description": "The markdown heading word (e.g. 'Para', 'Shloka') declaring the passage's presentation kind (per-block presentation model). Required on `main` passages; must be absent on prefatory/concluding."
+        },
         "speaker": {
           "type": "string",
           "description": "The standalone mula speaker attribution of a verse (e.g. 'सञ्जय उवाच', 'श्रीभगवानुवाच'). Set from a <!-- speaker --> block; verse-level only."
@@ -292,6 +301,32 @@
           "type": "array",
           "description": "Structured cross-text citations in the main (mula) passage text (school-namespace design §4.3). Present only when the mula prose carries citations (e.g. vedarthasangraha).",
           "items": { "$ref": "#/definitions/reference" }
+        },
+        "verse_quotes": {
+          "type": "array",
+          "description": "Runs of quoted verses within a main (mula) passage, marked by <!-- verse-quote --> blocks. Half-open offsets into content.sanskrit.devanagari; the presentation layer hang-indents each run and pāda-splits long metres. Present only when the passage quotes verses.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "integer", "minimum": 0 },
+              "end": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["start", "end"],
+            "additionalProperties": false
+          }
+        },
+        "verses": {
+          "type": "array",
+          "description": "The work's OWN verses (maṅgala/colophon/authored) within a passage, marked by <!-- verse --> blocks. Half-open offsets into content.sanskrit.devanagari; rendered like verse-quotes but semantically distinct (not embedded citations). Present only when the passage contains own verses.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "integer", "minimum": 0 },
+              "end": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["start", "end"],
+            "additionalProperties": false
+          }
         }
       },
       "required": ["ref", "passage_type"],
@@ -310,7 +345,19 @@
               "passage_type": { "const": "main" }
             }
           },
-          "then": { "required": ["content"] }
+          "then": {
+            "required": ["content", "kind"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "passage_type": { "enum": ["prefatory", "concluding"] }
+            }
+          },
+          "then": {
+            "not": { "required": ["kind"] }
+          }
         }
       ]
     },

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 320,
@@ -8,6 +8,7 @@
     {
       "ref": "4.62.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा मुनिश्रेष्ठमरुदं दुःखितो भृशम् ।\nअथ ध्यात्वा मुहूर्तं तु भगवानिदमब्रवीत् ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "4.62.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पक्षौ च ते प्रपक्षौ च पुनरन्यौ भविष्यतः ।\nप्राणाश्च चक्षुषी चैव विक्रमश्च बलं च ते ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "4.62.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुराणे सुमहत्कार्यं भविष्यति मया श्रुतम् ।\nदृष्टं मे तपसा चैव श्रुत्वा च विदितं मम ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "4.62.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "राजा दशरथो नाम कश्चिदिक्ष्वाकुनन्दनः ॥\nतस्य पुत्रो महातेजा रामो नाम भविष्यति ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "4.62.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अरण्यं च सह भ्रात्रा लक्ष्मणेन गमिष्यति ।\nअस्मिन्नर्थे नियुक्तः सन् पित्रा सत्यपराक्रमः ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "4.62.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नैर्र्ऋतो रावणो नाम तस्य भार्यां हरिष्यति ।\nराक्षसेन्द्रो जनस्थानादवध्यः सुरदानवैः ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "4.62.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सा च कामैः प्रलोभ्यन्ती भक्ष्यैर्भोज्यैश्च मैथिली ।\nन भोक्ष्यति महाभागा दुःखे मग्ना यशस्विनी ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "4.62.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "परमान्नं तु वैदेह्या ज्ञात्वा दास्यति वासवः ।\nयदन्नममृतप्रख्यं सुराणामपि दुर्लभम् ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "4.62.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदन्नं मैथिली प्राप्य विज्ञायेन्द्रादिदं त्विति ।\nअग्रमुद्धृत्य रामाय भूतले निर्वपिष्यति ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "4.62.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि जीवति मे भर्ता लक्ष्मणेन सह प्रभुः ।\nदेवत्वं गच्छतोर्वापि तयोरन्नमिदं त्विति ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "4.62.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एष्यन्त्यन्वेषकास्तस्या रामदूताः प्लवङ्गमाः ।\nआख्येया राममहिषी त्वया तेभ्यो विहङ्गमाः ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "4.62.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वथा हि न गन्तव्यमीदृशः क्क गमिष्यसि ।\nदेशकालौ प्रतीक्षस्व पक्षौ त्वं प्रतिपत्स्यसे ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "4.62.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नोत्सहेयमहं कर्तुमद्यैव त्वां सपक्षकम् ।\nइहस्थस्त्वं तु लोकानां हितं कार्यं करिष्यसि ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "4.62.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वयापि खलु तत्कार्यं तयोश्च नृपपुत्रयोः ।\nब्राह्मणानां सुराणां च मुनीनां वासवस्य च ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "4.62.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नेच्छे चिरं धारयितुं प्राणांस्त्यक्ष्ये कलेवरम् ।\nमहर्षिस्त्वब्रवीदेवं दृष्टतत्त्वार्थदर्शनः ॥\nइत्यार्षे श्रीरामायणे वाल्मीकीये आदिकाव्ये श्रीमत्किष्किन्धाकाण्डे द्विषष्टितमः सर्गः ॥ ६२ ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मुक्ताहाराख्याने किष्किन्धाकाण्डव्याख्याने द्विषष्टितमः सर्गः ॥ ६२ ॥"
@@ -184,11 +199,12 @@
             "start": 28,
             "end": 30,
             "display_text": "ना",
-            "grantha_id": null,
+            "grantha_id": "mahanarayana-upanishad",
+            "edition_id": null,
             "locator": null,
             "locator_end": null,
             "group_id": null,
-            "unresolved": true
+            "unresolved": false
           }
         ]
       },

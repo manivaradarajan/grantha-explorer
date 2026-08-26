@@ -39,5 +39,6 @@
       "file": "part2.json",
       "first_ref": "2.1.1"
     }
-  ]
+  ],
+  "edition_kind": "commentarial"
 }

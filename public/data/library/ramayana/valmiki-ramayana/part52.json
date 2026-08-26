@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 52,
@@ -22,6 +22,7 @@
     {
       "ref": "1.54.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कामधेनुं वसिष्ठो ऽपि यदा न त्यजते मुनिः ।\nतदास्य शबलां राम विश्वामित्रो ऽन्वकर्षत ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.54.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नीयमाना तु शबला राम राज्ञा महात्मना ।\nदुःखिता चिन्तयामास रुदन्ती शोककर्शिता ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.54.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "परित्यक्ता वसिष्ठेन किमहं सुमहात्मना ।\nया ऽहं राजभटैर्दीना ह्रियेयं भृशदुःखिता ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.54.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किं मया ऽपकृतं तस्य महर्षेर्भावितात्मनः ।\nयन्मामनागसं भक्तामिष्टां त्यजति धार्मिकः ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.54.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "निर्द्धूय तांस्तदा भृत्यान् शतशः शत्रुसूदन ।\nजगामानिलवेगेन पादमूलं महात्मनः ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.54.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शबला सा रुदन्ती च क्रोशन्ती चेदमब्रवीत् ।\nवसिष्ठस्याग्रतः स्थित्वा मेघदुन्दुभिराविणी ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.54.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगवन् किं परित्यक्ता त्वयाहं ब्रह्मणः सुत ।\nयस्माद्राजभृता मां हि नयन्ते त्वत्सकाशतः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.54.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्तस्तु ब्रह्मर्षिरिदं वचनमब्रवीत् ।\nशोकसन्तप्तहृदयां स्वसारमिव दुःखिताम् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.54.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न त्वां त्यजामि शबले नापिमे ऽपकृतं त्वया ।\nएष त्वां नयते राजा बलान्मत्तो महाबलः ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.54.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि तुल्यं बलं मह्यं राजा त्वद्य विशेषतः ।\nबली राजा क्षत्रियश्च पृथिव्याः पतिरेव च ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.54.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इयमक्षौहिणी पूर्णा सवाजिरथसङ्कुला ।\nहस्तिध्वजसमाकीर्णा तेनासौ बलवत्तरः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.54.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्ता वसिष्ठेन प्रत्युवाच विनीतवत् ।\nवचनं वचनज्ञा सा ब्रह्मर्षिमतुलप्रभम् ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.54.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न बलं क्षत्रियस्याहुर्ब्राह्मणो बलवत्तरः ।\nब्रह्मन् ब्रह्मबलं दिव्यं क्षत्रात्तु बलवत्तरम् ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.54.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अप्रमेयबलं तुभ्यं न त्वया बलवत्तरः ।\nविश्वामित्रो महावीर्यस्तेजस्तव दुरासदम् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.54.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नियुङ्क्ष्व मां महातेजस्त्वद्ब्रह्मबलसम्भृताम् ।\nतस्य दर्पबलं यत्तन्नाशयामि दुरात्मनः ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.54.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तस्तु तया राम वसिष्ठस्तु महायशाः ।\nसृजस्वेति तदोवाच बलं परबलारुजम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.54.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य तद्वचनं श्रुत्वा सुरभिः सासृजत्तदा ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.54.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्या हुम्भारवोत्सृष्टाः पप्लवाः शतशो नृप ।\nनाशयन्ति बलं सर्वं विश्वामित्रस्य पश्यतः ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.54.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स राजा परमक्रुद्धः क्रोधविस्फारितेक्षणः ।\nपप्लवान् नाशयामास शस्त्रैरुच्चावचैरपि ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.54.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रार्दितान् दृष्ट्वा पप्लवान् शतशस्तदा ।\nभूय एवासृजत्कोपाच्छकान् यवनमिश्रितान् ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.54.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तैरासीत्संवृता भूमिः शकैर्यवनमिश्रितैः ।\nप्रभावद्भिर्महावीर्यैर्हेमकिञ्जल्कसन्निभैः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.54.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दीर्घासिपट्टिशधरैर्हेमवर्णाम्बरावृतैः ।\nनिर्दग्धं तद्बलं सर्वं प्रदीप्तैरिव पावकैः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.54.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो ऽस्त्राणि महातेजा विश्वामित्रो मुमोच ह ।\nतैस्तैर्यवनकाम्भोजाः पप्लवाश्चाकुलीकृताः ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने चतुःपञ्चाशः सर्गः ॥ ५४ ॥"

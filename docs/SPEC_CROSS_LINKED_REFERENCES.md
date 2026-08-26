@@ -295,7 +295,11 @@ reference renders.
 - **Range-aware UI** (currently links to the first verse only).
 
 > School/lineage edition-targeted references are **implemented** — see §10.
-> `docs/DESIGN_SCHOOL_NAMESPACES.md` is the design narrative that §10 distills.
+> `../grantha-data/docs/DESIGN_SCHOOL_NAMESPACES.md` (moved from this repo) is
+> the design narrative that §10 distills. (The `../grantha-data` path assumes a
+> sibling checkout in the typical development layout — grantha-data is a
+> separate repo and may live elsewhere; see the README's development-layout
+> note.)
 
 ---
 
@@ -324,7 +328,8 @@ reference renders.
 
 Edition-targeted (school/lineage) references are **live** (was the deferred
 "Edition-targeted refs" §8 item). Full design narrative:
-`docs/DESIGN_SCHOOL_NAMESPACES.md`.
+`../grantha-data/docs/DESIGN_SCHOOL_NAMESPACES.md` (moved from this repo to
+grantha-data, where the type belongs).
 
 ### 10.1 The model
 

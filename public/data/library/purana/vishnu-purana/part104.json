@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 104,
@@ -8,6 +8,7 @@
     {
       "ref": "5.24.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्थंस्तुतस्तदा तेन मुचुकुन्देन धीमता ।\nप्राहेशः सर्वभूतानामनादिनिधनो हरिः"
@@ -18,6 +19,7 @@
     {
       "ref": "5.24.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यथाभिवाञ्छितान्दिव्यान्गच्छलोकान्नराधिप ।\nअव्याहतपरैश्वर्यो मत्प्रसादोपबृंहितः"
@@ -28,6 +30,7 @@
     {
       "ref": "5.24.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भुक्त्वा दिव्यन्महा भोगान्भविष्यसि महाकुले ।\nजातिस्मरो मत्प्रसादात्ततोमोक्षमवाप्स्यसि"
@@ -37,6 +40,7 @@
     {
       "ref": "5.24.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इत्युक्तः प्रणिपत्येशं जगतामच्युतं नृपः ।\nगुहामुखाद्विनिष्क्रान्ततःस ददर्शाल्पकान्नरान्"
@@ -47,6 +51,7 @@
     {
       "ref": "5.24.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः कलियुगं मत्वा प्राप्तं तप्तुं नृपस्तपः ।\nनरनारायणस्थानं प्रययौ गन्धमादनम्"
@@ -56,6 +61,7 @@
     {
       "ref": "5.24.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृष्णोपि घातयित्वारिमुपायेन हि तद्वलम् ।\nजग्राह मथुरामेत्य हस्त्यश्वस्यन्दनोज्ज्वलम्"
@@ -65,6 +71,7 @@
     {
       "ref": "5.24.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आनीय चोग्रसेनाय द्वारवत्वां न्यवेदयत् ।\nपराभिभवनिः शङ्कं बभूव च यदोः कुलम्"
@@ -74,6 +81,7 @@
     {
       "ref": "5.24.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बलदेवोऽपि मैत्रेय प्रशान्ताखिलविग्रहः ।\nज्ञातिदर्शनसोत्कण्ठः प्रययौ नन्दगोकुलम्"
@@ -83,6 +91,7 @@
     {
       "ref": "5.24.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततो गोपाश्च गोप्यश्च यथा पूर्वममित्रजित् ।\nतथैवाभ्यवदत्प्रम्णा बहुमानपुरःसरम्"
@@ -92,6 +101,7 @@
     {
       "ref": "5.24.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स कैश्चित्संपरिष्वक्तः कांश्चिच्च परिषस्वजे ।\nहास्यं चक्रे समं कैश्चिद्गोपैर्गोपीजनैस्तथा"
@@ -101,6 +111,7 @@
     {
       "ref": "5.24.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रियाण्यनेकान्यवदन् गोपास्तत्र हलायुधम् ।\nगोप्यश्च प्रेमकुपिताः प्रोचुःसेर्ष्यमथापराः"
@@ -110,6 +121,7 @@
     {
       "ref": "5.24.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गोप्यः पप्रच्छुरपरा नागरीजनवल्लभम् ।\nकच्चिदास्ते सुखं कृष्णश्चलप्रेमलवात्मकः"
@@ -119,6 +131,7 @@
     {
       "ref": "5.24.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अस्मच्चेष्टामपहसन्न कच्चित्पुरयोषिताम् ।\nसौभाग्यमान मधिकं करोति क्षणसौहृदः"
@@ -128,6 +141,7 @@
     {
       "ref": "5.24.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कच्चित्स्मरति नः कृष्णो गीतानुगमनं कलम् ।\nअप्यसौ मातरं द्रष्टु सकृदप्यागमिष्यति"
@@ -137,6 +151,7 @@
     {
       "ref": "5.24.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ वा किं तदालापैः क्रियन्तामपराः कथाः ।\nयस्यास्मभिर्विना तेन विनास्माकं भविष्यति"
@@ -146,6 +161,7 @@
     {
       "ref": "5.24.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पिता माता तथा भ्राता भर्ता बन्धुजनश्च किम् ।\nसंत्यक्तस्तत्कृतेस्माभिरकृतज्ञध्वजो हि सः"
@@ -155,6 +171,7 @@
     {
       "ref": "5.24.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तथापि कच्चिदालापमिहागमनसंश्रयम् ।\nकरोति कृष्णो वक्तव्यं भवता राम नानृतम्"
@@ -164,6 +181,7 @@
     {
       "ref": "5.24.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दामोदरोऽसौ गोविन्दः पुरस्त्रीसक्तमानसः ।\nअपेतप्रीतिरस्मासु दुर्दर्शः प्रतिभाति नः"
@@ -173,6 +191,7 @@
     {
       "ref": "5.24.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आमन्त्रितश्च कृष्णेति पुनर्दामोदरेति च ।\nजहसुःसस्वरं गोप्यो हरिणा हृतचेतसः"
@@ -182,6 +201,7 @@
     {
       "ref": "5.24.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "संदेशैः साममधुरैः प्रेमगर्भैरगर्वितैः ।\nरामेणाश्वासिता गोप्यः कृष्णस्यातिमनोहरैः"
@@ -191,6 +211,7 @@
     {
       "ref": "5.24.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गोपैश्च पूर्ववद्रामः परिहासमनोहराः ।\nकथाश्चकार रेमे च सह तैर्व्रजभूमिषु"

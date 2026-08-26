@@ -8,6 +8,7 @@
     {
       "ref": "1.2.1",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सर्वत्र प्रसिद्धोपदेशात् ॥ १-२-१ ॥"
@@ -17,6 +18,7 @@
     {
       "ref": "1.2.2",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "विविक्षतगुणोपपत्तेश्च ॥ १-२-२ ॥"
@@ -26,6 +28,7 @@
     {
       "ref": "1.2.3",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अनुपपत्तेस्तु न शारीर: ॥ १-२-३ ॥"
@@ -35,6 +38,7 @@
     {
       "ref": "1.2.4",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "कर्मकर्तृव्यपदेशाच्च ॥ १-२-४ ॥"
@@ -44,6 +48,7 @@
     {
       "ref": "1.2.5",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "शब्दविशेषात् ॥ १-२-५ ॥"
@@ -53,6 +58,7 @@
     {
       "ref": "1.2.6",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्मृतेश्च ॥ १-२-६ ॥"
@@ -62,6 +68,7 @@
     {
       "ref": "1.2.7",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अर्भकौकस्त्वात्तद्व्यपदेशाच्च नेति चेन्न निचाय्यत्वादेवं व्योमवच्च ॥ १-२-७ ॥"
@@ -71,6 +78,7 @@
     {
       "ref": "1.2.8",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सम्भोगप्राप्तिरिति चेन्न वैशेष्यात् ॥ १-२-८ ॥"
@@ -80,6 +88,7 @@
     {
       "ref": "1.2.9",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अत्ता चराचरग्रहणात् ॥ १-२-९ ॥"
@@ -89,6 +98,7 @@
     {
       "ref": "1.2.10",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "प्रकरणाच्च ॥ १-२-१० ॥"
@@ -98,6 +108,7 @@
     {
       "ref": "1.2.11",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "गुहां प्रविष्टावात्मानौ हि तद्दर्शनात् ॥ १-२-११ ॥"
@@ -107,6 +118,7 @@
     {
       "ref": "1.2.12",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "विशेषणाच्च ॥ १-२-१२ ॥"
@@ -116,6 +128,7 @@
     {
       "ref": "1.2.13",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तर उपपत्ते: ॥ १-२-१३ ॥"
@@ -125,6 +138,7 @@
     {
       "ref": "1.2.14",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्थानादिव्यपदेशाच्च ॥ १-२-१४ ॥"
@@ -134,6 +148,7 @@
     {
       "ref": "1.2.15",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सुखविविशष्टाभिधानादेव च ॥ १-२-१५ ॥"
@@ -143,6 +158,7 @@
     {
       "ref": "1.2.16",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अत एव च स ब्रह्म ॥ १-२-१६ ॥"
@@ -152,6 +168,7 @@
     {
       "ref": "1.2.17",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुतोपनिनषत्कगत्यभिधानाच्च ॥ १-२-१७ ॥"
@@ -161,6 +178,7 @@
     {
       "ref": "1.2.18",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अनवस्थितेरसम्भवाच्च नेतर: ॥ १-२-१८ ॥"
@@ -170,6 +188,7 @@
     {
       "ref": "1.2.19",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तर्याम्यधिदैवाधिलोकादिषु तद्धर्मव्यपदेशात् ॥ १-२-१९ ॥"
@@ -179,6 +198,7 @@
     {
       "ref": "1.2.20",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "न च स्मार्तमतद्धर्माभिलापाच्छारीरश्च ॥ १-२-२० ॥"
@@ -188,6 +208,7 @@
     {
       "ref": "1.2.21",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "उभयेऽपि हि भेदेनैनमधीयते ॥ १-२-२१ ॥"
@@ -197,6 +218,7 @@
     {
       "ref": "1.2.22",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अदृश्यत्वादिगुणको धर्मोक्ते: ॥ १-२-२२ ॥"
@@ -206,6 +228,7 @@
     {
       "ref": "1.2.23",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "विशेषणभेदव्यपदेशाभ्याञ्च नेतरौ ॥ १-२-२३ ॥"
@@ -215,6 +238,7 @@
     {
       "ref": "1.2.24",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "रूपोपन्यासाच्च ॥ १-२-२४ ॥"
@@ -224,6 +248,7 @@
     {
       "ref": "1.2.25",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "वैश्वानरस्साधारणशब्दविशेषात् ॥ १-२-२५ ॥"
@@ -233,6 +258,7 @@
     {
       "ref": "1.2.26",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "स्मर्यमाणमनुमानं स्यादिति ॥ १-२-२६ ॥"
@@ -242,6 +268,7 @@
     {
       "ref": "1.2.27",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "शब्दादिभ्योऽन्त:प्रतिष्ठानाच्च नेति चेन्न\nतथा दृष्ट्युपदेशादसम्भवात्पुरुषमपि चैनमधीयते ॥ १-२-२७ ॥"
@@ -251,6 +278,7 @@
     {
       "ref": "1.2.28",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अत एव न देवता भूतञ्च ॥ १-२-२८ ॥"
@@ -260,6 +288,7 @@
     {
       "ref": "1.2.29",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "साक्षादप्यविराधं जैमिनि: ॥ १-२-२९ ॥"
@@ -269,6 +298,7 @@
     {
       "ref": "1.2.30",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अभिव्यक्तेरित्याश्मरथ्य: ॥ १-२-३० ॥"
@@ -278,6 +308,7 @@
     {
       "ref": "1.2.31",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "अनुस्मृतेर्बादरि: ॥ १-२-३१ ॥"
@@ -287,6 +318,7 @@
     {
       "ref": "1.2.32",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "सम्पत्तेरिति जैमिनिस्तथा हि दर्शयति ॥ १-२-३२ ॥"
@@ -296,6 +328,7 @@
     {
       "ref": "1.2.33",
       "passage_type": "main",
+      "kind": "Sutra",
       "content": {
         "sanskrit": {
           "devanagari": "आमनन्ति चैनमिस्मन् ॥ १-२-३३ ॥"
@@ -435,7 +468,7 @@
             "display_text": "तै.शिक्षा ६.३",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "6.3",
+            "locator": "1.6.3",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -578,7 +611,7 @@
             "display_text": "तै.भृ.१",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1",
+            "locator": "3.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -589,7 +622,7 @@
             "display_text": "तै.भृ.६",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "6",
+            "locator": "3.6",
             "locator_end": null,
             "group_id": null,
             "unresolved": false

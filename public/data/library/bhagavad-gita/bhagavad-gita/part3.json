@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "bhagavad-gita",
   "edition_id": "bhagavad-gita",
   "part_num": 3,
@@ -8,6 +8,7 @@
     {
       "ref": "2.1",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तं तथा कृपयाविष्टमश्रुपूर्णाकुलेक्षणम् ।\nविषीदन्तमिदं वाक्यमुवाच मधुसूदनः"
@@ -18,6 +19,7 @@
     {
       "ref": "2.2",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कुतस्त्वा कश्मलमिदं विषमे समुपस्थितम् ।\nअनार्यजुष्टमस्वर्ग्यमकीर्तिकरमर्जुन"
@@ -28,6 +30,7 @@
     {
       "ref": "2.3",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मा क्लैब्यं गच्छ कौन्तेय नैतत्त्वय्युपपद्यते ।\nक्षुद्रं हृदयदौर्बल्यं त्यक्त्वोत्तिष्ठ परन्तप"
@@ -37,6 +40,7 @@
     {
       "ref": "2.4",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कथं भीष्ममहं संख्ये द्रोणं च मधुसूदन ।\nइषुभिः प्रतियोत्स्यामि पूजार्हावरिसूदन"
@@ -47,6 +51,7 @@
     {
       "ref": "2.5",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "गुरूनहत्वा हि महानुभावान् श्रेयश्चर्तुं भैक्षमपीह लोके ।\nहत्वार्थकामांस्तु गुरूनिहैव भुञ्जीय भोगान् रुधिरप्रदिग्धान्"
@@ -56,6 +61,7 @@
     {
       "ref": "2.6",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "न चैतद्विद्मः कतरन्नो गरीयो यद्वा जयेम यदि वा नो जयेयुः ।\nयानेव हत्वा न जिजीविषामस्तेऽवस्थिताः प्रमुखे धार्तराष्ट्राः"
@@ -65,6 +71,7 @@
     {
       "ref": "2.7",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कार्पण्यदोषोपहतस्वभावः पृच्छामि त्वा धर्मसंमूढचेताः ।\nयच्छ्रेयः स्यान्निश्चितं ब्रूहि तन्मे शिष्यस्तेऽहं शाधि मां त्वां प्रपन्नम्"
@@ -74,6 +81,7 @@
     {
       "ref": "2.8",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "न हि प्रपश्यामि ममापनुद्याद्यच्छोकमुच्छोषणमिन्द्रियाणाम् ।\nअवाप्य भूमावसपत्नमृद्धं राज्यं सुराणामपि चाधिपत्यम्"
@@ -83,6 +91,7 @@
     {
       "ref": "2.9",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एवमुक्त्वा हृशीकेशं गुडाकेशः परन्तपः ।\nन योत्स्य इति गोविन्दमुक्त्वा तूष्णीं बभूव ह"
@@ -93,6 +102,7 @@
     {
       "ref": "2.10",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तमुवाच हृशीकेशः प्रहसन्निव भारत ।\nसेनयोरुभयोर्मध्ये सीदमानमिदं वचः"
@@ -102,6 +112,7 @@
     {
       "ref": "2.11",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अशोच्यानन्वशोचस्त्वं प्रज्ञावादांश्च भाषसे ।\nगतासूनगतासूंश्च नानुशोचन्ति पण्डिताः"
@@ -112,6 +123,7 @@
     {
       "ref": "2.12",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "न त्वेवाहं जातु नासं न त्वं नेमे जनाधिपाः ।\nन चैव न भविष्यामः सर्वे वयमतः परम्"
@@ -121,6 +133,7 @@
     {
       "ref": "2.13",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "देहिनोऽस्मिन् यथा देहे कौमारं यौवनं जरा ।\nतथा देहान्तरप्राप्तिर्धीरस्तत्र न मुह्यति"
@@ -130,6 +143,7 @@
     {
       "ref": "2.14",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "मात्रास्पर्शास्तु कौन्तेय शीतोष्णसुखदुःखदाः ।\nआगमापायिनोऽनित्यास्तांस्तितिक्षस्व भारत"
@@ -139,6 +153,7 @@
     {
       "ref": "2.15",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यं हि न व्यथयन्त्येते पुरुषं पुरुषर्षभ ।\nसमदुःखसुखं धीरं सोऽमृतत्वाय कल्पते"
@@ -148,6 +163,7 @@
     {
       "ref": "2.16",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नासतो विद्यते भावो नाभावो विद्यते सतः ।\nउभयोरपि दृष्टोऽन्तस्त्वनयोस्तत्त्वदर्शिभिः"
@@ -157,6 +173,7 @@
     {
       "ref": "2.17",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अविनाशि तु तद्विद्धि येन सर्वमिदं ततम् ।\nविनाशमव्ययस्यास्य न कश्चित्कर्तुमर्हाति"
@@ -166,6 +183,7 @@
     {
       "ref": "2.18",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अन्तवन्त इमे देहा नित्यस्योक्ताः शरीरिणः ।\nअनाशिनोऽप्रमेयस्य तस्माद्युध्यस्व भारत"
@@ -175,6 +193,7 @@
     {
       "ref": "2.19",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "य एनं वेत्ति हन्तारं यश्चैनन्मन्यते हतम् ।\nउभौ तौ न विजानीतो नायं हन्ति न हन्यते"
@@ -184,6 +203,7 @@
     {
       "ref": "2.20",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "न जायते म्रियते वा कदाचिन्नायं भूत्वा भविता वा न भूयः ।\nअजो नित्यः शाश्वतोऽयं पुराणो न हन्यते हन्यमाने शरीरे"
@@ -193,6 +213,7 @@
     {
       "ref": "2.21",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "वेदाविनाशिनं नित्यं य एनमजमव्ययम् ।\nकथं स पुरुषः पार्थ कं घातयति हन्ति कम्"
@@ -202,6 +223,7 @@
     {
       "ref": "2.22",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "वासांसि जीर्णानि यथा विहाय नवानि गृह्णाति नरोऽपराणि ।\nतथा शरीराणि विहाय जीर्णान्यन्यानि संयाति नवानि देही"
@@ -211,6 +233,7 @@
     {
       "ref": "2.23",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नैनं छिन्दन्ति शस्त्राणि नैनं दहति पावकः ।\nन चैनं क्लेदयन्त्यापो न शोषयति मारुतः"
@@ -220,6 +243,7 @@
     {
       "ref": "2.24",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अच्छेद्योऽयमदाह्योऽयमक्लेद्योऽशोष्य एव च ।\nनित्यस्सर्वगतस्स्थाणुः अचलोऽयं सनातनः"
@@ -229,6 +253,7 @@
     {
       "ref": "2.25",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अव्यक्तोऽयमचिन्त्योऽयमविकार्योऽयमुच्यते ।\nतस्मादेवं विदित्वैनं नानुशोचितुमर्हासि"
@@ -238,6 +263,7 @@
     {
       "ref": "2.26",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अथ चैनं नित्यजातं नित्यं वा मन्यसे मृतम् ।\nतथापि त्वं महाबाहो! नैवं शोचितुमर्हासि"
@@ -247,6 +273,7 @@
     {
       "ref": "2.27",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "जातस्य हि ध्रुवो मृत्युर्ध्रुवं जन्म मृतस्य च ।\nतस्मादपरिहार्येऽर्थे न त्वं शोचितुमर्हासि"
@@ -256,6 +283,7 @@
     {
       "ref": "2.28",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अव्यक्तादीनि भूतानि व्यक्तमध्यानि भारत ।\nअव्यक्तनिधनान्येव तत्र का परिदेवना"
@@ -265,6 +293,7 @@
     {
       "ref": "2.29",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आश्चर्यवत्पश्यति कश्चिदेनमाश्चर्यवद्वदति तथैव चान्यः ।\nआश्चर्यवच्चैनमन्यः शृणोति श्रुत्वाप्येनं वेद न चैव कश्चित्"
@@ -274,6 +303,7 @@
     {
       "ref": "2.30",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "देही नित्यमवध्योऽयं देहे सर्वस्य भारत ।\nतस्मात्सर्वाणि भूतानि न त्वं शोचितुमर्हासि"
@@ -283,6 +313,7 @@
     {
       "ref": "2.31",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "स्वधर्ममपि चावेक्ष्य न विकम्पितुमर्हासि ।\nधर्म्याद्धि युद्धाच्छ्रेयोऽन्यत्क्षत्रियस्य न विद्यते"
@@ -292,6 +323,7 @@
     {
       "ref": "2.32",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यदृच्छया चोपपन्नं स्वर्गद्वारमपावृतम् ।\nसुखिनः क्षत्रियाः पार्थ लभन्ते युद्धमीदृशम्"
@@ -301,6 +333,7 @@
     {
       "ref": "2.33",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अथ चेत्त्वमिमं धर्म्यं संग्रामं न करिष्यसि ।\nततः स्वधर्मं कीर्ंित च हित्वा पापमवाप्स्यसि"
@@ -310,6 +343,7 @@
     {
       "ref": "2.34",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अकीर्तिं चापि भूतानि कथयिष्यन्ति तेऽव्ययाम् ।\nसंभावितस्य चाकीर्तिः मरणादतिरिच्यते"
@@ -319,6 +353,7 @@
     {
       "ref": "2.35",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "भयाद्रणादुपरतं मंस्यन्ते त्वां महारथाः ।\nयेषां च त्वं बहुमतो भूत्वा यास्यसि लौघवम्"
@@ -328,6 +363,7 @@
     {
       "ref": "2.36",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "अवाच्यवादांश्च बहून् वदिष्यन्ति तवाहिताः ।\nनिन्दन्तस्तव सामर्थ्यं ततो दुःखतरं नु किम्"
@@ -337,6 +373,7 @@
     {
       "ref": "2.37",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "हतो वा प्राप्स्यसे स्वर्गं जित्वा वा भोक्ष्यसे महीम् ।\nतस्मादुत्तिष्ठ कौन्तेय युद्धाय कृतनिश्चयः"
@@ -346,6 +383,7 @@
     {
       "ref": "2.38",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "सुखदुःखे समे कृत्वा लाभालाभौ जयाजयौ ।\nततो युद्धाय युज्यस्व नैवं पापमवाप्स्यसि"
@@ -355,6 +393,7 @@
     {
       "ref": "2.39",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एषा तेऽभिहिता साङ्ख्ये बुद्धिर्योगे त्विमां शृणु ।\nबुद्ध्या युक्तो यया पार्थ कर्मबन्धं प्रहास्यसि"
@@ -364,6 +403,7 @@
     {
       "ref": "2.40",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नेहाभिक्रमनाशोऽस्ति प्रत्यवायो न विद्यते ।\nस्वल्पमप्यस्य धर्मस्य त्रायते महतो भयात्"
@@ -373,6 +413,7 @@
     {
       "ref": "2.41",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "व्यवसायात्मिका बुद्धिरेकेह कुरुनन्दन ।\nबहुशाखा ह्यनन्ताश्च बुद्धयोऽव्यवसायिनाम्"
@@ -382,6 +423,7 @@
     {
       "ref": "2.42",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यामिमां पुष्पितां वाचं प्रवदन्त्यविपश्चितः ।\nवेदवादरताः पार्थ नान्यदस्तीति वादिनः"
@@ -391,6 +433,7 @@
     {
       "ref": "2.43",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कामात्मानः स्वर्गपराः जन्मकर्मफलप्रदाम् ।\nक्रियाविशेषबहुलां भोगैर्यगतिं प्रति"
@@ -400,6 +443,7 @@
     {
       "ref": "2.44",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "भोगैश्वर्यप्रसक्तानां तयापहृतचेतसाम् ।\nव्यवसायात्मिका बुद्धिः समाधौ न विधीयते"
@@ -409,6 +453,7 @@
     {
       "ref": "2.45",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "त्रैगुण्यविषया वेदा निस्त्रैगुण्यो भवार्जुन ।\nनिर्द्वन्द्वो नित्यसत्त्वस्थो निर्योगक्षेम आत्मवान्"
@@ -418,6 +463,7 @@
     {
       "ref": "2.46",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यावानर्थ उदपाने सर्वतः संप्लुतोदके ।\nतावान् सर्वेषु वेदेषु ब्राह्मणस्य विजानतः"
@@ -427,6 +473,7 @@
     {
       "ref": "2.47",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\nमा कर्मफलहेतुर्भूः मा ते सङ्गोऽस्त्वकर्मणि"
@@ -436,6 +483,7 @@
     {
       "ref": "2.48",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय ।\nसिद्ध्यसिद्ध्योः समो भूत्वा समत्वं योग उच्यते"
@@ -445,6 +493,7 @@
     {
       "ref": "2.49",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "दूरेण ह्यवरं कर्म बुद्धियोगाद्धनञ्जय ।\nबुद्धौ शरणमन्विच्छ कृपणाः फलहेतवः"
@@ -454,6 +503,7 @@
     {
       "ref": "2.50",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "बुद्धियुक्तो जहातीह उभे सुकृतदुष्कृते ।\nतस्माद्योगाय युज्यस्व योगः कर्मसु कौशलम्"
@@ -463,6 +513,7 @@
     {
       "ref": "2.51",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "कर्मजं बुद्धियुक्ता हि फलं त्यक्त्वा मनीषिणः ।\nजन्मबन्धविनिर्मुक्ताः पदं गच्छन्त्यनामयम्"
@@ -472,6 +523,7 @@
     {
       "ref": "2.52",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यदा ते मोहकलिलं बुद्धिर्व्यतितरिष्यति ।\nतदा गन्तासि निर्वेदं श्रोतव्यस्य श्रुतस्य च"
@@ -481,6 +533,7 @@
     {
       "ref": "2.53",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "श्रुतिविप्रतिपन्ना ते यदा स्थास्यति निश्चला ।\nसमाधावचला बुद्धिस्तदा योगमवाप्स्यसि"
@@ -490,6 +543,7 @@
     {
       "ref": "2.54",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "स्थितप्रज्ञस्य का भाषा समाधिस्थस्य केशव ।\nस्थितधीः किं प्रभाषते किमासीत व्रजेत किम्"
@@ -500,6 +554,7 @@
     {
       "ref": "2.55",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "प्रजहाति यदा कामान् सर्वान् पार्थ मनोगतान् ।\nआत्मन्येवात्मना तुष्टः स्थितप्रज्ञस्तदोच्यते"
@@ -510,6 +565,7 @@
     {
       "ref": "2.56",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "दुःखेष्वनुद्विग्नमनाः सुखेषु विगतस्पृहः ।\nवीतरागभयक्रोधः स्थितधीर्मुनिरुच्यते"
@@ -519,6 +575,7 @@
     {
       "ref": "2.57",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यः सर्वत्रानभिस्नेहस्तत्तत्प्राप्य शुभाशुभम् ।\nनाभिनन्दति न द्वेष्टि तस्य प्रज्ञा प्रतिष्ठिता"
@@ -528,6 +585,7 @@
     {
       "ref": "2.58",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यदा संहरते चायं कूर्मोऽङ्गानीव सर्वशः ।\nइन्द्रियाणीन्द्रियार्थेभ्यस्तस्य प्रज्ञा प्रतिष्ठिता"
@@ -537,6 +595,7 @@
     {
       "ref": "2.59",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "विषया विनिवर्तन्ते निराहारस्य देहिनः ।\nरसवर्जं रसोऽप्यस्य परं दृष्ट्वा निवर्तते"
@@ -546,6 +605,7 @@
     {
       "ref": "2.60",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "यततो ह्यपि कौन्तेय पुरुषस्य विपश्चितः ।\nइन्द्रियाणि प्रमाथीनि हरन्ति प्रसभं मनः"
@@ -555,6 +615,7 @@
     {
       "ref": "2.61",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तानि सर्वाणि संयम्य युक्त आसीत मत्परः ।\nवशे हि यस्येन्द्रियाणि तस्य प्रज्ञा प्रतिष्ठिता"
@@ -564,6 +625,7 @@
     {
       "ref": "2.62",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "ध्यायतो विषयान् पुंसः सङ्गस्तेषूपजायते ।\nसङ्गात्संजायते कामः कामात्क्रोधोऽभिजायते"
@@ -573,6 +635,7 @@
     {
       "ref": "2.63",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "क्रोधाद्भवति संमोहः संमोहात्स्मृतिविभ्रमः ।\nस्मृतिभ्रंशाद्बुद्धिनाशो बुद्धिनाशात्प्रणश्यति"
@@ -582,6 +645,7 @@
     {
       "ref": "2.64",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "रागद्वेषवियुक्तैस्तु विषयानिन्द्रियैश्चरन् ।\nआत्मवश्यैर्विधेयात्मा प्रसादमधिगच्छति"
@@ -591,6 +655,7 @@
     {
       "ref": "2.65",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "प्रसादे सर्वदुःखानां हानिरस्योपजायते ।\nप्रसन्नचेतसो ह्याशु बुद्धिः पर्यवतिष्ठते"
@@ -600,6 +665,7 @@
     {
       "ref": "2.66",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "नास्ति बुद्धिरयुक्तस्य न चायुक्तस्य भावना ।\nन चाभावयतः शान्तिरशान्तस्य कुतः सुखम्"
@@ -609,6 +675,7 @@
     {
       "ref": "2.67",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रियाणां हि चरतां यन्मनोऽनुविधीयते ।\nतदस्य हरति प्रज्ञां वायुर्नावमिवाम्भसि"
@@ -618,6 +685,7 @@
     {
       "ref": "2.68",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "तस्माद्यस्य महाबाहो निगृहीतानि सर्वशः ।\nइन्द्रियाणीन्द्रियार्थेभ्यस्तस्य प्रज्ञा प्रतिष्ठिता"
@@ -627,6 +695,7 @@
     {
       "ref": "2.69",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "या निशा सर्वभूतानां तस्यां जागर्ति संयमी ।\nयस्यां जागर्ति भूतानि सा निशा पश्यतो मुनेः"
@@ -636,6 +705,7 @@
     {
       "ref": "2.70",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "आपूर्यमाणमचलप्रतिष्ठं समुद्रमापः प्रविशन्ति यद्वत् ।\nतद्वत्कामा यं प्रविशन्ति सर्वे स शान्तिमाप्नोति न कामकामी"
@@ -645,6 +715,7 @@
     {
       "ref": "2.71",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "विहाय कामान् यः सर्वान् पुमांश्चरति निस्स्पृहः ।\nनिर्ममो निरहङ्कारः स शान्तिमधिगच्छति"
@@ -654,6 +725,7 @@
     {
       "ref": "2.72",
       "passage_type": "main",
+      "kind": "Verse",
       "content": {
         "sanskrit": {
           "devanagari": "एषा ब्राह्मी स्थितिः पार्थ नैनां प्राप्य विमुह्यति ।\nस्थित्वास्यामन्तकालेऽपि ब्रह्मनिर्वाणमृच्छति"
@@ -706,11 +778,12 @@
               "start": 394,
               "end": 401,
               "display_text": "गी.सं.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "gita-samhita",
+              "edition_id": null,
+              "locator": "6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -742,41 +815,45 @@
               "start": 727,
               "end": 744,
               "display_text": "श्वे.६.१३; क.५.१३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.13.5.13",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1409,
               "end": 1417,
               "display_text": "मु.१.२.९",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "mundaka-upanishad",
+              "edition_id": "mundaka-upanishad",
+              "locator": "1.2.9",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1478,
               "end": 1486,
               "display_text": "श्वे.६.७",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "svetasvatara-upanishad",
+              "edition_id": "svetasvatara-upanishad",
+              "locator": "6.7",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 1565,
               "end": 1574,
               "display_text": "भ.गी.७.२६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "7.26",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ],
           "intro": {
@@ -831,47 +908,52 @@
               "start": 421,
               "end": 434,
               "display_text": "वि.पु.२.१२.४३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.12.43",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 489,
               "end": 502,
               "display_text": "वि.पु.२.१२.४५",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.12.45",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 586,
               "end": 599,
               "display_text": "वि.पु.२.१४.१४",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.14.14",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 686,
               "end": 700,
               "display_text": "वि.पु.२.१३.१००",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "2.13.100",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 736,
               "end": 740,
               "display_text": "२.१८",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -882,6 +964,7 @@
               "end": 769,
               "display_text": "२.१७",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -919,11 +1002,12 @@
               "start": 364,
               "end": 373,
               "display_text": "भ.गी.१३.१",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "13.1",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ],
           "intro": {
@@ -1047,21 +1131,23 @@
               "start": 257,
               "end": 267,
               "display_text": "भ.गी.१८.४३",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "bhagavad-gita",
+              "edition_id": null,
+              "locator": "18.43",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             },
             {
               "start": 520,
               "end": 552,
               "display_text": "यजु.४.६.९.४६; यजु.ब्रा. ३.७.७.९४",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "yajurveda",
+              "edition_id": null,
+              "locator": "4.6.9.46.3.7.7.94",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         },
@@ -1149,6 +1235,7 @@
               "end": 321,
               "display_text": "२.४९",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,
@@ -1382,14 +1469,26 @@
           },
           "references": [
             {
-              "start": 361,
-              "end": 399,
-              "display_text": "वि.पु.६.७.७४; ना.पु.४७.७०,गा.पु.२२२–१६",
-              "grantha_id": null,
-              "locator": null,
+              "start": 367,
+              "end": 386,
+              "display_text": "६.७.७४; ना.पु.४७.७०",
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "6.7.74.47.70",
               "locator_end": null,
-              "group_id": null,
-              "unresolved": true
+              "group_id": "ref-1",
+              "unresolved": false
+            },
+            {
+              "start": 387,
+              "end": 399,
+              "display_text": "गा.पु.२२२–१६",
+              "grantha_id": "vishnu-purana",
+              "edition_id": null,
+              "locator": "6.7.74.222.16",
+              "locator_end": null,
+              "group_id": "ref-1",
+              "unresolved": false
             }
           ]
         },
@@ -1487,11 +1586,12 @@
               "start": 642,
               "end": 649,
               "display_text": "गी.सं.६",
-              "grantha_id": null,
-              "locator": null,
+              "grantha_id": "gita-samhita",
+              "edition_id": null,
+              "locator": "6",
               "locator_end": null,
               "group_id": null,
-              "unresolved": true
+              "unresolved": false
             }
           ]
         }
@@ -1711,6 +1811,7 @@
               "end": 1396,
               "display_text": "हिंसा",
               "grantha_id": null,
+              "edition_id": null,
               "locator": null,
               "locator_end": null,
               "group_id": null,

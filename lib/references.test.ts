@@ -108,7 +108,7 @@ describe("resolveReferenceTarget", () => {
   });
 
   it("resolves a 2-segment partial locator on a depth-3 nested tree (mundaka regression)", () => {
-    // मु. उ. १.१ → locator "1.1". The structure_levels is a NESTED tree whose
+    // मु.उ. १.१ → locator "1.1". The structure_levels is a NESTED tree whose
     // .length is 1; the true depth is 3. Regression: depth must be computed by
     // walking children, or "1.1" (2 segs) wrongly overflows a depth-1 view.
     const grantha = {
@@ -122,7 +122,7 @@ describe("resolveReferenceTarget", () => {
   });
 
   it("resolves a full-depth locator in a later, unloaded part (chandogya regression)", () => {
-    // छा. उ. ६.८.७ → locator "6.8.7" (full depth 3). Only part 1 is loaded;
+    // छा.उ. ६.८.७ → locator "6.8.7" (full depth 3). Only part 1 is loaded;
     // the leaf lives in part 6. Must resolve to the exact ref (the reader's
     // section loader fetches the containing part on navigation), NOT
     // REF-RUNTIME-UNRESOLVED.
@@ -260,14 +260,14 @@ describe("Reference artifact shape", () => {
     const r = ref({
       start: 807,
       end: 819,
-      display_text: "श्वे. उ. १.९",
+      display_text: "श्वे.उ. १.९",
       grantha_id: "svetasvatara-upanishad",
       locator: "1.9",
     });
     expect(r).toMatchObject({
       start: 807,
       end: 819,
-      display_text: "श्वे. उ. १.९",
+      display_text: "श्वे.उ. १.९",
       grantha_id: "svetasvatara-upanishad",
       locator: "1.9",
     });
@@ -306,7 +306,7 @@ describe("getPassagePreview (later-part fetch)", () => {
       kind: "grantha-part",
       passages: [
         { ...makePassage("4.1"), content: { sanskrit: { devanagari: "चतुर्थ अध्याय" }, english_translation: "" } },
-        { ...makePassage("4.6"), content: { sanskrit: { devanagari: "श्वे. उ. ४.६ का मन्त्र" }, english_translation: "" } },
+        { ...makePassage("4.6"), content: { sanskrit: { devanagari: "श्वे.उ. ४.६ का मन्त्र" }, english_translation: "" } },
       ],
       prefatory_material: [],
       concluding_material: [],
@@ -366,7 +366,7 @@ describe("getPassagePreview (later-part fetch)", () => {
       r,
       ["svetasvatara-upanishad"],
     );
-    expect(preview).toContain("श्वे. उ. ४.६ का मन्त्र");
+    expect(preview).toContain("श्वे.उ. ४.६ का मन्त्र");
     // part4.json was fetched for the preview.
     const part4Calls = fetchMock.mock.calls.filter((c) => String(c[0]).endsWith("part4.json"));
     expect(part4Calls.length).toBe(1);

@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 1,
@@ -8,6 +8,7 @@
     {
       "ref": "1.1.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ॐ पराशरं मुनिवरं कृतपौर्वाह्णिकक्रियम् ।\nमैत्रेयः परिपप्रच्छ प्रणिपत्याभिवाद्य च"
@@ -18,6 +19,7 @@
     {
       "ref": "1.1.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वत्तो हि वेदाध्ययनमधीतमखिलं गुरो ।\nधर्मशास्त्राणि सर्वाणि तथांगनि यथाक्रमम्"
@@ -27,6 +29,7 @@
     {
       "ref": "1.1.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "त्वत्प्रसादान्मुनिश्रेष्ठ मानन्ये नाकृतश्रमम् ।\nवक्ष्यन्ति सर्वशास्त्रेषु प्रायशो येऽपि विद्विषः"
@@ -36,6 +39,7 @@
     {
       "ref": "1.1.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सोऽहमिच्छामि धर्मज्ञ श्रोतुं त्वत्तो यथा जगत् ।\nबभूव भूयश्च​ यथा महाभाग भविष्यति"
@@ -45,6 +49,7 @@
     {
       "ref": "1.1.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यन्मयं च जगद्ब्रह्मन्यतश्चैतच्चराचरम् ।\nलीनमासीद्यथा यत्र लयमेष्यति यत्र च"
@@ -54,6 +59,7 @@
     {
       "ref": "1.1.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यत्प्रमाणानि भूतानि देवादीनां च सम्भवम् ।\nसमुद्रपर्वतानां च संस्थानं च यथा भुवः"
@@ -63,6 +69,7 @@
     {
       "ref": "1.1.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सूर्यादीनां च संस्थानं प्रमाणं मुनिसत्तम ।\nदेवादीनां तथा वंशान्मनून्मन्वन्तराणि च"
@@ -72,6 +79,7 @@
     {
       "ref": "1.1.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कल्पान् कल्पविभागांश्च चातुर्युगविकल्पितान् ।\nकल्पान्तस्य स्वरूपं च युगधर्माश्च कृत्स्नशः"
@@ -81,6 +89,7 @@
     {
       "ref": "1.1.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देवर्षिपार्थिवानां च चरितं यन्महामुने ।\nवेदशाखाप्रणयनं यथावद्व्‌यासकर्तृकम्"
@@ -90,6 +99,7 @@
     {
       "ref": "1.1.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धर्माश्च ब्राह्मणादीनां तथा चाश्रमवासिनाम् ।\nश्रोतुमिच्छाम्यहं सर्वं त्वृत्तो वासिष्ठनन्दन"
@@ -99,6 +109,7 @@
     {
       "ref": "1.1.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ब्रह्मन्प्रसादप्रवणं कुरुष्व मयि मानसम् ।\nयेनाहमेतज्जानीयां त्वत्प्रसादान्महामुने"
@@ -108,6 +119,7 @@
     {
       "ref": "1.1.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "साधु मैत्रेय धर्मज्ञ स्मारितोऽस्मि पुरातनम् ।\nपितुः पिता मे भगवान् वसिष्ठो यदुवाच ह"
@@ -118,6 +130,7 @@
     {
       "ref": "1.1.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विश्वामित्रप्रयुक्तेन रक्षसा भक्षितः पुरा ।\nश्रुतस्तातस्ततः क्रोधो मैत्रेयाभून्ममातुलः"
@@ -127,6 +140,7 @@
     {
       "ref": "1.1.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततोऽहं रक्षसां सत्रं विनाशाय समारभम् ।\nभस्मीभूताश्च शतशस्तस्मिन्सत्रे निशाचराः"
@@ -136,6 +150,7 @@
     {
       "ref": "1.1.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः सड्‌क्षीयमाणेषु तेषु रक्षस्स्वशेषतः ।\nमामुवाच महाभागो वसिष्ठो मत्पितामहः"
@@ -145,6 +160,7 @@
     {
       "ref": "1.1.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अलमत्यन्तकोपेन तात मन्युमिमं जहि ।\nराक्षसा नापराध्यन्ति पितुस्ते विहितं हि तत्"
@@ -154,6 +170,7 @@
     {
       "ref": "1.1.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मूढानामेव भवति क्रोधो ज्ञानवतां कृतः ।\nहन्यते तात कः केन यतः स्वकृतभुक्पुमान्"
@@ -163,6 +180,7 @@
     {
       "ref": "1.1.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सत्र्चितस्यापि महता वत्स क्लेशेन मानवैः ।\nयशसस्तपसश्र्चैव क्रोधो नाशकरः परः"
@@ -172,6 +190,7 @@
     {
       "ref": "1.1.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वर्गापवर्गव्यासेधकारणं परमर्षयः ।\nवर्जयन्ति सदा क्रोधं तात मा तद्वशो भव"
@@ -181,6 +200,7 @@
     {
       "ref": "1.1.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अलं निशाचरैर्दग्धैदीनैरनपकारिभिः ।\nसत्रं ते विरमत्वेतत्क्षमासारा हि साधवः"
@@ -190,6 +210,7 @@
     {
       "ref": "1.1.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं तातेन तेनाहमनुनीतो महात्मना ।\nउपसंहृतवान्सत्रं सद्यस्तद्वाक्यगौरवात्"
@@ -199,6 +220,7 @@
     {
       "ref": "1.1.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः प्रीतः स भगवान्वसिष्ठो मुनिसत्तमः ।\nसम्प्राप्तश्च तदा तत्र पुलस्त्यो ब्रह्मणः सुतः"
@@ -208,6 +230,7 @@
     {
       "ref": "1.1.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पितामहेन दत्तार्घ्यः कृतासनपरिग्रहः ।\nमामुवाच महाभागो मैत्रेय पुलहाग्रजः"
@@ -217,6 +240,7 @@
     {
       "ref": "1.1.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वैरे महति यद्दाक्याद्‌गुरोरद्याश्रिता क्षमा ।\nत्वया तस्मात्समस्तानि भवात्र्च्छास्त्राणि वेत्स्यति"
@@ -226,6 +250,7 @@
     {
       "ref": "1.1.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सन्ततेर्न ममोच्छेदः क्रुद्धेनापि यतः कृतः ।\nत्वया तस्मान्महाभाग ददाम्यन्यं महावरम्"
@@ -235,6 +260,7 @@
     {
       "ref": "1.1.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुराणसंहिताकर्ता भवान्वत्स भविष्यति ।\nदेवतापारमार्थ्यं च यथावद्वेत्स्यते भवान्"
@@ -244,6 +270,7 @@
     {
       "ref": "1.1.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रवृत्ते च निवृत्ते च कर्मण्यस्तमला मतिः ।\nमत्प्रसादादसन्दिग्धा तव वत्स भविष्यति"
@@ -253,6 +280,7 @@
     {
       "ref": "1.1.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्च प्राह भगवान्वसिष्ठो मे पितामहः ।\nपुलस्त्येन यदुक्तं ते सर्वमेतद्भविष्यति"
@@ -262,6 +290,7 @@
     {
       "ref": "1.1.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इति पूर्वं वसिष्ठेन पुलस्त्येन च धीमता ।\nयदुक्तं तत्स्मृतिं याति त्वत्प्रश्नादखिलं मम"
@@ -271,6 +300,7 @@
     {
       "ref": "1.1.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सोऽहं वदाम्यशेषं ते मैत्रेय परिपृच्छते ।\nपुराणसंहितां सम्यक् तां निबोध यथातथम्"
@@ -280,6 +310,7 @@
     {
       "ref": "1.1.31",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विष्णोः सकाशादुद्भूतं जगत्तत्रैव च स्थितम् ।\nस्थितिसंयमकर्ताऽसौ जगतोऽस्य जगच्च सः"

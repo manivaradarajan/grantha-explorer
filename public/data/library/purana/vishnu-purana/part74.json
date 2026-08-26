@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 74,
@@ -8,6 +8,7 @@
     {
       "ref": "4.18.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ययातेश्चातुर्थपुत्रस्यानोःसभानलचक्षुः परमेषुसंज्ञास्त्रयः पुत्रा बभूवुः"
@@ -18,6 +19,7 @@
     {
       "ref": "4.18.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सभानलपुत्रः कालानलः"
@@ -27,6 +29,7 @@
     {
       "ref": "4.18.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कालानलात्सृंजयः"
@@ -36,6 +39,7 @@
     {
       "ref": "4.18.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सृंजयात्पुरञ्जयः"
@@ -45,6 +49,7 @@
     {
       "ref": "4.18.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पुरञ्जयाज्जनमेजयः"
@@ -54,6 +59,7 @@
     {
       "ref": "4.18.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मान्महाशालः"
@@ -63,6 +69,7 @@
     {
       "ref": "4.18.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्माच्च महामनाः"
@@ -72,6 +79,7 @@
     {
       "ref": "4.18.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मादुशीनरतितीक्षू द्वौ पुत्रावुत्पन्नौ"
@@ -81,6 +89,7 @@
     {
       "ref": "4.18.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उशीनरस्यापि शिबिनृगनवकृमि वर्माख्याः पञ्च पुत्रा बभूवुः"
@@ -90,6 +99,7 @@
     {
       "ref": "4.18.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पृषदर्भसुवीरकेकयमद्रकाश्चत्वारशिशबिपुत्राः"
@@ -99,6 +109,7 @@
     {
       "ref": "4.18.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तितीक्षोरपि रुशद्रथः पुत्रोऽभूत्"
@@ -108,6 +119,7 @@
     {
       "ref": "4.18.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि हेमः हेमस्यापि सुतपाः सुतपसश्च बलिः"
@@ -117,6 +129,7 @@
     {
       "ref": "4.18.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्य क्षेत्रे दीर्घतमसांगवङ्गकलिङ्गसुह्यपौण्ड्राख्यं वालेयं क्षत्रमजन्यत"
@@ -126,6 +139,7 @@
     {
       "ref": "4.18.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तन्नामसंतसतिसंज्ञाश्च पञ्चविषयाः बभूवुः"
@@ -135,6 +149,7 @@
     {
       "ref": "4.18.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अङ्गादनपानस्ततो दिविरथस्तस्माद्धर्मरथः"
@@ -144,6 +159,7 @@
     {
       "ref": "4.18.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चित्ररथः रोमपादसंज्ञः"
@@ -153,6 +169,7 @@
     {
       "ref": "4.18.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्य दशरथो मित्रं जज्ञे"
@@ -162,6 +179,7 @@
     {
       "ref": "4.18.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्याजपुत्रो दशरथः शान्तां नाम कन्यामनपत्यस्यदुहितृत्वे युयोज"
@@ -171,6 +189,7 @@
     {
       "ref": "4.18.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "रोमपादाच्चतुरङ्गः तस्मात्पृथुलाक्षः"
@@ -180,6 +199,7 @@
     {
       "ref": "4.18.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततश्चंपः यश्चंपां निवेशायामास"
@@ -189,6 +209,7 @@
     {
       "ref": "4.18.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "चंपस्य हर्यङ्गो नामात्मजोऽभूत्"
@@ -198,6 +219,7 @@
     {
       "ref": "4.18.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हर्यङ्गाद्भद्ररथः भद्ररथाद्बृहद्रथः बृहद्रथाद्बृहत्कर्मा बृहत्कर्मणश्च वृहद्भानुस्तस्माच्च बृहन्मनाः बृहन्मनसो जयद्रथः"
@@ -207,6 +229,7 @@
     {
       "ref": "4.18.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "जयद्रथो ब्रहमक्षत्रान्तरालसंभूत्यां पत्न्यां विजयं नाम पुत्रमजीजनत्"
@@ -216,6 +239,7 @@
     {
       "ref": "4.18.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विजयश्च धृतिं पुत्रमवाप"
@@ -225,6 +249,7 @@
     {
       "ref": "4.18.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्यापि धृतव्रतः पुत्रोऽभूत्"
@@ -234,6 +259,7 @@
     {
       "ref": "4.18.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "धृतव्रतात्सत्यकर्मा"
@@ -243,6 +269,7 @@
     {
       "ref": "4.18.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सत्यकर्मणस्त्वतिरथः"
@@ -252,6 +279,7 @@
     {
       "ref": "4.18.28",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यो गङ्गाङ्गतो मञ्जूषागतं पृथापविद्धं कर्णं पुत्रमवाप"
@@ -261,6 +289,7 @@
     {
       "ref": "4.18.29",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कर्णाद्वृषसेनः इत्येतदन्ता अङ्गवंश्याः"
@@ -270,6 +299,7 @@
     {
       "ref": "4.18.30",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अतश्च पुरुवंशं श्रोतुमर्हसि"

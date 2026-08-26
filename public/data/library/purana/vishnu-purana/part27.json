@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 27,
@@ -8,6 +8,7 @@
     {
       "ref": "2.5.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "विस्तार एष कथितः पृथिव्या भवतो मया\nसप्ततिस्तु सहस्राणि द्विजोच्छ्रायोपि कथ्यते"
@@ -18,6 +19,7 @@
     {
       "ref": "2.5.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दशसाहस्रमेकैकं पातालं मुनिसत्तम\nअतलं वितलं चैव नितलं च गभस्तिमत्\nमहाख्यं सुतलं चाग्र्यं पातालं चापि सप्तमम्"
@@ -27,6 +29,7 @@
     {
       "ref": "2.5.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शुक्लाकृष्णारुणाः पीताः शर्कराः शैलकांचनाः\nभूमयो यत्र मैत्रेय वरप्रासादमंडिताः"
@@ -36,6 +39,7 @@
     {
       "ref": "2.5.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेषु दानवदैतेया यक्षाश्च शतशस्तथा\nनिवसन्ति महानागजातयश्च महामुने"
@@ -45,6 +49,7 @@
     {
       "ref": "2.5.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स्वर्लोकादपि रम्याणि पातालानीति नारदः\nप्राह स्वर्गसदां मध्ये पातालाभ्यागतो दिवि"
@@ -54,6 +59,7 @@
     {
       "ref": "2.5.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आह्लादकारिणः शुभ्रा मणयो यत्र सुप्रभाः\nनागाभरणभूषासु पातालं केन तत्समम्"
@@ -63,6 +69,7 @@
     {
       "ref": "2.5.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दैत्यदानवकन्याभिरितश्चेतश्च शोभिते\nपाताले कस्य न प्रीतिर्विमुक्तस्यापि जायते"
@@ -72,6 +79,7 @@
     {
       "ref": "2.5.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिवार्करश्मयो यत्र प्रभां तन्वन्ति नातपम्\nशशिरश्मिर्न शीताय निशि द्योताय केवलम्"
@@ -81,6 +89,7 @@
     {
       "ref": "2.5.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भक्ष्यभोज्यमहापानमुदितैरपि भोगिभिः\nयत्र न ज्ञायते कालो गतोपि दनुजादिभिः"
@@ -90,6 +99,7 @@
     {
       "ref": "2.5.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वनानि नद्यो रम्याणि सरांसि कमलाकराः\nपुंस्कोकिलाभिलापाश्च मनोज्ञान्यम्बराणि च"
@@ -99,6 +109,7 @@
     {
       "ref": "2.5.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भूषणान्यतिशुभ्राणि गन्धाढ्यं चानुलेपनम्\nवीणावेणुमृदंगानां स्वनैरापूरितानि च"
@@ -108,6 +119,7 @@
     {
       "ref": "2.5.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतान्यन्यानि चोदारभाग्यभोग्यानि दानवैः\nदैत्योरगैश्च भुज्यन्ते पातालान्तरगोचरैः"
@@ -117,6 +129,7 @@
     {
       "ref": "2.5.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "पातालानामधश्चास्ते विष्णोर्या तामसी तनुः\nशेषाख्या यद्गुणान्वक्तुं न शक्ता दैत्यदानवाः"
@@ -126,6 +139,7 @@
     {
       "ref": "2.5.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "योनन्तः पठ्यते सिद्धैर्दैवो देवर्षिपूजितः\nस सहस्रशिरा व्यक्तस्वस्तिकामलभूषणः"
@@ -135,6 +149,7 @@
     {
       "ref": "2.5.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "फणामणिसहस्रेण यः स विद्योतयन्दिशः\nसर्वान्करोति निर्वीर्यान् हिताय जगतोऽसुरान्"
@@ -144,6 +159,7 @@
     {
       "ref": "2.5.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मदाघूर्णितनेत्रोसौ यः सदैवैककुण्डलः\nकिरीटी स्रग्धरो भाति साग्निः श्वेत इवाचलः"
@@ -153,6 +169,7 @@
     {
       "ref": "2.5.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "नीलवासा मदोत्सिक्तः श्वेतहारोपशोभितः\nसाभ्रगङ्गाप्रवाहोसौ कैलासाद्रिरिवापरः"
@@ -162,6 +179,7 @@
     {
       "ref": "2.5.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "लाङ्गलासक्तहस्ताग्रो बिभ्रन्मुसलमुत्तमम्\nउपास्यते स्वयं कान्त्या यो वारुण्या च मूर्त्तया"
@@ -171,6 +189,7 @@
     {
       "ref": "2.5.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कल्पान्ते यस्य वक्त्रेभ्यो विषानलशिखोज्ज्वलः\nसंकर्षणात्मको रुद्रो निष्क्रम्यात्ति जगत्त्रयम्"
@@ -180,6 +199,7 @@
     {
       "ref": "2.5.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स बिभ्रच्छेखरीभूतमशेषं क्षितिमण्डलम्\nआस्ते पातालमूलस्थः शेषोऽशेषसुरार्चितः"
@@ -189,6 +209,7 @@
     {
       "ref": "2.5.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य वीर्यं प्रभावश्च स्वरूपं रूपमेव च\nन हि वर्णयितुं शक्यं ज्ञातुं च त्रिदशैरपि"
@@ -198,6 +219,7 @@
     {
       "ref": "2.5.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्यैषा सकला पृथ्वी फणामणिशिखारुणा\nआस्ते कुसुममालेव कस्तद्वीर्यं वदिष्यति"
@@ -207,6 +229,7 @@
     {
       "ref": "2.5.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदा विजृम्भतेनन्तो मदाघूर्णितलोचनः\nतदा चलति भूरेषा साब्धितोया सकानना"
@@ -216,6 +239,7 @@
     {
       "ref": "2.5.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गन्धर्वाप्सरसः सिद्धाः किन्नरोरगचारणाः\nनान्तं गुणानां गच्छन्ति तेनानन्तोयमव्ययः"
@@ -225,6 +249,7 @@
     {
       "ref": "2.5.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यस्य नागवधूहस्तैर्लगितं हरिचन्दनम्\nमुहुः श्वासानिलापास्तं याति दिक्क्षोदवासताम्"
@@ -234,6 +259,7 @@
     {
       "ref": "2.5.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यमाराध्य पूराणर्षिर्गर्गो ज्योतींषि तत्त्वतः\nज्ञातवान्सकलं चैव निमित्तपठितं फलम्"
@@ -243,6 +269,7 @@
     {
       "ref": "2.5.27",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तेनेयं नागवर्येण शिरसा विधृता मही\nबिभर्ति मालां लोकानां सदेवासुरमानुषाम्"

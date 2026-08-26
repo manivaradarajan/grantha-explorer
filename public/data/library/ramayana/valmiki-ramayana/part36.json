@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 36,
@@ -22,6 +22,7 @@
     {
       "ref": "1.38.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तां कथां कौशिको रामे निवेद्य कुशिकात्मजः ।\nपुनरेवापरं वाक्यं काकुत्स्थमिदमब्रवीत् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.38.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अयोध्याधिपतिः शूरः पूर्वमासीन्नराधिपः ।\nसगरो नाम धर्मात्मा प्रजाकामः स चाप्रजः ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.38.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "वैदर्भदुहिता राम केशिनी(?) नाम नामतः ।\nज्येष्ठा सगरपत्नी सा धर्मिष्ठा सत्यवादिनी ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.38.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अरिष्टनेमिदुहिता रूपेणाप्रतिमा भुवि ।\nद्वितीया सगरस्यासीत् पत्नी सुमतिसञ्ज्ञिता ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.38.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ताभ्यां सह तथा राजा पत्नीभ्यां तप्तवांस्तपः ।\nहिमवन्तं समासाद्य भृगुप्रस्रवणे गिरौ ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.38.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ वर्षशते पूर्णे तपसाराधितो मुनिः ।\nसगराय वरं प्रादाद्भृगुः सत्यवतां वरः ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.38.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अपत्यलाभः सुमहान् भविष्यति तवानघ ।\nकीर्तिं चाप्रतिमां लोके प्राप्स्यसे पुरुषर्षभ ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.38.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एका जनयिता तात पुत्रं वंशकरं तव ।\nषष्टिं पुत्रसहस्राणि अपरा जनयिष्यति ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.38.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भाषमाणं महात्मानं राजपुत्र्यौ प्रसाद्य तम् ।\nऊचतुः परमप्रीते कृताञ्जलिपुटे तदा ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.38.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एकः कस्यास्सुतो ब्रह्मन् का बहून् जनयिष्यति ।\nश्रोतुमिच्छावहे ब्रह्मन् सत्यमस्तु वचस्तव ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.38.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तयोस्तद्वचनं श्रुत्वा भृगुः परमधार्मिकः ।\nउवाच परमां वाणीं स्वच्छन्दो ऽत्र विधीयताम् ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.38.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एको वंशकरो वा ऽस्तु बहवो वा महाबलाः ।\nकीर्तिमन्तो महोत्साहाः का वा कं वरमिच्छति ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.38.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मुनेस्तु वचनं श्रुत्वा कैशिनी(?) रघुनन्दन ।\nपुत्रं वंशकरं राम जग्राह नृपसन्निधौ ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.38.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "षष्टिं पुत्रसहस्राणि सुपर्णभगिनी तदा ।\nमहोत्साहान् कीर्तिमतो जग्राह सुमतिः सुतान् ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.38.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रदक्षिणमृषिं कृत्वा शिरसाभिप्रणम्य च ।\nजगाम स्वपुरं राजा सभार्यो रघुनन्दन ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.38.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ काले गते तस्मिन् ज्येष्ठा पुत्रं व्यजायत ।\nअसमञ्ज इति ख्यातं केशिनी सगरात्मजम् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.38.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुमतिस्तु नरव्याघ्र गर्भतुम्बं व्यजायत ।\nषष्टिः पुत्राः सहस्राणि तुम्बभेदाद्विनिःसृताः ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.38.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "घृतपूर्णेषु कुम्भेषु धात्र्यस्तान् समवर्द्धयन् ।\nकालेन महता सर्वे यौवनं प्रतिपेदिरे ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.38.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अथ दीर्घेण कालेन रूपयौवनशालिनः ।\nषष्टिः पुत्रसहस्राणि सगरस्याभवंस्तदा ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.38.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "बालान् गृहीत्वा तु जले सरय्वा रघुनन्दन ।\nप्रक्षिप्य प्रहसन्नित्यं मज्जतस्तान् समीक्ष्य वै ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.38.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एवं पापसमाचारः सज्जनप्रतिबाधकः ।\nपौराणामहिते युक्तः पुत्रो निर्वासितः पुरात् ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.38.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य पुत्रों ऽशुमान्नाम असमञ्जस्य वीर्यवान् ।\nसम्मतः सर्वलोकस्य सर्वस्यापि प्रियंवदः ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.38.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः कालेन महता मतिः समभिजायत ।\nसगरस्य नरश्रेष्ठ यजेयमिति निश्चिता ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.38.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स कृत्वा निश्चयं राम सोपाध्यायगणस्तदा ।\nयज्ञकर्मणि वेदज्ञो यष्टुं समुपचक्रमे ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिमञ्जीराख्याने बालकाण्डव्याख्याने अष्टात्रिंशः सर्गः ॥ ३८ ॥"

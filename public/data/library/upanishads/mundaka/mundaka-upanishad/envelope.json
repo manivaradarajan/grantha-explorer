@@ -55,5 +55,6 @@
       "file": "part6.json",
       "first_ref": "3.2.1"
     }
-  ]
+  ],
+  "edition_kind": "commentarial"
 }

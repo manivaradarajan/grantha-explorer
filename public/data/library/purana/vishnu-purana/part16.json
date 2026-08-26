@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "vishnu-purana",
   "edition_id": "vishnu-purana",
   "part_num": 16,
@@ -8,6 +8,7 @@
     {
       "ref": "1.16.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथितो भवता वंशो मानवानां महामुने ।\nकाणञ्चास्य जगतो विष्णुरेव सनातनः"
@@ -18,6 +19,7 @@
     {
       "ref": "1.16.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यच्चैतदू भगवानाह प्रह्लादं दैत्यसत्तमम् ।\nददाह नाग्निर्नस्त्रैश्व क्षण्णस्तत्याज जीवितम्"
@@ -27,6 +29,7 @@
     {
       "ref": "1.16.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "जगाम वसुधा क्षोभं प्रह्लादे सलिले स्थिते ।\nबन्धबद्ध विचलति विक्षिप्ताङू गैः समाहता"
@@ -36,6 +39,7 @@
     {
       "ref": "1.16.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "शैलैराक्रान्तदेहोऽपि न ममार च यः पुरा ।\nत्वयैवातीव माहात्म्यां कथितं यस्य धीमतः"
@@ -45,6 +49,7 @@
     {
       "ref": "1.16.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य प्रभावमतुलं विष्णोर्भक्तिमतो मुने ।\nश्वोतुमिच्छामि यस्योतच्चरितं दीप्ततेजसः"
@@ -54,6 +59,7 @@
     {
       "ref": "1.16.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "किं निमित्तमसौ शस्त्रैर्विक्षतो दितिजैर्मुने ।\nकिममर्थञ्चाब्धिसलिले निक्षिप्ते धर्म्मतत्परः"
@@ -63,6 +69,7 @@
     {
       "ref": "1.16.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "आक्रान्तः पर्व्वतैः कस्मात् कस्मादृष्टो महोरगैः ।\nक्षिप्तः किमद्रिशिखरात् किं वा पावकसञ्चये"
@@ -72,6 +79,7 @@
     {
       "ref": "1.16.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिग्दन्तिनां दन्तबूमिं स च कस्मान्नरूपितः ।\nसंशोषकोऽनिलश्चास्य प्रयुक्तः किं मुहासुरैः"
@@ -81,6 +89,7 @@
     {
       "ref": "1.16.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कृत्याञ्च दैत्यगुरवो युयुजुस्तत्र किं मुने ।\nशम्बरश्चापि मायानां सहस्त्रं कि प्रयुक्तवान्"
@@ -90,6 +99,7 @@
     {
       "ref": "1.16.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "हालाहलं विषमहो दैत्यसूदैर्महात्मनः ।\nकस्माद् दत्त विनाशाय यद जीर्णा तेन धीमता"
@@ -99,6 +109,7 @@
     {
       "ref": "1.16.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "एतत् सर्व्वं महाभाग प्रह्लादस्य महात्मनः ।\nचरितं श्वोतुमिच्छामि महामाहात्म्यसूचकम्"
@@ -108,6 +119,7 @@
     {
       "ref": "1.16.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "न हि कौतूहलं तत्र यदू दैत्यैर्न हतो हि सः ।\nअनन्यमनसो विष्णौ कः शक्नोति निपातने"
@@ -117,6 +129,7 @@
     {
       "ref": "1.16.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मिन धर्म्मपरे नित्यं केशावरधानोद्य.ते ।\nस्ववंशप्रभवैर्दैत्येः कर्त्तु द्रषोऽतिदुष्करः"
@@ -126,6 +139,7 @@
     {
       "ref": "1.16.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दर्‌म्मात्मनि महाभागे विष्णुभक्ते विमत्सरे ।\nदैतेयैः प्रह्टतं यस्मात् तन्ममाख्यातुमर्हसि"
@@ -135,6 +149,7 @@
     {
       "ref": "1.16.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "प्रहरन्ति महात्मानो विपक्षा अपि नेदृशे ।\nगुणौः समन्विते साचधौ किं पुनयः खपक्षजः"
@@ -144,6 +159,7 @@
     {
       "ref": "1.16.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तदेतत् कथ्यतां सर्व्व विस्तरान्मुनिसत्तम ।\nदैत्येश्वरस्य चरितं श्वोतुमिच्छाम्यशेषतः"

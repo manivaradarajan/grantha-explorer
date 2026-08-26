@@ -1,6 +1,6 @@
 {
   "kind": "grantha-part",
-  "schema_version": "1.3.0",
+  "schema_version": "1.4.0",
   "grantha_id": "valmiki-ramayana",
   "edition_id": "valmiki-ramayana",
   "part_num": 40,
@@ -22,6 +22,7 @@
     {
       "ref": "1.42.1",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कालधर्मं गते राम सगरे प्रकृतीजनाः ।\nराजानं रोचयामासुरंशुमन्तं सुधार्मिकम् ॥"
@@ -31,6 +32,7 @@
     {
       "ref": "1.42.2",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स राजा सुमहानसीदंशुमान् रघुनन्दन ।\nतस्य पुत्रो महानासीद्दिलीप इति विश्रुतः ॥"
@@ -40,6 +42,7 @@
     {
       "ref": "1.42.3",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्मिन् राज्यं समावेश्य दिलीपे रघुनन्दन ।\nहिमवच्छिखरे पुण्ये तपस्तेपे सुदारुणम् ॥"
@@ -49,6 +52,7 @@
     {
       "ref": "1.42.4",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "द्वात्रिंशच्च सहस्राणि वर्षाणि सुमहायशाः ।\nतपोवनं गतो राम स्वर्गं लेभे तपोधनः ॥"
@@ -58,6 +62,7 @@
     {
       "ref": "1.42.5",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिलीपस्तु महातेजाः श्रुत्वा पैतामहं वधम् ।\nदुःखोपहतया बुद्ध्या निश्चयं नाध्यगच्छत ॥"
@@ -67,6 +72,7 @@
     {
       "ref": "1.42.6",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "कथं गङ्गावतरणं कथं तेषां जलक्रिया ।\nतारयेयं कथं चैनानिति चिन्तापरो ऽभवत् ॥"
@@ -76,6 +82,7 @@
     {
       "ref": "1.42.7",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य चिन्तयतो नित्यं धर्मेण विदितात्मनः ।\nपुत्रो भगीरथो नाम जज्ञे परमधार्मिकः ॥"
@@ -85,6 +92,7 @@
     {
       "ref": "1.42.8",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "दिलीपस्तु महातेजा यज्ञैर्बहुभिरिष्टवान् ।\nत्रिंशद्वर्षसहस्राणि राजा राज्यमकारयत् ॥"
@@ -94,6 +102,7 @@
     {
       "ref": "1.42.9",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "अगत्वा निश्चयं राजा तेषामुद्धरणं प्रति ।\nव्याधिना नरशार्दूल कालधर्ममुपेयिवान् ॥"
@@ -103,6 +112,7 @@
     {
       "ref": "1.42.10",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इन्द्रलोकं गतो राजा स्वार्जितेनैव कर्मणा ।\nराज्ये भगीरथं पुत्रमभिषिच्य नरर्षभः ॥"
@@ -112,6 +122,7 @@
     {
       "ref": "1.42.11",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथस्तु राजर्षिर्धार्मिको रघुनन्दन ।\nअनपत्यो महातेजाः प्रजाकामः स चाप्रजः ॥"
@@ -121,6 +132,7 @@
     {
       "ref": "1.42.12",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मन्त्रिष्वाधाय तद्राज्यं गङ्गावतरणे रतः ॥"
@@ -130,6 +142,7 @@
     {
       "ref": "1.42.13",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "स तपो दीर्घमातिष्ठद्गोकर्णे रघुनन्दन ।\nऊर्ध्वबाहुः पञ्चतपा मासाहारो जितेन्द्रियः ॥"
@@ -139,6 +152,7 @@
     {
       "ref": "1.42.14",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तस्य वर्षसहस्राणि घोरे तपसि तिष्ठतः ।\nअतीतानि महाबाहो तस्य राज्ञो महात्मनः ॥"
@@ -148,6 +162,7 @@
     {
       "ref": "1.42.15",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "सुप्रीतो भगवान् ब्रह्मा प्रजानां पतिरीश्वरः ॥"
@@ -157,6 +172,7 @@
     {
       "ref": "1.42.16",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "ततः सुरगुणैः सार्द्धमुपागम्य पितामहः ।\nभगीरथं महात्मानं तप्यमानमथाब्रवीत् ॥"
@@ -166,6 +182,7 @@
     {
       "ref": "1.42.17",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "भगीरथ महाभाग प्रीतस्ते ऽहं जनेश्वर ।\nतपसा च सुतप्तेन वरं वरय सुव्रत ॥"
@@ -175,6 +192,7 @@
     {
       "ref": "1.42.18",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमुवाच महातेजाः सर्वलोकपितामहम् ।\nभगीरथो महाभागः कृताञ्जलिरुपस्थितः ॥"
@@ -184,6 +202,7 @@
     {
       "ref": "1.42.19",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "यदि मे भगवन् प्रीतो यद्यस्ति तपसः फलम् ।\nसगरस्यात्मजाः सर्वे मत्तस्सलिलमाप्नुयुः ॥"
@@ -193,6 +212,7 @@
     {
       "ref": "1.42.20",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गङ्गायाः सलिलक्लिन्ने भस्मन्येषां महात्मनाम् ।\nस्वर्गं गच्छेयुरत्यन्तं सर्वे मे प्रपितामहाः ॥"
@@ -202,6 +222,7 @@
     {
       "ref": "1.42.21",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "देया च सन्ततिर्देव नावसीदेत्कुलं च नः ।\nइक्ष्वाकूणां कुले देव एष मे ऽस्तु वरः परः ॥"
@@ -211,6 +232,7 @@
     {
       "ref": "1.42.22",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "उक्तवाक्यं तु राजानं सर्वलोकपितामहः ।\nप्रत्युवाच शुभां वाणीं मधुरां मधुराक्षराम् ॥"
@@ -220,6 +242,7 @@
     {
       "ref": "1.42.23",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "मनोरथो महानेष भगीरथ महारथ ।\nएवं भवतु भद्रं ते इक्ष्वाकुकुलवर्द्धन ॥"
@@ -229,6 +252,7 @@
     {
       "ref": "1.42.24",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "इयं हैमवती गङ्गा ज्येष्ठा हिमवतः सुता ।\nतां वै धारयितुं शक्तो हरस्तत्र नियुज्यताम् ॥"
@@ -238,6 +262,7 @@
     {
       "ref": "1.42.25",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "गङ्गायाः पतनं राजन् पृथिवी न सहिष्यति ।\nतां वै धारयितुं वीर नान्यं पश्यामि शूलिनः ॥"
@@ -247,6 +272,7 @@
     {
       "ref": "1.42.26",
       "passage_type": "main",
+      "kind": "Shloka",
       "content": {
         "sanskrit": {
           "devanagari": "तमेवमुक्त्वा राजानं गङ्गां चाभाष्य लोककृत् ।\nजगाम त्रिदिवं देवस्सह देवैर्मरुद्गणैः ॥\nइति श्रीगोविन्दराजविरचिते श्रीरामायणभूषणे मणिञ्जीराख्याने बालकाण्डव्याख्याने द्विचत्वारिंशः सर्गः ॥ ४२ ॥"

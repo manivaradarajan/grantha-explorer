@@ -22,6 +22,9 @@ import {
   Passage,
   PrefatoryMaterial,
   GranthaSection,
+  presentationFor,
+  deriveEditionKind,
+  KNOWN_PASSAGE_KINDS,
 } from "./data";
 import { makePassage } from "@/tests/fixtures";
 
@@ -625,5 +628,45 @@ describe("sectionPartsToLoad (section-based eager part loading)", () => {
       { file: "p5.json", first_ref: "5.1.1" },
     ];
     expect(sectionPartsToLoad(baParts, "5.1.1", loaded(), 1)).toEqual(["5.1.1"]);
+  });
+});
+
+describe("presentationFor — total, pinned mapping of passage kind", () => {
+  it.each(["Para", "Gadya"])("classifies %s as prose", (kind) => {
+    expect(presentationFor(kind)).toBe("prose");
+  });
+
+  it.each(["Shloka", "Mantra", "Verse", "Sutra"])("classifies %s as verse", (kind) => {
+    expect(presentationFor(kind)).toBe("verse");
+  });
+
+  it("throws on an unknown kind — never a silent verse default", () => {
+    expect(() => presentationFor("Gadya2")).toThrow(/Unknown passage kind/);
+    expect(() => presentationFor("")).toThrow(/Unknown passage kind/);
+    expect(() => presentationFor("para")).toThrow(/Unknown passage kind/);
+  });
+
+  it("KNOWN_PASSAGE_KINDS covers every classified kind", () => {
+    expect(KNOWN_PASSAGE_KINDS).toEqual(
+      expect.arrayContaining(["Para", "Gadya", "Shloka", "Mantra", "Verse", "Sutra"]),
+    );
+    for (const kind of KNOWN_PASSAGE_KINDS) {
+      expect(() => presentationFor(kind)).not.toThrow();
+    }
+  });
+});
+
+describe("deriveEditionKind — load-boundary fallback for legacy files", () => {
+  it("classifies a commentary-bearing edition as commentarial", () => {
+    expect(deriveEditionKind([{ commentary_id: "bhashya" }])).toBe("commentarial");
+  });
+
+  it("classifies a commentary-less edition as mula-only", () => {
+    expect(deriveEditionKind([])).toBe("mula-only");
+  });
+
+  it("is total over any array", () => {
+    expect(deriveEditionKind(undefined)).toBe("mula-only");
+    expect(deriveEditionKind([])).toBe("mula-only");
   });
 });
