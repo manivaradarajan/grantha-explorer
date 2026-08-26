@@ -61,12 +61,12 @@ const cleanUp = (root: Root, el: HTMLDivElement) => {
 
 describe("renderCommentaryWithReferences", () => {
   it("splits raw text at reference offsets and emits a link", () => {
-    const text = "इति (श्वे. उ. १.९) उक्तम्";
+    const text = "इति (श्वे.उ. १.९) उक्तम्";
     const refs: Reference[] = [
       {
         start: 5,
-        end: 17,
-        display_text: "श्वे. उ. १.९",
+        end: 16,
+        display_text: "श्वे.उ. १.९",
         grantha_id: "svetasvatara-upanishad",
         locator: "1.9",
         unresolved: false,
@@ -85,7 +85,7 @@ describe("renderCommentaryWithReferences", () => {
       );
     });
     expect(el.querySelector(".reference-link")).not.toBeNull();
-    expect(el.querySelector(".reference-link")?.textContent).toBe("श्वे. उ. १.९");
+    expect(el.querySelector(".reference-link")?.textContent).toBe("श्वे.उ. १.९");
     expect(el.querySelector(".external-reference")).not.toBeNull();
     cleanUp(root, el);
   });
@@ -113,12 +113,12 @@ describe("renderCommentaryWithReferences", () => {
   });
 
   it("renders a not-in-library reference as an external link", () => {
-    const text = "इति (श्वे. उ. १.९) उक्तम्";
+    const text = "इति (श्वे.उ. १.९) उक्तम्";
     const refs: Reference[] = [
       {
         start: 5,
-        end: 17,
-        display_text: "श्वे. उ. १.९",
+        end: 16,
+        display_text: "श्वे.उ. १.९",
         grantha_id: "svetasvatara-upanishad",
         locator: "1.9",
         unresolved: false,
@@ -144,13 +144,13 @@ describe("renderCommentaryWithReferences", () => {
   it("renders a bold pair straddling a citation without crashing", () => {
     // A `**…**` pair whose close marker falls inside the citation span. The
     // per-segment transform cannot pair the markers, so they render literally
-    // (accepted pilot behavior — no pilot citation actually straddles bold).
-    const text = "**क्रतो (श्वे. उ. १.९)**";
+    // (accepted pilot behavior —&nbsp;no pilot citation actually straddles bold).
+    const text = "**क्रतो (श्वे.उ. १.९)**";
     const refs: Reference[] = [
       {
         start: 9,
-        end: 21,
-        display_text: "श्वे. उ. १.९",
+        end: 20,
+        display_text: "श्वे.उ. १.९",
         grantha_id: "svetasvatara-upanishad",
         locator: "1.9",
         unresolved: false,
@@ -166,7 +166,7 @@ describe("renderCommentaryWithReferences", () => {
       }))
       );
     });
-    expect(el.querySelector(".reference-link")?.textContent).toBe("श्वे. उ. १.९");
+    expect(el.querySelector(".reference-link")?.textContent).toBe("श्वे.उ. १.९");
     cleanUp(root, el);
   });
 
@@ -201,12 +201,12 @@ describe("renderCommentaryWithReferences", () => {
     // The bhashya quotes the cited verse in markdown bold, then the locator —
     // exactly the corpus shape. Opening the citation must steel-blue-mark the
     // quote in the source text (via the host's render-prop highlight).
-    const text = "स च **ज्ञाज्ञौ द्वावजावीशनीशौ** (श्वे. उ. १.९) इत्यादि";
+    const text = "स च **ज्ञाज्ञौ द्वावजावीशनीशौ** (श्वे.उ. १.९) इत्यादि";
     const refs: Reference[] = [
       {
         start: text.indexOf("श्वे"),
-        end: text.indexOf("श्वे") + "श्वे. उ. १.९".length,
-        display_text: "श्वे. उ. १.९",
+        end: text.indexOf("श्वे") + "श्वे.उ. १.९".length,
+        display_text: "श्वे.उ. १.९",
         grantha_id: "svetasvatara-upanishad",
         locator: "1.9",
         unresolved: false,
@@ -239,12 +239,12 @@ describe("renderCommentaryWithReferences", () => {
 
 describe("renderMulaWithReferences", () => {
   it("splits raw mula at offsets and wraps references as links", () => {
-    const text = "तदाह (बृ. उ. १.४.१७) इति ।";
+    const text = "तदाह (बृ.उ. १.४.१७) इति&nbsp;।";
     const refs: Reference[] = [
       {
         start: 6,
-        end: 19,
-        display_text: "बृ. उ. १.४.१७",
+        end: 18,
+        display_text: "बृ.उ. १.४.१७",
         grantha_id: "brihadaranyaka-upanishad",
         locator: "1.4.17",
         unresolved: false,
@@ -260,20 +260,20 @@ describe("renderMulaWithReferences", () => {
       }, undefined))
       );
     });
-    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
+    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ.उ. १.४.१७");
     expect(el.textContent).toContain("तदाह");
-    expect(el.textContent).toContain("इति ।");
+    expect(el.textContent).toContain("इति&nbsp;।");
     cleanUp(root, el);
   });
 
   it("strips markdown per segment without shifting offsets", () => {    // A citation preceded by a `**…**` pair; offsets are into the RAW string.
-    // "**अथ** " = 0..7, then `(` at 7, `बृ` at 8; "बृ. उ. १.४.१७" = 13 chars → 8..21.
-    const text = "**अथ** (बृ. उ. १.४.१७) इति ।";
+    // "**अथ** " = 0..7, then `(` at 7, `बृ` at 8; "बृ.उ. १.४.१७" = 12 chars → 8..20.
+    const text = "**अथ** (बृ.उ. १.४.१७) इति&nbsp;।";
     const refs: Reference[] = [
       {
         start: 8,
-        end: 21,
-        display_text: "बृ. उ. १.४.१७",
+        end: 20,
+        display_text: "बृ.उ. १.४.१७",
         grantha_id: "brihadaranyaka-upanishad",
         locator: "1.4.17",
         unresolved: false,
@@ -289,7 +289,7 @@ describe("renderMulaWithReferences", () => {
       }, undefined))
       );
     });
-    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ. उ. १.४.१७");
+    expect(el.querySelector(".reference-link")?.textContent).toBe("बृ.उ. १.४.१७");
     expect(el.textContent).toContain("अथ");
     cleanUp(root, el);
   });
@@ -299,10 +299,10 @@ describe("renderMulaWithReferences", () => {
     const root = createRoot(el);
     act(() => {
         root.render(
-      wrap(renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा ।", undefined, context, undefined))
+      wrap(renderMulaWithReferences("अथातो ब्रह्मजिज्ञासा&nbsp;।", undefined, context, undefined))
       );
     });
-    expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा ।");
+    expect(el.textContent).toBe("अथातो ब्रह्मजिज्ञासा&nbsp;।");
     cleanUp(root, el);
   });
 
@@ -310,15 +310,15 @@ describe("renderMulaWithReferences", () => {
     // The real para-1 shape: a segment with a line break and spaces between two
     // citations. Opening the citation popover sets `sourceHighlight`, which
     // re-slices the segment around the quoted phrase and wraps it in a
-    // `<mark>`. The TEXT must stay byte-identical — trimming the re-sliced
+    // `<mark>`. The TEXT must stay byte-identical —&nbsp;trimming the re-sliced
     // parts would eat the `\n`/space at the boundaries, reflow the paragraph,
     // and (by moving the hovered link out from under the cursor) close the
     // hover. This is a regression pin for that bug.
-    // raw: "') ।\nअयमात्मा ब्रह्म ।\n(" then the citation "(बृ.उ.६.४.५)".
-    const text = "') ।\nअयमात्मा ब्रह्म ।\n(बृ.उ.६.४.५)'";
+    // raw: "')&nbsp;।\nअयमात्मा ब्रह्म&nbsp;।\n(" then the citation "(बृ.उ.६.४.५)".
+    const text = "')&nbsp;।\nअयमात्मा ब्रह्म&nbsp;।\n(बृ.उ.६.४.५)'";
     const refs: Reference[] = [
       {
-        start: 22,
+        start: 24,
         end: 34,
         display_text: "बृ.उ.६.४.५",
         grantha_id: "brihadaranyaka-upanishad",
@@ -354,6 +354,24 @@ describe("renderMulaWithReferences", () => {
     const open = renderWith(highlight);
     expect(open).toBe(closed);
     expect(closed).toContain("अयमात्मा ब्रह्म");
+  });
+
+  it("glues em-dashes and sentence-dandas with non-breaking spaces (orphan fix)", () => {
+    // An em-dash used as an introducer must not wrap to the start of a line:
+    // both the space before and after it become NBSP, so the whole
+    // "word — word" unit stays on one line. A sentence-danda is glued to the
+    // word before it.
+    const text = "अयमर्थः — श्वेतकेतुं । तथा";
+    const el = container();
+    const root = createRoot(el);
+    act(() => {
+      root.render(
+        wrap(renderMulaWithReferences(text, undefined, context, undefined, undefined)),
+      );
+    });
+    expect(el.textContent).toContain("अयमर्थः\u00A0—\u00A0श्वेतकेतुं\u00A0।");
+    expect(el.textContent).not.toContain("अयमर्थः — ");
+    cleanUp(root, el);
   });
 });
 

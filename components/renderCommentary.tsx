@@ -12,6 +12,15 @@ import ReferenceLink from "./ReferenceLink";
 import { buildSourceWindow } from "@/lib/quotedMatch";
 import type { SourceHighlight } from "./CitationPanel";
 
+/** Length-preserving NBSP substitution: glue punctuation to its neighbour so a
+ *  line break never orphans an em-dash or a sentence-final danda. Both the
+ *  space BEFORE an em-dash (so the dash can't start a line) and AFTER it (so
+ *  the following word can't be orphaned) become NBSP; a danda is glued to the
+ *  word before it. All replacements are 1-for-1 UTF-16 code units, so the
+ *  reference / verse-quote / own-verse offsets into the text stay valid. */
+const protectLineBreaks = (text: string): string =>
+  text.replace(/ — /g, "\u00A0—\u00A0").replace(/ ।/g, "\u00A0।");
+
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
 export interface ReferenceLinkContext {
   currentGranthaId: string;
@@ -73,10 +82,12 @@ export function renderCommentaryWithReferences(
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
 ): React.ReactNode {
+  // Glue em-dashes and sentence-dandas to their neighbours (length-preserving).
+  const text = protectLineBreaks(rawText);
   if (!references || references.length === 0) {
     return (
       <span
-        dangerouslySetInnerHTML={{ __html: sanitizeCommentaryHtml(rawText) }}
+        dangerouslySetInnerHTML={{ __html: sanitizeCommentaryHtml(text) }}
       />
     );
   }
@@ -88,17 +99,17 @@ export function renderCommentaryWithReferences(
   for (const ref of sorted) {
     // Assert the producer's code-point offsets are valid UTF-16 slice
     // boundaries (SPEC §7) — fail loudly if a non-BMP char would be split.
-    assertCodePointOffsetAligned(rawText, ref.start);
-    assertCodePointOffsetAligned(rawText, ref.end);
+    assertCodePointOffsetAligned(text, ref.start);
+    assertCodePointOffsetAligned(text, ref.end);
     // Defensively skip spans that overlap the already-emitted range (stale
     // offsets after a source change) — never double-render text.
     if (ref.end <= cursor) {
       continue;
     }
     const segStart = Math.max(cursor, ref.start);
-    const window = buildSourceWindow(rawText, ref.start);
+    const window = buildSourceWindow(text, ref.start);
     if (segStart > cursor) {
-      const seg = rawText.slice(cursor, segStart);
+      const seg = text.slice(cursor, segStart);
       const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
       let html = seg;
       if (bounds) {
@@ -120,7 +131,7 @@ export function renderCommentaryWithReferences(
     }
     // Prefer the text actually at the offsets (ground truth for rendering);
     // fall back to the producer's display_text on any mismatch.
-    const displayText = rawText.slice(segStart, ref.end) || ref.display_text;
+    const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
       <ReferenceLink
         key={`ref-${segStart}`}
@@ -133,12 +144,12 @@ export function renderCommentaryWithReferences(
     cursor = ref.end;
   }
 
-  if (cursor < rawText.length) {
+  if (cursor < text.length) {
     parts.push(
       <span
         key="seg-last"
         dangerouslySetInnerHTML={{
-          __html: sanitizeCommentaryHtml(rawText.slice(cursor)),
+          __html: sanitizeCommentaryHtml(text.slice(cursor)),
         }}
       />
     );
@@ -159,7 +170,7 @@ export function renderCommentaryWithReferences(
  * wrapped as `ReferenceLink`; the caller appends the verse number.
  *
  * Args:
- *     rawText: The passage's raw mula Devanagari.
+ *     text: The passage's raw mula Devanagari.
  *     references: The passage's `references[]`, or undefined/[].
  *     linkContext: Context threaded into each `ReferenceLink`.
  *
@@ -181,6 +192,9 @@ export function renderMulaWithReferences(
   // spacing — the visual rhythm between prose and quoted verse is uniform.
   // The work's OWN verses (ownVerses, <!-- verse -->) render the same but with
   // the ``verse-own`` class (semantically distinct from embedded citations).
+  // Glue em-dashes and sentence-dandas to their neighbours (length-preserving,
+  // so all offsets below stay valid).
+  const text = protectLineBreaks(rawText);
   const allBlocks = [
     ...(verseQuotes ?? []).map((v) => ({ ...v, own: false })),
     ...(ownVerses ?? []).map((v) => ({ ...v, own: true })),
@@ -223,13 +237,13 @@ export function renderMulaWithReferences(
     };
     for (const blk of allBlocks) {
       if (blk.start > cursor) {
-        emit(rawText.slice(cursor, blk.start), cursor, "prose");
+        emit(text.slice(cursor, blk.start), cursor, "prose");
       }
-      emit(rawText.slice(blk.start, blk.end), blk.start, blk.own ? "own" : "quote");
+      emit(text.slice(blk.start, blk.end), blk.start, blk.own ? "own" : "quote");
       cursor = blk.end;
     }
-    if (cursor < rawText.length) {
-      emit(rawText.slice(cursor), cursor, "prose");
+    if (cursor < text.length) {
+      emit(text.slice(cursor), cursor, "prose");
     }
     // Insert a single blank-line separator at EVERY prose↔verse boundary, in
     // either direction — so prose that sits BETWEEN two verses (e.g. para 157's
@@ -253,7 +267,7 @@ export function renderMulaWithReferences(
     });
     return <>{joined}</>;
   }
-  return <>{renderMulaProse(rawText, references, linkContext, 0)}</>;
+  return <>{renderMulaProse(text, references, linkContext, 0)}</>;
 }
 
 /** Render a non-verse prose span with its references (existing split logic),
