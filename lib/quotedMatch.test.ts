@@ -6,7 +6,6 @@ import {
   buildSourceWindow,
   MAX_LOOKBACK,
   MIN_MATCH_CHARS,
-  MAX_COVERAGE,
 } from "./quotedMatch";
 
 describe("buildMatchString", () => {
@@ -26,6 +25,16 @@ describe("buildMatchString", () => {
   it("collapses whitespace runs (pāda newlines) to single spaces", () => {
     const { match } = buildMatchString("अविद्यया मृत्युं तीर्त्वा\nविद्ययाऽमृतमश्नुते ।।");
     expect(match).toBe("अविद्यया मृत्युं तीर्त्वा विद्ययाऽमृतमश्नुते");
+  });
+
+  it("elides a space after a syllable-final virama (तत् त्वमसि == तत्त्वमसि)", () => {
+    // The cited chhandogya edition reads the sandhi UNFUSED ("तत् त्वमसि");
+    // the quote is fused ("तत्त्वमसि"). A space after a virama carries no
+    // sound, so both must normalize identically.
+    expect(buildMatchString("तत् त्वमसि").match).toBe(buildMatchString("तत्त्वमसि").match);
+    expect(buildMatchString("तत्त्वमसि").match).toBe("तत्त्वमसि");
+    // ordinary intra-word spaces are untouched
+    expect(buildMatchString("स च ब्रह्म").match).toBe("स च ब्रह्म");
   });
 
   it("returns a map from each kept char to its original index", () => {
@@ -206,35 +215,99 @@ describe("findQuotedSpan — grapheme boundaries (no dotted circle)", () => {
   });
 });
 
-describe("findQuotedSpan — coverage suppression (whole-passage quote is noise)", () => {
+describe("findQuotedSpan — whole-passage quotes now highlight (suppression removed)", () => {
   it("still highlights a partial quote under the coverage threshold", () => {
     const window = "अग्निहोत्रादि तु तत्कार्यायैव";
     const passage = "अग्निहोत्रादि तु तत्कार्यायैव तद्दर्शनात्";
-    // ~71% coverage — under the 0.8 threshold, so it should still highlight.
     expect(findQuotedSpan(window, passage)).not.toBeNull();
   });
 
-  it("suppresses a match that covers the entire passage", () => {
+  it("highlights a match that covers the entire passage", () => {
     const window = "अग्निहोत्रादि तु तत्कार्यायैव";
     const passage = "अग्निहोत्रादि तु तत्कार्यायैव ।";
-    // Coverage ≈ 1.0 (> MAX_COVERAGE) → noise, no highlight.
-    expect(findQuotedSpan(window, passage)).toBeNull();
+    // A whole-passage quote is a meaningful highlight (decision: highlight
+    // anyway), not noise to suppress.
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toContain("अग्निहोत्रादि");
+    }
   });
 
-  it("suppresses a whole-sutra quote even with inline verse-number chrome (brahma-sutra 1.4.8)", () => {
+  it("highlights a whole-sutra quote even with inline verse-number chrome (brahma-sutra 1.4.8)", () => {
     // Brahma-sutra stores the verse number inline: "चमसवदविशेषात् ॥ १-४-८ ॥".
-    // The quote covers 100% of the actual sutra content — the number suffix is
-    // chrome and must not dilute the coverage check.
+    // The quote covers 100% of the sutra content — it still highlights (the
+    // number suffix is chrome but does not suppress).
     const window = "एवमेव व्यासार्यै:, ‘चमसवदविशेषात्’ (";
     const passage = "चमसवदविशेषात् ॥ १-४-८ ॥";
-    expect(findQuotedSpan(window, passage)).toBeNull();
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toContain("चमसवदविशेषात्");
+    }
   });
 
   it("still highlights a partial sutra quote when verse-number chrome is present", () => {
     const window = "अग्निहोत्रादि तु तत्कार्यायैव";
     const passage = "अग्निहोत्रादि तु तत्कार्यायैव तद्दर्शनात् ॥ ४-१-१६ ॥";
-    // ~50% of the content — under threshold, so it still highlights.
     expect(findQuotedSpan(window, passage)).not.toBeNull();
+  });
+});
+
+describe("findQuotedSpan — sandhi-unfused source quote (chhandogya 6.8.7)", () => {
+  it("matches तत्त्वमसि against the split तत् त्वमसि in the cited passage", () => {
+    // The cited chhandogya base edition reads the sandhi unfused.
+    const window = "तत्त्वमसि (";
+    const passage =
+      "ऐतदात्म्यमिदँ सर्वम् । तत्सत्यम् । स आत्मा । तत् त्वमसि श्वेतकेतो " +
+      "इति । भूयएव मा भगवान्विज्ञापयत्विति । तथा सोम्येति होवाच ॥ ७ ॥";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toBe("तत् त्वमसि");
+    }
+  });
+});
+
+describe("findQuotedSpan — word-initial a-vowel sandhi fusion (chhandogya 8.7.1)", () => {
+  it("matches अपहतपाप्मा against the fused आत्मापहतपाप्मा in the cited passage", () => {
+    // In the cited chhandogya the word is "आत्मापहतपाप्मा" = आत्मा + अपहतपाप्मा
+    // (the quote's leading अ fuses into the preceding आ). The matcher must
+    // align the sandhi-absorbed tail (पहतपाप्मा).
+    const window = "अपहतपाप्मा (";
+    const passage =
+      "य आत्मापहतपाप्मा विजरो विमृत्युर्विशोको विजिघत्सोऽपिपासः " +
+      "सत्यकामः सत्यसङ्कल्पः सोऽन्वेष्टव्यः स विजिज्ञासितव्यः स " +
+      "सर्वाꣳश्च लोकानाप्नोति सर्वाꣳश्च कामान्यस्तमात्मानमनुविद्य " +
+      "विजानातीति ह प्रजापतिरुवाच ॥ १ ॥";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toBe("पहतपाप्मा");
+    }
+  });
+});
+
+describe("buildSourceWindow — does not cross an earlier cross-reference", () => {
+  it("stops the lookback just after a prior (ref) on the same line", () => {
+    // Para 123 has two कौ. उ. ३.६४ refs on one line (no newline, so the
+    // window would otherwise sweep the whole paragraph). The second ref's
+    // window must not include the first crossref.
+    const text =
+      "ननु च सर्वस्य जन्तोः परमात्मान्तर्यामी तन्नियाम्यं च सर्वमेवेत्युक्तम् । " +
+      "एष एव साधु कर्म कारयति ते यमेभ्यो लोकेभ्य उन्निनीषति (कौ. उ. ३.६४) । " +
+      "एष एवासाधु कर्म कारयति तं यमधो निनीषतीति (कौ. उ. ३.६४) ।";
+    const refStart = text.lastIndexOf("कौ. उ. ३.६४") + 2; // second ref's text start
+    const window = buildSourceWindow(text, refStart);
+    expect(window.text.includes("कौ. उ. ३.६४) । एष")).toBe(false);
+    expect(window.text).toContain("एष एवासाधु कर्म कारयति तं यमधो निनीषतीति");
+  });
+
+  it("keeps a whole single-line quote window when no earlier crossref exists", () => {
+    const text = "तदेवम् । तेषां सततयुक्तानां भजतां प्रीतिपूर्वकम् । (भ. गी. १०.१०)";
+    const refStart = text.indexOf("भ. गी. १०.१०");
+    const window = buildSourceWindow(text, refStart);
+    expect(window.text).toContain("तेषां सततयुक्तानां भजतां प्रीतिपूर्वकम्");
   });
 });
 
@@ -348,10 +421,6 @@ describe("constants sanity", () => {
   it("MAX_LOOKBACK is 60 and MIN_MATCH_CHARS is 10", () => {
     expect(MAX_LOOKBACK).toBe(60);
     expect(MIN_MATCH_CHARS).toBe(10);
-  });
-
-  it("MAX_COVERAGE is 0.8", () => {
-    expect(MAX_COVERAGE).toBe(0.8);
   });
 });
 

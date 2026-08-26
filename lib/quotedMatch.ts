@@ -196,7 +196,34 @@ export const buildSourceWindow = (sourceText: string, refStart: number): SourceW
     const prevLineStart = sourceText.lastIndexOf("\n", prevLineEnd - 1) + 1;
     start = prevLineStart;
   }
+  // Never extend the lookback across an EARLIER cross-reference: a window that
+  // includes a previous "(ref) । …" lets the quote needle pollute across
+  // citations (para 123 has two कौ. उ. ३.६४ refs on one line; the second
+  // window must stop right after the first). Clamp `start` to just past the
+  // previous citation's closing paren.
+  const prevRef = crossRefEnd(sourceText, refStart);
+  if (prevRef !== null && prevRef > start) {
+    start = prevRef;
+  }
   return { text: sourceText.slice(start, refStart), start };
+};
+
+/** The position just after the last complete ``(ref)`` citation group that ends
+ *  strictly before `before` (the citation's own ``( … )`` is at `before` and
+ *  must not be matched). Returns `null` when no earlier citation exists. */
+const crossRefEnd = (text: string, before: number): number | null => {
+  let end = -1;
+  const re = /\([^()\n]*\)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index >= before) {
+      break;
+    }
+    if (m.index + m[0].length <= before) {
+      end = m.index + m[0].length;
+    }
+  }
+  return end === -1 ? null : end;
 };
 
 /** Minimum matched run length (in kept chars) before a match is accepted. */
@@ -292,6 +319,18 @@ export const buildQuoteNeedles = (sourceWindow: string): string[] => {
     if (phrase.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(phrase)) {
       seen.add(phrase);
       needles.push(phrase);
+      // Word-initial a-vowel sandhi: the quote "अपहतपाप्मा" appears in the
+      // cited passage as "आत्मापहतपाप्मा" — the leading अ fuses into the
+      // preceding word's final आ. Emit the variant without the absorbed
+      // initial अ/आ so it can align against the fused form (chhandogya 8.7.1).
+      const first = phrase[0];
+      if (first === "अ" || first === "आ") {
+        const rest = phrase.slice(first.length);
+        if (rest.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(rest)) {
+          seen.add(rest);
+          needles.push(rest);
+        }
+      }
     }
   };
 
@@ -328,17 +367,6 @@ export const buildQuoteNeedles = (sourceWindow: string): string[] => {
 /** Minimum local-alignment similarity of the aligned region. */
 export const MIN_SIMILARITY = 0.7;
 
-/** Above this fraction of the passage covered by the match, highlighting is
- *  noise (the quote is essentially the whole verse) and is suppressed. */
-export const MAX_COVERAGE = 0.8;
-
-/** Passages at or below this length are "the whole card" — a match covering
- *  > MAX_COVERAGE of them is trivially the whole passage and suppressing the
- *  highlight is correct (it would paint the entire card). Longer passages are
- *  real verses: a whole-verse quote IS the meaningful highlight (e.g. a full
- *  two-pāda Vishnu Purāṇa śloka), so coverage suppression does not apply. */
-export const MAX_COVERAGE_PASSAGE_LEN = 44;
-
 const MATCH_SCORE = 2;
 const MISMATCH_SCORE = -1;
 const GAP_SCORE = -1;
@@ -346,11 +374,6 @@ const GAP_SCORE = -1;
 /** Characters stripped from both sides before alignment (dandas, markdown,
  *  quote marks, punctuation). */
 const STRIP_CHARS = new Set(["।", "॥", "*", "_", ".", "'", "‘", "’", '"']);
-
-/** Trailing verse-number chrome inside a passage's stored text — e.g.
- *  brahma-sutra stores "चमसवदविशेषात् ॥ १-४-८ ॥". It is not content, so a
- *  quote of the whole sutra must measure coverage against the content only. */
-const VERSE_NUMBER_SUFFIX = /॥\s*[०-९0-9.\-]+\s*॥\s*$/;
 
 /** Characters that must never appear at a highlight edge: whitespace and
  *  anything `buildMatchString` strips (dandas, punctuation). A danda can leak
@@ -391,9 +414,16 @@ export const buildMatchString = (text: string): MatchString => {
       continue;
     }
     if (/\s/.test(ch)) {
-      if (!prevWasSpace && match.length > 0) {
-        match.push(" ");
-        map.push(i);
+      // Virama-elision at a word join: "तत् त्वमसि" is the sandhi-unfused form
+      // of "तत्त्वमसि". A space after a syllable-final virama (्, U+094D)
+      // carries no sound and must not break an otherwise-exact quote, so skip
+      // it (the following consonant then glues to the pre-virama consonant).
+      const prevKept = match[match.length - 1];
+      if (prevKept !== "्") {
+        if (!prevWasSpace && match.length > 0) {
+          match.push(" ");
+          map.push(i);
+        }
       }
       prevWasSpace = true;
       continue;
@@ -475,13 +505,6 @@ export const findQuotedSpan = (
     needles.push(enclosed.text);
   }
   const quoteNeedles = buildQuoteNeedles(sourceWindow);
-  // True when the source window is a SINGLE pāda/run (no internal danda or
-  // newline). A single-run window IS the whole quote candidate — if it covers
-  // the whole passage, the quote is the whole verse and must be suppressed (its
-  // fragments are the same quote, noise too). A window WITH internal pādas is
-  // mixed prose+quote: the longest needle may cover the passage but the real
-  // quote is a shorter pāda, so we must fall through to it.
-  const singleRunWindow = !/[।॥\n]/.test(sourceWindow);
   for (const tight of quoteNeedles) {
     if (tight !== enclosed?.text && !needles.includes(tight)) {
       needles.push(tight);
@@ -567,30 +590,6 @@ export const findQuotedSpan = (
       }
       sourceStart = sourceClamped.start;
       sourceEnd = sourceClamped.end;
-    }
-    // Whole-passage quote → highlighting is noise for SHORT passages (the
-    // quote is the whole card); suppress it. Measure coverage against the
-    // passage CONTENT only (a trailing " ॥ N ॥" verse number is chrome, not
-    // text — a quote of the whole sutra would otherwise look like <100%
-    // coverage). For longer passages (a real multi-pāda verse) a whole-verse
-    // quote is the MEANINGFUL highlight and is not suppressed.
-    const contentLength = passage
-      .replace(VERSE_NUMBER_SUFFIX, "")
-      .trimEnd()
-      .length;
-    const matchedLength = Math.min(clamped.end - clamped.start, contentLength);
-    if (
-      contentLength <= MAX_COVERAGE_PASSAGE_LEN &&
-      contentLength > 0 &&
-      matchedLength / contentLength > MAX_COVERAGE
-    ) {
-      if (singleRunWindow) {
-        // The whole quote IS the whole passage (single run): suppress entirely
-        // — every shorter candidate is a fragment of the same noise.
-        return null;
-      }
-      // Mixed prose+quote window: fall through to the tighter pāda candidate.
-      continue;
     }
     return {
       start: clamped.start,
