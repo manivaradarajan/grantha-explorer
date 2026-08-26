@@ -78,6 +78,26 @@ both converters) — never inferred, never a silent default. See
 - Consumer converter: `scripts/convert_structured_md.py` — `PassageData.kind`
   (leaf headings only), `_build_main_passage_entry` emits it on main passages.
 
+## Verse-quote blocks (`verse_quotes`) — mula-prose embedded citations
+
+Prose-mula texts (vedarthasangraha) embed quoted verses. The producer
+(grantha-data normalizer `wrap_verse_quotes`) wraps each quote in
+`<!-- verse-quote -->` markers and stamps `passage.verse_quotes` as
+`{start,end}` half-open offsets into `content.sanskrit.devanagari`; adjacent
+blocks are separated by a blank line (each block = one distinct quote). The
+renderer hang-indents each block and sub-indents even pādas of ≥4-pāda verses.
+
+- `components/renderCommentary.tsx` — `renderMulaWithReferences` interleaves
+  `.verse-quote` divs with `.flow-mula-prose` divs; `renderVerseQuote` splits
+  pādas (per-pāda absolute offsets keep refs/highlights aligned);
+  `renderMulaProse` renders prose + refs with the steel-blue source highlight.
+- `components/FlowReader.tsx` — the mūla block is a `<div>` (not `<p>`) and
+  passes `passage.verse_quotes` through.
+- `lib/data.ts` — `Passage.verse_quotes?: {start,end}[]`.
+- Producer rules: `grantha-data/tools/scripts/devanagari_normalize/normalize.py`
+  (`wrap_verse_quotes` — ॥-anchor, standalone single-danda pāda, ref-change
+  merge-split) and both converters' `verse_quotes` extraction.
+
 ## Edition kind (`edition_kind`) — the pane gate
 
 Declared classification of an edition ("mula-only" | "commentarial") derived

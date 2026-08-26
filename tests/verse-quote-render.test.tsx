@@ -55,12 +55,40 @@ describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
     expect(html).toContain('class="verse-quote"');
     // pādas are separate spans
     expect(html).toContain('class="verse-pada"');
-    // merged run has multiple verses in one block
+    // the first verse-quote block holds the अविद्या … यथा क्षेत्रशक्तिः ॥ run
     const block = html.split('class="verse-quote"')[1];
     expect(block).toContain("विद्या कर्मसंज्ञान्या तृतीया शक्तिरिष्यते");
-    expect(block).toContain("संसारतापानखिलानवाप्नोत्यतिसंततान्");
+    expect(block).toContain("यथा क्षेत्रशक्तिः सा वेष्टिता नृप सर्वगा ॥");
     // refs render as links inside the block
     expect(block).toContain("वि. पु. ६.७.६२");
+  });
+
+  it("renders differently-cited consecutive verses as SEPARATE quote blocks (para 52)", () => {
+    const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
+    const p = d.passages.find((x: { ref: string }) => x.ref === "52");
+    const html = render(
+      <div>{renderMulaWithReferences(p.content.sanskrit.devanagari, p.references, context, p.verse_quotes)}</div>
+    );
+    const quoteDivs = html.split('class="verse-quote"').length - 1;
+    // 3 distinct quotes: अविद्या …(६.७.६२), संसारतापान …(६.७.६१), तया …(६.७.६३)
+    expect(quoteDivs).toBe(3);
+    // संसारतापान …(६.७.६१) must be its OWN verse-quote, not inside the first block
+    const second = html.split('class="verse-quote"')[2];
+    expect(second).toContain("संसारतापानखिलानवाप्नोत्यतिसंततान् ॥");
+    expect(second).toContain(">वि. पु. ६.७.६१</a>");
+  });
+
+  it("renders a standalone single-danda pāda as its own quote block (para 48)", () => {
+    const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
+    const p = d.passages.find((x: { ref: string }) => x.ref === "48");
+    const html = render(
+      <div>{renderMulaWithReferences(p.content.sanskrit.devanagari, p.references, context, p.verse_quotes)}</div>
+    );
+    // कालं च पचते … (म. भा. शा. १९६.९) is a verse-quote block (not prose)
+    const quoteDivs = html.split('class="verse-quote"').length - 1;
+    expect(quoteDivs).toBe(7);
+    expect(html).toContain("कालं च पचते तत्र न कालस्तत्र वै प्रभूः ।");
+    expect(html).toContain(">म. भा. शा. १९६.९</a>");
   });
 
   it("renders refs on a verse's last pāda as links (para 48)", () => {
@@ -91,12 +119,14 @@ describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
     const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
     const p = d.passages.find((x: { ref: string }) => x.ref === "48");
     const dev = p.content.sanskrit.devanagari;
-    // The 15.16 verse text (before its ref) spans absolute offsets [131, 175).
-    const quoteText = dev.slice(131, 175);
+    // The 15.16 verse text is the pāda line just before its ref offset.
+    const ref = p.references.find((r: { display_text: string }) => r.display_text === "भ. गी. १५.१६");
+    const lineStart = dev.lastIndexOf("\n", ref.start - 1) + 1;
+    const quoteText = dev.slice(lineStart, ref.start);
     const ctx = {
       ...context,
       sourcePassageRef: "48",
-      sourceHighlight: { passageRef: "48", span: { start: 131, end: 175 } },
+      sourceHighlight: { passageRef: "48", span: { start: lineStart, end: ref.start } },
     };
     const html = render(
       <div>{renderMulaWithReferences(dev, p.references, ctx, p.verse_quotes)}</div>
