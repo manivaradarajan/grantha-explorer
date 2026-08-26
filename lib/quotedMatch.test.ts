@@ -290,22 +290,22 @@ describe("findQuotedSpan — word-initial a-vowel sandhi fusion (chhandogya 8.7.
 
 describe("buildSourceWindow — does not cross an earlier cross-reference", () => {
   it("stops the lookback just after a prior (ref) on the same line", () => {
-    // Para 123 has two कौ. उ. ३.६४ refs on one line (no newline, so the
+    // Para 123 has two कौ.उ. ३.६४ refs on one line (no newline, so the
     // window would otherwise sweep the whole paragraph). The second ref's
     // window must not include the first crossref.
     const text =
       "ननु च सर्वस्य जन्तोः परमात्मान्तर्यामी तन्नियाम्यं च सर्वमेवेत्युक्तम् । " +
-      "एष एव साधु कर्म कारयति ते यमेभ्यो लोकेभ्य उन्निनीषति (कौ. उ. ३.६४) । " +
-      "एष एवासाधु कर्म कारयति तं यमधो निनीषतीति (कौ. उ. ३.६४) ।";
-    const refStart = text.lastIndexOf("कौ. उ. ३.६४") + 2; // second ref's text start
+      "एष एव साधु कर्म कारयति ते यमेभ्यो लोकेभ्य उन्निनीषति (कौ.उ. ३.६४) । " +
+      "एष एवासाधु कर्म कारयति तं यमधो निनीषतीति (कौ.उ. ३.६४) ।";
+    const refStart = text.lastIndexOf("कौ.उ. ३.६४") + 2; // second ref's text start
     const window = buildSourceWindow(text, refStart);
-    expect(window.text.includes("कौ. उ. ३.६४) । एष")).toBe(false);
+    expect(window.text.includes("कौ.उ. ३.६४) । एष")).toBe(false);
     expect(window.text).toContain("एष एवासाधु कर्म कारयति तं यमधो निनीषतीति");
   });
 
   it("keeps a whole single-line quote window when no earlier crossref exists", () => {
-    const text = "तदेवम् । तेषां सततयुक्तानां भजतां प्रीतिपूर्वकम् । (भ. गी. १०.१०)";
-    const refStart = text.indexOf("भ. गी. १०.१०");
+    const text = "तदेवम् । तेषां सततयुक्तानां भजतां प्रीतिपूर्वकम् । (भ.गी. १०.१०)";
+    const refStart = text.indexOf("भ.गी. १०.१०");
     const window = buildSourceWindow(text, refStart);
     expect(window.text).toContain("तेषां सततयुक्तानां भजतां प्रीतिपूर्वकम्");
   });
@@ -353,7 +353,7 @@ describe("extractEnclosedQuote", () => {
 
   it("returns the last of several quoted spans in one window", () => {
     expect(
-      extractEnclosedQuote("‘**एको ह वै**’ (मु. उ. १.१) ‘**अनपहतपाप्मा**’ (शत. ब्रा.)")?.text,
+      extractEnclosedQuote("‘**एको ह वै**’ (मु.उ. १.१) ‘**अनपहतपाप्मा**’ (शत. ब्रा.)")?.text,
     ).toBe("‘**अनपहतपाप्मा**’");
   });
 

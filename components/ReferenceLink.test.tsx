@@ -29,7 +29,7 @@ function readJsonAsset(url: string): Promise<Response> {
 const LINKABLE_REF: Reference = {
   start: 0,
   end: 1,
-  display_text: "श्वे. उ. १.९",
+  display_text: "श्वे.उ. १.९",
   grantha_id: "svetasvatara-upanishad",
   locator: "1.9",
   unresolved: false,

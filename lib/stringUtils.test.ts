@@ -3,8 +3,8 @@ import { assertCodePointOffsetAligned } from "./stringUtils";
 
 describe("assertCodePointOffsetAligned (SPEC §7)", () => {
   it("accepts offsets inside BMP Devanagari (the normal corpus case)", () => {
-    // "श्वे. उ. १.९" — all BMP, any offset is a valid UTF-16 boundary.
-    const text = "इति (श्वे. उ. १.९) उक्तम्";
+    // "श्वे.उ. १.९" — all BMP, any offset is a valid UTF-16 boundary.
+    const text = "इति (श्वे.उ. १.९) उक्तम्";
     for (let i = 0; i <= text.length; i++) {
       expect(() => assertCodePointOffsetAligned(text, i)).not.toThrow();
     }
