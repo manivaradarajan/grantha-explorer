@@ -277,15 +277,25 @@ function renderVerseQuote(
   linkContext: ReferenceLinkContext,
   offset: number,
 ): React.ReactNode {
-  const padas = block.trim().split("\n");
   const inBlock = (references ?? []).filter(
     (r) => r.start >= offset && r.end <= offset + block.length,
   );
+  // Each pāda is a sub-slice of the block; track its absolute offset in the
+  // passage so renderMulaProse's reference filter/rebase and the source
+  // highlight stay aligned (a ref on the last pāda must not be dropped).
+  const padas: { text: string; absStart: number }[] = [];
+  let running = offset;
+  for (const line of block.split("\n")) {
+    if (line.trim().length > 0) {
+      padas.push({ text: line, absStart: running });
+    }
+    running += line.length + 1;
+  }
   return (
     <span className="verse-quote-inner">
-      {padas.map((pada, i) => (
+      {padas.map(({ text, absStart }, i) => (
         <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
-          {renderMulaProse(pada, inBlock.map((r) => ({ ...r, start: r.start - offset, end: r.end - offset })), linkContext, offset)}
+          {renderMulaProse(text, inBlock, linkContext, absStart)}
         </span>
       ))}
     </span>
