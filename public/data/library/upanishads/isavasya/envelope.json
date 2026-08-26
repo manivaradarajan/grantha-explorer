@@ -7,23 +7,14 @@
   "language": "sanskrit",
   "editions": [
     {
-      "edition_id": "isavasya-upanishad-vedantadesika",
-      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika",
-      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
-      "commentator": {
-        "devanagari": "श्रीमद्वेदान्ताचार्यः",
-        "roman": "śrīmadvēdāntācāryaḥ"
-      },
-      "isDefault": true
-    },
-    {
       "edition_id": "isavasya-upanishad-sankara-bhashya",
       "path": "upanishads/isavasya/isavasya-upanishad-sankara-bhashya",
       "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
       "commentator": {
         "devanagari": "श्रीमच्छङ्करभगवत्पूज्यपादः",
         "roman": "śrīmacchaṅkarabhagavatpūjyapādaḥ"
-      }
+      },
+      "isDefault": true
     },
     {
       "edition_id": "isavasya-upanishad-srivatsanarayana",
@@ -32,6 +23,15 @@
       "commentator": {
         "devanagari": "श्रीवत्सनारायणमुनीन्द्रः",
         "roman": "śrīvatsanārāyaṇamunīndraḥ"
+      }
+    },
+    {
+      "edition_id": "isavasya-upanishad-vedantadesika",
+      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika",
+      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमद्वेदान्ताचार्यः",
+        "roman": "śrīmadvēdāntācāryaḥ"
       }
     }
   ]
