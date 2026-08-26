@@ -140,11 +140,20 @@ it never infers type from field presence.
 
 ### Regenerating the JSON library from `../grantha-data`
 
-The committed `public/data/library/` is **re-derived** from the sibling
+The committed `public/data/library/` is **re-derived** from a
 `grantha-data/structured_md/` checkout by the explorer's own Python scripts
 (`scripts/convert_structured_md.py`, `scripts/import_editions.py`). These are
 parallel to the grantha-data Bazel converter (see `docs/DATA_FLOW.md` §1–2).
 Run them after any grantha-data edit; commit + push the result here.
+
+**Development layout note:** the commands below assume `../grantha-data`
+sits **next to** this repo (i.e. `grantha-data/` and `grantha-explorer/` are
+sibling directories). That is the expected development mode, but it is **not
+guaranteed** — `../` may point anywhere or hold nothing. Every converter's
+`--source` (and `GRANTHA_DATA_TOOLS_LIB`) is an explicit path you must adjust
+to wherever your grantha-data checkout actually lives. For development,
+putting the two checkouts side by side is the recommended (and assumed)
+layout.
 
 Prereqs:
 

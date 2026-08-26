@@ -116,7 +116,7 @@ class PassageData:
     label_devanagari: str = ""
     speaker: str = ""
     # The markdown heading word (e.g. "Para", "Shloka") for main passages only
-    # (per-block presentation model, IDEA.md). Empty for framing passages.
+    # (per-block presentation model). Empty for framing passages.
     kind: str = ""
     # Runs of quoted verses (verse-quote blocks) as {start, end} half-open
     # offsets into mula_text. Empty for non-verse prose.
@@ -1004,7 +1004,7 @@ def parse_body(
             speaker=speaker,
             # Main passages declare their heading kind (the leaf key, e.g.
             # "Para"/"Shloka"); framing passages carry none (per-block
-            # presentation model, IDEA.md).
+            # presentation model).
             kind=kind if kind in leaves else "",
             verse_quotes=verse_quotes,
             verses=verses,
@@ -1599,7 +1599,7 @@ def build_envelope_json(
             real edition_id.
         edition_kind: The edition's declared kind ("mula-only" | "commentarial")
             derived from commentary presence across the full part set
-            (per-block presentation model, IDEA.md). Omitted when unknown.
+            (per-block presentation model). Omitted when unknown.
         sections: Curated navigation sections (from ``<!-- section -->``
             comments), parsed by ``extract_sections``. Omitted when none.
 
@@ -1910,7 +1910,7 @@ def convert_grantha(
         raise RuntimeError("structure_levels missing from first source file frontmatter")
 
     normalized_levels = normalize_structure_levels(structure_levels_raw)
-    # The edition's declared kind (per-block presentation model, IDEA.md):
+    # The edition's declared kind (per-block presentation model):
     # derived at build time from commentary presence across the FULL part set.
     edition_kind = "commentarial" if any(part_has_commentary) else "mula-only"
     # Curated navigation sections (Raghavachar etc.) parsed from the first

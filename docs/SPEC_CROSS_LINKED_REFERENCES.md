@@ -296,7 +296,10 @@ reference renders.
 
 > School/lineage edition-targeted references are **implemented** — see §10.
 > `../grantha-data/docs/DESIGN_SCHOOL_NAMESPACES.md` (moved from this repo) is
-> the design narrative that §10 distills.
+> the design narrative that §10 distills. (The `../grantha-data` path assumes a
+> sibling checkout in the typical development layout — grantha-data is a
+> separate repo and may live elsewhere; see the README's development-layout
+> note.)
 
 ---
 

@@ -122,7 +122,7 @@
         "edition_kind": {
           "type": "string",
           "enum": ["mula-only", "commentarial"],
-          "description": "The edition's declared kind (per-block presentation model, IDEA.md): derived at build time from commentary presence across the full part set. Gates the commentary pane; does not drive per-block mula presentation."
+          "description": "The edition's declared kind (per-block presentation model): derived at build time from commentary presence across the full part set. Gates the commentary pane; does not drive per-block mula presentation."
         },
         "parts": {
           "description": "Ordered list of content parts for this edition. Each entry names the file and records the ref of the first main passage in that file, so the runtime knows which structural group (e.g. Adhyaya) the part belongs to without loading the content file.",

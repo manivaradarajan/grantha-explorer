@@ -12,7 +12,7 @@ export interface Content {
 
 /** The declared presentation kind of a main passage — the markdown heading
  *  word, stamped by both converters. Presentation is a total, pinned function
- *  of this value (IDEA.md per-block presentation model). Framing passages
+ *  of this value (per-block presentation model). Framing passages
  *  (prefatory/concluding) never carry a kind. */
 export type PassageKind =
   | "Para"
@@ -84,7 +84,7 @@ export interface Passage {
   /** Standalone mūla speaker attribution (e.g. "सञ्जय उवाच"). Verse-level only. */
   speaker?: string;
   /** The markdown heading word (e.g. "Para", "Shloka"). Main passages only;
-   *  absent on prefatory/concluding. Per-block presentation model (IDEA.md). */
+   *  absent on prefatory/concluding. Per-block presentation model. */
   kind?: string;
   /** Runs of quoted verses (verse-quote blocks): {start, end} half-open
    *  offsets into content.sanskrit.devanagari. The presentation layer
@@ -345,7 +345,7 @@ export interface GranthaMetadataOnly {
   commentaries?: Commentary[];
   parts: { file: string; id: string; first_ref: string }[];
   /** Declared edition kind ("mula-only" | "commentarial"), when the envelope
-   *  stamps it (per-block presentation model IDEA.md). Legacy files omit it. */
+   *  stamps it (per-block presentation model). Legacy files omit it. */
   edition_kind?: EditionKind;
 }
 
@@ -593,7 +593,7 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
       );
 
       // Edition kind: prefer the declared stamp (build-time derivation,
-      // per-block presentation model IDEA.md); legacy files without it fall
+      // per-block presentation model); legacy files without it fall
       // back to deriving from the assembled commentaries.
       partialGrantha.edition_kind =
         multiPartMetadata.edition_kind ?? deriveEditionKind(partialGrantha.commentaries);
@@ -652,7 +652,7 @@ export async function loadGrantha(granthaId: string, editionId?: string): Promis
       data.title_deva = granthaMetadata.title_deva ?? data.canonical_title;
       data.title_iast = granthaMetadata.title_iast ?? data.canonical_title;
 
-      // Edition kind (per-block presentation model IDEA.md): prefer the
+      // Edition kind (per-block presentation model): prefer the
       // declared stamp on the flat grantha file; fall back to derivation for
       // legacy files.
       data.edition_kind = data.edition_kind ?? deriveEditionKind(data.commentaries);
@@ -781,7 +781,7 @@ export function getAllPassagesForNavigation(
  * Vedārthasaṅgraha) hide the commentary pane entirely.
  *
  * Unifies every pane probe onto the typed `edition_kind` (per-block
- * presentation model, IDEA.md): prefer the declared stamp, fall back to
+ * presentation model): prefer the declared stamp, fall back to
  * derivation for legacy files without one.
  */
 export function hasCommentary(grantha: Grantha | null | undefined): boolean {
@@ -790,7 +790,7 @@ export function hasCommentary(grantha: Grantha | null | undefined): boolean {
 }
 
 /** The edition's kind, declared in committed data (per-block presentation
- *  model, IDEA.md): derived at build time from commentary presence. Gates the
+ *  model): derived at build time from commentary presence. Gates the
  *  commentary pane/chrome; does not drive per-block mula presentation. */
 export type EditionKind = "mula-only" | "commentarial";
 

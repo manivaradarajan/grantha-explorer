@@ -1,4 +1,4 @@
-"""On-disk invariant pins for the per-block mula presentation design (IDEA.md).
+"""On-disk invariant pins for the per-block mula presentation model.
 
 Mirror of the vitest `tests/integration/mula-presentation.test.ts` in Python.
 The presentation of a mula passage is a total, pinned function of the

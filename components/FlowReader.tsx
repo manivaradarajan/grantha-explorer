@@ -1111,7 +1111,7 @@ export default function FlowReader({
                   const mulaRefs = (passage as { references?: Reference[] }).references;
                   const introText = cp?.intro?.sanskrit?.devanagari;
                   // Presentation is a total function of the passage's declared
-                  // kind (per-block presentation model, IDEA.md).
+                  // kind (per-block presentation model).
                   const isProseMula = presentationFor(passage.kind ?? "") === "prose";
                   const mulaPresentation = MULA_PRESENTATION[presentationFor(passage.kind ?? "")];
                   // Mula content: reference-linked text (prose paras and verse
@@ -1170,7 +1170,7 @@ export default function FlowReader({
                             )}
                             {/* Mūla verse: presentation is a total function of
                             the passage's declared kind (per-block presentation
-                            model, IDEA.md). Verse kinds (Shloka/Mantra/Verse/
+                            model). Verse kinds (Shloka/Mantra/Verse/
                             Sutra) sit in a narrower, centered, left-ruled column
                             so commentary runs wider; prose kinds (Para/Gadya)
                             render undecorated like commentary — no border, no

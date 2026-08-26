@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * Render regression tests for the per-block mula presentation (IDEA.md).
+ * Render regression tests for the per-block mula presentation model.
  *
  * A main passage whose `kind` classifies as "prose" (Para/Gadya) must render
  * undecorated: no `border-l-2` bar, no `max-w-2xl` centering, `flow-commentary`

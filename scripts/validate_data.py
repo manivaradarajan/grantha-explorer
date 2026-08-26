@@ -45,7 +45,7 @@ _VALID_KINDS: frozenset[str] = frozenset({
 
 # Pinned classification (mirrors lib/data.ts KNOWN_PASSAGE_KINDS). Any kind
 # found in the corpus without an entry here is a build error (per-block
-# presentation model, IDEA.md).
+# presentation model).
 _KNOWN_PASSAGE_KINDS: frozenset[str] = frozenset({
     'Para', 'Gadya', 'Shloka', 'Mantra', 'Verse', 'Sutra',
 })
@@ -64,7 +64,7 @@ def _has_commentary(obj: dict[str, Any]) -> bool:
 
 def _check_passage_kinds(data: dict[str, Any]) -> list[str]:
     """Per-block kind invariants: main passages carry a classified `kind`;
-    framing passages carry none. (Per-block presentation model, IDEA.md.)"""
+    framing passages carry none. (Per-block presentation model.)"""
     errs: list[str] = []
     for key in ('passages', 'prefatory_material', 'concluding_material'):
         arr = data.get(key)
@@ -94,7 +94,7 @@ def _check_edition_kind_coherence(lib: pathlib.Path) -> list[str]:
     commentarial edition has a commentary in at least one part (a uniform drop
     now fails against the committed stamp). A commentarial edition may have an
     individual commentary-free part (e.g. a sarga whose whole text is one
-    un-glossed passage). (Per-block presentation model, IDEA.md.)"""
+    un-glossed passage). (Per-block presentation model.)"""
     errs: list[str] = []
     for path in sorted(lib.rglob('*.json')):
         data = json.loads(path.read_text())

@@ -90,7 +90,7 @@
     "edition_kind": {
       "type": "string",
       "enum": ["mula-only", "commentarial"],
-      "description": "The edition's declared kind (per-block presentation model, IDEA.md): derived at build time from commentary presence. Gates the commentary pane; does not drive per-block mula presentation. Present on flat single-file granthas and on edition-sub-envelopes."
+      "description": "The edition's declared kind (per-block presentation model): derived at build time from commentary presence. Gates the commentary pane; does not drive per-block mula presentation. Present on flat single-file granthas and on edition-sub-envelopes."
     }
   },
   "required": [
@@ -267,7 +267,7 @@
         },
         "kind": {
           "type": "string",
-          "description": "The markdown heading word (e.g. 'Para', 'Shloka') declaring the passage's presentation kind (per-block presentation model, IDEA.md). Required on `main` passages; must be absent on prefatory/concluding."
+          "description": "The markdown heading word (e.g. 'Para', 'Shloka') declaring the passage's presentation kind (per-block presentation model). Required on `main` passages; must be absent on prefatory/concluding."
         },
         "speaker": {
           "type": "string",

@@ -197,7 +197,7 @@ function checkEditionPathsResolve(
 }
 
 // ---------------------------------------------------------------------------
-// Per-block presentation checks (IDEA.md per-block presentation model)
+// Per-block presentation checks (per-block presentation model)
 // ---------------------------------------------------------------------------
 
 /** Pinned classification (mirrors lib/data.ts KNOWN_PASSAGE_KINDS). Any kind
@@ -247,7 +247,7 @@ function checkPassageKinds(data: Record<string, unknown>): string[] {
 }
 
 /**
- * Verify edition-kind coherence across the whole library (IDEA.md): every
+ * Verify edition-kind coherence across the whole library: every
  * edition carries a stamped `edition_kind` ("mula-only" | "commentarial"), a
  * mula-only edition carries a commentary in no part, and a commentarial
  * edition carries a commentary in at least one part (a uniform commentary drop

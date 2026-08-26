@@ -4,7 +4,7 @@ import path from "path";
 import { KNOWN_PASSAGE_KINDS, presentationFor } from "@/lib/data";
 
 /**
- * On-disk artifact pins for the per-block mula presentation design (IDEA.md).
+ * On-disk artifact pins for the per-block mula presentation model.
  *
  * The presentation of a mula passage is a total, pinned function of the
  * passage's declared `kind`. For that to hold, the committed
