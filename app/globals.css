@@ -349,12 +349,18 @@
    reflows the reading text, shifting the hovered reference link out from under
    the cursor and closing the hover. Background/radius/box-decoration-break are
    paint-only. */
-mark.citation-source-mark {
-  background-color: rgba(61, 90, 128, 0.16);
-  color: inherit;
-  border-radius: 3px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+ mark.citation-source-mark {
+   background-color: rgba(61, 90, 128, 0.16);
+   color: inherit;
+   border-radius: 3px;
+   -webkit-box-decoration-break: clone;
+   box-decoration-break: clone;
+ }
+
+/* A below-floor (low_quality) build-time quote renders with a dimmer mark so
+   the reader sees it as a tentative, not authoritative, highlight. */
+mark.citation-source-mark--low {
+  background-color: rgba(61, 90, 128, 0.08);
 }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set

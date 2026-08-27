@@ -296,13 +296,22 @@ const CitationPopover: React.FC = () => {
         return;
       }
       setPassage(text);
-      const span = citation.sourceLookback
-        ? findQuotedSpan(citation.sourceLookback, text)
-        : null;
+      // Prefer the build-time quote text as the tight needle; fall back to the
+      // full runtime sourceLookback fuzzy match when the tight needle misses
+      // (library drift) or when no quote was stamped.
+      const tightNeedle = citation.reference.quote?.text;
+      const tightSpan = tightNeedle ? findQuotedSpan(tightNeedle, text) : null;
+      const span =
+        tightSpan ??
+        (citation.sourceLookback
+          ? findQuotedSpan(citation.sourceLookback, text)
+          : null);
       setHighlight(span);
       // No exact quote in the window (plain quoted phrase, no delimiters) —
       // the fuzzy match's window-side span locates the quote in the source
-      // passage; push it so the reading surface can mark it too.
+      // passage; push it so the reading surface can mark it too. When the
+      // reference already carries a build-time quote span, ReferenceLink set
+      // sourceSpan directly, so this only fires for unstamped refs.
       if (
         span !== null &&
         citation.sourceSpan === null &&

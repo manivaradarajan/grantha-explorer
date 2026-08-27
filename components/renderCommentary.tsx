@@ -5,7 +5,6 @@ import type { Reference } from "@/lib/data";
 import {
   assertCodePointOffsetAligned,
   sanitizeCommentaryHtml,
-  stripMarkdown,
   stripMarkdownInline,
 } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
@@ -57,6 +56,80 @@ const highlightBounds = (
     return null;
   }
   return { s, e };
+};
+
+/** Render a text slice with optional typographic quote marks and the steel-blue
+ *  source highlight.
+ *
+ *  ``quote`` is the build-time ``reference.quote`` span with ABSOLUTE offsets
+ *  into the raw passage: a ``“`` is emitted where the quote opens and a ``”``
+ *  where it closes (the devanagari-source convention for quoted śruti). The
+ *  offsets may fall outside this slice (a verse quote spans several pādas), in
+ *  which case only the boundary that lands here is emitted. ``highlight`` is
+ *  relative to ``text`` (as produced by ``highlightBounds``) and wraps the
+ *  quoted text in the steel-blue ``<mark>`` — the two compose, so a hovered
+ *  quote reads ``“<mark>…</mark>”``.
+ *
+ *  Args:
+ *      text: The slice being rendered (already stripped of markdown).
+ *      absStart: Absolute offset of ``text[0]`` in the raw passage.
+ *      quote: The quote span (absolute), or undefined for no quote marks.
+ *      highlight: Relative ``[s, e)`` mark bounds, or null/undefined.
+ *
+ *  Returns:
+ *      The text with quote glyphs and the highlight mark applied.
+ */
+const renderMarkedSegment = (
+  text: string,
+  absStart: number,
+  quote?: { start: number; end: number },
+  highlight?: { s: number; e: number } | null,
+): React.ReactNode => {
+  const len = text.length;
+  const points = new Set<number>([0, len]);
+  let qs = -1;
+  let qe = -1;
+  if (quote) {
+    const relS = quote.start - absStart;
+    const relE = quote.end - absStart;
+    if (relS >= 0 && relS <= len) {
+      points.add(relS);
+      qs = relS;
+    }
+    if (relE >= 0 && relE <= len) {
+      points.add(relE);
+      qe = relE;
+    }
+  }
+  if (highlight) {
+    points.add(highlight.s);
+    points.add(highlight.e);
+  }
+  const pts = Array.from(points).sort((a, b) => a - b);
+  const out: React.ReactNode[] = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    if (b <= a) continue;
+    const inHigh = highlight ? a >= highlight.s && b <= highlight.e : false;
+    let content: React.ReactNode = stripMarkdownInline(text.slice(a, b));
+    if (inHigh) {
+      content = <mark className="citation-source-mark">{content}</mark>;
+    }
+    const prefix = a === qs ? "\u201C" : "";
+    const suffix = b === qe ? "\u201D" : "";
+    if (prefix || suffix) {
+      content = (
+        <Fragment>
+          {prefix}
+          {content}
+          {suffix}
+        </Fragment>
+      );
+    }
+    out.push(<Fragment key={`m-${absStart}-${a}`}>{content}</Fragment>);
+  }
+  return <>{out}</>;
 };
 
 /**
@@ -279,14 +352,19 @@ export function renderMulaWithReferences(
  *
  *  `blockLookbacks` optionally supplies per-ref source windows computed against
  *  a whole verse-quote BLOCK (see renderVerseQuote) so a ref at the verse's end
- *  still gets the full verse as its lookback — not just the pāda slice. */
+ *  still gets the full verse as its lookback — not just the pāda slice.
+ *  `quoteBounds` wraps the span in `“…”` when it falls within this slice (the
+ *  build-time quote span). `suppressQuoteMarks` drops the glyphs for
+ *  verse-quote blocks, whose hang-indent treatment is itself the quotation. */
 function renderMulaProse(
   text: string,
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
   offset: number,
   blockLookbacks?: Record<number, { sourceLookback: string; sourceWindowStart: number }>,
+  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean } = {},
 ): React.ReactNode {
+  const { quoteBounds, suppressQuoteMarks = false } = options;
   if (!references || references.length === 0) {
     const bounds = highlightBounds(
       linkContext.sourceHighlight,
@@ -294,18 +372,12 @@ function renderMulaProse(
       offset,
       text.length,
     );
-    if (bounds) {
-      return (
-        <Fragment>
-          {stripMarkdownInline(text.slice(0, bounds.s))}
-          <mark className="citation-source-mark">
-            {stripMarkdownInline(text.slice(bounds.s, bounds.e))}
-          </mark>
-          {stripMarkdownInline(text.slice(bounds.e))}
-        </Fragment>
-      );
-    }
-    return <>{stripMarkdown(text)}</>;
+    return renderMarkedSegment(
+      text,
+      offset,
+      suppressQuoteMarks ? undefined : quoteBounds,
+      bounds,
+    );
   }
   const sorted = [...references]
     .filter((r) => r.start >= offset && r.end <= offset + text.length)
@@ -338,19 +410,17 @@ function renderMulaProse(
         offset + cursor,
         seg.length,
       );
-      if (bounds) {
-        parts.push(
-          <Fragment key={`seg-${cursor}`}>
-            {stripMarkdownInline(seg.slice(0, bounds.s))}
-            <mark className="citation-source-mark">
-              {stripMarkdownInline(seg.slice(bounds.s, bounds.e))}
-            </mark>
-            {stripMarkdownInline(seg.slice(bounds.e))}
-          </Fragment>,
-        );
-      } else {
-        parts.push(<span key={`seg-${cursor}`}>{stripMarkdownInline(seg)}</span>);
-      }
+      // Quote marks from the block bounds (verse-quote) or the ref's own
+      // build-time quote (prose citation). Verse-quote blocks suppress them —
+      // the hang-indented block treatment is itself the quotation mark.
+      const quote = suppressQuoteMarks
+        ? undefined
+        : quoteBounds ?? (ref.quote ? { start: ref.quote.start, end: ref.quote.end } : undefined);
+      parts.push(
+        <Fragment key={`seg-${cursor}`}>
+          {renderMarkedSegment(seg, offset + cursor, quote, bounds)}
+        </Fragment>,
+      );
     }
     const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
@@ -371,20 +441,16 @@ function renderMulaProse(
       offset + cursor,
       text.length - cursor,
     );
-    if (bounds) {
-      const tail = text.slice(cursor);
-      parts.push(
-        <Fragment key="seg-last">
-          {stripMarkdownInline(tail.slice(0, bounds.s))}
-          <mark className="citation-source-mark">
-            {stripMarkdownInline(tail.slice(bounds.s, bounds.e))}
-          </mark>
-          {stripMarkdownInline(tail.slice(bounds.e))}
-        </Fragment>,
-      );
-    } else {
-      parts.push(<span key="seg-last">{stripMarkdownInline(text.slice(cursor))}</span>);
-    }
+    parts.push(
+      <Fragment key="seg-last">
+        {renderMarkedSegment(
+          text.slice(cursor),
+          offset + cursor,
+          suppressQuoteMarks ? undefined : quoteBounds,
+          bounds,
+        )}
+      </Fragment>,
+    );
   }
   return <>{parts}</>;
 }
@@ -426,7 +492,7 @@ function renderVerseQuote(
     <span className="verse-quote-inner">
       {padas.map(({ text, absStart }, i) => (
         <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
-          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks)}
+          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true })}
         </span>
       ))}
     </span>
