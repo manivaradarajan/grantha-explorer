@@ -38,13 +38,15 @@ export interface ReferenceLinkContext {
   sourceHighlight?: SourceHighlight | null;
 }
 
+import type { ReviewCommentType, ReviewStatus } from "./review/reviewServer";
+
 /** A review annotation highlight (edit mode): anchored by raw offsets in THIS
  *  passage, with a per-type CSS class and optional click handler. */
 export interface ReviewMarkSpec {
   start: number;
   end: number;
-  type: "citation-fix" | "quote-locate" | "note";
-  status: "open" | "done" | "dismissed" | "deleted";
+  type: ReviewCommentType;
+  status: ReviewStatus;
   drift?: boolean;
   commentId: string;
   onClick?: (commentId: string) => void;

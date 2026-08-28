@@ -6,9 +6,8 @@ import { ReviewModeProvider, useReviewMode } from "./ReviewModeProvider";
 import { ReviewCommentList } from "./ReviewCommentList";
 import { ReviewSelectionToolbar } from "./ReviewSelectionToolbar";
 import type { ReviewComment } from "./reviewServer";
-import type { ReviewMarkSpec } from "@/components/renderCommentary";
 import type { Grantha, Reference } from "@/lib/data";
-import { resolveAnchor } from "@/lib/reviewAnchor";
+import { resolveAnchor, resolveReviewMarks } from "@/lib/reviewAnchor";
 
 export interface EditReaderProps {
   grantha: Grantha;
@@ -130,29 +129,16 @@ function EditReaderInner(props: EditReaderProps) {
   }, [passageTexts, session]);
 
   // Compute review marks for the current session, re-located by snippet.
-  const marksByRef = useMemo(() => {
-    const out: Record<string, ReviewMarkSpec[]> = {};
-    if (!session) return out;
-    for (const c of session.comments) {
-      if (c.status === "deleted") continue;
-      if (detached.includes(c.id)) continue;
-      const raw = passageTexts[c.passage_ref];
-      if (!raw) continue;
-      const loc = resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end);
-      if (!loc) continue;
-      out[c.passage_ref] ??= [];
-      out[c.passage_ref].push({
-        start: loc.start,
-        end: loc.end,
-        type: c.type,
-        status: c.status,
-        drift: !!c.hash_changed,
-        commentId: c.id,
-        onClick: (id) => setFocusComment(id),
-      });
-    }
-    return out;
-  }, [session, detached, passageTexts]);
+  const marksByRef = useMemo(
+    () =>
+      resolveReviewMarks(
+        session?.comments,
+        passageTexts,
+        detached,
+        setFocusComment,
+      ),
+    [session, detached, passageTexts],
+  );
 
   // Keep activePassage in sync with FlowReader's scrollspy.
   const handleScrollVerse = (ref: string) => {
@@ -294,18 +280,13 @@ function EditReaderInner(props: EditReaderProps) {
     }
     // Resolve the anchor to ensure offsets are valid (handles 0,0 legacy)
     const loc = resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end);
-    const passageRaw = raw;
     setSelection({
       range,
       passageRef: c.passage_ref,
-      passageRaw,
+      passageRaw: raw,
       editing: c,
+      preset: loc ? { start: loc.start, end: loc.end, snippet: c.anchor.snippet } : undefined,
     });
-    // If loc exists and is more accurate than stored, keep it for the toolbar
-    // (the toolbar will re-resolve via selectionToOffset, but preset helps)
-    if (loc) {
-      // No-op: selection already carries the range; toolbar will map it
-    }
   };
 
   return (
@@ -343,6 +324,7 @@ function EditReaderInner(props: EditReaderProps) {
             references={passageRefs[selection.passageRef]}
             anchorRange={selection.range}
             editing={selection.editing}
+            preset={selection.preset}
             onSave={handleSave}
             onCancel={() => setSelection(null)}
           />

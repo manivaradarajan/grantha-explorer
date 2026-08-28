@@ -6,9 +6,9 @@ import { createRoot } from "react-dom/client";
 import {
   ReviewModeProvider,
   useReviewMode,
-  useReviewHighlightsFor,
 } from "./ReviewModeProvider";
 import { ReviewComment } from "./reviewServer";
+import { resolveReviewMarks } from "@/lib/reviewAnchor";
 
 const session = (comments: ReviewComment[] = []) => ({
   grantha_id: "vedarthasangraha",
@@ -33,13 +33,15 @@ const comment = (over: Partial<ReviewComment> = {}): ReviewComment => ({
 
 // A probe component that surfaces the provider state for assertions.
 function Probe({
+  passageTexts = {},
   onState,
 }: {
-  onState: (s: ReturnType<typeof useReviewMode> & { highlights: unknown[] }) => void;
+  passageTexts?: Record<string, string>;
+  onState: (s: ReturnType<typeof useReviewMode> & { marks: unknown[] }) => void;
 }) {
   const s = useReviewMode();
-  const highlights = useReviewHighlightsFor("17", "एवमेव संस्थाः संस्थानानि रूपाणीति");
-  onState({ ...s, highlights });
+  const marks = resolveReviewMarks(s.session?.comments, passageTexts, s.detached)["17"] ?? [];
+  onState({ ...s, marks });
   return null;
 }
 
@@ -60,17 +62,17 @@ afterEach(() => {
 });
 
 async function mountProbe(passageTexts: Record<string, string>): Promise<{
-  states: Array<ReturnType<typeof useReviewMode> & { highlights: unknown[] }>;
+  states: Array<ReturnType<typeof useReviewMode> & { marks: unknown[] }>;
   unmount: () => void;
 }> {
   const el = document.createElement("div");
   document.body.appendChild(el);
   const root = createRoot(el);
-  const states: Array<ReturnType<typeof useReviewMode> & { highlights: unknown[] }> = [];
+  const states: Array<ReturnType<typeof useReviewMode> & { marks: unknown[] }> = [];
   await act(async () => {
     root.render(
       <ReviewModeProvider granthaId="vedarthasangraha" passageTexts={passageTexts}>
-        <Probe onState={(s) => states.push(s)} />
+        <Probe passageTexts={passageTexts} onState={(s) => states.push(s)} />
       </ReviewModeProvider>,
     );
     // Flush the effect's async refresh + the resulting state updates.
@@ -112,10 +114,10 @@ describe("ReviewModeProvider", () => {
     });
     const state = states[states.length - 1];
     expect(state.session?.comments).toHaveLength(1);
-    expect(state.highlights).toHaveLength(1);
-    const h = state.highlights[0] as { commentId: string; span: { start: number; end: number } };
+    expect(state.marks).toHaveLength(1);
+    const h = state.marks[0] as { commentId: string; start: number; end: number };
     expect(h.commentId).toBe(c.id);
-    expect("एवमेव संस्थाः संस्थानानि रूपाणीति".slice(h.span.start, h.span.end)).toBe(
+    expect("एवमेव संस्थाः संस्थानानि रूपाणीति".slice(h.start, h.end)).toBe(
       "संस्थाः संस्थानानि",
     );
     unmount();
@@ -135,7 +137,7 @@ describe("ReviewModeProvider", () => {
     const { states, unmount } = await mountProbe({ "17": "एवमेव" });
     const state = states[states.length - 1];
     expect(state.detached).toContain(c.id);
-    expect(state.highlights).toHaveLength(0);
+    expect(state.marks).toHaveLength(0);
     unmount();
   });
 });

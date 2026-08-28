@@ -19,17 +19,6 @@ import {
 } from "./reviewServer";
 import { resolveAnchor } from "@/lib/reviewAnchor";
 
-/** A review highlight to paint on the reading surface: the comment's anchor
- *  span (possibly re-located against the current passage) plus the comment id. */
-export interface ReviewHighlight {
-  passageRef: string;
-  span: { start: number; end: number };
-  commentId: string;
-  type: ReviewComment["type"];
-  status: ReviewComment["status"];
-  drift: boolean;
-}
-
 export interface ReviewModeState {
   session: ReviewSession | null;
   hasChanged: boolean;
@@ -172,33 +161,4 @@ export function ReviewModeProvider({
       {children}
     </ReviewModeContext.Provider>
   );
-}
-
-/** Compute the review highlights to paint on the current passage: comments in
- *  the session whose anchor snippet exists in this passage, located by
- *  first-occurrence (the snippet is unique by construction at creation). */
-export function useReviewHighlightsFor(
-  passageRef: string,
-  passageRaw: string,
-): ReviewHighlight[] {
-  const ctx = useReviewMode();
-  if (!ctx.session) return [];
-  return ctx.session.comments
-    .filter((c) => {
-      if (c.passage_ref !== passageRef) return false;
-      if (c.status === "deleted") return false;
-      if (ctx.detached.includes(c.id)) return false;
-      return !!resolveAnchor(passageRaw, c.anchor.snippet, c.anchor.start, c.anchor.end);
-    })
-    .map((c) => {
-      const loc = resolveAnchor(passageRaw, c.anchor.snippet, c.anchor.start, c.anchor.end)!;
-      return {
-        passageRef,
-        span: { start: loc.start, end: loc.end },
-        commentId: c.id,
-        type: c.type,
-        status: c.status,
-        drift: !!c.hash_changed,
-      };
-    });
 }

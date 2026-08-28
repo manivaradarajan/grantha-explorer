@@ -92,3 +92,56 @@ export function resolveAnchor(
   }
   return locateSnippet(raw, snippet);
 }
+
+export interface ReviewCommentAnchorInput {
+  id: string;
+  passage_ref: string;
+  type: "citation-fix" | "quote-locate" | "note";
+  status: "open" | "done" | "dismissed" | "deleted";
+  anchor: { start: number; end: number; snippet: string };
+  hash_changed?: boolean;
+}
+
+export interface ResolvedReviewMark {
+  start: number;
+  end: number;
+  type: "citation-fix" | "quote-locate" | "note";
+  status: "open" | "done" | "dismissed" | "deleted";
+  drift?: boolean;
+  commentId: string;
+  onClick?: (commentId: string) => void;
+}
+
+/**
+ * Resolve review comments across passages into rendered ReviewMarkSpec[] lists by passageRef.
+ * Skips deleted or detached comments and re-locates anchor offsets against current passage texts.
+ */
+export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
+  comments: T[] | undefined,
+  passageTexts: Record<string, string>,
+  detached: string[] = [],
+  onMarkClick?: (commentId: string) => void,
+): Record<string, ResolvedReviewMark[]> {
+  const out: Record<string, ResolvedReviewMark[]> = {};
+  if (!comments || comments.length === 0) return out;
+  for (const c of comments) {
+    if (c.status === "deleted") continue;
+    if (detached.includes(c.id)) continue;
+    const raw = passageTexts[c.passage_ref];
+    if (!raw) continue;
+    const loc = resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end);
+    if (!loc) continue;
+    out[c.passage_ref] ??= [];
+    out[c.passage_ref].push({
+      start: loc.start,
+      end: loc.end,
+      type: c.type,
+      status: c.status,
+      drift: Boolean(c.hash_changed),
+      commentId: c.id,
+      onClick: onMarkClick,
+    });
+  }
+  return out;
+}
+
