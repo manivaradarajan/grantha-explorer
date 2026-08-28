@@ -11,9 +11,55 @@ import {
 import { selectionToOffset, SelectionMappingError } from "@/lib/selectionToOffset";
 import { locateSnippet } from "@/lib/reviewAnchor";
 
-/** Resolve the passage's raw devanagari for a given passage ref. */
-export interface PassageTextResolver {
-  (passageRef: string): string | undefined;
+export interface DetectedCitationTarget {
+  grantha_id: string;
+  edition?: string;
+  locator?: string;
+  display_text?: string;
+}
+
+export type CandidateReference = Pick<Reference, "start" | "end" | "grantha_id"> &
+  Partial<Pick<Reference, "edition_id" | "locator" | "display_text">>;
+
+/**
+ * Auto-detect the target of a citation-fix: the reference{} nearest to the selection.
+ * Handles three patterns: selection overlaps a reference, sits before a trailing citation,
+ * or sits in the lookback after a preceding one.
+ */
+export function detectNearestReference(
+  references: CandidateReference[] | undefined,
+  selStart: number,
+  selEnd: number,
+  maxDistance = 40,
+): DetectedCitationTarget | null {
+  if (!references || references.length === 0) return null;
+  const start = Math.max(0, selStart);
+  const end = Math.max(start, selEnd);
+  let best: CandidateReference | null = null;
+  let bestDist = Infinity;
+  for (const r of references) {
+    let dist: number;
+    if (r.start < end && r.end > start) {
+      dist = 0;
+    } else if (r.end <= start) {
+      dist = start - r.end;
+    } else {
+      dist = r.start - end;
+    }
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = r;
+    }
+  }
+  if (best && best.grantha_id && bestDist <= maxDistance) {
+    return {
+      grantha_id: best.grantha_id,
+      edition: best.edition_id ?? undefined,
+      locator: best.locator ?? undefined,
+      display_text: best.display_text,
+    };
+  }
+  return null;
 }
 
 interface ReviewSelectionToolbarProps {
@@ -158,40 +204,9 @@ export function ReviewSelectionToolbar({
       setDetectedTarget(null);
       return;
     }
-    const selStart = Math.max(0, offset.start);
-    const selEnd = Math.max(offset.start, offset.end);
-    let best: Reference | null = null;
-    let bestDist = Infinity;
-    for (const r of references) {
-      // distance from the selection to the reference span (0 when overlapping)
-      let dist: number;
-      if (r.start < selEnd && r.end > selStart) {
-        dist = 0;
-      } else if (r.end <= selStart) {
-        dist = selStart - r.end; // citation fully before selection
-      } else {
-        dist = r.start - selEnd; // citation starts after selection
-      }
-      if (dist < bestDist) {
-        bestDist = dist;
-        best = r;
-      }
-    }
-    // Require the nearest reference to be reasonably close (within the literal
-    // "lookback/forward" window) so a far-away citation isn't grabbed.
-    const MAX = 40;
-    if (best && best.grantha_id && bestDist <= MAX) {
-      setDetectedTarget({
-        grantha_id: best.grantha_id,
-        edition: best.edition_id ?? undefined,
-        locator: best.locator ?? undefined,
-        display_text: best.display_text,
-      });
-    } else {
-      setDetectedTarget(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type, offset.start, offset.end, references]);
+    const target = detectNearestReference(references, offset.start, offset.end);
+    setDetectedTarget(target);
+  }, [type, offset.start, offset.end, offset.snippet, references]);
 
   // Fetch candidates in citation-fix: scan the detected target grantha (if a
   // reference is near the selection), otherwise search the whole corpus so the

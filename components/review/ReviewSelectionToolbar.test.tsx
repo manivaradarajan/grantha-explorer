@@ -3,7 +3,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { createRoot } from "react-dom/client";
-import { ReviewSelectionToolbar } from "./ReviewSelectionToolbar";
+import { ReviewSelectionToolbar, detectNearestReference } from "./ReviewSelectionToolbar";
 import { ReviewComment } from "./reviewServer";
 
 afterEach(() => {
@@ -224,5 +224,55 @@ describe("ReviewSelectionToolbar", () => {
     });
     expect(cancelled).toBe(1);
     unmount();
+  });
+});
+
+describe("detectNearestReference", () => {
+  it("returns the overlapping reference when selection intersects it", () => {
+    const refs = [
+      {
+        start: 10,
+        end: 25,
+        grantha_id: "bhagavad-gita",
+        display_text: "भ.गी. २.१२",
+        locator: "2.12",
+      },
+    ];
+    const target = detectNearestReference(refs, 15, 20);
+    expect(target).toEqual({
+      grantha_id: "bhagavad-gita",
+      edition: undefined,
+      locator: "2.12",
+      display_text: "भ.गी. २.१२",
+    });
+  });
+
+  it("detects trailing citation right after the selection within max distance", () => {
+    const refs = [
+      {
+        start: 50,
+        end: 65,
+        grantha_id: "vishnu-purana",
+        display_text: "वि.पु. १.२.१०",
+        locator: "1.2.10",
+      },
+    ];
+    // Selection at 20..45, trailing citation starts at 50 (distance 5 <= 40)
+    const target = detectNearestReference(refs, 20, 45);
+    expect(target?.grantha_id).toBe("vishnu-purana");
+  });
+
+  it("ignores citations beyond max distance", () => {
+    const refs = [
+      {
+        start: 100,
+        end: 115,
+        grantha_id: "vishnu-purana",
+        display_text: "वि.पु. १.२.१०",
+      },
+    ];
+    // Selection at 0..10, citation starts at 100 (distance 90 > 40)
+    const target = detectNearestReference(refs, 0, 10, 40);
+    expect(target).toBeNull();
   });
 });
