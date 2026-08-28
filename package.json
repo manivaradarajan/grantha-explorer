@@ -5,6 +5,8 @@
   "scripts": {
     "postinstall": "sh scripts/hooks/install.sh",
     "dev": "tsx scripts/generate-granthas-json.ts && next dev -p $(node scripts/next-dev-port.mjs)",
+    "review:server": "node scripts/review-server.mjs",
+    "review:dev": "node scripts/review-dev.mjs",
     "prebuild": "tsx scripts/generate-granthas-json.ts && npm run validate:data && npm run validate:integrity",
     "build": "next build",
     "lint": "eslint",

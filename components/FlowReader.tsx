@@ -38,7 +38,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
-import { renderCommentaryWithReferences, renderMulaWithReferences } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences, type ReviewMarkSpec } from "./renderCommentary";
 import { CitationPanelHost, type SourceHighlight } from "./CitationPanel";
 
 interface FlowReaderProps {
@@ -75,6 +75,9 @@ interface FlowReaderProps {
   /** Per-grantha target metadata for the edition-aware link gate. */
   granthaById: Record<string, { editions?: { edition_id: string }[]; default_school?: string }>;
   granthaIdToDevanagariTitle: Record<string, string>;
+  /** Edit mode: review marks per passage ref, painted on the reading surface
+   *  (see ReviewMarkSpec in renderCommentary). Absent in normal reading. */
+  reviewMarksByRef?: Record<string, ReviewMarkSpec[]>;
 }
 
 const FONT_SCALE_MIN = 0.75;
@@ -129,6 +132,7 @@ export default function FlowReader({
   availableGranthaIds,
   granthaById,
   granthaIdToDevanagariTitle,
+  reviewMarksByRef,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -701,6 +705,10 @@ export default function FlowReader({
   }, []);
 
   const handleVerseClick = (ref: string) => {
+    const sel = typeof window !== "undefined" ? window.getSelection() : null;
+    if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) {
+      return;
+    }
     if (ref !== selectedRef) {
       justClicked.current = true;
       onVerseSelect(ref);
@@ -1077,6 +1085,7 @@ export default function FlowReader({
                                     },
                                     undefined,
                                     pVerses,
+                                    reviewMarksByRef?.[passage.ref],
                                   )}
                                 </div>
                               </div>
@@ -1136,6 +1145,7 @@ export default function FlowReader({
                               },
                               passage.verse_quotes,
                               (passage as { verses?: { start: number; end: number }[] }).verses,
+                              reviewMarksByRef?.[passage.ref],
                             )}
                             {!isProseMula && (
                               <>{" "}॥ {toDevanagariNumerals(passage.ref)} ॥</>

@@ -1,0 +1,431 @@
+"use client";
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { Reference } from "@/lib/data";
+import {
+  ReviewComment,
+  ReviewCommentType,
+  CitationCandidate,
+  fetchCandidates,
+} from "./reviewServer";
+import { selectionToOffset, SelectionMappingError } from "@/lib/selectionToOffset";
+import { locateSnippet } from "@/lib/reviewAnchor";
+
+/** Resolve the passage's raw devanagari for a given passage ref. */
+export interface PassageTextResolver {
+  (passageRef: string): string | undefined;
+}
+
+interface ReviewSelectionToolbarProps {
+  /** Raw text of the current passage (the one the selection is inside). */
+  passageRaw: string;
+  passageRef: string;
+  /** The citing grantha (to filter self-hits from corpus search). */
+  currentGranthaId?: string;
+  /** The passage's references, for auto-detecting the target of a citation-fix. */
+  references?: Reference[];
+  /** Existing comment being edited, if any. */
+  editing?: ReviewComment;
+  /** Persist a new comment (returns its id) or an update to an existing one. */
+  onSave: (comment: ReviewComment) => void | Promise<void>;
+  /** Dismiss the toolbar without saving. */
+  onCancel?: () => void;
+  /** The DOM range the toolbar is anchored to (selection or mark). */
+  anchorRange: Range;
+  /** Raw offsets of the anchored selection (when already known). */
+  preset?: { start: number; end: number; snippet: string };
+}
+
+const TYPES: ReviewCommentType[] = ["note", "citation-fix", "quote-locate"];
+
+/** Elements that must receive focus/input — a mousedown on them must not be
+ *  prevented (which would block typing/clicking). Clicks on the non-interactive
+ *  chrome (snippet, labels) keep selection-preservation via preventDefault. */
+const isInteractive = (el: EventTarget | null): boolean => {
+  if (!(el instanceof Element)) return false;
+  return !!el.closest("input, textarea, select, button, a");
+};
+
+/** Floating "add / edit review comment" toolbar, anchored below the selection. */
+export function ReviewSelectionToolbar({
+  passageRaw,
+  passageRef,
+  currentGranthaId,
+  references,
+  editing,
+  onSave,
+  onCancel,
+  anchorRange,
+  preset,
+}: ReviewSelectionToolbarProps) {
+  const [type, setType] = useState<ReviewCommentType>(
+    editing?.type ?? "note",
+  );
+  const [body, setBody] = useState(editing?.body ?? "");
+  const [locator, setLocator] = useState(
+    editing?.suggested_fix?.locator ?? "",
+  );
+  const [offset, setOffset] = useState(
+    preset ?? { start: 0, end: 0, snippet: "" },
+  );
+  const [mappingError, setMappingError] = useState<string | null>(null);
+  // Citation-fix candidates.
+  const [candidates, setCandidates] = useState<CitationCandidate[]>([]);
+  const [candidatesState, setCandidatesState] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >("idle");
+  const [selectedCandidate, setSelectedCandidate] = useState<CitationCandidate | null>(null);
+  const [detectedTarget, setDetectedTarget] = useState<{ grantha_id: string; edition?: string; locator?: string; display_text?: string } | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const reposition = () => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = anchorRange.getBoundingClientRect?.();
+    if (!rect || (rect.width === 0 && rect.height === 0)) return;
+    const pad = 8;
+    const margin = 8;
+    const w = el.offsetWidth || 360;
+    const h = el.offsetHeight || 280;
+    const left = Math.max(margin, Math.min(rect.left, window.innerWidth - w - margin));
+    const belowY = rect.bottom + pad;
+    const aboveY = rect.top - h - pad;
+    const fitsBelow = belowY + h <= window.innerHeight - margin;
+    const fitsAbove = aboveY >= margin;
+    const top = fitsBelow
+      ? belowY
+      : fitsAbove
+        ? aboveY
+        : Math.max(margin, Math.min(belowY, window.innerHeight - h - margin));
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+  };
+
+  // Anchor the toolbar just below the selection rectangle, flipping above it
+  // near the viewport bottom so it never clips off-screen. No-op when the
+  // Range lacks layout support (e.g. jsdom tests).
+  useLayoutEffect(() => {
+    reposition();
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(reposition);
+    ro.observe(el);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anchorRange, candidatesState, candidates.length]);
+
+  // Map the anchor selection to raw offsets on mount (unless preset).
+  useEffect(() => {
+    if (preset) return;
+    try {
+      const r = selectionToOffset({
+        range: anchorRange,
+        passageRaw,
+        annotatedSelector: "[data-offset-start]",
+      });
+      setOffset({ start: r.start, end: r.end, snippet: r.snippet });
+    } catch (e) {
+      if (e instanceof SelectionMappingError) {
+        // Fall back to a smoothed anchor: locate the snippet in the passage so
+        // a valid non-negative offset is still sent (the schema requires
+        // start >= 0). The snippet is the primary anchor; offsets are hints.
+        // Use quote-aware locate so `“पहतपाप्मा”` finds `पहतपाप्मा`.
+        const text = anchorRange.toString().trim();
+        if (text) {
+          const loc = locateSnippet(passageRaw, text);
+          setOffset(
+            loc
+              ? { start: loc.start, end: loc.end, snippet: text }
+              : { start: 0, end: 0, snippet: text },
+          );
+        } else {
+          setMappingError(e.message);
+        }
+      } else {
+        setMappingError(e instanceof Error ? e.message : String(e));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-detect the target of a citation-fix: the reference{} nearest to the
+  // selection. Handles three patterns: the selection overlaps a reference, sits
+  // immediately before a trailing citation (quote → (citation)), or sits in the
+  // lookback after a preceding one.
+  useEffect(() => {
+    if (type !== "citation-fix" || offset.snippet.length === 0 || !references) {
+      setDetectedTarget(null);
+      return;
+    }
+    const selStart = Math.max(0, offset.start);
+    const selEnd = Math.max(offset.start, offset.end);
+    let best: Reference | null = null;
+    let bestDist = Infinity;
+    for (const r of references) {
+      // distance from the selection to the reference span (0 when overlapping)
+      let dist: number;
+      if (r.start < selEnd && r.end > selStart) {
+        dist = 0;
+      } else if (r.end <= selStart) {
+        dist = selStart - r.end; // citation fully before selection
+      } else {
+        dist = r.start - selEnd; // citation starts after selection
+      }
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = r;
+      }
+    }
+    // Require the nearest reference to be reasonably close (within the literal
+    // "lookback/forward" window) so a far-away citation isn't grabbed.
+    const MAX = 40;
+    if (best && best.grantha_id && bestDist <= MAX) {
+      setDetectedTarget({
+        grantha_id: best.grantha_id,
+        edition: best.edition_id ?? undefined,
+        locator: best.locator ?? undefined,
+        display_text: best.display_text,
+      });
+    } else {
+      setDetectedTarget(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, offset.start, offset.end, references]);
+
+  // Fetch candidates in citation-fix: scan the detected target grantha (if a
+  // reference is near the selection), otherwise search the whole corpus so the
+  // reviewer can locate a quote that has no citation yet.
+  useEffect(() => {
+    if (type !== "citation-fix" || offset.snippet.length === 0) {
+      setCandidates([]);
+      setCandidatesState("idle");
+      return;
+    }
+    let cancelled = false;
+    setCandidatesState("loading");
+    setSelectedCandidate(null);
+    const req = detectedTarget
+      ? {
+          target: detectedTarget.grantha_id,
+          edition: detectedTarget.edition,
+          needle: offset.snippet,
+          exclude_locator: detectedTarget.locator,
+          min_quality: 0.5,
+        }
+      : { needle: offset.snippet, min_quality: 0.5, corpus: true };
+    fetchCandidates(req)
+      .then((res) => {
+        if (cancelled) return;
+        let list: CitationCandidate[] = res.candidates ?? [];
+        // Hide self-match (quoting passage itself) and low-quality noise that
+        // looks weird location-wise (e.g. vedarthasangraha 207/208 at 0.51).
+        list = list.filter((c) => c.quality >= 0.65);
+        if (currentGranthaId) {
+          list = list.filter(
+            (c) => !(c.grantha_id === currentGranthaId && c.ref === passageRef),
+          );
+        }
+        setCandidates(list);
+        setCandidatesState("ready");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setCandidates([]);
+        setCandidatesState("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [type, detectedTarget, offset.snippet, currentGranthaId, passageRef]);
+
+  // Escape closes the popup without saving.
+  useEffect(() => {
+    if (!onCancel) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        onCancel();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [onCancel]);
+
+  // Saving needs some substance: a comment body, or (for citation-fix) a
+  // selected candidate / typed locator. A candidate choice alone is enough to
+  // save — no body needed.
+  const hasSubstance =
+    body.trim().length > 0 ||
+    (type === "citation-fix" && (selectedCandidate !== null || locator.trim().length > 0));
+  const canSave =
+    hasSubstance &&
+    offset.snippet.trim().length > 0 &&
+    !mappingError;
+
+  const handleSave = async () => {
+    if (!canSave) return;
+    setSaveError(null);
+    // citation-fix: prefer a selected candidate; else the typed-custom locator
+    // (if any); else inherit the editing comment's suggested_fix.
+    let suggested_fix = editing?.suggested_fix;
+    if (type === "citation-fix") {
+      const customLocator = locator.trim();
+      if (selectedCandidate) {
+        suggested_fix = {
+          grantha_id: selectedCandidate.grantha_id,
+          display_text: selectedCandidate.ref,
+          locator: selectedCandidate.ref,
+        };
+      } else if (customLocator) {
+        suggested_fix = {
+          grantha_id: detectedTarget?.grantha_id,
+          display_text: customLocator,
+          locator: customLocator,
+        };
+      }
+    }
+    const base: ReviewComment = {
+      id: editing?.id ?? crypto.randomUUID(),
+      type,
+      status: editing?.status ?? "open",
+      passage_ref: passageRef,
+      passage_type: "main",
+      anchor: {
+        // Defensively clamp: the schema requires start >= 0 and end >= start.
+        // `offset` is always non-negative after the smoothed fallback, but this
+        // guarantees a bad value can never reach the server.
+        start: Math.max(0, Math.floor(offset.start)),
+        end: Math.max(Math.max(0, Math.floor(offset.start)), Math.floor(offset.end)),
+        line: Math.max(1, lineOf(anchorRange)),
+        snippet: offset.snippet,
+      },
+      body: body.trim(),
+      suggested_fix,
+      created_at: editing?.created_at ?? new Date().toISOString(),
+    };
+    try {
+      await onSave(base);
+    } catch (e) {
+      const msg =
+        e instanceof Error
+          ? e.message
+          : "Failed to save the comment.";
+      setSaveError(msg);
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="review-toolbar"
+      role="dialog"
+      aria-label="Add review comment"
+      onMouseDown={(e) => {
+        // Keep the page selection alive when clicking non-interactive chrome,
+        // but never block focus on the fields/buttons (that froze the popup).
+        if (!isInteractive(e.target)) e.preventDefault();
+      }}
+    >
+      <div className="review-toolbar-snippet">{offset.snippet || "(empty selection)"}</div>
+      <div className="review-toolbar-kinds">
+        {TYPES.map((t) => (
+          <button
+            key={t}
+            className={`review-kind-pill k-${typeOf(t)}${type === t ? " active" : ""}`}
+            onClick={() => setType(t)}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+      {type === "citation-fix" && (
+        <div className="review-candidates">
+          {candidatesState === "loading" ? (
+            <div className="review-candidates-status">Finding candidates…</div>
+          ) : candidatesState === "error" ? (
+            <div className="review-candidates-status review-candidates-error">
+              Candidates unavailable — type below.
+            </div>
+          ) : candidatesState === "ready" && candidates.length > 0 ? (
+            <div className="review-candidates-list">
+              <div className="review-candidates-head">
+                {detectedTarget
+                  ? `in ${detectedTarget.grantha_id}`
+                  : "in corpus"}
+              </div>
+              {candidates.map((c, idx) => (
+                <button
+                  key={`${c.grantha_id}:${c.ref}:${idx}`}
+                  className={`review-candidate${selectedCandidate?.ref === c.ref && selectedCandidate?.grantha_id === c.grantha_id ? " selected" : ""}`}
+                  onClick={() => {
+                    setSelectedCandidate(c);
+                    setLocator(c.ref);
+                  }}
+                >
+                  <span className="review-candidate-ref">{c.ref}</span>
+                  <span className="review-candidate-quality">
+                    {(c.quality * 100).toFixed(0)}%
+                  </span>
+                  <span className="review-candidate-excerpt">{c.excerpt}</span>
+                </button>
+              ))}
+            </div>
+          ) : candidatesState === "ready" ? (
+            <div className="review-candidates-status">No candidates found — type below.</div>
+          ) : null}
+          <div className="review-custom-fix">
+            <input
+              className="review-toolbar-locator"
+              placeholder="…or type your own locator (e.g. 2.121)"
+              value={locator}
+              onChange={(e) => {
+                setLocator(e.target.value);
+                setSelectedCandidate(null);
+              }}
+            />
+          </div>
+        </div>
+      )}
+      <textarea
+        className="review-toolbar-body"
+        placeholder="Comment…"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        autoFocus
+      />
+      {mappingError && (
+        <div className="review-toolbar-error">{mappingError}</div>
+      )}
+      {saveError && <div className="review-toolbar-error">{saveError}</div>}
+      {type !== "citation-fix" && body.trim().length === 0 && (
+        <div className="review-toolbar-hint">
+          {type === "note"
+            ? "Add your note text to save."
+            : "Describe the quote / fix to save."}
+        </div>
+      )}
+      <div className="review-toolbar-actions">
+        {onCancel && (
+          <button className="review-toolbar-cancel" onClick={onCancel}>
+            Cancel
+          </button>
+        )}
+        <button className="review-toolbar-save" disabled={!canSave} onClick={handleSave}>
+          {editing ? "Save changes" : "Save"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const typeOf = (t: ReviewCommentType): string =>
+  t === "citation-fix" ? "fix" : t === "quote-locate" ? "quote" : "note";
+
+const lineOf = (range: Range): number => {
+  const before = document.createRange();
+  before.setStart(range.startContainer, 0);
+  before.setEnd(range.startContainer, range.startOffset);
+  const text = before.toString();
+  return (text.match(/\n/g)?.length ?? 0) + 1;
+};
