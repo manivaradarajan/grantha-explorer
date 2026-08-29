@@ -38,6 +38,16 @@ _SIBLING_GRANTHA_DATA = _EXPLORER_ROOT.parent / "grantha-data"
 _REAL_VEDARTHA = _SIBLING_GRANTHA_DATA / "structured_md" / "vedarthasangraha"
 _EXPLORER_LIBRARY = _EXPLORER_ROOT / "public" / "data" / "library"
 
+
+def _current_vedartha_hash() -> str:
+    """The vedarthasangraha md's current ``validation_hash`` (the real frontmatter
+    is the source of truth; it changes whenever the md is re-hashed)."""
+    md = (_REAL_VEDARTHA / "vedarthasangraha-01.md").read_text(encoding="utf-8")
+    for line in md.splitlines():
+        if line.startswith("validation_hash:"):
+            return line.split(":", 1)[1].strip()
+    raise RuntimeError("validation_hash not found in vedarthasangraha-01.md")
+
 ALLOWED_ORIGIN = "http://localhost:3001"
 FOREIGN_ORIGIN = "https://evil.example"
 
@@ -227,9 +237,7 @@ def test_post_creates_timestamped_session_file_with_source_resolution(server):
     saved = sess["comments"][0]
     # source_file resolved against the REAL md, and hash = its real frontmatter.
     assert saved["source_file"] == "vedarthasangraha-01.md"
-    assert saved["source_hash"] == (
-        "af3cb00c688fc0e26000808495ed4f21d88340268a3e81c8027075401897d360"
-    )
+    assert saved["source_hash"] == _current_vedartha_hash()
     assert saved["part_num"] == 1
     assert saved["id"] == c["id"]
     # File on disk with the timestamped session filename.
@@ -305,16 +313,119 @@ def test_upsert_same_id_updates_in_place(server):
     assert sess["revision"] == before["session"]["revision"] + 1  # one more write
 
 
-def test_patch_status(server):
+def test_list_sessions_lists_rounds(server):
+    srv, _ = server
+    id_a = str(uuid.uuid4())
+    id_b = str(uuid.uuid4())
+    srv.request("POST", _post_path(), _valid_comment(id=id_a))  # round A
+    srv.request("POST", _post_path(), {"session": "new"})  # round B
+    srv.request("POST", _post_path(), _valid_comment(id=id_b))  # in round B
+    status, body = srv.request("GET", "/api/review/files?grantha=vedarthasangraha")
+    assert status == 200
+    sessions = body["sessions"]
+    assert len(sessions) >= 2
+    names = [s["name"] for s in sessions]
+    # Each file has a per-round summary with a revision + counts map.
+    for s in sessions:
+        assert s["name"].endswith(".comments.json")
+        assert set(s["counts"].keys()) == {
+            "open", "fixed", "accepted", "reopened", "dismissed", "deleted",
+        }
+    # The two rounds carry the two distinct comments (across the listing).
+    def round_comments(name):
+        st, b = srv.request(
+            "GET", "/api/review?grantha=vedarthasangraha&file=" + name
+        )
+        assert st == 200
+        return [x["id"] for x in b["session"]["comments"]]
+    found = {id_a, id_b}
+    for name in names:
+        found.difference_update(round_comments(name))
+    assert not found, f"comments not recovered from listed rounds: {found}"
+
+
+def test_get_specific_round_via_file_param(server):
+    srv, _ = server
+    cid_a = str(uuid.uuid4())
+    status, body = srv.request("POST", _post_path(), _valid_comment(id=cid_a))
+    assert status == 200
+    status, body = srv.request("GET", "/api/review/files?grantha=vedarthasangraha")
+    assert status == 200
+    # Find the (only) round that contains cid_a.
+    target_name = None
+    for s in body["sessions"]:
+        st, b = srv.request(
+            "GET", "/api/review?grantha=vedarthasangraha&file=" + s["name"]
+        )
+        assert st == 200
+        ids = [x["id"] for x in b["session"]["comments"]]
+        if cid_a in ids:
+            target_name = s["name"]
+            break
+    assert target_name, "comment not found in any listed round"
+    # Load that specific round.
+    status, body = srv.request(
+        "GET", "/api/review?grantha=vedarthasangraha&file=" + target_name
+    )
+    assert status == 200
+    ids = [x["id"] for x in body["session"]["comments"]]
+    assert cid_a in ids
+    # An unknown round name is a 404.
+    status, body = srv.request(
+        "GET",
+        "/api/review?grantha=vedarthasangraha&file=nonexistent-round.comments.json",
+    )
+    assert status == 404
+
+
+def test_patch_status_accept_chain(server):
+    """Accept requires a prior fix: open → fixed → accepted (the reviewer's
+    two-phase loop). `done` is a legacy alias for accepted."""
     srv, _ = server
     cid = str(uuid.uuid4())
     srv.request("POST", _post_path(), _valid_comment(id=cid))
+    # open → accepted directly is illegal (needs a fix record first).
     status, body = srv.request(
-        "PATCH", _patch_path(), {"id": cid, "status": "done"}
+        "PATCH", _patch_path(), {"id": cid, "status": "accepted"}
+    )
+    assert status == 409
+    # open → fixed (with a fixSummary recorded).
+    status, body = srv.request(
+        "PATCH", _patch_path(), {"id": cid, "status": "fixed", "fixSummary": "6.8.4 → 6.8.7"}
     )
     assert status == 200
     returned = next(x for x in body["session"]["comments"] if x["id"] == cid)
-    assert returned["status"] == "done"
+    assert returned["status"] == "fixed"
+    assert returned["fixes"][0]["summary"] == "6.8.4 → 6.8.7"
+    # fixed → accepted (terminal).
+    status, body = srv.request(
+        "PATCH", _patch_path(), {"id": cid, "status": "accepted"}
+    )
+    assert status == 200
+    returned = next(x for x in body["session"]["comments"] if x["id"] == cid)
+    assert returned["status"] == "accepted"
+    assert returned["accepted_at"]
+
+
+def test_patch_status_fixed_to_reopened_needs_note(server):
+    """A push-back (fixed → reopened) must carry a note, recorded as a follow_up."""
+    srv, _ = server
+    cid = str(uuid.uuid4())
+    srv.request("POST", _post_path(), _valid_comment(id=cid))
+    srv.request(
+        "PATCH", _patch_path(), {"id": cid, "status": "fixed", "fixSummary": "fix"}
+    )
+    # Missing note → 422.
+    status, body = srv.request("PATCH", _patch_path(), {"id": cid, "status": "reopened"})
+    assert status == 422
+    # With note → reopened + follow_up recorded.
+    status, body = srv.request(
+        "PATCH", _patch_path(), {"id": cid, "status": "reopened", "note": "still wrong"}
+    )
+    assert status == 200
+    returned = next(x for x in body["session"]["comments"] if x["id"] == cid)
+    assert returned["status"] == "reopened"
+    assert returned["follow_ups"][0]["note"] == "still wrong"
 
 
 def test_patch_status_deleted_soft_delete(server):
@@ -589,7 +700,7 @@ def test_drift_detected_when_source_changes(tmp_path):
         text = md.read_text(encoding="utf-8")
         md.write_text(
             text.replace(
-                "validation_hash: af3cb00c688fc0e26000808495ed4f21d88340268a3e81c8027075401897d360",
+                "validation_hash: " + _current_vedartha_hash(),
                 "validation_hash: " + "0" * 64,
             ),
             encoding="utf-8",

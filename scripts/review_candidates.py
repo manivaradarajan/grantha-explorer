@@ -157,6 +157,7 @@ def main(argv: list[str] | None = None) -> int:
                 "ref": c.ref,
                 "quality": round(c.quality, 3),
                 "excerpt": c.excerpt,
+                "is_current": bool(getattr(c, "is_current", False)),
             }
             for c in candidates
         ],

@@ -14,6 +14,8 @@
  *
  * Endpoints:
  *   GET    /api/review?grantha=<id>   → latest session + drift state
+ *   GET    /api/review?grantha=<id>&file=<name> → a specific round
+ *   GET    /api/review/files?grantha=<id> → list rounds (round picker)
  *   POST   /api/review                → upsert a comment, or {session:"new"}
  *   PATCH  /api/review/status         → {id, status}
  *   OPTIONS /api/review               → CORS preflight
@@ -76,7 +78,10 @@ const ALLOWED_ORIGINS = new Set([
 const GRANTHA_ID_RE = /^[a-z0-9-]+$/;
 const LOCATOR_RE = /^[0-9]+(?:\.[0-9]+)*$/;
 const COMMENT_TYPES = new Set(["citation-fix", "quote-locate", "note"]);
-const COMMENT_STATUSES = new Set(["open", "done", "dismissed", "deleted"]);
+// `done` is the legacy alias for `accepted` (in-flight old sessions / old
+// clients); it is accepted on write but canonicalized to `accepted` when the
+// transition runs.
+const COMMENT_STATUSES = new Set(["open", "fixed", "accepted", "reopened", "dismissed", "deleted", "done"]);
 const PASSAGE_TYPES = new Set(["main", "prefatory", "concluding"]);
 
 const UUID_RE =
@@ -264,7 +269,7 @@ function validateComment(c) {
   }
   if (!isNonEmptyStr(c.id) || !UUID_RE.test(c.id)) err("id", "must be a UUID v4 string");
   if (!COMMENT_TYPES.has(c.type)) err("type", "must be one of citation-fix, quote-locate, note");
-  if (!COMMENT_STATUSES.has(c.status)) err("status", "must be one of open, done, dismissed, deleted");
+  if (!COMMENT_STATUSES.has(c.status)) err("status", "must be one of open, fixed, accepted, reopened, dismissed, deleted, done");
   if (!PASSAGE_TYPES.has(c.passage_type)) err("passage_type", "must be main, prefatory, or concluding");
   if (!isNonEmptyStr(c.passage_ref)) err("passage_ref", "must be a non-empty string");
   if (c.kind !== undefined && !isNonEmptyStr(c.kind)) err("kind", "must be a non-empty string");
@@ -346,28 +351,67 @@ function recomputeSources(session) {
 
 async function latestSessionOnDisk(cfg, granthaId) {
   const dir = reviewsDirFor(cfg, granthaId);
+  const files = await listSessionFiles(dir, granthaId);
+  if (files.length === 0) return null;
+  const file = path.join(dir, files[files.length - 1]);
+  const session = JSON.parse(await fsp.readFile(file, "utf-8"));
+  return { file, session };
+}
+
+/** Load the session to write into: always the latest round from DISK (never a
+ *  stale in-memory copy, which would clobber an external edit). Creates a fresh
+ *  session file when none exists. Sets it as the active session. */
+async function loadActiveSession(cfg, granthaId) {
+  const disk = await latestSessionOnDisk(cfg, granthaId);
+  let file;
+  let session;
+  if (disk) {
+    ({ file, session } = disk);
+  } else {
+    session = newSession(granthaId);
+    file = path.join(reviewsDirFor(cfg, granthaId), sessionFileName(granthaId, reviewsDirFor(cfg, granthaId)));
+  }
+  activeSessions.set(granthaId, { file, session });
+  return { file, session };
+}
+
+/** The ``*.comments.json`` files for a grantha's review dir, sorted oldest →
+ *  newest. mtime is the primary key; ties (e.g. two rounds written in the same
+ *  millisecond) break toward the lexicographically-LATER filename (which
+ *  encodes a later timestamp) so the newest round wins deterministically. */
+async function listSessionFiles(dir, granthaId) {
   let files;
   try {
     files = (await fsp.readdir(dir)).filter((f) =>
       f.startsWith(`${granthaId}.`) && f.endsWith(".comments.json"),
     );
   } catch {
-    return null;
+    return [];
   }
-  if (files.length === 0) return null;
-  // Name sort is unreliable: a same-second suffixed name ("…-HHMMSS-abc") sorts
-  // BEFORE its base ("…-HHMMSS.") because '-' < '.', so pick by mtime.
   files.sort((a, b) => {
-    try {
-      return fsp.statSync(path.join(dir, a)).mtimeMs -
-             fsp.statSync(path.join(dir, b)).mtimeMs;
-    } catch {
-      return a.localeCompare(b);
-    }
+    const ma = (() => { try { return fsp.statSync(path.join(dir, a)).mtimeMs; } catch { return NaN; } })();
+    const mb = (() => { try { return fsp.statSync(path.join(dir, b)).mtimeMs; } catch { return NaN; } })();
+    if (!Number.isNaN(ma) && !Number.isNaN(mb) && ma !== mb) return ma - mb;
+    return b.localeCompare(a); // newer timestamp name sorts first when mtimes tie/unknown
   });
-  const file = path.join(dir, files[files.length - 1]);
-  const session = JSON.parse(await fsp.readFile(file, "utf-8"));
-  return { file, session };
+  return files;
+}
+
+/** Count active comments by status for a session (for the round picker). */
+function sessionCounts(session) {
+  const counts = {
+    open: 0,
+    fixed: 0,
+    accepted: 0,
+    reopened: 0,
+    dismissed: 0,
+    deleted: 0,
+  };
+  for (const c of session.comments || []) {
+    const s = c.status === "done" ? "accepted" : c.status;
+    if (s in counts) counts[s] += 1;
+  }
+  return counts;
 }
 
 async function writeSession(cfg, granthaId, file, session) {
@@ -490,17 +534,49 @@ function buildGetResponse(cfg, granthaId, session, sessionFile) {
   };
 }
 
-async function handleGet(cfg, granthaId) {
-  const active = activeSessions.get(granthaId);
+async function handleGet(cfg, granthaId, file) {
+  // Always (re)read from disk so an external edit to the session file (e.g. an
+  // agent fixing anchor offsets) is never clobbered by a stale in-memory copy.
   let session = null;
-  let file = null;
-  if (active) {
-    ({ session, file } = active);
+  let filePath = null;
+  if (file) {
+    const dir = reviewsDirFor(cfg, granthaId);
+    const files = await listSessionFiles(dir, granthaId);
+    const match = files.find((f) => f === file);
+    if (!match) throw new HttpError(404, `no review session file named ${file}`);
+    filePath = path.join(dir, match);
+    session = JSON.parse(await fsp.readFile(filePath, "utf-8"));
+    activeSessions.set(granthaId, { file: filePath, session });
   } else {
     const disk = await latestSessionOnDisk(cfg, granthaId);
-    if (disk) ({ session, file } = disk);
+    if (disk) ({ file: filePath, session } = disk);
   }
-  return buildGetResponse(cfg, granthaId, session, file);
+  return buildGetResponse(cfg, granthaId, session, filePath);
+}
+
+/** List the review-session files (rounds) for a grantha, newest first, with
+ *  summary counts — the data behind the round picker. Read-only. */
+async function handleListSessions(cfg, granthaId) {
+  const dir = reviewsDirFor(cfg, granthaId);
+  const files = await listSessionFiles(dir, granthaId);
+  const listed = [];
+  for (const f of files) {
+    let session;
+    try {
+      session = JSON.parse(await fsp.readFile(path.join(dir, f), "utf-8"));
+    } catch {
+      continue;
+    }
+    listed.push({
+      name: f,
+      started_at: session.session_started_at || null,
+      updated_at: session.updated_at || null,
+      revision: session.revision ?? 0,
+      counts: sessionCounts(session),
+    });
+  }
+  // Newest first for the picker's default selection.
+  return { sessions: listed.reverse() };
 }
 
 async function handlePostComment(cfg, granthaId, comment) {
@@ -508,20 +584,9 @@ async function handlePostComment(cfg, granthaId, comment) {
     const source = resolveSource(cfg, granthaId, comment);
     const resolved = { ...comment, ...source };
 
-    let active = activeSessions.get(granthaId);
     let file;
     let session;
-    if (active) {
-      ({ file, session } = active);
-    } else {
-      const disk = await latestSessionOnDisk(cfg, granthaId);
-      if (disk) {
-        ({ file, session } = disk);
-      } else {
-        session = newSession(granthaId);
-        file = path.join(reviewsDirFor(cfg, granthaId), sessionFileName(granthaId, reviewsDirFor(cfg, granthaId)));
-      }
-    }
+    ({ file, session } = await loadActiveSession(cfg, granthaId));
 
     const existingIdx = session.comments.findIndex((x) => x.id === comment.id);
     const prevHash =
@@ -566,7 +631,7 @@ async function handlePatchStatus(cfg, granthaId, body) {
     }
     if (!body || !COMMENT_STATUSES.has(body.status)) {
       fields.status =
-        "must be one of open, done, dismissed, deleted";
+        "must be one of open, fixed, accepted, reopened, dismissed, deleted, done";
     }
     if (Object.keys(fields).length > 0) {
       throw new HttpError(
@@ -575,19 +640,71 @@ async function handlePatchStatus(cfg, granthaId, body) {
         fields,
       );
     }
-    let active = activeSessions.get(granthaId);
     let file;
     let session;
-    if (active) {
-      ({ file, session } = active);
-    } else {
-      const disk = await latestSessionOnDisk(cfg, granthaId);
-      if (!disk) throw new HttpError(422, "no review session exists for this grantha");
-      ({ file, session } = disk);
-    }
+    ({ file, session } = await loadActiveSession(cfg, granthaId));
     const target = session.comments.find((x) => x.id === body.id);
     if (!target) throw new HttpError(422, `no comment with id ${body.id}`);
-    target.status = body.status;
+
+    // Canonicalize the legacy `done` alias and enforce the lifecycle state
+    // machine (mirrors grantha_data.review_comments).
+    const from = target.status === "done" ? "accepted" : target.status;
+    const to = body.status === "done" ? "accepted" : body.status;
+    const legal = {
+      open: ["fixed", "dismissed", "deleted"],
+      fixed: ["accepted", "reopened", "open", "dismissed", "deleted"],
+      reopened: ["fixed", "accepted", "open", "dismissed", "deleted"],
+      accepted: ["open", "dismissed", "deleted"],
+      dismissed: ["open", "deleted"],
+      deleted: ["open"], // soft-delete is recoverable
+    };
+    if (!(legal[from] ?? []).includes(to)) {
+      throw new HttpError(409, `illegal transition ${from} → ${to}`);
+    }
+    // Invariant: `accepted` (and the reopened→accepted shortcut) requires a
+    // prior fix record.
+    if (to === "accepted") {
+      const fixes = Array.isArray(target.fixes) ? target.fixes : [];
+      if (fixes.length === 0) {
+        throw new HttpError(409, "cannot accept a comment with no fix record");
+      }
+    }
+    if (to === "fixed") {
+      const summary = isNonEmptyStr(body.fixSummary)
+        ? body.fixSummary.trim()
+        : body.summary ? String(body.summary).trim() : "";
+      if (!summary) {
+        throw new HttpError(422, "mark fixed requires a non-blank fix summary", {
+          fixSummary: "must be a non-empty string",
+        });
+      }
+      const fix = {
+        applied_by: "reviewer",
+        at: nowIso(),
+        summary,
+      };
+      target.fixes = target.fixes ?? [];
+      target.fixes.push(fix);
+      delete target.accepted_at; // a new round starts fresh acceptance
+    }
+    if (to === "reopened") {
+      const note = isNonEmptyStr(body.note) ? body.note.trim() : "";
+      if (!note) {
+        throw new HttpError(422, "needs work requires a non-blank note", {
+          note: "must be a non-empty string",
+        });
+      }
+      target.follow_ups = target.follow_ups ?? [];
+      target.follow_ups.push({ note, at: nowIso(), by: "reviewer" });
+    }
+    if (to === "open") {
+      delete target.accepted_at; // reset clears the round's acceptance
+    }
+    if (to === "accepted") {
+      target.accepted_at = nowIso();
+    }
+    target.status = to;
+    target.updated_at = nowIso();
     await writeSession(cfg, granthaId, file, session);
     activeSessions.set(granthaId, { file, session });
     return { session };
@@ -696,7 +813,8 @@ function route(cfg, req, res) {
   if (
     pathname !== "/api/review" &&
     pathname !== "/api/review/status" &&
-    pathname !== "/api/review/candidates"
+    pathname !== "/api/review/candidates" &&
+    pathname !== "/api/review/files"
   ) {
     // Friendly landing page: this server is the edit-mode API, not the app.
     // A reviewer landing here (e.g. :4321/#...?m=edit) is on the wrong port.
@@ -750,8 +868,17 @@ function route(cfg, req, res) {
       throw new HttpError(422, `no structured_md/${granthaId} under source-root`);
     }
 
+    if (pathname === "/api/review/files") {
+      if (req.method !== "GET") {
+        throw new HttpError(405, "method not allowed");
+      }
+      const result = await handleListSessions(cfg, granthaId);
+      sendJson(res, 200, result, cors);
+      return;
+    }
+
     if (req.method === "GET") {
-      const body = await handleGet(cfg, granthaId);
+      const body = await handleGet(cfg, granthaId, url.searchParams.get("file") || undefined);
       sendJson(res, 200, body, cors);
       return;
     }
