@@ -93,11 +93,20 @@ export function resolveAnchor(
   return locateSnippet(raw, snippet);
 }
 
+export type ReviewCommentStatus =
+  | "open"
+  | "fixed"
+  | "accepted"
+  | "reopened"
+  | "dismissed"
+  | "deleted"
+  | "done"; // legacy alias for accepted (read-only; never newly emitted)
+
 export interface ReviewCommentAnchorInput {
   id: string;
   passage_ref: string;
   type: "citation-fix" | "quote-locate" | "note";
-  status: "open" | "done" | "dismissed" | "deleted";
+  status: ReviewCommentStatus;
   anchor: { start: number; end: number; snippet: string };
   hash_changed?: boolean;
 }
@@ -106,7 +115,7 @@ export interface ResolvedReviewMark {
   start: number;
   end: number;
   type: "citation-fix" | "quote-locate" | "note";
-  status: "open" | "done" | "dismissed" | "deleted";
+  status: Exclude<ReviewCommentStatus, "done">;
   drift?: boolean;
   commentId: string;
   onClick?: (commentId: string) => void;
@@ -136,7 +145,7 @@ export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
       start: loc.start,
       end: loc.end,
       type: c.type,
-      status: c.status,
+      status: c.status === "done" ? "accepted" : c.status,
       drift: Boolean(c.hash_changed),
       commentId: c.id,
       onClick: onMarkClick,

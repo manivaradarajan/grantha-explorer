@@ -7,8 +7,27 @@
  */
 
 export type ReviewCommentType = "citation-fix" | "quote-locate" | "note";
-export type ReviewStatus = "open" | "done" | "dismissed" | "deleted";
+
+// Lifecycle statuses live in lib/reviewAnchor.ts (the single source); re-export
+// here so reviewServer callers don't import two unions.
+import { ReviewCommentStatus as ReviewStatus } from "@/lib/reviewAnchor";
+export type { ReviewStatus };
+
 export type PassageType = "main" | "prefatory" | "concluding";
+
+/** A fixed round's applied-fix record (agent or reviewer self-fix). */
+export interface ReviewFixRecord {
+  applied_by: string;
+  at: string;
+  summary: string;
+}
+
+/** A reviewer push-back record (follow-up comment). */
+export interface ReviewFollowUp {
+  note: string;
+  at: string;
+  by: string;
+}
 
 export interface ReviewAnchor {
   start: number;
@@ -44,6 +63,9 @@ export interface ReviewComment {
   reference?: ReviewReference;
   body: string;
   suggested_fix?: ReviewSuggestedFix;
+  fixes?: ReviewFixRecord[];
+  follow_ups?: ReviewFollowUp[];
+  accepted_at?: string;
   source_file?: string;
   part_num?: number;
   source_hash?: string;
@@ -141,11 +163,38 @@ async function request<T>(
 
 export function fetchSession(
   granthaId: string,
+  file?: string,
 ): Promise<ReviewGetResponse> {
-  return request<ReviewGetResponse>(
+  const params = new URLSearchParams({ grantha: granthaId });
+  if (file) params.set("file", file);
+  return request<ReviewGetResponse>("GET", `/api/review?${params.toString()}`);
+}
+
+/** A round's summary card for the picker (one per comment file). */
+export interface ReviewRoundSummary {
+  name: string;
+  started_at?: string | null;
+  updated_at?: string | null;
+  revision: number;
+  counts: {
+    open: number;
+    fixed: number;
+    accepted: number;
+    reopened: number;
+    dismissed: number;
+    deleted: number;
+  };
+}
+
+/** List the review rounds (comment files) for a grantha, newest first. */
+export async function fetchSessions(
+  granthaId: string,
+): Promise<ReviewRoundSummary[]> {
+  const res = await request<{ sessions: ReviewRoundSummary[] }>(
     "GET",
-    `/api/review?grantha=${encodeURIComponent(granthaId)}`,
+    `/api/review/files?grantha=${encodeURIComponent(granthaId)}`,
   );
+  return res.sessions ?? [];
 }
 
 export async function upsertComment(
@@ -160,15 +209,24 @@ export async function upsertComment(
   return res;
 }
 
+/** PATCH body for a status transition. ``note`` is required for a push-back
+ *  (fixed → reopened); ``fixSummary`` is required for a reviewer self-fix
+ *  (open/reopened → fixed). */
+export interface SetCommentStatusRequest {
+  id: string;
+  status: ReviewStatus;
+  note?: string;
+  fixSummary?: string;
+}
+
 export async function setCommentStatus(
   granthaId: string,
-  id: string,
-  status: ReviewStatus,
+  req: SetCommentStatusRequest,
 ): Promise<{ session: ReviewSession }> {
   return request<{ session: ReviewSession }>(
     "PATCH",
     `/api/review/status?grantha=${encodeURIComponent(granthaId)}`,
-    { id, status },
+    req,
   );
 }
 
@@ -188,6 +246,8 @@ export interface CitationCandidate {
   ref: string;
   quality: number;
   excerpt: string;
+  /** True when this is the already-cited verse (the reviewer is verifying it). */
+  is_current?: boolean;
 }
 
 export interface CandidateRequest {

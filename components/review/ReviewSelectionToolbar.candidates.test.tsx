@@ -155,3 +155,96 @@ describe("ReviewSelectionToolbar candidates submenu", () => {
     unmount();
   });
 });
+
+describe("ReviewSelectionToolbar candidates — current + corpus fallback", () => {
+  it("renders a 'current' badge on the already-cited verse", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+        if (url.endsWith("/api/review/candidates")) {
+          return new Response(
+            JSON.stringify({
+              candidates: [
+                { grantha_id: "mundaka-upanishad", edition_id: "mundaka-upanishad", ref: "3.2.3", quality: 1.0, excerpt: "नायमात्मा प्रवचनेन", is_current: true },
+                { grantha_id: "mundaka-upanishad", edition_id: "mundaka-upanishad", ref: "3.2.4", quality: 0.52, excerpt: "नायमात्मा बलहीनेन" },
+              ],
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } },
+          );
+        }
+        return new Response(JSON.stringify({ session: null, current_sources: {}, has_changed: false }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }),
+    );
+    // A citation-fix with a detectable reference to mundaka 3.2.3.
+    const refs: Reference[] = [
+      {
+        start: RAW.indexOf("छा. उ. ६.८.४"),
+        end: RAW.indexOf("छा. उ. ६.८.४") + "छा. उ. ६.८.४".length,
+        display_text: "मुण्ड.उ. ३.२.३",
+        grantha_id: "mundaka-upanishad",
+        edition_id: "mundaka-upanishad",
+        locator: "3.2.3",
+        unresolved: false,
+      },
+    ];
+    const { host, unmount } = await renderToolbar(refs);
+    const currentBadge = host.querySelector(".review-candidate-current");
+    expect(currentBadge).not.toBeNull();
+    unmount();
+  });
+
+  it("falls back to a corpus search when only the current candidate survives", async () => {
+    const calls: unknown[] = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+        if (url.endsWith("/api/review/candidates")) {
+          const body = JSON.parse(String(init?.body)) as { corpus?: boolean };
+          calls.push(body);
+          if (body.corpus) {
+            return new Response(
+              JSON.stringify({
+                candidates: [
+                  { grantha_id: "mundaka-upanishad", edition_id: "mundaka-upanishad", ref: "3.2.3", quality: 1.0, excerpt: "नायमात्मा" },
+                  { grantha_id: "katha-upanishad", edition_id: "katha-upanishad", ref: "1.2.23", quality: 1.0, excerpt: "नायमात्मा" },
+                ],
+              }),
+              { status: 200, headers: { "Content-Type": "application/json" } },
+            );
+          }
+          // Targeted scan returns ONLY the current verse (the old bug hid it).
+          return new Response(
+            JSON.stringify({
+              candidates: [
+                { grantha_id: "mundaka-upanishad", edition_id: "mundaka-upanishad", ref: "3.2.3", quality: 1.0, excerpt: "नायमात्मा", is_current: true },
+              ],
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } },
+          );
+        }
+        return new Response(JSON.stringify({ session: null, current_sources: {}, has_changed: false }), { status: 200, headers: { "Content-Type": "application/json" } });
+      }),
+    );
+    const refs: Reference[] = [
+      {
+        start: RAW.indexOf("छा. उ. ६.८.४"),
+        end: RAW.indexOf("छा. उ. ६.८.४") + "छा. उ. ६.८.४".length,
+        display_text: "मुण्ड.उ. ३.२.३",
+        grantha_id: "mundaka-upanishad",
+        edition_id: "mundaka-upanishad",
+        locator: "3.2.3",
+        unresolved: false,
+      },
+    ];
+    const { host, unmount } = await renderToolbar(refs);
+    // A corpus fallback call was issued.
+    expect(calls.some((c) => (c as { corpus?: boolean }).corpus)).toBe(true);
+    // Both the current Mundaka verse and the Katha alternative appear.
+    const refsShown = [...host.querySelectorAll(".review-candidate-ref")].map((e) => e.textContent);
+    expect(refsShown).toContain("3.2.3");
+    expect(refsShown).toContain("1.2.23");
+    unmount();
+  });
+});

@@ -220,35 +220,58 @@ export function ReviewSelectionToolbar({
     let cancelled = false;
     setCandidatesState("loading");
     setSelectedCandidate(null);
-    const req = detectedTarget
-      ? {
-          target: detectedTarget.grantha_id,
-          edition: detectedTarget.edition,
-          needle: offset.snippet,
-          exclude_locator: detectedTarget.locator,
-          min_quality: 0.5,
-        }
-      : { needle: offset.snippet, min_quality: 0.5, corpus: true };
-    fetchCandidates(req)
-      .then((res) => {
-        if (cancelled) return;
-        let list: CitationCandidate[] = res.candidates ?? [];
-        // Hide self-match (quoting passage itself) and low-quality noise that
-        // looks weird location-wise (e.g. vedarthasangraha 207/208 at 0.51).
-        list = list.filter((c) => c.quality >= 0.65);
+    const run = async (): Promise<void> => {
+      const targeted = detectedTarget
+        ? {
+            target: detectedTarget.grantha_id,
+            edition: detectedTarget.edition,
+            needle: offset.snippet,
+            exclude_locator: detectedTarget.locator,
+            min_quality: 0.5,
+          }
+        : { needle: offset.snippet, min_quality: 0.5, corpus: true };
+      const filter = (cs: CitationCandidate[]): CitationCandidate[] => {
+        let list = cs.filter((c) => c.quality >= 0.65);
         if (currentGranthaId) {
           list = list.filter(
             (c) => !(c.grantha_id === currentGranthaId && c.ref === passageRef),
           );
         }
+        return list;
+      };
+      let list: CitationCandidate[] = [];
+      try {
+        const res = await fetchCandidates(targeted);
+        if (cancelled) return;
+        list = filter(res.candidates ?? []);
+        // Corpus fallback: when a targeted scan leaves only the already-cited
+        // verse (or nothing) above the floor, widen to the whole corpus so the
+        // reviewer still sees the other occurrences of the quote (e.g. a verse
+        // shared by Mundaka and Katha).
+        if (list.length === 0 || list.every((c) => c.is_current)) {
+          const corpus = await fetchCandidates({
+            needle: offset.snippet,
+            min_quality: 0.5,
+            corpus: true,
+          });
+          if (cancelled) return;
+          const merged = [...list];
+          for (const c of corpus.candidates ?? []) {
+            if (!merged.some((m) => m.grantha_id === c.grantha_id && m.ref === c.ref)) {
+              merged.push(c);
+            }
+          }
+          list = filter(merged);
+        }
         setCandidates(list);
         setCandidatesState("ready");
-      })
-      .catch(() => {
+      } catch {
         if (cancelled) return;
         setCandidates([]);
         setCandidatesState("error");
-      });
+      }
+    };
+    void run();
     return () => {
       cancelled = true;
     };
@@ -379,6 +402,9 @@ export function ReviewSelectionToolbar({
                   }}
                 >
                   <span className="review-candidate-ref">{c.ref}</span>
+                  {c.is_current && (
+                    <span className="review-candidate-current">current</span>
+                  )}
                   <span className="review-candidate-quality">
                     {(c.quality * 100).toFixed(0)}%
                   </span>

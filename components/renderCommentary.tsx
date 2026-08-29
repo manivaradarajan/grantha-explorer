@@ -92,7 +92,13 @@ const markClassName = (m: { type: string; status: string; drift?: boolean }): st
   [
     "review-mark",
     m.type === "citation-fix" ? "k-fix" : m.type === "quote-locate" ? "k-quote" : "k-note",
-    m.status !== "open" ? "st-done" : "",
+    // Accepted/done are terminal, reviewable states: keep them readable
+    // (no strikethrough/dim) and mark them with a checkmark.
+    ["accepted", "done"].includes(m.status) ? "st-accepted" : "",
+    // Deleted is shown in red + strikethrough (the destructive colour).
+    m.status === "deleted" ? "st-deleted" : "",
+    // Dismissed = acknowledged, won't fix: dim + strikethrough.
+    m.status === "dismissed" ? "st-done" : "",
     m.drift ? "drift" : "",
   ]
     .filter(Boolean)
@@ -162,21 +168,43 @@ const renderMarkedSegment = (
     if (inHigh) {
       content = <mark className="citation-source-mark">{content}</mark>;
     }
-    const mark = marks.find(({ s, e }) => s === a && e === b);
-    if (mark) {
-      content = (
-        <mark
-          className={markClassName(mark.spec)}
-          data-comment-id={mark.spec.commentId}
-          onClick={
-            mark.spec.onClick
-              ? () => mark.spec.onClick!(mark.spec.commentId)
-              : undefined
-          }
-        >
-          {content}
-        </mark>
-      );
+    const marksAtSpan = marks.filter(({ s, e }) => s === a && e === b);
+    if (marksAtSpan.length > 0) {
+      // Render EVERY comment on this span (two comments — e.g. a citation-fix
+      // and a note — can share identical bounds). Each mark keeps its own
+      // click/select and appends a checkmark when accepted.
+      let inner = content;
+      for (const m of marksAtSpan) {
+        const accepted = m.spec.status === "accepted" || m.spec.status === "done";
+        const mark = (
+          <mark
+            className={markClassName(m.spec)}
+            data-comment-id={m.spec.commentId}
+            onClick={
+              m.spec.onClick
+                ? () => m.spec.onClick!(m.spec.commentId)
+                : undefined
+            }
+          >
+            {inner}
+          </mark>
+        );
+        inner = accepted ? (
+          <Fragment>
+            {mark}
+            <span
+              className="review-mark-check"
+              aria-label="Accepted fix"
+              title="Accepted"
+            >
+              ✓
+            </span>
+          </Fragment>
+        ) : (
+          mark
+        );
+      }
+      content = inner;
     }
     const prefix = a === qs ? "\u201C" : "";
     const suffix = b === qe ? "\u201D" : "";

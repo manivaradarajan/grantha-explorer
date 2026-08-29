@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FlowReader from "@/components/FlowReader";
 import { ReviewModeProvider, useReviewMode } from "./ReviewModeProvider";
 import { ReviewCommentList } from "./ReviewCommentList";
@@ -59,6 +59,20 @@ interface SelectionState {
   preset?: { start: number; end: number; snippet: string };
 }
 
+/** Smoothly scroll ``el`` to the vertical center of its scroll container
+ *  (falling back to ``scrollIntoView`` when no container is found). */
+const scrollElementCentered = (
+  el: HTMLElement,
+  container: HTMLElement | null,
+): void => {
+  if (container) {
+    const top = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    container.scrollTo({ top: top - container.clientHeight / 2, behavior: "smooth" });
+  } else {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
+
 /** Edit-mode reader: the flow reading surface wrapped in review mode. */
 function EditReaderInner(props: EditReaderProps) {
   const { grantha, editionIds, granthas, selectedRef, updateHash, onGranthaChange } = props;
@@ -75,8 +89,24 @@ function EditReaderInner(props: EditReaderProps) {
   const [focusComment, setFocusComment] = useState<string | null>(null);
   const [activePassage, setActivePassage] = useState<string>(selectedRef);
   const [activeComment, setActiveComment] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  const showToast = useCallback((msg: string) => {
+    setToast(msg);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 3500);
+  }, []);
+
+  // Clear the toast timer on unmount.
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    },
+    [],
+  );
 
   const passageTexts = useMemo(() => buildPassageTexts(grantha), [grantha]);
   const passageRefs = useMemo(() => buildPassageRefs(grantha), [grantha]);
@@ -157,13 +187,13 @@ function EditReaderInner(props: EditReaderProps) {
     if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [activePassage, activeComment]);
 
-  // Phrase-level scrollspy: keep the comment for the highlight nearest the
-  // main viewport center highlighted and centered in the right pane, so the
-  // card lines up approximately with its phrase on screen.
+  // Phrase-level scrollspy: update which comment is "active" as the nearest
+  // highlight to the main viewport center. This only toggles the highlight/
+  // card emphasis — it does NOT auto-scroll the right pane, so a reviewer's
+  // manual scroll or click in the list is never fought by the surface scroll.
   useEffect(() => {
     const main = surfaceRef.current?.querySelector(".overflow-y-auto") as HTMLElement | null;
-    const aside = listRef.current;
-    if (!main || !aside || !session) return;
+    if (!main || !session) return;
     let raf = 0;
     let ticking = false;
     const onScroll = () => {
@@ -188,56 +218,61 @@ function EditReaderInner(props: EditReaderProps) {
           }
         }
         if (!best) return;
-        // Only activate if the nearest highlight is actually near the viewport
-        // (within one viewport height). Otherwise clear and fall back to
-        // passage-level highlight.
         if (bestDist > mainRect.height) {
           if (activeComment) setActiveComment(null);
           return;
         }
         const id = best.getAttribute("data-comment-id");
         if (id && id !== activeComment) setActiveComment(id);
-        // Keep the corresponding card centered in the right pane.
-        if (id) {
-          const card = aside.querySelector<HTMLElement>(`[data-comment-id="${id}"]`);
-          if (card) {
-            const cardRect = card.getBoundingClientRect();
-            const asideRect = aside.getBoundingClientRect();
-            const delta = cardRect.top + cardRect.height / 2 - (asideRect.top + asideRect.height / 2);
-            if (Math.abs(delta) > 24) {
-              aside.scrollBy({ top: delta, behavior: "smooth" });
-            }
-          }
-        }
       });
     };
     main.addEventListener("scroll", onScroll, { passive: true });
-    // Run once after marks are painted.
     const t = setTimeout(onScroll, 300);
     return () => {
       main.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
       clearTimeout(t);
     };
-  }, [session, detached, passageTexts, activeComment]);
+  }, [session, activeComment]);
 
-  // Scroll a focused comment's mark into view (clicking list → main).
+  // Scroll a focused comment's mark into view (clicking list → main), and the
+  // card into view in the right pane (clicking a mark → card). When the
+  // comment is detached (its snippet can't be re-located), fall back to
+  // scrolling to its PASSAGE and surface a toast.
   useEffect(() => {
     if (!focusComment) return;
+    const comment = session?.comments.find((c) => c.id === focusComment);
     const container = surfaceRef.current?.querySelector(
       ".overflow-y-auto",
     ) as HTMLElement | null;
     const el = surfaceRef.current?.querySelector(
       `[data-comment-id="${focusComment}"]`,
     ) as HTMLElement | null;
-    if (!el) return;
-    if (container) {
-      const top = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
-      container.scrollTo({ top: top - container.clientHeight / 2, behavior: "smooth" });
-    } else {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    const isDetached = detached.includes(focusComment);
+    if (el) {
+      scrollElementCentered(el, container);
+    } else if (isDetached && comment?.passage_ref) {
+      // No highlight could be rendered for this comment — jump to its passage
+      // so the reviewer still lands somewhere useful, and explain why.
+      const passageEl = surfaceRef.current?.querySelector<HTMLElement>(
+        `[data-verse-ref="${comment.passage_ref}"]`,
+      );
+      if (passageEl) {
+        scrollElementCentered(passageEl, container);
+        showToast(
+          `Text not found in para ${comment.passage_ref} — jumped to the paragraph.`,
+        );
+      }
     }
-  }, [focusComment]);
+    // Scroll the matching comment card into view in the right pane.
+    const list = listRef.current;
+    if (list) {
+      const card = list.querySelector<HTMLElement>(
+        `.review-card[data-comment-id="${focusComment}"]`,
+      );
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [focusComment, detached, session, showToast]);
 
   const handleSave = async (c: ReviewComment) => {
     await addComment(c);
@@ -338,15 +373,26 @@ function EditReaderInner(props: EditReaderProps) {
           onEdit={handleEdit}
         />
       </aside>
+      {toast && (
+        <div className="review-toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
 
 export default function EditReader(props: EditReaderProps) {
+  // Memoize so the provider's `detached` list (and therefore every consumer
+  // that depends on it, e.g. the focus-scroll effect) keeps a stable identity
+  // across re-renders. Previously this was a fresh object each render, which
+  // churned `detached` and made the focus effect re-fire its smooth-scroll on
+  // every user scroll — pinning the flow so the main pane couldn't be scrolled.
+  const passageTexts = useMemo(() => buildPassageTexts(props.grantha), [props.grantha]);
   return (
     <ReviewModeProvider
       granthaId={props.grantha.grantha_id}
-      passageTexts={buildPassageTexts(props.grantha)}
+      passageTexts={passageTexts}
     >
       <EditReaderInner {...props} />
     </ReviewModeProvider>

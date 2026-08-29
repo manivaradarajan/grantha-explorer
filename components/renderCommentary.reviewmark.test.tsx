@@ -72,7 +72,7 @@ describe("review-mark rendering", () => {
     el.remove();
   });
 
-  it("paints a done note mark with the st-done class and dimmed", () => {
+  it("paints a done note mark with the st-accepted class and a checkmark", () => {
     const snippet = "अशेषजगद्धितानुशासन";
     const idx = raw.indexOf(snippet);
     expect(idx).toBeGreaterThanOrEqual(0);
@@ -89,9 +89,29 @@ describe("review-mark rendering", () => {
     const el = renderToDom(
       renderMulaWithReferences(raw, refs, context, undefined, undefined, marks),
     );
-    const mark = el.querySelector("mark.review-mark.k-note.st-done.drift");
+    // Accepted/done marks are not struck through; a green checkmark follows.
+    const mark = el.querySelector("mark.review-mark.k-note.st-accepted.drift");
     expect(mark).not.toBeNull();
     expect(mark!.textContent).toContain(snippet);
+    expect(mark!.classList.contains("st-done")).toBe(false);
+    expect(el.querySelector(".review-mark-check")).not.toBeNull();
+    el.remove();
+  });
+
+  it("does not strike through a fixed mark (live work, full colour)", () => {
+    // `fixed` and `reopened` are still being worked; only truly terminal
+    // states (accepted/done/dismissed/deleted) dim + strike through.
+    const snippet = "अशेषजगद्धितानुशासन";
+    const idx = raw.indexOf(snippet);
+    const marks: ReviewMarkSpec[] = [
+      { start: idx, end: idx + snippet.length, type: "citation-fix", status: "fixed", commentId: "c-x" },
+    ];
+    const el = renderToDom(
+      renderMulaWithReferences(raw, refs, context, undefined, undefined, marks),
+    );
+    const mark = el.querySelector("mark.review-mark.k-fix");
+    expect(mark).not.toBeNull();
+    expect(mark!.classList.contains("st-done")).toBe(false);
     el.remove();
   });
 

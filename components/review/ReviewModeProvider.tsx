@@ -10,10 +10,13 @@ import React, {
 } from "react";
 import {
   fetchSession,
+  fetchSessions,
   upsertComment,
   setCommentStatus,
   startNewSession,
+  SetCommentStatusRequest,
   ReviewComment,
+  ReviewRoundSummary,
   ReviewSession,
   ReviewGetResponse,
 } from "./reviewServer";
@@ -23,13 +26,18 @@ export interface ReviewModeState {
   session: ReviewSession | null;
   hasChanged: boolean;
   currentSources: Record<string, string>;
+  /** The currently open round (comment file name, if any). */
+  sessionFile?: string;
+  /** All rounds for the grantha, newest first (for the picker). */
+  rounds: ReviewRoundSummary[];
   /** Comments whose snippet could not be re-located in the current text. */
   detached: string[];
   loading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
+  selectSession: (file: string | undefined) => Promise<void>;
   addComment: (comment: ReviewComment) => Promise<void>;
-  updateStatus: (id: string, status: ReviewComment["status"]) => Promise<void>;
+  updateStatus: (id: string, req: Omit<SetCommentStatusRequest, "id">) => Promise<void>;
   startNewSession: () => Promise<void>;
 }
 
@@ -61,25 +69,56 @@ export function ReviewModeProvider({
   children,
 }: ReviewModeProviderProps) {
   const [session, setSession] = useState<ReviewSession | null>(null);
+  const [sessionFile, setSessionFile] = useState<string | undefined>(undefined);
+  const [rounds, setRounds] = useState<ReviewRoundSummary[]>([]);
   const [hasChanged, setHasChanged] = useState(false);
   const [currentSources, setCurrentSources] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const refreshRounds = useCallback(async () => {
+    try {
+      setRounds(await fetchSessions(granthaId));
+    } catch {
+      setRounds([]);
+    }
+  }, [granthaId]);
+
   const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res: ReviewGetResponse = await fetchSession(granthaId);
+      const res: ReviewGetResponse = await fetchSession(granthaId, sessionFile);
       setSession(res.session);
       setHasChanged(res.has_changed);
       setCurrentSources(res.current_sources);
+      await refreshRounds();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setLoading(false);
     }
-  }, [granthaId]);
+  }, [granthaId, sessionFile, refreshRounds]);
+
+  const selectSession = useCallback(
+    async (file: string | undefined) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res: ReviewGetResponse = await fetchSession(granthaId, file);
+        setSessionFile(file);
+        setSession(res.session);
+        setHasChanged(res.has_changed);
+        setCurrentSources(res.current_sources);
+        await refreshRounds();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [granthaId, refreshRounds],
+  );
 
   const addComment = useCallback(
     async (comment: ReviewComment) => {
@@ -97,10 +136,10 @@ export function ReviewModeProvider({
   );
 
   const updateStatus = useCallback(
-    async (id: string, status: ReviewComment["status"]) => {
+    async (id: string, req: Omit<SetCommentStatusRequest, "id">) => {
       setError(null);
       try {
-        const res = await setCommentStatus(granthaId, id, status);
+        const res = await setCommentStatus(granthaId, { id, ...req });
         setSession(res.session);
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
@@ -114,12 +153,14 @@ export function ReviewModeProvider({
     setError(null);
     try {
       const res = await startNewSession(granthaId);
+      setSessionFile(undefined);
       setSession(res.session);
+      await refreshRounds();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
       throw e;
     }
-  }, [granthaId]);
+  }, [granthaId, refreshRounds]);
 
   // Load the latest session on mount / grantha change.
   useEffect(() => {
@@ -143,17 +184,20 @@ export function ReviewModeProvider({
   const value = useMemo<ReviewModeState>(
     () => ({
       session,
+      sessionFile,
+      rounds,
       hasChanged,
       currentSources,
       detached,
       loading,
       error,
       refresh,
+      selectSession,
       addComment,
       updateStatus,
       startNewSession: startNew,
     }),
-    [session, hasChanged, currentSources, detached, loading, error, refresh, addComment, updateStatus, startNew],
+    [session, sessionFile, rounds, hasChanged, currentSources, detached, loading, error, refresh, selectSession, addComment, updateStatus, startNew],
   );
 
   return (

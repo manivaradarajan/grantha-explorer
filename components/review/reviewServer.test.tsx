@@ -104,7 +104,7 @@ describe("reviewServer client", () => {
         }),
       ),
     );
-    await setCommentStatus("vedarthasangraha", "x", "done");
+    await setCommentStatus("vedarthasangraha", { id: "x", status: "done" });
     const [url, init] = (fetch as ReturnType<typeof vi.fn>).mock.calls[0];
     expect(url).toContain("/api/review/status");
     expect(JSON.parse(init.body)).toEqual({ id: "x", status: "done" });

@@ -377,19 +377,61 @@ mark.review-mark {
   cursor: pointer;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  border-bottom: 2px solid currentColor;
+  /* Paint-only underline: a real border on an inline element affects line
+     height / reflow (the §252 bug: hovering a citation re-broke lines).
+     box-shadow is paint-only and never changes layout. */
+  box-shadow: 0 2px 0 0 currentColor;
   background-color: color-mix(in srgb, currentColor 14%, transparent);
 }
 mark.review-mark.k-fix { color: #059669; }
 mark.review-mark.k-quote { color: #d97706; }
-mark.review-mark.k-note { color: #dc2626; }
+mark.review-mark.k-note { color: #2563eb; }
 mark.review-mark.st-done {
   opacity: 0.45;
   text-decoration: line-through;
 }
-mark.review-mark.drift { border-bottom-style: dashed; }
+/* Deleted is destructive: red + strikethrough. */
+mark.review-mark.st-deleted {
+  color: #dc2626;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+mark.review-mark.drift { box-shadow: 0 2px 0 0 currentColor, 0 -2px 0 0 currentColor; }
+
+/* Accepted (terminal, reviewable): no strikethrough; a green checkmark sits
+   just to the right of the highlighted span. */
+mark.review-mark.st-accepted {
+  opacity: 1;
+  text-decoration: none;
+}
+.review-mark-check {
+  margin-left: 1px;
+  color: #059669;
+  font-weight: 700;
+  font-size: 0.82em;
+  user-select: none;
+  cursor: pointer;
+}
 
 /* Review toolbar (floating "add comment") */
+.review-toast {
+  position: fixed;
+  z-index: 100;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(520px, calc(100vw - 32px));
+  background: #1f2937;
+  color: #f9fafb;
+  font-family: var(--font-sans, ui-sans-serif, system-ui), sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
 .review-toolbar {
   position: fixed;
   z-index: 80;
@@ -556,6 +598,18 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   color: #1f2937;
   white-space: nowrap;
 }
+.review-candidate-current {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 0 6px;
+  white-space: nowrap;
+}
 .review-candidate-quality {
   font-size: 0.66rem;
   color: #6b7280;
@@ -596,8 +650,23 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   color: #6b7280;
 }
 .review-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   padding: 8px 16px;
   border-bottom: 1px solid #e5e7eb;
+}
+.review-round-select,
+.review-filter-select {
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  max-width: 220px;
+  min-width: 0;
 }
 .review-link-btn {
   font-size: 0.74rem;
@@ -636,6 +705,15 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   align-items: center;
   gap: 6px;
   margin-bottom: 6px;
+  min-width: 0;
+}
+.review-card-row1 > * {
+  flex-shrink: 0;
+}
+.review-card-row1 .review-card-para {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .review-kind-badge {
   font-size: 0.62rem;
@@ -645,6 +723,7 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   padding: 2px 6px;
   border-radius: 5px;
   color: #fff;
+  white-space: nowrap;
 }
 .review-kind-badge.k-fix { background: #059669; }
 .review-kind-badge.k-quote { background: #d97706; }
@@ -664,7 +743,6 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   white-space: nowrap;
 }
 .review-status-chip {
-  margin-left: auto;
   font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -672,9 +750,14 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   border-radius: 999px;
   border: 1px solid #e5e7eb;
   color: #6b7280;
+  white-space: nowrap;
 }
 .review-status-chip.open { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.review-status-chip.fixed { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.review-status-chip.accepted { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.review-status-chip.reopened { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
 .review-status-chip.done { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.review-status-chip.dismissed { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
 .review-status-chip.deleted {
   background: #f3f4f6;
   color: #6b7280;
@@ -686,13 +769,21 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   border-top: 1px dashed #d1d5db;
 }
 .review-deleted-head {
+  display: block;
+  width: 100%;
+  text-align: left;
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #9ca3af;
   padding: 10px 16px 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
+.review-deleted-head:hover { color: #6b7280; }
 .review-card-body {
   font-size: 0.8rem;
   line-height: 1.5;
@@ -751,6 +842,7 @@ mark.review-mark.drift { border-bottom-style: dashed; }
 }
 .review-card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 8px;
 }
@@ -764,6 +856,45 @@ mark.review-mark.drift { border-bottom-style: dashed; }
   color: #374151;
 }
 .review-card-actions button:hover { background: #f3f4f6; }
+
+/* Inline "Mark fixed" / "Needs work" prompt inside a comment card. */
+.review-card-prompt {
+  margin-top: 8px;
+}
+.review-prompt-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.78rem;
+  color: #111827;
+  resize: vertical;
+}
+.review-prompt-input:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #2563eb;
+}
+.review-prompt-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.review-prompt-actions button {
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+}
+.review-prompt-actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.review-prompt-actions button:hover:not(:disabled) { background: #f3f4f6; }
 
 /* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set
    via the --reading-scale custom property on the flow reader root; these rules
