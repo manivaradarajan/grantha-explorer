@@ -127,6 +127,38 @@ export const extractEnclosedQuote = (sourceWindow: string): EnclosedQuote | null
   return { text: sourceWindow.slice(lastStart, lastEnd), start: lastStart, end: lastEnd };
 };
 
+/** The trailing graphemes of ``phrase`` that can be elided in sandhi: a
+ *  word-final anusvara (ं), a syllable-final म् (म्), or a visarga (ः) are
+ *  absorbed when the following word begins with a consonant
+ *  ("निर्गुणं" → "निर्गुणश्च"). Returns the tail to drop ("" when none).
+ *  Mirrors Python citation_repair.py ``_trailing_elidible_tail``. */
+const trailingElidibleTail = (phrase: string): string => {
+  if (phrase.length >= 3 && phrase.endsWith("म्")) {
+    return "म्";
+  }
+  if (phrase.length >= 2 && (phrase.endsWith("ं") || phrase.endsWith("ः"))) {
+    return phrase[phrase.length - 1];
+  }
+  return "";
+};
+
+/** True when ``derivative`` is a ONE-STEP sandhi/elision derivative of
+ *  ``full``: ``derivative`` equals ``full`` minus its leading अ/आ (a-vowel
+ *  fusion, "अपहतपाप्मा" → "पहतपाप्मा") or minus a trailing ं/ः/म् (nasal /
+ *  visarga absorption, "निर्गुणं" → "निर्गुण"). This gates M1's source-span
+ *  extension so a derivative never jumps to an unrelated longer needle.
+ *  Mirrors Python's explicit full-form pairing in ``_quote_needle_pairs``. */
+const isOneStepDerivative = (derivative: string, full: string): boolean => {
+  if (full.length <= derivative.length) {
+    return false;
+  }
+  if (derivative === full.slice(1) && (full[0] === "अ" || full[0] === "आ")) {
+    return true;
+  }
+  return full.slice(0, derivative.length) === derivative &&
+    trailingElidibleTail(full) === full.slice(derivative.length);
+};
+
 /** Build the source window for a citation: the `MAX_LOOKBACK` chars before the
  *  reference offset, extended backward to the nearest whitespace boundary.
  *
@@ -187,13 +219,20 @@ export const buildSourceWindow = (sourceText: string, refStart: number): SourceW
       start = 0;
       break;
     }
+    const prevLineStart = sourceText.lastIndexOf("\n", prevLineEnd - 1) + 1;
+    // Skip blank lines between verse-quote blocks ("\n\n\n\n" gaps in the
+    // rendered passage): they carry no content and must not stop the backward
+    // pāda walk (the §236 whole-quote highlight needs to cross them).
+    if (sourceText.slice(prevLineStart, prevLineEnd).trim() === "") {
+      start = prevLineStart;
+      continue;
+    }
     // The line BEFORE the current start must itself end in a danda+newline
     // (i.e. the char before prevLineEnd is । or ॥) for it to be a verse pāda
     // that belongs to the same quote.
     if (!(sourceText[prevLineEnd - 1] === "।" || sourceText[prevLineEnd - 1] === "॥")) {
       break;
     }
-    const prevLineStart = sourceText.lastIndexOf("\n", prevLineEnd - 1) + 1;
     start = prevLineStart;
   }
   // Never extend the lookback across an EARLIER cross-reference: a window that
@@ -238,10 +277,12 @@ export const MIN_QUOTE_NEEDLE_LEN = 4;
  *  multi-line window never explodes the candidate count. */
 const MAX_QUOTE_NEEDLES = 80;
 
-/** True when a char is a real word separator (whitespace or danda). A virama
- *  mid-word is NOT a separator — conjuncts stay one word. */
+/** True when a char is a real word separator (whitespace, danda, or an
+ *  en/em dash — a quote that begins after a dash starts the needle on the
+ *  quote, not the dash). A virama mid-word is NOT a separator — conjuncts stay
+ *  one word. */
 const isSeparatorChar = (ch: string): boolean =>
-  /\s/.test(ch) || ch === "।" || ch === "॥";
+  /\s/.test(ch) || ch === "।" || ch === "॥" || ch === "\u2013" || ch === "\u2014";
 
 /** True when a char cannot start a word: a Devanagari virama/matra/combining
  *  mark (a candidate starting on those renders a dotted circle or splits a
@@ -283,12 +324,16 @@ export const buildQuoteNeedles = (sourceWindow: string): string[] => {
   }
   const t = s.slice(lead);
 
-  // Pāda boundaries: after each danda and after each newline (the window may
-  // span several lines). The window end is always a boundary.
+  // Pāda boundaries: after each danda, after each newline (the window may
+  // span several lines), and after an em/en-dash (a hard quote-start boundary:
+  // "देवतैवमैक्षत — हन्ताहमि…" must needle from हन्ता, never from the dash's
+  // preceding prose). The window end is always a boundary.
   const padas = [0];
   for (let i = 0; i < t.length; i++) {
     const ch = t[i];
     if (ch === "।" || ch === "॥" || ch === "\n") {
+      padas.push(i + 1);
+    } else if (ch === "\u2014" || ch === "\u2013") {
       padas.push(i + 1);
     }
   }
@@ -326,6 +371,19 @@ export const buildQuoteNeedles = (sourceWindow: string): string[] => {
       const first = phrase[0];
       if (first === "अ" || first === "आ") {
         const rest = phrase.slice(first.length);
+        if (rest.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(rest)) {
+          seen.add(rest);
+          needles.push(rest);
+        }
+      }
+      // Trailing nasal/visarga elision: "निर्गुणं" appears in the cited
+      // passage as "निर्गुणश्च" (sandhi with the next word's initial
+      // sibilant). Emit the variant without the final grapheme so it can
+      // align prefix-wise (śvetāśvatara 6.11). Mirrors Python
+      // citation_repair.py.
+      const tail = trailingElidibleTail(phrase);
+      if (tail) {
+        const rest = phrase.slice(0, phrase.length - tail.length);
         if (rest.length >= MIN_QUOTE_NEEDLE_LEN && !seen.has(rest)) {
           seen.add(rest);
           needles.push(rest);
@@ -374,6 +432,13 @@ const GAP_SCORE = -1;
 /** Characters stripped from both sides before alignment (dandas, markdown,
  *  quote marks, punctuation). */
 const STRIP_CHARS = new Set(["।", "॥", "*", "_", ".", "'", "‘", "’", '"']);
+
+/** Consonants after which a syllable-final class nasal + virama collapses to
+ *  the anusvara (सत्यसङ्कल्पः -> सत्यसंकल्पः): the unvoiced stops + sibilants.
+ *  Before a VOICED consonant the nasal must stay (आनन्दम् keeps न्+द). */
+const UNVOICED_AFTER_NASAL = new Set(
+  "कखचछटठतथपफशषसह".split(""),
+);
 
 /** Characters that must never appear at a highlight edge: whitespace and
  *  anything `buildMatchString` strips (dandas, punctuation). A danda can leak
@@ -439,10 +504,60 @@ export const buildMatchString = (text: string): MatchString => {
       prevWasSpace = false;
       continue;
     }
+    // A syllable-final म् is an anusvara (विज्ञानम् == विज्ञानं); always
+    // collapse it.
     if (ch === "म" && nfc[i + 1] === "्") {
       match.push("ं"); // same sentinel as anusvara
       map.push(i);
       i++; // consume the virama — it is not a separate kept char
+      prevWasSpace = false;
+      continue;
+    }
+    // A syllable-final class nasal (ङ/ञ/ण/न) + virama is an anusvara when it
+    // precedes an UNVOICED consonant (सत्यसङ्कल्पः/सत्यसंकल्पः: ङ्+क == ं+क).
+    // Before a VOICED consonant (आनन्दम्: न्+द) the nasal must stay. Mirrors
+    // Python.
+    if (
+      (ch === "ङ" || ch === "ञ" || ch === "ण" || ch === "न") &&
+      nfc[i + 1] === "्" &&
+      UNVOICED_AFTER_NASAL.has(nfc[i + 2])
+    ) {
+      match.push("ं"); // same sentinel as anusvara
+      map.push(i);
+      i++; // consume the virama — it is not a separate kept char
+      prevWasSpace = false;
+      continue;
+    }
+    // Avagraha (ऽ, U+093D) is an elided अ: "आत्माऽपहतपाप्मा" from
+    // "आत्मा + अपहतपाप्मा". Canonicalize it to अ so a quote needle
+    // "अपहतपाप्मा" aligns against the fused form. Mirrored in Python
+    // citation_repair.py normalize().
+    if (ch === "\u093D") {
+      match.push("\u0905");
+      map.push(i);
+      prevWasSpace = false;
+      continue;
+    }
+    // Visarga (ः) assimilation before a sibilant: a word-final ः followed by a
+    // स/श/ष is the sibilant's doubled form across a word boundary
+    // ("यः सर्वज्ञः" == "यस्सर्वज्ञस्सर्व..."). Fold ः + optional ws +
+    // sibilant to the doubled sibilant on BOTH sides. Mirrored in Python.
+    if (ch === "\u0903") {
+      let j = i + 1;
+      while (j < nfc.length && /\s/.test(nfc[j])) {
+        j++;
+      }
+      if (j < nfc.length && (nfc[j] === "स" || nfc[j] === "श" || nfc[j] === "ष")) {
+        match.push(nfc[j]);
+        map.push(i);
+        match.push(nfc[j]);
+        map.push(j);
+        prevWasSpace = false;
+        i = j; // loop increment advances past the sibilant
+        continue;
+      }
+      match.push(ch);
+      map.push(i);
       prevWasSpace = false;
       continue;
     }
@@ -578,16 +693,37 @@ export const findQuotedSpan = (
       sourceStart = enclosed.start;
       sourceEnd = enclosed.end;
     } else {
-      let rawStart: number;
-      let rawEnd: number;
+      let rawStart = 0;
+      let rawEnd = 0;
       if (needle !== sourceWindow) {
         const tightOffset = sourceWindow.lastIndexOf(needle);
         if (tightOffset === -1) {
           continue;
         }
-        const needleMap = buildMatchString(needle).map;
-        rawStart = tightOffset + needleMap[queryStart];
-        rawEnd = tightOffset + needleMap[queryEnd - 1] + 1;
+        // M1: derive the source span from the FULL quote form when the accepted
+        // needle is a one-step sandhi/elision derivative and that full form is
+        // still verbatim, containing the accepted needle's span — the highlight
+        // must cover the whole quoted word ("पहतपाप्मा" derives from
+        // "अपहतपाप्मा"; "निर्गुण" from "निर्गुणं"). The full verbatim extent
+        // is authoritative; the derivative's query offsets do not map into it.
+        let extended = false;
+        for (const other of needles) {
+          if (other.length > needle.length && isOneStepDerivative(needle, other)) {
+            const otherOffset = sourceWindow.lastIndexOf(other);
+            if (otherOffset !== -1 && otherOffset <= tightOffset &&
+                otherOffset + other.length >= tightOffset + needle.length) {
+              rawStart = otherOffset;
+              rawEnd = otherOffset + other.length;
+              extended = true;
+              break;
+            }
+          }
+        }
+        if (!extended) {
+          const needleMap = buildMatchString(needle).map;
+          rawStart = tightOffset + needleMap[queryStart];
+          rawEnd = tightOffset + needleMap[queryEnd - 1] + 1;
+        }
       } else {
         rawStart = windowStr.map[queryStart];
         rawEnd = windowStr.map[queryEnd - 1] + 1;
@@ -601,6 +737,12 @@ export const findQuotedSpan = (
       }
       sourceStart = sourceClamped.start;
       sourceEnd = sourceClamped.end;
+      // M3: a trailing question/exclamation mark immediately after the quoted
+      // span belongs to the quotation (reviewer's §20 note). Swallow it into
+      // the span.
+      while (sourceEnd < sourceWindow.length && (sourceWindow[sourceEnd] === "?" || sourceWindow[sourceEnd] === "!")) {
+        sourceEnd++;
+      }
     }
     return {
       start: clamped.start,
