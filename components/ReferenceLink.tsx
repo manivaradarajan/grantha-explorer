@@ -37,6 +37,19 @@ interface ReferenceLinkProps {
   /** Per-grantha target metadata (editions + default_school) for the edition-aware gate. */
   granthaById: Record<string, ReferenceTargetMeta>;
   granthaIdToTitle: Record<string, string>;
+  /**
+   * Controls the visual presentation of this citation.
+   *
+   * - `"inline"` (default): renders the citation display_text as a link, the
+   *   existing behaviour.
+   * - `"footnote-marker"`: renders a `<sup>[n]</sup>` superscript in place of
+   *   the citation text; all hover/focus/touch logic is unchanged.
+   * - `"footnote-entry"`: renders `[n] display_text` as a footnote list row;
+   *   same hover/focus/touch machinery.
+   */
+  displayMode?: "inline" | "footnote-marker" | "footnote-entry";
+  /** Required when `displayMode` is `"footnote-marker"` or `"footnote-entry"`. */
+  footnoteNumber?: number;
 }
 
 const HOVER_OPEN_DELAY_MS = 150;
@@ -61,6 +74,8 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
   availableGranthaIds,
   granthaById,
   granthaIdToTitle,
+  displayMode = "inline",
+  footnoteNumber,
 }) => {
   const { openCitation, closeCitation, citation, mode, scheduleClose, cancelClose } = useCitationPanel();
   const anchorRef = useRef<HTMLAnchorElement>(null);
@@ -280,6 +295,74 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
   React.useEffect(() => {
     return () => clearHoverOpen();
   }, [clearHoverOpen]);
+
+  // --- Footnote modes ---
+
+  if (displayMode === "footnote-marker") {
+    const numDisplay = `[${toDevanagariNumerals(String(footnoteNumber ?? 1))}]`;
+    if (renderPlain) {
+      // Unresolved: muted static superscript — no hover or navigation.
+      return (
+        <sup className="text-xs text-gray-400 font-mono ml-px select-none">
+          {numDisplay}
+        </sup>
+      );
+    }
+    return (
+      <sup>
+        <a
+          ref={anchorRef}
+          href={`#${reference.grantha_id}:${reference.locator ?? "1"}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onFocus={handleFocus}
+          onClick={handleClick}
+          className="text-xs text-blue-600 font-mono ml-px cursor-pointer no-underline hover:underline"
+        >
+          {numDisplay}
+        </a>
+      </sup>
+    );
+  }
+
+  if (displayMode === "footnote-entry") {
+    const numDisplay = `[${toDevanagariNumerals(String(footnoteNumber ?? 1))}]`;
+    const numPrefix = (
+      <span className="font-mono text-gray-400 mr-2 select-none">{numDisplay}</span>
+    );
+    if (renderPlain) {
+      // Unresolved abbreviation: plain text, no link — slightly muted so it
+      // doesn't compete with the main passage text above it.
+      return (
+        <>
+          {numPrefix}
+          <span className="text-gray-500">{reference.display_text}</span>
+        </>
+      );
+    }
+    return (
+      <>
+        {numPrefix}
+        <a
+          ref={anchorRef}
+          href={`#${reference.grantha_id}:${reference.locator ?? "1"}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onFocus={handleFocus}
+          onClick={handleClick}
+          className={
+            linkable
+              ? "text-blue-500 hover:underline cursor-pointer"
+              : "text-gray-500 cursor-pointer"
+          }
+        >
+          {reference.display_text}
+        </a>
+      </>
+    );
+  }
+
+  // --- Default: inline mode ---
 
   // Unresolved references (undefined abbreviation / build error) render as
   // plain text — never a link.

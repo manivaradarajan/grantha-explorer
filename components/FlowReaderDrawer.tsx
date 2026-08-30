@@ -1,6 +1,7 @@
 "use client";
 
 import MobileDrawer from "./MobileDrawer";
+import { useFootnoteMode } from "@/lib/contexts/FootnoteModeContext";
 
 interface FlowReaderDrawerProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export default function FlowReaderDrawer({
   onExitFlow,
 }: FlowReaderDrawerProps) {
   const roman = script === "roman";
+  const { footnoteModeEnabled, toggleFootnoteMode } = useFootnoteMode();
   return (
     <MobileDrawer isOpen={isOpen} onClose={onClose} label="Reading preferences">
       <div className="h-full flex flex-col">
@@ -87,24 +89,16 @@ export default function FlowReaderDrawer({
           />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 text-sm text-gray-400 flex items-center justify-center text-center">
-          <div>
-            <div className="mb-1">full-text search results,</div>
-            <div className="mb-1">grantha browser, bookmarks —</div>
-            <div>whatever else ends up here</div>
-          </div>
-        </div>
-
-        <div className="border-t border-gray-100 p-3">
-          {/* Dev entry point to the reference-diagnostics view (spec §6). The
-              #diagnostics hash is intercepted by page.tsx before parse/validate.
-              Permanent dev-mode triage channel for unresolved / deferred refs. */}
-          <a
-            href="#diagnostics"
-            className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-500"
-          >
-            <span>Reference diagnostics</span>
-          </a>
+        <div className="border-b border-gray-100 p-3">
+          <label className="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={footnoteModeEnabled}
+              onChange={toggleFootnoteMode}
+              className="accent-blue-600"
+            />
+            <span>{roman ? "Footnotes" : "पादटिप्पणी"}</span>
+          </label>
           <button
             type="button"
             onClick={onExitFlow}
@@ -127,6 +121,26 @@ export default function FlowReaderDrawer({
             </svg>
             <span>{roman ? "3-pane view" : "३-पटलम्"}</span>
           </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 text-sm text-gray-400 flex items-center justify-center text-center">
+          <div>
+            <div className="mb-1">full-text search results,</div>
+            <div className="mb-1">grantha browser, bookmarks —</div>
+            <div>whatever else ends up here</div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 p-3">
+          {/* Dev entry point to the reference-diagnostics view (spec §6). The
+              #diagnostics hash is intercepted by page.tsx before parse/validate.
+              Permanent dev-mode triage channel for unresolved / deferred refs. */}
+          <a
+            href="#diagnostics"
+            className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm text-gray-500"
+          >
+            <span>Reference diagnostics</span>
+          </a>
           <button
             type="button"
             className="w-full flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-gray-50 transition-colors mt-1"

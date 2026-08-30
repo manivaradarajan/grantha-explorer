@@ -117,7 +117,6 @@ export default function NavigationSidebar({
   );
   const isCurated = curatedSections != null;
   const uiStrings = getUIStrings();
-
   // --- Pending-scroll state machine ---
   // pendingVerseRef: set when a quick-jump targets a verse whose part is not
   //   yet loaded; cleared when the verse mounts, the selection changes, or the
@@ -389,6 +388,7 @@ export default function NavigationSidebar({
         passageRefs={passageRefs}
         curated={isCurated}
       />
+
     </div>
   );
 }

@@ -105,7 +105,7 @@
   --citation-tail-size: 10px;
   --citation-tail-bg: var(--citation-bg);
   --citation-clamp-lines: 5;
-  --citation-title-size: 0.9rem;
+  --citation-title-size: 1rem;
   --citation-excerpt-size: calc(1em * var(--reading-scale, 1.1));
   /* Bottom pull-up for the footer actions: how much of the card's bottom
      padding the buttons consume. 0 = flush with the card's bottom edge;
@@ -118,6 +118,10 @@
      title text (the header bleeds to the card edges and re-applies padding).
      Lower it to close the title→excerpt gap even further. */
   --citation-header-padding-bottom: 8px;
+  /* Header band tint — a very subtle blue-gray at rest; hover darkens to
+     --citation-shadow-tint via the :has() rule below. Setting to transparent
+     removes the tint and reverts to a plain white band. */
+  --citation-header-bg: rgba(61, 90, 128, 0.06);
 
   position: fixed;
   width: min(var(--citation-width), var(--citation-max-width));
@@ -157,14 +161,24 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
-  /* Full-bleed padding: the header is the clickable title band. Negative
-     margins pull it out to the popover's edges (the popover has padding), so
-     the title-action's hover highlight spans the whole row horizontally too. */
+  /* Full-bleed: negative margins pull the header out to the popover's edges
+     (compensating for the popover's padding), then re-apply the same padding
+     so content stays inset. The background/hover tint is applied here (not on
+     the child button) so it genuinely covers the full band — the child button
+     has padding:0 and would leave bare gutters otherwise. */
   margin: calc(-1 * var(--citation-padding)) calc(-1 * var(--citation-padding))
     0;
   padding: var(--citation-padding) var(--citation-padding)
     var(--citation-header-padding-bottom);
   border-radius: var(--citation-radius) var(--citation-radius) 0 0;
+  background: var(--citation-header-bg, rgba(61, 90, 128, 0.06));
+}
+
+/* Full-bleed hover: darken the whole header band (including gutters) when the
+   title-action button is hovered. Applied on the parent so the tint covers the
+   full negative-margin area, not just the button's zero-padding content box. */
+.citation-header:has(.citation-title-action:hover) {
+  background-color: rgba(61, 90, 128, 0.12);
 }
 
 .citation-title-action {
@@ -184,7 +198,9 @@
 
 .citation-title-action:hover {
   color: #2c4460;
-  background-color: rgba(61, 90, 128, 0.12);
+  /* background-color intentionally omitted — the hover tint is applied on
+     .citation-header:has(.citation-title-action:hover) so it covers the full
+     bleed band rather than just the button's zero-padding content box. */
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
@@ -196,6 +212,7 @@
 }
 
 .citation-title {
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
   font-weight: 600;
   font-size: var(--citation-title-size);
   overflow: hidden;
@@ -216,6 +233,7 @@
 }
 
 .citation-locator {
+  font-family: var(--font-reading, "Tiro Devanagari Sanskrit"), serif;
   font-weight: 600;
   font-size: var(--citation-title-size);
   color: #374151;

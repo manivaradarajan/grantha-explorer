@@ -29,6 +29,7 @@ import {
 } from "@/lib/data";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import InvalidVerseModal from "@/components/InvalidVerseModal";
+import { FootnoteModeProvider } from "@/lib/contexts/FootnoteModeContext";
 
 /** Fixed, always-visible entry point into flow mode from the 3-pane view. */
 function FlowModeToggle({ onEnter }: { onEnter: () => void }) {
@@ -468,7 +469,7 @@ export default function Home() {
     // both are present.
     const loadedEditions = flowEditions.length >= 2 ? flowEditions : [currentGrantha];
     return (
-      <>
+      <FootnoteModeProvider>
         <FlowReader
           grantha={currentGrantha}
           editions={loadedEditions}
@@ -498,7 +499,7 @@ export default function Home() {
           title={invalidVerseTitle}
           messageLines={invalidVerseMessageLines}
         />
-      </>
+      </FootnoteModeProvider>
     );
   }
 
@@ -606,6 +607,7 @@ export default function Home() {
   );
 
   return (
+    <FootnoteModeProvider>
     <main className="h-screen bg-white">
       {showCommentaryPane ? (
         <PanelGroup
@@ -687,5 +689,6 @@ export default function Home() {
       />
       <FlowModeToggle onEnter={() => updateMode("flow")} />
     </main>
+    </FootnoteModeProvider>
   );
 }
