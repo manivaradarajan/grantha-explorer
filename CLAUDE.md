@@ -77,6 +77,9 @@ with a wrong mental model of how to update the committed JSON library.
   `replaceState` carve-out, panes mode does not).
 - Run `npm run lint` and the tests (`pytest tests scripts/tests`,
   `npm run validate:data`) after changes that touch data or scripts.
+- **Before every push that has an open PR (or before creating a new PR), run
+  `npm test` and confirm all tests pass locally.** This mirrors the CI check
+  and prevents broken pushes. Do not push until the local run is clean.
 
 ## Where things live
 

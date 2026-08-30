@@ -47,6 +47,11 @@ function render(node: React.ReactNode): string {
   return el.innerHTML;
 }
 
+/** Read a rendered HTML string's visible text, normalizing the renderer's
+ *  NBSP glue (protectLineBreaks) back to plain spaces for substring checks. */
+const textContentOf = (html: string): string =>
+  (new DOMParser().parseFromString(html, "text/html").body.textContent ?? "").replace(/\u00A0/g, " ");
+
 describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
   it("renders verse-quote blocks hang-indented with pāda sub-indents", () => {
     const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
@@ -61,10 +66,14 @@ describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
     expect(html).toContain('class="verse-quote"');
     // pādas are separate spans
     expect(html).toContain('class="verse-pada"');
-    // the first verse-quote block holds the अविद्या … यथा क्षेत्रशक्तिः ॥ run
+    // the first verse-quote block holds the अविद्या … यथा क्षेत्रशक्तिः ॥ run;
+    // verse-quote blocks carry NO quote glyphs — the hang-indented block
+    // treatment is itself the quotation mark
     const block = html.split('class="verse-quote"')[1];
     expect(block).toContain("विद्या कर्मसंज्ञान्या तृतीया शक्तिरिष्यते");
     expect(block).toContain("यथा क्षेत्रशक्तिः सा वेष्टिता नृप सर्वगा ॥");
+    expect(block).not.toContain("“");
+    expect(block).not.toContain("”");
     // refs render as links inside the block
     expect(block).toContain("वि.पु. ६.७.६२");
   });
@@ -127,18 +136,39 @@ describe("verse-quote rendering (on-disk vedarthasangraha)", () => {
     const dev = p.content.sanskrit.devanagari;
     // The 15.16 verse text is the pāda line just before its ref offset.
     const ref = p.references.find((r: { display_text: string }) => r.display_text === "भ.गी. १५.१६");
-    const lineStart = dev.lastIndexOf("\n", ref.start - 1) + 1;
-    const quoteText = dev.slice(lineStart, ref.start);
+    const quoteText = dev.slice(ref.quote.start, ref.quote.end);
     const ctx = {
       ...context,
       sourcePassageRef: "48",
-      sourceHighlight: { passageRef: "48", span: { start: lineStart, end: ref.start } },
+      sourceHighlight: { passageRef: "48", span: { start: ref.quote.start, end: ref.quote.end } },
     };
     const html = render(
       <div>{renderMulaWithReferences(dev, p.references, ctx, p.verse_quotes)}</div>
     );
     expect(html).toContain('class="citation-source-mark"');
-    expect(html).toContain(quoteText);
+    // verse-quote blocks carry no quote glyphs; the mark wraps the quoted text
+    // (the \n between pādas is a span boundary, so assert each pāda fragment)
+    const [pada1, pada2] = quoteText.split("\n");
+    // the renderer glues sentence-dandas to their neighbour (NBSP), matching
+    // protectLineBreaks; read the DOM text content and normalize the NBSP glue
+    const text = textContentOf(html);
+    expect(text).toContain(pada1);
+    expect(text).toContain(pada2);
+    expect(text).not.toContain("“");
+    expect(text).not.toContain("”");
+  });
+
+  it("wraps a PROSE citation quote in typographic double quotes (para 89)", () => {
+    // A citation embedded in flowing prose (not a verse-quote block) keeps the
+    // “…” glyphs around the quoted text.
+    const d = JSON.parse(fs.readFileSync("public/data/library/vedarthasangraha/part1.json", "utf-8"));
+    const p = d.passages.find((x: { ref: string }) => x.ref === "89");
+    const html = render(
+      <div>{renderMulaWithReferences(p.content.sanskrit.devanagari, p.references, context, p.verse_quotes)}</div>
+    );
+    expect(html).toContain("“नात्मा श्रुतेर्नित्यत्वाच्च ताभ्यः”");
+    const text = textContentOf(html);
+    expect(text).toContain("(ब्र.सू. २.३.१८)");
   });
 
   it("highlights the WHOLE verse for a ref at its end (para 125, भ.गी. १०.१०)", () => {

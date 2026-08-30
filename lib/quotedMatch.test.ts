@@ -23,8 +23,27 @@ describe("buildMatchString", () => {
   });
 
   it("collapses whitespace runs (pāda newlines) to single spaces", () => {
+    // The trailing ऽ (avagraha) is an elided अ; it canonicalizes to अ, so
+    // "विद्ययाऽमृत" → "विद्ययाअमृत".
     const { match } = buildMatchString("अविद्यया मृत्युं तीर्त्वा\nविद्ययाऽमृतमश्नुते ।।");
-    expect(match).toBe("अविद्यया मृत्युं तीर्त्वा विद्ययाऽमृतमश्नुते");
+    expect(match).toBe("अविद्यया मृत्युं तीर्त्वा विद्ययाअमृतमश्नुते");
+  });
+
+  it("canonicalizes avagraha (ऽ) to अ", () => {
+    // U+093D (ऽ) is an elided अ: "आत्माऽपहतपाप्मा" from "आत्मा + अपहतपाप्मा",
+    // so a needle "अपहतपाप्मा" aligns against the fused form. Mirrors the
+    // Python citation_repair.py.
+    expect(buildMatchString("आत्माऽपहतपाप्मा").match).toBe("आत्माअपहतपाप्मा");
+    const fused = buildMatchString("आत्माऽपहतपाप्मा").match;
+    expect(fused.includes(buildMatchString("अपहतपाप्मा").match)).toBe(true);
+  });
+
+  it("folds a word-final visarga before a sibilant into the doubled sibilant", () => {
+    // "यः सर्वज्ञः सर्ववित्" folds to "यससर्वज्ञससर्ववित्", aligning the
+    // §112 needle against the passage's "यस्सर्वज्ञस्सर्ववित्".
+    expect(buildMatchString("यः सर्वज्ञः सर्ववित्").match).toBe(
+      "यससर्वज्ञससर्ववित्",
+    );
   });
 
   it("elides a space after a syllable-final virama (तत् त्वमसि == तत्त्वमसि)", () => {
@@ -284,6 +303,50 @@ describe("findQuotedSpan — word-initial a-vowel sandhi fusion (chhandogya 8.7.
     expect(span).not.toBeNull();
     if (span) {
       expect(passage.slice(span.start, span.end)).toBe("पहतपाप्मा");
+    }
+  });
+
+  it("matches निर्गुणं against निर्गुणश्च (svetasvatara 6.11 trailing elision)", () => {
+    // The quote ends in anusvara/visarga, the cited word in -श्च (sandhi with
+    // the next word's initial sibilant). The trailing-elision variant aligns
+    // prefix-wise, and the source span covers the whole quoted word. The window
+    // ends at the citation's open paren, as buildSourceWindow produces it.
+    const window = "असंख्येयकल्याणगुणगणाः निर्गुणं (";
+    const passage =
+      "एको देवः सर्वभूतेषु गूढः सर्वव्यापी सर्वभूतान्तरात्मा ।\n" +
+      "कर्माध्यक्षः सर्वभूताधिवासः साक्षी चेता केवलो निर्गुणश्च ॥";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toBe("निर्गुण");
+      // Source span covers the FULL quoted word, including the अनुस्वार.
+      expect(window.slice(span.sourceStart, span.sourceEnd)).toBe("निर्गुणं");
+    }
+  });
+
+  it("highlights the full quoted word for a leading-drop derivative (M1)", () => {
+    // The accepted needle is the a-vowel-drop variant; the source highlight
+    // must cover the whole quoted word including the absorbed अ.
+    const passage =
+      "य आत्माऽपहतपाप्मा विजरो विमृत्युर्विशोको विजिघत्सोऽपिपासः " +
+      "सत्यकामः सत्यसङ्कल्पः सोऽन्वेष्टव्यः स विजिज्ञासितव्यः";
+    const window = "…गुणगणाः अपहतपाप्मा (";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(passage.slice(span.start, span.end)).toContain("पहतपाप्मा");
+      // Source span must include the अ of अपहतपाप्मा.
+      expect(window.slice(span.sourceStart, span.sourceEnd)).toBe("अपहतपाप्मा");
+    }
+  });
+
+  it("swallows a trailing ? into the source span (M3)", () => {
+    const window = "ज्ञानबलक्रिया च विज्ञातारमरे केन विजानीयात्? (बृ.उ. ४.४.१४)";
+    const passage = "विज्ञातारमरे केन विजानीयात्";
+    const span = findQuotedSpan(window, passage);
+    expect(span).not.toBeNull();
+    if (span) {
+      expect(window.slice(span.sourceStart, span.sourceEnd)).toContain("विजानीयात्?");
     }
   });
 });

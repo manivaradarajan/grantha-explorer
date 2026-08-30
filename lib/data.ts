@@ -189,6 +189,10 @@ export interface Reference {
   group_id?: string | null;
   /** True when a build REF-* error was emitted (undefined abbreviation). */
   unresolved: boolean;
+  /** Precomputed source-side quote span (build-time citation matcher).
+   *  Half-open offsets into the citing passage's devanagari. Lets the runtime
+   *  highlight the quoted text exactly without matching. */
+  quote?: { start: number; end: number; text: string; status?: "matched" | "low_quality" };
 }
 
 export interface Commentary {

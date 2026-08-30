@@ -19,17 +19,22 @@ easily-missed pieces `extractEnclosedQuote` and the manual grapheme clamp.
 
 | TS (`lib/quotedMatch.ts`) | Python (`citation_repair.py`) |
 |---|---|
-| `buildMatchString` — NFC; strip set `। ॥ * _ . ' ‘ ’ "`; whitespace collapse; anusvara ≈ final-`म्` (`विज्ञानम्`==`विज्ञानं`) | `normalize()` |
-| `buildSourceWindow` — `MAX_LOOKBACK=60`, whitespace extend, `enclosingQuoteStart` (cap `QUOTE_EXTEND_CAP=600`), multi-pāda line extend (cap `QUOTE_LINE_EXTEND_CAP=400`) | `source_window()` |
+| `buildMatchString` — NFC; strip set `। ॥ * _ . ' ‘ ’ "`; whitespace collapse; anusvara ≈ final-`म्` (`विज्ञानम्`==`विज्ञानं`); **virama elision at a word join** (a space after a syllable-final `्` is skipped — `तत् त्वमसि`==`तत्त्वमसि`) | `normalize()` |
+| `buildSourceWindow` — `MAX_LOOKBACK=60`, whitespace extend, `enclosingQuoteStart` (cap `QUOTE_EXTEND_CAP=600`), multi-pāda line extend (cap `QUOTE_LINE_EXTEND_CAP=400`), **crossref-stop** (clamp `start` to just past the previous `(ref)`, `crossRefEnd`) | `source_window()` |
 | `extractEnclosedQuote` — quote-pair detection (`**…**`, `‘…’`, `“…”`, `"…"`, `'…'`), `QUOTE_TAIL_TOLERANCE=20` | `extract_enclosed_quote()` |
-| `buildQuoteNeedles` — pāda tier then word tier; `MIN_QUOTE_NEEDLE_LEN=4`; cap `MAX_QUOTE_NEEDLES=80`; virama/matra never a word start | `quote_needles()` |
-| `findQuotedSpan` — Smith–Waterman; `queryStart===0` start-anchor; `minScore = 2*max(MIN_QUOTE_NEEDLE_LEN, min(MIN_MATCH_CHARS, query.length))`; `MIN_SIMILARITY=0.7`; coverage suppression (`MAX_COVERAGE=0.8`, `MAX_COVERAGE_PASSAGE_LEN=44`, `singleRunWindow`); **manual** grapheme clamp (`clampToGraphemeBoundaries`: cluster codepoints, `RIGHT_MATRAS` swallow, edge trim) | `find_quoted_span()` |
+| `buildQuoteNeedles` — pāda tier then word tier; `MIN_QUOTE_NEEDLE_LEN=4`; cap `MAX_QUOTE_NEEDLES=80`; virama/matra never a word start; **word-initial a-vowel sandhi variant** (a candidate starting `अ`/`आ` also emits the absorbed tail — `अपहतपाप्मा`→`पहतपाप्मा`) | `quote_needles()` |
+| `findQuotedSpan` — Smith–Waterman; `queryStart===0` start-anchor; `minScore = 2*max(MIN_QUOTE_NEEDLE_LEN, min(MIN_MATCH_CHARS, query.length))`; `MIN_SIMILARITY=0.7`; **no coverage suppression** (whole-passage quotes always highlight); **manual** grapheme clamp (`clampToGraphemeBoundaries`: cluster codepoints, `RIGHT_MATRAS` swallow, edge trim) | `find_quoted_span()` |
 
 **Constants (identical values):** `MAX_LOOKBACK=60`, `MIN_MATCH_CHARS=10`,
 `MIN_QUOTE_NEEDLE_LEN=4`, `MAX_QUOTE_NEEDLES=80`, `MIN_SIMILARITY=0.7`,
-`MAX_COVERAGE=0.8`, `MAX_COVERAGE_PASSAGE_LEN=44`,
 `QUOTE_TAIL_TOLERANCE=20`, `QUOTE_LINE_EXTEND_CAP=400`,
 `QUOTE_EXTEND_CAP=600`, `MATCH_SCORE=2`, `MISMATCH_SCORE=-1`, `GAP_SCORE=-1`.
+
+> **Removed (2026-08):** the coverage-suppression machinery
+> (`MAX_COVERAGE=0.8`, `MAX_COVERAGE_PASSAGE_LEN=44`, `singleRunWindow`,
+> `VERSE_NUMBER_SUFFIX`) was deleted from BOTH sides — a whole-passage quote now
+> always highlights (decision: "highlight anyway"). These constants no longer
+> exist on either side; do not reintroduce them.
 
 ## Grapheme segmentation is pinned to the MANUAL scan on both sides
 
@@ -69,8 +74,10 @@ build on drift**. The test skips when the grantha-explorer sibling checkout is
 absent (same policy as `test_school_context.py` / `test_v2_cross_converter.py`).
 
 The golden fixtures include the locked cases from `lib/quotedMatch.test.ts`
-(anusvara, whole-verse, danda-boundary, short-precise) plus adversarial cases
-(formulaic-phrase ambiguity, paraphrase, whole-passage suppression).
+(anusvara, whole-verse, danda-boundary, short-precise, virama elision
+`तत्त्वमसि`, word-initial a-vowel sandhi `अपहतपाप्मा`, crossref-stop window)
+plus adversarial cases (formulaic-phrase ambiguity, paraphrase,
+whole-passage-highlight).
 
 ## Cross-repo pointer
 

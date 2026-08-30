@@ -252,6 +252,21 @@
         "unresolved": {
           "type": "boolean",
           "description": "True when a build REF-* error was emitted for this reference (undefined abbreviation)."
+        },
+        "quote": {
+          "type": "object",
+          "description": "Precomputed source-side quote span (build-time citation matcher). Half-open offsets into content.sanskrit.devanagari of the CITING passage; present only when the matcher found a confident span. Lets the runtime highlight the quote exactly without matching.",
+          "properties": {
+            "start": { "type": "integer", "minimum": 0 },
+            "end": { "type": "integer", "minimum": 0 },
+            "text": { "type": "string", "description": "The quoted Devanagari text (content[start:end])." },
+            "status": {
+              "enum": ["matched", "low_quality"],
+              "description": "Optional; absent means 'matched'. Reserved for a future below-floor signal."
+            }
+          },
+          "required": ["start", "end", "text"],
+          "additionalProperties": false
         }
       },
       "required": ["start", "end", "display_text", "grantha_id", "locator", "unresolved"],

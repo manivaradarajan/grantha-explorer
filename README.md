@@ -89,6 +89,7 @@ npm run test:deploy    # build:local + serve, exactly like production
 | Command                 | Purpose                                             |
 | ----------------------- | --------------------------------------------------- |
 | `npm run dev`           | Dev server (runs data generation first)             |
+| `npm run review:server` | Local review server for edit mode (`?m=edit`)       |
 | `npm run build`         | Production build with `basePath` (for GitHub Pages) |
 | `npm run build:local`   | Build without `basePath` (local testing)            |
 | `npm run serve`         | Serve the `out/` directory                          |
@@ -96,6 +97,23 @@ npm run test:deploy    # build:local + serve, exactly like production
 | `npm run lint`          | ESLint (Next.js config)                             |
 | `npm run validate:data` | Validate data files against JSON schemas            |
 | `npm run validate:integrity` | Validate a grantha's files against its envelope |
+
+## Edit mode (`?m=edit`)
+
+A hash mode on the live reading surface for code-review-style annotations
+(select text / click citations / annotate lines). Comments persist to a
+timestamped session JSON in the sibling `grantha-data` checkout. It requires the
+local review server:
+
+```bash
+npm run review:server      # 127.0.0.1:4321, defaults to ../grantha-data
+```
+
+Then visit e.g. `http://localhost:3000/#vedarthasangraha:1?m=edit`. The schema
+and agent handoff contract live in
+`../grantha-data/docs/REVIEW_COMMENTS_SCHEMA.md`. Without the server running,
+the review panel shows an actionable "server unreachable" error (no data is
+lost; nothing is written).
 
 ## Project layout
 

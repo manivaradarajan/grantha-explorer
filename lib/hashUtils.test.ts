@@ -72,6 +72,13 @@ describe("buildHash / parseHash round-trip", () => {
     const state: UrlState = { ...base, mode: "panes", script: "deva", fontSize: 100 };
     expect(buildHash(state, true)).toBe("#bhagavad-gita:1.1");
   });
+
+  it("round-trips edit mode (?m=edit)", () => {
+    const state: UrlState = { ...base, mode: "edit" };
+    const hash = buildHash(state);
+    expect(hash).toContain("m=edit");
+    expect(parseHash(hash)).toEqual({ ...state, mode: "edit" });
+  });
 });
 
 describe("validateAndNormalizeHash", () => {

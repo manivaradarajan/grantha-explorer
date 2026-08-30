@@ -9,6 +9,7 @@ import CommentaryPanel from "@/components/CommentaryPanel";
 import MobileLayout from "@/components/MobileLayout";
 import TabletLayout from "@/components/TabletLayout";
 import FlowReader from "@/components/FlowReader";
+import EditReader from "@/components/review/EditReader";
 import ReferenceDiagnosticsPage from "@/components/ReferenceDiagnosticsPage";
 import { isDiagnosticsHash } from "@/lib/referenceDiagnostics";
 import { useVerseHash } from "@/hooks/useVerseHash";
@@ -427,6 +428,35 @@ export default function Home() {
       <div className="flex items-center justify-center h-screen">
         <p className="text-gray-500">Loading {granthaId}...</p>
       </div>
+    );
+  }
+
+  // Edit mode — the flow reading surface overlaid with review annotations.
+  // The review comments persist to a standalone server; see scripts/review-server.mjs.
+  if (mode === "edit") {
+    return (
+      <>
+        <EditReader
+          grantha={currentGrantha}
+          editionIds={editionIds.length ? editionIds.slice(0, 2) : [currentGrantha.edition_id ?? granthaId]}
+          granthas={granthas}
+          selectedRef={verseRef}
+          updateHash={updateHash}
+          onGranthaChange={handleGranthaChange}
+          onExitEdit={() => updateMode("panes")}
+          availableGranthaIds={granthas.map((g) => g.id)}
+          granthaById={granthaById}
+          granthaIdToDevanagariTitle={granthaIdToDevanagariTitle}
+          loadPart={loadPart}
+          isLoadingPart={isLoadingPart}
+        />
+        <InvalidVerseModal
+          isOpen={showInvalidVerseModal}
+          onClose={handleCloseInvalidVerseModal}
+          title={invalidVerseTitle}
+          messageLines={invalidVerseMessageLines}
+        />
+      </>
     );
   }
 

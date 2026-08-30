@@ -163,9 +163,13 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
       if (!reference.grantha_id) return null;
       // The fully-formed quote visible in the lookback window, mapped to
       // absolute offsets in the source passage — the steel-blue source
-      // highlight shown while the popover is open.
+      // highlight shown while the popover is open. Prefer the build-time
+      // `reference.quote` span (exact); fall back to the enclosed-quote scan
+      // of the runtime lookback window.
       let sourceSpan: { start: number; end: number } | null = null;
-      if (sourceLookback && sourceWindowStart !== undefined) {
+      if (reference.quote) {
+        sourceSpan = { start: reference.quote.start, end: reference.quote.end };
+      } else if (sourceLookback && sourceWindowStart !== undefined) {
         const quoted = extractEnclosedQuote(sourceLookback);
         if (quoted !== null) {
           sourceSpan = {

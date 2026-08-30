@@ -3,7 +3,7 @@ import { Grantha, Passage, PrefatoryMaterial } from "./data";
 /**
  * URL state interface
  */
-export type ReadingMode = "flow" | "panes";
+export type ReadingMode = "flow" | "panes" | "edit";
 
 export interface UrlState {
   granthaId: string;
@@ -117,9 +117,9 @@ export function parseHash(hash: string): UrlState | null {
       }
     }
 
-    // Reading mode (flow reader vs. panes). Absent = panes (the default).
+    // Reading mode (flow reader vs. panes vs. edit). Absent = panes (the default).
     const m = params.get("m");
-    if (m === "flow" || m === "panes") {
+    if (m === "flow" || m === "panes" || m === "edit") {
       result.mode = m;
     }
   }

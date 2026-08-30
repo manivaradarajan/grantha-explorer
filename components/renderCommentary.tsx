@@ -5,7 +5,6 @@ import type { Reference } from "@/lib/data";
 import {
   assertCodePointOffsetAligned,
   sanitizeCommentaryHtml,
-  stripMarkdown,
   stripMarkdownInline,
 } from "@/lib/stringUtils";
 import ReferenceLink from "./ReferenceLink";
@@ -39,6 +38,20 @@ export interface ReferenceLinkContext {
   sourceHighlight?: SourceHighlight | null;
 }
 
+import type { ReviewCommentType, ReviewStatus } from "./review/reviewServer";
+
+/** A review annotation highlight (edit mode): anchored by raw offsets in THIS
+ *  passage, with a per-type CSS class and optional click handler. */
+export interface ReviewMarkSpec {
+  start: number;
+  end: number;
+  type: ReviewCommentType;
+  status: ReviewStatus;
+  drift?: boolean;
+  commentId: string;
+  onClick?: (commentId: string) => void;
+}
+
 /** Local `[s, e)` bounds of `highlight.span` within a segment that starts at
  *  `segStart` in the raw text, or null when the segment doesn't intersect the
  *  highlighted span or belongs to another passage. */
@@ -57,6 +70,204 @@ const highlightBounds = (
     return null;
   }
   return { s, e };
+};
+
+/** Local bounds of each review mark intersecting a segment, absolute→local. */
+const reviewBoundsInSegment = (
+  marks: ReviewMarkSpec[] | undefined,
+  segStart: number,
+  segLength: number,
+): { spec: ReviewMarkSpec; s: number; e: number }[] => {
+  if (!marks || marks.length === 0) return [];
+  return marks
+    .map((m) => {
+      const s = Math.max(0, m.start - segStart);
+      const e = Math.min(segLength, m.end - segStart);
+      return { spec: m, s, e };
+    })
+    .filter(({ s, e }) => s < e);
+};
+
+const markClassName = (m: { type: string; status: string; drift?: boolean }): string =>
+  [
+    "review-mark",
+    m.type === "citation-fix" ? "k-fix" : m.type === "quote-locate" ? "k-quote" : "k-note",
+    // Accepted/done are terminal, reviewable states: keep them readable
+    // (no strikethrough/dim) and mark them with a checkmark.
+    ["accepted", "done"].includes(m.status) ? "st-accepted" : "",
+    // Deleted is shown in red + strikethrough (the destructive colour).
+    m.status === "deleted" ? "st-deleted" : "",
+    // Dismissed = acknowledged, won't fix: dim + strikethrough.
+    m.status === "dismissed" ? "st-done" : "",
+    m.drift ? "drift" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+/** Render a text slice with optional typographic quote marks and the steel-blue
+ *  source highlight.
+ *
+ *  ``quote`` is the build-time ``reference.quote`` span with ABSOLUTE offsets
+ *  into the raw passage: a ``“`` is emitted where the quote opens and a ``”``
+ *  where it closes (the devanagari-source convention for quoted śruti). The
+ *  offsets may fall outside this slice (a verse quote spans several pādas), in
+ *  which case only the boundary that lands here is emitted. ``highlight`` is
+ *  relative to ``text`` (as produced by ``highlightBounds``) and wraps the
+ *  quoted text in the steel-blue ``<mark>`` — the two compose, so a hovered
+ *  quote reads ``“<mark>…</mark>”``.
+ *
+ *  Args:
+ *      text: The slice being rendered (already stripped of markdown).
+ *      absStart: Absolute offset of ``text[0]`` in the raw passage.
+ *      quote: The quote span (absolute), or undefined for no quote marks.
+ *      highlight: Relative ``[s, e)`` mark bounds, or null/undefined.
+ *
+ *  Returns:
+ *      The text with quote glyphs and the highlight mark applied.
+ */
+const renderMarkedSegment = (
+  text: string,
+  absStart: number,
+  quote?: { start: number; end: number },
+  highlight?: { s: number; e: number } | null,
+  reviewMarks?: ReviewMarkSpec[],
+): React.ReactNode => {
+  const len = text.length;
+  const points = new Set<number>([0, len]);
+  let qs = -1;
+  let qe = -1;
+  if (quote) {
+    const relS = quote.start - absStart;
+    const relE = quote.end - absStart;
+    if (relS >= 0 && relS <= len) {
+      points.add(relS);
+      qs = relS;
+    }
+    if (relE >= 0 && relE <= len) {
+      points.add(relE);
+      qe = relE;
+    }
+  }
+  if (highlight) {
+    points.add(highlight.s);
+    points.add(highlight.e);
+  }
+  const marks = reviewBoundsInSegment(reviewMarks, absStart, len);
+  for (const { s, e } of marks) {
+    points.add(s);
+    points.add(e);
+  }
+  const pts = Array.from(points).sort((a, b) => a - b);
+  const out: React.ReactNode[] = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i];
+    const b = pts[i + 1];
+    if (b <= a) continue;
+    const inHigh = highlight ? a >= highlight.s && b <= highlight.e : false;
+    let content: React.ReactNode = stripMarkdownInline(text.slice(a, b));
+    if (inHigh) {
+      content = <mark className="citation-source-mark">{content}</mark>;
+    }
+    const marksAtSpan = marks.filter(({ s, e }) => s === a && e === b);
+    if (marksAtSpan.length > 0) {
+      // Render EVERY comment on this span (two comments — e.g. a citation-fix
+      // and a note — can share identical bounds). Each mark keeps its own
+      // click/select and appends a checkmark when accepted.
+      let inner = content;
+      for (const m of marksAtSpan) {
+        const accepted = m.spec.status === "accepted" || m.spec.status === "done";
+        const mark = (
+          <mark
+            className={markClassName(m.spec)}
+            data-comment-id={m.spec.commentId}
+            onClick={
+              m.spec.onClick
+                ? () => m.spec.onClick!(m.spec.commentId)
+                : undefined
+            }
+          >
+            {inner}
+          </mark>
+        );
+        inner = accepted ? (
+          <Fragment>
+            {mark}
+            <span
+              className="review-mark-check"
+              aria-label="Accepted fix"
+              title="Accepted"
+            >
+              ✓
+            </span>
+          </Fragment>
+        ) : (
+          mark
+        );
+      }
+      content = inner;
+    }
+    const prefix = a === qs ? "\u201C" : "";
+    const suffix = b === qe ? "\u201D" : "";
+    if (prefix || suffix) {
+      content = (
+        <Fragment>
+          {prefix}
+          {content}
+          {suffix}
+        </Fragment>
+      );
+    }
+    out.push(<Fragment key={`m-${absStart}-${a}`}>{content}</Fragment>);
+  }
+  return <>{out}</>;
+};
+
+/** Render a text slice with the renderer's raw-offset annotation, so edit-mode
+ *  selections can be mapped back to raw `content.sanskrit.devanagari` offsets.
+ *  The span is display-inline and carries no styling — the attributes are the
+ *  only payload (selectionToOffset reads them). */
+const annotated = (
+  rawStart: number,
+  rawEnd: number,
+  content: React.ReactNode,
+): React.ReactNode => (
+  <span data-offset-start={rawStart} data-offset-end={rawEnd}>
+    {content}
+  </span>
+);
+
+/** Wrap the review marks that fall inside a raw [rawStart, rawEnd) slice with
+ *  `<mark class="review-mark ...">` HTML, for the dangerouslySetInnerHTML paths.
+ *  Returns the HTML with the marks spliced in. */
+const markHtmlInSpan = (
+  html: string,
+  rawStart: number,
+  rawEnd: number,
+  reviewMarks?: ReviewMarkSpec[],
+): string => {
+  if (!reviewMarks || reviewMarks.length === 0) return html;
+  const segLength = rawEnd - rawStart;
+  const inSpan = reviewMarks
+    .map((m) => ({
+      m,
+      s: Math.max(0, m.start - rawStart),
+      e: Math.min(segLength, m.end - rawStart),
+    }))
+    .filter(({ s, e }) => s < e)
+    .sort((a, b) => a.s - b.s);
+  if (inSpan.length === 0) return html;
+  let out = "";
+  let cursor = 0;
+  for (const { m, s, e } of inSpan) {
+    if (s > cursor) out += html.slice(cursor, s);
+    out +=
+      `<mark class="${markClassName(m)}" data-comment-id="${m.commentId}">` +
+      html.slice(s, e) +
+      "</mark>";
+    cursor = e;
+  }
+  out += html.slice(cursor);
+  return out;
 };
 
 /**
@@ -81,12 +292,15 @@ export function renderCommentaryWithReferences(
   rawText: string,
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
+  reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
   // Glue em-dashes and sentence-dandas to their neighbours (length-preserving).
   const text = protectLineBreaks(rawText);
   if (!references || references.length === 0) {
     return (
       <span
+        data-offset-start={0}
+        data-offset-end={text.length}
         dangerouslySetInnerHTML={{ __html: sanitizeCommentaryHtml(text) }}
       />
     );
@@ -123,8 +337,12 @@ export function renderCommentaryWithReferences(
       parts.push(
         <span
           key={`seg-${cursor}`}
+          data-offset-start={cursor}
+          data-offset-end={segStart}
           dangerouslySetInnerHTML={{
-            __html: sanitizeCommentaryHtml(html),
+            __html: sanitizeCommentaryHtml(
+              markHtmlInSpan(html, cursor, segStart, reviewMarks),
+            ),
           }}
         />
       );
@@ -148,8 +366,12 @@ export function renderCommentaryWithReferences(
     parts.push(
       <span
         key="seg-last"
+        data-offset-start={cursor}
+        data-offset-end={text.length}
         dangerouslySetInnerHTML={{
-          __html: sanitizeCommentaryHtml(text.slice(cursor)),
+          __html: sanitizeCommentaryHtml(
+            markHtmlInSpan(text.slice(cursor), cursor, text.length, reviewMarks),
+          ),
         }}
       />
     );
@@ -183,6 +405,7 @@ export function renderMulaWithReferences(
   linkContext: ReferenceLinkContext,
   verseQuotes: { start: number; end: number }[] | undefined,
   ownVerses?: { start: number; end: number }[],
+  reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
   // Split the mula at verse-quote boundaries: each verse-quote block renders
   // as a hang-indented verse (pādas on separate lines), prose between them uses
@@ -222,19 +445,19 @@ export function renderMulaWithReferences(
       if (kind === "own") {
         parts.push(
           <div key={`v-${offset}`} className="verse-quote verse-own">
-            {renderVerseQuote(t, references, linkContext, o)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks)}
           </div>,
         );
       } else if (kind === "quote") {
         parts.push(
           <div key={`vq-${offset}`} className="verse-quote">
-            {renderVerseQuote(t, references, linkContext, o)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks)}
           </div>,
         );
       } else if (t.trim() !== "") {
         parts.push(
           <div key={`prose-${offset}`} className="flow-mula-prose">
-            {renderMulaProse(t, references, linkContext, o)}
+            {renderMulaProse(t, references, linkContext, o, undefined, {}, reviewMarks)}
           </div>,
         );
       }
@@ -271,7 +494,7 @@ export function renderMulaWithReferences(
     });
     return <>{joined}</>;
   }
-  return <>{renderMulaProse(text, references, linkContext, 0)}</>;
+  return <>{renderMulaProse(text, references, linkContext, 0, undefined, {}, reviewMarks)}</>;
 }
 
 /** Render a non-verse prose span with its references (existing split logic),
@@ -279,14 +502,20 @@ export function renderMulaWithReferences(
  *
  *  `blockLookbacks` optionally supplies per-ref source windows computed against
  *  a whole verse-quote BLOCK (see renderVerseQuote) so a ref at the verse's end
- *  still gets the full verse as its lookback — not just the pāda slice. */
+ *  still gets the full verse as its lookback — not just the pāda slice.
+ *  `quoteBounds` wraps the span in `“…”` when it falls within this slice (the
+ *  build-time quote span). `suppressQuoteMarks` drops the glyphs for
+ *  verse-quote blocks, whose hang-indent treatment is itself the quotation. */
 function renderMulaProse(
   text: string,
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
   offset: number,
   blockLookbacks?: Record<number, { sourceLookback: string; sourceWindowStart: number }>,
+  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean } = {},
+  reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
+  const { quoteBounds, suppressQuoteMarks = false } = options;
   if (!references || references.length === 0) {
     const bounds = highlightBounds(
       linkContext.sourceHighlight,
@@ -294,18 +523,17 @@ function renderMulaProse(
       offset,
       text.length,
     );
-    if (bounds) {
-      return (
-        <Fragment>
-          {stripMarkdownInline(text.slice(0, bounds.s))}
-          <mark className="citation-source-mark">
-            {stripMarkdownInline(text.slice(bounds.s, bounds.e))}
-          </mark>
-          {stripMarkdownInline(text.slice(bounds.e))}
-        </Fragment>
-      );
-    }
-    return <>{stripMarkdown(text)}</>;
+    return annotated(
+      offset,
+      offset + text.length,
+      renderMarkedSegment(
+        text,
+        offset,
+        suppressQuoteMarks ? undefined : quoteBounds,
+        bounds,
+        reviewMarks,
+      ),
+    );
   }
   const sorted = [...references]
     .filter((r) => r.start >= offset && r.end <= offset + text.length)
@@ -338,19 +566,21 @@ function renderMulaProse(
         offset + cursor,
         seg.length,
       );
-      if (bounds) {
-        parts.push(
-          <Fragment key={`seg-${cursor}`}>
-            {stripMarkdownInline(seg.slice(0, bounds.s))}
-            <mark className="citation-source-mark">
-              {stripMarkdownInline(seg.slice(bounds.s, bounds.e))}
-            </mark>
-            {stripMarkdownInline(seg.slice(bounds.e))}
-          </Fragment>,
-        );
-      } else {
-        parts.push(<span key={`seg-${cursor}`}>{stripMarkdownInline(seg)}</span>);
-      }
+      // Quote marks from the block bounds (verse-quote) or the ref's own
+      // build-time quote (prose citation). Verse-quote blocks suppress them —
+      // the hang-indented block treatment is itself the quotation mark.
+      const quote = suppressQuoteMarks
+        ? undefined
+        : quoteBounds ?? (ref.quote ? { start: ref.quote.start, end: ref.quote.end } : undefined);
+      parts.push(
+        <Fragment key={`seg-${cursor}`}>
+          {annotated(
+            offset + cursor,
+            offset + segStart,
+            renderMarkedSegment(seg, offset + cursor, quote, bounds, reviewMarks),
+          )}
+        </Fragment>,
+      );
     }
     const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
@@ -371,20 +601,21 @@ function renderMulaProse(
       offset + cursor,
       text.length - cursor,
     );
-    if (bounds) {
-      const tail = text.slice(cursor);
-      parts.push(
-        <Fragment key="seg-last">
-          {stripMarkdownInline(tail.slice(0, bounds.s))}
-          <mark className="citation-source-mark">
-            {stripMarkdownInline(tail.slice(bounds.s, bounds.e))}
-          </mark>
-          {stripMarkdownInline(tail.slice(bounds.e))}
-        </Fragment>,
-      );
-    } else {
-      parts.push(<span key="seg-last">{stripMarkdownInline(text.slice(cursor))}</span>);
-    }
+    parts.push(
+      <Fragment key="seg-last">
+        {annotated(
+          offset + cursor,
+          offset + text.length,
+          renderMarkedSegment(
+            text.slice(cursor),
+            offset + cursor,
+            suppressQuoteMarks ? undefined : quoteBounds,
+            bounds,
+            reviewMarks,
+          ),
+        )}
+      </Fragment>,
+    );
   }
   return <>{parts}</>;
 }
@@ -396,6 +627,7 @@ function renderVerseQuote(
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
   offset: number,
+  reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
   const inBlock = (references ?? []).filter(
     (r) => r.start >= offset && r.end <= offset + block.length,
@@ -426,7 +658,7 @@ function renderVerseQuote(
     <span className="verse-quote-inner">
       {padas.map(({ text, absStart }, i) => (
         <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
-          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks)}
+          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true }, reviewMarks)}
         </span>
       ))}
     </span>

@@ -149,6 +149,38 @@ the commentary pane/chrome; does not drive per-block presentation.
   `lib/quotedMatch.ts` constant/rule change must ship the matching Python
   change + mirrored test.
 
+## Edit mode (`?m=edit`) — code-review-style annotations
+
+A hash mode where the reviewer selects text / clicks citations / annotates
+lines, and comments persist to a timestamped session JSON in grantha-data.
+
+- `app/page.tsx` — `mode === "edit"` branch renders `EditReader`.
+- `components/review/EditReader.tsx` — wraps `FlowReader` in `ReviewModeProvider`,
+  computes per-passage review marks (re-located by snippet), overlays the
+  toolbar + right-hand comment list.
+- `components/review/ReviewModeProvider.tsx` — loads/upserts the session
+  (`fetchSession`/`upsertComment`/`setCommentStatus`/`startNewSession`),
+  computes `detached` comments and review highlights.
+- `components/review/ReviewSelectionToolbar.tsx` — the floating "add/edit
+  comment" popup: kind picker, body, suggested locator; maps the selection to
+  raw offsets via `lib/selectionToOffset.ts`.
+- `components/review/ReviewCommentList.tsx` — right panel: status chips, done/
+  dismiss, "new review", drift/detached badges.
+- `components/review/reviewServer.ts` — HTTP client for the local review server.
+- `lib/selectionToOffset.ts` — maps a DOM selection back to raw
+  `content.sanskrit.devanagari` offsets via the renderer's
+  `data-offset-start/end` annotations (exact, or widened, or loud error).
+- `components/renderCommentary.tsx` — `annotated()` wraps every emitted slice
+  in `data-offset-start/end` spans; `ReviewMarkSpec` paints `.review-mark` on
+  the surface (threaded via `renderMulaWithReferences` /
+  `renderCommentaryWithReferences` `reviewMarks` param).
+- `scripts/review-server.mjs` — standalone dep-free Node server (port 4321)
+  persisting sessions to `../grantha-data/structured_md/<grantha_id>/reviews/`;
+  resolves `source_file` + `validation_hash` from the real md; hardened
+  (127.0.0.1, origin allowlist, payload validation). Run with `npm run
+  review:server`.
+- Schema/handoff contract: `../grantha-data/docs/REVIEW_COMMENTS_SCHEMA.md`.
+
 ## Front matter + category dividers (flow reader)
 
 How prefatory/concluding items decide their treatment, and the divider that
