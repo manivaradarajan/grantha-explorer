@@ -593,6 +593,14 @@ mark.review-mark.st-accepted {
   border-color: #059669;
   background: #ecfdf5;
 }
+.review-candidate-grantha {
+  grid-column: 1 / -1;
+  font-size: 0.68rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .review-candidate-ref {
   font-weight: 600;
   color: #1f2937;

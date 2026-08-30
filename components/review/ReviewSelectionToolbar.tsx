@@ -10,6 +10,7 @@ import {
 } from "./reviewServer";
 import { selectionToOffset, SelectionMappingError } from "@/lib/selectionToOffset";
 import { locateSnippet } from "@/lib/reviewAnchor";
+import { useGranthasMeta } from "@/hooks/useGrantha";
 
 export interface DetectedCitationTarget {
   grantha_id: string;
@@ -234,6 +235,9 @@ export function ReviewSelectionToolbar({
       currentGranthaId,
       passageRef,
     });
+  const { data: granthaMeta } = useGranthasMeta();
+  const granthaTitle = (id: string): string =>
+    granthaMeta?.[id]?.title?.devanagari ?? id;
   const [saveError, setSaveError] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -432,8 +436,8 @@ export function ReviewSelectionToolbar({
             <div className="review-candidates-list">
               <div className="review-candidates-head">
                 {detectedTarget
-                  ? `in ${detectedTarget.grantha_id}`
-                  : "in corpus"}
+                  ? `in ${granthaTitle(detectedTarget.grantha_id)}`
+                  : "across texts"}
               </div>
               {candidates.map((c, idx) => (
                 <button
@@ -444,6 +448,9 @@ export function ReviewSelectionToolbar({
                     setLocator(c.ref);
                   }}
                 >
+                  <span className="review-candidate-grantha">
+                    {granthaTitle(c.grantha_id)}
+                  </span>
                   <span className="review-candidate-ref">{c.ref}</span>
                   {c.is_current && (
                     <span className="review-candidate-current">current</span>
