@@ -18,16 +18,21 @@ const FootnoteModeContext = createContext<FootnoteModeContextValue>({
 /**
  * Reads the stored footnote-mode flag from localStorage.
  *
+ * Footnote mode defaults to **on**: a first-time visitor (no stored value)
+ * sees footnotes immediately. Returns `false` only when the stored value is
+ * explicitly `"false"`.
+ *
  * Returns:
- *     `true` when the stored value is "true", `false` on any error or when
- *     the value is absent or running in a non-browser context.
+ *     `false` when the stored value is "false", `true` in all other cases
+ *     (value absent, storage unavailable, or non-browser context).
  */
 function readStoredFootnoteMode(): boolean {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return true;
   try {
-    return localStorage.getItem(STORAGE_KEY) === "true";
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored === null ? true : stored === "true";
   } catch {
-    return false;
+    return true;
   }
 }
 

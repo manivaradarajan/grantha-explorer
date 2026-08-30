@@ -38,7 +38,7 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
-import { renderCommentaryWithReferences, renderMulaWithReferences, footnoteKey, type ReviewMarkSpec } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences, footnoteKey, type ReviewMarkSpec, type ReferenceLinkContext } from "./renderCommentary";
 import { CitationPanelHost, type SourceHighlight } from "./CitationPanel";
 import { FootnoteBlock, type FootnoteEntry } from "./FootnoteBlock";
 import { useFootnoteMode } from "@/lib/contexts/FootnoteModeContext";
@@ -139,6 +139,34 @@ function buildFootnoteEntries(
   }
   return entries.sort((a, b) => a.number - b.number);
 }
+/**
+ * Renders a `FootnoteBlock` when footnote mode is enabled and the map is
+ * non-empty, or returns `null`.
+ *
+ * Args:
+ *     map: The per-verse footnote map built by `buildFootnoteMap`.
+ *     allRefs: All references in the verse block.
+ *     enabled: Whether footnote mode is currently on.
+ *     linkContext: The reference-link context for the verse block.
+ *
+ * Returns:
+ *     A `FootnoteBlock` element, or `null`.
+ */
+function renderFootnoteBlock(
+  map: ReadonlyMap<string, number>,
+  allRefs: Reference[],
+  enabled: boolean,
+  linkContext: ReferenceLinkContext,
+): ReactNode {
+  if (!enabled || map.size === 0) return null;
+  return (
+    <FootnoteBlock
+      footnotes={buildFootnoteEntries(map, allRefs)}
+      linkContext={linkContext}
+    />
+  );
+}
+
 /** Max scrollTop drift from the recorded target that still counts as "at the
  *  verse" — beyond it the reader has scrolled away. */
 const RE_ALIGN_TOLERANCE_PX = 32;
@@ -1196,6 +1224,15 @@ export default function FlowReader({
                   const footnoteMap: ReadonlyMap<string, number> = footnoteModeEnabled
                     ? buildFootnoteMap(allRefs)
                     : new Map();
+                  const linkContext: ReferenceLinkContext = {
+                    currentGranthaId: grantha.grantha_id,
+                    sourcePassageRef: passage.ref,
+                    sourceHighlight,
+                    updateHash,
+                    availableGranthaIds,
+                    granthaById,
+                    granthaIdToTitle: granthaIdToDevanagariTitle,
+                  };
                   const introText = cp?.intro?.sanskrit?.devanagari;
                   // Presentation is a total function of the passage's declared
                   // kind (per-block presentation model).
@@ -1336,36 +1373,10 @@ export default function FlowReader({
                               )}
                             </p>
                             {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap)}
-                            {footnoteModeEnabled && footnoteMap.size > 0 && (
-                              <FootnoteBlock
-                                footnotes={buildFootnoteEntries(footnoteMap, allRefs)}
-                                linkContext={{
-                                  currentGranthaId: grantha.grantha_id,
-                                  sourcePassageRef: passage.ref,
-                                  sourceHighlight,
-                                  updateHash,
-                                  availableGranthaIds,
-                                  granthaById,
-                                  granthaIdToTitle: granthaIdToDevanagariTitle,
-                                }}
-                              />
-                            )}
+                            {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>
                         )}
-                        {!cp && footnoteModeEnabled && footnoteMap.size > 0 && (
-                          <FootnoteBlock
-                            footnotes={buildFootnoteEntries(footnoteMap, allRefs)}
-                            linkContext={{
-                              currentGranthaId: grantha.grantha_id,
-                              sourcePassageRef: passage.ref,
-                              sourceHighlight,
-                              updateHash,
-                              availableGranthaIds,
-                              granthaById,
-                              granthaIdToTitle: granthaIdToDevanagariTitle,
-                            }}
-                          />
-                        )}
+                        {!cp && renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                       </div>
                     </Fragment>
                   );

@@ -186,13 +186,15 @@ const REF_B = {
 
 describe("FlowReader footnote mode", () => {
   it("with footnoteModeEnabled=false: no FootnoteBlock rendered (regression guard)", async () => {
-    // When the context has footnoteModeEnabled=false (default), no footnote block.
+    // Explicitly disable footnote mode so the provider initialises with false.
+    localStorage.setItem("grantha-footnote-mode", "false");
     const grantha = makeGranthaWithRefs([REF_A]);
     const { root, el } = await renderInto(
       <FootnoteModeProvider>
         <FlowReader {...propsFor(grantha)} />
       </FootnoteModeProvider>,
     );
+    localStorage.removeItem("grantha-footnote-mode");
     // FootnoteBlock renders with class "mt-4" only when footnote mode is on.
     const footnoteBlock = el.querySelector('[data-verse-ref="1"] .mt-4');
     expect(footnoteBlock).toBeNull();
