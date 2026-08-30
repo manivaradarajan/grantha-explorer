@@ -38,8 +38,10 @@ import FlowReaderFolio from "./FlowReaderFolio";
 import FlowReaderCitation from "./FlowReaderCitation";
 import FlowReaderCompare from "./FlowReaderCompare";
 import ComparePicker from "./ComparePicker";
-import { renderCommentaryWithReferences, renderMulaWithReferences, type ReviewMarkSpec } from "./renderCommentary";
+import { renderCommentaryWithReferences, renderMulaWithReferences, footnoteKey, type ReviewMarkSpec, type ReferenceLinkContext } from "./renderCommentary";
 import { CitationPanelHost, type SourceHighlight } from "./CitationPanel";
+import { FootnoteBlock, type FootnoteEntry } from "./FootnoteBlock";
+import { useFootnoteMode } from "@/lib/contexts/FootnoteModeContext";
 
 interface FlowReaderProps {
   grantha: Grantha;
@@ -82,6 +84,89 @@ interface FlowReaderProps {
 
 const FONT_SCALE_MIN = 0.75;
 const FONT_SCALE_MAX = 1.4;
+
+/**
+ * Builds a deduplicated map from citation key to sequential footnote number.
+ *
+ * References with the same `footnoteKey` share a single number. Numbers are
+ * assigned in the order the references appear in `refs`.
+ *
+ * Args:
+ *     refs: All references in the verse block (commentary + subcommentaries).
+ *
+ * Returns:
+ *     A map from `footnoteKey(ref)` to a 1-based footnote number.
+ */
+function buildFootnoteMap(refs: Reference[]): ReadonlyMap<string, number> {
+  const map = new Map<string, number>();
+  let counter = 1;
+  for (const ref of refs) {
+    const key = footnoteKey(ref);
+    if (!map.has(key)) {
+      map.set(key, counter++);
+    }
+  }
+  return map;
+}
+
+/**
+ * Inverts a footnote map into an ordered list of `FootnoteEntry` values.
+ *
+ * Duplicate keys (same citation used multiple times) produce a single entry.
+ * Entries are sorted ascending by footnote number.
+ *
+ * Args:
+ *     map: The map produced by `buildFootnoteMap`.
+ *     refs: The same reference list that was passed to `buildFootnoteMap`.
+ *
+ * Returns:
+ *     Deduplicated `FootnoteEntry[]` sorted by footnote number.
+ */
+function buildFootnoteEntries(
+  map: ReadonlyMap<string, number>,
+  refs: Reference[],
+): FootnoteEntry[] {
+  const seen = new Set<string>();
+  const entries: FootnoteEntry[] = [];
+  for (const ref of refs) {
+    const key = footnoteKey(ref);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const num = map.get(key);
+    if (num !== undefined) {
+      entries.push({ number: num, reference: ref });
+    }
+  }
+  return entries.sort((a, b) => a.number - b.number);
+}
+/**
+ * Renders a `FootnoteBlock` when footnote mode is enabled and the map is
+ * non-empty, or returns `null`.
+ *
+ * Args:
+ *     map: The per-verse footnote map built by `buildFootnoteMap`.
+ *     allRefs: All references in the verse block.
+ *     enabled: Whether footnote mode is currently on.
+ *     linkContext: The reference-link context for the verse block.
+ *
+ * Returns:
+ *     A `FootnoteBlock` element, or `null`.
+ */
+function renderFootnoteBlock(
+  map: ReadonlyMap<string, number>,
+  allRefs: Reference[],
+  enabled: boolean,
+  linkContext: ReferenceLinkContext,
+): ReactNode {
+  if (!enabled || map.size === 0) return null;
+  return (
+    <FootnoteBlock
+      footnotes={buildFootnoteEntries(map, allRefs)}
+      linkContext={linkContext}
+    />
+  );
+}
+
 /** Max scrollTop drift from the recorded target that still counts as "at the
  *  verse" — beyond it the reader has scrolled away. */
 const RE_ALIGN_TOLERANCE_PX = 32;
@@ -135,6 +220,7 @@ export default function FlowReader({
   reviewMarksByRef,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const { footnoteModeEnabled } = useFootnoteMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [folioOpen, setFolioOpen] = useState(false);
   const [fontScale, setFontScale] = useState(1.2);
@@ -742,6 +828,7 @@ export default function FlowReader({
     sub: Commentary,
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
+    footnoteMap: ReadonlyMap<string, number>,
   ): ReactNode => {
     const subPassage = commentaryPassageForRef(sub.passages, verseRef);
     if (!subPassage) {
@@ -795,6 +882,8 @@ export default function FlowReader({
                   granthaById,
                   granthaIdToTitle: granthaIdToDevanagariTitle,
                 },
+                undefined,
+                footnoteMap,
               )}
             </p>
           </div>
@@ -806,12 +895,13 @@ export default function FlowReader({
   const renderSubcommentaries = (
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
+    footnoteMap: ReadonlyMap<string, number>,
   ): ReactNode => {
     if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
       return null;
     }
     return activeCommentary.subcommentaries.map((sub) =>
-      renderSubcommentary(sub, verseRef, sourceHighlight),
+      renderSubcommentary(sub, verseRef, sourceHighlight, footnoteMap),
     );
   };
 
@@ -1101,7 +1191,7 @@ export default function FlowReader({
                               </div>
                             )
                           ) : null}
-                          {renderSubcommentaries(passage.ref, sourceHighlight)}
+                          {renderSubcommentaries(passage.ref, sourceHighlight, new Map())}
                         </div>
                       </Fragment>
                     );
@@ -1114,10 +1204,35 @@ export default function FlowReader({
                           passage.ref,
                         )
                       : undefined;
+
                   const isSelected = passage.ref === selectedRef;
                   const rawMula = passage.content?.sanskrit?.devanagari;
                   const mula = stripMarkdown(rawMula);
                   const mulaRefs = (passage as { references?: Reference[] }).references;
+
+                  // Collect all citation references from this verse block
+                  // (mula + commentary + any subcommentary for this passage ref) to
+                  // build a per-block footnote map when footnote mode is on.
+                  const allRefs: Reference[] = [
+                    ...(mulaRefs ?? []),
+                    ...(cp?.references ?? []),
+                    ...(activeCommentary?.subcommentaries?.flatMap((sub) => {
+                      const sp = commentaryPassageForRef(sub.passages, passage.ref);
+                      return sp?.references ?? [];
+                    }) ?? []),
+                  ];
+                  const footnoteMap: ReadonlyMap<string, number> = footnoteModeEnabled
+                    ? buildFootnoteMap(allRefs)
+                    : new Map();
+                  const linkContext: ReferenceLinkContext = {
+                    currentGranthaId: grantha.grantha_id,
+                    sourcePassageRef: passage.ref,
+                    sourceHighlight,
+                    updateHash,
+                    availableGranthaIds,
+                    granthaById,
+                    granthaIdToTitle: granthaIdToDevanagariTitle,
+                  };
                   const introText = cp?.intro?.sanskrit?.devanagari;
                   // Presentation is a total function of the passage's declared
                   // kind (per-block presentation model).
@@ -1146,6 +1261,7 @@ export default function FlowReader({
                               passage.verse_quotes,
                               (passage as { verses?: { start: number; end: number }[] }).verses,
                               reviewMarksByRef?.[passage.ref],
+                              footnoteMap,
                             )}
                             {!isProseMula && (
                               <>{" "}॥ {toDevanagariNumerals(passage.ref)} ॥</>
@@ -1245,18 +1361,22 @@ export default function FlowReader({
                                 cp.references,
                                 {
                                   currentGranthaId: grantha.grantha_id,
-                                                    sourcePassageRef: passage.ref,
-                  sourceHighlight,
-                  updateHash,
+                                  sourcePassageRef: passage.ref,
+                                  sourceHighlight,
+                                  updateHash,
                                   availableGranthaIds,
                                   granthaById,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,
                                 },
+                                undefined,
+                                footnoteMap,
                               )}
                             </p>
-                            {renderSubcommentaries(passage.ref, sourceHighlight)}
+                            {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap)}
+                            {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>
                         )}
+                        {!cp && renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                       </div>
                     </Fragment>
                   );

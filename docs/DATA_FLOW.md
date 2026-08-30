@@ -1,6 +1,6 @@
 # Grantha Data Flow — Consumer Side (grantha-explorer)
 
-**Last updated:** 2026-08-16
+**Last updated:** 2026-08-30
 **Status:** Living document. Read **first**: the canonical producer-side
 description in `../grantha-data/docs/DATA_FLOW.md` (source → BUILD → converter →
 on-disk shapes). This file documents only what the explorer does: ingestion
@@ -33,10 +33,18 @@ The three on-disk shapes (`grantha` flat file, `edition-sub-envelope`+parts,
 ### 2.1 Flat + multipart single-edition — `scripts/convert_structured_md.py`
 
 ```
+GRANTHA_DATA_TOOLS_LIB=../grantha-data/tools/lib \
 python3 scripts/convert_structured_md.py \
   --source ../grantha-data/structured_md/upanishads/taittiriya \
   --out public/data/library/upanishads/taittiriya/taittiriya-upanishad
 ```
+
+Run from the `grantha-explorer/` root. `GRANTHA_DATA_TOOLS_LIB` is required
+unless `grantha_data` is already importable via a `pip install -e` of the
+active worktree checkout (the editable install of a *different* checkout, e.g.
+`~/github/grantha-data`, won't carry worktree-local changes to
+`grantha_data.references`). Without it the converter raises
+`ModuleNotFoundError` on reference emission — it does **not** silently skip.
 
 - Reads all publishable `.md` files from `--source` (BUILD-gated via
   `scripts/_build_parser.py`).
@@ -74,10 +82,12 @@ python3 scripts/convert_structured_md.py \
   (`grantha_data.references`, extracted by `_extract_references`), emitting a
   schema-shaped `references[]` key when citations are found. The library lives
   in the sibling `grantha-data` checkout and is imported via the env-gated
-  bootstrap (`scripts/grantha_data_bootstrap.py`): set
-  `GRANTHA_DATA_TOOLS_LIB=<grantha-data>/tools/lib` (or have `grantha_data`
-  installed) or the converter skips reference emission — best-effort, never
-  blocks a conversion. Both converters also write a per-edition
+  bootstrap (`scripts/grantha_data_bootstrap.py`): `GRANTHA_DATA_TOOLS_LIB`
+  must be set to `<grantha-data>/tools/lib`, or `grantha_data` must be
+  importable via a `pip install -e` of the **active** worktree checkout.
+  Without either, the converter raises `ModuleNotFoundError` — it does not
+  silently skip (see the command example above).
+  Both converters also write a per-edition
   `references-report.json` (reference diagnostics: code, severity, source
   file, passage_ref, offsets, hint) next to the part files whenever any
   diagnostic was produced. See the pilot plan §4.1.2 / §8.1.

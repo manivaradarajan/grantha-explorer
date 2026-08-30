@@ -271,6 +271,22 @@ const markHtmlInSpan = (
 };
 
 /**
+ * Produces a stable deduplication key for a reference.
+ *
+ * Two references with the same `grantha_id`, `locator`, and `display_text`
+ * map to the same footnote number in a verse block.
+ *
+ * Args:
+ *     ref: The reference to key.
+ *
+ * Returns:
+ *     A string key unique to this citation identity.
+ */
+export function footnoteKey(ref: Reference): string {
+  return `${ref.grantha_id ?? ""}||${ref.locator ?? ""}||${ref.display_text}`;
+}
+
+/**
  * Render commentary Devanagari with its structured cross-text citations.
  *
  * Splits the RAW `content.sanskrit.devanagari` at each reference's half-open
@@ -279,10 +295,18 @@ const markHtmlInSpan = (
  * parenthesized citation text itself is never re-synthesized — the offsets
  * and `display_text` come from the producer.
  *
+ * When `footnoteMap` is provided, references whose `footnoteKey` appears in
+ * the map are emitted as `<ReferenceLink displayMode="footnote-marker">` (a
+ * `<sup>[n]</sup>` superscript) instead of the normal inline link; the same
+ * CitationPanel hover logic applies.
+ *
  * Args:
  *     rawText: The passage's raw `content.sanskrit.devanagari`.
  *     references: The passage's `references[]`, or undefined/[].
  *     linkContext: Context threaded into each `ReferenceLink`.
+ *     reviewMarks: Optional edit-mode annotation highlights.
+ *     footnoteMap: When present, citations whose key is in this map are
+ *         rendered as footnote markers; keys map to footnote numbers.
  *
  * Returns:
  *     A React fragment of sanitized text segments interleaved with reference
@@ -293,6 +317,7 @@ export function renderCommentaryWithReferences(
   references: Reference[] | undefined,
   linkContext: ReferenceLinkContext,
   reviewMarks?: ReviewMarkSpec[],
+  footnoteMap?: ReadonlyMap<string, number>,
 ): React.ReactNode {
   // Glue em-dashes and sentence-dandas to their neighbours (length-preserving).
   const text = protectLineBreaks(rawText);
@@ -322,8 +347,19 @@ export function renderCommentaryWithReferences(
     }
     const segStart = Math.max(cursor, ref.start);
     const window = buildSourceWindow(text, ref.start);
+    // Prefer the text actually at the offsets (ground truth for rendering);
+    // fall back to the producer's display_text on any mismatch.
+    const displayText = text.slice(segStart, ref.end) || ref.display_text;
+    const refWithDisplay = { ...ref, display_text: displayText };
+    const fnNum = footnoteMap?.get(footnoteKey(ref));
+    const isMarker = fnNum !== undefined;
     if (segStart > cursor) {
-      const seg = text.slice(cursor, segStart);
+      let seg = text.slice(cursor, segStart);
+      if (isMarker) {
+        // Strip the open-paren (and optional preceding space) that wraps the
+        // citation span — the footnote marker replaces the parenthesized citation.
+        seg = seg.replace(/ ?\($/, "");
+      }
       const bounds = highlightBounds(linkContext.sourceHighlight, linkContext.sourcePassageRef, cursor, seg.length);
       let html = seg;
       if (bounds) {
@@ -347,19 +383,29 @@ export function renderCommentaryWithReferences(
         />
       );
     }
-    // Prefer the text actually at the offsets (ground truth for rendering);
-    // fall back to the producer's display_text on any mismatch.
-    const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
-      <ReferenceLink
-        key={`ref-${segStart}`}
-        reference={{ ...ref, display_text: displayText }}
-        sourceLookback={window.text}
-        sourceWindowStart={window.start}
-        {...linkContext}
-      />
+      isMarker ? (
+        <ReferenceLink
+          key={`ref-${segStart}`}
+          reference={refWithDisplay}
+          sourceLookback={window.text}
+          sourceWindowStart={window.start}
+          displayMode="footnote-marker"
+          footnoteNumber={fnNum}
+          {...linkContext}
+        />
+      ) : (
+        <ReferenceLink
+          key={`ref-${segStart}`}
+          reference={refWithDisplay}
+          sourceLookback={window.text}
+          sourceWindowStart={window.start}
+          {...linkContext}
+        />
+      ),
     );
-    cursor = ref.end;
+    // Skip a trailing close-paren that wrapped the citation span in the source.
+    cursor = isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
   }
 
   if (cursor < text.length) {
@@ -406,6 +452,7 @@ export function renderMulaWithReferences(
   verseQuotes: { start: number; end: number }[] | undefined,
   ownVerses?: { start: number; end: number }[],
   reviewMarks?: ReviewMarkSpec[],
+  footnoteMap?: ReadonlyMap<string, number>,
 ): React.ReactNode {
   // Split the mula at verse-quote boundaries: each verse-quote block renders
   // as a hang-indented verse (pādas on separate lines), prose between them uses
@@ -445,19 +492,19 @@ export function renderMulaWithReferences(
       if (kind === "own") {
         parts.push(
           <div key={`v-${offset}`} className="verse-quote verse-own">
-            {renderVerseQuote(t, references, linkContext, o, reviewMarks)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap)}
           </div>,
         );
       } else if (kind === "quote") {
         parts.push(
           <div key={`vq-${offset}`} className="verse-quote">
-            {renderVerseQuote(t, references, linkContext, o, reviewMarks)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap)}
           </div>,
         );
       } else if (t.trim() !== "") {
         parts.push(
           <div key={`prose-${offset}`} className="flow-mula-prose">
-            {renderMulaProse(t, references, linkContext, o, undefined, {}, reviewMarks)}
+            {renderMulaProse(t, references, linkContext, o, undefined, { footnoteMap }, reviewMarks)}
           </div>,
         );
       }
@@ -494,7 +541,7 @@ export function renderMulaWithReferences(
     });
     return <>{joined}</>;
   }
-  return <>{renderMulaProse(text, references, linkContext, 0, undefined, {}, reviewMarks)}</>;
+  return <>{renderMulaProse(text, references, linkContext, 0, undefined, { footnoteMap }, reviewMarks)}</>;
 }
 
 /** Render a non-verse prose span with its references (existing split logic),
@@ -512,10 +559,10 @@ function renderMulaProse(
   linkContext: ReferenceLinkContext,
   offset: number,
   blockLookbacks?: Record<number, { sourceLookback: string; sourceWindowStart: number }>,
-  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean } = {},
+  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean; footnoteMap?: ReadonlyMap<string, number> } = {},
   reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
-  const { quoteBounds, suppressQuoteMarks = false } = options;
+  const { quoteBounds, suppressQuoteMarks = false, footnoteMap } = options;
   if (!references || references.length === 0) {
     const bounds = highlightBounds(
       linkContext.sourceHighlight,
@@ -546,6 +593,10 @@ function renderMulaProse(
     assertCodePointOffsetAligned(text, ref.end);
     if (ref.end <= cursor) continue;
     const segStart = Math.max(cursor, ref.start);
+    // footnoteKey uses only grantha_id/locator/display_text — not offsets —
+    // so looking up rebased refs works correctly.
+    const fnNum = footnoteMap?.get(footnoteKey(ref));
+    const isMarker = fnNum !== undefined;
     // Prefer a whole-block lookback (the full verse) over the per-pāda slice.
     let sourceLookback: string;
     let sourceWindowStart: number;
@@ -559,7 +610,12 @@ function renderMulaProse(
       sourceWindowStart = w.start + offset;
     }
     if (segStart > cursor) {
-      const seg = text.slice(cursor, segStart);
+      let seg = text.slice(cursor, segStart);
+      if (isMarker) {
+        // Strip the open-paren (and optional preceding space) that wraps the
+        // citation span — the footnote marker replaces the parenthesized citation.
+        seg = seg.replace(/ ?\($/, "");
+      }
       const bounds = highlightBounds(
         linkContext.sourceHighlight,
         linkContext.sourcePassageRef,
@@ -584,15 +640,28 @@ function renderMulaProse(
     }
     const displayText = text.slice(segStart, ref.end) || ref.display_text;
     parts.push(
-      <ReferenceLink
-        key={`ref-${segStart}`}
-        reference={{ ...ref, display_text: displayText }}
-        sourceLookback={sourceLookback}
-        sourceWindowStart={sourceWindowStart}
-        {...linkContext}
-      />,
+      isMarker ? (
+        <ReferenceLink
+          key={`ref-${segStart}`}
+          reference={{ ...ref, display_text: displayText }}
+          sourceLookback={sourceLookback}
+          sourceWindowStart={sourceWindowStart}
+          displayMode="footnote-marker"
+          footnoteNumber={fnNum}
+          {...linkContext}
+        />
+      ) : (
+        <ReferenceLink
+          key={`ref-${segStart}`}
+          reference={{ ...ref, display_text: displayText }}
+          sourceLookback={sourceLookback}
+          sourceWindowStart={sourceWindowStart}
+          {...linkContext}
+        />
+      ),
     );
-    cursor = ref.end;
+    // Skip a trailing close-paren that wrapped the citation span in the source.
+    cursor = isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
   }
   if (cursor < text.length) {
     const bounds = highlightBounds(
@@ -628,6 +697,7 @@ function renderVerseQuote(
   linkContext: ReferenceLinkContext,
   offset: number,
   reviewMarks?: ReviewMarkSpec[],
+  footnoteMap?: ReadonlyMap<string, number>,
 ): React.ReactNode {
   const inBlock = (references ?? []).filter(
     (r) => r.start >= offset && r.end <= offset + block.length,
@@ -658,7 +728,7 @@ function renderVerseQuote(
     <span className="verse-quote-inner">
       {padas.map(({ text, absStart }, i) => (
         <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
-          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true }, reviewMarks)}
+          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true, footnoteMap }, reviewMarks)}
         </span>
       ))}
     </span>
