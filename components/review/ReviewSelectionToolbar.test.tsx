@@ -3,6 +3,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReviewSelectionToolbar, detectNearestReference } from "./ReviewSelectionToolbar";
 import { ReviewComment } from "./reviewServer";
 
@@ -46,16 +47,19 @@ async function renderToolbar(
   const host = document.createElement("div");
   document.body.appendChild(host);
   const root = createRoot(host);
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   await act(async () => {
     root.render(
-      <ReviewSelectionToolbar
-        passageRaw={RAW}
-        passageRef="17"
-        anchorRange={range}
-        onSave={onSave}
-        onCancel={onCancel}
-        editing={editing}
-      />,
+      <QueryClientProvider client={queryClient}>
+        <ReviewSelectionToolbar
+          passageRaw={RAW}
+          passageRef="17"
+          anchorRange={range}
+          onSave={onSave}
+          onCancel={onCancel}
+          editing={editing}
+        />
+      </QueryClientProvider>,
     );
   });
   return {

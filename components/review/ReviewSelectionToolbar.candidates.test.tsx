@@ -3,6 +3,7 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReviewSelectionToolbar } from "./ReviewSelectionToolbar";
 import type { Reference } from "@/lib/data";
 
@@ -71,15 +72,18 @@ async function renderToolbar(refs: Reference[] = references) {
   const host = document.createElement("div");
   document.body.appendChild(host);
   const root = createRoot(host);
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   await act(async () => {
     root.render(
-      <ReviewSelectionToolbar
-        passageRaw={RAW}
-        passageRef="1"
-        references={refs}
-        anchorRange={range}
-        onSave={() => {}}
-      />,
+      <QueryClientProvider client={queryClient}>
+        <ReviewSelectionToolbar
+          passageRaw={RAW}
+          passageRef="1"
+          references={refs}
+          anchorRange={range}
+          onSave={() => {}}
+        />
+      </QueryClientProvider>,
     );
   });
   // Switch to citation-fix (default is note) to trigger the submenu.
