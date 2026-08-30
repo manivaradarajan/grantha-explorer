@@ -5,7 +5,7 @@ import FlowReader from "@/components/FlowReader";
 import { ReviewModeProvider, useReviewMode } from "./ReviewModeProvider";
 import { ReviewCommentList } from "./ReviewCommentList";
 import { ReviewSelectionToolbar } from "./ReviewSelectionToolbar";
-import type { ReviewComment } from "./reviewServer";
+import type { ReviewComment, ReviewSession } from "./reviewServer";
 import type { Grantha, Reference } from "@/lib/data";
 import { resolveAnchor, resolveReviewMarks } from "@/lib/reviewAnchor";
 
@@ -72,6 +72,118 @@ const scrollElementCentered = (
     el.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 };
+
+// ---------------------------------------------------------------------------
+// Extracted hooks
+// ---------------------------------------------------------------------------
+
+/**
+ * Phrase-level scrollspy: keeps ``activeComment`` synced to whichever
+ * comment highlight is nearest the viewport center as the user scrolls.
+ *
+ * Does NOT auto-scroll the right-pane list — so a reviewer's manual
+ * scroll or card click is never fought by surface scrolling.
+ */
+function useScrollSpy(
+  surfaceRef: React.RefObject<HTMLDivElement | null>,
+  session: ReviewSession | null | undefined,
+  activeComment: string | null,
+  setActiveComment: (id: string | null) => void,
+): void {
+  useEffect(() => {
+    const main = surfaceRef.current?.querySelector(".overflow-y-auto") as HTMLElement | null;
+    if (!main || !session) return;
+    let raf = 0;
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = requestAnimationFrame(() => {
+        ticking = false;
+        const highlights = Array.from(
+          main.querySelectorAll<HTMLElement>("[data-comment-id]"),
+        ).filter((el) => el.offsetParent !== null);
+        if (!highlights.length) return;
+        const mainRect = main.getBoundingClientRect();
+        const centerY = mainRect.top + mainRect.height / 2;
+        let best: HTMLElement | null = null;
+        let bestDist = Infinity;
+        for (const el of highlights) {
+          const r = el.getBoundingClientRect();
+          const dist = Math.abs(r.top + r.height / 2 - centerY);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = el;
+          }
+        }
+        if (!best) return;
+        if (bestDist > mainRect.height) {
+          if (activeComment) setActiveComment(null);
+          return;
+        }
+        const id = best.getAttribute("data-comment-id");
+        if (id && id !== activeComment) setActiveComment(id);
+      });
+    };
+    main.addEventListener("scroll", onScroll, { passive: true });
+    const t = setTimeout(onScroll, 300);
+    return () => {
+      main.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+    };
+  }, [session, activeComment, surfaceRef, setActiveComment]);
+}
+
+/**
+ * Focus-scroll: when ``focusComment`` changes, scrolls the matching
+ * highlight mark into the center of the reading surface, and the comment
+ * card into view in the right pane.  Falls back to the passage heading
+ * when the comment is detached and shows a toast explaining the miss.
+ */
+function useFocusScroll(
+  focusComment: string | null,
+  detached: string[],
+  session: ReviewSession | null | undefined,
+  showToast: (msg: string) => void,
+  surfaceRef: React.RefObject<HTMLDivElement | null>,
+  listRef: React.RefObject<HTMLDivElement | null>,
+): void {
+  useEffect(() => {
+    if (!focusComment) return;
+    const comment = session?.comments.find((c) => c.id === focusComment);
+    const container = surfaceRef.current?.querySelector(
+      ".overflow-y-auto",
+    ) as HTMLElement | null;
+    const el = surfaceRef.current?.querySelector(
+      `[data-comment-id="${focusComment}"]`,
+    ) as HTMLElement | null;
+    const isDetached = detached.includes(focusComment);
+    if (el) {
+      scrollElementCentered(el, container);
+    } else if (isDetached && comment?.passage_ref) {
+      // No highlight could be rendered for this comment — jump to its passage
+      // so the reviewer still lands somewhere useful, and explain why.
+      const passageEl = surfaceRef.current?.querySelector<HTMLElement>(
+        `[data-verse-ref="${comment.passage_ref}"]`,
+      );
+      if (passageEl) {
+        scrollElementCentered(passageEl, container);
+        showToast(
+          `Text not found in para ${comment.passage_ref} — jumped to the paragraph.`,
+        );
+      }
+    }
+    // Scroll the matching comment card into view in the right pane.
+    const list = listRef.current;
+    if (list) {
+      const card = list.querySelector<HTMLElement>(
+        `.review-card[data-comment-id="${focusComment}"]`,
+      );
+      if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [focusComment, detached, session, showToast, surfaceRef, listRef]);
+}
 
 /** Edit-mode reader: the flow reading surface wrapped in review mode. */
 function EditReaderInner(props: EditReaderProps) {
@@ -187,92 +299,8 @@ function EditReaderInner(props: EditReaderProps) {
     if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [activePassage, activeComment]);
 
-  // Phrase-level scrollspy: update which comment is "active" as the nearest
-  // highlight to the main viewport center. This only toggles the highlight/
-  // card emphasis — it does NOT auto-scroll the right pane, so a reviewer's
-  // manual scroll or click in the list is never fought by the surface scroll.
-  useEffect(() => {
-    const main = surfaceRef.current?.querySelector(".overflow-y-auto") as HTMLElement | null;
-    if (!main || !session) return;
-    let raf = 0;
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      raf = requestAnimationFrame(() => {
-        ticking = false;
-        const highlights = Array.from(
-          main.querySelectorAll<HTMLElement>("[data-comment-id]"),
-        ).filter((el) => el.offsetParent !== null);
-        if (!highlights.length) return;
-        const mainRect = main.getBoundingClientRect();
-        const centerY = mainRect.top + mainRect.height / 2;
-        let best: HTMLElement | null = null;
-        let bestDist = Infinity;
-        for (const el of highlights) {
-          const r = el.getBoundingClientRect();
-          const dist = Math.abs(r.top + r.height / 2 - centerY);
-          if (dist < bestDist) {
-            bestDist = dist;
-            best = el;
-          }
-        }
-        if (!best) return;
-        if (bestDist > mainRect.height) {
-          if (activeComment) setActiveComment(null);
-          return;
-        }
-        const id = best.getAttribute("data-comment-id");
-        if (id && id !== activeComment) setActiveComment(id);
-      });
-    };
-    main.addEventListener("scroll", onScroll, { passive: true });
-    const t = setTimeout(onScroll, 300);
-    return () => {
-      main.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-      clearTimeout(t);
-    };
-  }, [session, activeComment]);
-
-  // Scroll a focused comment's mark into view (clicking list → main), and the
-  // card into view in the right pane (clicking a mark → card). When the
-  // comment is detached (its snippet can't be re-located), fall back to
-  // scrolling to its PASSAGE and surface a toast.
-  useEffect(() => {
-    if (!focusComment) return;
-    const comment = session?.comments.find((c) => c.id === focusComment);
-    const container = surfaceRef.current?.querySelector(
-      ".overflow-y-auto",
-    ) as HTMLElement | null;
-    const el = surfaceRef.current?.querySelector(
-      `[data-comment-id="${focusComment}"]`,
-    ) as HTMLElement | null;
-    const isDetached = detached.includes(focusComment);
-    if (el) {
-      scrollElementCentered(el, container);
-    } else if (isDetached && comment?.passage_ref) {
-      // No highlight could be rendered for this comment — jump to its passage
-      // so the reviewer still lands somewhere useful, and explain why.
-      const passageEl = surfaceRef.current?.querySelector<HTMLElement>(
-        `[data-verse-ref="${comment.passage_ref}"]`,
-      );
-      if (passageEl) {
-        scrollElementCentered(passageEl, container);
-        showToast(
-          `Text not found in para ${comment.passage_ref} — jumped to the paragraph.`,
-        );
-      }
-    }
-    // Scroll the matching comment card into view in the right pane.
-    const list = listRef.current;
-    if (list) {
-      const card = list.querySelector<HTMLElement>(
-        `.review-card[data-comment-id="${focusComment}"]`,
-      );
-      if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }, [focusComment, detached, session, showToast]);
+  useScrollSpy(surfaceRef, session, activeComment, setActiveComment);
+  useFocusScroll(focusComment, detached, session, showToast, surfaceRef, listRef);
 
   const handleSave = async (c: ReviewComment) => {
     await addComment(c);

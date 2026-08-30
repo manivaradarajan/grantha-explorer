@@ -84,6 +84,116 @@ interface ReviewSelectionToolbarProps {
 
 const TYPES: ReviewCommentType[] = ["note", "citation-fix", "quote-locate"];
 
+// ---------------------------------------------------------------------------
+// useCitationCandidates
+// ---------------------------------------------------------------------------
+
+interface UseCitationCandidatesParams {
+  type: ReviewCommentType;
+  detectedTarget: DetectedCitationTarget | null;
+  snippet: string;
+  currentGranthaId?: string;
+  passageRef: string;
+}
+
+interface UseCitationCandidatesResult {
+  candidates: CitationCandidate[];
+  candidatesState: "idle" | "loading" | "ready" | "error";
+  selectedCandidate: CitationCandidate | null;
+  setSelectedCandidate: (c: CitationCandidate | null) => void;
+}
+
+/**
+ * Fetch and filter citation candidates for the toolbar's citation-fix mode.
+ *
+ * When the selection is near a known reference, targets that grantha first;
+ * falls back to a full-corpus scan when the targeted scan yields nothing new.
+ * Returns idle state (empty candidates) while type !== "citation-fix".
+ */
+function useCitationCandidates({
+  type,
+  detectedTarget,
+  snippet,
+  currentGranthaId,
+  passageRef,
+}: UseCitationCandidatesParams): UseCitationCandidatesResult {
+  const [candidates, setCandidates] = useState<CitationCandidate[]>([]);
+  const [candidatesState, setCandidatesState] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >("idle");
+  const [selectedCandidate, setSelectedCandidate] =
+    useState<CitationCandidate | null>(null);
+
+  useEffect(() => {
+    if (type !== "citation-fix" || snippet.length === 0) {
+      setCandidates([]);
+      setCandidatesState("idle");
+      return;
+    }
+    let cancelled = false;
+    setCandidatesState("loading");
+    setSelectedCandidate(null);
+    const run = async (): Promise<void> => {
+      const targeted = detectedTarget
+        ? {
+            target: detectedTarget.grantha_id,
+            edition: detectedTarget.edition,
+            needle: snippet,
+            exclude_locator: detectedTarget.locator,
+            min_quality: 0.5,
+          }
+        : { needle: snippet, min_quality: 0.5, corpus: true };
+      const filter = (cs: CitationCandidate[]): CitationCandidate[] => {
+        let list = cs.filter((c) => c.quality >= 0.65);
+        if (currentGranthaId) {
+          list = list.filter(
+            (c) => !(c.grantha_id === currentGranthaId && c.ref === passageRef),
+          );
+        }
+        return list;
+      };
+      let list: CitationCandidate[] = [];
+      try {
+        const res = await fetchCandidates(targeted);
+        if (cancelled) return;
+        list = filter(res.candidates ?? []);
+        // Corpus fallback: when a targeted scan leaves only the already-cited
+        // verse (or nothing) above the floor, widen to the whole corpus so the
+        // reviewer still sees the other occurrences of the quote (e.g. a verse
+        // shared by Mundaka and Katha).
+        if (list.length === 0 || list.every((c) => c.is_current)) {
+          const corpus = await fetchCandidates({
+            needle: snippet,
+            min_quality: 0.5,
+            corpus: true,
+          });
+          if (cancelled) return;
+          const merged = [...list];
+          for (const c of corpus.candidates ?? []) {
+            if (!merged.some((m) => m.grantha_id === c.grantha_id && m.ref === c.ref)) {
+              merged.push(c);
+            }
+          }
+          list = filter(merged);
+        }
+        setCandidates(list);
+        setCandidatesState("ready");
+      } catch (e) {
+        if (cancelled) return;
+        console.error("[useCitationCandidates] fetch failed:", e);
+        setCandidates([]);
+        setCandidatesState("error");
+      }
+    };
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, [type, detectedTarget, snippet, currentGranthaId, passageRef]);
+
+  return { candidates, candidatesState, selectedCandidate, setSelectedCandidate };
+}
+
 /** Elements that must receive focus/input — a mousedown on them must not be
  *  prevented (which would block typing/clicking). Clicks on the non-interactive
  *  chrome (snippet, labels) keep selection-preservation via preventDefault. */
@@ -115,13 +225,15 @@ export function ReviewSelectionToolbar({
     preset ?? { start: 0, end: 0, snippet: "" },
   );
   const [mappingError, setMappingError] = useState<string | null>(null);
-  // Citation-fix candidates.
-  const [candidates, setCandidates] = useState<CitationCandidate[]>([]);
-  const [candidatesState, setCandidatesState] = useState<
-    "idle" | "loading" | "ready" | "error"
-  >("idle");
-  const [selectedCandidate, setSelectedCandidate] = useState<CitationCandidate | null>(null);
-  const [detectedTarget, setDetectedTarget] = useState<{ grantha_id: string; edition?: string; locator?: string; display_text?: string } | null>(null);
+  const [detectedTarget, setDetectedTarget] = useState<DetectedCitationTarget | null>(null);
+  const { candidates, candidatesState, selectedCandidate, setSelectedCandidate } =
+    useCitationCandidates({
+      type,
+      detectedTarget,
+      snippet: offset.snippet,
+      currentGranthaId,
+      passageRef,
+    });
   const [saveError, setSaveError] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -207,75 +319,6 @@ export function ReviewSelectionToolbar({
     const target = detectNearestReference(references, offset.start, offset.end);
     setDetectedTarget(target);
   }, [type, offset.start, offset.end, offset.snippet, references]);
-
-  // Fetch candidates in citation-fix: scan the detected target grantha (if a
-  // reference is near the selection), otherwise search the whole corpus so the
-  // reviewer can locate a quote that has no citation yet.
-  useEffect(() => {
-    if (type !== "citation-fix" || offset.snippet.length === 0) {
-      setCandidates([]);
-      setCandidatesState("idle");
-      return;
-    }
-    let cancelled = false;
-    setCandidatesState("loading");
-    setSelectedCandidate(null);
-    const run = async (): Promise<void> => {
-      const targeted = detectedTarget
-        ? {
-            target: detectedTarget.grantha_id,
-            edition: detectedTarget.edition,
-            needle: offset.snippet,
-            exclude_locator: detectedTarget.locator,
-            min_quality: 0.5,
-          }
-        : { needle: offset.snippet, min_quality: 0.5, corpus: true };
-      const filter = (cs: CitationCandidate[]): CitationCandidate[] => {
-        let list = cs.filter((c) => c.quality >= 0.65);
-        if (currentGranthaId) {
-          list = list.filter(
-            (c) => !(c.grantha_id === currentGranthaId && c.ref === passageRef),
-          );
-        }
-        return list;
-      };
-      let list: CitationCandidate[] = [];
-      try {
-        const res = await fetchCandidates(targeted);
-        if (cancelled) return;
-        list = filter(res.candidates ?? []);
-        // Corpus fallback: when a targeted scan leaves only the already-cited
-        // verse (or nothing) above the floor, widen to the whole corpus so the
-        // reviewer still sees the other occurrences of the quote (e.g. a verse
-        // shared by Mundaka and Katha).
-        if (list.length === 0 || list.every((c) => c.is_current)) {
-          const corpus = await fetchCandidates({
-            needle: offset.snippet,
-            min_quality: 0.5,
-            corpus: true,
-          });
-          if (cancelled) return;
-          const merged = [...list];
-          for (const c of corpus.candidates ?? []) {
-            if (!merged.some((m) => m.grantha_id === c.grantha_id && m.ref === c.ref)) {
-              merged.push(c);
-            }
-          }
-          list = filter(merged);
-        }
-        setCandidates(list);
-        setCandidatesState("ready");
-      } catch {
-        if (cancelled) return;
-        setCandidates([]);
-        setCandidatesState("error");
-      }
-    };
-    void run();
-    return () => {
-      cancelled = true;
-    };
-  }, [type, detectedTarget, offset.snippet, currentGranthaId, passageRef]);
 
   // Escape closes the popup without saving.
   useEffect(() => {

@@ -84,6 +84,16 @@ const COMMENT_TYPES = new Set(["citation-fix", "quote-locate", "note"]);
 const COMMENT_STATUSES = new Set(["open", "fixed", "accepted", "reopened", "dismissed", "deleted", "done"]);
 const PASSAGE_TYPES = new Set(["main", "prefatory", "concluding"]);
 
+/** Legal comment-status transitions (mirrors grantha_data.review_comments). */
+const LEGAL_TRANSITIONS = {
+  open: ["fixed", "dismissed", "deleted"],
+  fixed: ["accepted", "reopened", "open", "dismissed", "deleted"],
+  reopened: ["fixed", "accepted", "open", "dismissed", "deleted"],
+  accepted: ["open", "dismissed", "deleted"],
+  dismissed: ["open", "deleted"],
+  deleted: ["open"], // soft-delete is recoverable
+};
+
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -388,9 +398,23 @@ async function listSessionFiles(dir, granthaId) {
   } catch {
     return [];
   }
+  // Pre-collect mtimes asynchronously (fsp has no statSync) so the sort
+  // comparator can be a pure sync function.
+  const mtimeOf = new Map(
+    await Promise.all(
+      files.map(async (f) => {
+        try {
+          const st = await fsp.stat(path.join(dir, f));
+          return [f, st.mtimeMs];
+        } catch {
+          return [f, NaN];
+        }
+      }),
+    ),
+  );
   files.sort((a, b) => {
-    const ma = (() => { try { return fsp.statSync(path.join(dir, a)).mtimeMs; } catch { return NaN; } })();
-    const mb = (() => { try { return fsp.statSync(path.join(dir, b)).mtimeMs; } catch { return NaN; } })();
+    const ma = mtimeOf.get(a);
+    const mb = mtimeOf.get(b);
     if (!Number.isNaN(ma) && !Number.isNaN(mb) && ma !== mb) return ma - mb;
     return b.localeCompare(a); // newer timestamp name sorts first when mtimes tie/unknown
   });
@@ -508,6 +532,17 @@ function checkHost(req) {
     return false;
   }
   return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
+/** Read and JSON-parse the request body; throw HttpError on parse failure. */
+async function readJsonBody(req) {
+  const chunks = [];
+  for await (const c of req) chunks.push(c);
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString("utf-8"));
+  } catch {
+    throw new HttpError(400, "malformed JSON body");
+  }
 }
 
 // ─────────────────────────────── handlers ──────────────────────────────────
@@ -650,15 +685,7 @@ async function handlePatchStatus(cfg, granthaId, body) {
     // machine (mirrors grantha_data.review_comments).
     const from = target.status === "done" ? "accepted" : target.status;
     const to = body.status === "done" ? "accepted" : body.status;
-    const legal = {
-      open: ["fixed", "dismissed", "deleted"],
-      fixed: ["accepted", "reopened", "open", "dismissed", "deleted"],
-      reopened: ["fixed", "accepted", "open", "dismissed", "deleted"],
-      accepted: ["open", "dismissed", "deleted"],
-      dismissed: ["open", "deleted"],
-      deleted: ["open"], // soft-delete is recoverable
-    };
-    if (!(legal[from] ?? []).includes(to)) {
+    if (!(LEGAL_TRANSITIONS[from] ?? []).includes(to)) {
       throw new HttpError(409, `illegal transition ${from} → ${to}`);
     }
     // Invariant: `accepted` (and the reopened→accepted shortcut) requires a
@@ -846,14 +873,6 @@ function route(cfg, req, res) {
     return;
   }
 
-  const readBody = () =>
-    new Promise((resolve, reject) => {
-      const chunks = [];
-      req.on("data", (c) => chunks.push(c));
-      req.on("end", () => resolve(Buffer.concat(chunks)));
-      req.on("error", reject);
-    });
-
   const run = async () => {
     if (pathname === "/api/review/candidates") {
       const result = await handleCandidates(cfg, req);
@@ -884,13 +903,7 @@ function route(cfg, req, res) {
     }
 
     if (req.method === "PATCH") {
-      const raw = await readBody();
-      let body;
-      try {
-        body = JSON.parse(raw.toString("utf-8"));
-      } catch {
-        throw new HttpError(400, "malformed JSON body");
-      }
+      const body = await readJsonBody(req);
       const result = await handlePatchStatus(cfg, granthaId, body);
       sendJson(res, 200, result, cors);
       return;
@@ -899,13 +912,7 @@ function route(cfg, req, res) {
     // POST
     const ct = (req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
     if (ct !== "application/json") throw new HttpError(415, "Content-Type must be application/json");
-    const raw = await readBody();
-    let body;
-    try {
-      body = JSON.parse(raw.toString("utf-8"));
-    } catch {
-      throw new HttpError(400, "malformed JSON body");
-    }
+    const body = await readJsonBody(req);
     if (body && body.session === "new") {
       const result = await handleNewSession(cfg, granthaId);
       sendJson(res, 200, result, cors);

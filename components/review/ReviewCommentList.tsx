@@ -181,6 +181,74 @@ export function ReviewCommentList({
   );
 }
 
+// ---------------------------------------------------------------------------
+// Lifecycle action table
+// ---------------------------------------------------------------------------
+
+type ActionDef = {
+  label: string;
+  status: ReviewComment["status"];
+  prompt?: "fix" | "needs-work";
+};
+
+const ACCEPT_ACTION: ActionDef = { label: "Accept", status: "accepted" };
+
+/** Per-status base action lists for the comment card action buttons.
+ *  The ``reopened`` list omits the conditional Accept; ``buildCommentActions``
+ *  splices it in when the comment already has recorded fixes. */
+const LIFECYCLE_ACTIONS: Record<ReviewComment["status"], ActionDef[]> = {
+  open: [
+    { label: "Mark fixed", status: "fixed", prompt: "fix" },
+    { label: "Won't fix", status: "dismissed" },
+    { label: "Delete", status: "deleted" },
+  ],
+  reopened: [
+    { label: "Mark fixed", status: "fixed", prompt: "fix" },
+    // Accept is inserted here (position 1) when c.fixes is non-empty.
+    { label: "Reopen", status: "open" },
+    { label: "Won't fix", status: "dismissed" },
+    { label: "Delete", status: "deleted" },
+  ],
+  fixed: [
+    ACCEPT_ACTION,
+    { label: "Needs work", status: "reopened", prompt: "needs-work" },
+    { label: "Reopen", status: "open" },
+    { label: "Won't fix", status: "dismissed" },
+    { label: "Delete", status: "deleted" },
+  ],
+  accepted: [
+    { label: "Reopen", status: "open" },
+    { label: "Won't fix", status: "dismissed" },
+    { label: "Delete", status: "deleted" },
+  ],
+  // "done" is a legacy alias for "accepted".
+  done: [
+    { label: "Reopen", status: "open" },
+    { label: "Won't fix", status: "dismissed" },
+    { label: "Delete", status: "deleted" },
+  ],
+  dismissed: [
+    { label: "Reopen", status: "open" },
+    { label: "Delete", status: "deleted" },
+  ],
+  deleted: [{ label: "Reopen", status: "open" }],
+};
+
+/**
+ * Build the ordered action list for a comment based on its current status.
+ *
+ * Uses {@link LIFECYCLE_ACTIONS} as the base and splices the Accept action
+ * into position 1 for `reopened` comments that already have recorded fixes.
+ */
+function buildCommentActions(c: ReviewComment): ActionDef[] {
+  const base = LIFECYCLE_ACTIONS[c.status] ?? [];
+  if (c.status === "reopened" && (c.fixes?.length ?? 0) > 0) {
+    // Splice Accept in at position 1 (after "Mark fixed").
+    return [base[0], ACCEPT_ACTION, ...base.slice(1)];
+  }
+  return base;
+}
+
 function ReviewCommentCard({
   comment: c,
   detached,
@@ -211,44 +279,9 @@ function ReviewCommentCard({
   >(null);
   const [promptText, setPromptText] = useState("");
 
-  // Lifecycle state machine:
-  //   open ── Mark fixed ──► fixed ── Accept ──► accepted
-  //     ▲                      │  └─ Needs work ─► reopened
-  //     └── Reopen (any active)┘                    │
-  //   reopened ── Mark fixed ─► fixed                └─ Accept (shortcut)
-  //   any non-deleted ── Won't fix ─► dismissed
-  //   any ── Delete ─► deleted
-  const actions: { label: string; status: ReviewComment["status"]; prompt?: "fix" | "needs-work" }[] = [];
-  if (c.status === "open") {
-    actions.push({ label: "Mark fixed", status: "fixed", prompt: "fix" });
-    actions.push({ label: "Won't fix", status: "dismissed" });
-    actions.push({ label: "Delete", status: "deleted" });
-  } else if (c.status === "reopened") {
-    actions.push({ label: "Mark fixed", status: "fixed", prompt: "fix" });
-    if ((c.fixes?.length ?? 0) > 0) {
-      actions.push({ label: "Accept", status: "accepted" });
-    }
-    actions.push({ label: "Reopen", status: "open" });
-    actions.push({ label: "Won't fix", status: "dismissed" });
-    actions.push({ label: "Delete", status: "deleted" });
-  } else if (c.status === "fixed") {
-    actions.push({ label: "Accept", status: "accepted" });
-    actions.push({ label: "Needs work", status: "reopened", prompt: "needs-work" });
-    actions.push({ label: "Reopen", status: "open" });
-    actions.push({ label: "Won't fix", status: "dismissed" });
-    actions.push({ label: "Delete", status: "deleted" });
-  } else {
-    // accepted / dismissed (and legacy done reads as accepted)
-    actions.push({ label: "Reopen", status: "open" });
-    if (c.status === "accepted" || c.status === "done") {
-      actions.push({ label: "Won't fix", status: "dismissed" });
-    }
-    if (c.status !== "deleted") {
-      actions.push({ label: "Delete", status: "deleted" });
-    }
-  }
+  const actions = buildCommentActions(c);
 
-  const onAction = (a: (typeof actions)[number]) => {
+  const onAction = (a: ActionDef) => {
     if (a.prompt === "fix" || a.prompt === "needs-work") {
       setPromptFor({ kind: a.prompt });
       setPromptText("");

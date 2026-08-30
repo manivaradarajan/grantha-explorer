@@ -38,11 +38,6 @@ export function locateSnippet(
   const normSnippet = normWS(snippet);
   const normRaw = normWS(raw);
   if (!normSnippet) return null;
-  // Avoid re-trying the exact quote-stripped case already handled.
-  if (normSnippet === snippet.replace(/[“”"'`]/g, "").trim()) {
-    // Still try whitespace-normalized search even if quote stripping didn't change
-    // the string (e.g. para 100's NBSP + `।` spacing).
-  }
   idx = normRaw.indexOf(normSnippet);
   if (idx >= 0) {
     // Map back: find first and last CONTENT word (skip isolated danda tokens
