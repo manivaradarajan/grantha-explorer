@@ -8,14 +8,12 @@ interface FlowReaderDrawerProps {
   onClose: () => void;
   script: "deva" | "roman";
   onScriptToggle: () => void;
-  fontScale: number;
-  onFontScaleChange: (next: number) => void;
   /** Switch back to the 3-pane view (the "३-पटलम्" exit). */
   onExitFlow: () => void;
 }
 
 /**
- * Left drawer for the flow reader — reading preferences (script + font size),
+ * Left drawer for the flow reader — reading preferences (script toggle),
  * search (input only, no backend), a reserved placeholder area, and an
  * account/settings placeholder row. Reuses the existing MobileDrawer via its
  * optional label prop (spec §3.2, §7 gap #11). App branding is the sr-only
@@ -27,8 +25,6 @@ export default function FlowReaderDrawer({
   onClose,
   script,
   onScriptToggle,
-  fontScale,
-  onFontScaleChange,
   onExitFlow,
 }: FlowReaderDrawerProps) {
   const roman = script === "roman";
@@ -52,31 +48,6 @@ export default function FlowReaderDrawer({
             >
               {roman ? "lipi" : "लिपि"}
             </button>
-          </div>
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-sm text-gray-600">
-              {roman ? "Text size" : "अक्षर"}
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => onFontScaleChange(fontScale - 0.1)}
-                disabled={fontScale <= 0.75}
-                className="w-7 h-7 rounded text-xs text-gray-500 hover:bg-gray-100 hover:text-gray-800 disabled:opacity-40"
-                title="Smaller text"
-              >
-                अ−
-              </button>
-              <button
-                type="button"
-                onClick={() => onFontScaleChange(fontScale + 0.1)}
-                disabled={fontScale >= 1.4}
-                className="w-7 h-7 rounded text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-800 disabled:opacity-40"
-                title="Larger text"
-              >
-                अ+
-              </button>
-            </div>
           </div>
         </div>
 

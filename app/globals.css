@@ -96,14 +96,18 @@
   --citation-width: 320px;
   --citation-max-width: calc(100vw - 24px);
   --citation-viewport-margin: 12px;
-  --citation-radius: 16px;
+  --citation-radius: 12px;
   --citation-shadow:
     0 8px 30px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.08);
   --citation-bg: #ffffff;
   --citation-border: none;
   --citation-padding: 12px;
   --citation-tail-size: 10px;
-  --citation-tail-bg: var(--citation-bg);
+  /* Solid composite of --citation-header-bg (rgba(61,90,128,0.06)) over
+     --citation-bg (#fff): the tail sits at the top of the popover (below
+     placement), in the header zone, so it must match that band's color.
+     The .above override below restores white for the footer zone. */
+  --citation-tail-bg: rgb(243, 245, 247);
   --citation-clamp-lines: 5;
   --citation-title-size: 1rem;
   --citation-excerpt-size: calc(1em * var(--reading-scale, 1.1));
@@ -113,11 +117,11 @@
   --citation-footer-margin-bottom: 2px;
   /* Vertical spacing between the popover's sections (title / excerpt /
      footer). Lower it to pull the excerpt text up under the title. */
-  --citation-gap: 2px;
+  --citation-gap: 8px;
   /* The header's own bottom padding — this is the space directly under the
      title text (the header bleeds to the card edges and re-applies padding).
      Lower it to close the title→excerpt gap even further. */
-  --citation-header-padding-bottom: 8px;
+  --citation-header-padding-bottom: 6px;
   /* Header band tint — a very subtle blue-gray at rest; hover darkens to
      --citation-shadow-tint via the :has() rule below. Setting to transparent
      removes the tint and reverts to a plain white band. */
@@ -155,6 +159,8 @@
 .citation-popover.above .citation-tail {
   top: 100%; /* above placement → bottom edge, pointing down at the reference */
   transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  /* Tail is now in the white body/footer zone — restore card background. */
+  --citation-tail-bg: var(--citation-bg);
 }
 
 .citation-header {
@@ -172,6 +178,7 @@
     var(--citation-header-padding-bottom);
   border-radius: var(--citation-radius) var(--citation-radius) 0 0;
   background: var(--citation-header-bg, rgba(61, 90, 128, 0.06));
+  border-bottom: 1px solid rgba(61, 90, 128, 0.12);
 }
 
 /* Full-bleed hover: darken the whole header band (including gutters) when the
@@ -922,14 +929,16 @@ mark.review-mark.st-accepted {
 }
 .review-prompt-actions button:hover:not(:disabled) { background: #f3f4f6; }
 
-/* Flow reader: JS-driven font-scale control (drawer अ−/अ+). The scale is set
-   via the --reading-scale custom property on the flow reader root; these rules
-   apply it to the reader's body text only, so other reading surfaces are
-   unaffected. Font sizes stay em-relative (vs Tailwind's rem utilities) so the
-   single inherited scale multiplies them uniformly. Unlayered rules here
-   override the layered Tailwind utilities (e.g. text-xl) for these elements. */
+/* Flow reader typography. --reading-scale is the single knob for body text
+   size — edit it here to resize without touching TSX. Font sizes stay
+   em-relative so the scale multiplies them uniformly. Line-heights are set
+   explicitly (overriding Tailwind's leading-relaxed = 1.625) because
+   Devanagari vowel marks (matras above the shirorekha, anusvara, below-line
+   ु/ू) extend outside the normal text band and need more breathing room than
+   Latin text at the same size. Unlayered rules here override the layered
+   Tailwind utilities (e.g. text-xl, leading-relaxed) for these elements. */
 .flow-reader {
-  --reading-scale: 1;
+  --reading-scale: 1.15;
   /* Use the dynamic viewport height on mobile: `h-screen` (100vh) is taller
      than the visible viewport once the browser chrome is accounted for, so
      content near the bottom (including a citation popover anchored below a
@@ -1054,7 +1063,7 @@ mark.review-mark.st-accepted {
    always sit on separate lines regardless of CSS white-space handling; the
    tight line-height holds them together as ONE connected unit. The scale is
    em-relative (0.9375em ≈ 15px at a 16px base — below the verse tier, closer
-   to body-text scale) so the अ−/अ+ drawer's --reading-scale still multiplies.
+   to body-text scale) so --reading-scale still multiplies.
    Ink matches the reading prose's gray-700. Verse-tagged front matter
    (<!-- verse -->) is NOT affected — it renders via the .verse-quote.verse-own
    treatment. */
@@ -1106,17 +1115,34 @@ mark.review-mark.st-accepted {
   }
 }
 
+/* Mūla-only on narrow viewports: drop the left rail (its purpose is to
+   bracket the numbered column against commentary; with no commentary it is
+   pure decoration) and shrink the number gutter to the minimum that still
+   fits three-digit Devanagari numerals (७७७). */
+@media (max-width: 480px) {
+  .flow-reader.flow-mula-only .flow-para-row {
+    border-left: none;
+    padding-left: 0.25rem;
+  }
+  .flow-reader.flow-mula-only .flow-para-number {
+    min-width: 1.5em;
+  }
+}
+
 .flow-reader .flow-verse {
   font-size: calc(1.25em * var(--reading-scale, 1));
+  line-height: 1.85; /* verse lines are shorter — slightly less than prose */
 }
 
 .flow-reader .flow-intro,
 .flow-reader .flow-commentary {
   font-size: calc(1em * var(--reading-scale, 1));
+  line-height: 1.9; /* Devanagari matras need more vertical air than Latin */
 }
 
 .flow-reader .flow-commentary-sub {
   font-size: calc(0.875em * var(--reading-scale, 1));
+  line-height: 1.9;
 }
 
 /* Tiro Devanagari Sanskrit only ships a 400 weight, so bold is browser-
