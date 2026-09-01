@@ -1382,17 +1382,37 @@ _references_bimap_cache: Any = None
 _references_bimap_cache_key: str | None = None
 
 
+# When set (via ``--grantha-data-dir``), the grantha-data checkout root used
+# to locate ``data/citation_bimap.yaml`` etc. Under Bazel this is the runfiles
+# path; the env-var / package derivation is the npm fallback.
+_GRANTHA_DATA_DIR: Path | None = None
+
+
+def _set_grantha_data_dir(grantha_data_dir: Path | None) -> None:
+    """Pin the grantha-data checkout root (Bazel runfiles path).
+
+    Args:
+        grantha_data_dir: The grantha-data checkout root, or None to fall back
+            to the env-var / installed-package derivation.
+    """
+    global _GRANTHA_DATA_DIR
+    _GRANTHA_DATA_DIR = grantha_data_dir
+
+
 def _tools_lib_dir() -> Path:
     """Return the grantha-data ``tools/lib`` directory for the active checkout.
 
-    When ``GRANTHA_DATA_TOOLS_LIB`` is set it is derived from it; otherwise
-    the installed ``grantha_data`` package location is used.
+    When ``--grantha-data-dir`` was passed it is derived from it; otherwise
+    ``GRANTHA_DATA_TOOLS_LIB``, then the installed ``grantha_data`` package
+    location is used.
 
     Returns:
         The ``tools/lib`` Path.
     """
     import os
 
+    if _GRANTHA_DATA_DIR is not None:
+        return _GRANTHA_DATA_DIR / "tools" / "lib"
     tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
     if tools_lib:
         return Path(tools_lib).expanduser()
@@ -1405,17 +1425,25 @@ def _references_bimap() -> list[Any]:
     """Load the citation bimap, resolving the grantha-data checkout path.
 
     The bimap lives in the same grantha-data checkout as the library. When
-    ``GRANTHA_DATA_TOOLS_LIB`` is set it is derived from it; otherwise the
-    ``grantha_data`` package location is used. Returns [] when the bimap
-    cannot be located, so reference extraction degrades gracefully.
+    ``--grantha-data-dir`` is set it is derived from it; otherwise
+    ``GRANTHA_DATA_TOOLS_LIB``, then the ``grantha_data`` package location is
+    used. Returns [] when the bimap cannot be located, so reference extraction
+    degrades gracefully — EXCEPT when ``--grantha-data-dir`` was passed
+    explicitly (the Bazel path): a missing bimap is then a hard error, never a
+    silent drop of ``references[]``.
 
-    The result is cached per ``GRANTHA_DATA_TOOLS_LIB`` value: this is called
-    once per passage, and re-parsing the YAML on every call makes a 626-part
-    corpus conversion (tens of thousands of passages) spend its time in the
-    YAML parser instead of extracting.
+    The result is cached per override/env value: this is called once per
+    passage, and re-parsing the YAML on every call makes a 626-part corpus
+    conversion (tens of thousands of passages) spend its time in the YAML
+    parser instead of extracting.
 
     Returns:
-        The loaded bimap entries, or [] when the file is unavailable.
+        The loaded bimap entries, or [] when the file is unavailable on the
+        npm fallback path.
+
+    Raises:
+        FileNotFoundError: When ``--grantha-data-dir`` is set but the bimap
+            file is missing.
     """
     global _references_bimap_cache, _references_bimap_cache_key
     import os
@@ -1423,7 +1451,7 @@ def _references_bimap() -> list[Any]:
     from grantha_data.references import load_bimap
 
     tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
-    cache_key = tools_lib or "default"
+    cache_key = str(_GRANTHA_DATA_DIR) or tools_lib or "default"
     if _references_bimap_cache is not None and _references_bimap_cache_key == cache_key:
         return _references_bimap_cache
 
@@ -1431,6 +1459,11 @@ def _references_bimap() -> list[Any]:
     loaded: list[Any] = []
     if bimap_path.exists():
         loaded = load_bimap(bimap_path)
+    elif _GRANTHA_DATA_DIR is not None:
+        raise FileNotFoundError(
+            f"--grantha-data-dir={_GRANTHA_DATA_DIR} but citation bimap "
+            f"missing at {bimap_path} — refusing to silently drop references[]"
+        )
     _references_bimap_cache = loaded
     _references_bimap_cache_key = cache_key
     return loaded
@@ -2088,6 +2121,18 @@ def _build_arg_parser() -> argparse.ArgumentParser:
             "Defaults to the parent of the scripts/ directory."
         ),
     )
+    parser.add_argument(
+        "--grantha-data-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Root of the grantha-data checkout (for data/citation_bimap.yaml "
+            "and data/citation_corrections.yaml). Under Bazel this is the "
+            "runfiles path. When unset, falls back to GRANTHA_DATA_TOOLS_LIB "
+            "or the installed grantha_data package. Setting it makes a missing "
+            "bimap a hard error instead of a silent references[] drop."
+        ),
+    )
     return parser
 
 
@@ -2099,6 +2144,9 @@ def main() -> None:
     source_dir: Path = args.source.resolve()
     out_dir: Path = args.out.resolve()
     explorer_root: Path = args.grantha_explorer_root.resolve()
+    _set_grantha_data_dir(
+        args.grantha_data_dir.resolve() if args.grantha_data_dir else None
+    )
 
     if not source_dir.is_dir():
         parser.error(f"--source is not a directory: {source_dir}")

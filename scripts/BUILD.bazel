@@ -9,6 +9,16 @@ load("@explorer_pip//:requirements.bzl", "requirement")
 load("@npm//:tsx/package_json.bzl", tsx_bin = "bin")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 
+# Converter + materialize sources referenced cross-package by //data:...
+exports_files([
+    "convert_structured_md.py",
+    "import_editions.py",
+    "_build_parser.py",
+    "grantha_data_bootstrap.py",
+    "materialize_library.py",
+    "test_committed_in_sync.py",
+])
+
 tsx_bin.tsx_binary(
     name = "tsx",
     visibility = ["//visibility:public"],

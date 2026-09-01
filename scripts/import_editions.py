@@ -45,6 +45,7 @@ from convert_structured_md import (
     _first_main_ref,
     _list_source_markdown_files,
     _resolve_target_commentary_ids,
+    _set_grantha_data_dir,
     build_envelope_json,
     build_part_json,
     normalize_structure_levels,
@@ -629,6 +630,14 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         "equals a value are imported; useful for co-located grantha dirs "
         "(e.g. --grantha-id mandukya-upanishad).",
     )
+    parser.add_argument(
+        "--grantha-data-dir",
+        type=Path,
+        default=None,
+        help="Root of the grantha-data checkout (for data/citation_bimap.yaml "
+        "etc.). Under Bazel this is the runfiles path. When unset, falls back "
+        "to GRANTHA_DATA_TOOLS_LIB or the installed grantha_data package.",
+    )
     return parser
 
 
@@ -639,6 +648,10 @@ def main() -> None:
 
     if not args.source.is_dir():
         parser.error(f"--source is not a directory: {args.source}")
+
+    _set_grantha_data_dir(
+        args.grantha_data_dir.resolve() if args.grantha_data_dir else None
+    )
 
     import_grantha(
         source_dir=args.source,
