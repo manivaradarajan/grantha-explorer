@@ -49,7 +49,7 @@ The repo runs a deliberate two-toolchain setup. Bazel owns the
 - **Hermetic data regeneration**: `bazel run //data:materialize` regenerates
   `public/data/library/` from the `@grantha_data` runfiles (the Bazel-owned
   replacement for the manual npm converter invocations — see
-  `docs/DATA_FLOW.md` §2). `//data:committed_in_sync` (a `bazel test`) proves
+  `docs/DATA_FLOW.md` §2). `//data:determinism_check` (a `bazel test`) proves
   the pipeline is deterministic (two fresh runs byte-identical) and *reports*
   committed-vs-fresh drift explicitly — drift is NOT gated, because the
   committed tree may legitimately lag the current citation bimap (see the
@@ -90,7 +90,7 @@ bumping dependencies; do not add a Bazel vitest target as a workaround.
   `GRANTHA_PYTHON=~/git-worktrees/.venvs/bazel-in-explorer/bin/python3`.
 - The committed `public/data/library/` may lag the current citation bimap
   (e.g. `vishnu-purana` references). `test_committed_reference_parity.py`
-  fails on this by design; the Bazel `//data:committed_in_sync` reports it as
+  fails on this by design; the Bazel `//data:determinism_check` reports it as
   drift (not a gate). To re-sync: `bazel run //data:materialize`, review the
   diff, and commit the regenerated library.
 

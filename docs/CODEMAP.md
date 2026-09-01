@@ -126,12 +126,12 @@ the commentary pane/chrome; does not drive per-block presentation.
 ## Hermetic data regeneration (Bazel)
 
 - `scripts/materialize_library.py` — the driver behind `bazel run
-  //data:materialize` and `//data:committed_in_sync`. Resolves the grantha-data
+  //data:materialize` and `//data:determinism_check`. Resolves the grantha-data
   root from runfiles (`RUNFILES_DIR`/`TEST_SRCDIR`/manifest, scanning for
   `grantha_data*/data/citation_bimap.yaml`), runs `convert_structured_md` +
   `import_editions` over every text (README's per-text table), verifies
   determinism, and reports committed-vs-fresh drift.
-- `scripts/test_committed_in_sync.py` — the `//data:committed_in_sync` test
+- `scripts/test_determinism_check.py` — the `//data:determinism_check` test
   entry (calls `materialize_library._verify`).
 - `--grantha-data-dir` on both converters (`_set_grantha_data_dir` /
   `_GRANTHA_DATA_DIR`) pins the grantha-data root under Bazel; when set, a

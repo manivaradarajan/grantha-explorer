@@ -185,7 +185,7 @@ Run them after any grantha-data edit; commit + push the result here.
 **Bazel path (recommended):** `bazel run //data:materialize` runs the same two
 converters hermetically from the `@grantha_data` runfiles (no
 `GRANTHA_DATA_TOOLS_LIB` env hack), writing into the checkout's
-`public/data/library/`. `bazel test //data:committed_in_sync` proves the
+`public/data/library/`. `bazel test //data:determinism_check` proves the
 pipeline is deterministic and *reports* committed-vs-fresh drift (not a hard
 gate — the committed tree may legitimately lag the current citation bimap).
 

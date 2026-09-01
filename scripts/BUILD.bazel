@@ -16,7 +16,7 @@ exports_files([
     "_build_parser.py",
     "grantha_data_bootstrap.py",
     "materialize_library.py",
-    "test_committed_in_sync.py",
+    "test_determinism_check.py",
 ])
 
 tsx_bin.tsx_binary(

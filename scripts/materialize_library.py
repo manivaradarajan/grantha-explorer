@@ -12,7 +12,7 @@ Two entry points share this module:
   ``public/data/library/``. ``--library-root`` defaults to the workspace
   (via ``BUILD_WORKING_DIRECTORY``), so the committed tree is updated
   deliberately and then committed like the npm flow.
-- ``//data:committed_in_sync`` (``bazel test``): regenerate into a temp root,
+- ``//data:determinism_check`` (``bazel test``): regenerate into a temp root,
   run twice to prove determinism, then report the diff against the committed
   tree explicitly. Drift is *reported*, not gated (the committed library may
   legitimately lag the current bimap; see the parity test docs).

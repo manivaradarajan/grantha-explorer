@@ -35,7 +35,7 @@ runs both converters below hermetically from the `@grantha_data` runfiles
 (no `GRANTHA_DATA_TOOLS_LIB` env hack, no sys.path games; the grantha-data
 root is resolved from runfiles and passed as `--grantha-data-dir`, which
 fails hard if the citation bimap is missing — never a silent `references[]`
-drop). `bazel test //data:committed_in_sync` proves determinism (two fresh
+drop). `bazel test //data:determinism_check` proves determinism (two fresh
 runs byte-identical) and *reports* committed-vs-fresh drift explicitly; drift
 is not gated because the committed tree may legitimately lag the current bimap
 (see §8 and the parity-test docs). The manual invocations below remain the
@@ -334,7 +334,7 @@ you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
   and matching the committed library byte-for-byte.
 - The committed `public/data/library/` may lag the current citation bimap
   (e.g. vishnu-purana references) — `test_committed_reference_parity.py`
-  fails on this by design; `//data:committed_in_sync` reports it as drift.
+  fails on this by design; `//data:determinism_check` reports it as drift.
   Re-sync deliberately with `bazel run //data:materialize` + commit.
 - Manual 3-file registry sync before a grantha appears in the UI.
 - `granthas.json` is gitignored and regenerated; a stale committed
