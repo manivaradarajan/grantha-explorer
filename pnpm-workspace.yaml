@@ -1,0 +1,17 @@
+# pnpm configuration for Bazel (aspect_rules_js npm_translate_lock).
+#
+# pnpm v10+ requires build scripts (lifecycle hooks) to be explicitly allowed
+# via `onlyBuiltDependencies`. Packages not listed here get their
+# postinstall/install scripts skipped, which is what makes the Bazel build
+# hermetic. Add any new native-binary package here if it needs a postinstall.
+#
+# This file also makes this checkout a pnpm workspace root; the committed
+# `pnpm-lock.yaml` is generated from the npm `package-lock.json` via
+# `pnpm import` (see docs/DATA_FLOW.md). npm workflows keep using
+# `package-lock.json`; Bazel uses the pnpm lockfile.
+onlyBuiltDependencies:
+  - "@tailwindcss/oxide"
+  - "esbuild"
+  - "fsevents"
+  - "lightningcss"
+  - "sharp"

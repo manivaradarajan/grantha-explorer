@@ -16,7 +16,20 @@ import * as path from 'path';
 import { createHash } from 'crypto';
 
 const root = path.resolve(__dirname, '..');
-const producerSchemas = path.join(root, '..', 'grantha-data', 'formats', 'schemas');
+
+// Producer schemas directory. Under Bazel the sibling checkout is not present
+// on disk; GRANTHA_DATA_SCHEMAS_DIR points at a producer schema file's runfiles
+// path (its directory is the schemas dir). Defaults to the sibling checkout
+// layout used by the npm path.
+const producerSchemasEnv = process.env.GRANTHA_DATA_SCHEMAS_DIR;
+const producerSchemas = producerSchemasEnv
+  ? (() => {
+      const resolved = path.resolve(producerSchemasEnv);
+      return fs.existsSync(resolved) && !fs.statSync(resolved).isDirectory()
+        ? path.dirname(resolved)
+        : resolved;
+    })()
+  : path.join(root, '..', 'grantha-data', 'formats', 'schemas');
 
 const SCHEMAS = [
   'grantha.schema.json',

@@ -39,6 +39,9 @@ next-env.d.ts
 # generated files
 public/data/generated/
 
+# Bazel symlinks (bazel-bin, bazel-grantha-explorer, bazel-out, bazel-testlogs)
+/bazel-*
+
 # reference diagnostics (regenerable; not library data)
 **/references-report.json
 

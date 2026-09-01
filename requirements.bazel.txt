@@ -1,0 +1,20 @@
+# Bazel-managed Python deps for grantha-explorer's own validators/tests.
+# This is the transitive-closure lock consumed by rules_python's pip hub
+# (pip.parse → explorer_pip). It is NOT the venv requirements.txt (which covers
+# dev tools + the converter scripts that Phase 4 deletes).
+#
+# Regenerate by running pip-compile against requirements.bazel.in; versions are
+# pinned to the same versions used across the repo (see requirements.txt).
+attrs==25.4.0
+colorama==0.4.6
+iniconfig==2.3.0
+jsonschema==4.25.1
+jsonschema-specifications==2025.9.1
+packaging==25.0
+pluggy==1.6.0
+Pygments==2.19.2
+pytest==9.0.0
+PyYAML==6.0.3
+referencing==0.37.0
+rpds-py==0.28.0
+typing_extensions==4.15.0

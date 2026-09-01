@@ -1,0 +1,59 @@
+"""grantha-explorer - Next.js static export consumer of grantha-data."""
+
+module(
+    name = "grantha_explorer",
+    version = "0.1.0",
+)
+
+# Python rules — must match grantha-data's rules_python so the producer's
+# py_library targets (and their @grantha_pip hub) are consumable from here.
+bazel_dep(name = "rules_python", version = "1.7.0")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.11",
+)
+
+# The producer repo. `local_path_override` points at the sibling checkout in
+# development; CI replaces this with a pinned `git_override`.
+bazel_dep(name = "grantha_data", version = "0.0.1")
+local_path_override(
+    module_name = "grantha_data",
+    path = "../grantha-data",
+)
+
+# --- JavaScript / TypeScript rules ---
+bazel_dep(name = "rules_nodejs", version = "6.7.5")
+bazel_dep(name = "aspect_rules_js", version = "2.9.3")
+
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+# jsdom 27 (pulled in by isomorphic-dompurify at static-export time) requires
+# node ^22.12.0; keep the toolchain above that floor.
+node.toolchain(node_version = "22.12.0")
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+    # isomorphic-dompurify pulls jsdom (an optional peer of its dep chain) at
+    # static-export build time; it must be resolvable from the workspace root
+    # node_modules, mimicking npm's hoisting. rules_js strict linking would
+    # otherwise keep it out of the next build's resolution.
+    public_hoist_packages = {
+        "jsdom": [""],
+    },
+)
+use_repo(npm, "npm")
+
+# --- Python validation deps ---
+# Minimal hub for the explorer's own Python validators/tests. jsonschema is
+# used by scripts/validate_data.py, pyyaml by grantha_markdown_validator.py,
+# pytest by the py_test wrappers.
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "explorer_pip",
+    python_version = "3.11",
+    requirements_lock = "//:requirements.bazel.txt",
+)
+use_repo(pip, "explorer_pip")

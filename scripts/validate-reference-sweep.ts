@@ -97,7 +97,11 @@ const main = (): void => {
   // edition derivation mirrors import_editions.edition_id_for_file (strip the
   // trailing -NN suffix); a flat single-edition file falls back to grantha_id.
   const sourceSchoolByEdition: Record<string, string> = {};
-  const structuredMdRoot = path.join(root, '..', 'grantha-data', 'structured_md');
+  // Under Bazel the sibling checkout is not on disk; GRANTHA_DATA_STRUCTURED_MD
+  // points at the producer runfiles. Defaults to the sibling layout used by npm.
+  const structuredMdRoot = process.env.GRANTHA_DATA_STRUCTURED_MD
+    ? path.resolve(process.env.GRANTHA_DATA_STRUCTURED_MD)
+    : path.join(root, '..', 'grantha-data', 'structured_md');
   if (fs.existsSync(structuredMdRoot)) {
     const editionSuffixRe = /-\d+(?:-\d+)*\.md$/;
     const walk = (dir: string): void => {

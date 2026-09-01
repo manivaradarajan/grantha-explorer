@@ -1,0 +1,34 @@
+# Python validator tests that survive the Phase-4 converter deletion.
+# These import modules from //scripts via py_library deps (the test files use
+# `sys.path` manipulation; Bazel's runfiles expose the library packages).
+
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@explorer_pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_test")
+
+# Test fixture imported by lib/*.test.ts via the `@/tests/fixtures` alias
+# (tsc/typecheck includes lib tests which reference it). Wrapped in a js_library
+# so the root package can reference it without copy_to_bin issues.
+js_library(
+    name = "fixtures",
+    srcs = ["fixtures.ts"],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "test_hide_editor_comments",
+    srcs = ["test_hide_editor_comments.py"],
+    main = "test_hide_editor_comments.py",
+    deps = ["//scripts:hide_editor_comments_lib"],
+)
+
+py_test(
+    name = "test_grantha_markdown_validator",
+    srcs = ["test_grantha_markdown_validator.py"],
+    main = "test_grantha_markdown_validator.py",
+    deps = [
+        "//scripts:grantha_markdown_validator_lib",
+        requirement("PyYAML"),
+        requirement("pytest"),
+    ],
+)

@@ -36,6 +36,36 @@ turn: check if that feature is already in `docs/CODEMAP.md`.
 Keep entries short: file, function names, one line each. This file is
 read often — don't let it balloon into full documentation.
 
+## Build/test tooling boundary (Bazel vs npm)
+
+The repo runs a deliberate two-toolchain setup. Bazel owns the
+**artifact-producing, deterministic, cross-repo** surface; npm owns the
+**interactive/test** surface.
+
+**Bazel owns** (`bazel test //...`, `bazel build //:static_export`):
+- Data + build pipeline: `//scripts:generate_granthas_json` (indexer),
+  `//:validate_data`, `//:validate_schema_mirrors`, `//:verify_sidebar_model`,
+  `//:typecheck`, and the next static-export build.
+- Python helpers and cross-repo deps via
+  `@grantha_data//tools/lib/grantha_data` (local_path_override → sibling).
+- Before touching `BUILD.bazel`, `MODULE.bazel`, `scripts/BUILD.bazel`, or the
+  `.bazelrc`/`pnpm-workspace.yaml`, understand that changing these affects both
+  toolchains.
+
+**npm owns** (never move to Bazel — either not supported well there or
+intrinsically non-hermetic):
+- `npm test` (vitest; rules_js has a known double-React issue with symlinked
+  node_modules, see aspect-build/rules_js#362 — do not attempt to re-wrap).
+- `npm run dev`, `npm run review:server` / `review:dev`, playwright e2e,
+  eslint, git hooks.
+- `scripts/validate-reference-sweep.ts` — needs the producer `structured_md`
+  source tree; it is **intentionally npm-only** (running it under Bazel without
+  the producer tree would be a vacuous pass).
+
+**Two lockfiles:** `package-lock.json` (npm) and `pnpm-lock.yaml` (Bazel,
+generated from the npm lock via `npx pnpm import`). Keep them in sync when
+bumping dependencies; do not add a Bazel vitest target as a workaround.
+
 **Git hooks:** the repo uses version-controlled hooks under
 `scripts/hooks/`, activated automatically by `postinstall`. On a fresh
 clone run `npm install` (already the first README step) — or the manual

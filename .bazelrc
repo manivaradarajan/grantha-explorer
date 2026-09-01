@@ -1,0 +1,24 @@
+# Common Bazel configuration for grantha-explorer
+# Mirrors grantha-data/.bazelrc where behavior must match the producer.
+
+# Enable Bzlmod (modern dependency management)
+common --enable_bzlmod=true
+
+# Enable color output
+common --color=yes
+
+# Show test output on failure
+test --test_output=errors
+
+# Enable build without bytes
+build --incompatible_default_to_explicit_init_py
+
+# Performance improvements
+build --jobs=auto
+
+# Test configuration
+test --test_verbose_timeout_warnings
+test --test_summary=detailed
+
+# Do not inherit the ambient environment into actions (hermetic builds).
+build --incompatible_strict_action_env

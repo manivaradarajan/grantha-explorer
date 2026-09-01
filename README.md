@@ -55,6 +55,7 @@ v1 deliberately excludes user accounts, search, and personal annotations.
 | Persistent state    | `localStorage` (panel sizes, commentary fallback) |
 | Layout              | `react-resizable-panels` (resizable 3-column)     |
 | Data                | JSON in `public/data/`, versioned in Git          |
+| Build/test tooling  | **Hybrid**: Bazel (data + build gates) + npm (dev/test) |
 | Deployment          | GitHub Actions → GitHub Pages                     |
 
 Full rationale: [`TECH-STACK.md`](TECH-STACK.md).
@@ -77,6 +78,21 @@ git config core.hooksPath scripts/hooks
 Open http://localhost:3000. The `prebuild` step runs automatically before the
 dev server: it scans `public/data/library/` and regenerates
 `public/data/generated/granthas.json` (auto-generated — never edit it).
+
+### Bazel (data + build gates)
+
+The repo uses a deliberate **hybrid toolchain**. Bazel owns the
+artifact-producing, cross-repo surface:
+
+```bash
+bazel test //...          # indexer, data validators, typecheck, python smoke
+```
+
+Bazel consumes the sibling `grantha-data` checkout via `local_path_override`
+(`MODULE.bazel`) and generates its own deterministic `granthas.json`. The
+exact Bazel/npm boundary — and why vitest/dev/e2e stay on npm — is documented
+in `AGENTS.md`. There are **two lockfiles**: `package-lock.json` (npm) and
+`pnpm-lock.yaml` (Bazel, kept in sync via `npx pnpm import`).
 
 ### Build & serve locally
 

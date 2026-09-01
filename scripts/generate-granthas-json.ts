@@ -224,7 +224,6 @@ async function generateGranthasJson() {
 
     const output = {
       _meta: {
-        generated: new Date().toISOString(),
         generator: 'scripts/generate-granthas-json.ts',
         warning: 'This file is auto-generated at build time. DO NOT EDIT manually. Edit source files in public/data/ instead.'
       },
