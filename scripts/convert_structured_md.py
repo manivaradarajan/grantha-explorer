@@ -1451,7 +1451,11 @@ def _references_bimap() -> list[Any]:
     from grantha_data.references import load_bimap
 
     tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
-    cache_key = str(_GRANTHA_DATA_DIR) or tools_lib or "default"
+    cache_key = (
+        str(_GRANTHA_DATA_DIR)
+        if _GRANTHA_DATA_DIR is not None
+        else (tools_lib or "default")
+    )
     if _references_bimap_cache is not None and _references_bimap_cache_key == cache_key:
         return _references_bimap_cache
 
