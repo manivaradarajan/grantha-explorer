@@ -293,20 +293,7 @@
         "sanskrit": {
           "devanagari": "तौ शोणिताक्तौ युद्ध्येतां वानरौ वनचारिणौ ।\nमेघाविव महाशब्दैस्तर्जमा(या)नौ परस्परम् ॥"
         }
-      },
-      "references": [
-        {
-          "start": 68,
-          "end": 70,
-          "display_text": "या",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.16.30",
@@ -580,20 +567,7 @@
           "sanskrit": {
             "devanagari": "ताविति । युध्येताम् अयुध्यताम् । तर्जमा(या)नाविति उभयत्र आगमशासनस्यानित्यत्वादडभावः मुमभावश्च ॥ ४.१६.२९,३० ॥"
           }
-        },
-        "references": [
-          {
-            "start": 40,
-            "end": 42,
-            "display_text": "या",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "4.16.31",

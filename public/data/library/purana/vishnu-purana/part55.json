@@ -45,20 +45,7 @@
         "sanskrit": {
           "devanagari": "को नग्रः किं समाचारो नग्रसंज्ञां नरो लभेत् ।\nनग्रस्वरूपमिच्छामि यथावद् गदितं त्वया ।\n(श्रोतु धर्मभृता श्रेष्ठ! न ह्मस्त्यविदितं तव)"
         }
-      },
-      "references": [
-        {
-          "start": 86,
-          "end": 130,
-          "display_text": "श्रोतु धर्मभृता श्रेष्ठ! न ह्मस्त्यविदितं तव",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.17.5",

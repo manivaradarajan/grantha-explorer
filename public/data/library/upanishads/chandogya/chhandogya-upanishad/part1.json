@@ -1670,17 +1670,6 @@
             "unresolved": false
           },
           {
-            "start": 3536,
-            "end": 3541,
-            "display_text": "१-२-७",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 3719,
             "end": 3730,
             "display_text": "बृ.उ. ३-३-१",
@@ -1884,20 +1873,7 @@
           "sanskrit": {
             "devanagari": "– **देवाः……प्राविशन्** । देवाः मरणभीताः सन्तः **त्रयीं विद्या प्राविशन्**वैदिकं कर्म प्रारब्धवन्तः इत्यर्थः । **ते छन्दोभिरच्छादयन् । छन्दोभिः** – कर्मविनियुक्तैःवैदिकैर्मन्त्रैः मृत्युभीताः सन्त आत्मानं छादितवन्तः इत्यर्थः । वैदिकमन्त्रकञ्चुकच्छन्नाइति यावत् । **यत्……छन्दस्त्वम्** । छादकत्वादेव (वैदिकमन्त्राणां) छन्दस्त्वम् इत्यर्थः ॥"
           }
-        },
-        "references": [
-          {
-            "start": 298,
-            "end": 313,
-            "display_text": "वैदिकमन्त्राणां",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.4.3",
@@ -2390,20 +2366,7 @@
           "sanskrit": {
             "devanagari": "**अथाध्यात्मम् ।** उपदिश्यते इति शेषः ।**वागेवर्क्……तत् साम ।** सर्वं पूर्ववत् ॥ (१-४ )"
           }
-        },
-        "references": [
-          {
-            "start": 82,
-            "end": 85,
-            "display_text": "१-४",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.7.5",

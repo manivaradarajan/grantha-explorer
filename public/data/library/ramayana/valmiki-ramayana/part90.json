@@ -407,20 +407,7 @@
         "sanskrit": {
           "devanagari": "मम मातुर्महद्दुःखमतुलं शुभलक्षण ।\nअभिप्रायमवि(भि)ज्ञाय सत्यस्य च शमस्य च ॥"
         }
-      },
-      "references": [
-        {
-          "start": 46,
-          "end": 48,
-          "display_text": "भि",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.21.40",

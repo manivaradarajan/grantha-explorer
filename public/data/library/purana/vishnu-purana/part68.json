@@ -465,20 +465,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुमाहापुराणे चतुर्थांशे द्वादशोऽध्यायः (१२)"
         }
-      },
-      "references": [
-        {
-          "start": 52,
-          "end": 54,
-          "display_text": "१२",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

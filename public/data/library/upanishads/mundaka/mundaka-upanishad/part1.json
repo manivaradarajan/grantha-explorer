@@ -134,31 +134,7 @@
           "sanskrit": {
             "devanagari": "देवा: – हे देवाः ! भद्रम् – कल्याणम् (वेदाख्यं, साङ्गेतिहासपुराणम् ), कर्णेभिः – श्रोत्रेः, शृणुयाम – श्रोतुं, समर्थाः भवेम । यजत्राः – हे यजत्राः ! त्रायन्ते रक्षन्तीति यजत्राः, यजमानपालकाः, अक्षभिः – नेत्रैः, भद्रम् – कल्याणम् , पश्येम – द्रष्टुं समर्थाः भवेम । स्थिरैः – दृढैः, अङ्गैः – करचरणाद्यवयवैः, तथा तनूभिः – शरीरैः, युक्ताः, तुष्टुवांसः – भवतः स्तुवन्तः (वयम् ), देवहितम् – देवैः, स्थापितं देवानां हितं देवोपासनयोग्यं वा, यदायुः – शतप्रमाणमायुः इति शतप्रमाणमायुः, व्यशेम – प्राप्नुयाम ।\n\nपूर्वत्र प्रत्यक्षेण प्रार्थिताः देवाः । अत्र तु परोक्षेण निर्दिश्य एकैकश: प्रार्थ्यन्ते । न: – अस्माकं, वृद्धश्रवाः- वृद्धश्रवणः, सदा श्रोत्रश्रवणात् , यद्वा वृद्धेः महात्मभिः सदा श्रूयते इति वृद्धश्रवाः, इन्द्रः – इन्द्रः, स्वस्ति – कल्याणं, दधातु – विदधातु । तथा विश्ववेदाः – विश्वैः विद्यते ज्ञायते लभ्यते वेति विश्ववेदाः, यद्वा, विश्वानि ज्ञानानि, धनानि वा यस्येति बहुव्रीहिः, पूषा – सूर्यः, न: – अस्माकं, स्वस्ति – कल्याणं, दधात . विदधातु : एवम् अरिष्टनेमिः – अनुपक्षीणनेमिः, प्रथिनेमिः, तार्क्ष्यः – तार्क्ष्यो नाम छन्दोमयो रथः यः, विहगराजो वा, नः – अस्माकं स्वस्ति – कल्याणम् , दधातु – विदधातु । बृहस्पतिः – देवगुरुश्च, नः – अस्माकं, स्वस्ति – कल्याणं, दधातु – विदधातु ।।"
           }
-        },
-        "references": [
-          {
-            "start": 38,
-            "end": 66,
-            "display_text": "वेदाख्यं, साङ्गेतिहासपुराणम्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 366,
-            "end": 370,
-            "display_text": "वयम्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.1.1",
@@ -194,17 +170,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 337,
-            "end": 339,
-            "display_text": "वा",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 831,
@@ -328,23 +293,12 @@
             "unresolved": false
           },
           {
-            "start": 8170,
-            "end": 8185,
-            "display_text": "निहितं पुरुषपदं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 9139,
             "end": 9147,
             "display_text": "ते.आन. १",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -355,7 +309,7 @@
             "display_text": "ते.आन. १",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -641,7 +595,7 @@
             "display_text": "ते.आन. १",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false

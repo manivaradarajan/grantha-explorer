@@ -103,20 +103,7 @@
         "sanskrit": {
           "devanagari": "समे शुचौ शर्करावह्निवालुकाविवर्जिते शब्दजलाश(श्र)यादिभिः ।\nमनोऽनुकूले न तु चक्षुपीडने गुहानिवाताश्रयणेन योजयेत् ॥"
         }
-      },
-      "references": [
-        {
-          "start": 45,
-          "end": 48,
-          "display_text": "श्र",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.11",
@@ -156,20 +143,7 @@
         "sanskrit": {
           "devanagari": "यथैव बिम्बं मृदयोपलिप्तं तेजोमयं भ्राजते तत्सुधान्त(क्त)म् ।\nतद्वाऽऽत्मतत्त्वं प्रसमीक्ष्य देही एकः कृतार्थो भवते बीतशोकः ॥"
         }
-      },
-      "references": [
-        {
-          "start": 52,
-          "end": 55,
-          "display_text": "क्त",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.15",
@@ -216,31 +190,7 @@
           "sanskrit": {
             "devanagari": "आत्मासंस्थपरमात्मप्रतीत्यौपयिकेन्द्रियनिग्रहरूपतपस्सिद्ध्ययनुगुणं भगवत्प्रार्थनामन्त्रमाह –**युञ्जानः**इति ।**धियः** **सविता**– प्रेरकः परमात्मा पृथिव्याः**अधि**ऊर्ध्व**अग्निं** **ज्योतिः**– अग्निरूपं ज्योतिः –**निचाय्य**– संपूज्य अग्निहोत्रादिकर्म (दिकं) कृत्वा**मनः** **तत्त्वाय**– साक्षात्काराय पृथिवीनिष्ठाग्निज्योतिस्सदृश- स्वात्मनिष्ठपरमात्मतत्त्वसाक्षात्काराय**युञ्जानः**– नियुञ्जानः**आभवत्**– भवति इत्यर्थः ।\n\n(तत्त्वसाक्षात्काराय परमात्मनि मनो नियञ्जानो भवतु इत्यर्थः) ।। १ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 250,
-            "end": 254,
-            "display_text": "दिकं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 419,
-            "end": 476,
-            "display_text": "तत्त्वसाक्षात्काराय परमात्मनि मनो नियञ्जानो भवतु इत्यर्थः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.2",
@@ -268,17 +218,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 570,
-            "end": 595,
-            "display_text": "इति वयं मन्यामहे इति शेषः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -300,17 +239,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 601,
-            "end": 612,
-            "display_text": "परिचर्येति?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -320,20 +248,7 @@
           "sanskrit": {
             "devanagari": "**युजे** **वां** **इति**। दिव्यस्थानस्थिताः सर्वे ब्रह्मपुत्राः मत्प्रार्थनां शृण्वन्तु ।**सूरेः**– नित्यसूरिकर्तृका, स्तुतिपथादनपेतत्वेन**पथ्या**– स्तुतिः ।**वां** **पूर्व्यं**व: पूर्वमित्यर्थः । वचनव्यत्ययश्छान्दसः । सा (सः) तादृशं ब्रह्म यथा प्राप्नोति, एवं**युजे**. योगाय – ब्रह्मप्राप्तये इति यावत् । मया कृतः**विश्लोकः**– विविधः श्लोकः स्तोत्ररूप:**एतु**– प्राप्नोतु । नित्यसूरिकृतां स्तुतिं यथा भगवान् अङ्गीकरोति, एवम् अङ्गीकरोतु इत्यर्थः । ततश्च योगप्रवृत्तेः प्राक् भगवत्स्तुतिः कर्तव्या इत्युक्तं भवति ।। ५ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 223,
-            "end": 225,
-            "display_text": "सः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.6",
@@ -349,20 +264,7 @@
           "sanskrit": {
             "devanagari": "**सवित्रा**इति । एवं गुरुप्रणामभगवत्स्तुतिप्रसन्नेन सवित्रा कृतेन**प्रसवेन\\*\\***–**अनुज्ञया तदनुज्ञातस्सन् इति यावत् ।**पूर्व्यम्**– पूर्वपृष्टं (श्रेष्टं)**ब्रह्म\\*\\* **जुषेत**– सेवेत । ध्यायेदिति यावत् ।**तत्र**– परमात्मनि**योनिं**– स्थानं – मनसि इति शेषः**कृण्वसे**– कुरुष्व । तथा सति ते**पूर्तिं**– मनोरथपूर्तिं तत् – ब्रह्म**नाक्षिपत्**– न क्षिपति । न निरस्यतीत्यर्थः लडर्थे लङ् ।। ७ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 146,
-            "end": 154,
-            "display_text": "श्रेष्टं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.8",
@@ -370,20 +272,7 @@
           "sanskrit": {
             "devanagari": "योगदशेतिकर्तव्यतामाह –**त्रिरुन्नत**मिति । उर:कण्ठशिरःप्रदेशेषु उन्नतम् इतरत्र**समं** **शरीरं**स्थापयित्वा सर्वाणीन्द्रियाणि हृदयकुहरे**संनिवेश्य** **ब्रह्मोडुपेन**– प्रणवलक्षण (ब्रह्मस्वरूप) प्लवेन ब्रह्मध्यानेन इत्यर्थः ।**सर्वाणि** **भयावहानि**नानाविधानि जन्म**स्रोतांसि**तरेत् इत्यर्थः ।। ८ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 178,
-            "end": 190,
-            "display_text": "ब्रह्मस्वरूप",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.9",
@@ -415,17 +304,6 @@
         },
         "references": [
           {
-            "start": 190,
-            "end": 196,
-            "display_text": "ल्कादि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 304,
             "end": 317,
             "display_text": "ब्र.सू.४-१-११",
@@ -435,17 +313,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 390,
-            "end": 396,
-            "display_text": "श्रिते",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 425,
@@ -512,28 +379,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1122,
-            "end": 1123,
-            "display_text": "च",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 1153,
-            "end": 1156,
-            "display_text": "साध",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -543,20 +388,7 @@
           "sanskrit": {
             "devanagari": "योगमभ्यस्यतो ब्रह्माभिव्यक्तिप्राचीनानि तञ्चिह्नानि आह –**नीहारेति**। प्रथमतो नीहारवत् स्फुरति, ततो**धूमार्कानि**(न) लाद्याकारतया स्फुरति । एवम्भूतानि स्फुरणानि पूर्वप्रवृत्तानि आगामि**ब्रह्माभिव्यक्तिचिह्नानि**इत्यर्थः ।। ११ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 114,
-            "end": 115,
-            "display_text": "न",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.12",
@@ -564,20 +396,7 @@
           "sanskrit": {
             "devanagari": "योगाभ्यासस्य कायसिद्धिफलकत्वमाह –**पृथ्वीति** **।** **गुणो**– गुणनमभ्यासः । योगाभ्यासे प्रवृत्ते सति योगमहिम्ना सत्त्वप्रचुरभूतारब्धे पाश्चभौतिके शरीरे**समुत्थिते**तादृशसर्वरोगादिदाहसमर्थत्वेना**ग्नि**रूपेण योगनारब्धशरीरयुक्तस्य पुंसौ रोगादि**र्न**(सं) भवतीत्यर्थः ।। १२ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 249,
-            "end": 251,
-            "display_text": "सं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.13",
@@ -593,31 +412,7 @@
           "sanskrit": {
             "devanagari": "योगमभ्यस्यतो ब्रह्मोपलब्धिप्रकारं तत्फलञ्चाह – यथैवेति । मृदा अयसा बा उपलिप्त: – निर्मितः प्रतिमाविशेषः सुधाविशेषान्त (विशेषाख्य?) रञ्जकद्रव्यलिप्तस्सन् तेजोमयतया दीप्यते ।**तद्वत्**सुधाविशेषलिप्ततेजोमयप्रतिमासमं दर्शनसमानाकारध्यानेनोपलभ्य कश्चित् पुरुषधौरेयो निवृत्तसंसारगन्ध: सिद्धार्थो भवतीत्यर्थः । तद्वा इत्यत्र**वा**शब्द: इवार्थः ।**तद्वत्** **सतत्तवं** **प्रसपीक्ष्येति**पाठेऽव्ययमैवार्थः । केचित्तु सुधान्तमिति मत्वा सुधौतमित्यर्थे (सुधातरित्यर्थे) सुधान्तमिति शब्द इत्यपि वदन्ति ।। १४ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 119,
-            "end": 129,
-            "display_text": "विशेषाख्य?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 441,
-            "end": 455,
-            "display_text": "सुधातरित्यर्थे",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.15",
@@ -625,31 +420,7 @@
           "sanskrit": {
             "devanagari": "**यदाऽऽत्मेति** **।** **यदा**योगयुक्त: परमात्मप्रतीत्युपायभूतेन प्रणयप्रतिपादित- परमात्मशेषभावेन प्रत्यगात्मना साधनेन(सम्बन्धेन तत्स्थं परम् अनादिम् अनन्तं हेयप्रतिभटं अस्रभूषाध्यायोक्तरीत्या सर्वतत्त्वात्मका**स्त्र**भूषणोपेतं परं ब्रह्म सूक्ष्मव**स्त्रा**न्तरितमाणिक्यवत् (यदा) पश्येत्, तदा सर्वं (बन्धक)कर्महानिर्भवतीत्यर्थः ।। १५ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 274,
-            "end": 277,
-            "display_text": "यदा",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 299,
-            "end": 304,
-            "display_text": "बन्धक",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.16",
@@ -669,17 +440,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 327,
-            "end": 331,
-            "display_text": "जातः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },

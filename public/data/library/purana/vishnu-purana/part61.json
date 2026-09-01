@@ -123,64 +123,7 @@
         "sanskrit": {
           "devanagari": "बानुमतः शतद्य म्नः, तस्य शुचिः, तस्मादूर्ज्ज चवहो नाम पुत्रो जज्ञ तस्यापि सत्यध्वजः ततः कुनिः (क्रिणिः), कुनेरञ्जनः, ततूपुत्रः, ऋतुजित्, ततोऽरिष्टनेमिः, तस्मात् श्रतायुः, ततः सूर्य्याश्वः, तस्मात् सञ्जयः (संनयः), ततः क्षेमारिः, तसमा दनेनाः,तस्मान्मीनरथः (मानरथः) तस्य सत्यरथः, तस्य सात्यरथिः, सात्यरथरुपगुः, तस्मात् श्रुतः, तस्माच्छा पाच्च मित्रावरुणयोस्तेजसि वांशष्ठतेज (सुवर्ज्जाः), तस्यापि सुभासः, ततः सुश्रुतः, तस्माज्जयः, जयपुत्रो विजयः, तस्य ऋतः, ऋतात् सुनयः, ततो वीतहव्यः, तस्मात् सञ्जयः, तस्माद् (क्षेमाश्वः तस्मात्) धृतिः धृतेर्बहुलाश्वः तस्य पुत्रः कृतिः कृतौ सन्तिष्ठतेऽय जनक-वंशः"
         }
-      },
-      "references": [
-        {
-          "start": 95,
-          "end": 102,
-          "display_text": "क्रिणिः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 205,
-          "end": 210,
-          "display_text": "संनयः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 255,
-          "end": 261,
-          "display_text": "मानरथः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 372,
-          "end": 382,
-          "display_text": "सुवर्ज्जाः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 505,
-          "end": 523,
-          "display_text": "क्षेमाश्वः तस्मात्",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.5.13",

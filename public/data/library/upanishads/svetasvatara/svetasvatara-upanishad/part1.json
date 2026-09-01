@@ -243,28 +243,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 937,
-            "end": 945,
-            "display_text": "यथार्ह ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 1009,
-            "end": 1013,
-            "display_text": "एको?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -350,28 +328,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 452,
-            "end": 454,
-            "display_text": "शं",
-            "grantha_id": "mahabharata-shanti-parva",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 484,
-            "end": 486,
-            "display_text": "कं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -383,17 +339,6 @@
           }
         },
         "references": [
-          {
-            "start": 286,
-            "end": 298,
-            "display_text": "परमात्मा तु?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 347,
             "end": 356,

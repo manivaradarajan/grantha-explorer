@@ -383,20 +383,7 @@
         "sanskrit": {
           "devanagari": "हिता नाम हृदयस्य नाड्यो हृदयात् पुरीततमभिप्रतिष्टन्ति । यथा (च) सहस्रधा केशस्यापि पातः तावदण्व्यः पिङ्गळस्याणिम्ना तिष्ठन्ते शुक्लस्य कृष्णस्य पीतस्य लोहितस्येति । तासु तदा भवति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 61,
-          "end": 62,
-          "display_text": "च",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.39",
@@ -947,17 +934,6 @@
             "grantha_id": "brihadaranyaka-upanishad",
             "edition_id": "brihadaranyaka-upanishad",
             "locator": "6.3.21",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 1017,
-            "end": 1020,
-            "display_text": "तत्",
-            "grantha_id": "tattva-sara",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false

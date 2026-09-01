@@ -982,17 +982,6 @@
             "unresolved": false
           },
           {
-            "start": 8083,
-            "end": 8090,
-            "display_text": "इत्यादौ",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 8374,
             "end": 8385,
             "display_text": "ब्र.उ.४-२-३",
@@ -2238,17 +2227,6 @@
             "unresolved": false
           },
           {
-            "start": 12190,
-            "end": 12198,
-            "display_text": "युक्तम्?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 12272,
             "end": 12283,
             "display_text": "रा.सु.२१-१५",
@@ -2581,17 +2559,6 @@
             "unresolved": false
           },
           {
-            "start": 10096,
-            "end": 10097,
-            "display_text": "१",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 10121,
             "end": 10132,
             "display_text": "छां.उ.६-८-६",
@@ -2647,17 +2614,6 @@
             "unresolved": false
           },
           {
-            "start": 11212,
-            "end": 11213,
-            "display_text": "२",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 11426,
             "end": 11438,
             "display_text": "ब्र.सू.४-२-३",
@@ -2667,17 +2623,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 11716,
-            "end": 11717,
-            "display_text": "३",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 11824,
@@ -2700,17 +2645,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 12301,
-            "end": 12302,
-            "display_text": "४",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 12439,
@@ -2779,17 +2713,6 @@
             "unresolved": false
           },
           {
-            "start": 13078,
-            "end": 13079,
-            "display_text": "५",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 13113,
             "end": 13124,
             "display_text": "छां.उ.६-८-६",
@@ -2810,17 +2733,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 13574,
-            "end": 13575,
-            "display_text": "६",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 13761,

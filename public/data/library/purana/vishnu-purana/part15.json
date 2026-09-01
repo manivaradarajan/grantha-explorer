@@ -1603,20 +1603,7 @@
         "sanskrit": {
           "devanagari": "इतिश्रीविष्णुपुराणे प्रथमेऽंशे पञ्चदशोऽध्यायः (१५)"
         }
-      },
-      "references": [
-        {
-          "start": 47,
-          "end": 49,
-          "display_text": "१५",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

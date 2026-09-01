@@ -677,20 +677,7 @@
         "sanskrit": {
           "devanagari": "अर्दितं मम नाराचैर्ध्वस्तभ्रान्तमृगद्विजम् ।\nसमाकुलममर्यादं जगत् पश्याद्य(र्य) लक्ष्मण ॥"
         }
-      },
-      "references": [
-        {
-          "start": 74,
-          "end": 77,
-          "display_text": "र्य",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.64.67",

@@ -230,42 +230,7 @@
           "sanskrit": {
             "devanagari": "उत्तशानस्य फलमाह •**य एक**इति । ‘अपहतपाप्मा दिव्यो देव’ (अध्यात्म उ- १) इति देवत्वेन श्रुतिप्रसिद्ध: परमात्मा प्रकृतिशब्दितमायारूपवागुरा युक्तस्सन् ईशानसमर्थाभि: ज्ञानबक्रियाशक्तिभिः मायाजालगोचरान् प्राकृतांश्च(न्)लोकानीष्टे सदगोचरान् अप्राकृतांश्च लोकान् ईष्टे । यश्च जगतः**उद्भवे**उत्पत्ती,**सम्भवे**समीत्येकीकारे लयापरपर्याये एकीभावे च (क)ईष्टे, रज्ज्ञानं मोक्षसाधनमित्यर्थः ।। १ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 57,
-            "end": 70,
-            "display_text": "अध्यात्म उ- १",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 211,
-            "end": 213,
-            "display_text": "न्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 340,
-            "end": 341,
-            "display_text": "क",
-            "grantha_id": "katha-upanishad",
-            "edition_id": "katha-upanishad",
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          }
-        ]
+        }
       },
       {
         "ref": "3.2",
@@ -275,17 +240,6 @@
           }
         },
         "references": [
-          {
-            "start": 462,
-            "end": 466,
-            "display_text": "द्रव",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 659,
             "end": 667,
@@ -307,17 +261,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 798,
-            "end": 805,
-            "display_text": "यौगिकः?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -339,28 +282,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 153,
-            "end": 155,
-            "display_text": "वि",
-            "grantha_id": "vishnu-purana",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 220,
-            "end": 227,
-            "display_text": "**संध**",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -485,20 +406,7 @@
           "sanskrit": {
             "devanagari": "तज्ज्ञानस्य मोक्षसाधनत्वमुक्त्वा इतरस्य तन्निषेधेति –**वेदाहमेत**मिति । प्रकृतेः परस्तात् ज्योति: महापुरुषं (ज्योतिर्मयवपुषं ?)**तमेव** **पुरुषं** **विदित्वा\\*\\***‘**मृत्युशब्दितं संसारमतिक्रामति ।**अयनाय**तत्प्राप्तये अन्यो मार्गो नास्ति । एतमर्थमहं**वेद\\*\\*– जानामि । अस्मिन्नर्थे विवादो नास्तीति मुनीनां परस्परं वचनमिदम् ।। ८ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 109,
-            "end": 126,
-            "display_text": "ज्योतिर्मयवपुषं ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.9",
@@ -526,17 +434,6 @@
             "grantha_id": "brahma-sutra",
             "edition_id": "brahma-sutra-sribhashya",
             "locator": "3.2.35",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 992,
-            "end": 1011,
-            "display_text": "पाद्मोत्तर ६-२५४-६६",
-            "grantha_id": "padma-purana",
-            "edition_id": null,
-            "locator": "6.254.66",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -617,17 +514,6 @@
             "unresolved": false
           },
           {
-            "start": 263,
-            "end": 272,
-            "display_text": "तस्मात् ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 355,
             "end": 367,
             "display_text": "बि.पु ६-५-७९",
@@ -660,31 +546,9 @@
             "unresolved": false
           },
           {
-            "start": 200,
-            "end": 208,
-            "display_text": "इत्यत्र?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 533,
             "end": 551,
             "display_text": "महा.भा.मो.प.३४९-७३",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 689,
-            "end": 701,
-            "display_text": "वर्णविग्रहः?",
             "grantha_id": null,
             "edition_id": null,
             "locator": null,
@@ -729,20 +593,7 @@
           "sanskrit": {
             "devanagari": "यस्मात् पुरुषेण व्याप्तमिदं सर्वम्, अतः भूतभव्योपलक्षितं प्रपञ्चजातं पुरुषात्मकमेवेत्याह ·**पुरुष** **एवेति**। (उक्तोऽर्थः)**उताऽमृतेति**। अत्रामृतशब्देन मुक्तिवाचिना मुक्तिस्थानं लक्ष्यते । अप्राकृतभोग्यभोगोपकरणसमृद्धं**यदमृतवं**परमपदम्**अन्ने**प्रकृतिप्राकृतसम्बन्धे**नातिरोहति**– नोत्पद्यते; तस्याप्यमृतत्वस्यासौ**ईशान**इत्यर्थः । अतश्चोभयविभूतिनायकत्वमुक्तं भवति ।। १५ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 112,
-            "end": 122,
-            "display_text": "उक्तोऽर्थः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.16",
@@ -819,20 +670,7 @@
           "sanskrit": {
             "devanagari": "**अणो**रिति । सकलसूक्ष्मवस्त्वन्तःप्रवेशयोग्यसौक्ष्मवान् निरतिशयबृहत्वशाली एवम्भूतः**अस्य** **जन्तोः**प्राणिनो जीवस्य**आत्मा**प्रेरकस्सन् सर्वजीवस्य हृदय- गुहायामास्ते ।**जन्तो**रित्येतत्**आत्मा**इत्यत्रापि च संबध्यते; आकाङ्क्षासत्त्वात् ।**गुहायाम्**इति निर्दिष्टहृदयगुहायामपि ‘सम्बध्यते । तादृशम्**अक्रतुं**– कर्मलेपशून्यं महामहिमशालिनमीशं यदा**पश्यति**, तदा**धातुः**धारकस्य परमात्मनः प्रसादात्**वीतशोको**भवति । ‘प्रसीदत्यच्युतस्तस्मिन् प्रसन्ने क्लेशसंक्षयः’ इति स्मृतेः । ततश्च ध्यानसाध्यपरमात्मप्रसादनिर्वर्त्यतया ज्ञाननिवर्त्यत्वेन (प्रसादनिवर्त्यतया (ज्ञाननिवर्त्यत्वेन?) बन्धस्य मिथ्यात्वं प्रत्युक्तम् ।। २० ।।"
           }
-        },
-        "references": [
-          {
-            "start": 558,
-            "end": 577,
-            "display_text": "ज्ञाननिवर्त्यत्वेन?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "3.21",

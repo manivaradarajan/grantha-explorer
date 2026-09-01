@@ -73,20 +73,7 @@
         "sanskrit": {
           "devanagari": "कच्चिच्छुश्रूषमाणा वः शुश्रूषणपरा मयि ।\nप्र(म)मादाभ्युचितां वृत्तिं सीता युक्तं न वर्तते ॥"
         }
-      },
-      "references": [
-        {
-          "start": 44,
-          "end": 45,
-          "display_text": "म",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.116.8",

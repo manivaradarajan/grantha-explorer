@@ -177,20 +177,7 @@
         "sanskrit": {
           "devanagari": "तमब्रवीत् प्रीयमाणो महात्मा\nवरं तवेहाद्य ददानि (मि) भूयः ।\nतवैव नाम्ना भविताऽयमग्निः\nसृंकाञ्चेमामनेकरूपां गृहाण ॥"
         }
-      },
-      "references": [
-        {
-          "start": 48,
-          "end": 50,
-          "display_text": "मि",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "1.1.17",
@@ -220,20 +207,7 @@
         "sanskrit": {
           "devanagari": "यो वा ए(प्ये)तां ब्रह्मजज्ञात्मभूतां चितिं विदित्वा चिनुते नाचिकेतम् ।\nस एव भूत्वा ब्रह्मजज्ञात्मभूतः करोति तद् येन पुनर्न जायते ॥"
         }
-      },
-      "references": [
-        {
-          "start": 8,
-          "end": 12,
-          "display_text": "प्ये",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "1.1.20",
@@ -362,17 +336,6 @@
           }
         },
         "references": [
-          {
-            "start": 15,
-            "end": 41,
-            "display_text": "श्रीरङ्गरामानुजमुनिविरचिता",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 284,
             "end": 295,
@@ -679,17 +642,6 @@
             "unresolved": false
           },
           {
-            "start": 247,
-            "end": 256,
-            "display_text": "हेतुभिः ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 379,
             "end": 388,
             "display_text": "क.उ. १-१९",
@@ -815,17 +767,6 @@
             "unresolved": false
           },
           {
-            "start": 1859,
-            "end": 1861,
-            "display_text": "उत",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 2117,
             "end": 2129,
             "display_text": "वि.पु.२-८-९५",
@@ -947,17 +888,6 @@
             "unresolved": false
           },
           {
-            "start": 5169,
-            "end": 5171,
-            "display_text": "हि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 5777,
             "end": 5788,
             "display_text": "पू.मी.१-४-८",
@@ -1000,17 +930,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 6532,
-            "end": 6544,
-            "display_text": "वा २७२२,२७२३",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 6955,
@@ -1088,17 +1007,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 9008,
-            "end": 9014,
-            "display_text": "कथम् ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 9169,
@@ -1353,17 +1261,6 @@
             "unresolved": false
           },
           {
-            "start": 1540,
-            "end": 1552,
-            "display_text": "उपेतृस्वरूपम",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 2314,
             "end": 2323,
             "display_text": "क.उ. १-१२",
@@ -1406,17 +1303,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 3264,
-            "end": 3268,
-            "display_text": "२-११",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },

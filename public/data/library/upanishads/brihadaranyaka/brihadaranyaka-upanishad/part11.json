@@ -387,17 +387,6 @@
             "unresolved": true
           },
           {
-            "start": 980,
-            "end": 985,
-            "display_text": "८-१-१",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 1232,
             "end": 1243,
             "display_text": "बृ.उ.६-३-२१",
@@ -1056,17 +1045,6 @@
             "unresolved": false
           },
           {
-            "start": 1257,
-            "end": 1264,
-            "display_text": "यागादेः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 1331,
             "end": 1340,
             "display_text": "भ.गी.९-२४",
@@ -1085,20 +1063,7 @@
           "sanskrit": {
             "devanagari": "**स वा एष महानज...... ब्रह्म** । **स एष महानात्मा** - परमात्मा जन्मजरामरणशून्यः **अमृतः** - असंसारी, अत एव भयशून्यः । एवम्भूतोऽयमात्मा **ब्रह्म** - निरतिशयबृहदि(न्नि)त्यर्थः । तत्र हेतुमाह - **अभयं वै ब्रह्म** । **अमृतमभयमेतद्ब्रह्म** इति निरुपाधिकाभयत्वाश्रयस्य परब्रह्मत्वप्रसिद्धेरिति भावः । तज्ज्ञानस्य फलमाह - **अभयं हि वै ब्रह्मभवति य एवं वेद** । **ब्रह्म भवति** - आविर्भूतब्राह्मरूपो भवतीत्यर्थः । शिष्टं स्पष्टम् ॥"
           }
-        },
-        "references": [
-          {
-            "start": 161,
-            "end": 165,
-            "display_text": "न्नि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "6.5.1",

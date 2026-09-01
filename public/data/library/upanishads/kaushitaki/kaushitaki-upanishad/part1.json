@@ -347,20 +347,7 @@
         "sanskrit": {
           "devanagari": "तं ब्रह्माह अभिधावत मम यशसा विरजां (विजरां) वाऽयं नदीं प्रापत् । न वाऽयं जिगीष्यतीति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 36,
-          "end": 42,
-          "display_text": "विजरां",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "1.34",
@@ -725,20 +712,7 @@
           "sanskrit": {
             "devanagari": "अतसीगुच्छसच्छायमञ्चितोरस्स्थलं श्रिया।\nअञ्जनाचलशृङ्गारमञ्जलिर्मम गाहताम् ।।\n\nव्यासं लक्ष्मणयोगीन्द्रं प्रणम्यान्यान् गुरूनपि ।\nकौषीतकि(की)श्रुतिव्याख्यां करवाणि यथामति ।।\n\nअर्चिरादिगति तत्प्राप्यदेशविशेष – तद्विशिष्टब्रह्मानुभवप्रकारोपदेशाय आख्यायिकेयमारभ्यते – **चित्रो ह……वव्रे। **नाम्ना चित्रः गार्ग्यस्यापत्यं गार्ग्यायणिः क्षत्रियः आरुणिं गौतमं** याजनाय प्रार्थितवान् इत्यर्थः ।।"
           }
-        },
-        "references": [
-          {
-            "start": 135,
-            "end": 137,
-            "display_text": "की",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.2",
@@ -1078,20 +1052,7 @@
           "sanskrit": {
             "devanagari": "हे **ऋतवः** ! यूयमितः परं निषेककर्तरि पुंसि रेतोरूपतया अवस्थानाय **मेरयध्वम्** – मा प्रेषयत । प्रेषणं मा कुरुत इत्यर्थः । उत्तरत्र **मा** इत्यस्य अत्राप्यनुषङ्गः । **पुंसा** निषेककर्त्रा मम शरीरपरिग्रहाय (**मातरि मा निषिक्तम्** ) निषेकं मा कुरुत । छान्दसः शपो लुक् ।।"
           }
-        },
-        "references": [
-          {
-            "start": 205,
-            "end": 227,
-            "display_text": "**मातरि मा निषिक्तम्**",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "1.16",
@@ -1408,17 +1369,6 @@
             "start": 441,
             "end": 458,
             "display_text": "**छां.उ. ८-१३-१**",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 536,
-            "end": 552,
-            "display_text": "**शाट्यायनीयम्**",
             "grantha_id": null,
             "edition_id": null,
             "locator": null,

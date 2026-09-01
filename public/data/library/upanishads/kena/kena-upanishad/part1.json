@@ -177,20 +177,7 @@
         "sanskrit": {
           "devanagari": "तद्धेषां विजज्ञौ । तेभ्यो ह प्रादुर्बभूव । तन्न व्यजानत(न्त) किमिदं यक्षमिति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 56,
-          "end": 59,
-          "display_text": "न्त",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.3",
@@ -230,20 +217,7 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ, एतद्दहेति। तदुपप्रेयाय सर्वजवेन । तन्न शशाक दग्धुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुम्, यदेतद्यक्षमिति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 94,
-          "end": 97,
-          "display_text": "नैन",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.7",
@@ -283,20 +257,7 @@
         "sanskrit": {
           "devanagari": "तस्मै तृणं निदधौ एतदादत्स्वेति । तदुपप्रेयाय सर्वजवेन । तन्न शशाकाऽऽदातुम् । स तत एव निववृते, नैत (नैन) दशकं विज्ञातुं, यदेतद्यक्षमिति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 99,
-          "end": 102,
-          "display_text": "नैन",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.11",
@@ -336,20 +297,7 @@
         "sanskrit": {
           "devanagari": "तस्माद्वा एते देवा अतितरामिवान्यान् देवान्। यदग्निर्वायुरिन्द्रः । ते ह्येनन्नेदिष्ठं पस्पृशुः । ते (स) ह्येनत् प्रथमो विदाञ्चकार ब्रह्मेति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 101,
-          "end": 102,
-          "display_text": "स",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.3",
@@ -369,20 +317,7 @@
         "sanskrit": {
           "devanagari": "तस्यैष आदेशो यदेतद्विद्युतो व्यद्युतदा इति, इन्न्यमिष (मीमिष)दा इत्यधिदैवतम् ॥"
         }
-      },
-      "references": [
-        {
-          "start": 55,
-          "end": 60,
-          "display_text": "मीमिष",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.5",
@@ -392,42 +327,7 @@
         "sanskrit": {
           "devanagari": "अथाध्यात्मम्, यदेत (न)दगच्छतीव च मनो न (मनोऽनेन) चैन(त) दुपस्मरत्यभीक्ष्णं सङ्कल्पः ॥"
         }
-      },
-      "references": [
-        {
-          "start": 20,
-          "end": 21,
-          "display_text": "न",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 40,
-          "end": 47,
-          "display_text": "मनोऽनेन",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        },
-        {
-          "start": 53,
-          "end": 54,
-          "display_text": "त",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.6",
@@ -585,23 +485,12 @@
         },
         "references": [
           {
-            "start": 43,
-            "end": 48,
-            "display_text": "यस्तु",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 397,
             "end": 405,
             "display_text": "तै.उ.आ.9",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "9",
+            "locator": "2.9",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -612,7 +501,7 @@
             "display_text": "तै.उ.आ.1",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1",
+            "locator": "2.1",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -659,17 +548,6 @@
           }
         },
         "references": [
-          {
-            "start": 176,
-            "end": 180,
-            "display_text": "अत्र",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 302,
             "end": 308,
@@ -777,42 +655,7 @@
           "sanskrit": {
             "devanagari": "**तस्यैष आदेशः** । तस्य – आविर्भूतस्य’ सद्यस्तिरोभूतस्य ब्रह्मण एष आदेश: वक्ष्यमाण उपमानोपदेश इत्यर्थः । **यदेतत् विद्युतो व्यद्युतदा’** इति । यथा विद्युतो विद्योतनं क्षणिकम, तद्वत इत्यर्थः । आ इति प्रसिद्धौ। उपमानान्तरमाह – **इन्न्यमि (मीमि)षदा** इति अत्रापि आ इत्येतत् पूर्ववत् । इच्छब्दः उपमानान्तरसमुच्चयार्थः। यथा न्यमिषत (न्यमीमिषत्) निमेषः, प्रकाशतिरोभावः क्षणेन, एवं ब्रह्माऽपि तिरोऽभूत् इत्यर्थः । यथा विद्यतस्तिरोहिता भवन्ति इत्यर्थः (र्थ?) **न्यममिषत्** इति वचनव्यत्ययश्छन्दसः । **इत्यधिदैवतम्** – अनात्मभूताकाशादिगतविद्युद्विषयं ब्रह्मण उपमानदर्शनमुक्तम् इत्यर्थः ।"
           }
-        },
-        "references": [
-          {
-            "start": 237,
-            "end": 241,
-            "display_text": "मीमि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 328,
-            "end": 338,
-            "display_text": "न्यमीमिषत्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 445,
-            "end": 449,
-            "display_text": "र्थ?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "4.5",

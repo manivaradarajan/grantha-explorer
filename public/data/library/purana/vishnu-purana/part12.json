@@ -1070,20 +1070,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुपुराणे प्रथमेऽंशे द्वादशोऽध्यायः (१२)"
         }
-      },
-      "references": [
-        {
-          "start": 48,
-          "end": 50,
-          "display_text": "१२",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }
