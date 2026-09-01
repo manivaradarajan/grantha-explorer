@@ -1399,6 +1399,22 @@ def _set_grantha_data_dir(grantha_data_dir: Path | None) -> None:
     _GRANTHA_DATA_DIR = grantha_data_dir
 
 
+def reset_caches() -> None:
+    """Clear this module's process-global caches.
+
+    Callers that run multiple conversions in one process (e.g. the
+    ``materialize_library`` determinism gate, which regenerates twice to prove
+    hermeticity) must reset between runs so each run re-loads from disk instead
+    of reusing a prior run's cached data.
+    """
+    global _CITATION_OVERLAY_CACHE, _references_bimap_cache
+    global _references_bimap_cache_key, _GRANTHA_DATA_DIR
+    _CITATION_OVERLAY_CACHE = None
+    _references_bimap_cache = None
+    _references_bimap_cache_key = None
+    _GRANTHA_DATA_DIR = None
+
+
 def _tools_lib_dir() -> Path:
     """Return the grantha-data ``tools/lib`` directory for the active checkout.
 
@@ -1944,6 +1960,7 @@ def convert_grantha(
     source_dir: Path,
     out_dir: Path,
     grantha_explorer_root: Path,
+    grantha_data_dir: Path | None = None,
 ) -> None:
     """Convert all source files for one grantha into v1.0.0 JSON.
 
@@ -1951,7 +1968,11 @@ def convert_grantha(
         source_dir: Directory of .md source files for this grantha.
         out_dir: Output directory for envelope.json and partN.json files.
         grantha_explorer_root: Root of the grantha-explorer repo (for DEFERRED.md).
+        grantha_data_dir: Optional grantha-data checkout root (for the citation
+            bimap). ``None`` resets to the env-var / installed-package
+            derivation, never inheriting a prior call's directory.
     """
+    _set_grantha_data_dir(grantha_data_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     source_files = _collect_source_files(source_dir)
 

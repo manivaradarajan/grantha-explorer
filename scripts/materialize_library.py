@@ -19,9 +19,10 @@ Two entry points share this module:
 
 All inputs (grantha-data sources, the citation bimap, the converter's Python
 deps) come from Bazel runfiles — no ``GRANTHA_DATA_TOOLS_LIB`` env hack, no
-sys.path games. The grantha-data root is resolved via ``python.runfiles`` and
-passed to the converters as ``--grantha-data-dir`` (a hard error if the bimap
-is missing, never a silent references[] drop).
+sys.path games. The grantha-data root is resolved from the runfiles manifest
+(``RUNFILES_MANIFEST_FILE`` / ``RUNFILES_DIR``) and passed to the converters
+as ``grantha_data_dir`` (a hard error if the bimap is missing, never a silent
+references[] drop).
 """
 
 from __future__ import annotations
@@ -30,46 +31,83 @@ import argparse
 import filecmp
 import os
 import pathlib
-import shutil
 import sys
 import tempfile
-from typing import NoReturn, Sequence
+from typing import NoReturn
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
-from convert_structured_md import (  # noqa: E402
-    _set_grantha_data_dir,
-    convert_grantha,
-)
+import convert_structured_md  # noqa: E402
+from convert_structured_md import convert_grantha  # noqa: E402
 from import_editions import import_grantha  # noqa: E402
+
+
+def _reset_converter_caches() -> None:
+    """Clear the converters' process-global caches for a clean-room run.
+
+    ``convert_structured_md`` caches the loaded citation bimap and overlay per
+    override/env key; without a reset, two ``_run_all`` calls in the same
+    process would reuse the first run's cached data and the determinism gate
+    would not exercise the load path a second time.
+    """
+    convert_structured_md.reset_caches()
 
 
 # ---------------------------------------------------------------------------
 # Per-text regeneration table (mirrors README.md "Regenerating the JSON library")
 # ---------------------------------------------------------------------------
+# NOTE: this table encodes producer-side knowledge (source dirs, default
+# editions). It is NOT automatically kept in sync with grantha-data additions:
+# a newly added text must be added here, and only a missing source dir fails
+# loudly (a re-pointed default_edition is applied to both sides of the drift
+# gate and thus silently passes). The real fix is the tracked upstream
+# consolidation (docs/DATA_FLOW.md §8); keep this table current when a text is
+# added/renamed.
 
 # Multi-edition texts -> import_editions (source_rel, text_path, default_edition).
 MULTI_EDITION: list[tuple[str, str, str]] = [
     ("upanishads/taittiriya", "upanishads/taittiriya", "taittiriya-upanishad"),
     ("upanishads/aitareya", "upanishads/aitareya", "aitareya-upanishad"),
-    ("upanishads/brihadaranyaka", "upanishads/brihadaranyaka", "brihadaranyaka-upanishad"),
+    (
+        "upanishads/brihadaranyaka",
+        "upanishads/brihadaranyaka",
+        "brihadaranyaka-upanishad",
+    ),
     ("upanishads/chandogya", "upanishads/chandogya", "chhandogya-upanishad"),
     ("upanishads/katha", "upanishads/katha", "katha-upanishad"),
     ("upanishads/kena", "upanishads/kena", "kena-upanishad"),
     ("upanishads/mundaka", "upanishads/mundaka", "mundaka-upanishad"),
     ("upanishads/prashna", "upanishads/prashna", "prashna-upanishad"),
-    ("upanishads/isavasya", "upanishads/isavasya", "isavasya-upanishad-vedantadesika"),
+    (
+        "upanishads/isavasya",
+        "upanishads/isavasya",
+        "isavasya-upanishad-vedantadesika",
+    ),
 ]
 
 # mandukya / mandukya-karika are co-located; import one grantha at a time.
 MANDUKYA: list[tuple[str, str, str, str]] = [
-    ("upanishads/mandukya", "upanishads/mandukya", "mandukya-upanishad-rangaramanuja", "mandukya-upanishad"),
-    ("upanishads/mandukya", "upanishads/mandukya-karika", "mandukya-karika-bharadvajaramanujacharya", "mandukya-karika"),
+    (
+        "upanishads/mandukya",
+        "upanishads/mandukya",
+        "mandukya-upanishad-rangaramanuja",
+        "mandukya-upanishad",
+    ),
+    (
+        "upanishads/mandukya",
+        "upanishads/mandukya-karika",
+        "mandukya-karika-bharadvajaramanujacharya",
+        "mandukya-karika",
+    ),
 ]
 
 # brahma-sutra uses the recursive edition discovery (source_dir has no md2json
 # BUILD; one-level subdirs each carry a BUILD).
-BRAHMA_SUTRA: tuple[str, str, str] = ("brahma-sutras", "brahma-sutra", "brahma-sutra-sribhashya")
+BRAHMA_SUTRA: tuple[str, str, str] = (
+    "brahma-sutras",
+    "brahma-sutra",
+    "brahma-sutra-sribhashya",
+)
 
 # Flat + multipart single-edition texts -> convert_structured_md
 # (source_rel_path, out_rel_path).
@@ -86,26 +124,20 @@ FLAT: list[tuple[str, str]] = [
 def _grantha_data_root() -> pathlib.Path:
     """Resolve the grantha-data checkout root from Bazel runfiles.
 
-    Under ``bazel run``/``bazel test`` the runfiles tree root is exported as
-    ``RUNFILES_DIR`` (or ``TEST_SRCDIR``). The grantha-data external repo lives
-    under a canonical name (``grantha_data+`` in this build); we locate it by
-    scanning the runfiles root for a directory whose ``data/citation_bimap.yaml``
-    exists. Fails loudly when the runfiles are missing.
+    Under ``bazel run``/``bazel test`` the runfiles manifest is exported as
+    ``RUNFILES_MANIFEST_FILE`` (or the runfiles tree root as ``RUNFILES_DIR``).
+    The grantha-data external repo's ``data/citation_bimap.yaml`` is a declared
+    runfile; its parent's parent is the grantha-data root. The manifest entry is
+    authoritative (exact key); the directory scan is a strict fallback that
+    errors when zero or more-than-one candidates match, so an ambiguous runfiles
+    layout can never silently pick a wrong checkout.
 
     Returns:
         The grantha-data root Path.
 
     Raises:
-        RuntimeError: When the runfiles bimap cannot be located.
+        RuntimeError: When the runfiles bimap cannot be located uniquely.
     """
-    runfiles_dir = os.environ.get("RUNFILES_DIR") or os.environ.get("TEST_SRCDIR")
-    if runfiles_dir:
-        root = pathlib.Path(runfiles_dir)
-        candidates = sorted(root.glob("grantha_data*/data/citation_bimap.yaml"))
-        if candidates:
-            return candidates[0].parent.parent
-
-    # Fallback: derive from the runfiles manifest (key ends with the bimap path).
     manifest = os.environ.get("RUNFILES_MANIFEST_FILE")
     if manifest:
         try:
@@ -117,10 +149,39 @@ def _grantha_data_root() -> pathlib.Path:
         except OSError:
             pass
 
+    runfiles_dir = os.environ.get("RUNFILES_DIR") or os.environ.get("TEST_SRCDIR")
+    if runfiles_dir:
+        candidates = sorted(
+            pathlib.Path(runfiles_dir).glob("grantha_data*/data/citation_bimap.yaml")
+        )
+        if len(candidates) == 1:
+            return candidates[0].parent.parent
+        if len(candidates) > 1:
+            raise RuntimeError(
+                "runfiles: multiple grantha_data repos contain the citation "
+                "bimap; refusing to guess: " + ", ".join(str(c) for c in candidates)
+            )
+
     raise RuntimeError(
         "runfiles: could not locate grantha_data/data/citation_bimap.yaml "
         "(is @grantha_data//data:data in the target's data, and is RUNFILES_DIR "
         "set?)"
+    )
+
+
+def _explorer_root() -> pathlib.Path:
+    """Return the grantha-explorer workspace root.
+
+    Under ``bazel run``/``bazel test`` the workspace is exported as
+    ``BUILD_WORKING_DIRECTORY``; outside Bazel it is the repo root (two levels
+    above this file's scripts/ directory).
+
+    Returns:
+        The explorer workspace root.
+    """
+    return pathlib.Path(
+        os.environ.get("BUILD_WORKING_DIRECTORY")
+        or pathlib.Path(__file__).resolve().parent.parent
     )
 
 
@@ -136,7 +197,6 @@ def _run_all(
         library_root: Where the library tree is written (checkout or temp).
         grantha_explorer_root: Explorer root for the DEFERRED.md side effect.
     """
-    _set_grantha_data_dir(grantha_data_dir)
     structured_md = grantha_data_dir / "structured_md"
 
     print("=== multi-edition (import_editions) ===")
@@ -147,6 +207,7 @@ def _run_all(
             library_root=library_root,
             text_path=text_path,
             default_edition=default_edition,
+            grantha_data_dir=grantha_data_dir,
         )
     for src_rel, text_path, default_edition, grantha_id in MANDUKYA:
         print(f"[import_editions] {src_rel} (grantha {grantha_id}) -> {text_path}")
@@ -156,6 +217,7 @@ def _run_all(
             text_path=text_path,
             default_edition=default_edition,
             grantha_ids=[grantha_id],
+            grantha_data_dir=grantha_data_dir,
         )
     src_rel, text_path, default_edition = BRAHMA_SUTRA
     print(f"[import_editions] {src_rel} (recursive) -> {text_path}")
@@ -164,6 +226,7 @@ def _run_all(
         library_root=library_root,
         text_path=text_path,
         default_edition=default_edition,
+        grantha_data_dir=grantha_data_dir,
     )
 
     print("=== flat/multipart (convert_structured_md) ===")
@@ -173,6 +236,7 @@ def _run_all(
             source_dir=structured_md / src_rel,
             out_dir=library_root / out_rel,
             grantha_explorer_root=grantha_explorer_root,
+            grantha_data_dir=grantha_data_dir,
         )
 
 
@@ -221,9 +285,7 @@ def _materialize(
         grantha_data_dir: Optional explicit grantha-data root (else runfiles).
     """
     gd = grantha_data_dir or _grantha_data_root()
-    explorer_root = pathlib.Path(
-        os.environ.get("BUILD_WORKING_DIRECTORY") or pathlib.Path(__file__).resolve().parent.parent
-    )
+    explorer_root = _explorer_root()
     library_root.mkdir(parents=True, exist_ok=True)
     _run_all(gd, library_root, explorer_root)
 
@@ -238,11 +300,12 @@ def _verify(committed_root: pathlib.Path, grantha_data_dir: pathlib.Path) -> NoR
     Returns:
         Never returns (raises SystemExit).
     """
-    explorer_root = committed_root.parent
+    explorer_root = _explorer_root()
     with tempfile.TemporaryDirectory() as td:
         run1 = pathlib.Path(td) / "run1"
         run2 = pathlib.Path(td) / "run2"
         _run_all(grantha_data_dir, run1, explorer_root)
+        _reset_converter_caches()
         _run_all(grantha_data_dir, run2, explorer_root)
 
         drift = _diff_trees(run1, run2)
@@ -251,7 +314,8 @@ def _verify(committed_root: pathlib.Path, grantha_data_dir: pathlib.Path) -> NoR
             for line in drift:
                 print(f"  {line}")
             raise SystemExit(1)
-        print(f"DETERMINISM OK — two fresh runs byte-identical ({len(list(run1.rglob('*')))} files)")
+        file_count = len(list(run1.rglob("*")))
+        print(f"DETERMINISM OK — two fresh runs byte-identical ({file_count} files)")
 
         committed_vs_fresh = _diff_trees(committed_root, run1)
         if committed_vs_fresh:
@@ -295,18 +359,14 @@ def main() -> None:
     gd = args.grantha_data_dir or _grantha_data_root()
 
     if args.library_root is not None:
-        # Explicit target root: regenerate there (also used by the drift check
-        # via --verify-against, handled by the test driver calling _verify).
+        # Explicit target root: regenerate there (used by the drift-check test
+        # driver, which calls _verify directly rather than this entry point).
         _materialize(args.library_root, gd)
         print("Done.")
         return
 
     # bazel run //data:materialize: write into the checkout.
-    workspace = pathlib.Path(
-        os.environ.get("BUILD_WORKING_DIRECTORY")
-        or pathlib.Path(__file__).resolve().parent.parent
-    )
-    library_root = workspace / "public" / "data" / "library"
+    library_root = _explorer_root() / "public" / "data" / "library"
     _materialize(library_root, gd)
     print(f"Materialized {library_root}")
 

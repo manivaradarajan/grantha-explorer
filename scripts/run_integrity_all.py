@@ -9,21 +9,18 @@ from __future__ import annotations
 
 import pathlib
 import sys
-from typing import NoReturn
 
 from validate_grantha_integrity import validate_grantha_directory
 
 
-def main() -> NoReturn:
+def main() -> None:
     """Run integrity validation over all envelope-bearing library dirs."""
     library = pathlib.Path(__file__).resolve().parent.parent / "public" / "data" / "library"
     if not library.is_dir():
         print(f"Error: library dir not found at {library}")
         sys.exit(1)
 
-    envelope_dirs = sorted(
-        p.parent for p in library.rglob("envelope.json")
-    )
+    envelope_dirs = sorted(p.parent for p in library.rglob("envelope.json"))
 
     errors: list[str] = []
     for grantha_dir in envelope_dirs:

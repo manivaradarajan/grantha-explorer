@@ -16,7 +16,7 @@ def main() -> None:
     """Run the smoke assertions."""
     assert sys.version_info[:2] == (3, 11), f"unexpected python: {sys.version}"
     assert platform.platform(), "platform() returned nothing"
-    json.loads("{}")
+    assert json.loads("{}") == {}
     print(f"python {sys.version.split()[0]} at {sys.executable}")
 
 

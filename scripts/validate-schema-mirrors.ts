@@ -21,14 +21,15 @@ const root = path.resolve(__dirname, '..');
 // on disk; GRANTHA_DATA_SCHEMAS_DIR points at a producer schema file's runfiles
 // path (its directory is the schemas dir). Defaults to the sibling checkout
 // layout used by the npm path.
+const resolveProducerSchemas = (envValue: string): string => {
+  const resolved = path.resolve(envValue);
+  return fs.existsSync(resolved) && !fs.statSync(resolved).isDirectory()
+    ? path.dirname(resolved)
+    : resolved;
+};
 const producerSchemasEnv = process.env.GRANTHA_DATA_SCHEMAS_DIR;
 const producerSchemas = producerSchemasEnv
-  ? (() => {
-      const resolved = path.resolve(producerSchemasEnv);
-      return fs.existsSync(resolved) && !fs.statSync(resolved).isDirectory()
-        ? path.dirname(resolved)
-        : resolved;
-    })()
+  ? resolveProducerSchemas(producerSchemasEnv)
   : path.join(root, '..', 'grantha-data', 'formats', 'schemas');
 
 const SCHEMAS = [

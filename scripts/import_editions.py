@@ -477,6 +477,7 @@ def import_grantha(
     default_edition: str | None = None,
     exclude_editions: list[str] | None = None,
     grantha_ids: list[str] | None = None,
+    grantha_data_dir: Path | None = None,
 ) -> None:
     """Derive and write edition data for one structured_md source directory.
 
@@ -491,11 +492,15 @@ def import_grantha(
         grantha_ids: Optional exact grantha_id filters. Only granthas whose id
             equals one of these values are imported. Defaults to ``None``
             (no restriction).
+        grantha_data_dir: Optional grantha-data checkout root (for the citation
+            bimap). ``None`` resets to the env-var / installed-package
+            derivation, never inheriting a prior call's directory.
 
     Raises:
         RuntimeError: If no editions are discovered, every edition is
             excluded, or no grantha matches ``--grantha-id``.
     """
+    _set_grantha_data_dir(grantha_data_dir)
     source_dir = source_dir.resolve()
     library_root = library_root.resolve()
     dest_dir = library_root / text_path
