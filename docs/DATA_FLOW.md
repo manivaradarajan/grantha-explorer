@@ -30,6 +30,17 @@ The three on-disk shapes (`grantha` flat file, `edition-sub-envelope`+parts,
 
 ## 2. Ingestion scripts (run manually, not part of `npm run build`)
 
+**Bazel-owned regeneration (recommended):** `bazel run //data:materialize`
+runs both converters below hermetically from the `@grantha_data` runfiles
+(no `GRANTHA_DATA_TOOLS_LIB` env hack, no sys.path games; the grantha-data
+root is resolved from runfiles and passed as `--grantha-data-dir`, which
+fails hard if the citation bimap is missing — never a silent `references[]`
+drop). `bazel test //data:committed_in_sync` proves determinism (two fresh
+runs byte-identical) and *reports* committed-vs-fresh drift explicitly; drift
+is not gated because the committed tree may legitimately lag the current bimap
+(see §8 and the parity-test docs). The manual invocations below remain the
+equivalent npm-path commands.
+
 ### 2.1 Flat + multipart single-edition — `scripts/convert_structured_md.py`
 
 ```
@@ -315,6 +326,16 @@ you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
 ## 8. Known weaknesses (see also the canonical doc)
 
 - Two parallel converters (grantha-data vs explorer) must be kept in sync.
+- **Upstream consolidation is a tracked follow-up** (deferred): port
+  `convert_structured_md.py` + `import_editions.py` into grantha-data's Bazel
+  rules so the explorer is a pure consumer of `@grantha_data` JSON and the
+  converters are deleted. Deferred because it requires porting the
+  multi-edition `grantha-envelope` layout + `references[]` extraction upstream
+  and matching the committed library byte-for-byte.
+- The committed `public/data/library/` may lag the current citation bimap
+  (e.g. vishnu-purana references) — `test_committed_reference_parity.py`
+  fails on this by design; `//data:committed_in_sync` reports it as drift.
+  Re-sync deliberately with `bazel run //data:materialize` + commit.
 - Manual 3-file registry sync before a grantha appears in the UI.
 - `granthas.json` is gitignored and regenerated; a stale committed
   `granthas-meta.json`/`order` silently drops a grantha from the index.

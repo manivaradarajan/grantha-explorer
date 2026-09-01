@@ -85,7 +85,9 @@ The repo uses a deliberate **hybrid toolchain**. Bazel owns the
 artifact-producing, cross-repo surface:
 
 ```bash
-bazel test //...          # indexer, data validators, typecheck, python smoke
+bazel test //...              # indexer, data validators, typecheck, python smoke,
+                              # hermetic data-regeneration determinism
+bazel run //data:materialize  # regenerate public/data/library/ from grantha-data
 ```
 
 Bazel consumes the sibling `grantha-data` checkout via `local_path_override`
@@ -179,6 +181,15 @@ The committed `public/data/library/` is **re-derived** from a
 (`scripts/convert_structured_md.py`, `scripts/import_editions.py`). These are
 parallel to the grantha-data Bazel converter (see `docs/DATA_FLOW.md` §1–2).
 Run them after any grantha-data edit; commit + push the result here.
+
+**Bazel path (recommended):** `bazel run //data:materialize` runs the same two
+converters hermetically from the `@grantha_data` runfiles (no
+`GRANTHA_DATA_TOOLS_LIB` env hack), writing into the checkout's
+`public/data/library/`. `bazel test //data:committed_in_sync` proves the
+pipeline is deterministic and *reports* committed-vs-fresh drift (not a hard
+gate — the committed tree may legitimately lag the current citation bimap).
+
+**Manual npm path:** the commands below are the equivalent manual invocations.
 
 **Development layout note:** the commands below assume `../grantha-data`
 sits **next to** this repo (i.e. `grantha-data/` and `grantha-explorer/` are

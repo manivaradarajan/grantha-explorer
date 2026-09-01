@@ -123,6 +123,23 @@ the commentary pane/chrome; does not drive per-block presentation.
   `_check_edition_kind_coherence`.
 - Cross-converter equivalence: `../grantha-data/tools/lib/grantha_converter/test_v2_cross_converter.py`.
 
+## Hermetic data regeneration (Bazel)
+
+- `scripts/materialize_library.py` — the driver behind `bazel run
+  //data:materialize` and `//data:committed_in_sync`. Resolves the grantha-data
+  root from runfiles (`RUNFILES_DIR`/`TEST_SRCDIR`/manifest, scanning for
+  `grantha_data*/data/citation_bimap.yaml`), runs `convert_structured_md` +
+  `import_editions` over every text (README's per-text table), verifies
+  determinism, and reports committed-vs-fresh drift.
+- `scripts/test_committed_in_sync.py` — the `//data:committed_in_sync` test
+  entry (calls `materialize_library._verify`).
+- `--grantha-data-dir` on both converters (`_set_grantha_data_dir` /
+  `_GRANTHA_DATA_DIR`) pins the grantha-data root under Bazel; when set, a
+  missing bimap is a hard error (never a silent `references[]` drop). The npm
+  path (env / installed package) is unchanged.
+- Producer side: `@grantha_data//structured_md:sources` (per-text `sources`
+  filegroups aggregated) + `@grantha_data//data:data` supply the runfiles.
+
 ## On-disk presentation invariants (tests)
 
 - `tests/integration/mula-presentation.test.ts` and
