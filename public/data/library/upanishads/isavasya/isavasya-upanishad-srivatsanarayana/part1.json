@@ -436,17 +436,6 @@
             "unresolved": false
           },
           {
-            "start": 954,
-            "end": 955,
-            "display_text": "न",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 1665,
             "end": 1673,
             "display_text": "ई. उ. ११",
@@ -907,17 +896,6 @@
             "grantha_id": "chhandogya-upanishad",
             "edition_id": "chhandogya-upanishad",
             "locator": "8.1.5",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 3381,
-            "end": 3392,
-            "display_text": "आत्मोपनिषत्",
-            "grantha_id": "atma-upanishad",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1392,17 +1370,6 @@
             "grantha_id": "chhandogya-upanishad",
             "edition_id": "chhandogya-upanishad",
             "locator": "1.6.7",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 1938,
-            "end": 1949,
-            "display_text": "आत्मोपनिषत्",
-            "grantha_id": "atma-upanishad",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false

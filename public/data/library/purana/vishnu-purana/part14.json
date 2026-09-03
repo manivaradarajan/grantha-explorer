@@ -514,20 +514,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुपुराणे प्रथमेऽंशे प्रचेतास्तवो नाम चतुर्दशोऽध्यायः (१४)"
         }
-      },
-      "references": [
-        {
-          "start": 66,
-          "end": 68,
-          "display_text": "१४",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

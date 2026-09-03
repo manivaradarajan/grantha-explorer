@@ -638,17 +638,6 @@
         },
         "references": [
           {
-            "start": 53,
-            "end": 55,
-            "display_text": "न्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 745,
             "end": 761,
             "display_text": "म.भा.शां. १७.२२३",
@@ -975,17 +964,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1851,
-            "end": 1917,
-            "display_text": "**त्वं वा अहमस्मि भगवो देवते** इत्यादिषु युष्मदस्मदोः सहप्रयोगोऽपि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 2085,

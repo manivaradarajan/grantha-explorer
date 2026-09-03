@@ -423,17 +423,6 @@
             "unresolved": true
           },
           {
-            "start": 1921,
-            "end": 1935,
-            "display_text": "शतपथब्राह्मणम्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 2043,
             "end": 2055,
             "display_text": "मनुस्मृ.४.६५",
@@ -1875,17 +1864,6 @@
             "unresolved": false
           },
           {
-            "start": 20919,
-            "end": 20937,
-            "display_text": "ब्रह्मनन्दिवाक्यम्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 22358,
             "end": 22368,
             "display_text": "मु.उ.२.२.७",
@@ -1936,17 +1914,6 @@
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
             "locator": "2.1",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 22680,
-            "end": 22691,
-            "display_text": "आत्मोपनिषत्",
-            "grantha_id": "atma-upanishad",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -2029,17 +1996,6 @@
             "unresolved": false
           },
           {
-            "start": 24685,
-            "end": 24696,
-            "display_text": "आत्मोपनिषत्",
-            "grantha_id": "atma-upanishad",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
             "start": 36356,
             "end": 36369,
             "display_text": "ब्र.सू.२.२.३१",
@@ -2049,28 +2005,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 39432,
-            "end": 39442,
-            "display_text": "प्रतिपत्तौ",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 39642,
-            "end": 39693,
-            "display_text": "देशकालान्तरदृष्टस्य देशान्तरकालान्तरव्यावर्तमानत्वं",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 48445,
@@ -2282,39 +2216,6 @@
             "unresolved": false
           },
           {
-            "start": 55269,
-            "end": 55280,
-            "display_text": "आत्मसिद्धि:",
-            "grantha_id": "atra-siddhi",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 55658,
-            "end": 55669,
-            "display_text": "आत्मसिद्धि:",
-            "grantha_id": "atra-siddhi",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 56409,
-            "end": 56420,
-            "display_text": "आत्मसिद्धि:",
-            "grantha_id": "atra-siddhi",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
             "start": 60317,
             "end": 60329,
             "display_text": "अष्टा.५.२.९१",
@@ -2491,17 +2392,6 @@
             "unresolved": false
           },
           {
-            "start": 63898,
-            "end": 63908,
-            "display_text": "आत्मसिद्धौ",
-            "grantha_id": "atra-siddhi",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
             "start": 69819,
             "end": 69827,
             "display_text": "मु.१.१.५",
@@ -2522,28 +2412,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 70814,
-            "end": 70834,
-            "display_text": "कैयटे वृद्ध्याह्निके",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 71150,
-            "end": 71165,
-            "display_text": "मन्त्रिकोपनिषत्",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 71178,
@@ -3767,28 +3635,6 @@
             "unresolved": false
           },
           {
-            "start": 93106,
-            "end": 93119,
-            "display_text": "बोधायनवृत्ति:",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 93201,
-            "end": 93212,
-            "display_text": "ब्रह्मनन्दि",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 93318,
             "end": 93333,
             "display_text": "छां.८.प्र.१.ख.६",
@@ -4073,17 +3919,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 97877,
-            "end": 97895,
-            "display_text": "श्रीनाथमुनिश्लोका:",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 110050,
@@ -4587,28 +4422,6 @@
             "grantha_id": "taittiriya-samhita",
             "edition_id": null,
             "locator": "3.12.13",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 127437,
-            "end": 127444,
-            "display_text": "महानारा",
-            "grantha_id": "mahanarayana-upanishad",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 127481,
-            "end": 127491,
-            "display_text": "महानारायणं",
-            "grantha_id": "mahanarayana-upanishad",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -6276,17 +6089,6 @@
             "unresolved": false
           },
           {
-            "start": 15039,
-            "end": 15051,
-            "display_text": "व्यासस्मृति:",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 15081,
             "end": 15086,
             "display_text": "तै.ना",
@@ -6337,28 +6139,6 @@
             "grantha_id": "brihadaranyaka-upanishad",
             "edition_id": "brihadaranyaka-upanishad",
             "locator": "6.4.5",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 17979,
-            "end": 17996,
-            "display_text": "अथर्वब्रह्मसूक्तं",
-            "grantha_id": "atharva-brahma-sukta",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 18110,
-            "end": 18127,
-            "display_text": "अथर्वब्रह्मसूक्तं",
-            "grantha_id": "atharva-brahma-sukta",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -8063,17 +7843,6 @@
             "unresolved": false
           },
           {
-            "start": 16145,
-            "end": 16163,
-            "display_text": "कैयटे वृध्याह्निके",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 16760,
             "end": 16767,
             "display_text": "यजु.२.२",
@@ -8946,17 +8715,6 @@
             "grantha_id": "brihadaranyaka-upanishad",
             "edition_id": "brihadaranyaka-upanishad",
             "locator": "5.9.28",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 3815,
-            "end": 3821,
-            "display_text": "आत्मोप",
-            "grantha_id": "atma-upanishad",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false

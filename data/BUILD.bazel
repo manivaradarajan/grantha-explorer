@@ -1,0 +1,56 @@
+# Data-pipeline Bazel targets: hermetic regeneration of public/data/library/
+# from the grantha-data sources (Bazel-owned replacement for the manual npm
+# converter invocations — see docs/DATA_FLOW.md §2 and README).
+
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+
+# The grantha-data source tree + data files as runfiles.
+filegroup(
+    name = "grantha_data_sources",
+    srcs = [
+        "@grantha_data//data:data",
+        "@grantha_data//structured_md:sources",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Regenerate the checkout's public/data/library/ from the grantha-data sources.
+# `bazel run //data:materialize` writes into the workspace (BUILD_WORKING_DIRECTORY),
+# deliberately updating the committed tree; then commit it like the npm flow.
+py_binary(
+    name = "materialize",
+    srcs = [
+        "//scripts:materialize_library.py",
+        "//scripts:convert_structured_md.py",
+        "//scripts:import_editions.py",
+        "//scripts:_build_parser.py",
+        "//scripts:grantha_data_bootstrap.py",
+    ],
+    main = "//scripts:materialize_library.py",
+    data = [
+        ":grantha_data_sources",
+        "//:sidecars",
+    ],
+    deps = ["@grantha_data//tools/lib/grantha_data:grantha_data"],
+)
+
+# Determinism + drift check: regenerates twice into temp dirs (byte-identical)
+# and reports committed-vs-fresh drift explicitly (not gated).
+py_test(
+    name = "determinism_check",
+    srcs = [
+        "//scripts:test_determinism_check.py",
+        "//scripts:materialize_library.py",
+        "//scripts:convert_structured_md.py",
+        "//scripts:import_editions.py",
+        "//scripts:_build_parser.py",
+        "//scripts:grantha_data_bootstrap.py",
+    ],
+    main = "//scripts:test_determinism_check.py",
+    data = [
+        ":grantha_data_sources",
+        "//:library_data",
+        "//:sidecars",
+    ],
+    deps = ["@grantha_data//tools/lib/grantha_data:grantha_data"],
+)

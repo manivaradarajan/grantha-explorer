@@ -13,20 +13,7 @@
         "sanskrit": {
           "devanagari": "तस्याप्यायुर्धीमानमावसु-विश्वावसु-शतायुः-श्रुतायुः (अयुतायुः) संज्ञाः षड़भवन् पुत्राः"
         }
-      },
-      "references": [
-        {
-          "start": 52,
-          "end": 60,
-          "display_text": "अयुतायुः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "4.7.2",

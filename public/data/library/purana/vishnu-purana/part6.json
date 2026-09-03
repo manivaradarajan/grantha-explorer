@@ -435,20 +435,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुरुराणे प्रथमेऽंशे षष्ठोऽध्यायः (६)"
         }
-      },
-      "references": [
-        {
-          "start": 46,
-          "end": 47,
-          "display_text": "६",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

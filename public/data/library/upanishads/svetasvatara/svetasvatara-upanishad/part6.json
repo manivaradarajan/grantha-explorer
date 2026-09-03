@@ -295,17 +295,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 233,
-            "end": 245,
-            "display_text": "प्रकारज्ञान?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -403,20 +392,7 @@
           "sanskrit": {
             "devanagari": "**यस्तन्तुनाभ** इति । लूताख्यः कीटविशेषः स्वसंनिहितजन्तुविशेषं यथा तन्तुभिः आवृणोति, एवं प्रकृतिजैः प्राकृतैः तत्त्वैः **स्वभावतः** स्वेच्छातः चिद्वर्गमावृणोति लुप्तज्ञानं करोति (यः?) स देवोऽस्माकं ब्रह्मणि **अप्ययमा** त्यन्तिकं लयं करोतु मुक्तस्य ब्रह्मण्यप्ययो नाम भेदकाकारास्फुरणम् ।। १० ।।"
           }
-        },
-        "references": [
-          {
-            "start": 179,
-            "end": 182,
-            "display_text": "यः?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "6.11",
@@ -436,28 +412,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 185,
-            "end": 186,
-            "display_text": "अ",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 216,
-            "end": 218,
-            "display_text": "च?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 278,
@@ -488,28 +442,6 @@
           }
         },
         "references": [
-          {
-            "start": 82,
-            "end": 85,
-            "display_text": "यः?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 129,
-            "end": 134,
-            "display_text": "हेतु?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 528,
             "end": 546,
@@ -619,17 +551,6 @@
         },
         "references": [
           {
-            "start": 100,
-            "end": 122,
-            "display_text": "त् परमात्मानुग्रहाच्च?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 205,
             "end": 213,
             "display_text": "धा.पा.६१",
@@ -659,28 +580,6 @@
         },
         "references": [
           {
-            "start": 26,
-            "end": 44,
-            "display_text": "Summative Analysis",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 318,
-            "end": 328,
-            "display_text": "आदरार्था च",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 475,
             "end": 486,
             "display_text": "छां.उ.८.४.१",
@@ -690,17 +589,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 586,
-            "end": 594,
-            "display_text": "प्रतीयते",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 745,
@@ -846,17 +734,6 @@
             "unresolved": false
           },
           {
-            "start": 2475,
-            "end": 2478,
-            "display_text": "वा?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 2622,
             "end": 2635,
             "display_text": "ब्र.सू.३-२-३४",
@@ -899,17 +776,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 3083,
-            "end": 3093,
-            "display_text": "पूर्वप्रति",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 3228,
@@ -998,17 +864,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 4335,
-            "end": 4340,
-            "display_text": "वार्थ",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 4519,
@@ -1121,42 +976,9 @@
             "unresolved": false
           },
           {
-            "start": 6220,
-            "end": 6231,
-            "display_text": "दत्ताञ्जलये",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 6412,
-            "end": 6413,
-            "display_text": "ष",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 6463,
             "end": 6471,
             "display_text": "गी.सं.र.",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 6867,
-            "end": 6869,
-            "display_text": "च?",
             "grantha_id": null,
             "edition_id": null,
             "locator": null,
@@ -1209,17 +1031,6 @@
             "unresolved": false
           },
           {
-            "start": 8345,
-            "end": 8348,
-            "display_text": "३-२",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 8988,
             "end": 8995,
             "display_text": "श्वे.उ.",
@@ -1240,50 +1051,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 9565,
-            "end": 9566,
-            "display_text": "क",
-            "grantha_id": "katha-upanishad",
-            "edition_id": "katha-upanishad",
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 9883,
-            "end": 9888,
-            "display_text": "शब्द?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 10560,
-            "end": 10564,
-            "display_text": "अत:?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 11540,
-            "end": 11543,
-            "display_text": "त्व",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       }

@@ -193,20 +193,7 @@
           "sanskrit": {
             "devanagari": "परमान्नमिति । ज्ञात्वा, अनश(ना)नमिति शेषः ॥ ४.६२.८१३ ॥"
           }
-        },
-        "references": [
-          {
-            "start": 28,
-            "end": 30,
-            "display_text": "ना",
-            "grantha_id": "mahanarayana-upanishad",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          }
-        ]
+        }
       },
       {
         "ref": "4.62.14",

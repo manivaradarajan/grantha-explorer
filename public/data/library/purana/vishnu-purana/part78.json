@@ -144,20 +144,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीमहाविष्णुपुराणे चतुर्थांशे द्वाविंशोऽध्यायः (२२)"
         }
-      },
-      "references": [
-        {
-          "start": 53,
-          "end": 55,
-          "display_text": "२२",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

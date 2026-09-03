@@ -837,20 +837,7 @@
           "sanskrit": {
             "devanagari": "नेति । छन्नया गूढाभिप्रायया । चलितः स्वाधीनत्वाच्चलनं प्राप्तः । (छुरितइति) पाठान्तरे तु वञ्चित इत्यर्थः । छन्नाग्निकल्पया भस्मच्छन्नाङ्गारतुल्यया ॥ २.३४.३६ ॥"
           }
-        },
-        "references": [
-          {
-            "start": 66,
-            "end": 74,
-            "display_text": "छुरितइति",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.34.37",

@@ -43,20 +43,7 @@
         "sanskrit": {
           "devanagari": "दूरमेते विपरीते विषूची ।\nअविद्या या च विद्येति ज्ञाता ।\nविद्याभीप्सिनं(तं) नचिकेतसं मन्ये ।\nन त्वा कामा बहवोऽलोलुपन्त ॥"
         }
-      },
-      "references": [
-        {
-          "start": 71,
-          "end": 73,
-          "display_text": "तं",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "1.2.5",
@@ -695,17 +682,6 @@
             "unresolved": false
           },
           {
-            "start": 3125,
-            "end": 3134,
-            "display_text": "त्रय इति?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 3761,
             "end": 3769,
             "display_text": "क.उ.२-२३",
@@ -813,17 +789,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 703,
-            "end": 713,
-            "display_text": "पांचरात्रे",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 878,
@@ -1249,28 +1214,6 @@
             "unresolved": false
           },
           {
-            "start": 2106,
-            "end": 2115,
-            "display_text": "परमसंहिता",
-            "grantha_id": "parama-samhita",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 2376,
-            "end": 2385,
-            "display_text": "परमसंहिता",
-            "grantha_id": "parama-samhita",
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
             "start": 2528,
             "end": 2539,
             "display_text": "मुं.उ.२-१-३",
@@ -1343,17 +1286,6 @@
             "grantha_id": "dhatu-patha",
             "edition_id": null,
             "locator": "1011",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 3458,
-            "end": 3467,
-            "display_text": "परमसंहिता",
-            "grantha_id": "parama-samhita",
-            "edition_id": null,
-            "locator": null,
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -1673,17 +1605,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1508,
-            "end": 1513,
-            "display_text": "३-५-७",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 1650,

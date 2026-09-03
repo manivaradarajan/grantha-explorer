@@ -252,17 +252,6 @@
             "locator_end": "3.7",
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 327,
-            "end": 338,
-            "display_text": "पाञ्चरात्रे",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -288,20 +277,7 @@
           "sanskrit": {
             "devanagari": "**नील**इति ।**नील** **हरितः**– लोहिताक्षभेदभिन्नः**पतङ्गः**– पक्षी त्वमेव: (तटिद्गर्भः?)**ऋतब**:**समुद्राश्च**। त्वमेव अनादिः ।**यतो**विश्वानि भूतानि**जातानि**, तदपि त्वमेव; निखिलजगत्कारणमपि त्वमेवेत्यर्थः । नीलपतङ्गाद्यात्मत्वमपि न स्वरूपेण अपि तु व्यापकत्वेनात्मत्वादित्येतत् प्रदर्शयति –**विभुत्वेन** **वर्तस**इति । यतस्त्वं व्याप्य आत्मतया**वर्तसे**, तत सर्वात्मत्वमित्यर्थः ।। ४ ।।"
           }
-        },
-        "references": [
-          {
-            "start": 76,
-            "end": 87,
-            "display_text": "तटिद्गर्भः?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "4.5",
@@ -321,17 +297,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 509,
-            "end": 520,
-            "display_text": "प्रजाकरीम्?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 826,
@@ -354,17 +319,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1557,
-            "end": 1559,
-            "display_text": "व?",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 2206,
@@ -453,17 +407,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 4216,
-            "end": 4221,
-            "display_text": "ततश्च",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 4428,
@@ -581,17 +524,6 @@
           }
         },
         "references": [
-          {
-            "start": 232,
-            "end": 236,
-            "display_text": "हारः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 393,
             "end": 403,
@@ -749,17 +681,6 @@
           }
         },
         "references": [
-          {
-            "start": 149,
-            "end": 157,
-            "display_text": "**एतत्**",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
           {
             "start": 194,
             "end": 222,

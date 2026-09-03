@@ -2487,17 +2487,6 @@
             "unresolved": false
           },
           {
-            "start": 898,
-            "end": 910,
-            "display_text": "बृ- ६- ५- १५",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 1058,
             "end": 1068,
             "display_text": "बृ.६. ५. ६",
@@ -2908,17 +2897,6 @@
             "grantha_id": "chhandogya-upanishad",
             "edition_id": "chhandogya-upanishad",
             "locator": "8.3.4",
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": false
-          },
-          {
-            "start": 1251,
-            "end": 1263,
-            "display_text": "शारी ४- ४- २",
-            "grantha_id": "brahma-sutra",
-            "edition_id": "brahma-sutra-sribhashya",
-            "locator": "4.4.2",
             "locator_end": null,
             "group_id": null,
             "unresolved": false

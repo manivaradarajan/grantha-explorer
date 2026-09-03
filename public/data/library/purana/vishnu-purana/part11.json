@@ -600,20 +600,7 @@
         "sanskrit": {
           "devanagari": "इति श्रीविष्णुपुराणे प्रथमेंश एकादशोऽध्यायः (११)"
         }
-      },
-      "references": [
-        {
-          "start": 45,
-          "end": 47,
-          "display_text": "११",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     }
   ]
 }

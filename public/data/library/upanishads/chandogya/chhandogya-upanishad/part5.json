@@ -1906,17 +1906,6 @@
         },
         "references": [
           {
-            "start": 32,
-            "end": 33,
-            "display_text": "३",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 562,
             "end": 573,
             "display_text": "पा.सू.३-४-२",

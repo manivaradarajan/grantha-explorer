@@ -55,6 +55,7 @@ v1 deliberately excludes user accounts, search, and personal annotations.
 | Persistent state    | `localStorage` (panel sizes, commentary fallback) |
 | Layout              | `react-resizable-panels` (resizable 3-column)     |
 | Data                | JSON in `public/data/`, versioned in Git          |
+| Build/test tooling  | **Hybrid**: Bazel (data + build gates) + npm (dev/test) |
 | Deployment          | GitHub Actions → GitHub Pages                     |
 
 Full rationale: [`TECH-STACK.md`](TECH-STACK.md).
@@ -77,6 +78,23 @@ git config core.hooksPath scripts/hooks
 Open http://localhost:3000. The `prebuild` step runs automatically before the
 dev server: it scans `public/data/library/` and regenerates
 `public/data/generated/granthas.json` (auto-generated — never edit it).
+
+### Bazel (data + build gates)
+
+The repo uses a deliberate **hybrid toolchain**. Bazel owns the
+artifact-producing, cross-repo surface:
+
+```bash
+bazel test //...              # indexer, data validators, typecheck, python smoke,
+                              # hermetic data-regeneration determinism
+bazel run //data:materialize  # regenerate public/data/library/ from grantha-data
+```
+
+Bazel consumes the sibling `grantha-data` checkout via `local_path_override`
+(`MODULE.bazel`) and generates its own deterministic `granthas.json`. The
+exact Bazel/npm boundary — and why vitest/dev/e2e stay on npm — is documented
+in `AGENTS.md`. There are **two lockfiles**: `package-lock.json` (npm) and
+`pnpm-lock.yaml` (Bazel, kept in sync via `npx pnpm import`).
 
 ### Build & serve locally
 
@@ -163,6 +181,15 @@ The committed `public/data/library/` is **re-derived** from a
 (`scripts/convert_structured_md.py`, `scripts/import_editions.py`). These are
 parallel to the grantha-data Bazel converter (see `docs/DATA_FLOW.md` §1–2).
 Run them after any grantha-data edit; commit + push the result here.
+
+**Bazel path (recommended):** `bazel run //data:materialize` runs the same two
+converters hermetically from the `@grantha_data` runfiles (no
+`GRANTHA_DATA_TOOLS_LIB` env hack), writing into the checkout's
+`public/data/library/`. `bazel test //data:determinism_check` proves the
+pipeline is deterministic and *reports* committed-vs-fresh drift (not a hard
+gate — the committed tree may legitimately lag the current citation bimap).
+
+**Manual npm path:** the commands below are the equivalent manual invocations.
 
 **Development layout note:** the commands below assume `../grantha-data`
 sits **next to** this repo (i.e. `grantha-data/` and `grantha-explorer/` are

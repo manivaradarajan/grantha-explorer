@@ -153,20 +153,7 @@
         "sanskrit": {
           "devanagari": "वैरूप्यमङ्गेषु कशाभिघातो मौण्ड्यं(ढ्यं) तथा लक्षणसन्निपातः ।\nएतान् हि दूते प्रवदन्ति दण्डान् वधस्तु दूतस्य न नः श्रुतो ऽपि ॥"
         }
-      },
-      "references": [
-        {
-          "start": 34,
-          "end": 38,
-          "display_text": "ढ्यं",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "5.52.16",

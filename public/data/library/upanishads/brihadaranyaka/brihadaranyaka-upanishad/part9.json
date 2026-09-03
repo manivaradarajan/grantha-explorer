@@ -213,20 +213,7 @@
         "sanskrit": {
           "devanagari": "न तन्त्र रथा न रथयोगा न पन्थानो भवन्ति । अथ रथान् रथयोगान् पथः सृजते । न तत्रानन्दा मुदः प्रमुदो भवन्तिः अथानन्दान् मुदः प्रमुदः सृजते । न तत्र वेशान्ताः पुष्करिण्यः स्रवन्त्यो भवन्तिः अथ वेशान्तान् (न्ताः) पुष्करिण्यः स्रवन्त्यः सृजते । स हि कर्ता ॥"
         }
-      },
-      "references": [
-        {
-          "start": 200,
-          "end": 205,
-          "display_text": "न्ताः",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "6.3.11",
@@ -912,17 +899,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 434,
-            "end": 444,
-            "display_text": "**शुक्लं**",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },

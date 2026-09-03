@@ -1,0 +1,4 @@
+# Bazel must not try to interpret these as workspaces.
+node_modules
+.next
+out

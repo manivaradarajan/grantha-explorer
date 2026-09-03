@@ -514,17 +514,6 @@
           },
           "references": [
             {
-              "start": 223,
-              "end": 225,
-              "display_text": "पु",
-              "grantha_id": "taittiriya-aranyaka",
-              "edition_id": null,
-              "locator": null,
-              "locator_end": null,
-              "group_id": null,
-              "unresolved": false
-            },
-            {
               "start": 252,
               "end": 265,
               "display_text": "सा.उ.१७.२.४.२",

@@ -283,20 +283,7 @@
         "sanskrit": {
           "devanagari": "तस्मिन्नुपरते शब्दे दिव्ये श्रोतृ(त्र)सुखे नृणाम् ।\nददर्श भारतं सैन्यं विधानं विश्वकर्मणः ॥"
         }
-      },
-      "references": [
-        {
-          "start": 34,
-          "end": 37,
-          "display_text": "त्र",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.91.29",
@@ -1350,20 +1337,7 @@
           "sanskrit": {
             "devanagari": "बभूवुरिति । पायसान्येव कर्दमानि येषु ते तथोक्ताः ताः । गावः पूर्वमेव वनचर्य्यः कामदुघाः यावदभीष्टक्षीरपुरकाः आसन् । “दुहः कब्घश्च” मधुस्रुतः मधुस्राविणः । (मधुश्च्युतः मधुस्राविणः) ॥ २.९१.६८ ॥"
           }
-        },
-        "references": [
-          {
-            "start": 156,
-            "end": 179,
-            "display_text": "मधुश्च्युतः मधुस्राविणः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.91.69",

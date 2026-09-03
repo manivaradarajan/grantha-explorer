@@ -1,0 +1,249 @@
+# Root BUILD for grantha-explorer.
+#
+# Bazel owns the data/build/validation surface; npm owns vitest, dev/review
+# servers, playwright, eslint, and git hooks (see AGENTS.md for the boundary).
+# Targets here: data indexer, TS validators, typecheck, next static export,
+# and the toolchain smoke tests.
+
+load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_test")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+load("@npm//:next/package_json.bzl", next_bin = "bin")
+load("@npm//:tsx/package_json.bzl", tsx_bin = "bin")
+load("@npm//:typescript/package_json.bzl", tsc_bin = "bin")
+load("@rules_python//python:defs.bzl", "py_test")
+
+npm_link_all_packages(name = "node_modules")
+
+# Data inputs shared by the JS/TS toolchain targets (indexer, validators).
+filegroup(
+    name = "library_data",
+    srcs = glob(["public/data/library/**"]),
+    visibility = ["//visibility:public"],
+)
+
+# Committed quote sidecars (public/data/sidecars/<grantha_id>/...). The
+# converter resolves them from the explorer root, which under `bazel test` /
+# `bazel run` is the runfiles tree — they must be runfiles of the data
+# pipeline targets.
+filegroup(
+    name = "sidecars",
+    srcs = glob(["public/data/sidecars/**"]),
+    visibility = ["//visibility:public"],
+)
+
+# JS/TS sources that the validators import (resolved via tsx relative imports).
+# tests/ is its own Bazel package, so test sources are NOT globbed here.
+filegroup(
+    name = "ts_sources",
+    srcs = glob([
+        "lib/**/*.ts",
+        "lib/**/*.tsx",
+        "hooks/**/*.ts",
+        "components/**/*.ts",
+        "components/**/*.tsx",
+        "app/**/*.tsx",
+        "types/**/*.ts",
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+# Everything the Next build needs that is NOT public/ or node_modules: app,
+# components, lib, hooks, types, and static assets (css, svg, ...).
+filegroup(
+    name = "app_sources",
+    srcs = glob([
+        "app/**",
+        "components/**",
+        "lib/**",
+        "hooks/**",
+        "types/**",
+    ], exclude = [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.test.js",
+        "**/*.test.jsx",
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+# Producer schemas used by validate_schema_mirrors. The filegroup's files land
+# in runfiles; the test points GRANTHA_DATA_SCHEMAS_DIR at one schema file and
+# the validator derives the schemas dir from its parent.
+
+exports_files([
+    "public/data/granthas-meta.json",
+    "public/data/granthas-order.json",
+    "public/data/categories.json",
+    "grantha.schema.json",
+    "grantha-envelope.schema.json",
+    "grantha-part.schema.json",
+])
+
+# --- Validation (mirrors `npm run validate:data`) ---
+# Each validator is a tsx_test running tsx on the script. Relative imports
+# (../lib/data etc.) resolve from the runfiles tree.
+
+tsx_bin.tsx_test(
+    name = "validate_data",
+    args = ["scripts/validate-data.ts"],
+    data = [
+        "//scripts:validate_scripts_lib",
+        "//:library_data",
+        "grantha.schema.json",
+        "grantha-envelope.schema.json",
+        "grantha-part.schema.json",
+        "//:node_modules",
+    ],
+)
+
+tsx_bin.tsx_test(
+    name = "validate_schema_mirrors",
+    args = ["scripts/validate-schema-mirrors.ts"],
+    data = [
+        "//scripts:validate_scripts_lib",
+        "@grantha_data//formats/schemas:grantha.schema.json",
+        "@grantha_data//formats/schemas:grantha-envelope.schema.json",
+        "@grantha_data//formats/schemas:grantha-part.schema.json",
+        "grantha.schema.json",
+        "grantha-envelope.schema.json",
+        "grantha-part.schema.json",
+        "//:node_modules",
+    ],
+    # Point the validator at the producer schemas dir. $(rootpath) of one
+    # exported producer schema expands to a runfiles path; the validator
+    # derives the schemas dir from its parent. no_copy_to_bin skips the
+    # copy_to_bin for external raw files (validator only reads them).
+    env = {"GRANTHA_DATA_SCHEMAS_DIR": "$(rootpath @grantha_data//formats/schemas:grantha.schema.json)"},
+    expand_env = True,
+    no_copy_to_bin = [
+        "@grantha_data//formats/schemas:grantha.schema.json",
+        "@grantha_data//formats/schemas:grantha-envelope.schema.json",
+        "@grantha_data//formats/schemas:grantha-part.schema.json",
+    ],
+)
+
+tsx_bin.tsx_test(
+    name = "verify_sidebar_model",
+    args = ["scripts/verify-sidebar-model.ts"],
+    data = [
+        "//scripts:validate_scripts_lib",
+        "//:library_data",
+        "//:ts_sources",
+        "//:generate_granthas_json",
+        "//:node_modules",
+    ],
+)
+
+# --- Typecheck (mirrors CI `npx tsc --noEmit`) ---
+tsc_bin.tsc_test(
+    name = "typecheck",
+    args = ["--noEmit"],
+    data = [
+        "tsconfig.json",
+        "//:ts_sources",
+        "//tests:fixtures",
+        "//:library_data",
+        "//:node_modules",
+    ],
+)
+
+# --- Next.js static export (mirrors `npm run build:local`) ---
+# The app is `output: "export"`, so `next build` emits `out/` (the site) plus
+# `.next/`. The generated granthas.json index must be in public/ at build time
+# so Next copies it into the export; it is produced by //:generate_granthas_json
+# and fed in as a tree artifact.
+#
+# Hermeticity note: `next/font/google` fetches fonts over the network during
+# the build (same as the npm path). This action therefore allows network access;
+# vendoring to next/font/local is a future hardening option.
+
+next_bin.next_binary(
+    name = "next",
+    visibility = ["//visibility:public"],
+)
+
+js_run_binary(
+    name = "static_export",
+    srcs = [
+        "next.config.js",
+        "package.json",
+        "tsconfig.json",
+        "postcss.config.js",
+        "tailwind.config.ts",
+        "eslint.config.mjs",
+        "//:app_sources",
+        "//:public_data",
+        "//:generate_granthas_json",
+        "//:node_modules",
+    ],
+    args = ["build", "--webpack"],
+    chdir = package_name(),
+    env = {
+        "NODE_ENV": "production",
+        "NEXT_PUBLIC_NO_BASE_PATH": "true",
+    },
+    out_dirs = ["out", ".next"],
+    tool = ":next",
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "public_data",
+    srcs = glob([
+        "public/**",
+    ], exclude = ["public/data/generated/**"]),
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "validate_data_suite",
+    tests = [
+        ":validate_data",
+        ":validate_schema_mirrors",
+        ":verify_sidebar_model",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# --- Indexer (generate-granthas-json.ts) ---
+
+# Regenerate public/data/generated/granthas.json from the committed library.
+# Deterministic (no timestamp) so the action is reproducible.
+js_run_binary(
+    name = "generate_granthas_json",
+    srcs = [
+        "//scripts:generate_granthas_json_lib",
+        "//:library_data",
+        "public/data/granthas-meta.json",
+        "public/data/granthas-order.json",
+        "public/data/categories.json",
+        "//:node_modules",
+    ],
+    args = ["$(rootpath //scripts:generate_granthas_json_lib)"],
+    chdir = package_name(),
+    out_dirs = ["public/data/generated"],
+    tool = "//scripts:tsx",
+    visibility = ["//visibility:public"],
+)
+
+js_test(
+    name = "node_env_smoke",
+    data = [
+        "//:node_modules/react",
+        "package.json",
+    ],
+    entry_point = "tools/bazel/node_env_smoke.js",
+)
+
+py_test(
+    name = "python_env_smoke",
+    srcs = ["tools/bazel/test_python_env.py"],
+    main = "tools/bazel/test_python_env.py",
+)
+
+py_test(
+    name = "grantha_data_import_smoke",
+    srcs = ["tools/bazel/test_grantha_data_import.py"],
+    main = "tools/bazel/test_grantha_data_import.py",
+    deps = ["@grantha_data//tools/lib/grantha_data:grantha_data"],
+)

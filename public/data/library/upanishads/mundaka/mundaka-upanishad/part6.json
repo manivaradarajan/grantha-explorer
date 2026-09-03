@@ -63,20 +63,7 @@
         "sanskrit": {
           "devanagari": "वेदान्तविज्ञानसुनिश्चितार्थाः संन्यासयोगाद्यतयः शुद्धसत्त्वाः ।\nते ब्रह्मलोकेषु (तु) परान्तकाले परामृतात् परिमुच्यन्ति सर्वे ॥"
         }
-      },
-      "references": [
-        {
-          "start": 81,
-          "end": 83,
-          "display_text": "तु",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "3.2.7",
@@ -230,17 +217,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1030,
-            "end": 1036,
-            "display_text": "४-३-११",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
@@ -444,28 +420,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 2805,
-            "end": 2810,
-            "display_text": "८-१-१",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 2859,
-            "end": 2864,
-            "display_text": "८-१-१",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           },
           {
             "start": 3061,

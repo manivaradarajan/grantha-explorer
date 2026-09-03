@@ -23,20 +23,7 @@
         "sanskrit": {
           "devanagari": "तान् ह स ऋषिरुवाच, भूय एव तपसा ब्रह्मचर्येण श्रद्धया संवत्सरं संवत्स्यथ । यथाकामं प्रश्नान् पृच्छत (थ) । यदि विज्ञास्यामः, सर्वं ह वो वक्ष्याम इति ॥"
         }
-      },
-      "references": [
-        {
-          "start": 100,
-          "end": 101,
-          "display_text": "थ",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "1.3",
@@ -395,17 +382,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 1412,
-            "end": 1417,
-            "display_text": "१-४-८",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },

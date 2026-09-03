@@ -296,23 +296,12 @@
             "unresolved": false
           },
           {
-            "start": 691,
-            "end": 713,
-            "display_text": "प्रतिपाद्यतया परिगृह्य",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 903,
             "end": 914,
             "display_text": "तै.भृ.उ.१-२",
             "grantha_id": "taittiriya-upanishad",
             "edition_id": "taittiriya-upanishad",
-            "locator": "1.2",
+            "locator": "3.1.2",
             "locator_end": null,
             "group_id": null,
             "unresolved": false
@@ -717,20 +706,7 @@
           "sanskrit": {
             "devanagari": "एतान् प्रश्रान् प्रतिवक्तुं जगत्कारणत्वौपयिकगुणविशिष्टस्यैव ब्रह्मणः प्राप्यत्वादिज्ञापनाय आह – **सोऽकामयत** इति । सः आनन्दमयः आत्मा, देवमनुष्यादिरूपेण **बह स्याम्**; तदर्थमाकाशादिरूपेण **प्रजायेय** इति व्यष्टिसमष्टिरूपचेतनाचेतनविषयसंकल्पम् अकरोत् इत्यर्थः । सः – परमात्मा स्रष्टव्यालोचनरूपं तपः कृतवान् इत्यर्थः । तप आलोचने (श्रौतधातुः) इति हि धातुः । **तत्सृष्ट्वा** इत्यादि । ननु सर्वदा सर्वव्याप्तस्य ब्रह्मणः कोऽसौ सृष्टिकालानुप्रवेशः? इति चेत् उच्यते – ‘गोजठरगतवत्से गोत्वजातिवत् सर्वव्याप्तस्य ब्रह्मणः प्रत्येकं सर्ववस्तुषु पुष्कलप्रतीत्यर्ह स्थितिविशेषे एव अनुप्रवेशः । अनेन, **सत्यं ज्ञानमनन्तं ब्रह्म, यो वेद निहितं गुहायाम्** इति मन्त्रोक्तम् अनन्तस्य ब्रह्मणो हृदयगुहानिहितत्वम् उपपादितम् भवति ॥"
           }
-        },
-        "references": [
-          {
-            "start": 326,
-            "end": 336,
-            "display_text": "श्रौतधातुः",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.6.3",
@@ -806,17 +782,6 @@
             "start": 1693,
             "end": 1707,
             "display_text": "ग.पु.पू.२२२-२२",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
-            "start": 1785,
-            "end": 1798,
-            "display_text": "कात्यायनवचनम्",
             "grantha_id": null,
             "edition_id": null,
             "locator": null,

@@ -1,0 +1,104 @@
+# Bazel targets for the grantha-explorer scripts.
+#
+# The indexer (`generate-granthas-json.ts`) lives in this package but is wired
+# from the root BUILD.bazel (it needs to glob the whole public/ tree, which a
+# subpackage cannot escape to). The tsx tool is exposed here for reuse.
+
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@explorer_pip//:requirements.bzl", "requirement")
+load("@npm//:tsx/package_json.bzl", tsx_bin = "bin")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+
+# Converter + materialize sources referenced cross-package by //data:...
+exports_files([
+    "convert_structured_md.py",
+    "import_editions.py",
+    "_build_parser.py",
+    "grantha_data_bootstrap.py",
+    "materialize_library.py",
+    "test_determinism_check.py",
+])
+
+tsx_bin.tsx_binary(
+    name = "tsx",
+    visibility = ["//visibility:public"],
+)
+
+# Expose the indexer script to the root package's js_run_binary. Wrapped in a
+# js_library so the cross-package reference is to a generated output (Bazel
+# cannot copy a raw source file out of its own package).
+js_library(
+    name = "generate_granthas_json_lib",
+    srcs = ["generate-granthas-json.ts"],
+    visibility = ["//visibility:public"],
+)
+
+# The four TS validators behind `npm run validate:data`, exposed as js_library
+# so the root package's js_test targets can reference them cross-package.
+js_library(
+    name = "validate_scripts_lib",
+    srcs = [
+        "validate-data.ts",
+        "validate-schema-mirrors.ts",
+        "validate-reference-sweep.ts",
+        "verify-sidebar-model.ts",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# --- Python validators (survive the Phase-4 converter deletion) ---
+
+py_binary(
+    name = "validate_grantha_integrity",
+    srcs = [
+        "run_integrity_all.py",
+        "validate_grantha_integrity.py",
+        "ref_validator_utils.py",
+    ],
+    main = "run_integrity_all.py",
+    imports = ["."],
+    visibility = ["//visibility:public"],
+)
+
+py_test(
+    name = "integrity_all_test",
+    srcs = [
+        "run_integrity_all.py",
+        "validate_grantha_integrity.py",
+        "ref_validator_utils.py",
+    ],
+    main = "run_integrity_all.py",
+    imports = ["."],
+    data = ["//:library_data"],
+)
+
+py_test(
+    name = "validate_data_py_test",
+    srcs = [
+        "validate_data.py",
+    ],
+    main = "validate_data.py",
+    data = [
+        "//:library_data",
+        "//:grantha.schema.json",
+        "//:grantha-envelope.schema.json",
+        "//:grantha-part.schema.json",
+    ],
+    deps = [requirement("jsonschema")],
+)
+
+# Libraries for the tests/ package's py_test targets (pure-stdlib / small-dep
+# validator modules that survive the Phase-4 converter deletion).
+py_library(
+    name = "hide_editor_comments_lib",
+    srcs = ["hide_editor_comments.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_library(
+    name = "grantha_markdown_validator_lib",
+    srcs = ["grantha_markdown_validator.py"],
+    visibility = ["//visibility:public"],
+    deps = [requirement("PyYAML")],
+)
+

@@ -464,20 +464,7 @@
           "sanskrit": {
             "devanagari": "क्षीरीभवद्धेनूपयुक्ततृणादिवत् प्रधानमपीति न युक्तं वक्तुम्, अनडुहा(दा)दिष्वदर्शनात्, तद्धि प्राज्ञाधिष्ठितम्"
           }
-        },
-        "references": [
-          {
-            "start": 67,
-            "end": 69,
-            "display_text": "दा",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.2.5",
@@ -682,20 +669,7 @@
           "sanskrit": {
             "devanagari": "क(का)रण दोषबाधकप्रत्ययराहित्यरूपवैषम्याच्च न स्वप्नादिवज्जागरितज्ञानस्य मिथ्यात्वम्"
           }
-        },
-        "references": [
-          {
-            "start": 2,
-            "end": 4,
-            "display_text": "का",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          }
-        ]
+        }
       },
       {
         "ref": "2.2.29",

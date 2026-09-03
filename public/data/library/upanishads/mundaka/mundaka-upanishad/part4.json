@@ -103,20 +103,7 @@
         "sanskrit": {
           "devanagari": "हिरण्मये परे (पुरे) कोशे विरजं ब्रह्म निष्कलम् ।\nतच्छुभ्रं ज्योतिषां ज्योतिस्तद्यदात्मविदो विदुः ॥"
         }
-      },
-      "references": [
-        {
-          "start": 14,
-          "end": 18,
-          "display_text": "पुरे",
-          "grantha_id": null,
-          "edition_id": null,
-          "locator": null,
-          "locator_end": null,
-          "group_id": null,
-          "unresolved": true
-        }
-      ]
+      }
     },
     {
       "ref": "2.2.11",
@@ -348,17 +335,6 @@
         },
         "references": [
           {
-            "start": 14,
-            "end": 17,
-            "display_text": "परे",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
-          },
-          {
             "start": 52,
             "end": 67,
             "display_text": "तै.आर. १-२७-११५",
@@ -389,17 +365,6 @@
             "locator_end": null,
             "group_id": null,
             "unresolved": false
-          },
-          {
-            "start": 901,
-            "end": 905,
-            "display_text": "५-१५",
-            "grantha_id": null,
-            "edition_id": null,
-            "locator": null,
-            "locator_end": null,
-            "group_id": null,
-            "unresolved": true
           }
         ]
       },
