@@ -133,6 +133,19 @@ the commentary pane/chrome; does not drive per-block presentation.
 
 ## Citation-repair analysis + matcher parity
 
+## Quote sidecar (`reference.quote`)
+
+- Committed sidecars live under `public/data/sidecars/<grantha_id>/citation_quotes.json`
+  — per-passage quote spans stamped into `reference.quote` by the converter.
+  They annotate the `references[]`-bearing library JSON produced here (not the
+  grantha-data markdown), so this repo owns them.
+- `scripts/convert_structured_md.py:_quote_sidecar_for` reads a grantha's
+  sidecar from `public/data/sidecars/<grantha_id>/` (via the explorer root);
+  absent sidecar → no quote stamping (graceful).
+- Regenerate from the grantha-data `citation-quotes` tool after materializing
+  (`--out public/data/sidecars/<grantha_id>/citation_quotes.json`).
+
+
 - `../grantha-data/tools/lib/grantha_data/citation_repair.py` — the Python
   citation-repair classifier (verbatim port of `lib/quotedMatch.ts`'s
   `findQuotedSpan`) + `classify`/`analyze`/`build_overlay`/`apply_overlay`;

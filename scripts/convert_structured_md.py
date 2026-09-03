@@ -1436,20 +1436,33 @@ def _references_bimap() -> list[Any]:
     return loaded
 
 
-def _quote_sidecar_for(source_dir: Path) -> dict[tuple[str, str, int], object] | None:
-    """Load the quote-sidecar rows next to ``source_dir`` (``citation_quotes.json``).
+def _quote_sidecar_for(
+    grantha_explorer_root: Path, grantha_id: str
+) -> dict[tuple[str, str, int], object] | None:
+    """Load the quote-sidecar rows for a grantha.
 
-    Returns ``None`` when the sidecar is absent (reference emission proceeds
-    without quote stamping). Rows are keyed ``(passage_ref, passage_type,
-    ref_start)``.
+    The sidecar lives in this repo under
+    ``public/data/sidecars/<grantha_id>/citation_quotes.json`` (it annotates
+    the ``references[]``-bearing library JSON produced here, not the source
+    markdown in grantha-data). Returns ``None`` when the sidecar is absent
+    (reference emission proceeds without quote stamping). Rows are keyed
+    ``(passage_ref, passage_type, ref_start)``.
 
     Args:
-        source_dir: The directory of .md source files for one grantha.
+        grantha_explorer_root: Root of the grantha-explorer repo.
+        grantha_id: The citing grantha's id.
 
     Returns:
         The keyed sidecar rows, or ``None``.
     """
-    sidecar = source_dir / "citation_quotes.json"
+    sidecar = (
+        grantha_explorer_root
+        / "public"
+        / "data"
+        / "sidecars"
+        / grantha_id
+        / "citation_quotes.json"
+    )
     if not sidecar.exists():
         return None
 
@@ -1944,7 +1957,7 @@ def convert_grantha(
             _handle_aitareya_sayana(body, grantha_explorer_root)
 
         diag_start = len(diagnostics)
-        quote_rows = _quote_sidecar_for(source_dir)
+        quote_rows = _quote_sidecar_for(grantha_explorer_root, grantha_id)
         part_json = build_part_json(
             frontmatter,
             body,
