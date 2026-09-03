@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
   type ReactNode,
 } from "react";
 import {
@@ -19,6 +18,7 @@ import {
   Reference,
   commentaryPassageForRef,
   getAllPassagesForNavigation,
+  hasCommentary,
   nextUnloadedPartFirstRef,
   presentationFor,
   previousUnloadedPartFirstRef,
@@ -81,9 +81,6 @@ interface FlowReaderProps {
    *  (see ReviewMarkSpec in renderCommentary). Absent in normal reading. */
   reviewMarksByRef?: Record<string, ReviewMarkSpec[]>;
 }
-
-const FONT_SCALE_MIN = 0.75;
-const FONT_SCALE_MAX = 1.4;
 
 /**
  * Builds a deduplicated map from citation key to sequential footnote number.
@@ -220,10 +217,11 @@ export default function FlowReader({
   reviewMarksByRef,
 }: FlowReaderProps) {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isMobile = useMediaQuery("(max-width: 480px)");
+  const isMulaOnlyMobile = isMobile && !hasCommentary(grantha);
   const { footnoteModeEnabled } = useFootnoteMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [folioOpen, setFolioOpen] = useState(false);
-  const [fontScale, setFontScale] = useState(1.2);
   const [availableWidth, setAvailableWidth] = useState(0);
 
   const isCompare = editionIds.length >= 2;
@@ -829,6 +827,7 @@ export default function FlowReader({
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
     footnoteMap: ReadonlyMap<string, number>,
+    seenFootnoteKeys?: Set<string>,
   ): ReactNode => {
     const subPassage = commentaryPassageForRef(sub.passages, verseRef);
     if (!subPassage) {
@@ -884,6 +883,7 @@ export default function FlowReader({
                 },
                 undefined,
                 footnoteMap,
+                seenFootnoteKeys,
               )}
             </p>
           </div>
@@ -896,19 +896,20 @@ export default function FlowReader({
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
     footnoteMap: ReadonlyMap<string, number>,
+    seenFootnoteKeys?: Set<string>,
   ): ReactNode => {
     if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
       return null;
     }
     return activeCommentary.subcommentaries.map((sub) =>
-      renderSubcommentary(sub, verseRef, sourceHighlight, footnoteMap),
+      renderSubcommentary(sub, verseRef, sourceHighlight, footnoteMap, seenFootnoteKeys),
     );
   };
 
   return (
     <main
-      className="flow-reader h-screen bg-white flex"
-      style={{ "--reading-scale": fontScale } as CSSProperties}
+      className={`flow-reader h-screen bg-white flex${!hasCommentary(grantha) ? " flow-mula-only" : ""}`}
+      data-script={script}
     >
       <h1 className="sr-only">Grantha Explorer</h1>
 
@@ -1040,7 +1041,7 @@ export default function FlowReader({
           ref={scrollContainerRef}
           className="flex-1 overflow-y-auto overflow-x-hidden"
         >
-            <div className={`mx-auto px-8 py-10 ${contentWidthClass}`}>
+            <div className={`mx-auto ${hasCommentary(grantha) ? "px-5" : "px-3"} sm:px-8 py-4 sm:py-10 ${contentWidthClass}`}>
               {isCompare ? (
                 <FlowReaderCompare
                   editions={editions}
@@ -1096,7 +1097,7 @@ export default function FlowReader({
                     divider = (
                       <div
                         key={`divider-${index}`}
-                        className="flex items-center gap-4 my-12"
+                        className="flex items-center gap-4 my-6 sm:my-12"
                       >
                         <span className="flex-1 h-px bg-gray-200" />
                         <span className="text-sm text-gray-400 font-serif tracking-wide">
@@ -1141,7 +1142,7 @@ export default function FlowReader({
                     return (
                       <Fragment key={`${passage.passage_type}-${passage.ref}`}>
                         {categoryDivider}
-                        <div data-verse-ref={passage.ref} className="px-4 py-8">
+                        <div data-verse-ref={passage.ref} className="py-4 sm:py-8 sm:px-4">
                           {prefaceAnchor ? (
                             <p
                               className="verse-text font-serif flow-commentary-sub leading-relaxed text-gray-700 whitespace-pre-line"
@@ -1153,13 +1154,13 @@ export default function FlowReader({
                             />
                           ) : content ? (
                             hasOwnVerse ? (
-                              <div className={`flow-para-row ${MULA_PRESENTATION.prose.text}`}>
+                              <div className={`flow-para-row ${MULA_PRESENTATION.prose.text}`} style={isMulaOnlyMobile ? { borderLeft: "none", paddingLeft: "0.25rem" } : undefined}>
                                 {/* Empty gutter spacer: framing rows carry no
                                     paragraph number, but reserving the number
                                     gutter's width makes the verse column land at
                                     the SAME x as a body paragraph's own-verse
                                     (e.g. para 252's closing सारासार verse). */}
-                                <span className="flow-para-number" aria-hidden="true" />
+                                <span className="flow-para-number" aria-hidden="true" style={isMulaOnlyMobile ? { minWidth: "1.5em" } : undefined} />
                                 <div className="min-w-0 flex-1">
                                   {renderMulaWithReferences(
                                     content,
@@ -1224,6 +1225,9 @@ export default function FlowReader({
                   const footnoteMap: ReadonlyMap<string, number> = footnoteModeEnabled
                     ? buildFootnoteMap(allRefs)
                     : new Map();
+                  const seenFootnoteKeys: Set<string> | undefined = footnoteModeEnabled
+                    ? new Set<string>()
+                    : undefined;
                   const linkContext: ReferenceLinkContext = {
                     currentGranthaId: grantha.grantha_id,
                     sourcePassageRef: passage.ref,
@@ -1262,6 +1266,7 @@ export default function FlowReader({
                               (passage as { verses?: { start: number; end: number }[] }).verses,
                               reviewMarksByRef?.[passage.ref],
                               footnoteMap,
+                              seenFootnoteKeys,
                             )}
                             {!isProseMula && (
                               <>{" "}॥ {toDevanagariNumerals(passage.ref)} ॥</>
@@ -1280,9 +1285,8 @@ export default function FlowReader({
                         ref={(el) => setVerseRef(passage.ref, el)}
                         data-verse-ref={passage.ref}
                         onClick={() => handleVerseClick(passage.ref)}
-                        className={`group px-4 py-8 transition-colors ${
-                          isSelected ? "bg-gray-50" : ""
-                        }`}
+                        className="group py-4 sm:py-8 sm:px-4 transition-colors"
+                        style={isSelected ? { backgroundColor: "rgba(61, 90, 128, 0.06)" } : undefined}
                       >
                         <div className="flex items-start justify-between">
                           <div className="min-w-0 flex-1">
@@ -1315,8 +1319,8 @@ export default function FlowReader({
                               )}
                               {mula && (
                                 isProseMula ? (
-                                  <div className={`flow-para-row ${mulaPresentation.text}`}>
-                                    <span className="flow-para-number">
+                                  <div className={`flow-para-row ${mulaPresentation.text}`} style={isMulaOnlyMobile ? { borderLeft: "none", paddingLeft: "0.25rem" } : undefined}>
+                                    <span className="flow-para-number" style={isMulaOnlyMobile ? { minWidth: "1.5em" } : undefined}>
                                       {toDevanagariNumerals(passage.ref)}.
                                     </span>
                                     <div className="min-w-0 flex-1">{mulaContent}</div>
@@ -1370,9 +1374,10 @@ export default function FlowReader({
                                 },
                                 undefined,
                                 footnoteMap,
+                                seenFootnoteKeys,
                               )}
                             </p>
-                            {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap)}
+                            {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap, seenFootnoteKeys)}
                             {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>
                         )}
@@ -1414,10 +1419,6 @@ export default function FlowReader({
         script={script}
         onScriptToggle={() =>
           onScriptChange(script === "deva" ? "roman" : "deva")
-        }
-        fontScale={fontScale}
-        onFontScaleChange={(next) =>
-          setFontScale(Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, next)))
         }
         onExitFlow={onExitFlow}
       />

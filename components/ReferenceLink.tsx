@@ -87,7 +87,7 @@ const ReferenceLink: React.FC<ReferenceLinkProps> = ({
   const focusedPinRef = useRef(false);
 
   const targetTitle = reference.grantha_id
-    ? granthaIdToTitle[reference.grantha_id] || reference.grantha_id
+    ? granthaIdToTitle[reference.grantha_id] || reference.display_text
     : reference.display_text;   // unresolved (no id): fall back to the citation text
   const locatorLabel = reference.locator
     ? toDevanagariNumerals(reference.locator)

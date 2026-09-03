@@ -15,13 +15,35 @@
     {
       "passage_ref": "1",
       "passage_type": "main",
-      "ref_start": 539,
-      "ref_end": 550,
-      "quote_start": 520,
-      "quote_end": 535,
+      "ref_start": 536,
+      "ref_end": 547,
+      "quote_start": 519,
+      "quote_end": 534,
       "quote_text": "अयमात्मा ब्रह्म",
       "status": "matched",
       "quality": 0.03571428571428571
+    },
+    {
+      "passage_ref": "1",
+      "passage_type": "main",
+      "ref_start": 809,
+      "ref_end": 821,
+      "quote_start": 744,
+      "quote_end": 807,
+      "quote_text": "तमेतं वेदानुवचनेन ब्राह्मणा विविदिषन्ति यज्ञेन दानेन तपसानाशकेन",
+      "status": "matched",
+      "quality": 0.07645631067961164
+    },
+    {
+      "passage_ref": "1",
+      "passage_type": "main",
+      "ref_start": 847,
+      "ref_end": 858,
+      "quote_start": 824,
+      "quote_end": 845,
+      "quote_text": "ब्रह्मविदाप्नोति परम्",
+      "status": "matched",
+      "quality": 0.2127659574468085
     },
     {
       "passage_ref": "10",
@@ -268,10 +290,21 @@
     {
       "passage_ref": "113",
       "passage_type": "main",
-      "ref_start": 68,
-      "ref_end": 79,
-      "quote_start": 47,
-      "quote_end": 66,
+      "ref_start": 31,
+      "ref_end": 43,
+      "quote_start": 0,
+      "quote_end": 29,
+      "quote_text": "सर्वं खल्विदं ब्रह्म तज्जलान्",
+      "status": "matched",
+      "quality": 0.21641791044776118
+    },
+    {
+      "passage_ref": "113",
+      "passage_type": "main",
+      "ref_start": 70,
+      "ref_end": 81,
+      "quote_start": 49,
+      "quote_end": 68,
       "quote_text": "ऐतदात्म्यमिदं सर्वं",
       "status": "matched",
       "quality": 0.16822429906542055
@@ -854,8 +887,8 @@
       "ref_start": 245,
       "ref_end": 256,
       "quote_start": 185,
-      "quote_end": 213,
-      "quote_text": "यस्मात्परं नापरमस्ति किंचित्",
+      "quote_end": 243,
+      "quote_text": "यस्मात्परं नापरमस्ति किंचित्, तेनेदं पूर्णं पुरुषेण सर्वम्",
       "status": "matched",
       "quality": 0.22580645161290322
     },
@@ -964,8 +997,8 @@
       "ref_start": 146,
       "ref_end": 157,
       "quote_start": 22,
-      "quote_end": 142,
-      "quote_text": "अथ यदिदमस्मिन् ब्रह्मपुरे दहरं पुण्डरीकं वेश्म दहरोऽस्मिन्नन्तराकाशस्तस्मिन् यदन्तस्तदन्वेष्टव्यं तद्वा व विजिज्ञासितव्य",
+      "quote_end": 144,
+      "quote_text": "अथ यदिदमस्मिन् ब्रह्मपुरे दहरं पुण्डरीकं वेश्म दहरोऽस्मिन्नन्तराकाशस्तस्मिन् यदन्तस्तदन्वेष्टव्यं तद्वा व विजिज्ञासितव्यम्",
       "status": "matched",
       "quality": 0.9661016949152542
     },
@@ -975,8 +1008,8 @@
       "ref_start": 172,
       "ref_end": 183,
       "quote_start": 92,
-      "quote_end": 168,
-      "quote_text": "दहरोऽस्मिन्नन्तराकाशः किं तदत्र विद्यते यदन्वेष्टव्यं यद्वा व विजिज्ञासितव्य",
+      "quote_end": 170,
+      "quote_text": "दहरोऽस्मिन्नन्तराकाशः किं तदत्र विद्यते यदन्वेष्टव्यं यद्वा व विजिज्ञासितव्यम्",
       "status": "matched",
       "quality": 0.5447761194029851
     },
@@ -1344,6 +1377,17 @@
       "quality": 1.0
     },
     {
+      "passage_ref": "160",
+      "passage_type": "main",
+      "ref_start": 336,
+      "ref_end": 349,
+      "quote_start": 220,
+      "quote_end": 332,
+      "quote_text": "स एव सृज्यः स च सर्वकर्ता स एव पात्यत्ति च पाल्यते च ।\nब्रह्माद्यवस्थाभिरशेषमूर्तिर्विष्णुर्वरिष्ठो वरदो वरेण्यः",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
       "passage_ref": "161",
       "passage_type": "main",
       "ref_start": 174,
@@ -1353,6 +1397,17 @@
       "quote_text": "",
       "status": "no_match",
       "quality": 1.0
+    },
+    {
+      "passage_ref": "161",
+      "passage_type": "main",
+      "ref_start": 407,
+      "ref_end": 421,
+      "quote_start": 384,
+      "quote_end": 405,
+      "quote_text": "तत्सर्वं वै हरेस्तनुः",
+      "status": "matched",
+      "quality": 0.24705882352941178
     },
     {
       "passage_ref": "164",
@@ -1676,10 +1731,21 @@
     {
       "passage_ref": "199",
       "passage_type": "main",
-      "ref_start": 224,
-      "ref_end": 236,
-      "quote_start": 159,
-      "quote_end": 220,
+      "ref_start": 144,
+      "ref_end": 155,
+      "quote_start": 105,
+      "quote_end": 140,
+      "quote_text": "तस्य यथा कप्यासं पुण्डरीकमेवमक्षिणी",
+      "status": "matched",
+      "quality": 0.3
+    },
+    {
+      "passage_ref": "199",
+      "passage_type": "main",
+      "ref_start": 222,
+      "ref_end": 234,
+      "quote_start": 157,
+      "quote_end": 218,
       "quote_text": "य एषोऽन्तर्हृादय आकाशस्तस्मिन्नयं पुरुषो मनोमयोऽमृतो हिरण्मयः",
       "status": "matched",
       "quality": 0.3177083333333333
@@ -1841,8 +1907,8 @@
     {
       "passage_ref": "209",
       "passage_type": "main",
-      "ref_start": 508,
-      "ref_end": 521,
+      "ref_start": 506,
+      "ref_end": 519,
       "quote_start": 468,
       "quote_end": 504,
       "quote_text": "संसारतापानखिलान् अवाप्नोत्यतिसंततान्",
@@ -1852,10 +1918,10 @@
     {
       "passage_ref": "209",
       "passage_type": "main",
-      "ref_start": 543,
-      "ref_end": 556,
-      "quote_start": 523,
-      "quote_end": 541,
+      "ref_start": 542,
+      "ref_end": 555,
+      "quote_start": 522,
+      "quote_end": 540,
       "quote_text": "तया तिरोहितत्वाच्च",
       "status": "matched",
       "quality": 0.22784810126582278
@@ -1870,17 +1936,6 @@
       "quote_text": "सत्यं ज्ञानमनन्तं ब्रह्म, यो वेद निहितं गुहायां परमे व्योमन्",
       "status": "matched",
       "quality": 0.6170212765957447
-    },
-    {
-      "passage_ref": "211",
-      "passage_type": "main",
-      "ref_start": 98,
-      "ref_end": 109,
-      "quote_start": 0,
-      "quote_end": 0,
-      "quote_text": "",
-      "status": "no_match",
-      "quality": 1.0
     },
     {
       "passage_ref": "213",
@@ -2017,8 +2072,19 @@
     {
       "passage_ref": "218",
       "passage_type": "main",
-      "ref_start": 484,
-      "ref_end": 497,
+      "ref_start": 376,
+      "ref_end": 390,
+      "quote_start": 289,
+      "quote_end": 372,
+      "quote_text": "देवत्वे देवदेहेयं मनुष्यत्वे च मानुषी ।\nविष्णोर्देहानुरूपां वै करोत्येषात्मनस्तनुम्",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "218",
+      "passage_type": "main",
+      "ref_start": 483,
+      "ref_end": 496,
       "quote_start": 0,
       "quote_end": 0,
       "quote_text": "",
@@ -2028,8 +2094,8 @@
     {
       "passage_ref": "218",
       "passage_type": "main",
-      "ref_start": 554,
-      "ref_end": 567,
+      "ref_start": 553,
+      "ref_end": 566,
       "quote_start": 0,
       "quote_end": 0,
       "quote_text": "",
@@ -2860,6 +2926,17 @@
       "quote_text": "तयोरन्यः पिप्पलं स्वाद्वत्त्यनश्नन्नन्योऽभिचाकशीति",
       "status": "matched",
       "quality": 0.504950495049505
+    },
+    {
+      "passage_ref": "81",
+      "passage_type": "main",
+      "ref_start": 636,
+      "ref_end": 649,
+      "quote_start": 605,
+      "quote_end": 617,
+      "quote_text": "तदनुप्रविश्य",
+      "status": "matched",
+      "quality": 0.0851063829787234
     },
     {
       "passage_ref": "81",
