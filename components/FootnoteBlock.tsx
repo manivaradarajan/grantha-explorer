@@ -41,7 +41,7 @@ export function FootnoteBlock({
   if (footnotes.length === 0) return null;
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 footnote-block">
       <hr className="w-1/3 border-gray-300 my-3" />
       <ol className="space-y-1 text-sm font-serif list-none p-0 m-0">
         {footnotes.map((entry) => (

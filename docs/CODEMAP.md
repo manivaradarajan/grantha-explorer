@@ -3,6 +3,31 @@
 Index of non-obvious code locations — features whose implementation is spread
 across files or doesn't match an obvious name.
 
+## Footnote mode (पादटिप्पणी)
+
+A flow-reader toggle that replaces inline citation spans with `[n]` superscript
+markers and collects the deduplicated entries into a footnote block below each
+passage. Persisted via localStorage; toggled from the flow drawer.
+
+- `lib/contexts/FootnoteModeContext.tsx` — `FootnoteModeProvider` +
+  `useFootnoteMode` (localStorage-backed, `grantha-footnote-mode`).
+- `components/FootnoteBlock.tsx` — the collected block (`hr` + `<ol>` of
+  `ReferenceLink` `footnote-entry` rows); `FootnoteEntry` `{number, reference}`.
+- `components/renderCommentary.tsx` — `footnoteKey` (dedup key =
+  grantha_id/locator/display_text), `renderCommentaryWithReferences` /
+  `renderMulaProse` emit `ReferenceLink` `footnote-marker` `<sup>` when the
+  optional `footnoteMap` contains the ref.
+- `components/FlowReader.tsx` — `buildFootnoteMap` (dedup → sequential numbers)
+  + `buildFootnoteEntries`; `allRefs` aggregates mula + commentary + every
+  subcommentary's refs per block; `renderFootnoteBlock` renders the block in
+  the `cp` branch (aligns with bhashya text) or, mula-only, inside the mula
+  wrapper (`.flow-mula-*-wrap`) so it aligns with the mūla text's left margin.
+- `components/ReferenceLink.tsx` — `footnote-marker` / `footnote-entry`
+  display modes (Devanagari numeral prefix).
+- `components/FlowReaderDrawer.tsx` — the footnote toggle UI.
+- Styling/alignment: `.footnote-block` + `.flow-mula-prose-wrap .footnote-block`
+  margin (app/globals.css). Outstanding multi-tier work: `DEFERRED.md` #15.
+
 ## Reference citation popover
 
 Hover (peek) or click/tap (pinned) a cross-text citation to open a compact

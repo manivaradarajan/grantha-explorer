@@ -985,6 +985,23 @@ mark.review-mark.st-accepted {
   color: #6b7280; /* text-gray-500 */
 }
 
+/* Mula-only footnote block (no commentary): line its left edge up with the
+   mūla text's left margin. For a PROSE para the text starts after the
+   para-row's chrome — 2px rail + 0.875rem padding + the number gutter +
+   0.5rem flex gap. The gutter term is em-based and sits inside
+   .flow-para-row, whose font-size is calc(1em * var(--reading-scale)), so it
+   grows with the अ−/अ+ scale; a plain 2.25em here (at the footnote's own
+   unscaled font size) would lag behind it. Hence the explicit × scale — the
+   two terms then resolve to the same px at every reading scale. The rail is
+   NOT repeated beside the footnotes (they sit below the paragraph, not beside
+   it). A VERSE mūla needs no rule: the wrapper's pl-6 already places any
+   child (verse text AND footnote) at the same left x. */
+.flow-reader .flow-mula-prose-wrap .footnote-block {
+  margin-left: calc(
+    2px + 0.875rem + (2.25em * var(--reading-scale, 1)) + 0.5rem
+  );
+}
+
 /* ---------------------------------------------------------------------------
    Verse-quote blocks: an embedded verse (or prose quotation) inside a mula
    prose paragraph. Design (PLAN_VERSE_CITATIONS.md): the quotation is

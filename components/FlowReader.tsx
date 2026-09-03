@@ -1331,6 +1331,7 @@ export default function FlowReader({
                                   </div>
                                 )
                               )}
+                              {!cp && renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                             </div>
                           </div>
                           <div className="shrink-0 pl-3 pt-1">
@@ -1381,7 +1382,6 @@ export default function FlowReader({
                             {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>
                         )}
-                        {!cp && renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                       </div>
                     </Fragment>
                   );
