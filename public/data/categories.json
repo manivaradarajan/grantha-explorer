@@ -35,6 +35,12 @@
       "deva": "पुराणम्",
       "iast": "Purāṇa",
       "order": 6
+    },
+    {
+      "id": "smriti",
+      "deva": "स्मृतयः",
+      "iast": "Smṛtayaḥ",
+      "order": 7
     }
   ],
   "text_type_labels": {
@@ -126,6 +132,21 @@
     ],
     "vishnu-purana": [
       "purana"
+    ],
+    "manu-smriti": [
+      "smriti"
+    ],
+    "yajnavalkya-smriti": [
+      "smriti"
+    ],
+    "brihadaranyaka-madhyandina": [
+      "upanishads"
+    ],
+    "mahanarayana-upanishad": [
+      "upanishads"
+    ],
+    "subala-upanishad": [
+      "upanishads"
     ]
   }
 }

@@ -1,0 +1,149 @@
+{
+  "kind": "grantha-part",
+  "schema_version": "1.4.0",
+  "grantha_id": "subala-upanishad",
+  "edition_id": "subala-upanishad",
+  "part_num": 6,
+  "passages": [
+    {
+      "ref": "6.1",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "नैवेह किञ्चनाग्र आसीदमूलमनाधारम् ।"
+        }
+      }
+    },
+    {
+      "ref": "6.2",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "इमाः प्रजाः प्रजायन्ते दिव्यो देव एको नारायणः ।।"
+        }
+      }
+    },
+    {
+      "ref": "6.3",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "चक्षुश्च द्रष्टव्यञ्च नारायणः । श्रोत्रञ्च श्रोतव्यं च नारायणो घ्राणं च घ्रातव्यं च नारायणो जिह्वा च रसयितव्यञ्च नारायणः । त्वक् च स्पर्शयितव्यञ्च नारायणो मनश्च मन्तव्यञ्च नारायणो बुद्धिश्च बोद्धव्यञ्च नारायणोऽहङ्कारश्चाहकर्तव्यञ्च नारायणश्चित्तञ्च चेतयितव्यञ्च नारायणो वाक् च वक्तव्यञ्च नारायणो हस्तौ चादातव्यञ्च नारायणः । पादौ च गन्तव्यञ्च नारायणः । पायुश्च विसर्जयितव्यञ्च नारायणः । उपस्थश्चाऽऽनन्दयितव्यं च नारायणः ।"
+        }
+      }
+    },
+    {
+      "ref": "6.4",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "धाता विधाता कर्ता विकर्ता दिव्यो देव एको नारायणः ।"
+        }
+      }
+    },
+    {
+      "ref": "6.5",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "आदित्या रुद्रा मरुतो वसनोऽश्विनौ ऋचो यजूंषि सामानि मन्त्रोऽग्निराज्याहुतिर्नारायणः ।"
+        }
+      }
+    },
+    {
+      "ref": "6.6",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "उद्भवः सम्भवो दिव्यो देव एको नारायणः ।"
+        }
+      }
+    },
+    {
+      "ref": "6.7",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "माता पिता भ्राता निवासः शरणं सुहृद्गतिर्नारायणः ।।"
+        }
+      }
+    },
+    {
+      "ref": "6.8",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "विराजासुदर्शनाजितासोम्यामोघाकुमाराऽमृतासत्यामध्यमानासीरा-शिशुरासूरासूर्यास्वरा (शिशुसूर्याऽसुराभास्वती?) विज्ञेयानि नाडीनामानि दिव्यानि ।"
+        }
+      }
+    },
+    {
+      "ref": "6.9",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "गर्जति गायति वाति वर्षति वरुणोऽर्यमा चन्द्रमाः कला कलिर्धाता ब्रह्मा प्रजापतिर्मघवा दिवसाश्चार्धदिवसाश्च कला: कल्पाश्चोर्ध्वञ्च दिशश्च सर्वं नारायणः ।।"
+        }
+      }
+    },
+    {
+      "ref": "6.10",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "पुरुष एवेदं सर्वं यद्भूतं यश्च भव्यम् ।"
+        }
+      }
+    },
+    {
+      "ref": "6.11",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "उतामृतत्वस्येशानो यदन्नेनातिरोहति ।।"
+        }
+      }
+    },
+    {
+      "ref": "6.12",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तद्विष्णोः परमं पदं सदा पश्यन्ति सूरयः । दिवीव चक्षुराततम् ।।"
+        }
+      }
+    },
+    {
+      "ref": "6.13",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तद्विप्रासो विपन्यवो जागृवांसः समिन्धते । विष्णोर्यत् परमं पदम् ।"
+        }
+      }
+    },
+    {
+      "ref": "6.14",
+      "passage_type": "main",
+      "kind": "Mantra",
+      "content": {
+        "sanskrit": {
+          "devanagari": "तदेतनिर्वाणानुशासनम् । इति वेदानुशासनम् । इति वेदानुशासनम् ।।"
+        }
+      }
+    }
+  ]
+}

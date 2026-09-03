@@ -118,6 +118,18 @@ FLAT: list[tuple[str, str]] = [
     ("ramayana/valmiki-ramayana", "ramayana/valmiki-ramayana"),
     ("purana/vishnu-purana", "purana/vishnu-purana"),
     ("vedarthasangraha", "vedarthasangraha"),
+    # 2026-09 bring-in (mula-only single-edition texts)
+    ("smriti/manu-smriti", "smriti/manu-smriti"),
+    ("smriti/yajnavalkya-smriti", "smriti/yajnavalkya-smriti"),
+    (
+        "upanishads/brihadaranyaka-madhyandina",
+        "upanishads/brihadaranyaka-madhyandina",
+    ),
+    (
+        "upanishads/mahanarayana-upanishad",
+        "upanishads/mahanarayana-upanishad",
+    ),
+    ("upanishads/subala-upanishad", "upanishads/subala-upanishad"),
 ]
 
 
