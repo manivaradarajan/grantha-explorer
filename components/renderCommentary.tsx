@@ -20,6 +20,11 @@ import type { SourceHighlight } from "./CitationPanel";
 const protectLineBreaks = (text: string): string =>
   text.replace(/ — /g, "\u00A0—\u00A0").replace(/ ।/g, "\u00A0।");
 
+/** Punctuation that follows a citation's closing ")" and belongs to the prose,
+ *  not to the citation — must be emitted BEFORE the footnote-marker node so
+ *  the rendered output reads: prose… punct [n] rest rather than prose… [n] punct rest. */
+const TRAIL_PUNCT = new Set([",", ";", ":", ".", "?", "!", "\u0964", "\u0965"]);
+
 /** Props threaded from the reader to ReferenceLink for a rendered citation. */
 export interface ReferenceLinkContext {
   currentGranthaId: string;
@@ -414,7 +419,28 @@ export function renderCommentaryWithReferences(
       ),
     );
     // Skip a trailing close-paren that wrapped the citation span in the source.
-    cursor = isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
+    const afterClose =
+      isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
+    // In footnote-marker mode, any prose punctuation immediately after the
+    // closing paren (comma, danda, etc.) must appear BEFORE the marker in
+    // the rendered DOM so the reading order is: prose…, [n] rest rather than
+    // prose… [n], rest.
+    let trailLen = 0;
+    if (isMarker) {
+      while (
+        afterClose + trailLen < text.length &&
+        TRAIL_PUNCT.has(text[afterClose + trailLen])
+      ) {
+        trailLen++;
+      }
+    }
+    if (trailLen > 0) {
+      const tp = text.slice(afterClose, afterClose + trailLen);
+      parts.splice(parts.length - 1, 0, (
+        <span key={`tp-${ref.start}`}>{tp}</span>
+      ));
+    }
+    cursor = afterClose + trailLen;
   }
 
   if (cursor < text.length) {
@@ -679,7 +705,32 @@ function renderMulaProse(
       ),
     );
     // Skip a trailing close-paren that wrapped the citation span in the source.
-    cursor = isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
+    const afterClose2 =
+      isMarker && text[ref.end] === ")" ? ref.end + 1 : ref.end;
+    // In footnote-marker mode, prose punctuation immediately after the closing
+    // paren must precede the marker node in DOM order.
+    let trailLen2 = 0;
+    if (isMarker) {
+      while (
+        afterClose2 + trailLen2 < text.length &&
+        TRAIL_PUNCT.has(text[afterClose2 + trailLen2])
+      ) {
+        trailLen2++;
+      }
+    }
+    if (trailLen2 > 0) {
+      const tp2 = text.slice(afterClose2, afterClose2 + trailLen2);
+      parts.splice(parts.length - 1, 0, (
+        <Fragment key={`tp-${ref.start}`}>
+          {annotated(
+            offset + afterClose2,
+            offset + afterClose2 + trailLen2,
+            <span>{tp2}</span>,
+          )}
+        </Fragment>
+      ));
+    }
+    cursor = afterClose2 + trailLen2;
   }
   if (cursor < text.length) {
     const bounds = highlightBounds(

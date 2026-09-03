@@ -71,6 +71,146 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+// Context extended with all granthas used in the trailing-punct tests.
+const EXTENDED_CONTEXT = {
+  currentGranthaId: "vedarthasangraha",
+  sourcePassageRef: "1",
+  updateHash: () => {},
+  availableGranthaIds: [
+    "svetasvatara-upanishad",
+    "brihadaranyaka-upanishad",
+    "taittiriya-upanishad",
+  ],
+  granthaById: {
+    "svetasvatara-upanishad": { editions: [], default_school: undefined },
+    "brihadaranyaka-upanishad": { editions: [], default_school: undefined },
+    "taittiriya-upanishad": { editions: [], default_school: undefined },
+  },
+  granthaIdToTitle: {
+    "svetasvatara-upanishad": "श्वेताश्वतरोपनिषत्",
+    "brihadaranyaka-upanishad": "बृहदारण्यकोपनिषत्",
+    "taittiriya-upanishad": "तैत्तिरीयोपनिषत्",
+  },
+};
+
+// ---
+
+describe("trailing punctuation precedes footnote marker", () => {
+  // Reference spanning "(बृ.उ. ६.४.५)" (parens inclusive) followed by ","
+  const RAW = "अयमात्मा ब्रह्म (बृ.उ. ६.४.५), अत्र";
+  const refStart = RAW.indexOf("(बृ.उ. ६.४.५)");
+  const refEnd = refStart + "(बृ.उ. ६.४.५)".length;
+
+  const REF = makeRef({
+    start: refStart,
+    end: refEnd,
+    display_text: "बृ.उ. ६.४.५",
+    grantha_id: "brihadaranyaka-upanishad",
+    locator: "6.4.5",
+  });
+  const footnoteMap = new Map([[footnoteKey(REF), 2]]);
+
+  it("comma after ) renders before <sup> in renderCommentaryWithReferences", async () => {
+    const node = renderCommentaryWithReferences(
+      RAW,
+      [REF],
+      EXTENDED_CONTEXT,
+      undefined,
+      footnoteMap,
+    );
+    const { root, el } = await renderNode(node);
+    const sup = el.querySelector("sup");
+    expect(sup).not.toBeNull();
+    // The comma must appear in a dedicated node BEFORE the <sup> element.
+    // We look for an element whose textContent is exactly "," and that
+    // precedes the sup in document order (DOCUMENT_POSITION_FOLLOWING means
+    // the sup comes after the candidate node).
+    const nodesBeforeSup = Array.from(el.querySelectorAll("*")).filter(
+      (n) =>
+        n.compareDocumentPosition(sup!) & Node.DOCUMENT_POSITION_FOLLOWING &&
+        !(n.compareDocumentPosition(sup!) & Node.DOCUMENT_POSITION_CONTAINED_BY),
+    );
+    const commaNode = nodesBeforeSup.find((n) => n.textContent === ",");
+    expect(commaNode).not.toBeNull();
+    cleanUp(root, el);
+  });
+
+  it("दण्ड (।) after ) renders before <sup>", async () => {
+    const raw2 = "एष आत्मा (श्वे.उ. ४.१)। अत्र";
+    const r2start = raw2.indexOf("(श्वे.उ. ४.१)");
+    const r2end = r2start + "(श्वे.उ. ४.१)".length;
+    const ref2 = makeRef({
+      start: r2start,
+      end: r2end,
+      display_text: "श्वे.उ. ४.१",
+      grantha_id: "svetasvatara-upanishad",
+      locator: "4.1",
+    });
+    const map2 = new Map([[footnoteKey(ref2), 1]]);
+    const node = renderCommentaryWithReferences(
+      raw2,
+      [ref2],
+      EXTENDED_CONTEXT,
+      undefined,
+      map2,
+    );
+    const { root, el } = await renderNode(node);
+    const sup = el.querySelector("sup");
+    expect(sup).not.toBeNull();
+    const nodesBeforeSup = Array.from(el.querySelectorAll("*")).filter(
+      (n) => n.compareDocumentPosition(sup!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    const dandaNode = nodesBeforeSup.find((n) => n.textContent === "।");
+    expect(dandaNode).not.toBeNull();
+    cleanUp(root, el);
+  });
+
+  it("no trailing punct → no spurious node inserted before <sup>", async () => {
+    const raw3 = "ब्रह्मविदाप्नोति परम् (तै.उ. २.१.१) इति";
+    const r3start = raw3.indexOf("(तै.उ. २.१.१)");
+    const r3end = r3start + "(तै.उ. २.१.१)".length;
+    const ref3 = makeRef({
+      start: r3start,
+      end: r3end,
+      display_text: "तै.उ. २.१.१",
+      grantha_id: "taittiriya-upanishad",
+      locator: "2.1.1",
+    });
+    const map3 = new Map([[footnoteKey(ref3), 6]]);
+    const node = renderCommentaryWithReferences(
+      raw3,
+      [ref3],
+      EXTENDED_CONTEXT,
+      undefined,
+      map3,
+    );
+    const { root, el } = await renderNode(node);
+    const sup = el.querySelector("sup");
+    expect(sup).not.toBeNull();
+    // Collect element nodes before the sup.
+    const nodesBeforeSup = Array.from(el.querySelectorAll("*")).filter(
+      (n) => n.compareDocumentPosition(sup!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    const lastBefore = nodesBeforeSup[nodesBeforeSup.length - 1];
+    // The node immediately before sup must NOT be a lone punctuation character.
+    const LONE_PUNCT = /^[,;:.?!।॥]$/;
+    expect(LONE_PUNCT.test(lastBefore?.textContent?.trim() ?? "x")).toBe(false);
+    cleanUp(root, el);
+  });
+
+  it("inline mode unchanged: no punct reordering when not footnote-marker", async () => {
+    // No footnoteMap → inline mode
+    const node = renderCommentaryWithReferences(RAW, [REF], EXTENDED_CONTEXT);
+    const { root, el } = await renderNode(node);
+    // Should render an <a> tag (inline link), not <sup>.
+    const sup = el.querySelector("sup");
+    expect(sup).toBeNull();
+    const link = el.querySelector("a");
+    expect(link).not.toBeNull();
+    cleanUp(root, el);
+  });
+});
+
 // ---
 
 describe("footnoteKey()", () => {
