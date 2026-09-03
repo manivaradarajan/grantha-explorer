@@ -1,0 +1,31 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.4.0",
+  "edition_id": "mahanarayana-upanishad",
+  "grantha_id": "mahanarayana-upanishad",
+  "structure_levels": [
+    {
+      "key": "Anuvaka",
+      "scriptNames": {
+        "devanagari": "अनुवाकः",
+        "roman": "anuvāka"
+      },
+      "children": [
+        {
+          "key": "Mantra",
+          "scriptNames": {
+            "devanagari": "मन्त्रः",
+            "roman": "mantra"
+          }
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1"
+    }
+  ],
+  "edition_kind": "mula-only"
+}

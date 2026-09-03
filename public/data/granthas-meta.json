@@ -770,5 +770,29 @@
         "वा.रा."
       ]
     }
+  },
+  "yajnavalkya-smriti": {
+    "title": {
+      "devanagari": "याज्ञवल्क्यस्मृतिः",
+      "iast": "Yājñavalkya Smṛti"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "या.स्मृ.",
+        "याज्ञवल्क्य"
+      ]
+    }
+  },
+  "brihadaranyaka-madhyandina": {
+    "title": {
+      "devanagari": "बृहदारण्यकोपनिषत्",
+      "iast": "Brihadaranyaka Upanishad (Mādhyandina)"
+    },
+    "abbreviations": {
+      "devanagari": [
+        "बृ.उ.मा.",
+        "बृ.उ.मा.पा."
+      ]
+    }
   }
 }

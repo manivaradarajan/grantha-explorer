@@ -1,0 +1,73 @@
+{
+  "kind": "edition-sub-envelope",
+  "schema_version": "1.4.0",
+  "edition_id": "manu-smriti",
+  "grantha_id": "manu-smriti",
+  "structure_levels": [
+    {
+      "key": "Adhyaya",
+      "scriptNames": {
+        "devanagari": "अध्यायः"
+      },
+      "children": [
+        {
+          "key": "Verse",
+          "scriptNames": {
+            "devanagari": "श्लोकः"
+          }
+        }
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "file": "part1.json",
+      "first_ref": "1.1"
+    },
+    {
+      "file": "part2.json",
+      "first_ref": "2.1"
+    },
+    {
+      "file": "part3.json",
+      "first_ref": "3.1"
+    },
+    {
+      "file": "part4.json",
+      "first_ref": "4.1"
+    },
+    {
+      "file": "part5.json",
+      "first_ref": "5.1"
+    },
+    {
+      "file": "part6.json",
+      "first_ref": "6.1"
+    },
+    {
+      "file": "part7.json",
+      "first_ref": "7.1"
+    },
+    {
+      "file": "part8.json",
+      "first_ref": "8.1"
+    },
+    {
+      "file": "part9.json",
+      "first_ref": "9.1"
+    },
+    {
+      "file": "part10.json",
+      "first_ref": "10.1"
+    },
+    {
+      "file": "part11.json",
+      "first_ref": "11.1"
+    },
+    {
+      "file": "part12.json",
+      "first_ref": "12.1"
+    }
+  ],
+  "edition_kind": "mula-only"
+}
