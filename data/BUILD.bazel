@@ -27,7 +27,10 @@ py_binary(
         "//scripts:grantha_data_bootstrap.py",
     ],
     main = "//scripts:materialize_library.py",
-    data = [":grantha_data_sources"],
+    data = [
+        ":grantha_data_sources",
+        "//:sidecars",
+    ],
     deps = ["@grantha_data//tools/lib/grantha_data:grantha_data"],
 )
 
@@ -47,6 +50,7 @@ py_test(
     data = [
         ":grantha_data_sources",
         "//:library_data",
+        "//:sidecars",
     ],
     deps = ["@grantha_data//tools/lib/grantha_data:grantha_data"],
 )

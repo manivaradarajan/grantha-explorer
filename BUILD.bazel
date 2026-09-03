@@ -21,6 +21,16 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+# Committed quote sidecars (public/data/sidecars/<grantha_id>/...). The
+# converter resolves them from the explorer root, which under `bazel test` /
+# `bazel run` is the runfiles tree — they must be runfiles of the data
+# pipeline targets.
+filegroup(
+    name = "sidecars",
+    srcs = glob(["public/data/sidecars/**"]),
+    visibility = ["//visibility:public"],
+)
+
 # JS/TS sources that the validators import (resolved via tsx relative imports).
 # tests/ is its own Bazel package, so test sources are NOT globbed here.
 filegroup(
