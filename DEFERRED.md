@@ -237,6 +237,28 @@ was 2218) and lazy-loads sargas on scroll; gita behavior unchanged.
 
 ---
 
+## 15. Footnote presentation for mula + bhashya + tika (deferred)
+
+Footnote mode's per-passage block in the flow reader handles the mula-only
+(`!cp`) and mula+bhashya (`cp`) cases, but the three-tier mula+bhashya+tika
+layout has two open presentation questions, deferred:
+
+- **Collapsed-ṭīkā phantom entries:** `FlowReader.tsx` builds the per-block
+  `allRefs` by flatMapping every subcommentary's references regardless of
+  whether its toggle is open (`activeSubIds`), so a collapsed ṭīkā still
+  contributes numbered entries to the footnote block with no visible `[n]`
+  marker above. Fix: filter `allRefs` by the open subcommentary ids.
+- **Presentation review:** decide how the block should present with multiple
+  tiers active — placement/grouping (one block below all three tiers vs. per
+  tier), and whether the footnote `[n]` numbering should interleave mūla,
+  bhashya, and tika or restart per tier.
+
+The mula+bhashya single-tier case already aligns with the bhashya text and is
+unaffected by the mula-only alignment change (the footnote block stays in the
+`cp` branch, full-width below the commentary).
+
+---
+
 ## 14. `loadGrantha` eager-grouping — RESOLVED
 
 **Status:** ✅ **Resolved.** The section-scoped part-loading refactor replaced

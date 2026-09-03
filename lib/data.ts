@@ -65,13 +65,16 @@ export const MULA_PRESENTATION: Record<
   // Verse kinds: the classic verse column — narrower, centered, left-ruled,
   // larger type (flow-verse). Keeps commentary running wider than the mula.
   verse: {
-    wrapper: "mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2",
+    wrapper:
+      "mb-5 max-w-2xl mx-auto border-l-2 border-gray-400 pl-6 py-2 flow-mula-verse-wrap",
     text: "verse-text font-serif flow-verse leading-8 text-gray-900 whitespace-pre-line",
   },
   // Prose kinds (Para/Gadya): undecorated, commentary-like reading — no bar,
   // no centering, standard font (flow-commentary). No appended verse number.
+  // The `flow-mula-*-wrap` markers let the CSS align a mula-only footnote
+  // block with the text's left margin (inside the same wrapper).
   prose: {
-    wrapper: "mb-5",
+    wrapper: "mb-5 flow-mula-prose-wrap",
     text: "verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line",
   },
 };

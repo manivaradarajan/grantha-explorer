@@ -184,6 +184,33 @@ const REF_B = {
   locator: "1.2",
 };
 
+/** Builds a MULA-ONLY grantha (no commentaries) whose main passage carries the
+ *  given references, for testing the `!cp` footnote placement. */
+const makeMulaOnlyGrantha = (
+  kind: "Para" | "Shloka",
+  refs: Array<{
+    start: number;
+    end: number;
+    display_text: string;
+    grantha_id: string;
+    locator: string;
+  }>,
+): Grantha => {
+  const withRefs = makeGranthaWithRefs(refs);
+  return {
+    ...withRefs,
+    commentaries: [],
+    passages: [
+      {
+        ...withRefs.passages[0],
+        ref: "1",
+        kind,
+        references: refs,
+      } as unknown as Grantha["passages"][number],
+    ],
+  };
+};
+
 describe("FlowReader footnote mode", () => {
   it("with footnoteModeEnabled=false: no FootnoteBlock rendered (regression guard)", async () => {
     // Explicitly disable footnote mode so the provider initialises with false.
@@ -245,6 +272,49 @@ describe("FlowReader footnote mode", () => {
     // Only one <li> entry should be rendered.
     const items = el.querySelectorAll('[data-verse-ref="1"] li');
     expect(items.length).toBe(1);
+    cleanUp(root, el);
+  });
+
+  it("mula-only prose (Para): footnote block is a child of the prose mula wrapper, after the para row", async () => {
+    localStorage.setItem("grantha-footnote-mode", "true");
+    const grantha = makeMulaOnlyGrantha("Para", [REF_A]);
+    const { root, el } = await renderInto(
+      <FootnoteModeProvider>
+        <FlowReader {...propsFor(grantha)} />
+      </FootnoteModeProvider>,
+    );
+    localStorage.removeItem("grantha-footnote-mode");
+    const wrap = el.querySelector('[data-verse-ref="1"] .flow-mula-prose-wrap');
+    expect(wrap).not.toBeNull();
+    // The para row and the footnote block are siblings inside the wrapper, so
+    // the CSS can indent the footnotes to the mula text's left margin.
+    const row = wrap!.querySelector(".flow-para-row");
+    expect(row).not.toBeNull();
+    const fb = wrap!.querySelector(".footnote-block");
+    expect(fb).not.toBeNull();
+    expect(fb!.parentElement).toBe(wrap);
+    // No paragraph rail or number gutter is repeated beside the footnotes.
+    expect(fb!.querySelector(".flow-para-number")).toBeNull();
+    cleanUp(root, el);
+  });
+
+  it("mula-only verse (Shloka): footnote block is a child of the verse mula wrapper, next to the verse text", async () => {
+    localStorage.setItem("grantha-footnote-mode", "true");
+    const grantha = makeMulaOnlyGrantha("Shloka", [REF_A]);
+    const { root, el } = await renderInto(
+      <FootnoteModeProvider>
+        <FlowReader {...propsFor(grantha)} />
+      </FootnoteModeProvider>,
+    );
+    localStorage.removeItem("grantha-footnote-mode");
+    const wrap = el.querySelector('[data-verse-ref="1"] .flow-mula-verse-wrap');
+    expect(wrap).not.toBeNull();
+    // Verse text and footnotes share the wrapper, so its pl-6 aligns their
+    // left edges with no extra margin rule needed.
+    expect(wrap!.querySelector(".verse-text")).not.toBeNull();
+    const fb = wrap!.querySelector(".footnote-block");
+    expect(fb).not.toBeNull();
+    expect(fb!.parentElement).toBe(wrap);
     cleanUp(root, el);
   });
 });
