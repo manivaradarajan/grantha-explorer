@@ -404,14 +404,18 @@
    cites. MUST be layout-neutral (no padding/margin/border affecting the box):
    the mark is inserted into the passage being read, and any layout change
    reflows the reading text, shifting the hovered reference link out from under
-   the cursor and closing the hover. Background/radius/box-decoration-break are
-   paint-only. */
+   the cursor and closing the hover — which drops the mark, reflows back, and
+   re-hovers in an infinite flicker (footnote-mode §-81 repro).
+   NOTE: box-decoration-break: clone is NOT used here. Despite being commonly
+   described as paint-only, on an inline box spanning lines it changes how the
+   text after it wraps when the reading text relies on word-break: break-word
+   for unbroken Devanagari runs (measured: the hovered footnote marker shifted
+   36px left the instant the mark appeared). Default slice keeps wrapping
+   identical; the background still paints across every line fragment. */
  mark.citation-source-mark {
    background-color: rgba(61, 90, 128, 0.16);
    color: inherit;
    border-radius: 3px;
-   -webkit-box-decoration-break: clone;
-   box-decoration-break: clone;
  }
 
 /* A below-floor (low_quality) build-time quote renders with a dimmer mark so
