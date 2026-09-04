@@ -26,10 +26,32 @@
     {
       "passage_ref": "1",
       "passage_type": "main",
-      "ref_start": 809,
-      "ref_end": 821,
-      "quote_start": 744,
-      "quote_end": 807,
+      "ref_start": 656,
+      "ref_end": 674,
+      "quote_start": 550,
+      "quote_end": 654,
+      "quote_text": "य आत्मनि तिष्ठन्नात्मनोऽन्तरो यमात्मा न वेद यस्यात्मा शरीरं य आत्मानमन्तरो यमयति स त आत्मान्तर्याम्यमृतः",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "1",
+      "passage_type": "main",
+      "ref_start": 732,
+      "ref_end": 743,
+      "quote_start": 677,
+      "quote_end": 730,
+      "quote_text": "एष सर्वभूतान्तरात्माऽपहतपाप्मा दिव्यो देव एको नारायणः",
+      "status": "matched",
+      "quality": 0.058426966292134834
+    },
+    {
+      "passage_ref": "1",
+      "passage_type": "main",
+      "ref_start": 811,
+      "ref_end": 823,
+      "quote_start": 746,
+      "quote_end": 809,
       "quote_text": "तमेतं वेदानुवचनेन ब्राह्मणा विविदिषन्ति यज्ञेन दानेन तपसानाशकेन",
       "status": "matched",
       "quality": 0.07645631067961164
@@ -37,10 +59,10 @@
     {
       "passage_ref": "1",
       "passage_type": "main",
-      "ref_start": 847,
-      "ref_end": 858,
-      "quote_start": 824,
-      "quote_end": 845,
+      "ref_start": 849,
+      "ref_end": 860,
+      "quote_start": 826,
+      "quote_end": 847,
       "quote_text": "ब्रह्मविदाप्नोति परम्",
       "status": "matched",
       "quality": 0.2127659574468085
@@ -167,6 +189,17 @@
       "quality": 0.3617021276595745
     },
     {
+      "passage_ref": "106",
+      "passage_type": "main",
+      "ref_start": 574,
+      "ref_end": 586,
+      "quote_start": 552,
+      "quote_end": 572,
+      "quote_text": "तदक्षरे परमे व्योमन्",
+      "status": "matched",
+      "quality": 0.1834862385321101
+    },
+    {
       "passage_ref": "108",
       "passage_type": "main",
       "ref_start": 134,
@@ -187,6 +220,17 @@
       "quote_text": "जगदेतन्महाश्चर्यं रूपं यस्य महात्मनः ।\nतेनाश्चर्यवरेणाहं भवता कृष्ण संगतः",
       "status": "matched",
       "quality": 1.0
+    },
+    {
+      "passage_ref": "11",
+      "passage_type": "main",
+      "ref_start": 90,
+      "ref_end": 108,
+      "quote_start": 72,
+      "quote_end": 88,
+      "quote_text": "यस्यात्मा शरीरम्",
+      "status": "matched",
+      "quality": 0.14150943396226415
     },
     {
       "passage_ref": "110",
@@ -279,6 +323,17 @@
     {
       "passage_ref": "112",
       "passage_type": "main",
+      "ref_start": 176,
+      "ref_end": 188,
+      "quote_start": 135,
+      "quote_end": 174,
+      "quote_text": "सर्वे निमेषा जज्ञिरे विद्युतः पुरुषादधि",
+      "status": "matched",
+      "quality": 0.47560975609756095
+    },
+    {
+      "passage_ref": "112",
+      "passage_type": "main",
       "ref_start": 263,
       "ref_end": 274,
       "quote_start": 191,
@@ -334,6 +389,17 @@
     {
       "passage_ref": "114",
       "passage_type": "main",
+      "ref_start": 188,
+      "ref_end": 201,
+      "quote_start": 144,
+      "quote_end": 186,
+      "quote_text": "पतिं विश्वस्यात्मेश्वरं शाश्वतं शिवमच्युतं",
+      "status": "matched",
+      "quality": 0.5476190476190477
+    },
+    {
+      "passage_ref": "114",
+      "passage_type": "main",
       "ref_start": 255,
       "ref_end": 266,
       "quote_start": 204,
@@ -363,6 +429,17 @@
       "quote_text": "एष त आत्मान्तर्याम्यमृतः",
       "status": "matched",
       "quality": 0.20353982300884957
+    },
+    {
+      "passage_ref": "115",
+      "passage_type": "main",
+      "ref_start": 288,
+      "ref_end": 306,
+      "quote_start": 266,
+      "quote_end": 281,
+      "quote_text": "यस्यात्मा शरीरं",
+      "status": "matched",
+      "quality": 0.14150943396226415
     },
     {
       "passage_ref": "118",
@@ -532,6 +609,17 @@
     {
       "passage_ref": "127",
       "passage_type": "main",
+      "ref_start": 614,
+      "ref_end": 627,
+      "quote_start": 586,
+      "quote_end": 612,
+      "quote_text": "य एनं विदुरमृतास्ते भवन्ति",
+      "status": "matched",
+      "quality": 0.24509803921568626
+    },
+    {
+      "passage_ref": "127",
+      "passage_type": "main",
       "ref_start": 653,
       "ref_end": 663,
       "quote_start": 630,
@@ -664,6 +752,17 @@
     {
       "passage_ref": "13",
       "passage_type": "main",
+      "ref_start": 715,
+      "ref_end": 733,
+      "quote_start": 610,
+      "quote_end": 713,
+      "quote_text": "य आत्मनि तिष्ठन्नात्मनोऽन्तरो यमात्मा न वेद यस्यात्मा शरीरं य आत्मानमन्तरो यमयति स त आत्मान्तर्याम्यमृत",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "13",
+      "passage_type": "main",
       "ref_start": 769,
       "ref_end": 780,
       "quote_start": 751,
@@ -671,6 +770,17 @@
       "quote_text": "अनेन जीवेनात्मना",
       "status": "matched",
       "quality": 0.21176470588235294
+    },
+    {
+      "passage_ref": "131",
+      "passage_type": "main",
+      "ref_start": 175,
+      "ref_end": 188,
+      "quote_start": 75,
+      "quote_end": 171,
+      "quote_text": "या वेदबाह्याः स्मृतयो याश्च काश्च कुदृष्टयः ।\nसर्वस्ता निष्फलाः प्रेत्य तमोनिष्ठा हि ताः स्मृताः",
+      "status": "matched",
+      "quality": 1.0
     },
     {
       "passage_ref": "133",
@@ -838,6 +948,83 @@
       "quality": 0.6428571428571429
     },
     {
+      "passage_ref": "135",
+      "passage_type": "main",
+      "ref_start": 29,
+      "ref_end": 41,
+      "quote_start": 1,
+      "quote_end": 27,
+      "quote_text": "यमन्तः समुद्रे कवयो वयन्ति",
+      "status": "matched",
+      "quality": 0.23529411764705882
+    },
+    {
+      "passage_ref": "135",
+      "passage_type": "main",
+      "ref_start": 133,
+      "ref_end": 146,
+      "quote_start": 96,
+      "quote_end": 128,
+      "quote_text": "न तस्येशे कश्चन तस्य नाम महद्यशः",
+      "status": "matched",
+      "quality": 0.44594594594594594
+    },
+    {
+      "passage_ref": "135",
+      "passage_type": "main",
+      "ref_start": 253,
+      "ref_end": 266,
+      "quote_start": 148,
+      "quote_end": 251,
+      "quote_text": "न संदृशे तिष्ठति रूपमस्य न चक्षुषा पश्यति कश्चनैनम्, हृदा मनीषा मनसाभिकिप्तो य एवं विदुरमृतास्ते भवन्ति",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "135",
+      "passage_type": "main",
+      "ref_start": 321,
+      "ref_end": 334,
+      "quote_start": 304,
+      "quote_end": 319,
+      "quote_text": "न तस्येशे कश्चन",
+      "status": "matched",
+      "quality": 0.21621621621621623
+    },
+    {
+      "passage_ref": "135",
+      "passage_type": "main",
+      "ref_start": 421,
+      "ref_end": 434,
+      "quote_start": 384,
+      "quote_end": 419,
+      "quote_text": "अद्भ्यः सम्भूतो हिरण्यगर्भ इत्यष्टौ",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "136",
+      "passage_type": "main",
+      "ref_start": 54,
+      "ref_end": 67,
+      "quote_start": 35,
+      "quote_end": 52,
+      "quote_text": "सहस्रशीर्षं देवम्",
+      "status": "matched",
+      "quality": 0.21052631578947367
+    },
+    {
+      "passage_ref": "136",
+      "passage_type": "main",
+      "ref_start": 128,
+      "ref_end": 142,
+      "quote_start": 79,
+      "quote_end": 126,
+      "quote_text": "स ब्रह्मा स शिवः सेन्द्रः सोऽक्षरः परमः स्वराट्",
+      "status": "matched",
+      "quality": 0.5454545454545454
+    },
+    {
       "passage_ref": "136",
       "passage_type": "main",
       "ref_start": 608,
@@ -847,6 +1034,28 @@
       "quote_text": "ब्रह्मविदाप्नोति परम्",
       "status": "matched",
       "quality": 0.2127659574468085
+    },
+    {
+      "passage_ref": "137",
+      "passage_type": "main",
+      "ref_start": 207,
+      "ref_end": 220,
+      "quote_start": 192,
+      "quote_end": 205,
+      "quote_text": "पतिं विश्वस्य",
+      "status": "matched",
+      "quality": 0.16666666666666666
+    },
+    {
+      "passage_ref": "137",
+      "passage_type": "main",
+      "ref_start": 243,
+      "ref_end": 256,
+      "quote_start": 226,
+      "quote_end": 241,
+      "quote_text": "न तस्येशे कश्चन",
+      "status": "matched",
+      "quality": 0.21621621621621623
     },
     {
       "passage_ref": "138",
@@ -948,6 +1157,28 @@
       "quality": 0.5411764705882353
     },
     {
+      "passage_ref": "140",
+      "passage_type": "main",
+      "ref_start": 23,
+      "ref_end": 36,
+      "quote_start": 6,
+      "quote_end": 21,
+      "quote_text": "न तस्येशे कश्चन",
+      "status": "matched",
+      "quality": 0.21621621621621623
+    },
+    {
+      "passage_ref": "140",
+      "passage_type": "main",
+      "ref_start": 88,
+      "ref_end": 101,
+      "quote_start": 76,
+      "quote_end": 86,
+      "quote_text": "अणोरणीयान्",
+      "status": "matched",
+      "quality": 0.09900990099009901
+    },
+    {
       "passage_ref": "142",
       "passage_type": "main",
       "ref_start": 56,
@@ -979,6 +1210,17 @@
       "quote_text": "अक्षरणामकारोऽस्मि",
       "status": "matched",
       "quality": 0.23076923076923078
+    },
+    {
+      "passage_ref": "143",
+      "passage_type": "main",
+      "ref_start": 26,
+      "ref_end": 39,
+      "quote_start": 7,
+      "quote_end": 24,
+      "quote_text": "सहस्रशीर्षं देवम्",
+      "status": "matched",
+      "quality": 0.21052631578947367
     },
     {
       "passage_ref": "143",
@@ -1137,6 +1379,28 @@
     {
       "passage_ref": "154",
       "passage_type": "main",
+      "ref_start": 414,
+      "ref_end": 426,
+      "quote_start": 373,
+      "quote_end": 412,
+      "quote_text": "सर्वे निमेषा जज्ञिरे विद्युतः पुरुषादधि",
+      "status": "matched",
+      "quality": 0.47560975609756095
+    },
+    {
+      "passage_ref": "154",
+      "passage_type": "main",
+      "ref_start": 463,
+      "ref_end": 476,
+      "quote_start": 429,
+      "quote_end": 461,
+      "quote_text": "न तस्येशे कश्चन तस्य नाम महद्यशः",
+      "status": "matched",
+      "quality": 0.44594594594594594
+    },
+    {
+      "passage_ref": "154",
+      "passage_type": "main",
       "ref_start": 499,
       "ref_end": 511,
       "quote_start": 479,
@@ -1144,6 +1408,17 @@
       "quote_text": "नेह नानास्ति किंचन",
       "status": "matched",
       "quality": 0.225
+    },
+    {
+      "passage_ref": "154",
+      "passage_type": "main",
+      "ref_start": 540,
+      "ref_end": 552,
+      "quote_start": 0,
+      "quote_end": 0,
+      "quote_text": "",
+      "status": "no_match",
+      "quality": 1.0
     },
     {
       "passage_ref": "156",
@@ -1478,6 +1753,39 @@
     {
       "passage_ref": "165",
       "passage_type": "main",
+      "ref_start": 40,
+      "ref_end": 51,
+      "quote_start": 19,
+      "quote_end": 38,
+      "quote_text": "प्रादुरासीत्तमोनुदः",
+      "status": "matched",
+      "quality": 0.24390243902439024
+    },
+    {
+      "passage_ref": "165",
+      "passage_type": "main",
+      "ref_start": 118,
+      "ref_end": 129,
+      "quote_start": 54,
+      "quote_end": 114,
+      "quote_text": "सिसृक्षुर्विविधाः प्रजाः ।\nअप एव ससर्जादौ तासु वीर्यमपासृजत्",
+      "status": "matched",
+      "quality": 0.7058823529411765
+    },
+    {
+      "passage_ref": "165",
+      "passage_type": "main",
+      "ref_start": 159,
+      "ref_end": 170,
+      "quote_start": 132,
+      "quote_end": 157,
+      "quote_text": "तस्मिञ्जज्ञे स्वयं ब्रह्म",
+      "status": "matched",
+      "quality": 0.33766233766233766
+    },
+    {
+      "passage_ref": "165",
+      "passage_type": "main",
       "ref_start": 319,
       "ref_end": 331,
       "quote_start": 277,
@@ -1485,6 +1793,17 @@
       "quote_text": "अयं तस्य ताः पूर्वं तेन नारायणः स्मृतः",
       "status": "matched",
       "quality": 0.5066666666666667
+    },
+    {
+      "passage_ref": "17",
+      "passage_type": "main",
+      "ref_start": 307,
+      "ref_end": 320,
+      "quote_start": 221,
+      "quote_end": 303,
+      "quote_text": "सर्वेषां तु नामानि कर्माणि च पृथक्पृथक् ।\nवेदशब्देभ्य एवादौ पृथक्संस्थाश्च निर्ममे",
+      "status": "matched",
+      "quality": 1.0
     },
     {
       "passage_ref": "17",
@@ -1529,6 +1848,28 @@
       "quote_text": "सर्वस्य वशी सर्वस्येशानः",
       "status": "matched",
       "quality": 0.02912621359223301
+    },
+    {
+      "passage_ref": "187",
+      "passage_type": "main",
+      "ref_start": 75,
+      "ref_end": 88,
+      "quote_start": 0,
+      "quote_end": 0,
+      "quote_text": "",
+      "status": "no_match",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "187",
+      "passage_type": "main",
+      "ref_start": 530,
+      "ref_end": 542,
+      "quote_start": 485,
+      "quote_end": 528,
+      "quote_text": "तदेवाग्निस्तद्वायुस्तत्सूर्यस्तदु चन्द्रमाः",
+      "status": "matched",
+      "quality": 0.4942528735632184
     },
     {
       "passage_ref": "188",
@@ -1751,6 +2092,17 @@
       "quality": 0.3177083333333333
     },
     {
+      "passage_ref": "199",
+      "passage_type": "main",
+      "ref_start": 321,
+      "ref_end": 335,
+      "quote_start": 0,
+      "quote_end": 0,
+      "quote_text": "",
+      "status": "no_match",
+      "quality": 1.0
+    },
+    {
       "passage_ref": "20",
       "passage_type": "main",
       "ref_start": 221,
@@ -1795,6 +2147,17 @@
       "quality": 0.08083832335329341
     },
     {
+      "passage_ref": "200",
+      "passage_type": "main",
+      "ref_start": 39,
+      "ref_end": 53,
+      "quote_start": 0,
+      "quote_end": 37,
+      "quote_text": "नीलतोयदमध्यस्था विद्युल्लेखेव भास्वरा",
+      "status": "matched",
+      "quality": 0.5
+    },
+    {
       "passage_ref": "201",
       "passage_type": "main",
       "ref_start": 127,
@@ -1819,6 +2182,17 @@
     {
       "passage_ref": "202",
       "passage_type": "main",
+      "ref_start": 241,
+      "ref_end": 253,
+      "quote_start": 191,
+      "quote_end": 239,
+      "quote_text": "यदेकमव्यक्तमनन्तरूपं विश्वं पुराणं तमसः परस्तात्",
+      "status": "matched",
+      "quality": 0.4895833333333333
+    },
+    {
+      "passage_ref": "202",
+      "passage_type": "main",
       "ref_start": 292,
       "ref_end": 303,
       "quote_start": 256,
@@ -1826,6 +2200,17 @@
       "quote_text": "यो वेद निहितं गुहायां परमे व्योमन्",
       "status": "matched",
       "quality": 0.3617021276595745
+    },
+    {
+      "passage_ref": "202",
+      "passage_type": "main",
+      "ref_start": 401,
+      "ref_end": 413,
+      "quote_start": 354,
+      "quote_end": 399,
+      "quote_text": "तदेव भूतं तदु भव्यमा इदं तदक्षरे परमे व्योमन्",
+      "status": "matched",
+      "quality": 0.41284403669724773
     },
     {
       "passage_ref": "207",
@@ -1837,6 +2222,17 @@
       "quote_text": "समस्तहेयरहितं विष्ण्वाख्यं परं पदम्",
       "status": "matched",
       "quality": 0.5072463768115942
+    },
+    {
+      "passage_ref": "207",
+      "passage_type": "main",
+      "ref_start": 236,
+      "ref_end": 248,
+      "quote_start": 214,
+      "quote_end": 234,
+      "quote_text": "तदक्षरे परमे व्योमन्",
+      "status": "matched",
+      "quality": 0.1834862385321101
     },
     {
       "passage_ref": "207",
@@ -1936,6 +2332,17 @@
       "quote_text": "सत्यं ज्ञानमनन्तं ब्रह्म, यो वेद निहितं गुहायां परमे व्योमन्",
       "status": "matched",
       "quality": 0.6170212765957447
+    },
+    {
+      "passage_ref": "211",
+      "passage_type": "main",
+      "ref_start": 98,
+      "ref_end": 110,
+      "quote_start": 76,
+      "quote_end": 96,
+      "quote_text": "तदक्षरे परमे व्योमन्",
+      "status": "matched",
+      "quality": 0.1834862385321101
     },
     {
       "passage_ref": "213",
@@ -2147,6 +2554,17 @@
       "quality": 0.04119850187265917
     },
     {
+      "passage_ref": "222",
+      "passage_type": "main",
+      "ref_start": 279,
+      "ref_end": 292,
+      "quote_start": 237,
+      "quote_end": 277,
+      "quote_text": "विश्वतः परमं नित्यं विश्वं नारायणं हरिम्",
+      "status": "matched",
+      "quality": 0.5324675324675324
+    },
+    {
       "passage_ref": "227",
       "passage_type": "main",
       "ref_start": 44,
@@ -2211,6 +2629,17 @@
       "quote_text": "ऐतदात्म्यमिदं सर्वं, तत्त्वमसि श्वेतकेतो",
       "status": "matched",
       "quality": 0.514018691588785
+    },
+    {
+      "passage_ref": "236",
+      "passage_type": "main",
+      "ref_start": 182,
+      "ref_end": 198,
+      "quote_start": 138,
+      "quote_end": 178,
+      "quote_text": "इन्द्रमेके परे प्राणमपरे ब्रह्म शाश्वतम्",
+      "status": "matched",
+      "quality": 0.49411764705882355
     },
     {
       "passage_ref": "236",
@@ -2301,6 +2730,28 @@
       "quality": 0.1990521327014218
     },
     {
+      "passage_ref": "245",
+      "passage_type": "main",
+      "ref_start": 218,
+      "ref_end": 233,
+      "quote_start": 178,
+      "quote_end": 214,
+      "quote_text": "सर्वं परवशं दुःखं सर्वमात्मवशं सुखम्",
+      "status": "matched",
+      "quality": 0.4931506849315068
+    },
+    {
+      "passage_ref": "245",
+      "passage_type": "main",
+      "ref_start": 293,
+      "ref_end": 306,
+      "quote_start": 244,
+      "quote_end": 289,
+      "quote_text": "सेवा श्ववृत्तिराख्याता तस्मात्तां परिवर्जयेत्",
+      "status": "matched",
+      "quality": 0.5287356321839081
+    },
+    {
       "passage_ref": "247",
       "passage_type": "main",
       "ref_start": 144,
@@ -2310,6 +2761,17 @@
       "quote_text": "आत्मा ज्ञानमयोऽमलः",
       "status": "matched",
       "quality": 0.22077922077922077
+    },
+    {
+      "passage_ref": "247",
+      "passage_type": "main",
+      "ref_start": 213,
+      "ref_end": 226,
+      "quote_start": 198,
+      "quote_end": 211,
+      "quote_text": "पतिं विश्वस्य",
+      "status": "matched",
+      "quality": 0.16666666666666666
     },
     {
       "passage_ref": "248",
@@ -2741,6 +3203,28 @@
       "quality": 1.0
     },
     {
+      "passage_ref": "50",
+      "passage_type": "main",
+      "ref_start": 47,
+      "ref_end": 61,
+      "quote_start": 9,
+      "quote_end": 43,
+      "quote_text": "प्रशासितारं सर्वेषामणीयांसमणीयसाम्",
+      "status": "matched",
+      "quality": 0.34146341463414637
+    },
+    {
+      "passage_ref": "50",
+      "passage_type": "main",
+      "ref_start": 140,
+      "ref_end": 156,
+      "quote_start": 95,
+      "quote_end": 136,
+      "quote_text": "क्षेत्रस्येश्वरज्ञानाद्विशुद्धिः परमा मता",
+      "status": "matched",
+      "quality": 0.5057471264367817
+    },
+    {
       "passage_ref": "52",
       "passage_type": "main",
       "ref_start": 101,
@@ -2904,6 +3388,17 @@
       "quote_text": "स्तब्धोऽस्युत तमादेशमप्राक्ष्य",
       "status": "matched",
       "quality": 0.20270270270270271
+    },
+    {
+      "passage_ref": "8",
+      "passage_type": "main",
+      "ref_start": 524,
+      "ref_end": 538,
+      "quote_start": 502,
+      "quote_end": 522,
+      "quote_text": "प्रशासितारं सर्वेषां",
+      "status": "matched",
+      "quality": 0.24390243902439024
     },
     {
       "passage_ref": "81",
@@ -3150,6 +3645,17 @@
     {
       "passage_ref": "90",
       "passage_type": "main",
+      "ref_start": 162,
+      "ref_end": 175,
+      "quote_start": 44,
+      "quote_end": 158,
+      "quote_text": "अजामेकां लोहितशुक्लकृष्णां बह्नीं प्रजां जनयन्तीं सरूपाम् ।\nअजो ह्येको जुषमाणोऽनुशेते जहात्येनां भुक्तभोगामजोऽन्यः",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "90",
+      "passage_type": "main",
       "ref_start": 274,
       "ref_end": 285,
       "quote_start": 213,
@@ -3289,6 +3795,28 @@
       "quote_text": "वेदैश्च सर्वैरहमेव वेद्यः",
       "status": "matched",
       "quality": 0.2403846153846154
+    },
+    {
+      "passage_ref": "98",
+      "passage_type": "main",
+      "ref_start": 103,
+      "ref_end": 119,
+      "quote_start": 18,
+      "quote_end": 99,
+      "quote_text": "प्रशासितारं सर्वेषामणीयांसमणीयसाम्\n\nरुक्माभं स्वप्नधीगम्यं विद्यात्तं पुरुषं परम्",
+      "status": "matched",
+      "quality": 1.0
+    },
+    {
+      "passage_ref": "98",
+      "passage_type": "main",
+      "ref_start": 477,
+      "ref_end": 493,
+      "quote_start": 432,
+      "quote_end": 473,
+      "quote_text": "इन्द्रमेके परे प्रमाणमपरे ब्रह्म शाश्वतम्",
+      "status": "matched",
+      "quality": 0.49411764705882355
     }
   ]
 }
