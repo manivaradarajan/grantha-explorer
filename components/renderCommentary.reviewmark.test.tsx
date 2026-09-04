@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeAll } from "vitest";
-import { act } from "react-dom/test-utils";
+
 import { createRoot } from "react-dom/client";
-import React from "react";
+import React, { act } from "react";
 import fs from "fs";
 import { renderMulaWithReferences, ReviewMarkSpec } from "./renderCommentary";
 import { CitationPanelHost } from "./CitationPanel";

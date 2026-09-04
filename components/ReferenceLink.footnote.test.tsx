@@ -5,9 +5,9 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach, beforeAll } from "vitest";
-import { act } from "react-dom/test-utils";
+
 import { createRoot, Root } from "react-dom/client";
-import React from "react";
+import React, { act } from "react";
 import { Reference } from "@/lib/data";
 import ReferenceLink from "./ReferenceLink";
 import { CitationPanelHost } from "./CitationPanel";

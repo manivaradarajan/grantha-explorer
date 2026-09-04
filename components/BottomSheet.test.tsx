@@ -5,9 +5,10 @@
  * behavior is untouched.
  */
 
+import { act } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createRoot, Root } from "react-dom/client";
-import { act } from "react-dom/test-utils";
+
 import BottomSheet from "./BottomSheet";
 
 let root: Root;

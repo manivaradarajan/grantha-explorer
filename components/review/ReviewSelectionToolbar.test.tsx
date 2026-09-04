@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from "vitest";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import React, { act } from "react";
+
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReviewSelectionToolbar, detectNearestReference } from "./ReviewSelectionToolbar";

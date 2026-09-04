@@ -8,8 +8,9 @@
  * the pinned popover (keyboard path).
  */
 
+import { act } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { act } from "react-dom/test-utils";
+
 import { createRoot, Root } from "react-dom/client";
 import fs from "fs";
 import path from "path";

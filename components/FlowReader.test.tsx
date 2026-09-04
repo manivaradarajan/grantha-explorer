@@ -12,9 +12,9 @@
  */
 
 import { describe, it, expect, afterEach, beforeAll } from "vitest";
-import { act } from "react-dom/test-utils";
+
 import { createRoot, Root } from "react-dom/client";
-import React from "react";
+import React, { act } from "react";
 import { Grantha, GranthaMetadata, PrefatoryMaterial } from "@/lib/data";
 import FlowReader from "./FlowReader";
 

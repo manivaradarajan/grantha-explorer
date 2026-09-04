@@ -3,9 +3,9 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { renderMulaWithReferences } from "@/components/renderCommentary";
 import { CitationPanelHost } from "@/components/CitationPanel";
 import { buildSourceWindow, findQuotedSpan } from "@/lib/quotedMatch";
-import { act } from "react-dom/test-utils";
+
 import { createRoot } from "react-dom/client";
-import React from "react";
+import React, { act } from "react";
 import fs from "fs";
 
 // The cited bhagavad-gita 10.10 passage (from part11.json), used to derive the
