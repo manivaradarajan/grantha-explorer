@@ -63,7 +63,9 @@ jobs:
             echo "ERROR: grantha-data.rev does not contain a 40-hex SHA: '$REV'"
             exit 1
           fi
-          git -C ../grantha-data fetch --depth 1 origin "$REV"
+          git -C ../grantha-data fetch --depth 1 origin "$REV" \
+            || { echo "FATAL: could not fetch grantha-data rev $REV from origin." \
+                      "Verify the SHA is reachable and update grantha-data.rev if needed."; exit 1; }
           git -C ../grantha-data checkout --detach "$REV"
           echo "Pinned grantha-data at $REV"
 

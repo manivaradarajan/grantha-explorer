@@ -60,11 +60,14 @@ export function locateSnippet(
   };
   let normNeedle = normSnippet;
   idx = normRaw.indexOf(normNeedle);
-  while (idx < 0) {
+  // withoutEdgeDandas is idempotent (strips all edge dandas in one pass), so
+  // at most one retry is possible — use `if` rather than `while`.
+  if (idx < 0) {
     const trimmed = withoutEdgeDandas(normNeedle);
-    if (trimmed === normNeedle) break; // no edge danda left to drop
-    normNeedle = trimmed;
-    idx = normRaw.indexOf(normNeedle);
+    if (trimmed !== normNeedle) {
+      normNeedle = trimmed;
+      idx = normRaw.indexOf(normNeedle);
+    }
   }
   if (idx >= 0) {
     // Map back: find first and last CONTENT word (skip isolated danda tokens
@@ -161,6 +164,10 @@ export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
   for (const c of comments) {
     if (c.status === "deleted") continue;
     if (detached.includes(c.id)) continue;
+    // "done" is a legacy alias emitted by older clients; normalize here at the
+    // resolution boundary so all callers work with the canonical status set
+    // (Exclude<ReviewCommentStatus, "done">).  Raw session JSON may still
+    // contain "done" — the ReviewCommentStatus type tracks both.
     const status = c.status === "done" ? "accepted" : c.status;
     if (opts.statuses && !opts.statuses.has(status)) continue;
     const raw = passageTexts[c.passage_ref];

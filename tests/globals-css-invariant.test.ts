@@ -38,20 +38,42 @@ interface CssRule {
   declarations: string;
 }
 
-/** Extract every rule whose selector mentions `needle` (crude but sufficient
- *  for this hand-maintained file: comments and values contain no braces). */
-function rulesMentioning(needle: string): CssRule[] {
-  const css = fs.readFileSync(GLOBALS, "utf8");
+/** Parse `css` into flat (selector, declarations) pairs, recursing into block
+ *  rules such as `@media` so that nested simple rules are always surfaced.
+ *  Assumes no braces appear inside string values or comments (true for the
+ *  hand-maintained `globals.css`). */
+function extractRules(css: string): CssRule[] {
   const rules: CssRule[] = [];
-  const re = /([^{}]*)[^{}]*\{([^}]*)\}/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(css)) !== null) {
-    const selector = m[1].trim();
-    if (selector.includes(needle)) {
-      rules.push({ selector, declarations: m[2] });
+  let i = 0;
+  while (i < css.length) {
+    const open = css.indexOf("{", i);
+    if (open === -1) break;
+    const selector = css.slice(i, open).trim();
+    // Find the matching close brace using depth tracking.
+    let depth = 1;
+    let j = open + 1;
+    while (j < css.length && depth > 0) {
+      if (css[j] === "{") depth++;
+      else if (css[j] === "}") depth--;
+      j++;
     }
+    const body = css.slice(open + 1, j - 1);
+    if (body.includes("{")) {
+      // Block rule (@media, @supports, etc.) — recurse into its body so inner
+      // simple rules are surfaced with their own selectors.
+      rules.push(...extractRules(body));
+    } else {
+      rules.push({ selector, declarations: body });
+    }
+    i = j;
   }
   return rules;
+}
+
+/** Extract every rule whose selector mentions `needle`. */
+function rulesMentioning(needle: string): CssRule[] {
+  const css = fs.readFileSync(GLOBALS, "utf8");
+  return extractRules(css).filter((r) => r.selector.includes(needle));
 }
 
 describe("reading-surface source highlight stays paint-only", () => {

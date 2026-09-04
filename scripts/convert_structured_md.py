@@ -1437,7 +1437,14 @@ def _tools_lib_dir() -> Path:
     # grantha_data is the package INSIDE <grantha-data>/tools/lib (its
     # __init__.py sits at tools/lib/grantha_data/__init__.py), so the tools/lib
     # directory is the package dir's PARENT — two `.parent`s up from __file__.
-    return Path(grantha_data.__file__).resolve().parent.parent
+    tools_lib = Path(grantha_data.__file__).resolve().parent.parent
+    if not (tools_lib / "grantha_data").is_dir():
+        raise RuntimeError(
+            f"Derived tools/lib at {tools_lib!r} does not contain a "
+            f"grantha_data/ sub-package. The package layout may have changed. "
+            f"Set GRANTHA_DATA_TOOLS_LIB to override."
+        )
+    return tools_lib
 
 
 def _references_bimap() -> list[Any]:

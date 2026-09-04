@@ -372,7 +372,7 @@ describe("CitationPopover", () => {
     expect(mark!.textContent).toContain("अथातो ब्रह्मजिज्ञासा");
     const txt = excerpt.textContent ?? "";
     // The short opening unit is prepended as an anchor right before an ellipsis.
-    expect(txt.startsWith("तत्त्वमसि"));
+    expect(txt.startsWith("तत्त्वमसि")).toBe(true);
     expect(txt).toContain("…");
     // One whole unit of trailing context is kept…
     expect(txt).toContain("निर्गुणो गुणी");
