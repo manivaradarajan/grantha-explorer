@@ -10,7 +10,7 @@
  * Imported by `quotedMatch.ts`; depends only on `quotedMatchNormalize.ts`.
  */
 
-import { isTrimEdgeChar } from "./quotedMatchNormalize.ts";
+import { isTrimEdgeChar, isSvaraCodePoint } from "./quotedMatchNormalize.ts";
 
 // ---------------------------------------------------------------------------
 // Smith–Waterman scoring constants
@@ -36,7 +36,7 @@ const CLUSTER_CODEPOINTS = new Set([
 /** True when `codePoint` is a Devanagari combining mark that cannot start a
  *  grapheme (a rendered dotted circle would appear if it did). */
 export const isClusterCodePoint = (codePoint: number): boolean =>
-  CLUSTER_CODEPOINTS.has(codePoint);
+  CLUSTER_CODEPOINTS.has(codePoint) || isSvaraCodePoint(codePoint);
 
 /** Devanagari vowel signs drawn to the RIGHT of the base syllable. Their
  *  stroke can paint past the cluster's advance box, so a highlight ending on

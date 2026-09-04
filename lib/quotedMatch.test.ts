@@ -599,3 +599,71 @@ describe("findQuotedSpan — comma-elision union (para 236)", () => {
     expect(matched).toContain("स आत्मा");
   });
 });
+
+describe("buildMatchString — vedic svaras are dropped", () => {
+  it("ignores Devanagari stress-sign udatta/anudatta (U+0951/U+0952)", () => {
+    expect(buildMatchString("भ्राज॑सा").match).toBe("भ्राजसा");
+    // अ॒न्तः → अन्तः, and the  न् before unvoiced त is an anusvara (अंतः).
+    expect(buildMatchString("गर्भे॑ अ॒न्तः").match).toBe("गर्भे अंतः");
+    expect(buildMatchString("गर्भे॑ अ॒न्तः").match).toBe(
+      buildMatchString("गर्भे अन्तः").match,
+    );
+  });
+
+  it("ignores vedic-extensions combining tones (double svarita U+1CDA etc.)", () => {
+    // U+1CDA VEDIC TONE DOUBLE SVARITA sits above a vowel (kavayo॒).
+    expect(buildMatchString("कवयो᳚").match).toBe("कवयो");
+  });
+
+  it("keeps anusvara/visarga/virama, which are NOT svaras", () => {
+    // ज्योतीग्ंषि carries ् + ं (virama + anusvara) inside the cluster; these
+    // are phonological, not tonal, and must survive normalization.
+    const m = buildMatchString("ज्योतीग्ंषि");
+    expect(m.match).toContain("ं");
+    expect(m.match).toContain("ग्".slice(0, 1));
+  });
+});
+
+describe("findQuotedSpan — svara-insensitive matching (mahanarayana)", () => {
+  // Mahanarayana is a svara-bearing (sāma-vedic) text: the mūla stores udatta
+  // (॑ U+0951), anudatta (॒ U+0952) and double-svarita (᳚ U+1CDA) combining
+  // marks, but commentaries cite the plain (svara-less) form. The matcher must
+  // align a svara-less needle against the svara-bearing haystack and highlight
+  // the full cluster INCLUDING the svara.
+  const ref13 =
+    "येना॑वृतं खं च॒ दिवं॑ म॒हीं च॒\n" +
+    "येना॑दि॒त्यस्तप॑ति॒ तेज॑सा॒ भ्राज॑सा च ।\n" +
+    "यम॒न्तस्स॑मु॒द्रे क॒वय॑ो॒ वय॑न्ति॒\n" +
+    "यद॒क्षरे॑ पर॒मे प्र॒जाः ।";
+  const ref11 =
+    "अम्भ॑स्यपा॒रे भुव॑नस्य॒ मध्ये॒\n" +
+    "नाक॑स्य पृष्ठे म॑ह॒तो मही॑यान् ।\n" +
+    "शुक्रे॑ण॒ ज्योतीग्ं॑षि समनुप्रवि॑ष्टः॒\n" +
+    "प्र॒जाप॑तिश्चरिति॒ गर्भे॑ अ॒न्तः ।";
+
+  it("matches a short svara-less phrase inside a svara-bearing verse (1.3 भ्राजसा च)", () => {
+    const span = findQuotedSpan("भ्राजसा च", ref13);
+    expect(span).not.toBeNull();
+    const matched = ref13.slice(span!.start, span!.end);
+    expect(matched).toContain("भ्राज");
+    expect(matched).toContain("च");
+    // The highlight covers the full cluster including the udatta svara.
+    expect(matched).toContain("भ्राज॑सा");
+  });
+
+  it("matches a longer multi-pāda svara-less quote (1.3 यमन्तस्समुद्रे कवयो वयन्ति)", () => {
+    const span = findQuotedSpan("यमन्तस्समुद्रे कवयो वयन्ति", ref13);
+    expect(span).not.toBeNull();
+    const matched = ref13.slice(span!.start, span!.end);
+    expect(matched).toContain("यम॒न्तस्स॑मु॒द्रे");
+    expect(matched).toContain("वय॑न्ति॒");
+  });
+
+  it("matches a svara-less needle against 1.1 (गर्भे अन्तः)", () => {
+    const span = findQuotedSpan("गर्भे अन्तः", ref11);
+    expect(span).not.toBeNull();
+    const matched = ref11.slice(span!.start, span!.end);
+    expect(matched).toContain("गर्भे॑");
+    expect(matched).toContain("अ॒न्तः");
+  });
+});
