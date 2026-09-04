@@ -57,6 +57,26 @@ active worktree checkout (the editable install of a *different* checkout, e.g.
 `grantha_data.references`). Without it the converter raises
 `ModuleNotFoundError` on reference emission — it does **not** silently skip.
 
+Equivalent explicit flag (preferred; unambiguous regardless of env/editable
+installs): pass `--grantha-data-dir ../grantha-data`. **A flat converter run
+that omits BOTH the flag and the env var does not raise** — it falls back to an
+installed-package-derived bimap path that does not exist, loads an empty bimap,
+and every reference is emitted **unresolved** (`grantha_id: null`, `REF-UNDEFINED-ABBREV`
+in `references-report.json`). After converting, `references-report.json` next
+to the parts must show **0 errors**; if it shows `REF-UNDEFINED-ABBREV` rows,
+re-run with `--grantha-data-dir`.
+
+**Quote-sidecar stamping is a two-stage cycle.** For a text whose committed
+library JSON carries `reference.quote` (vedarthasangraha), the converter reads
+quotes from the committed sidecar
+(`public/data/sidecars/<grantha_id>/citation_quotes.json`). After any source
+edit to a citing text — or after a new target grantha is materialized — the
+sidecar goes stale (rows are keyed by `ref_start`; stale/missing rows are
+silently dropped, never mis-stamped, and no test fails). Regenerate the sidecar
+first (`grantha_data.citation_quotes` from the just-converted parts), then
+**re-run this converter** so the fresh quotes are stamped. Full recipe and
+staleness rules: grantha-data `docs/DATA_FLOW.md` §4.2.
+
 - Reads all publishable `.md` files from `--source` (BUILD-gated via
   `scripts/_build_parser.py`).
 - Emits `envelope.json` (`edition-sub-envelope`) + `partN.json`

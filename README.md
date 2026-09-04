@@ -276,6 +276,20 @@ Prereqs:
    `scripts/tests/test_committed_reference_parity.py` fails if the committed
    artifact is regenerated with the wrong tool.
 
+   **Cross-text references + quote sidecar.** For a `references[]`-bearing text
+   (vedarthasangraha today), pass `--grantha-data-dir ../grantha-data` (or set
+   `GRANTHA_DATA_TOOLS_LIB`) or every reference comes back **unresolved**
+   (`grantha_id: null` + `REF-UNDEFINED-ABBREV`) because the citation bimap is
+   looked up at a wrong path. Regenerating vedarthasangraha is a **two-stage
+   cycle**: convert → regenerate the quote sidecar
+   (`grantha_data.citation_quotes` into
+   `public/data/sidecars/vedarthasangraha/citation_quotes.json`) → **re-convert**
+   so `reference.quote` is stamped. The sidecar also goes stale (silently, no
+   failing test) whenever a new target grantha is materialized, so regenerate it
+   after any source edit to a citing text. See
+   `docs/DATA_FLOW.md` §2.1 and grantha-data `docs/DATA_FLOW.md` §4.2 for the
+   full recipe and ordering.
+
 3. **Validate** — `npm run build` (prebuild regenerates `granthas.json` +
    `validate:data` + `validate:integrity`), or just
    `npm run validate:data`. The `schema_version` in the output comes from the
