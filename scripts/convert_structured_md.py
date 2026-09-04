@@ -1434,7 +1434,10 @@ def _tools_lib_dir() -> Path:
         return Path(tools_lib).expanduser()
     import grantha_data
 
-    return Path(grantha_data.__file__).resolve().parent
+    # grantha_data is the package INSIDE <grantha-data>/tools/lib (its
+    # __init__.py sits at tools/lib/grantha_data/__init__.py), so the tools/lib
+    # directory is the package dir's PARENT — two `.parent`s up from __file__.
+    return Path(grantha_data.__file__).resolve().parent.parent
 
 
 def _references_bimap() -> list[Any]:
@@ -2169,14 +2172,19 @@ def main() -> None:
     source_dir: Path = args.source.resolve()
     out_dir: Path = args.out.resolve()
     explorer_root: Path = args.grantha_explorer_root.resolve()
-    _set_grantha_data_dir(
+    grantha_data_dir: Path | None = (
         args.grantha_data_dir.resolve() if args.grantha_data_dir else None
     )
 
     if not source_dir.is_dir():
         parser.error(f"--source is not a directory: {source_dir}")
 
-    convert_grantha(source_dir, out_dir, explorer_root)
+    # convert_grantha owns the bimap directory (it calls _set_grantha_data_dir
+    # itself, resetting any prior value), so the resolved value MUST be passed
+    # through rather than set here — otherwise --grantha-data-dir is silently
+    # ignored and every reference comes back unresolved (the bimap falls back
+    # to an installed-package-derived path that does not exist).
+    convert_grantha(source_dir, out_dir, explorer_root, grantha_data_dir)
     print("Done.")
 
 
