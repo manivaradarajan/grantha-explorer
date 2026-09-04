@@ -109,6 +109,11 @@
      The .above override below restores white for the footer zone. */
   --citation-tail-bg: rgb(243, 245, 247);
   --citation-clamp-lines: 5;
+  /* Windowed (highlight) excerpt: the JS quote window is the normal bound; the
+     line-clamp is only a backstop for a pathological unit. Slightly looser
+     than the no-highlight clamp since a sentence unit plus context can run
+     longer than a five-line teaser. */
+  --citation-windowed-clamp-lines: 8;
   --citation-title-size: 1rem;
   --citation-excerpt-size: calc(1em * var(--reading-scale, 1.1));
   /* Bottom pull-up for the footer actions: how much of the card's bottom
@@ -281,10 +286,15 @@
   height: 1em;
 }
 
-/* Passage excerpt: NOT a scrollable reading pane. Clamped to ~5 lines; when a
-   highlight is present the clamp is dropped (§10.1 — preserve the phrase). */
+/* Passage excerpt: NOT a scrollable reading pane — a compact teaser. Clamped
+   to ~5 lines without a highlight; with a highlight the excerpt is windowed in
+   JS around the quote (lib/citationExcerpt) with a looser line-clamp backstop.
+   max-height is a hard cap so a pathological unit can never dominate the
+   screen; the footer stays pinned below the body. */
 .citation-body {
   min-height: 0;
+  max-height: min(56vh, 380px);
+  overflow: hidden;
 }
 
 .citation-excerpt {
@@ -302,6 +312,28 @@
   -webkit-line-clamp: var(--citation-clamp-lines);
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Windowed excerpt (a quote highlight is present): bounded by the JS window,
+   with the clamp as a pathological-unit backstop. -webkit-box + clamp only
+   apply to the <p> box; the nested mark/ellipsis spans flow inside it. */
+.citation-excerpt-windowed {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--citation-windowed-clamp-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The dimmed opening-anchor unit and the truncation ellipses. The ellipsis is
+   its own inline span so it never inherits the highlight's paint. */
+.citation-opener {
+  color: inherit;
+}
+
+.citation-ellipsis {
+  color: #9ca3af; /* text-gray-400 */
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 .citation-excerpt.text-gray-400 {

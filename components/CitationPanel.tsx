@@ -13,6 +13,7 @@ import React, {
 import { createPortal } from "react-dom";
 import { getPassagePreview } from "@/lib/references";
 import { findQuotedSpan } from "@/lib/quotedMatch";
+import { buildCitationExcerpt } from "@/lib/citationExcerpt";
 import { formatCitation } from "@/lib/citation";
 import { buildHash } from "@/lib/hashUtils";
 import type { Reference } from "@/lib/data";
@@ -428,11 +429,13 @@ const CitationPopover: React.FC = () => {
 
   const { targetTitle, locatorLabel } = citation;
 
-  // The quoted span must stay visible: when a highlight exists, don't clamp
-  // (a verse is short; §10.1 prefers preserving the meaningful phrase over a
-  // rigid line cap). Otherwise clamp to --citation-clamp-lines.
+  // The quoted span must stay visible. When a highlight exists the excerpt is
+  // windowed around the quote in JS (lib/citationExcerpt) so a very long cited
+  // passage (a multi-thousand-char sarga) is bounded to the quote plus whole
+  // sentence units of context — never the raw full text. A line-clamp is still
+  // applied as a backstop for a pathological unit. Without a highlight we keep
+  // the plain CSS clamp to --citation-clamp-lines.
   const clamp = highlight ? undefined : "citation-excerpt-clamp";
-
   const renderPassage = (): React.ReactNode => {
     if (status) {
       return <p className="citation-excerpt text-gray-400">{status}</p>;
@@ -441,11 +444,27 @@ const CitationPopover: React.FC = () => {
       return <p className="citation-excerpt text-gray-400">loading…</p>;
     }
     if (highlight) {
+      const ex = buildCitationExcerpt(passage, highlight.start, highlight.end);
+      const localStart = highlight.start - ex.windowStart;
+      const localEnd = highlight.end - ex.windowStart;
+      const windowText = passage.slice(ex.windowStart, ex.windowEnd);
       return (
-        <p className={`citation-excerpt ${clamp ?? ""}`}>
-          {passage.slice(0, highlight.start)}
-          <mark className="citation-mark">{passage.slice(highlight.start, highlight.end)}</mark>
-          {passage.slice(highlight.end)}
+        <p className="citation-excerpt citation-excerpt-windowed">
+          {ex.opener != null && (
+            <>
+              <span className="citation-opener">{ex.opener}</span>
+              {ex.leadEllipsis && <span className="citation-ellipsis">…</span>}
+            </>
+          )}
+          {ex.opener == null && ex.leadEllipsis && (
+            <span className="citation-ellipsis">…</span>
+          )}
+          {windowText.slice(0, localStart)}
+          <mark className="citation-mark">
+            {windowText.slice(localStart, localEnd)}
+          </mark>
+          {windowText.slice(localEnd)}
+          {ex.trailEllipsis && <span className="citation-ellipsis">…</span>}
         </p>
       );
     }
