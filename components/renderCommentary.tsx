@@ -323,7 +323,6 @@ export function renderCommentaryWithReferences(
   linkContext: ReferenceLinkContext,
   reviewMarks?: ReviewMarkSpec[],
   footnoteMap?: ReadonlyMap<string, number>,
-  seenFootnoteKeys?: Set<string>,
 ): React.ReactNode {
   // Glue em-dashes and sentence-dandas to their neighbours (length-preserving).
   const text = protectLineBreaks(rawText);
@@ -359,14 +358,7 @@ export function renderCommentaryWithReferences(
     const refWithDisplay = { ...ref, display_text: displayText };
     const key = footnoteKey(ref);
     const fnNum = footnoteMap?.get(key);
-    let isMarker = fnNum !== undefined;
-    if (isMarker && seenFootnoteKeys) {
-      if (seenFootnoteKeys.has(key)) {
-        isMarker = false;
-      } else {
-        seenFootnoteKeys.add(key);
-      }
-    }
+    const isMarker = fnNum !== undefined;
     if (segStart > cursor) {
       let seg = text.slice(cursor, segStart);
       if (isMarker) {
@@ -488,7 +480,6 @@ export function renderMulaWithReferences(
   ownVerses?: { start: number; end: number }[],
   reviewMarks?: ReviewMarkSpec[],
   footnoteMap?: ReadonlyMap<string, number>,
-  seenFootnoteKeys?: Set<string>,
 ): React.ReactNode {
   // Split the mula at verse-quote boundaries: each verse-quote block renders
   // as a hang-indented verse (pādas on separate lines), prose between them uses
@@ -528,19 +519,19 @@ export function renderMulaWithReferences(
       if (kind === "own") {
         parts.push(
           <div key={`v-${offset}`} className="verse-quote verse-own">
-            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap, seenFootnoteKeys)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap)}
           </div>,
         );
       } else if (kind === "quote") {
         parts.push(
           <div key={`vq-${offset}`} className="verse-quote">
-            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap, seenFootnoteKeys)}
+            {renderVerseQuote(t, references, linkContext, o, reviewMarks, footnoteMap)}
           </div>,
         );
       } else if (t.trim() !== "") {
         parts.push(
           <div key={`prose-${offset}`} className="flow-mula-prose">
-            {renderMulaProse(t, references, linkContext, o, undefined, { footnoteMap, seenFootnoteKeys }, reviewMarks)}
+            {renderMulaProse(t, references, linkContext, o, undefined, { footnoteMap }, reviewMarks)}
           </div>,
         );
       }
@@ -577,7 +568,7 @@ export function renderMulaWithReferences(
     });
     return <>{joined}</>;
   }
-  return <>{renderMulaProse(text, references, linkContext, 0, undefined, { footnoteMap, seenFootnoteKeys }, reviewMarks)}</>;
+  return <>{renderMulaProse(text, references, linkContext, 0, undefined, { footnoteMap }, reviewMarks)}</>;
 }
 
 /** Render a non-verse prose span with its references (existing split logic),
@@ -595,10 +586,10 @@ function renderMulaProse(
   linkContext: ReferenceLinkContext,
   offset: number,
   blockLookbacks?: Record<number, { sourceLookback: string; sourceWindowStart: number }>,
-  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean; footnoteMap?: ReadonlyMap<string, number>; seenFootnoteKeys?: Set<string> } = {},
+  options: { quoteBounds?: { start: number; end: number }; suppressQuoteMarks?: boolean; footnoteMap?: ReadonlyMap<string, number> } = {},
   reviewMarks?: ReviewMarkSpec[],
 ): React.ReactNode {
-  const { quoteBounds, suppressQuoteMarks = false, footnoteMap, seenFootnoteKeys } = options;
+  const { quoteBounds, suppressQuoteMarks = false, footnoteMap } = options;
   if (!references || references.length === 0) {
     const bounds = highlightBounds(
       linkContext.sourceHighlight,
@@ -633,14 +624,7 @@ function renderMulaProse(
     // so looking up rebased refs works correctly.
     const key = footnoteKey(ref);
     const fnNum = footnoteMap?.get(key);
-    let isMarker = fnNum !== undefined;
-    if (isMarker && seenFootnoteKeys) {
-      if (seenFootnoteKeys.has(key)) {
-        isMarker = false;
-      } else {
-        seenFootnoteKeys.add(key);
-      }
-    }
+    const isMarker = fnNum !== undefined;
     // Prefer a whole-block lookback (the full verse) over the per-pāda slice.
     let sourceLookback: string;
     let sourceWindowStart: number;
@@ -767,7 +751,6 @@ function renderVerseQuote(
   offset: number,
   reviewMarks?: ReviewMarkSpec[],
   footnoteMap?: ReadonlyMap<string, number>,
-  seenFootnoteKeys?: Set<string>,
 ): React.ReactNode {
   const inBlock = (references ?? []).filter(
     (r) => r.start >= offset && r.end <= offset + block.length,
@@ -798,7 +781,7 @@ function renderVerseQuote(
     <span className="verse-quote-inner">
       {padas.map(({ text, absStart }, i) => (
         <span key={i} className={`verse-pada${padas.length >= 4 && (i + 1) % 2 === 0 ? " verse-pada-cont" : ""}`}>
-          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true, footnoteMap, seenFootnoteKeys }, reviewMarks)}
+          {renderMulaProse(text, inBlock, linkContext, absStart, blockLookbacks, { suppressQuoteMarks: true, footnoteMap }, reviewMarks)}
         </span>
       ))}
     </span>

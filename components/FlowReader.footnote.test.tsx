@@ -257,7 +257,7 @@ describe("FlowReader footnote mode", () => {
     cleanUp(root, el);
   });
 
-  it("duplicate citation key → single footnote entry (dedup)", async () => {
+  it("duplicate citation key → one footnote entry, but EVERY occurrence gets a marker", async () => {
     localStorage.setItem("grantha-footnote-mode", "true");
     // Two refs with the same grantha_id + locator + display_text.
     const dupRef = { ...REF_A, start: 0, end: 4 };
@@ -269,9 +269,16 @@ describe("FlowReader footnote mode", () => {
       </FootnoteModeProvider>,
     );
     localStorage.removeItem("grantha-footnote-mode");
-    // Only one <li> entry should be rendered.
+    // Exactly one <li> entry (the block is deduplicated)…
     const items = el.querySelectorAll('[data-verse-ref="1"] li');
     expect(items.length).toBe(1);
+    // …but BOTH occurrences carry the same [n] superscript — a repeated
+    // citation must not read as an un-footnoted inline link.
+    const sups = el.querySelectorAll('[data-verse-ref="1"] sup a[class*="font-mono"]');
+    expect(sups.length).toBe(2);
+    const markers = [...sups].map((s) => s.textContent);
+    expect(markers[0]).toBe(markers[1]);
+    expect(markers[0]).toBeTruthy();
     cleanUp(root, el);
   });
 

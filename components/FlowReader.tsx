@@ -827,7 +827,6 @@ export default function FlowReader({
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
     footnoteMap: ReadonlyMap<string, number>,
-    seenFootnoteKeys?: Set<string>,
   ): ReactNode => {
     const subPassage = commentaryPassageForRef(sub.passages, verseRef);
     if (!subPassage) {
@@ -883,7 +882,6 @@ export default function FlowReader({
                 },
                 undefined,
                 footnoteMap,
-                seenFootnoteKeys,
               )}
             </p>
           </div>
@@ -896,13 +894,12 @@ export default function FlowReader({
     verseRef: string,
     sourceHighlight: SourceHighlight | null,
     footnoteMap: ReadonlyMap<string, number>,
-    seenFootnoteKeys?: Set<string>,
   ): ReactNode => {
     if (!hasSubcommentaries || !activeCommentary?.subcommentaries) {
       return null;
     }
     return activeCommentary.subcommentaries.map((sub) =>
-      renderSubcommentary(sub, verseRef, sourceHighlight, footnoteMap, seenFootnoteKeys),
+      renderSubcommentary(sub, verseRef, sourceHighlight, footnoteMap),
     );
   };
 
@@ -1225,9 +1222,6 @@ export default function FlowReader({
                   const footnoteMap: ReadonlyMap<string, number> = footnoteModeEnabled
                     ? buildFootnoteMap(allRefs)
                     : new Map();
-                  const seenFootnoteKeys: Set<string> | undefined = footnoteModeEnabled
-                    ? new Set<string>()
-                    : undefined;
                   const linkContext: ReferenceLinkContext = {
                     currentGranthaId: grantha.grantha_id,
                     sourcePassageRef: passage.ref,
@@ -1266,7 +1260,6 @@ export default function FlowReader({
                               (passage as { verses?: { start: number; end: number }[] }).verses,
                               reviewMarksByRef?.[passage.ref],
                               footnoteMap,
-                              seenFootnoteKeys,
                             )}
                             {!isProseMula && (
                               <>{" "}॥ {toDevanagariNumerals(passage.ref)} ॥</>
@@ -1375,10 +1368,9 @@ export default function FlowReader({
                                 },
                                 undefined,
                                 footnoteMap,
-                                seenFootnoteKeys,
                               )}
                             </p>
-                            {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap, seenFootnoteKeys)}
+                            {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap)}
                             {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>
                         )}
