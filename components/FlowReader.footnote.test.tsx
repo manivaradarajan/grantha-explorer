@@ -9,9 +9,8 @@
  */
 
 import { describe, it, expect, afterEach, beforeAll } from "vitest";
-import { act } from "react-dom/test-utils";
 import { createRoot, Root } from "react-dom/client";
-import React from "react";
+import React, { act } from "react";
 import { Grantha, GranthaMetadata } from "@/lib/data";
 import FlowReader from "./FlowReader";
 import { FootnoteModeProvider } from "@/lib/contexts/FootnoteModeContext";
@@ -31,7 +30,7 @@ const makeGranthaWithRefs = (
 ): Grantha => {
   // Build commentary text: each ref occupies [start, end) with display_text.
   // Assemble text so display_texts are at the right offsets.
-  let cpText = "आदिः ";
+  const cpText = "आदिः ";
   const refs = cpRefs.map((r) => ({
     start: r.start,
     end: r.end,
@@ -174,14 +173,6 @@ const REF_A = {
   display_text: "श्वे.उ.",
   grantha_id: "svetasvatara-upanishad",
   locator: "1.1",
-};
-
-const REF_B = {
-  start: 4,
-  end: 8,
-  display_text: "श्वे.उ. २",
-  grantha_id: "svetasvatara-upanishad",
-  locator: "1.2",
 };
 
 /** Builds a MULA-ONLY grantha (no commentaries) whose main passage carries the
