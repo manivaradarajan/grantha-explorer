@@ -164,7 +164,7 @@ describe("ReviewSelectionToolbar candidates — current + corpus fallback", () =
   it("renders a 'current' badge on the already-cited verse", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      vi.fn(async (input: RequestInfo | URL) => {
         const url = String(input);
         if (url.endsWith("/api/review/candidates")) {
           return new Response(
