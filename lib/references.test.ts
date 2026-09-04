@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import fs from "fs";
+import path from "path";
 import { Grantha, Reference } from "./data";
 import {
   getPassagePreview,
@@ -370,5 +372,55 @@ describe("getPassagePreview (later-part fetch)", () => {
     // part4.json was fetched for the preview.
     const part4Calls = fetchMock.mock.calls.filter((c) => String(c[0]).endsWith("part4.json"));
     expect(part4Calls.length).toBe(1);
+  });
+});
+
+describe("getPassagePreview — part-boundary straddle (real BAU data)", () => {
+  // A section (Brahmana) can SPAN two part files: for बृ.उ. ६.४.२२,
+  // sectionPartsToLoad returns ["6.3.21", "6.4.20"] (part10 + part11 both back
+  // the 6.4 brahmana prefix), but the passage lives in part11 — the SECOND
+  // part. getPassagePreview must fetch every part the loader would merge, not
+  // just toLoad[0], or the cited mantra comes back null ("no preview").
+  let fetchCalls: string[];
+
+  beforeEach(() => {
+    fetchCalls = [];
+    const read = (url: string) => {
+      const pathname = new URL(url, "http://localhost").pathname;
+      const abs = path.resolve(__dirname, "..", "public", "data", pathname.replace(/^\/data\//, ""));
+      if (!fs.existsSync(abs)) return Promise.resolve(new Response(null, { status: 404 }));
+      return Promise.resolve(new Response(fs.readFileSync(abs, "utf-8"), { status: 200 }));
+    };
+    vi.stubGlobal("fetch", vi.fn((input: unknown) => {
+      const u = String(input);
+      fetchCalls.push(u);
+      return read(u);
+    }));
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("previews बृ.उ. ६.४.२२ which lives in a later part beyond toLoad[0]", async () => {
+    const r: Reference = {
+      start: 811,
+      end: 823,
+      display_text: "बृ.उ. ६.४.२२",
+      grantha_id: "brihadaranyaka-upanishad",
+      edition_id: "brihadaranyaka-upanishad",
+      locator: "6.4.22",
+      unresolved: false,
+    };
+    const preview = await getPassagePreview(
+      "brihadaranyaka-upanishad",
+      r,
+      ["brihadaranyaka-upanishad"],
+    );
+    // The cited mantra text (तमेतं वेदानुवचनेन …) lives in part11.json.
+    expect(preview ?? "").toContain("तमेतं वेदानुवचनेन");
+    // part11.json (the second straddling part) must have been fetched.
+    expect(fetchCalls.some((c) => c.endsWith("part11.json"))).toBe(true);
   });
 });

@@ -223,8 +223,11 @@ export const getPassagePreview = async (
       return loaded.content.sanskrit.devanagari;
     }
 
-    // 2. Passage in a later, not-yet-loaded part: find the containing part and
-    //    fetch it on demand.
+    // 2. Passage in a later, not-yet-loaded part: find the containing part(s)
+    //    and fetch them on demand. A section can SPAN part files (e.g. the BAU
+    //    6.4 brahmana is split across part10/part11 at 6.4.20), so
+    //    `sectionPartsToLoad` may return several parts — the passage lives in
+    //    whichever one holds it, not necessarily the first.
     const partLevel = partLevelFor(target.structure_levels);
     if (partLevel >= 0 && target.parts) {
       const toLoad = sectionPartsToLoad(
@@ -233,28 +236,27 @@ export const getPassagePreview = async (
         loadedFirstRefsFor(target),
         partLevel,
       );
-      if (toLoad.length > 0) {
-        const firstRef = toLoad[0];
+      for (const firstRef of toLoad) {
         const partInfo = target.parts.find((p) => p.first_ref === firstRef);
-        if (partInfo) {
-          const cacheKey = previewCacheKey(target.path, partInfo.file);
-          let passages = previewPartCache.get(cacheKey);
-          if (!passages) {
-            const part = await loadGranthaPart(target.path, partInfo.file);
-            passages = [
-              ...(part.prefatory_material ?? []),
-              ...(part.passages ?? []),
-              ...(part.concluding_material ?? []),
-            ]
-              .map((p) => ({
-                ref: p.ref,
-                text: p.content?.sanskrit?.devanagari ?? "",
-              }))
-              .filter((p) => p.text);
-            previewPartCache.set(cacheKey, passages);
-          }
-          return passages.find((p) => p.ref === resolution.ref)?.text ?? null;
+        if (!partInfo) continue;
+        const cacheKey = previewCacheKey(target.path, partInfo.file);
+        let passages = previewPartCache.get(cacheKey);
+        if (!passages) {
+          const part = await loadGranthaPart(target.path, partInfo.file);
+          passages = [
+            ...(part.prefatory_material ?? []),
+            ...(part.passages ?? []),
+            ...(part.concluding_material ?? []),
+          ]
+            .map((p) => ({
+              ref: p.ref,
+              text: p.content?.sanskrit?.devanagari ?? "",
+            }))
+            .filter((p) => p.text);
+          previewPartCache.set(cacheKey, passages);
         }
+        const found = passages.find((p) => p.ref === resolution.ref);
+        if (found) return found.text;
       }
     }
 
