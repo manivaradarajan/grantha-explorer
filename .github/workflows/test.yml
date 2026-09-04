@@ -26,3 +26,53 @@ jobs:
 
       - name: Unit + integration tests
         run: npm test
+
+  # Cross-repo data/build gates (Bazel-owned surface, see AGENTS.md). The repo
+  # consumes grantha-data via local_path_override to ../grantha-data, so CI
+  # checks the producer out at exactly the SHA recorded in grantha-data.rev and
+  # runs the fast Bazel gates against it: validate_data, validate_schema_mirrors
+  # (committed mirrors vs the pinned producer's schemas), verify_sidebar_model,
+  # typecheck, integrity + smoke tests.
+  #
+  # //data:determinism_check (the slow full-library regeneration) is EXCLUDED
+  # here: it re-derives every part twice (several minutes) and its
+  # committed-vs-fresh drift is intentionally report-only, not a gate. Run it
+  # locally (`bazel test //data:determinism_check`) or add it as a separate,
+  # slower job if that changes.
+  bazel:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: grantha-explorer
+    steps:
+      - name: Checkout grantha-explorer
+        uses: actions/checkout@v4
+        with:
+          path: grantha-explorer
+
+      - name: Checkout grantha-data
+        uses: actions/checkout@v4
+        with:
+          repository: manivaradarajan/grantha-data
+          path: grantha-data
+
+      - name: Pin grantha-data to the recorded revision
+        run: |
+          REV=$(cat grantha-data.rev | tr -d '[:space:]')
+          if ! echo "$REV" | grep -qE '^[0-9a-f]{40}$'; then
+            echo "ERROR: grantha-data.rev does not contain a 40-hex SHA: '$REV'"
+            exit 1
+          fi
+          git -C ../grantha-data fetch --depth 1 origin "$REV"
+          git -C ../grantha-data checkout --detach "$REV"
+          echo "Pinned grantha-data at $REV"
+
+      - name: Set up Bazel
+        uses: bazel-contrib/setup-bazel@0.8.5
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+
+      - name: Run Bazel data/build gates
+        run: bazel test //... -//data:determinism_check

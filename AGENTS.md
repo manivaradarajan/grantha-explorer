@@ -56,6 +56,12 @@ The repo runs a deliberate two-toolchain setup. Bazel owns the
   parity-test docs and `test_committed_reference_parity.py`).
 - Python helpers and cross-repo deps via
   `@grantha_data//tools/lib/grantha_data` (local_path_override → sibling).
+- **Producer pin (`grantha-data.rev`, repo root):** CI checks the producer out
+  at exactly this SHA and runs `bazel test //... -//data:determinism_check`
+  (fast gates only; determinism_check is the slow full-library regen). Keep the
+  pin honest: after `bazel run //data:materialize`, run
+  `git -C ../grantha-data rev-parse HEAD > grantha-data.rev` and commit the pin
+  in the same change as the regenerated library.
 - Before touching `BUILD.bazel`, `MODULE.bazel`, `scripts/BUILD.bazel`, or the
   `.bazelrc`/`pnpm-workspace.yaml`, understand that changing these affects both
   toolchains.

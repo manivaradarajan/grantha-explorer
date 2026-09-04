@@ -356,6 +356,15 @@ you change `lib/data.ts`, `hooks/useGranthaLoader.ts`, `hooks/useEditions.ts`,
   (e.g. vishnu-purana references) — `test_committed_reference_parity.py`
   fails on this by design; `//data:determinism_check` reports it as drift.
   Re-sync deliberately with `bazel run //data:materialize` + commit.
+- **Producer pin (`grantha-data.rev`).** CI checks the producer out at exactly
+  the SHA in `grantha-data.rev` (repo root) and runs the fast Bazel gates
+  against it. After any `bazel run //data:materialize`, overwrite
+  `grantha-data.rev` with `git -C ../grantha-data rev-parse HEAD` and commit it
+  in the same change as the regenerated library — otherwise the pin no longer
+  corresponds to the committed data. When a grantha-data commit is expected to
+  affect the explorer (schema, `structured_md`, bimap), the flow is:
+  bump the producer rev in `grantha-data.rev` → `bazel run //data:materialize`
+  → commit library + rev together.
 - Manual 3-file registry sync before a grantha appears in the UI.
 - `granthas.json` is gitignored and regenerated; a stale committed
   `granthas-meta.json`/`order` silently drops a grantha from the index.

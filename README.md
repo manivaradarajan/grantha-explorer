@@ -96,6 +96,13 @@ exact Bazel/npm boundary — and why vitest/dev/e2e stay on npm — is documente
 in `AGENTS.md`. There are **two lockfiles**: `package-lock.json` (npm) and
 `pnpm-lock.yaml` (Bazel, kept in sync via `npx pnpm import`).
 
+**Producer pin (`grantha-data.rev`).** CI checks the producer out at exactly
+the SHA recorded in `grantha-data.rev` and runs the fast Bazel gates against
+it (`bazel test //... -//data:determinism_check`). After
+`bazel run //data:materialize`, write the producer HEAD into `grantha-data.rev`
+and commit it alongside the regenerated library so the committed data and the
+pin stay in correspondence:
+
 ### Build & serve locally
 
 ```bash
@@ -185,9 +192,18 @@ Run them after any grantha-data edit; commit + push the result here.
 **Bazel path (recommended):** `bazel run //data:materialize` runs the same two
 converters hermetically from the `@grantha_data` runfiles (no
 `GRANTHA_DATA_TOOLS_LIB` env hack), writing into the checkout's
-`public/data/library/`. `bazel test //data:determinism_check` proves the
-pipeline is deterministic and *reports* committed-vs-fresh drift (not a hard
-gate — the committed tree may legitimately lag the current citation bimap).
+`public/data/library/`. Then record which producer revision that output
+corresponds to and commit both together:
+
+```bash
+bazel run //data:materialize          # regenerate public/data/library/
+git -C ../grantha-data rev-parse HEAD > grantha-data.rev
+# review the diff; commit the regenerated library + the updated pin together
+```
+
+`bazel test //data:determinism_check` proves the pipeline is deterministic and
+*reports* committed-vs-fresh drift (not a hard gate — the committed tree may
+legitimately lag the current citation bimap).
 
 **Manual npm path:** the commands below are the equivalent manual invocations.
 
