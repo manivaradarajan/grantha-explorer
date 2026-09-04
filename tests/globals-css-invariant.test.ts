@@ -41,7 +41,8 @@ interface CssRule {
 /** Parse `css` into flat (selector, declarations) pairs, recursing into block
  *  rules such as `@media` so that nested simple rules are always surfaced.
  *  Assumes no braces appear inside string values or comments (true for the
- *  hand-maintained `globals.css`). */
+ *  hand-maintained `globals.css`). Also assumes the file has no top-level
+ *  text before the first `{` (no `@charset`, no bare leading comment). */
 function extractRules(css: string): CssRule[] {
   const rules: CssRule[] = [];
   let i = 0;
@@ -70,10 +71,12 @@ function extractRules(css: string): CssRule[] {
   return rules;
 }
 
+// Parse once at module load; all test cases share this extraction.
+const ALL_RULES: CssRule[] = extractRules(fs.readFileSync(GLOBALS, "utf8"));
+
 /** Extract every rule whose selector mentions `needle`. */
 function rulesMentioning(needle: string): CssRule[] {
-  const css = fs.readFileSync(GLOBALS, "utf8");
-  return extractRules(css).filter((r) => r.selector.includes(needle));
+  return ALL_RULES.filter((r) => r.selector.includes(needle));
 }
 
 describe("reading-surface source highlight stays paint-only", () => {

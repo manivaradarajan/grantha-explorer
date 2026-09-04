@@ -27,12 +27,12 @@ const GAP_SCORE = -1;
 /** Combining / cluster-forming code points that must stay glued to their base
  *  (Devanagari: matras, virama, nukta, anusvara, candrabindu, vowels, signs).
  *  Vedic svara marks (U+0951–U+0954, selected U+1CD0–U+1CF9) are NOT listed
- *  here — they are covered by `isSvaraCodePoint` and checked separately in
- *  `isClusterCodePoint` below. */
+ *  here — they are covered exclusively by `isSvaraCodePoint` and handled via
+ *  the `|| isSvaraCodePoint(codePoint)` branch in `isClusterCodePoint`. */
 const CLUSTER_CODEPOINTS = new Set([
   0x093e, 0x093f, 0x0940, 0x0941, 0x0942, 0x0943, 0x0944, 0x0945,
   0x0946, 0x0947, 0x0948, 0x0949, 0x094a, 0x094b, 0x094c, 0x094d,
-  0x094e, 0x094f, 0x0951, 0x0952, 0x0957, 0x0962, 0x0963, 0x093a,
+  0x094e, 0x094f, 0x0957, 0x0962, 0x0963, 0x093a,
   0x093b, 0x093c, 0x0950, 0x0901, 0x0902, 0x0903,
 ]);
 

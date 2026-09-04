@@ -1432,6 +1432,9 @@ def _tools_lib_dir() -> Path:
     tools_lib = os.environ.get("GRANTHA_DATA_TOOLS_LIB")
     if tools_lib:
         return Path(tools_lib).expanduser()
+    # Deferred: grantha_data is an optional editable install; importing at
+    # module level would break callers that set GRANTHA_DATA_TOOLS_LIB and
+    # never need the package import path.
     import grantha_data
 
     # grantha_data is the package INSIDE <grantha-data>/tools/lib (its
@@ -1439,11 +1442,12 @@ def _tools_lib_dir() -> Path:
     # directory is the package dir's PARENT — two `.parent`s up from __file__.
     tools_lib = Path(grantha_data.__file__).resolve().parent.parent
     if not (tools_lib / "grantha_data").is_dir():
-        raise RuntimeError(
+        msg = (
             f"Derived tools/lib at {tools_lib!r} does not contain a "
             f"grantha_data/ sub-package. The package layout may have changed. "
             f"Set GRANTHA_DATA_TOOLS_LIB to override."
         )
+        raise RuntimeError(msg)
     return tools_lib
 
 
