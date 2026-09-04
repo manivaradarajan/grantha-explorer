@@ -363,4 +363,43 @@ describe("ReviewCommentList filter", () => {
     expect(ids).not.toContain("c-accepted");
     unmount();
   });
+
+  it("is controllable: a parent filter prop drives the visible set and onFilterChange reports changes", async () => {
+    comments = [
+      makeComment({ id: "c-open", status: "open" }),
+      makeComment({
+        id: "c-accepted",
+        status: "accepted",
+        fixes: [{ applied_by: "agent", at: "x", summary: "s" }],
+        accepted_at: "x",
+      }),
+    ];
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const root = createRoot(host);
+    const onFilterChange = vi.fn();
+    await act(async () => {
+      root.render(
+        <ReviewModeProvider granthaId="vedarthasangraha" passageTexts={{ "17": "एवमेव ब्रह्म" }}>
+          <ReviewCommentList
+            filter="not-accepted"
+            onFilterChange={onFilterChange}
+          />
+        </ReviewModeProvider>,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    const cards = [...host.querySelectorAll(".review-card")].map((e) => e.getAttribute("data-comment-id"));
+    expect(cards).toEqual(["c-open"]);
+    // Changing the select fires the callback (the parent owns the state).
+    const sel = host.querySelector(".review-filter-select") as HTMLSelectElement;
+    await act(async () => {
+      const setter = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, "value")!.set!;
+      setter.call(sel, "all");
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    expect(onFilterChange).toHaveBeenCalledWith("all");
+    await act(async () => root.unmount());
+  });
 });

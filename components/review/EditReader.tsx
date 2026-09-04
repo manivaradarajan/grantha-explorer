@@ -197,6 +197,7 @@ function EditReaderInner(props: EditReaderProps) {
     isLoadingPart,
   } = props;
   const { session, detached, addComment, refresh } = useReviewMode();
+  const [filter, setFilter] = useState<"all" | "not-accepted">("all");
   const [selection, setSelection] = useState<SelectionState | null>(null);
   const [focusComment, setFocusComment] = useState<string | null>(null);
   const [activePassage, setActivePassage] = useState<string>(selectedRef);
@@ -270,7 +271,10 @@ function EditReaderInner(props: EditReaderProps) {
     return () => window.removeEventListener("mouseup", onMouseUp);
   }, [passageTexts, session]);
 
-  // Compute review marks for the current session, re-located by snippet.
+  // Compute review marks for the current session, re-located by snippet. When
+  // the list filter is "Not yet accepted", surface marks carry only the statuses
+  // still under review so accepted/done/dismissed highlights stop being colored
+  // noise in the text.
   const marksByRef = useMemo(
     () =>
       resolveReviewMarks(
@@ -278,8 +282,11 @@ function EditReaderInner(props: EditReaderProps) {
         passageTexts,
         detached,
         setFocusComment,
+        filter === "not-accepted"
+          ? { statuses: new Set(["open", "reopened", "fixed"]) }
+          : undefined,
       ),
-    [session, detached, passageTexts],
+    [session, detached, passageTexts, filter],
   );
 
   // Keep activePassage in sync with FlowReader's scrollspy.
@@ -397,6 +404,8 @@ function EditReaderInner(props: EditReaderProps) {
         <ReviewCommentList
           activePassageRef={activePassage}
           activeCommentId={activeComment}
+          filter={filter}
+          onFilterChange={setFilter}
           onSelect={(id) => setFocusComment(id)}
           onEdit={handleEdit}
         />

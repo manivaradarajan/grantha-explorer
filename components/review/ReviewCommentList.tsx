@@ -26,16 +26,32 @@ export function ReviewCommentList({
   onEdit,
   activePassageRef,
   activeCommentId,
+  filter: filterProp,
+  onFilterChange,
 }: {
   onSelect?: (id: string) => void;
   onEdit?: (c: ReviewComment) => void;
   activePassageRef?: string;
   activeCommentId?: string | null;
+  /** Controlled "all | not-accepted" filter. When omitted the list owns its own
+   *  filter state (backward compatible with direct-mount usage). */
+  filter?: "all" | "not-accepted";
+  /** Called with the new filter when the user changes it (controlled mode). */
+  onFilterChange?: (f: "all" | "not-accepted") => void;
 }) {
   const { session, sessionFile, rounds, detached, hasChanged, loading, error, refresh, selectSession, updateStatus, startNewSession } =
     useReviewMode();
-  const [filter, setFilter] = useState<"all" | "not-accepted">("all");
+  const [internalFilter, setInternalFilter] = useState<"all" | "not-accepted">("all");
   const [showDeleted, setShowDeleted] = useState(false);
+  const controlled = filterProp !== undefined;
+  const filter = filterProp ?? internalFilter;
+  const changeFilter = (f: "all" | "not-accepted") => {
+    if (controlled) {
+      onFilterChange?.(f);
+    } else {
+      setInternalFilter(f);
+    }
+  };
 
   if (loading) {
     return <div className="review-panel-empty">Loading review session…</div>;
@@ -119,7 +135,7 @@ export function ReviewCommentList({
           className="review-filter-select"
           aria-label="Filter comments"
           value={filter}
-          onChange={(e) => setFilter(e.target.value as "all" | "not-accepted")}
+          onChange={(e) => changeFilter(e.target.value as "all" | "not-accepted")}
         >
           <option value="all">All</option>
           <option value="not-accepted">Not yet accepted</option>

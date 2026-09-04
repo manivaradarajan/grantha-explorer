@@ -38,11 +38,38 @@ export function locateSnippet(
   const normSnippet = normWS(snippet);
   const normRaw = normWS(raw);
   if (!normSnippet) return null;
-  idx = normRaw.indexOf(normSnippet);
+  // Trim isolated leading/trailing danda tokens (which normWS isolated into
+  // their own words). A review selection may bracket a phrase with a `।`/`॥`
+  // that a later text edit replaced (e.g. the para 1 BAU 6.4.22 citation fix
+  // turned "…तपसानाशकेन ।" into "…तपसानाशकेन (बृ.उ. ६.४.२२),"); the danda is
+  // editorial chrome, so drop it and retry when the exact normalized match
+  // misses. Dandas INSIDE the snippet or genuinely present in the raw text are
+  // unaffected (trim stops at the first non-danda edge token).
+  const withoutEdgeDandas = (s: string): string => {
+    const tokens = s.split(" ").filter(Boolean);
+    while (tokens.length && (tokens[0] === "।" || tokens[0] === "॥")) {
+      tokens.shift();
+    }
+    while (
+      tokens.length &&
+      (tokens[tokens.length - 1] === "।" || tokens[tokens.length - 1] === "॥")
+    ) {
+      tokens.pop();
+    }
+    return tokens.join(" ");
+  };
+  let normNeedle = normSnippet;
+  idx = normRaw.indexOf(normNeedle);
+  while (idx < 0) {
+    const trimmed = withoutEdgeDandas(normNeedle);
+    if (trimmed === normNeedle) break; // no edge danda left to drop
+    normNeedle = trimmed;
+    idx = normRaw.indexOf(normNeedle);
+  }
   if (idx >= 0) {
     // Map back: find first and last CONTENT word (skip isolated danda tokens
     // like `।`/`॥` — the last one would otherwise leave `raw.indexOf("")`).
-    const allWords = normSnippet.split(" ").filter(Boolean);
+    const allWords = normNeedle.split(" ").filter(Boolean);
     const contentWords = allWords.filter((w) => w !== "।" && w !== "॥");
     if (contentWords.length === 0) return null;
     const first = contentWords[0];
@@ -52,11 +79,11 @@ export function locateSnippet(
     let end = raw.indexOf(last, start);
     if (end < 0) return null;
     end += last.length;
-    // Include trailing danda if the snippet had it
-    if (snippet.includes("॥")) {
+    // Include trailing danda if the (possibly danda-trimmed) needle had it.
+    if (normNeedle.includes("॥")) {
       const dandaIdx = raw.indexOf("॥", end - last.length);
       if (dandaIdx >= 0 && dandaIdx < end + 5) end = dandaIdx + 2;
-    } else if (snippet.includes("।")) {
+    } else if (normNeedle.includes("।")) {
       const dandaIdx = raw.indexOf("।", end - last.length);
       if (dandaIdx >= 0 && dandaIdx < end + 5) end = dandaIdx + 1;
     }
@@ -119,18 +146,23 @@ export interface ResolvedReviewMark {
 /**
  * Resolve review comments across passages into rendered ReviewMarkSpec[] lists by passageRef.
  * Skips deleted or detached comments and re-locates anchor offsets against current passage texts.
+ * Optionally restricts which statuses surface (e.g. the edit mode "Not yet accepted" filter
+ * passes {open, reopened, fixed}); when omitted, every non-deleted status is surfaced.
  */
 export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
   comments: T[] | undefined,
   passageTexts: Record<string, string>,
   detached: string[] = [],
   onMarkClick?: (commentId: string) => void,
+  opts: { statuses?: ReadonlySet<Exclude<ReviewCommentStatus, "deleted" | "done">> } = {},
 ): Record<string, ResolvedReviewMark[]> {
   const out: Record<string, ResolvedReviewMark[]> = {};
   if (!comments || comments.length === 0) return out;
   for (const c of comments) {
     if (c.status === "deleted") continue;
     if (detached.includes(c.id)) continue;
+    const status = c.status === "done" ? "accepted" : c.status;
+    if (opts.statuses && !opts.statuses.has(status)) continue;
     const raw = passageTexts[c.passage_ref];
     if (!raw) continue;
     const loc = resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end);
@@ -140,7 +172,7 @@ export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
       start: loc.start,
       end: loc.end,
       type: c.type,
-      status: c.status === "done" ? "accepted" : c.status,
+      status,
       drift: Boolean(c.hash_changed),
       commentId: c.id,
       onClick: onMarkClick,
