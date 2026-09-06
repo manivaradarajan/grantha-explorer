@@ -169,6 +169,12 @@ export interface CommentaryPassage {
    *  producer-side reference pipeline. Half-open offsets into
    *  content.sanskrit.devanagari. */
   references?: Reference[];
+  /** Runs of quoted verses (verse-quote blocks) as {start, end} half-open
+   *  offsets into content.sanskrit.devanagari. */
+  verse_quotes?: { start: number; end: number }[];
+  /** The commentary's OWN verses (<!-- verse --> blocks) as {start, end}
+   *  half-open offsets into content.sanskrit.devanagari. */
+  verses?: { start: number; end: number }[];
 }
 
 /** A structured cross-text citation (grantha.schema.json `reference`). */

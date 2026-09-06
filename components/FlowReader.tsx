@@ -1353,7 +1353,7 @@ export default function FlowReader({
                                 </p>
                               </div>
                             ))}
-                            <p className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
+                            <div className="verse-text font-serif flow-commentary leading-relaxed text-gray-700 whitespace-pre-line">
                               {renderCommentaryWithReferences(
                                 cp.content?.sanskrit?.devanagari || "",
                                 cp.references,
@@ -1368,8 +1368,10 @@ export default function FlowReader({
                                 },
                                 undefined,
                                 footnoteMap,
+                                cp.verse_quotes,
+                                cp.verses,
                               )}
-                            </p>
+                            </div>
                             {renderSubcommentaries(passage.ref, sourceHighlight, footnoteMap)}
                             {renderFootnoteBlock(footnoteMap, allRefs, footnoteModeEnabled, linkContext)}
                           </div>

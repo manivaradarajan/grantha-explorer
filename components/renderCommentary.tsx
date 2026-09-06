@@ -300,6 +300,12 @@ export function footnoteKey(ref: Reference): string {
  * parenthesized citation text itself is never re-synthesized — the offsets
  * and `display_text` come from the producer.
  *
+ * When `verseQuotes` or `ownVerses` are provided, the function splits the
+ * text at verse-block boundaries first and renders each block with the
+ * hang-indented pāda layout (identical to the mūla verse treatment). Prose
+ * segments between verse blocks recurse without verse arguments and take the
+ * standard reference-split path.
+ *
  * When `footnoteMap` is provided, references whose `footnoteKey` appears in
  * the map are emitted as `<ReferenceLink displayMode="footnote-marker">` (a
  * `<sup>[n]</sup>` superscript) instead of the normal inline link; the same
@@ -312,6 +318,8 @@ export function footnoteKey(ref: Reference): string {
  *     reviewMarks: Optional edit-mode annotation highlights.
  *     footnoteMap: When present, citations whose key is in this map are
  *         rendered as footnote markers; keys map to footnote numbers.
+ *     verseQuotes: Half-open {start, end} offsets of quoted-verse blocks.
+ *     ownVerses: Half-open {start, end} offsets of the author's own verses.
  *
  * Returns:
  *     A React fragment of sanitized text segments interleaved with reference
@@ -323,9 +331,71 @@ export function renderCommentaryWithReferences(
   linkContext: ReferenceLinkContext,
   reviewMarks?: ReviewMarkSpec[],
   footnoteMap?: ReadonlyMap<string, number>,
+  verseQuotes?: { start: number; end: number }[],
+  ownVerses?: { start: number; end: number }[],
 ): React.ReactNode {
   // Glue em-dashes and sentence-dandas to their neighbours (length-preserving).
   const text = protectLineBreaks(rawText);
+
+  // Split at verse-block boundaries when verse data is present, mirroring the
+  // mūla renderMulaWithReferences verse-splitting path.
+  const allBlocks = [
+    ...(verseQuotes ?? []).map((v) => ({ ...v, own: false })),
+    ...(ownVerses ?? []).map((v) => ({ ...v, own: true })),
+  ].sort((a, b) => a.start - b.start);
+
+  if (allBlocks.length > 0) {
+    const parts: React.ReactNode[] = [];
+    let cursor = 0;
+
+    // Render a prose sub-segment by rebasing reference offsets relative to the
+    // segment's start so they remain valid for the recursive call.
+    const emitProse = (segText: string, segStart: number): void => {
+      const trimmed = segText.replace(/^\n+/, "").replace(/\n+$/, "");
+      if (!trimmed.trim()) return;
+      const trimOffset = segText.length - segText.replace(/^\n+/, "").length;
+      const localStart = segStart + trimOffset;
+      const localRefs = (references ?? [])
+        .filter((r) => r.start >= localStart && r.end <= localStart + trimmed.length)
+        .map((r) => ({ ...r, start: r.start - localStart, end: r.end - localStart }));
+      parts.push(
+        <span key={`prose-${segStart}`}>
+          {renderCommentaryWithReferences(trimmed, localRefs, linkContext, reviewMarks, footnoteMap)}
+        </span>,
+      );
+    };
+
+    for (const blk of allBlocks) {
+      if (blk.start > cursor) {
+        emitProse(text.slice(cursor, blk.start), cursor);
+      }
+      const blkText = text.slice(blk.start, blk.end);
+      parts.push(
+        <div key={`v-${blk.start}`} className={`verse-quote${blk.own ? " verse-own" : ""}`}>
+          {renderVerseQuote(blkText, references, linkContext, blk.start, reviewMarks, footnoteMap)}
+        </div>,
+      );
+      cursor = blk.end;
+    }
+    if (cursor < text.length) {
+      emitProse(text.slice(cursor), cursor);
+    }
+
+    // Insert a blank-line separator at every prose↔verse boundary, matching
+    // the mūla rendering rhythm.
+    const joined: React.ReactNode[] = [];
+    let prevWasVerse = false;
+    parts.forEach((part, i) => {
+      const isVerse = (part as React.ReactElement)?.props?.className?.includes("verse-quote");
+      if (i > 0 && isVerse !== prevWasVerse) {
+        joined.push(<div key={`sep-${i}`} className="flow-commentary-verse-sep">{"\n"}</div>);
+      }
+      joined.push(part);
+      prevWasVerse = isVerse;
+    });
+    return <>{joined}</>;
+  }
+  // No verse blocks — existing prose/reference-split path unchanged.
   if (!references || references.length === 0) {
     return (
       <span

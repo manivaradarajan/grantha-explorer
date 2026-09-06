@@ -133,6 +133,12 @@ class CommentaryPassage:
     ref: str
     text: str
     intro: str = ""
+    # Runs of quoted verses (verse-quote blocks) as {start, end} half-open
+    # offsets into text. Empty for non-verse prose.
+    verse_quotes: tuple[dict[str, int], ...] = ()
+    # The commentary's OWN verses (<!-- verse --> blocks) as {start, end}
+    # half-open offsets into text. Empty when the passage has no own verses.
+    verses: tuple[dict[str, int], ...] = ()
 
 
 @dataclass
@@ -809,10 +815,21 @@ def _merge_duplicate_ref_passages(
         if cp.ref in seen:
             idx = seen[cp.ref]
             existing = merged[idx]
+            shift = len(existing.text) + 2  # len("\n\n")
+            merged_vq = existing.verse_quotes + tuple(
+                {"start": d["start"] + shift, "end": d["end"] + shift}
+                for d in cp.verse_quotes
+            )
+            merged_vs = existing.verses + tuple(
+                {"start": d["start"] + shift, "end": d["end"] + shift}
+                for d in cp.verses
+            )
             merged[idx] = CommentaryPassage(
                 ref=cp.ref,
                 text=existing.text + "\n\n" + cp.text,
                 intro=existing.intro or cp.intro,
+                verse_quotes=merged_vq,
+                verses=merged_vs,
             )
         else:
             seen[cp.ref] = len(merged)
@@ -822,7 +839,7 @@ def _merge_duplicate_ref_passages(
 
 def _extract_commentary_blocks(
     segment: str,
-) -> dict[str, list[tuple[str | None, str, str]]]:
+) -> dict[str, list[tuple[str | None, str, str, list[dict[str, int]], list[dict[str, int]]]]]:
     """Extract commentary blocks from a segment, split by sub-heading refs.
 
     Handles two source variants:
@@ -840,11 +857,17 @@ def _extract_commentary_blocks(
         segment: Text between two passage headings (or end of body).
 
     Returns:
-        Mapping from commentary_id to a list of ``(heading_ref_or_None,
-        cleaned_gloss, cleaned_intro)`` triples, one per sub-heading (or one
-        per block when no sub-heading is present).
+        Mapping from commentary_id to a list of
+        ``(heading_ref_or_None, cleaned_gloss, cleaned_intro,
+        verse_quotes, verses)`` 5-tuples, one per sub-heading (or one per
+        block when no sub-heading is present).  ``verse_quotes`` and
+        ``verses`` hold half-open ``{start, end}`` dicts into
+        ``cleaned_gloss``.
     """
-    grouped: dict[str, list[tuple[str | None, str, str]]] = {}
+    grouped: dict[
+        str,
+        list[tuple[str | None, str, str, list[dict[str, int]], list[dict[str, int]]]],
+    ] = {}
     opens = list(_COMMENTARY_OPEN_RE.finditer(segment))
     closes = list(_COMMENTARY_CLOSE_RE.finditer(segment))
 
@@ -871,14 +894,17 @@ def _extract_commentary_blocks(
             # (the tags would otherwise be stripped below and the intro text
             # merged into the gloss).
             intro, gloss = _split_commentary_intro(text)
+            # Extract verse-block offsets BEFORE stripping HTML comment tags,
+            # since the tags delimit the verse regions.
+            verse_stripped_gloss, vq, vs = _extract_verse_quotes(gloss)
             # Strip any stray orphaned HTML comment tags (source data errors).
-            cleaned_gloss = _RESIDUAL_HTML_COMMENT_RE.sub("", gloss).strip()
+            cleaned_gloss = _RESIDUAL_HTML_COMMENT_RE.sub("", verse_stripped_gloss).strip()
             cleaned_intro = (
                 _RESIDUAL_HTML_COMMENT_RE.sub("", intro).strip() if intro else ""
             )
             if cleaned_gloss or cleaned_intro:
                 grouped.setdefault(cid, []).append(
-                    (heading_ref, cleaned_gloss, cleaned_intro)
+                    (heading_ref, cleaned_gloss, cleaned_intro, vq, vs)
                 )
 
     return grouped
@@ -953,10 +979,16 @@ def parse_body(
     if headings:
         preamble = text[: headings[0].start()]
         for cid, sub_passages in _extract_commentary_blocks(preamble).items():
-            for heading_ref, gloss, intro in sub_passages:
+            for heading_ref, gloss, intro, vq, vs in sub_passages:
                 if heading_ref is not None:
                     data.commentary_blocks.setdefault(cid, []).append(
-                        CommentaryPassage(ref=heading_ref, text=gloss, intro=intro)
+                        CommentaryPassage(
+                            ref=heading_ref,
+                            text=gloss,
+                            intro=intro,
+                            verse_quotes=tuple(vq),
+                            verses=tuple(vs),
+                        )
                     )
                 elif intro and not gloss:
                     # Heading-less preamble intro-only block: the chapter intro.
@@ -1038,7 +1070,7 @@ def parse_body(
         # is present (heading_ref is None) — the fallback handles the small
         # number of blocks in the corpus that carry no explicit heading.
         for cid, sub_passages in commentary_by_cid.items():
-            for heading_ref, gloss, intro in sub_passages:
+            for heading_ref, gloss, intro, vq, vs in sub_passages:
                 if kind in leaves and data.pending_adhikarana_intro:
                     # Fold the adhikarana upodghata into this (first) leaf's
                     # commentary lead-in so it survives into the UI. Runs
@@ -1059,7 +1091,13 @@ def parse_body(
                     continue
                 passage_ref = heading_ref if heading_ref is not None else ref
                 data.commentary_blocks.setdefault(cid, []).append(
-                    CommentaryPassage(ref=passage_ref, text=gloss, intro=intro)
+                    CommentaryPassage(
+                        ref=passage_ref,
+                        text=gloss,
+                        intro=intro,
+                        verse_quotes=tuple(vq),
+                        verses=tuple(vs),
+                    )
                 )
 
     return data
@@ -1598,6 +1636,10 @@ def _build_commentary(
                 diagnostics.append(diag)
         if cp.intro:
             entry["intro"] = {"sanskrit": {"devanagari": cp.intro}}
+        if cp.verse_quotes:
+            entry["verse_quotes"] = [dict(d) for d in cp.verse_quotes]
+        if cp.verses:
+            entry["verses"] = [dict(d) for d in cp.verses]
         commentary_passages.append(entry)
 
     commentary: dict[str, Any] = {
