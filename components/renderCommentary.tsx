@@ -20,6 +20,7 @@ import type { SourceHighlight } from "./CitationPanel";
 const protectLineBreaks = (text: string): string =>
   text.replace(/ — /g, "\u00A0—\u00A0").replace(/ ।/g, "\u00A0।");
 
+
 /** Punctuation that follows a citation's closing ")" and belongs to the prose,
  *  not to the citation — must be emitted BEFORE the footnote-marker node so
  *  the rendered output reads: prose… punct [n] rest rather than prose… [n] punct rest. */

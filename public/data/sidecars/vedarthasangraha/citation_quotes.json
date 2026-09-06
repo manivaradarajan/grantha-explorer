@@ -164,7 +164,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "105",
@@ -549,7 +549,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "125",
@@ -813,7 +813,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "133",
@@ -857,7 +857,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "133",
@@ -1110,7 +1110,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "139",
@@ -1121,7 +1121,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "139",
@@ -1143,7 +1143,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "14",
@@ -1363,7 +1363,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "154",
@@ -1418,7 +1418,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "156",
@@ -1484,7 +1484,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "157",
@@ -1605,7 +1605,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "159",
@@ -1616,7 +1616,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "16",
@@ -1638,7 +1638,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "160",
@@ -1649,7 +1649,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "160",
@@ -1671,7 +1671,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "161",
@@ -1700,11 +1700,11 @@
       "passage_type": "main",
       "ref_start": 270,
       "ref_end": 284,
-      "quote_start": 0,
-      "quote_end": 0,
-      "quote_text": "",
-      "status": "no_match",
-      "quality": 1.0
+      "quote_start": 250,
+      "quote_end": 268,
+      "quote_text": "बुद्ध्यर्थः पादवत्",
+      "status": "matched",
+      "quality": 0.76
     },
     {
       "passage_ref": "164",
@@ -1733,11 +1733,11 @@
       "passage_type": "main",
       "ref_start": 379,
       "ref_end": 393,
-      "quote_start": 0,
-      "quote_end": 0,
-      "quote_text": "",
-      "status": "no_match",
-      "quality": 1.0
+      "quote_start": 360,
+      "quote_end": 377,
+      "quote_text": "तथान्यप्रतिषेधात्",
+      "status": "matched",
+      "quality": 0.75
     },
     {
       "passage_ref": "164",
@@ -1858,7 +1858,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "187",
@@ -1913,7 +1913,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "188",
@@ -2100,7 +2100,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "20",
@@ -2419,7 +2419,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "217",
@@ -2496,7 +2496,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "218",
@@ -2507,7 +2507,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "220",
@@ -2650,7 +2650,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "236",
@@ -2815,7 +2815,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "249",
@@ -2826,7 +2826,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "25",
@@ -2848,7 +2848,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "250",
@@ -2859,7 +2859,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "251",
@@ -3189,7 +3189,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "49",
@@ -3200,7 +3200,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "50",
@@ -3244,7 +3244,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "52",
@@ -3739,7 +3739,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "92",
@@ -3750,7 +3750,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "93",
@@ -3761,7 +3761,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "96",
@@ -3783,7 +3783,7 @@
       "quote_end": 0,
       "quote_text": "",
       "status": "no_match",
-      "quality": 1.0
+      "quality": 0.0
     },
     {
       "passage_ref": "97",

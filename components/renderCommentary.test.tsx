@@ -235,6 +235,7 @@ describe("renderCommentaryWithReferences", () => {
     expect(mark?.textContent).toContain("ज्ञाज्ञौ द्वावजावीशनीशौ");
     cleanUp(root, el);
   });
+
 });
 
 describe("renderMulaWithReferences", () => {
