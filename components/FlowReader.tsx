@@ -1366,7 +1366,9 @@ export default function FlowReader({
                                   granthaById,
                                   granthaIdToTitle: granthaIdToDevanagariTitle,
                                 },
-                                undefined,
+                                activeCommentary?.commentary_id
+                                  ? reviewMarksByRef?.[`${activeCommentary.commentary_id}:${passage.ref}`]
+                                  : undefined,
                                 footnoteMap,
                                 cp.verse_quotes,
                                 cp.verses,

@@ -359,9 +359,15 @@ export function renderCommentaryWithReferences(
       const localRefs = (references ?? [])
         .filter((r) => r.start >= localStart && r.end <= localStart + trimmed.length)
         .map((r) => ({ ...r, start: r.start - localStart, end: r.end - localStart }));
+      // Rebase review marks to the local coordinate system of this prose
+      // segment (same treatment as localRefs). Without rebasing, the recursive
+      // call treats absolute offsets as local, shifting every mark by localStart.
+      const localReviewMarks = reviewMarks
+        ?.map((m) => ({ ...m, start: m.start - localStart, end: m.end - localStart }))
+        .filter((m) => m.end > 0 && m.start < trimmed.length);
       parts.push(
         <span key={`prose-${segStart}`}>
-          {renderCommentaryWithReferences(trimmed, localRefs, linkContext, reviewMarks, footnoteMap)}
+          {renderCommentaryWithReferences(trimmed, localRefs, linkContext, localReviewMarks, footnoteMap)}
         </span>,
       );
     };

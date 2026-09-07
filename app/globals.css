@@ -821,13 +821,13 @@ mark.review-mark.st-accepted {
   color: #6b7280;
   white-space: nowrap;
 }
-.review-status-chip.open { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
-.review-status-chip.fixed { background: #fffbeb; color: #b45309; border-color: #fde68a; }
-.review-status-chip.accepted { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.review-status-chip.reopened { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-.review-status-chip.done { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-.review-status-chip.dismissed { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
-.review-status-chip.deleted {
+.review-status-chip.s-open { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.review-status-chip.s-fixed { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+.review-status-chip.s-accepted { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.review-status-chip.s-reopened { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+.review-status-chip.s-done { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.review-status-chip.s-dismissed { background: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
+.review-status-chip.s-deleted {
   background: #f3f4f6;
   color: #6b7280;
   border-color: #d1d5db;

@@ -361,7 +361,7 @@ function ReviewCommentCard({
         </div>
       )}
       <div className="review-card-meta">
-        <span className={`review-status-chip ${c.status}`}>{c.status}</span>
+        <span className={`review-status-chip s-${c.status}`}>{c.status}</span>
         {c.source_file && <span className="review-card-file">{c.source_file}</span>}
         {c.source_hash && (
           <span className="review-card-hash">{c.source_hash.slice(0, 8)}</span>

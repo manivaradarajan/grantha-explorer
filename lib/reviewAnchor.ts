@@ -130,6 +130,9 @@ export type ReviewCommentStatus =
 export interface ReviewCommentAnchorInput {
   id: string;
   passage_ref: string;
+  /** Set when the anchor is in a commentary passage rather than the mūla.
+   *  When present, the mark is keyed as "${commentary_id}:${passage_ref}". */
+  commentary_id?: string;
   type: "citation-fix" | "quote-locate" | "note";
   status: ReviewCommentStatus;
   anchor: { start: number; end: number; snippet: string };
@@ -157,7 +160,14 @@ export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
   passageTexts: Record<string, string>,
   detached: string[] = [],
   onMarkClick?: (commentId: string) => void,
-  opts: { statuses?: ReadonlySet<Exclude<ReviewCommentStatus, "deleted" | "done">> } = {},
+  opts: {
+    statuses?: ReadonlySet<Exclude<ReviewCommentStatus, "deleted" | "done">>;
+    /** Raw commentary text keyed as "${commentary_id}:${passage_ref}".
+     *  When provided, commentary-anchored comments are resolved against the
+     *  commentary text and keyed by the same compound string so FlowReader
+     *  can look them up separately from mūla marks. */
+    commentaryTexts?: Record<string, string>;
+  } = {},
 ): Record<string, ResolvedReviewMark[]> {
   const out: Record<string, ResolvedReviewMark[]> = {};
   if (!comments || comments.length === 0) return out;
@@ -171,12 +181,20 @@ export function resolveReviewMarks<T extends ReviewCommentAnchorInput>(
     const status: Exclude<ReviewCommentStatus, "done"> =
       c.status === "done" ? "accepted" : c.status;
     if (opts.statuses && !opts.statuses.has(status)) continue;
-    const raw = passageTexts[c.passage_ref];
+    // Commentary-anchored comments resolve against commentary text and are
+    // keyed as "${commentary_id}:${passage_ref}" so FlowReader can pass them
+    // to the commentary renderer independently of mūla marks.
+    const compoundKey = c.commentary_id
+      ? `${c.commentary_id}:${c.passage_ref}`
+      : c.passage_ref;
+    const raw = c.commentary_id && opts.commentaryTexts
+      ? opts.commentaryTexts[compoundKey]
+      : passageTexts[c.passage_ref];
     if (!raw) continue;
     const loc = resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end);
     if (!loc) continue;
-    out[c.passage_ref] ??= [];
-    out[c.passage_ref].push({
+    out[compoundKey] ??= [];
+    out[compoundKey].push({
       start: loc.start,
       end: loc.end,
       type: c.type,

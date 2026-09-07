@@ -174,14 +174,30 @@ function useFocusScroll(
     const isDetached = detached.includes(focusComment);
     if (el) {
       scrollElementCentered(el, container);
-    } else if (isDetached && comment?.passage_ref) {
-      // No highlight could be rendered for this comment — jump to its passage
-      // so the reviewer still lands somewhere useful, and explain why.
+    } else if (comment?.passage_ref) {
+      // No highlight mark exists — try to land somewhere useful.
+      const commentaryId = comment.commentary_id;
+      // For commentary-anchored comments, prefer the commentary block over
+      // the bare verse root so the reviewer sees the relevant section.
+      const commentaryEl = commentaryId
+        ? (surfaceRef.current?.querySelector<HTMLElement>(
+            `[data-verse-ref="${comment.passage_ref}"] [data-commentary-id="${commentaryId}"]`,
+          ) ??
+          surfaceRef.current?.querySelector<HTMLElement>(
+            `[data-commentary-id="${commentaryId}"]`,
+          ))
+        : null;
       const passageEl = surfaceRef.current?.querySelector<HTMLElement>(
         `[data-verse-ref="${comment.passage_ref}"]`,
       );
-      if (passageEl) {
-        scrollElementCentered(passageEl, container);
+      const target = commentaryEl ?? passageEl;
+      if (target) {
+        scrollElementCentered(target, container);
+      }
+      // Only show the "text not found" toast for mūla-anchored comments;
+      // commentary-anchored detached comments land on the commentary block
+      // which is already the right place.
+      if (isDetached && !commentaryId) {
         showToast(
           `Text not found in para ${comment.passage_ref} — jumped to the paragraph.`,
         );
@@ -303,11 +319,14 @@ function EditReaderInner(props: EditReaderProps) {
         passageTexts,
         detached,
         setFocusComment,
-        filter === "not-accepted"
-          ? { statuses: new Set(["open", "reopened", "fixed"]) }
-          : undefined,
+        {
+          ...(filter === "not-accepted"
+            ? { statuses: new Set(["open", "reopened", "fixed"]) }
+            : {}),
+          commentaryTexts,
+        },
       ),
-    [session, detached, passageTexts, filter],
+    [session, detached, passageTexts, commentaryTexts, filter],
   );
 
   // Keep activePassage in sync with FlowReader's scrollspy.
