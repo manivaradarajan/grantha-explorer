@@ -33,6 +33,15 @@
         "devanagari": "श्रीवत्सनारायणमुनीन्द्रः",
         "roman": "śrīvatsanārāyaṇamunīndraḥ"
       }
+    },
+    {
+      "edition_id": "isavasya-upanishad-vedantadesika-varadachari",
+      "path": "upanishads/isavasya/isavasya-upanishad-vedantadesika-varadachari",
+      "commentary_title": "ईशावास्योपनिषद्भाष्यम्",
+      "commentator": {
+        "devanagari": "श्रीमद्वेदान्ताचार्यः",
+        "roman": "śrīmadvēdāntācāryaḥ"
+      }
     }
   ]
 }
