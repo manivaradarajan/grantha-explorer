@@ -24,6 +24,18 @@ export interface EditReaderProps {
   isLoadingPart: boolean;
 }
 
+/** Build a map of "${commentary_id}:${ref}" → raw commentary devanagari. */
+export function buildCommentaryTexts(grantha: Grantha): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const commentary of grantha.commentaries ?? []) {
+    for (const cp of commentary.passages ?? []) {
+      out[`${commentary.commentary_id}:${cp.ref}`] =
+        cp.content?.sanskrit?.devanagari ?? "";
+    }
+  }
+  return out;
+}
+
 /** Build the passageRef → raw devanagari map for snippet re-location. */
 export function buildPassageTexts(grantha: Grantha): Record<string, string> {
   const out: Record<string, string> = {};
@@ -55,6 +67,7 @@ interface SelectionState {
   range: Range;
   passageRef: string;
   passageRaw: string;
+  commentaryId?: string;
   editing?: ReviewComment;
   preset?: { start: number; end: number; snippet: string };
 }
@@ -222,6 +235,7 @@ function EditReaderInner(props: EditReaderProps) {
   );
 
   const passageTexts = useMemo(() => buildPassageTexts(grantha), [grantha]);
+  const commentaryTexts = useMemo(() => buildCommentaryTexts(grantha), [grantha]);
   const passageRefs = useMemo(() => buildPassageRefs(grantha), [grantha]);
 
   // Load the session on mount (the provider also does this; keep a stable hook
@@ -260,16 +274,23 @@ function EditReaderInner(props: EditReaderProps) {
       const editing = commentId
         ? comments.find((c) => c.id === commentId)
         : undefined;
+      // Detect whether the selection is inside a commentary block.
+      const commentaryEl = el?.closest("[data-commentary-id]");
+      const commentaryId = commentaryEl?.getAttribute("data-commentary-id") ?? undefined;
+      const passageRaw = commentaryId
+        ? (commentaryTexts[`${commentaryId}:${passageRef}`] ?? "")
+        : (passageTexts[passageRef] ?? "");
       setSelection({
         range,
         passageRef,
-        passageRaw: passageTexts[passageRef] ?? "",
+        passageRaw,
+        commentaryId,
         editing,
       });
     };
     window.addEventListener("mouseup", onMouseUp);
     return () => window.removeEventListener("mouseup", onMouseUp);
-  }, [passageTexts, session]);
+  }, [passageTexts, commentaryTexts, session]);
 
   // Compute review marks for the current session, re-located by snippet. When
   // the list filter is "Not yet accepted", surface marks carry only the statuses
@@ -315,7 +336,9 @@ function EditReaderInner(props: EditReaderProps) {
   };
 
   const handleEdit = (c: ReviewComment) => {
-    const raw = passageTexts[c.passage_ref] ?? "";
+    const raw = c.commentary_id
+      ? (commentaryTexts[`${c.commentary_id}:${c.passage_ref}`] ?? "")
+      : (passageTexts[c.passage_ref] ?? "");
     // Try to anchor the toolbar to the highlight if it's rendered
     const hl = surfaceRef.current?.querySelector(
       `[data-comment-id="${c.id}"]`,
@@ -395,6 +418,7 @@ function EditReaderInner(props: EditReaderProps) {
             anchorRange={selection.range}
             editing={selection.editing}
             preset={selection.preset}
+            commentaryId={selection.commentaryId}
             onSave={handleSave}
             onCancel={() => setSelection(null)}
           />
@@ -426,10 +450,26 @@ export default function EditReader(props: EditReaderProps) {
   // churned `detached` and made the focus effect re-fire its smooth-scroll on
   // every user scroll — pinning the flow so the main pane couldn't be scrolled.
   const passageTexts = useMemo(() => buildPassageTexts(props.grantha), [props.grantha]);
+  const commentaryTexts = useMemo(() => buildCommentaryTexts(props.grantha), [props.grantha]);
+  // For multi-edition granthas (edition_id differs from grantha_id), pass the
+  // primary commentary's commentary_id so the review server can filter its .md
+  // index to the correct edition file (avoids AmbiguousIndexError).
+  const reviewEdition = useMemo(() => {
+    const g = props.grantha;
+    // Convention: single-edition granthas set edition_id === grantha_id
+    // (or leave it absent); treat both as "no filter needed".
+    if (!g.edition_id || g.edition_id === g.grantha_id) return undefined;
+    // Each edition has exactly one source .md file; the commentary_id in that
+    // file's frontmatter is what the review server uses to disambiguate.
+    // Index 0 is the primary commentary, which always identifies the edition.
+    return g.commentaries[0]?.commentary_id;
+  }, [props.grantha]);
   return (
     <ReviewModeProvider
       granthaId={props.grantha.grantha_id}
       passageTexts={passageTexts}
+      commentaryTexts={commentaryTexts}
+      edition={reviewEdition}
     >
       <EditReaderInner {...props} />
     </ReviewModeProvider>

@@ -72,6 +72,10 @@ export interface ReviewComment {
   created_at?: string;
   updated_at?: string;
   hash_changed?: boolean;
+  /** Set when the comment's anchor is into a commentary passage (not the mūla).
+   *  Value is Commentary.commentary_id; used client-side to resolve the correct
+   *  raw text for anchor re-resolution. */
+  commentary_id?: string;
 }
 
 export interface ReviewSession {
@@ -190,9 +194,10 @@ export interface ReviewRoundSummary {
 export async function fetchSessions(
   granthaId: string,
 ): Promise<ReviewRoundSummary[]> {
+  const params = new URLSearchParams({ grantha: granthaId });
   const res = await request<{ sessions: ReviewRoundSummary[] }>(
     "GET",
-    `/api/review/files?grantha=${encodeURIComponent(granthaId)}`,
+    `/api/review/files?${params.toString()}`,
   );
   return res.sessions ?? [];
 }
@@ -200,13 +205,15 @@ export async function fetchSessions(
 export async function upsertComment(
   granthaId: string,
   comment: ReviewComment,
+  edition?: string,
 ): Promise<{ session: ReviewSession; hash_changed?: boolean }> {
-  const res = await request<{ session: ReviewSession; hash_changed?: boolean }>(
+  const params = new URLSearchParams({ grantha: granthaId });
+  if (edition !== undefined) params.set("edition", edition);
+  return request<{ session: ReviewSession; hash_changed?: boolean }>(
     "POST",
-    `/api/review?grantha=${encodeURIComponent(granthaId)}`,
+    `/api/review?${params.toString()}`,
     comment,
   );
-  return res;
 }
 
 /** PATCH body for a status transition. ``note`` is required for a push-back
@@ -223,19 +230,23 @@ export async function setCommentStatus(
   granthaId: string,
   req: SetCommentStatusRequest,
 ): Promise<{ session: ReviewSession }> {
+  const params = new URLSearchParams({ grantha: granthaId });
   return request<{ session: ReviewSession }>(
     "PATCH",
-    `/api/review/status?grantha=${encodeURIComponent(granthaId)}`,
+    `/api/review/status?${params.toString()}`,
     req,
   );
 }
 
 export async function startNewSession(
   granthaId: string,
+  edition?: string,
 ): Promise<{ session: ReviewSession }> {
+  const params = new URLSearchParams({ grantha: granthaId });
+  if (edition !== undefined) params.set("edition", edition);
   return request<{ session: ReviewSession }>(
     "POST",
-    `/api/review?grantha=${encodeURIComponent(granthaId)}`,
+    `/api/review?${params.toString()}`,
     { session: "new" },
   );
 }

@@ -1340,7 +1340,7 @@ export default function FlowReader({
                           </div>
                         </div>
                         {cp && (
-                          <div>
+                          <div data-commentary-id={activeCommentary?.commentary_id}>
                             {cp.prefatory_material?.map((item, idx) => (
                               <div key={idx} className="mb-4">
                                 {item.label && (

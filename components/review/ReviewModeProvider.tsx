@@ -51,10 +51,21 @@ export const useReviewMode = (): ReviewModeState => {
   return ctx;
 };
 
+/** Props for {@link ReviewModeProvider}. */
 interface ReviewModeProviderProps {
   granthaId: string;
   /** Map of passageRef → raw devanagari, used to re-locate snippets on load. */
   passageTexts: Record<string, string>;
+  /** Keyed by "${commentary_id}:${ref}". Absent for granthas without commentary. */
+  commentaryTexts?: Record<string, string>;
+  /**
+   * For multi-edition granthas whose source directory holds several .md files
+   * (one per edition), this is the `commentary_id` from the active edition's
+   * .md frontmatter.  The review server uses it to filter the index to a
+   * single file, avoiding AmbiguousIndexError.  Leave undefined for
+   * single-edition granthas.
+   */
+  edition?: string;
   children: React.ReactNode;
 }
 
@@ -66,6 +77,8 @@ interface ReviewModeProviderProps {
 export function ReviewModeProvider({
   granthaId,
   passageTexts,
+  commentaryTexts,
+  edition,
   children,
 }: ReviewModeProviderProps) {
   const [session, setSession] = useState<ReviewSession | null>(null);
@@ -124,7 +137,7 @@ export function ReviewModeProvider({
     async (comment: ReviewComment) => {
       setError(null);
       try {
-        const res = await upsertComment(granthaId, comment);
+        const res = await upsertComment(granthaId, comment, edition);
         setSession(res.session);
         if (res.hash_changed) setHasChanged(true);
       } catch (e) {
@@ -132,7 +145,7 @@ export function ReviewModeProvider({
         throw e;
       }
     },
-    [granthaId],
+    [granthaId, edition],
   );
 
   const updateStatus = useCallback(
@@ -152,7 +165,7 @@ export function ReviewModeProvider({
   const startNew = useCallback(async () => {
     setError(null);
     try {
-      const res = await startNewSession(granthaId);
+      const res = await startNewSession(granthaId, edition);
       setSessionFile(undefined);
       setSession(res.session);
       await refreshRounds();
@@ -160,12 +173,14 @@ export function ReviewModeProvider({
       setError(e instanceof Error ? e.message : String(e));
       throw e;
     }
-  }, [granthaId, refreshRounds]);
+  }, [granthaId, edition, refreshRounds]);
 
   // Load the latest session on mount / grantha change.
   useEffect(() => {
     void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally
+    // run only on granthaId change; including `refresh` would re-fire on every
+    // sessionFile state update (refresh closes over sessionFile).
   }, [granthaId]);
 
   // Re-locate snippets on load or session change.
@@ -173,13 +188,15 @@ export function ReviewModeProvider({
     if (!session) return [];
     const out: string[] = [];
     for (const c of session.comments) {
-      const raw = passageTexts[c.passage_ref];
+      const raw = c.commentary_id && commentaryTexts
+        ? (commentaryTexts[`${c.commentary_id}:${c.passage_ref}`] ?? "")
+        : (passageTexts[c.passage_ref] ?? "");
       if (!raw || !resolveAnchor(raw, c.anchor.snippet, c.anchor.start, c.anchor.end)) {
         out.push(c.id);
       }
     }
     return out;
-  }, [session, passageTexts]);
+  }, [session, passageTexts, commentaryTexts]);
 
   const value = useMemo<ReviewModeState>(
     () => ({

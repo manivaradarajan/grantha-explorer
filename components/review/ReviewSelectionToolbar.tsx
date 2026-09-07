@@ -81,6 +81,8 @@ interface ReviewSelectionToolbarProps {
   anchorRange: Range;
   /** Raw offsets of the anchored selection (when already known). */
   preset?: { start: number; end: number; snippet: string };
+  /** Set when the selection is inside a commentary block, not the mūla. */
+  commentaryId?: string;
 }
 
 const TYPES: ReviewCommentType[] = ["note", "citation-fix", "quote-locate"];
@@ -214,6 +216,7 @@ export function ReviewSelectionToolbar({
   onCancel,
   anchorRange,
   preset,
+  commentaryId,
 }: ReviewSelectionToolbarProps) {
   const [type, setType] = useState<ReviewCommentType>(
     editing?.type ?? "note",
@@ -376,6 +379,7 @@ export function ReviewSelectionToolbar({
       status: editing?.status ?? "open",
       passage_ref: passageRef,
       passage_type: "main",
+      commentary_id: commentaryId,
       anchor: {
         // Defensively clamp: the schema requires start >= 0 and end >= start.
         // `offset` is always non-negative after the smoothed fallback, but this
