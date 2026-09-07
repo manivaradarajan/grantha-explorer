@@ -36,17 +36,26 @@ _SERVER = _SCRIPTS / "review-server.mjs"
 _EXPLORER_ROOT = _SCRIPTS.parent
 _SIBLING_GRANTHA_DATA = _EXPLORER_ROOT.parent / "grantha-data"
 _REAL_VEDARTHA = _SIBLING_GRANTHA_DATA / "structured_md" / "vedarthasangraha"
+# Isavasya lives under a nested category directory: structured_md/upanishads/isavasya/
+_REAL_ISAVASYA = _SIBLING_GRANTHA_DATA / "structured_md" / "upanishads" / "isavasya"
+# The commentary_id and source filename for the Vedanta Desika edition of
+# Isavasya, used by tests that exercise the multi-edition edition-filter path.
+_ISAVASYA_VD_EDITION = "vedanta-desika-bhashyam"
+_ISAVASYA_VD_FILE = "isavasya-upanishad-vedantadesika-01.md"
 _EXPLORER_LIBRARY = _EXPLORER_ROOT / "public" / "data" / "library"
 
 
-def _current_vedartha_hash() -> str:
-    """The vedarthasangraha md's current ``validation_hash`` (the real frontmatter
-    is the source of truth; it changes whenever the md is re-hashed)."""
-    md = (_REAL_VEDARTHA / "vedarthasangraha-01.md").read_text(encoding="utf-8")
-    for line in md.splitlines():
+def _read_validation_hash(md_path: pathlib.Path) -> str:
+    """Extract ``validation_hash`` from a structured-md frontmatter."""
+    for line in md_path.read_text(encoding="utf-8").splitlines():
         if line.startswith("validation_hash:"):
             return line.split(":", 1)[1].strip()
-    raise RuntimeError("validation_hash not found in vedarthasangraha-01.md")
+    raise RuntimeError(f"validation_hash not found in {md_path}")
+
+
+def _current_vedartha_hash() -> str:
+    """The vedarthasangraha md's current ``validation_hash``."""
+    return _read_validation_hash(_REAL_VEDARTHA / "vedarthasangraha-01.md")
 
 ALLOWED_ORIGIN = "http://localhost:3001"
 FOREIGN_ORIGIN = "https://evil.example"
@@ -156,9 +165,12 @@ def server(tmp_path_factory: pytest.TempPathFactory):
     srv.stop()
 
 
-def _post_path(grantha: str = "vedarthasangraha") -> str:
+def _post_path(grantha: str = "vedarthasangraha", edition: str | None = None) -> str:
     """POST/PATCH paths carry the grantha in the query string (like GET)."""
-    return f"/api/review?grantha={grantha}"
+    p = f"/api/review?grantha={grantha}"
+    if edition:
+        p += f"&edition={edition}"
+    return p
 
 
 def _patch_path(grantha: str = "vedarthasangraha") -> str:
@@ -768,5 +780,68 @@ def test_multipart_ref_partition_and_duplicate_detection(tmp_path):
             "POST", _post_path("brihadaranyaka-upanishad"), _valid_comment(id=str(uuid.uuid4()), passage_ref="1", passage_type="main", kind="Para", body="dup")
         )
         assert status == 422
+    finally:
+        srv.stop()
+
+
+# ──────────────────────────── nested directory layout ────────────────────
+#
+# Granthas stored under a category sub-directory (e.g.
+# structured_md/upanishads/isavasya/ for grantha_id "isavasya-upanishad")
+# must be resolved correctly.  The flat-layout fast path
+# (structured_md/<granthaId>/) does not exist for these granthas, so the
+# server must scan frontmatter to find the real directory.
+
+
+def test_nested_grantha_get_returns_200(tmp_path):
+    """GET for a grantha whose source dir is nested (upanishads/isavasya/)
+    must return 200, not 422 'no structured_md/isavasya-upanishad'."""
+    if not _REAL_ISAVASYA.is_dir():
+        pytest.skip("sibling grantha-data isavasya checkout not present")
+    reviews_dir = tmp_path / "reviews"
+    reviews_dir.mkdir()
+    srv = ReviewServer(_SIBLING_GRANTHA_DATA, reviews_dir, _EXPLORER_LIBRARY)
+    try:
+        status, body = srv.request("GET", "/api/review?grantha=isavasya-upanishad")
+        assert status == 200
+        assert body["session"] is None
+        assert body["has_changed"] is False
+    finally:
+        srv.stop()
+
+
+def test_nested_grantha_post_resolves_source_file(tmp_path):
+    """POST for a nested-layout grantha with an edition filter resolves the
+    passage to the correct .md, records source_file name and validation_hash.
+
+    Multi-edition directories (all files share the same grantha_id and passage
+    refs) require the caller to supply ``&edition=<commentary_id>`` so the
+    server can index a single file without hitting AmbiguousIndexError.
+    """
+    if not _REAL_ISAVASYA.is_dir():
+        pytest.skip("sibling grantha-data isavasya checkout not present")
+    reviews_dir = tmp_path / "reviews"
+    reviews_dir.mkdir()
+    srv = ReviewServer(_SIBLING_GRANTHA_DATA, reviews_dir, _EXPLORER_LIBRARY)
+    try:
+        comment = _valid_comment(
+            id=str(uuid.uuid4()),
+            passage_ref="1",
+            passage_type="main",
+            kind="Mantra",
+            body="Test comment on isavasya mantra 1.",
+        )
+        status, body = srv.request(
+            "POST",
+            _post_path("isavasya-upanishad", edition=_ISAVASYA_VD_EDITION),
+            comment,
+        )
+        assert status == 200, body
+        saved = body["session"]["comments"][0]
+        # Source file must be the vedantadesika .md inside upanishads/isavasya/.
+        assert saved["source_file"] == _ISAVASYA_VD_FILE
+        expected_hash: str = _read_validation_hash(_REAL_ISAVASYA / _ISAVASYA_VD_FILE)
+        assert saved["source_hash"] == expected_hash
+        assert saved["part_num"] == 1
     finally:
         srv.stop()

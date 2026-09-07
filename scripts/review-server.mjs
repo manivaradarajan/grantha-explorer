@@ -136,7 +136,84 @@ function sessionFileName(granthaId, reviewsDir) {
   return name;
 }
 
+/**
+ * Scan `structured_md/` recursively (up to 2 levels deep) to find the
+ * directory that owns .md files with `grantha_id: <id>` in their frontmatter.
+ * Handles nested layouts (e.g. structured_md/upanishads/isavasya/ for the
+ * grantha_id "isavasya-upanishad") as well as flat layouts (e.g.
+ * structured_md/vedarthasangraha/).  Results are memoised per sourceRoot.
+ *
+ * Only cache HITS are stored — a miss is re-scanned on the next call so that
+ * a grantha directory created after server start is eventually found without
+ * requiring a restart.
+ *
+ * Returns the absolute directory path, or null when not found.
+ */
+const _granthaDirCache = new Map(); // sourceRoot → Map<granthaId, dir> (hits only)
+
+function resolveGranthaDir(sourceRoot, granthaId) {
+  let byId = _granthaDirCache.get(sourceRoot);
+  if (!byId) {
+    byId = new Map();
+    _granthaDirCache.set(sourceRoot, byId);
+  }
+  if (byId.has(granthaId)) return byId.get(granthaId);
+
+  const result = _scanForGrantha(path.join(sourceRoot, "structured_md"), granthaId, 2);
+  if (result !== null) {
+    byId.set(granthaId, result); // only cache hits — misses are re-scanned
+  }
+  return result;
+}
+
+function _scanForGrantha(dir, granthaId, depth) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return null;
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const sub = path.join(dir, entry.name);
+    // Check whether any .md file in this directory declares the target grantha_id.
+    // Read only the first 512 bytes — grantha_id is always in the top of the
+    // YAML frontmatter, well within that window.
+    let mdFiles;
+    try {
+      mdFiles = fs.readdirSync(sub).filter((f) => f.endsWith(".md"));
+    } catch {
+      continue;
+    }
+    for (const f of mdFiles) {
+      try {
+        const fd = fs.openSync(path.join(sub, f), "r");
+        const buf = Buffer.alloc(512);
+        fs.readSync(fd, buf, 0, 512, 0);
+        fs.closeSync(fd);
+        const snippet = buf.toString("utf8");
+        const m = /^grantha_id:\s*(\S+)/m.exec(snippet);
+        if (m && m[1] === granthaId) return sub;
+      } catch {
+        /* skip unreadable file */
+      }
+    }
+    if (depth > 1) {
+      const deeper = _scanForGrantha(sub, granthaId, depth - 1);
+      if (deeper) return deeper;
+    }
+  }
+  return null;
+}
+
 function reviewsDirFor(cfg, granthaId) {
+  // When reviews live inside the source tree (default: reviewsDir === sourceRoot),
+  // co-locate reviews with the source files so they sit next to the .md they annotate.
+  // When a separate reviews directory is configured, use the flat granthaId layout.
+  if (cfg.reviewsDir === cfg.sourceRoot) {
+    const sourceDir = resolveGranthaDir(cfg.sourceRoot, granthaId);
+    if (sourceDir) return path.join(sourceDir, "reviews");
+  }
   return path.join(cfg.reviewsDir, "structured_md", granthaId, "reviews");
 }
 
@@ -165,13 +242,17 @@ function defaultPython(cfg) {
 function parseFrontmatter(text) {
   const m = /^---\n([\s\S]*?)\n---\n/.exec(text);
   if (!m) return {};
+  const fm = m[1];
   const out = {};
-  for (const line of m[1].split("\n")) {
+  for (const line of fm.split("\n")) {
     const hash = /^validation_hash:\s*(\S+)/.exec(line);
     if (hash) out.validation_hash = hash[1];
     const part = /^part_num:\s*(\d+)/.exec(line);
     if (part) out.part_num = Number.parseInt(part[1], 10);
   }
+  // First commentary_id in the commentaries_metadata YAML list (indented entry).
+  const cid = /^\s*-\s*commentary_id:\s*(\S+)/m.exec(fm);
+  if (cid) out.commentary_id = cid[1];
   return out;
 }
 
@@ -185,12 +266,22 @@ const HEADING_RE = {
  * Build (and cache, invalidated by file mtime) the per-grantha passage→file
  * index. Ref spaces partition across part files; a ref found in two files is a
  * loud data error.
+ *
+ * When `edition` is supplied (a commentary_id string), only the .md file whose
+ * frontmatter `commentaries_metadata[0].commentary_id` matches is indexed.
+ * This disambiguates multi-edition directories (e.g. isavasya-upanishad with
+ * four commentary files) where an edition-agnostic index would throw
+ * AmbiguousIndexError because every file shares the same passage refs.
  */
 class GranthaIndex {
-  constructor(sourceRoot, granthaId) {
+  constructor(sourceRoot, granthaId, edition) {
     this.sourceRoot = sourceRoot;
     this.granthaId = granthaId;
-    this.dir = path.join(sourceRoot, "structured_md", granthaId);
+    // Normalise undefined → null so all checks can use `if (this.edition)`.
+    this.edition = edition ?? null;
+    this.dir =
+      resolveGranthaDir(sourceRoot, granthaId) ??
+      path.join(sourceRoot, "structured_md", granthaId);
     this.byKey = new Map(); // "passage_type\x00ref" -> {file, part_num}
     this.fileMeta = new Map(); // filename -> {mtimeMs, validation_hash, part_num}
     this.mtimes = new Map();
@@ -220,6 +311,10 @@ class GranthaIndex {
       this.mtimes.set(f, st.mtimeMs);
       const text = fs.readFileSync(full, "utf-8");
       const fm = parseFrontmatter(text);
+      // When an edition filter is set, skip files whose first commentary_id
+      // does not match.  This lets multi-edition directories (where every file
+      // shares the same passage refs) be indexed without ambiguity.
+      if (this.edition && fm.commentary_id !== this.edition) continue;
       this.fileMeta.set(f, {
         validation_hash: fm.validation_hash || null,
         part_num: fm.part_num || null,
@@ -253,13 +348,13 @@ class GranthaIndex {
   }
 }
 
-const _indexCache = new Map(); // `${sourceRoot}\x00${granthaId}` -> GranthaIndex
+const _indexCache = new Map(); // `${sourceRoot}\x00${granthaId}\x00${edition}` -> GranthaIndex
 
-function getIndex(cfg, granthaId) {
-  const key = `${cfg.sourceRoot}\x00${granthaId}`;
+function getIndex(cfg, granthaId, edition) {
+  const key = `${cfg.sourceRoot}\x00${granthaId}\x00${edition ?? ""}`;
   let idx = _indexCache.get(key);
   if (!idx || idx.needsRebuild()) {
-    idx = new GranthaIndex(cfg.sourceRoot, granthaId);
+    idx = new GranthaIndex(cfg.sourceRoot, granthaId, edition);
     idx.rebuild();
     _indexCache.set(key, idx);
   }
@@ -460,13 +555,14 @@ function withGranthaLock(granthaId, fn) {
 
 // ─────────────────────────────── resolution ────────────────────────────────
 
-function resolveSource(cfg, granthaId, comment) {
-  const idx = getIndex(cfg, granthaId);
+function resolveSource(cfg, granthaId, comment, edition) {
+  const idx = getIndex(cfg, granthaId, edition);
   const hit = idx.resolve(comment.passage_type, comment.passage_ref);
   if (!hit) {
+    const hint = edition ? ` (edition: ${edition})` : "";
     throw new HttpError(
       422,
-      `passage ${comment.passage_type} "${comment.passage_ref}" not found in any .md of ${granthaId}`,
+      `passage ${comment.passage_type} "${comment.passage_ref}" not found in any .md of ${granthaId}${hint}`,
     );
   }
   const meta = idx.metaFor(hit.file);
@@ -478,11 +574,20 @@ function resolveSource(cfg, granthaId, comment) {
 }
 
 function currentHashes(cfg, granthaId, files) {
-  const idx = getIndex(cfg, granthaId);
+  // Read file hashes directly — avoids the edition-filtered index so that drift
+  // detection in GET works for any source file regardless of edition context.
+  const dir =
+    resolveGranthaDir(cfg.sourceRoot, granthaId) ??
+    path.join(cfg.sourceRoot, "structured_md", granthaId);
   const out = {};
   for (const f of files) {
-    const meta = idx.metaFor(f);
-    if (meta && meta.validation_hash) out[f] = meta.validation_hash;
+    try {
+      const text = fs.readFileSync(path.join(dir, f), "utf-8");
+      const fm = parseFrontmatter(text);
+      if (fm.validation_hash) out[f] = fm.validation_hash;
+    } catch {
+      /* skip unreadable file */
+    }
   }
   return out;
 }
@@ -614,9 +719,9 @@ async function handleListSessions(cfg, granthaId) {
   return { sessions: listed.reverse() };
 }
 
-async function handlePostComment(cfg, granthaId, comment) {
+async function handlePostComment(cfg, granthaId, comment, edition) {
   return withGranthaLock(granthaId, async () => {
-    const source = resolveSource(cfg, granthaId, comment);
+    const source = resolveSource(cfg, granthaId, comment, edition);
     const resolved = { ...comment, ...source };
 
     let file;
@@ -883,9 +988,12 @@ function route(cfg, req, res) {
     const granthaId = url.searchParams.get("grantha");
     const granthaErr = validateGranthaId(granthaId);
     if (granthaErr) throw new HttpError(422, granthaErr);
-    if (!fs.existsSync(path.join(cfg.sourceRoot, "structured_md", granthaId))) {
+    if (!resolveGranthaDir(cfg.sourceRoot, granthaId)) {
       throw new HttpError(422, `no structured_md/${granthaId} under source-root`);
     }
+    // Optional edition filter (commentary_id): disambiguates multi-edition
+    // directories where every file shares the same passage refs.
+    const edition = url.searchParams.get("edition") || undefined;
 
     if (pathname === "/api/review/files") {
       if (req.method !== "GET") {
@@ -922,7 +1030,7 @@ function route(cfg, req, res) {
     if (Object.keys(fields).length > 0) {
       throw new HttpError(422, "invalid comment payload", fields);
     }
-    const result = await handlePostComment(cfg, granthaId, body);
+    const result = await handlePostComment(cfg, granthaId, body, edition);
     sendJson(res, 200, result, cors);
   };
 
