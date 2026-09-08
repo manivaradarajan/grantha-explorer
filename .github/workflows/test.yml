@@ -78,4 +78,4 @@ jobs:
           repository-cache: true
 
       - name: Run Bazel data/build gates
-        run: bazel test //... -//data:determinism_check
+        run: bazel test //... -- -//data:determinism_check
