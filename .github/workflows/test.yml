@@ -55,6 +55,7 @@ jobs:
         with:
           repository: manivaradarajan/grantha-data
           path: grantha-data
+          token: ${{ secrets.GH_PAT }}
 
       - name: Pin grantha-data to the recorded revision
         run: |
