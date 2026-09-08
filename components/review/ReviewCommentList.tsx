@@ -89,14 +89,9 @@ export function ReviewCommentList({
     (c) => c.status === "open" || c.status === "reopened",
   ).length;
   const needsReviewCount = activeAll.filter((c) => c.status === "fixed").length;
-  const notAccepted = [
-    "open",
-    "reopened",
-    "fixed",
-  ];
   const active =
     filter === "not-accepted"
-      ? activeAll.filter((c) => notAccepted.includes(c.status))
+      ? activeAll.filter((c) => NOT_ACCEPTED_STATUSES.has(c.status))
       : activeAll;
 
   return (
@@ -209,6 +204,9 @@ type ActionDef = {
 
 const ACCEPT_ACTION: ActionDef = { label: "Accept", status: "accepted" };
 
+/** Statuses that count as "not yet accepted" for the filter. */
+const NOT_ACCEPTED_STATUSES = new Set(["open", "reopened", "fixed"]);
+
 /** Per-status base action lists for the comment card action buttons.
  *  The ``reopened`` list omits the conditional Accept; ``buildCommentActions``
  *  splices it in when the comment already has recorded fixes. */
@@ -258,7 +256,9 @@ const LIFECYCLE_ACTIONS: Record<ReviewComment["status"], ActionDef[]> = {
  */
 function buildCommentActions(c: ReviewComment): ActionDef[] {
   const base = LIFECYCLE_ACTIONS[c.status] ?? [];
-  if (c.status === "reopened" && (c.fixes?.length ?? 0) > 0) {
+  // base.length > 0 guards base[0] below; LIFECYCLE_ACTIONS["reopened"] is
+  // non-empty by construction, but the ?? [] fallback above makes it possible.
+  if (c.status === "reopened" && (c.fixes?.length ?? 0) > 0 && base.length > 0) {
     // Splice Accept in at position 1 (after "Mark fixed").
     return [base[0], ACCEPT_ACTION, ...base.slice(1)];
   }

@@ -156,7 +156,6 @@ export function ReviewModeProvider({
         setSession(res.session);
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
-        throw e;
       }
     },
     [granthaId],
@@ -171,7 +170,6 @@ export function ReviewModeProvider({
       await refreshRounds();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
-      throw e;
     }
   }, [granthaId, edition, refreshRounds]);
 

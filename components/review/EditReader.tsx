@@ -254,12 +254,7 @@ function EditReaderInner(props: EditReaderProps) {
   const commentaryTexts = useMemo(() => buildCommentaryTexts(grantha), [grantha]);
   const passageRefs = useMemo(() => buildPassageRefs(grantha), [grantha]);
 
-  // Load the session on mount (the provider also does this; keep a stable hook
-  // identity so the surface doesn't re-mount).
-  useEffect(() => {
-    void refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Session is loaded by ReviewModeProvider on mount; no additional fetch needed.
 
   // Global mouseup → detect a text selection on the surface → show toolbar.
   useEffect(() => {

@@ -1234,8 +1234,12 @@ export default function FlowReader({
                   const introText = cp?.intro?.sanskrit?.devanagari;
                   // Presentation is a total function of the passage's declared
                   // kind (per-block presentation model).
-                  const isProseMula = presentationFor(passage.kind ?? "") === "prose";
-                  const mulaPresentation = MULA_PRESENTATION[presentationFor(passage.kind ?? "")];
+                  const isProseMula = passage.kind
+                    ? presentationFor(passage.kind) === "prose"
+                    : true;
+                  const mulaPresentation = passage.kind
+                    ? MULA_PRESENTATION[presentationFor(passage.kind)]
+                    : MULA_PRESENTATION["prose"];
                   // Mula content: reference-linked text (prose paras and verse
                   // quotes interleave via renderMulaWithReferences); verse kinds
                   // close with the print-convention double-danda number.

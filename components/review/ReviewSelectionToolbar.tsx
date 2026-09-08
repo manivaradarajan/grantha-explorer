@@ -165,6 +165,7 @@ function useCitationCandidates({
         // reviewer still sees the other occurrences of the quote (e.g. a verse
         // shared by Mundaka and Katha).
         if (list.length === 0 || list.every((c) => c.is_current)) {
+          if (cancelled) return;
           const corpus = await fetchCandidates({
             needle: snippet,
             min_quality: 0.5,

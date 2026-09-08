@@ -471,7 +471,7 @@ mark.review-mark.st-accepted {
   font-weight: 700;
   font-size: 0.82em;
   user-select: none;
-  cursor: pointer;
+  cursor: default;
 }
 
 /* Review toolbar (floating "add comment") */
